@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "dry-monads"
+version = "0.1.0"
+description = "Monads for python made simple and safe."
+authors = ["sobolevn <mail@sobolevn.me>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.6"
+
+[tool.poetry.dev-dependencies]
+mypy = "^0.660.0"
+typing-extensions = "^3.7"
+attrs = "^18.2"
+wemake-python-styleguide = "^0.7.0"
+flake8-pytest = "^1.3"
+safety = "^1.8"
+pytest = "^4.1"
+pytest-cov = "^2.6"
+pytest-randomly = "^1.2"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
