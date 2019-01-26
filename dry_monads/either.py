@@ -32,10 +32,7 @@ class Left(Either[ValueType]):
         """Returns the 'Left' instance that was used to call the method."""
         return Left(self._inner_value)
 
-    def value_or(
-        self,
-        default_value: NewValueType,
-    ) -> NewValueType:
+    def value_or(self, default_value: NewValueType) -> NewValueType:
         """Returns the value if we deal with 'Right' or default if 'Left'."""
         return default_value
 
@@ -73,10 +70,7 @@ class Right(Either[ValueType]):
         """
         return function(self._inner_value)
 
-    def value_or(
-        self,
-        default_value: NewValueType,
-    ) -> ValueType:
+    def value_or(self, default_value: NewValueType) -> ValueType:
         """Returns the value if we deal with 'Right' or default if 'Left'."""
         return self._inner_value
 

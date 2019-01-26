@@ -18,7 +18,7 @@ def test_left_identity_success():
 def test_left_identity_failure():
     """Ensures that left identity works for Right monad."""
     def factory(inner_value: int) -> Left[TypeError]:
-        return Left(TypeError)
+        return Left(TypeError())
 
     input_value = 5
     bound = Left(input_value).bind(factory)

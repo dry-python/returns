@@ -47,6 +47,11 @@ class Monad(Generic[ValueType], metaclass=ABCMeta):
         """
         raise NotImplementedError
 
+    @abstractmethod
+    def value_of(self, default_value):
+        """Forces to unwrap value from monad or return a default."""
+        raise NotImplementedError
+
     def __str__(self) -> str:
         """Converts to string."""
         return '{0}: {1}'.format(
