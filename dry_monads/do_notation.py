@@ -22,3 +22,19 @@ def do_notation(
         except UnwrapFailedError as exc:
             return exc.halted_monad
     return decorator
+
+# from dry_monads.either import Success, Failure, Either
+
+# @do_notation
+# def test() -> Success[int]:
+#     def example(incoming: int) -> Either[int, int]:
+#         return Failure("abc")
+
+#     first = example(1).unwrap()
+#     second = example(2).unwrap()
+#     reveal_type(first)  # dry_monads/do.py:35: error: Revealed type is 'builtins.int*'
+#     reveal_type(second)  # dry_monads/do.py:36: error: Revealed type is 'builtins.int*'
+#     return Success(first + second)
+
+# reveal_type(test())  # dry_monads/do.py:39: error: Revealed type is 'dry_monads.either.Right*[builtins.int]'
+# print(test())

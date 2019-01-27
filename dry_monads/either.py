@@ -1,23 +1,39 @@
 # -*- coding: utf-8 -*-
 
-from typing import Callable, NoReturn
+from abc import ABCMeta, abstractmethod
+from typing import Callable, NoReturn, Generic, TypeVar, Any, Union, NewType
+from typing_extensions import Protocol
 
 from dry_monads.primitives.exceptions import UnwrapFailedError
-from dry_monads.primitives.monad import Monad, NewValueType, ValueType
+from dry_monads.primitives.monad import NewValueType, ValueType, Monad
+
+ErrorType = TypeVar('ErrorType')
 
 
-class Either(Monad[ValueType]):
+class Either(Generic[ValueType, ErrorType]):
     """
     Represents a calculation that may either fail or succeed.
 
     An alternative to using exceptions.
     'Either' (or its alias 'Result') is an abstract type and should not
     be instantiated directly. Instead use 'Right' (or its alias 'Success')
-    and 'Left' (or its alias 'Failure')
+    and 'Left' (or its alias 'Failure').
     """
 
+    _inner_value: Union[ValueType, ErrorType]
 
-class Left(Either[ValueType]):
+    @abstractmethod
+    def unwrap(self) -> ValueType:
+        """
+        Custom magic method to unwrap inner value from monad.
+
+        Should be redefined for ones that actually have values.
+        And for ones that raise an exception for no values.
+        """
+        raise NotImplementedError()
+
+
+class Left(Either[Any, ErrorType], Monad[ErrorType]):
     """
     Represents a calculation which has failed.
 
@@ -25,11 +41,19 @@ class Left(Either[ValueType]):
     To help with readability you may alternatively use the alias 'Failure'.
     """
 
-    def fmap(self, function) -> 'Left[ValueType]':
+    def __init__(self, inner_value: ErrorType) -> None:
+        """
+        Wraps the given value in the Container.
+
+        'value' is any arbitrary value of any type including functions.
+        """
+        self._inner_value = inner_value
+
+    def fmap(self, function) -> 'Left[ErrorType]':
         """Returns the 'Left' instance that was used to call the method."""
         return Left(self._inner_value)
 
-    def bind(self, function) -> 'Left[ValueType]':
+    def bind(self, function) -> 'Left[ErrorType]':
         """Returns the 'Left' instance that was used to call the method."""
         return Left(self._inner_value)
 
@@ -42,12 +66,20 @@ class Left(Either[ValueType]):
         raise UnwrapFailedError(self)
 
 
-class Right(Either[ValueType]):
+class Right(Either[ValueType, Any], Monad[ValueType]):
     """
     Represents a calculation which has succeeded and contains the result.
 
     To help with readability you may alternatively use the alias 'Success'.
     """
+
+    def __init__(self, inner_value: ValueType) -> None:
+        """
+        Wraps the given value in the Container.
+
+        'value' is any arbitrary value of any type including functions.
+        """
+        self._inner_value = inner_value
 
     def fmap(
         self,
@@ -65,8 +97,8 @@ class Right(Either[ValueType]):
 
     def bind(
         self,
-        function: Callable[[ValueType], Either[NewValueType]],
-    ) -> Either[NewValueType]:
+        function: Callable[[ValueType], Either[NewValueType, ErrorType]],
+    ) -> Either[NewValueType, ErrorType]:
         """
         Applies 'function' to the result of a previous calculation.
 
@@ -89,3 +121,11 @@ class Right(Either[ValueType]):
 Result = Either
 Success = Right
 Failure = Left
+
+# def function(trigger: int) -> Either[int, bool]:
+#     if trigger > 1:
+#         reveal_type(Success(''))
+#         return Success('')
+#     else:
+#         reveal_type(Failure(''))
+#         return Failure('-')

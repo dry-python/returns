@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from abc import ABCMeta, abstractmethod
-from typing import Generic, TypeVar
+from typing import Any, TypeVar, Generic
 
 ValueType = TypeVar('ValueType')
 NewValueType = TypeVar('NewValueType')
@@ -19,15 +19,7 @@ class Monad(Generic[ValueType], metaclass=ABCMeta):
 
     """
 
-    _inner_value: ValueType
-
-    def __init__(self, inner_value: ValueType) -> None:
-        """
-        Wraps the given value in the Container.
-
-        'value' is any arbitrary value of any type including functions.
-        """
-        self._inner_value = inner_value
+    _inner_value: Any
 
     @abstractmethod
     def fmap(self, function):  # pragma: no cover
