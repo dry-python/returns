@@ -1,24 +1,18 @@
 # -*- coding: utf-8 -*-
 
 from functools import wraps
-from typing import TYPE_CHECKING, Callable, TypeVar, Union
+from typing import Callable
 
-from dry_monads.either import Either
 from dry_monads.primitives.exceptions import UnwrapFailedError
-
-if TYPE_CHECKING:  # pragma: no cover
-    from dry_monads.primitives.monad import Monad  # noqa: Z435, F401
-
-# We need to have this ugly type because there is no other way around it:
-_MonadType = TypeVar('_MonadType', bound=Union['Monad', Either])
+from dry_monads.primitives.types import MonadType
 
 
 def do_notation(
-    function: Callable[..., _MonadType],
-) -> Callable[..., _MonadType]:
+    function: Callable[..., MonadType],
+) -> Callable[..., MonadType]:
     """Decorator to enable 'do-notation' context."""
     @wraps(function)
-    def decorator(*args, **kwargs) -> _MonadType:
+    def decorator(*args, **kwargs) -> MonadType:
         try:
             return function(*args, **kwargs)
         except UnwrapFailedError as exc:
