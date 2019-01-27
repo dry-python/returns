@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from abc import ABCMeta, abstractmethod
-from typing import Generic, TypeVar
+from typing import Any, Generic, TypeVar
 
 ValueType = TypeVar('ValueType')
 NewValueType = TypeVar('NewValueType')
@@ -19,15 +19,7 @@ class Monad(Generic[ValueType], metaclass=ABCMeta):
 
     """
 
-    _inner_value: ValueType
-
-    def __init__(self, inner_value: ValueType) -> None:
-        """
-        Wraps the given value in the Container.
-
-        'value' is any arbitrary value of any type including functions.
-        """
-        self._inner_value = inner_value
+    _inner_value: Any
 
     @abstractmethod
     def fmap(self, function):  # pragma: no cover
@@ -36,7 +28,7 @@ class Monad(Generic[ValueType], metaclass=ABCMeta):
 
         And returns a new functor value.
         """
-        raise NotImplementedError
+        raise NotImplementedError()
 
     @abstractmethod
     def bind(self, function):  # pragma: no cover
@@ -45,12 +37,22 @@ class Monad(Generic[ValueType], metaclass=ABCMeta):
 
         And returns a new monad.
         """
-        raise NotImplementedError
+        raise NotImplementedError()
 
     @abstractmethod
-    def value_of(self, default_value):
+    def value_or(self, default_value):  # pragma: no cover
         """Forces to unwrap value from monad or return a default."""
-        raise NotImplementedError
+        raise NotImplementedError()
+
+    @abstractmethod
+    def unwrap(self) -> ValueType:  # pragma: no cover
+        """
+        Custom magic method to unwrap inner value from monad.
+
+        Should be redefined for ones that actually have values.
+        And for ones that raise an exception for no values.
+        """
+        raise NotImplementedError()
 
     def __str__(self) -> str:
         """Converts to string."""
