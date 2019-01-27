@@ -5,17 +5,24 @@ from dry_monads.either import Either, Failure, Success
 
 
 @do_notation
-def _example(number: int) -> Either[int, str]:
+def _example1(number: int) -> Either[int, str]:
     first = Success(1).unwrap()
-    second = Failure('E').unwrap() if number % 2 else Success(number).unwrap()
+    second = Success(number).unwrap() if number % 2 else Failure('E').unwrap()
     return Success(first + second)
+
+
+@do_notation
+def _example2(number: int) -> Success[int]:
+    first: int = Success(1).unwrap()
+    return Success(first + Failure(number).unwrap())
 
 
 def test_do_notation_success():
     """Ensures that do notation works well for Success."""
-    assert _example(5) == Success(6)
+    assert _example1(5) == Success(6)
 
 
 def test_do_notation_failure():
     """Ensures that do notation works well for Failure."""
-    assert _example(6) == Failure('E')
+    assert _example1(6) == Failure('E')
+    assert _example2(0) == Failure(0)
