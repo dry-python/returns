@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from typing import Callable
+from typing import Callable, NoReturn
 
+from dry_monads.primitives.exceptions import UnwrapFailedError
 from dry_monads.primitives.monad import Monad, NewValueType, ValueType
 
 
@@ -35,6 +36,10 @@ class Left(Either[ValueType]):
     def value_or(self, default_value: NewValueType) -> NewValueType:
         """Returns the value if we deal with 'Right' or default if 'Left'."""
         return default_value
+
+    def unwrap(self) -> NoReturn:
+        """Raises an exception, since it does not have a value inside."""
+        raise UnwrapFailedError(self)
 
 
 class Right(Either[ValueType]):
@@ -72,6 +77,10 @@ class Right(Either[ValueType]):
 
     def value_or(self, default_value: NewValueType) -> ValueType:
         """Returns the value if we deal with 'Right' or default if 'Left'."""
+        return self._inner_value
+
+    def unwrap(self) -> ValueType:
+        """Returns the unwrapped value from the inside of this monad."""
         return self._inner_value
 
 

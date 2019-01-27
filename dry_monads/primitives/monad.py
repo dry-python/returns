@@ -36,7 +36,7 @@ class Monad(Generic[ValueType], metaclass=ABCMeta):
 
         And returns a new functor value.
         """
-        raise NotImplementedError
+        raise NotImplementedError()
 
     @abstractmethod
     def bind(self, function):  # pragma: no cover
@@ -45,12 +45,22 @@ class Monad(Generic[ValueType], metaclass=ABCMeta):
 
         And returns a new monad.
         """
-        raise NotImplementedError
+        raise NotImplementedError()
 
     @abstractmethod
-    def value_of(self, default_value):
+    def value_or(self, default_value):
         """Forces to unwrap value from monad or return a default."""
-        raise NotImplementedError
+        raise NotImplementedError()
+
+    @abstractmethod
+    def unwrap(self) -> ValueType:
+        """
+        Custom magic method to unwrap inner value from monad.
+
+        Should be redefined for ones that actually have values.
+        And for ones that raise an exception for no values.
+        """
+        raise NotImplementedError()
 
     def __str__(self) -> str:
         """Converts to string."""
