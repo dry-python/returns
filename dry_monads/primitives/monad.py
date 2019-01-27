@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from abc import ABCMeta, abstractmethod
-from typing import Any, TypeVar, Generic
+from typing import Any, Generic, TypeVar
 
 ValueType = TypeVar('ValueType')
 NewValueType = TypeVar('NewValueType')
@@ -40,12 +40,12 @@ class Monad(Generic[ValueType], metaclass=ABCMeta):
         raise NotImplementedError()
 
     @abstractmethod
-    def value_or(self, default_value):
+    def value_or(self, default_value):  # pragma: no cover
         """Forces to unwrap value from monad or return a default."""
         raise NotImplementedError()
 
     @abstractmethod
-    def unwrap(self) -> ValueType:
+    def unwrap(self) -> ValueType:  # pragma: no cover
         """
         Custom magic method to unwrap inner value from monad.
 

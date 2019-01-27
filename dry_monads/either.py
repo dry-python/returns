@@ -1,16 +1,21 @@
 # -*- coding: utf-8 -*-
 
 from abc import ABCMeta, abstractmethod
-from typing import Callable, NoReturn, Generic, TypeVar, Any, Union, NewType
-from typing_extensions import Protocol
+from typing import Any, Callable, Generic, NoReturn, TypeVar, Union
+
+from typing_extensions import final
 
 from dry_monads.primitives.exceptions import UnwrapFailedError
-from dry_monads.primitives.monad import NewValueType, ValueType, Monad
+from dry_monads.primitives.monad import Monad, NewValueType, ValueType
 
 ErrorType = TypeVar('ErrorType')
 
 
-class Either(Generic[ValueType, ErrorType]):
+# That's the most ugly part.
+# We need to express `Either` with two type parameters and
+# Left and Right with just one parameter.
+# And that's how we do it. Any other and more cleaner ways are appreciated.
+class Either(Generic[ValueType, ErrorType], metaclass=ABCMeta):
     """
     Represents a calculation that may either fail or succeed.
 
@@ -23,7 +28,7 @@ class Either(Generic[ValueType, ErrorType]):
     _inner_value: Union[ValueType, ErrorType]
 
     @abstractmethod
-    def unwrap(self) -> ValueType:
+    def unwrap(self) -> ValueType:  # pragma: no cover
         """
         Custom magic method to unwrap inner value from monad.
 
@@ -33,6 +38,7 @@ class Either(Generic[ValueType, ErrorType]):
         raise NotImplementedError()
 
 
+@final
 class Left(Either[Any, ErrorType], Monad[ErrorType]):
     """
     Represents a calculation which has failed.
@@ -66,6 +72,7 @@ class Left(Either[Any, ErrorType], Monad[ErrorType]):
         raise UnwrapFailedError(self)
 
 
+@final
 class Right(Either[ValueType, Any], Monad[ValueType]):
     """
     Represents a calculation which has succeeded and contains the result.
@@ -121,11 +128,3 @@ class Right(Either[ValueType, Any], Monad[ValueType]):
 Result = Either
 Success = Right
 Failure = Left
-
-# def function(trigger: int) -> Either[int, bool]:
-#     if trigger > 1:
-#         reveal_type(Success(''))
-#         return Success('')
-#     else:
-#         reveal_type(Failure(''))
-#         return Failure('-')

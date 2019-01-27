@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 
 from functools import wraps
-from typing import TYPE_CHECKING, Callable, TypeVar
+from typing import TYPE_CHECKING, Callable, TypeVar, Union
 
+from dry_monads.either import Either
 from dry_monads.primitives.exceptions import UnwrapFailedError
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from dry_monads.primitives.monad import Monad  # noqa: Z435, F401
 
-_MonadType = TypeVar('_MonadType', bound='Monad')
+# We need to have this ugly type because there is no other way around it:
+_MonadType = TypeVar('_MonadType', bound=Union['Monad', Either])
 
 
 def do_notation(
@@ -22,19 +24,3 @@ def do_notation(
         except UnwrapFailedError as exc:
             return exc.halted_monad
     return decorator
-
-# from dry_monads.either import Success, Failure, Either
-
-# @do_notation
-# def test() -> Success[int]:
-#     def example(incoming: int) -> Either[int, int]:
-#         return Failure("abc")
-
-#     first = example(1).unwrap()
-#     second = example(2).unwrap()
-#     reveal_type(first)  # dry_monads/do.py:35: error: Revealed type is 'builtins.int*'
-#     reveal_type(second)  # dry_monads/do.py:36: error: Revealed type is 'builtins.int*'
-#     return Success(first + second)
-
-# reveal_type(test())  # dry_monads/do.py:39: error: Revealed type is 'dry_monads.either.Right*[builtins.int]'
-# print(test())

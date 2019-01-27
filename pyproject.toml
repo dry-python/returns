@@ -6,11 +6,11 @@ authors = ["sobolevn <mail@sobolevn.me>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.6"
+python = "^3.6 || ^3.7"
+typing-extensions = "^3.7"
 
 [tool.poetry.dev-dependencies]
 mypy = "^0.660.0"
-typing-extensions = "^3.7"
 attrs = "^18.2"
 wemake-python-styleguide = "^0.7.0"
 flake8-pytest = "^1.3"
