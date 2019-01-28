@@ -46,7 +46,6 @@ class CreateAccountAndUser(object):
         return self._create_user(account)
 
     # Protected methods
-    # def _validate_user()
     # ...
 
 ```

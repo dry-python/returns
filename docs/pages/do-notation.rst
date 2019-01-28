@@ -16,7 +16,8 @@ And we know that this pipeline can fail in several places:
 
 1. Wrong ``username`` or ``email`` might be passed, so the validation will fail
 2. ``Account`` with this ``username`` or ``email`` might already exist
-3. ``User`` creation might fail as well, since it also makes an ``HTTP`` request to another micro-service deep inside
+3. ``User`` creation might fail as well,
+   since it also makes an ``HTTP`` request to another micro-service deep inside
 
 Here's the code to illustrate the task.
 
