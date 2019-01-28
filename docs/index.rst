@@ -7,6 +7,7 @@ Contents
   :maxdepth: 2
   :caption: Userguide
 
+  pages/monad.rst
   pages/either.rst
   pages/do-notation.rst
 

@@ -120,6 +120,12 @@ and then return a simple ``Failure`` monad.
       user creation-->>pipeline: returns Failure(http status) if fails
       user creation-->>pipeline: returns Success(user) if user is created
 
+See, do notation allows you to write simple yet powerful pipelines
+with multiple and complex steps.
+And at the same time the produced code is simple and readable.
+
+And that's it!
+
 API Reference
 -------------
 

@@ -14,6 +14,20 @@ Monads for `python` made simple and safe.
 - No operator overloading or other unpythonic stuff that makes your eyes bleed
 
 
+## What's inside?
+
+We have several the most iconic monads inside:
+
+- [`Result`, `Failure`, and `Success`](https://dry-monads.readthedocs.io/en/latest/pages/either.html) (also known as `Either`, `Left`, and `Right`)
+- `Maybe`, `Some`, and `Nothing` (currently WIP)
+- `Just` (currently WIP)
+
+We also care about code readability and developer experience,
+so we have included some useful features to make your life easier:
+
+- [Do notation](https://dry-monads.readthedocs.io/en/latest/pages/do-notation.html)
+
+
 ## Inspirations
 
 This module is heavily based on:
