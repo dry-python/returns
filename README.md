@@ -18,7 +18,7 @@ Monads for `python` made simple and safe.
 
 We have several the most iconic monads inside:
 
-- [`Result`, `Failure`, and `Success`](https://dry-monads.readthedocs.io/en/latest/pages/either.html) (also known as `Either`, `Left`, and `Right`)
+- [Result, Failure, and Success](https://dry-monads.readthedocs.io/en/latest/pages/either.html) (also known as `Either`, `Left`, and `Right`)
 - `Maybe`, `Some`, and `Nothing` (currently WIP)
 - `Just` (currently WIP)
 

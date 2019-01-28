@@ -139,7 +139,6 @@ html_sidebars = {
         'logo.html',
         'globaltoc.html',
         'github.html',
-        'searchbox.html',
         'moreinfo.html',
     ]
 }
