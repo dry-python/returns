@@ -21,17 +21,17 @@ sys.path.insert(0, os.path.abspath('..'))
 # -- Project information -----------------------------------------------------
 
 def _get_project_meta():
-    import tomlkit
+    import tomlkit  # noqa: Z435
 
     with open('../pyproject.toml') as pyproject:
-        contents = pyproject.read()
+        file_contents = pyproject.read()
 
-    return tomlkit.parse(contents)['tool']['poetry']
+    return tomlkit.parse(file_contents)['tool']['poetry']
 
 
 pkg_meta = _get_project_meta()
 project = pkg_meta['name']
-copyright = '2019, wemake.services'
+copyright = '2019, wemake.services'  # noqa: A001
 author = 'wemake.services'
 
 # The short X.Y version
@@ -137,7 +137,7 @@ html_sidebars = {
         'globaltoc.html',
         'github.html',
         'moreinfo.html',
-    ]
+    ],
 }
 
 
