@@ -28,6 +28,31 @@ so we have included some useful features to make your life easier:
 - [Do notation](https://dry-monads.readthedocs.io/en/latest/pages/do-notation.html)
 
 
+## Example
+
+
+```python
+from dry_monads.do_notation import do_notation
+from dry_monads.either import Result, Success, Failure
+
+class CreateAccountAndUser(object):
+    """Creates new Account-User pair."""
+
+    @do_notation
+    def __call__(self, username: str, email: str) -> Result['User', str]:
+        """Can return a Success(user) or Failure(str_reason)."""
+        user_schema = self._validate_user(username, email).unwrap()
+        account = self._create_account(user_schema).unwrap()
+        return self._create_user(account)
+
+    # Protected methods
+    # def _validate_user()
+    # ...
+
+```
+
+We are [covering what's going on in this example](https://dry-monads.readthedocs.io/en/latest/pages/do-notation.html) in the docs.
+
 ## Inspirations
 
 This module is heavily based on:
