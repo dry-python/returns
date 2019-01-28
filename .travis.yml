@@ -20,8 +20,7 @@ script:
   - poetry run flake8 dry_monads tests docs
   - poetry run mypy dry_monads tests/**/*.py
   - poetry run pytest
-  # TODO: add docs and enable
-  # - poetry run doc8 -q docs
+  - poetry run doc8 -q docs
   - poetry check
   - pip check
   - safety check --bare --full-report
