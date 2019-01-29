@@ -1,13 +1,43 @@
 # -*- coding: utf-8 -*-
 
 from abc import ABCMeta, abstractmethod
-from typing import Any, Generic, TypeVar
+from typing import Any, Generic, NoReturn, TypeVar
+
+from dry_monads.primitives.exceptions import ImmutableStateError
 
 ValueType = TypeVar('ValueType')
 NewValueType = TypeVar('NewValueType')
 
 
-class Monad(Generic[ValueType], metaclass=ABCMeta):
+class _BaseMonad(Generic[ValueType], metaclass=ABCMeta):
+    """Utility class to provide all needed magic methods to the contest."""
+
+    __slots__ = ('_inner_value',)
+    _inner_value: Any
+
+    def __setattr__(self, attr_name, attr_value) -> NoReturn:
+        """Makes inner state of the monads immutable."""
+        raise ImmutableStateError()
+
+    def __delattr__(self, attr_name) -> NoReturn:  # noqa: Z434
+        """Makes inner state of the monads immutable."""
+        raise ImmutableStateError()
+
+    def __str__(self) -> str:
+        """Converts to string."""
+        return '{0}: {1}'.format(
+            self.__class__.__qualname__,
+            str(self._inner_value),
+        )
+
+    def __eq__(self, other) -> bool:
+        """Used to compare two 'Monad' objects."""
+        if not isinstance(other, _BaseMonad):
+            return False
+        return self._inner_value == other._inner_value  # noqa: Z441
+
+
+class Monad(_BaseMonad[ValueType]):
     """
     Represents a "context" in which calculations can be executed.
 
@@ -17,9 +47,12 @@ class Monad(Generic[ValueType], metaclass=ABCMeta):
     a series of calculations while maintaining
     the context of that specific monad.
 
-    """
+    This is an abstract class with the API declaration.
 
-    _inner_value: Any
+    Attributes:
+        _inner_value: Wrapped internal immutable state.
+
+    """
 
     @abstractmethod
     def fmap(self, function):  # pragma: no cover
@@ -53,16 +86,3 @@ class Monad(Generic[ValueType], metaclass=ABCMeta):
         And for ones that raise an exception for no values.
         """
         raise NotImplementedError()
-
-    def __str__(self) -> str:
-        """Converts to string."""
-        return '{0}: {1}'.format(
-            self.__class__.__qualname__,
-            str(self._inner_value),
-        )
-
-    def __eq__(self, other) -> bool:
-        """Used to compare two 'Monad' objects."""
-        if not isinstance(other, Monad):
-            return False
-        return self._inner_value == other._inner_value  # noqa: Z441

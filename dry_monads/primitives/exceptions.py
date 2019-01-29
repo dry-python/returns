@@ -18,3 +18,7 @@ class UnwrapFailedError(Exception):
         """
         super().__init__()
         self.halted_monad = monad
+
+
+class ImmutableStateError(Exception):
+    """Raised when a monad is forced to be mutated."""

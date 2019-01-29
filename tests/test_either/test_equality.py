@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
+import pytest
+
 from dry_monads.either import Left, Right
+from dry_monads.primitives.exceptions import ImmutableStateError
 
 
 def test_nonequality():
@@ -9,3 +12,33 @@ def test_nonequality():
 
     assert Left(input_value) != input_value
     assert Right(input_value) != input_value
+
+
+def test_immutability_failure():
+    """Ensures that Failure monad is immutable."""
+    with pytest.raises(ImmutableStateError):
+        Left(0)._inner_state = 1  # noqa: Z441
+
+    with pytest.raises(ImmutableStateError):
+        Left(1).missing = 2
+
+    with pytest.raises(ImmutableStateError):
+        del Left(0)._inner_state  # type: ignore # noqa: Z420, Z441
+
+    with pytest.raises(AttributeError):
+        Left(1).missing  # type: ignore # noqa: Z444
+
+
+def test_immutability_success():
+    """Ensures that Success monad is immutable."""
+    with pytest.raises(ImmutableStateError):
+        Right(0)._inner_state = 1  # noqa: Z441
+
+    with pytest.raises(ImmutableStateError):
+        Right(1).missing = 2
+
+    with pytest.raises(ImmutableStateError):
+        del Right(0)._inner_state  # type: ignore # noqa: Z420, Z441
+
+    with pytest.raises(AttributeError):
+        Right(1).missing  # type: ignore # noqa: Z444

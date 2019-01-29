@@ -53,7 +53,7 @@ class Left(Either[Any, ErrorType], Monad[ErrorType]):
 
         'value' is any arbitrary value of any type including functions.
         """
-        self._inner_value = inner_value
+        object.__setattr__(self, '_inner_value', inner_value)
 
     def fmap(self, function) -> 'Left[ErrorType]':
         """Returns the 'Left' instance that was used to call the method."""
@@ -86,7 +86,7 @@ class Right(Either[ValueType, Any], Monad[ValueType]):
 
         'value' is any arbitrary value of any type including functions.
         """
-        self._inner_value = inner_value
+        object.__setattr__(self, '_inner_value', inner_value)
 
     def fmap(
         self,

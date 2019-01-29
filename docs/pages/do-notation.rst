@@ -1,3 +1,5 @@
+.. _do-notation:
+
 Do notation
 ===========
 
