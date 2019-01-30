@@ -82,6 +82,9 @@ monads like ``Failure`` and ``Nothing``:
 - :func:`Monad.ebind <dry_monads.primitives.monad.Monad.ebind>` the opposite
   of ``bind`` method that works only when monad is failed
 
+``efmap`` can be used to fix some fixable errors
+during the pipeline execution:
+
 .. code:: python
 
   from dry_monads.either import Failure
@@ -92,8 +95,8 @@ monads like ``Failure`` and ``Nothing``:
   Failure(1).efmap(double)
   # => Will be equal to Success(2.0)
 
-So, ``efmap`` can be used to fix some fixable errors
-during the pipeline execution.
+``ebind`` can return any monad you want.
+It can also fix your flow and get on the right track again:
 
 .. code:: python
 
@@ -106,9 +109,6 @@ during the pipeline execution.
 
   Failure(ZeroDivisionError).ebind(fix)
   # => Will be equal to Success(0)
-
-``ebind`` can return any monad you want.
-It can also be fixed to get your flow on the right track again.
 
 Unwrapping values
 ~~~~~~~~~~~~~~~~~
