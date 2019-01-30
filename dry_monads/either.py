@@ -95,6 +95,10 @@ class Left(Either[Any, ErrorType], Monad[ErrorType]):
         """Raises an exception, since it does not have a value inside."""
         raise UnwrapFailedError(self)
 
+    def failure(self) -> ErrorType:
+        """Unwraps inner error value from failed monad."""
+        return self._inner_value
+
 
 @final
 class Right(Either[ValueType, Any], Monad[ValueType]):
@@ -153,6 +157,10 @@ class Right(Either[ValueType, Any], Monad[ValueType]):
     def unwrap(self) -> ValueType:
         """Returns the unwrapped value from the inside of this monad."""
         return self._inner_value
+
+    def failure(self) -> NoReturn:
+        """Raises an exception, since it does not have an error inside."""
+        raise UnwrapFailedError(self)
 
 
 # Useful aliases for end users:

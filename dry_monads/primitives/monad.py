@@ -112,5 +112,16 @@ class Monad(_BaseMonad[ValueType]):
 
         Should be redefined for ones that actually have values.
         And for ones that raise an exception for no values.
+
+        This method is the opposite of :meth:`~failure`.
+        """
+        raise NotImplementedError()
+
+    @abstractmethod
+    def failure(self):  # pragma: no cover
+        """
+        Custom magic method to unwrap inner value from the failed monad.
+
+        This method is the opposite of :meth:`~unwrap`.
         """
         raise NotImplementedError()

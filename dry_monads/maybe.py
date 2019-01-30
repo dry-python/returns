@@ -94,6 +94,10 @@ class Nothing(Maybe[Literal[None]]):
         """Raises an exception, since it does not have a value inside."""
         raise UnwrapFailedError(self)
 
+    def failure(self) -> None:
+        """Unwraps inner error value from failed monad."""
+        return self._inner_value
+
 
 @final
 class Some(Maybe[ValueType]):
@@ -152,3 +156,7 @@ class Some(Maybe[ValueType]):
     def unwrap(self) -> ValueType:
         """Returns the unwrapped value from the inside of this monad."""
         return self._inner_value
+
+    def failure(self) -> NoReturn:
+        """Raises an exception, since it does not have an error inside."""
+        raise UnwrapFailedError(self)

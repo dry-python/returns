@@ -139,6 +139,21 @@ inner state of monads into a regular types:
 
 The most user-friendly way to use ``unwrap`` method is with :ref:`do-notation`.
 
+For failing monads you can
+use :func:`Monad.failure <dry_monads.primitives.monad.Monad.failure>`
+to unwrap failed state:
+
+.. code:: python
+
+  Failure(1).failure()
+  # => 1
+
+  Success(1).failure()
+  # => Traceback (most recent call last): UnwrapFailedError
+
+Be careful, since this method will raise an exception
+when you try to ``failure`` a successful monad.
+
 Immutability
 ------------
 

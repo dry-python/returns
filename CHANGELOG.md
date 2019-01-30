@@ -11,6 +11,7 @@ We follow Semantic Versions since the `0.1.0` release.
 - Adds methods to work with failures
 - Adds `safe` decorator to convert exceptions to `Either` monad
 - Adds `is_successful()` function to detect if your result is a success
+- Adds `failure()` method to unwrap values from failed monads
 
 ### Bugfixes
 
