@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "dry-monads"
-version = "0.1.1"
+version = "0.2.0"
 description = "Monads for python made simple and safe."
 license = "MIT"
 
