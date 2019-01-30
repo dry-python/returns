@@ -25,3 +25,26 @@ def test_left_identity_failure():
 
     assert bound == Left(input_value)
     assert str(bound) == 'Left: 5'
+
+
+def test_ebind_success():
+    """Ensures that ebind works for Right monad."""
+    def factory(inner_value: int) -> Right[int]:
+        return Right(inner_value * 2)
+
+    bound = Right(5).ebind(factory)
+
+    assert bound == Right(5)
+    assert str(bound) == 'Right: 5'
+
+
+def test_ebind_failure():
+    """Ensures that ebind works for Right monad."""
+    def factory(inner_value: int) -> Left[float]:
+        return Left(float(inner_value + 1))
+
+    expected = 6.0
+    bound = Left(5).ebind(factory)
+
+    assert bound == Left(expected)
+    assert str(bound) == 'Left: 6.0'

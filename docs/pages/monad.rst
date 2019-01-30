@@ -53,7 +53,7 @@ is used to literally bind two different monads together.
       ...
 
   result = Success(1).bind(make_http_call)
-  # => will be equal to either Success[int] or Failure[str]
+  # => Will be equal to either Success[int] or Failure[str]
 
 So, the rule is: whenever you have some impure functions,
 it should return a monad instead.
@@ -69,12 +69,46 @@ to use monads with pure functions.
       return state * 2
 
   result = Success(1).fmap(double)
-  # => will be equal to Success(2)
+  # => Will be equal to Success(2)
 
 Reverse operations
 ~~~~~~~~~~~~~~~~~~
 
-TODO: write about ``or_bind`` and ``or_fmap`` values.
+We also support two special methods to work with "failed"
+monads like ``Failure`` and ``Nothing``:
+
+- :func:`Monad.efmap <dry_monads.primitives.monad.Monad.efmap>` the opposite
+  of ``fmap`` method that works only when monad is failed
+- :func:`Monad.ebind <dry_monads.primitives.monad.Monad.ebind>` the opposite
+  of ``bind`` method that works only when monad is failed
+
+.. code:: python
+
+  from dry_monads.either import Failure
+
+  def double(state: int) -> float:
+      return state * 2.0
+
+  Failure(1).efmap(double)
+  # => Will be equal to Success(2.0)
+
+So, ``efmap`` can be used to fix some fixable errors
+during the pipeline execution.
+
+.. code:: python
+
+  from dry_monads.either import Either, Failure, Success
+
+  def fix(state: Exception) -> Either[int, Exception]:
+      if isinstance(state, ZeroDivisionError):
+          return Success(0)
+      return Failure(state)
+
+  Failure(ZeroDivisionError).ebind(fix)
+  # => Will be equal to Success(0)
+
+``ebind`` can return any monad you want.
+It can also be fixed to get your flow on the right track again.
 
 Unwrapping values
 ~~~~~~~~~~~~~~~~~

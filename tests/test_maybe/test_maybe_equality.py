@@ -11,11 +11,17 @@ def test_nonequality():
     assert Nothing() is not None
     assert Nothing(None) is not None
     assert Some(5) != 5
+    assert Some(None) != Nothing()
 
 
 def test_is_compare():
     """Ensures that `is` operator works correctly."""
-    assert Some(1) is not Some(1)
+    nothing = Nothing()
+    some_monad = Some(1)
+
+    assert nothing.bind(lambda state: state) is nothing
+    assert some_monad.ebind(lambda state: state) is some_monad
+    assert some_monad is not Some(1)
 
 
 def test_immutability_failure():

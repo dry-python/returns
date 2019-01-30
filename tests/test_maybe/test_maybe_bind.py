@@ -4,7 +4,7 @@ from dry_monads.maybe import Nothing, Some
 
 
 def test_bind_some():
-    """Ensures that Nothing identity works for Some monad."""
+    """Ensures that left identity works for Some monad."""
     def factory(inner_value: int) -> Some[int]:
         return Some(inner_value * 2)
 
@@ -16,7 +16,7 @@ def test_bind_some():
 
 
 def test_bind_nothing():
-    """Ensures that Nothing identity works for Some monad."""
+    """Ensures that left identity works for Some monad."""
     def factory(inner_value: None) -> Some[int]:
         return Some(1)
 
@@ -24,3 +24,25 @@ def test_bind_nothing():
 
     assert bound == Nothing(None)
     assert str(bound) == 'Nothing: None'
+
+
+def test_ebind_some():
+    """Ensures that left identity works for Some monad."""
+    def factory(inner_value: int) -> Some[int]:
+        return Some(inner_value * 2)
+
+    bound = Some(5).ebind(factory)
+
+    assert bound == Some(5)
+    assert str(bound) == 'Some: 5'
+
+
+def test_ebind_nothing():
+    """Ensures that left identity works for Some monad."""
+    def factory(inner_value: None) -> Some[int]:
+        return Some(1)
+
+    bound = Nothing().ebind(factory)
+
+    assert bound == Some(1)
+    assert str(bound) == 'Some: 1'

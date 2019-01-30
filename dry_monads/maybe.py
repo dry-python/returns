@@ -54,11 +54,37 @@ class Nothing(Maybe[Literal[None]]):
 
     def fmap(self, function) -> 'Nothing':
         """Returns the 'Nothing' instance that was used to call the method."""
-        return Nothing(self._inner_value)
+        return self
 
     def bind(self, function) -> 'Nothing':
         """Returns the 'Nothing' instance that was used to call the method."""
-        return Nothing(self._inner_value)
+        return self
+
+    def efmap(
+        self,
+        function: Callable[[Literal[None]], 'NewValueType'],
+    ) -> 'Some[NewValueType]':
+        """
+        Applies function to the inner value.
+
+        Applies 'function' to the contents of the 'Some' instance
+        and returns a new 'Some' object containing the result.
+        'function' should accept a single "normal" (non-monad) argument
+        and return a non-monad result.
+        """
+        return Some(function(self._inner_value))
+
+    def ebind(
+        self,
+        function: Callable[[Literal[None]], MonadType],
+    ) -> MonadType:
+        """
+        Applies 'function' to the result of a previous calculation.
+
+        'function' should accept a single "normal" (non-monad) argument
+        and return either a 'Nothing' or 'Some' type object.
+        """
+        return function(self._inner_value)
 
     def value_or(self, default_value: NewValueType) -> NewValueType:
         """Returns the value if we deal with 'Some' or default if 'Nothing'."""
@@ -110,6 +136,14 @@ class Some(Maybe[ValueType]):
         and return either a 'Nothing' or 'Some' type object.
         """
         return function(self._inner_value)
+
+    def efmap(self, function) -> 'Some[ValueType]':
+        """Returns the 'Some' instance that was used to call the method."""
+        return self
+
+    def ebind(self, function) -> 'Some[ValueType]':
+        """Returns the 'Some' instance that was used to call the method."""
+        return self
 
     def value_or(self, default_value: NewValueType) -> ValueType:
         """Returns the value if we deal with 'Some' or default if 'Nothing'."""

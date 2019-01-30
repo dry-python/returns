@@ -34,6 +34,8 @@ class _BaseMonad(Generic[ValueType], metaclass=ABCMeta):
         """Used to compare two 'Monad' objects."""
         if not isinstance(other, _BaseMonad):
             return False
+        if type(self) != type(other):
+            return False
         return self._inner_value == other._inner_value  # noqa: Z441
 
 
@@ -60,6 +62,8 @@ class Monad(_BaseMonad[ValueType]):
         Applies 'function' to the contents of the functor.
 
         And returns a new functor value.
+        Works for monads that represent success.
+        Is the opposite of :meth:`~efmap`.
         """
         raise NotImplementedError()
 
@@ -69,6 +73,30 @@ class Monad(_BaseMonad[ValueType]):
         Applies 'function' to the result of a previous calculation.
 
         And returns a new monad.
+        Works for monads that represent success.
+        Is the opposite of :meth:`~ebind`.
+        """
+        raise NotImplementedError()
+
+    @abstractmethod
+    def efmap(self, function):  # pragma: no cover
+        """
+        Applies 'function' to the contents of the functor.
+
+        And returns a new functor value.
+        Works for monads that represent failure.
+        Is the opposite of :meth:`~fmap`.
+        """
+        raise NotImplementedError()
+
+    @abstractmethod
+    def ebind(self, function):  # pragma: no cover
+        """
+        Applies 'function' to the result of a previous calculation.
+
+        And returns a new monad.
+        Works for monads that represent failure.
+        Is the opposite of :meth:`~bind`.
         """
         raise NotImplementedError()
 

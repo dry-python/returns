@@ -12,11 +12,17 @@ def test_nonequality():
 
     assert Left(input_value) != input_value
     assert Right(input_value) != input_value
+    assert Left(input_value) != Right(input_value)
 
 
 def test_is_compare():
     """Ensures that `is` operator works correctly."""
-    assert Right(1) is not Right(1)
+    left = Left(1)
+    right = Right(1)
+
+    assert left.bind(lambda state: state) is left
+    assert right.ebind(lambda state: state) is right
+    assert right is not Right(1)
 
 
 def test_immutability_failure():

@@ -58,11 +58,34 @@ class Left(Either[Any, ErrorType], Monad[ErrorType]):
 
     def fmap(self, function) -> 'Left[ErrorType]':
         """Returns the 'Left' instance that was used to call the method."""
-        return Left(self._inner_value)
+        return self
 
     def bind(self, function) -> 'Left[ErrorType]':
         """Returns the 'Left' instance that was used to call the method."""
-        return Left(self._inner_value)
+        return self
+
+    def efmap(
+        self,
+        function: Callable[[ErrorType], NewValueType],
+    ) -> 'Right[NewValueType]':
+        """
+        Applies function to the inner value.
+
+        Applies 'function' to the contents of the 'Right' instance
+        and returns a new 'Right' object containing the result.
+        'function' should accept a single "normal" (non-monad) argument
+        and return a non-monad result.
+        """
+        return Right(function(self._inner_value))
+
+    def ebind(self, function: Callable[[ErrorType], MonadType]) -> MonadType:
+        """
+        Applies 'function' to the result of a previous calculation.
+
+        'function' should accept a single "normal" (non-monad) argument
+        and return either a 'Left' or 'Right' type object.
+        """
+        return function(self._inner_value)
 
     def value_or(self, default_value: NewValueType) -> NewValueType:
         """Returns the value if we deal with 'Right' or default if 'Left'."""
@@ -114,6 +137,14 @@ class Right(Either[ValueType, Any], Monad[ValueType]):
         and return either a 'Left' or 'Right' type object.
         """
         return function(self._inner_value)
+
+    def efmap(self, function) -> 'Right[ValueType]':
+        """Returns the 'Right' instance that was used to call the method."""
+        return self
+
+    def ebind(self, function) -> 'Right[ValueType]':
+        """Returns the 'Right' instance that was used to call the method."""
+        return self
 
     def value_or(self, default_value: NewValueType) -> ValueType:
         """Returns the value if we deal with 'Right' or default if 'Left'."""
