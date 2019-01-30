@@ -129,6 +129,38 @@ And at the same time the produced code is simple and readable.
 
 And that's it!
 
+See also:
+  - https://dry-rb.org/gems/dry-monads/do-notation/
+  - https://en.wikibooks.org/wiki/Haskell/do_notation
+  - https://wiki.haskell.org/Do_notation_considered_harmful
+
+Limitations
+-----------
+
+There's one limitation in typing
+that we are facing right now
+due to `mypy issue <https://github.com/python/mypy/issues/3157>`_:
+
+.. code:: python
+
+  from dry_monads.do_notation import do_notation
+  from dry_monads.either import Success
+
+  @do_notation
+  def function(param: int) -> Success[int]:
+      return Success(param)
+
+  reveal_type(function)
+  # Actual => def (*Any, **Any) -> dry_monads.either.Right*[builtins.int]
+  # Expected => def (int) -> dry_monads.either.Right*[builtins.int]
+
+This effect can be reduced with the help of `Design by Contract <https://en.wikipedia.org/wiki/Design_by_contract>`_
+with these implementations:
+
+- https://github.com/Parquery/icontract
+- https://github.com/orsinium/deal
+- https://github.com/deadpixi/contracts
+
 API Reference
 -------------
 

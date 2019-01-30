@@ -7,6 +7,7 @@ from typing_extensions import final
 
 from dry_monads.primitives.exceptions import UnwrapFailedError
 from dry_monads.primitives.monad import Monad, NewValueType, ValueType
+from dry_monads.primitives.types import MonadType
 
 ErrorType = TypeVar('ErrorType')
 
@@ -104,8 +105,8 @@ class Right(Either[ValueType, Any], Monad[ValueType]):
 
     def bind(
         self,
-        function: Callable[[ValueType], Either[NewValueType, ErrorType]],
-    ) -> Either[NewValueType, ErrorType]:
+        function: Callable[[ValueType], MonadType],
+    ) -> MonadType:
         """
         Applies 'function' to the result of a previous calculation.
 

@@ -14,6 +14,11 @@ def test_nonequality():
     assert Right(input_value) != input_value
 
 
+def test_is_compare():
+    """Ensures that `is` operator works correctly."""
+    assert Right(1) is not Right(1)
+
+
 def test_immutability_failure():
     """Ensures that Failure monad is immutable."""
     with pytest.raises(ImmutableStateError):

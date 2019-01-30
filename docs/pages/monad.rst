@@ -71,6 +71,11 @@ to use monads with pure functions.
   result = Success(1).fmap(double)
   # => will be equal to Success(2)
 
+Reverse operations
+~~~~~~~~~~~~~~~~~~
+
+TODO: write about ``or_bind`` and ``or_fmap`` values.
+
 Unwrapping values
 ~~~~~~~~~~~~~~~~~
 
