@@ -1,16 +1,13 @@
 # -*- coding: utf-8 -*-
 
 from functools import wraps
-from typing import Callable, TypeVar
 
 from returns.either import Either, Failure, Success
 from returns.primitives.exceptions import UnwrapFailedError
 from returns.primitives.types import MonadType
 
-_ReturnType = TypeVar('_ReturnType')
 
-
-def is_successful(monad: MonadType) -> bool:
+def is_successful(monad):
     """Determins if a monad was a success or not."""
     try:
         monad.unwrap()
@@ -20,9 +17,7 @@ def is_successful(monad: MonadType) -> bool:
         return True
 
 
-def safe(
-    function: Callable[..., _ReturnType],
-) -> Callable[..., Either[_ReturnType, Exception]]:
+def safe(function):
     """
     Decorator to covert exception throwing function to 'Either' monad.
 
@@ -30,7 +25,7 @@ def safe(
     It does not catch 'BaseException' subclasses.
     """
     @wraps(function)
-    def decorator(*args, **kwargs) -> Either[_ReturnType, Exception]:
+    def decorator(*args, **kwargs):
         try:
             return Success(function(*args, **kwargs))
         except Exception as exc:

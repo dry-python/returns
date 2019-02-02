@@ -1,15 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:  # pragma: no cover
-    from returns.primitives.types import MonadType  # noqa: Z435, F401
-
 
 class UnwrapFailedError(Exception):
     """Raised when a monad can not be unwrapped into a meaningful value."""
 
-    def __init__(self, monad: 'MonadType') -> None:
+    def __init__(self, monad):
         """
         Saves halted monad in the inner state.
 

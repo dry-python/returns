@@ -10,7 +10,7 @@ from returns.primitives.monad import Monad, NewValueType, ValueType
 from returns.primitives.types import MonadType
 
 
-class Maybe(Monad[ValueType], metaclass=ABCMeta):
+class Maybe(Monad, metaclass=ABCMeta):
     """
     Represents a result of a series of commutation that can return ``None``.
 
@@ -19,33 +19,18 @@ class Maybe(Monad[ValueType], metaclass=ABCMeta):
     Instead use ``Some`` and ``Nothing``.
     """
 
-    @overload
     @classmethod
-    def new(cls, inner_value: Literal[None]) -> 'Nothing':  # type: ignore
-        """Overload to declare correct return type for Nothing."""
-
-    @overload  # noqa: F811
-    @classmethod
-    def new(cls, inner_value: ValueType) -> 'Some[ValueType]':
-        """Overload to declare correct return type for Some."""
-
-    @classmethod  # noqa: F811
-    def new(
-        cls, inner_value: Union[ValueType, Literal[None]],
-    ) -> Union['Nothing', 'Some[ValueType]']:
+    def new(cls, inner_value):
         """Creates new instance of Some or Nothing monads based on a value."""
         if inner_value is None:
             return Nothing(inner_value)
         return Some(inner_value)
 
 
-@final
-class Nothing(Maybe[Literal[None]]):
+class Nothing(Maybe):
     """Represents an empty state."""
 
-    _inner_value: Literal[None]
-
-    def __init__(self, inner_value: Literal[None] = None) -> None:
+    def __init__(self, inner_value = None):
         """
         Wraps the given value in the Container.
 
@@ -53,18 +38,15 @@ class Nothing(Maybe[Literal[None]]):
         """
         object.__setattr__(self, '_inner_value', inner_value)
 
-    def fmap(self, function) -> 'Nothing':
+    def fmap(self, function):
         """Returns the 'Nothing' instance that was used to call the method."""
         return self
 
-    def bind(self, function) -> 'Nothing':
+    def bind(self, function):
         """Returns the 'Nothing' instance that was used to call the method."""
         return self
 
-    def efmap(
-        self,
-        function: Callable[[Literal[None]], 'NewValueType'],
-    ) -> 'Some[NewValueType]':
+    def efmap(self, function):
         """
         Applies function to the inner value.
 
@@ -75,10 +57,7 @@ class Nothing(Maybe[Literal[None]]):
         """
         return Some(function(self._inner_value))
 
-    def ebind(
-        self,
-        function: Callable[[Literal[None]], MonadType],
-    ) -> MonadType:
+    def ebind(self, function):
         """
         Applies 'function' to the result of a previous calculation.
 
@@ -87,39 +66,27 @@ class Nothing(Maybe[Literal[None]]):
         """
         return function(self._inner_value)
 
-    def value_or(self, default_value: NewValueType) -> NewValueType:
+    def value_or(self, default_value):
         """Returns the value if we deal with 'Some' or default if 'Nothing'."""
         return default_value
 
-    def unwrap(self) -> NoReturn:
+    def unwrap(self):
         """Raises an exception, since it does not have a value inside."""
         raise UnwrapFailedError(self)
 
-    def failure(self) -> None:
+    def failure(self):
         """Unwraps inner error value from failed monad."""
         return self._inner_value
 
 
-@final
-class Some(Maybe[ValueType]):
+class Some(Maybe):
     """
     Represents a calculation which has succeeded and contains the result.
 
     Quite similar to ``Success`` type.
     """
 
-    def __init__(self, inner_value: ValueType) -> None:
-        """
-        Wraps the given value in the Container.
-
-        'value' is any arbitrary value of any type including functions.
-        """
-        object.__setattr__(self, '_inner_value', inner_value)
-
-    def fmap(
-        self,
-        function: Callable[[ValueType], NewValueType],
-    ) -> 'Some[NewValueType]':
+    def fmap(self, function):
         """
         Applies function to the inner value.
 
@@ -130,10 +97,7 @@ class Some(Maybe[ValueType]):
         """
         return Some(function(self._inner_value))
 
-    def bind(
-        self,
-        function: Callable[[ValueType], MonadType],
-    ) -> MonadType:
+    def bind(self, function):
         """
         Applies 'function' to the result of a previous calculation.
 
@@ -142,22 +106,22 @@ class Some(Maybe[ValueType]):
         """
         return function(self._inner_value)
 
-    def efmap(self, function) -> 'Some[ValueType]':
+    def efmap(self, function):
         """Returns the 'Some' instance that was used to call the method."""
         return self
 
-    def ebind(self, function) -> 'Some[ValueType]':
+    def ebind(self, function):
         """Returns the 'Some' instance that was used to call the method."""
         return self
 
-    def value_or(self, default_value: NewValueType) -> ValueType:
+    def value_or(self, default_value):
         """Returns the value if we deal with 'Some' or default if 'Nothing'."""
         return self._inner_value
 
-    def unwrap(self) -> ValueType:
+    def unwrap(self):
         """Returns the unwrapped value from the inside of this monad."""
         return self._inner_value
 
-    def failure(self) -> NoReturn:
+    def failure(self):
         """Raises an exception, since it does not have an error inside."""
         raise UnwrapFailedError(self)

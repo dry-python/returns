@@ -14,6 +14,10 @@ _MonadType = TypeVar('_MonadType', bound=Union['Monad', 'Either'])
 _ErrorType = TypeVar('_ErrorType')
 
 
+# That's the ugliest part.
+# We need to express `Either` with two type parameters and
+# Left and Right with just one parameter.
+# And that's how we do it. Any other and more cleaner ways are appreciated.
 class Either(Generic[ValueType, _ErrorType], metaclass=ABCMeta):
     _inner_value: Union[ValueType, _ErrorType]
 
