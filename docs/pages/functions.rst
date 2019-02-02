@@ -6,17 +6,17 @@ We feature several helper functions to make your developer experience better.
 is_successful
 -------------
 
-:func:`is_succesful <dry_monads.functions.is_successful>` is used to
+:func:`is_succesful <returns.functions.is_successful>` is used to
 tell whether or not your monad is a success.
 We treat only treat monads that does not throw as a successful ones,
-basically: :class:`Right <dry_monads.either.Right>`
-and :class:`Some <dry_monads.maybe.Some>`.
+basically: :class:`Right <returns.either.Right>`
+and :class:`Some <returns.maybe.Some>`.
 
 .. code:: python
 
-  from dry_monads.either import Success, Failure
-  from dry_monads.functions import is_successful
-  from dry_monads.maybe import Some, Nothing
+  from returns.either import Success, Failure
+  from returns.functions import is_successful
+  from returns.maybe import Some, Nothing
 
   is_successful(Some(1)) and is_successful(Success(1))
   # => True
@@ -27,13 +27,13 @@ and :class:`Some <dry_monads.maybe.Some>`.
 safe
 ----
 
-:func:`safe <dry_monads.functions.safe>` is used to convert
+:func:`safe <returns.functions.safe>` is used to convert
 regular functions that can throw exceptions to functions
-that return :class:`Either <dry_monads.either.Either>` monad.
+that return :class:`Either <returns.either.Either>` monad.
 
 .. code:: python
 
-  from dry_monads.functions import safe
+  from returns.functions import safe
 
   @safe
   def divide(number: int) -> float:
@@ -48,5 +48,5 @@ that return :class:`Either <dry_monads.either.Either>` monad.
 API Reference
 -------------
 
-.. automodule:: dry_monads.functions
+.. automodule:: returns.functions
    :members:

@@ -13,7 +13,7 @@ based on just a single value:
 
 .. code:: python
 
-  from dry_monads.maybe import Maybe
+  from returns.maybe import Maybe
 
   Maybe.new(1)
   # => Some(1)
@@ -56,7 +56,7 @@ It might be very useful for complex operations like the following one:
 API Reference
 -------------
 
-.. autoclasstree:: dry_monads.maybe
+.. autoclasstree:: returns.maybe
 
-.. automodule:: dry_monads.maybe
+.. automodule:: returns.maybe
    :members:

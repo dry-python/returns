@@ -3,8 +3,8 @@
 from functools import wraps
 from typing import Callable
 
-from dry_monads.primitives.exceptions import UnwrapFailedError
-from dry_monads.primitives.types import MonadType
+from returns.primitives.exceptions import UnwrapFailedError
+from returns.primitives.types import MonadType
 
 # Typing decorators is not an easy task, see:
 # https://github.com/python/mypy/issues/3157

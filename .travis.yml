@@ -17,8 +17,8 @@ install:
   - poetry install
 
 script:
-  - poetry run flake8 dry_monads tests docs
-  - poetry run mypy dry_monads tests/**/*.py
+  - poetry run flake8 returns tests docs
+  - poetry run mypy returns tests/**/*.py
   - poetry run pytest
   - poetry run doc8 -q docs
   - poetry check

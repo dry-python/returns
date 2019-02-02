@@ -5,9 +5,9 @@ from typing import Any, Callable, Generic, NoReturn, TypeVar, Union
 
 from typing_extensions import final
 
-from dry_monads.primitives.exceptions import UnwrapFailedError
-from dry_monads.primitives.monad import Monad, NewValueType, ValueType
-from dry_monads.primitives.types import MonadType
+from returns.primitives.exceptions import UnwrapFailedError
+from returns.primitives.monad import Monad, NewValueType, ValueType
+from returns.primitives.types import MonadType
 
 ErrorType = TypeVar('ErrorType')
 

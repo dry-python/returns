@@ -3,7 +3,7 @@
 from abc import ABCMeta, abstractmethod
 from typing import Any, Generic, NoReturn, TypeVar
 
-from dry_monads.primitives.exceptions import ImmutableStateError
+from returns.primitives.exceptions import ImmutableStateError
 
 ValueType = TypeVar('ValueType')
 NewValueType = TypeVar('NewValueType')

@@ -2,7 +2,7 @@
 
 import pytest
 
-from dry_monads.primitives.monad import Monad
+from returns.primitives.monad import Monad
 
 
 def test_abstract_class():

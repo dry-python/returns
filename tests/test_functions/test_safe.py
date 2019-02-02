@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from dry_monads.either import Failure, Success
-from dry_monads.functions import safe
+from returns.either import Failure, Success
+from returns.functions import safe
 
 
 @safe

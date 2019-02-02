@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from dry_monads.maybe import Nothing, Some
+from returns.maybe import Nothing, Some
 
 
 def test_some_value():

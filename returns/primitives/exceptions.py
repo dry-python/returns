@@ -3,7 +3,7 @@
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:  # pragma: no cover
-    from dry_monads.primitives.types import MonadType  # noqa: Z435, F401
+    from returns.primitives.types import MonadType  # noqa: Z435, F401
 
 
 class UnwrapFailedError(Exception):

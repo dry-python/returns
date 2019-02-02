@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "dry-monads"
-version = "0.2.0"
-description = "Monads for python made simple and safe."
+name = "returns"
+version = "0.3.0"
+description = "Make your functions return something meaningful and safe!"
 license = "MIT"
 
 authors = [
@@ -10,8 +10,8 @@ authors = [
 
 readme = "README.md"
 
-repository = "https://github.com/sobolevn/dry-monads"
-homepage = "https://dry-monads.readthedocs.io"
+repository = "https://github.com/dry-python/returns"
+homepage = "https://returns.readthedocs.io"
 
 keywords = [
   "functional programming",

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from dry_monads.either import Either, Failure, Left, Result, Right, Success
+from returns.either import Either, Failure, Left, Result, Right, Success
 
 
 def test_aliases():

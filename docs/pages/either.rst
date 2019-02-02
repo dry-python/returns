@@ -13,7 +13,7 @@ and ``Failure`` indicates that something has failed.
 
 .. code:: python
 
-  from dry_monads.either import Result, Success, Failure
+  from returns.either import Result, Success, Failure
 
   def find_user(user_id: int) -> Either['User', str]:
       user = User.objects.filter(id=user_id)
@@ -36,7 +36,7 @@ and other ``None`` exception-friends.
 API Reference
 -------------
 
-.. autoclasstree:: dry_monads.either
+.. autoclasstree:: returns.either
 
-.. automodule:: dry_monads.either
+.. automodule:: returns.either
    :members:

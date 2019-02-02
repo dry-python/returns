@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from dry_monads.maybe import Maybe, Nothing, Some
+from returns.maybe import Maybe, Nothing, Some
 
 
 def test_maybe_new_some():

@@ -1,7 +1,7 @@
 Monad: the concept
 ==================
 
-.. currentmodule:: dry_monads.primitives.monads
+.. currentmodule:: returns.primitives.monads
 
 We won't say that monad is `a monoid in the category of endofunctors <https://stackoverflow.com/questions/3870088/a-monad-is-just-a-monoid-in-the-category-of-endofunctors-whats-the-problem>`_.
 
@@ -16,7 +16,7 @@ Internals
 
 The main idea behind a monad is that it wraps some internal state.
 That's what
-:py:attr:`Monad._inner_value <dry_monads.primitives.monad.Monad._inner_value>`
+:py:attr:`Monad._inner_value <returns.primitives.monad.Monad._inner_value>`
 is used for.
 
 And we have several functions to create new monads based on the previous state.
@@ -42,12 +42,12 @@ The difference is simple:
 - ``fmap`` works with functions that return regular values
 - ``bind`` works with functions that return monads
 
-:func:`Monad.bind <dry_monads.primitives.monad.Monad.bind>`
+:func:`Monad.bind <returns.primitives.monad.Monad.bind>`
 is used to literally bind two different monads together.
 
 .. code:: python
 
-  from dry_monads.either import Either, Success
+  from returns.either import Either, Success
 
   def make_http_call(user_id: int) -> Either[int, str]:
       ...
@@ -58,12 +58,12 @@ is used to literally bind two different monads together.
 So, the rule is: whenever you have some impure functions,
 it should return a monad instead.
 
-And we use :func:`Monad.fmap <dry_monads.primitives.monad.Monad.fmap>`
+And we use :func:`Monad.fmap <returns.primitives.monad.Monad.fmap>`
 to use monads with pure functions.
 
 .. code:: python
 
-  from dry_monads.either import Success
+  from returns.either import Success
 
   def double(state: int) -> int:
       return state * 2
@@ -77,9 +77,9 @@ Reverse operations
 We also support two special methods to work with "failed"
 monads like ``Failure`` and ``Nothing``:
 
-- :func:`Monad.efmap <dry_monads.primitives.monad.Monad.efmap>` the opposite
+- :func:`Monad.efmap <returns.primitives.monad.Monad.efmap>` the opposite
   of ``fmap`` method that works only when monad is failed
-- :func:`Monad.ebind <dry_monads.primitives.monad.Monad.ebind>` the opposite
+- :func:`Monad.ebind <returns.primitives.monad.Monad.ebind>` the opposite
   of ``bind`` method that works only when monad is failed
 
 ``efmap`` can be used to fix some fixable errors
@@ -87,7 +87,7 @@ during the pipeline execution:
 
 .. code:: python
 
-  from dry_monads.either import Failure
+  from returns.either import Failure
 
   def double(state: int) -> float:
       return state * 2.0
@@ -100,7 +100,7 @@ It can also fix your flow and get on the right track again:
 
 .. code:: python
 
-  from dry_monads.either import Either, Failure, Success
+  from returns.either import Either, Failure, Success
 
   def fix(state: Exception) -> Either[int, Exception]:
       if isinstance(state, ZeroDivisionError):
@@ -116,14 +116,14 @@ Unwrapping values
 And we have two more functions to unwrap
 inner state of monads into a regular types:
 
-- :func:`Monad.value_or <dry_monads.primitives.monad.Monad.value_or>` - returns
+- :func:`Monad.value_or <returns.primitives.monad.Monad.value_or>` - returns
   a value if it is possible, returns ``default_value`` otherwise
-- :func:`Monad.unwrap <dry_monads.primitives.monad.Monad.unwrap>` - returns
+- :func:`Monad.unwrap <returns.primitives.monad.Monad.unwrap>` - returns
   a value if it possible, raises ``UnwrapFailedError`` otherwise
 
 .. code:: python
 
-  from dry_monads.either import Failure, Success
+  from returns.either import Failure, Success
 
   Success(1).value_or(None)
   # => 1
@@ -140,7 +140,7 @@ inner state of monads into a regular types:
 The most user-friendly way to use ``unwrap`` method is with :ref:`do-notation`.
 
 For failing monads you can
-use :func:`Monad.failure <dry_monads.primitives.monad.Monad.failure>`
+use :func:`Monad.failure <returns.primitives.monad.Monad.failure>`
 to unwrap failed state:
 
 .. code:: python
@@ -157,7 +157,7 @@ when you try to ``failure`` a successful monad.
 Immutability
 ------------
 
-We like to think of ``dry-monads`` as immutable structures.
+We like to think of ``returns`` as immutable structures.
 You cannot mutate the inner state of the created monad,
 because we redefine ``__setattr__`` and ``__delattr__`` magic methods.
 
@@ -196,7 +196,7 @@ This way your code will be type-safe from errors.
 API Reference
 -------------
 
-.. autoclasstree:: dry_monads.primitives.monad
+.. autoclasstree:: returns.primitives.monad
 
-.. automodule:: dry_monads.primitives.monad
+.. automodule:: returns.primitives.monad
    :members:

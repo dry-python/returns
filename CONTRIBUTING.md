@@ -40,7 +40,7 @@ pytest
 To run linting:
 
 ```bash
-flake8 dry_monads tests docs
+flake8 returns tests docs
 ```
 
 These steps are mandatory during the CI.
@@ -52,7 +52,7 @@ We use `mypy` to run type checks on our code.
 To use it:
 
 ```bash
-mypy dry_monads
+mypy returns
 ```
 
 This step is mandatory during the CI.

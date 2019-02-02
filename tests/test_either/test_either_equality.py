@@ -2,8 +2,8 @@
 
 import pytest
 
-from dry_monads.either import Left, Right
-from dry_monads.primitives.exceptions import ImmutableStateError
+from returns.either import Left, Right
+from returns.primitives.exceptions import ImmutableStateError
 
 
 def test_nonequality():

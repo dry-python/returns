@@ -4,9 +4,9 @@ from typing import Callable, NoReturn, Union, overload
 
 from typing_extensions import Literal, final
 
-from dry_monads.primitives.exceptions import UnwrapFailedError
-from dry_monads.primitives.monad import Monad, NewValueType, ValueType
-from dry_monads.primitives.types import MonadType
+from returns.primitives.exceptions import UnwrapFailedError
+from returns.primitives.monad import Monad, NewValueType, ValueType
+from returns.primitives.types import MonadType
 
 
 class Maybe(Monad[ValueType]):

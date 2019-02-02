@@ -2,6 +2,16 @@
 
 We follow Semantic Versions since the `0.1.0` release.
 
+## Version 0.3.0, Renamed to `returns`
+
+The project is renamed to `returns` and moved to `dry-python` org.
+
+### Features
+
+- Adds `.pyi` files for all modules,
+  to enable `mypy` support for 3rd party users
+
+
 ## Version 0.2.0
 
 ### Features

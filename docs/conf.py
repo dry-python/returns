@@ -118,10 +118,10 @@ html_theme = 'sphinx_typlog_theme'
 # further.  For a list of options available for each theme, see the
 # documentation.
 html_theme_options = {
-    'logo_name': 'dry-monads',
+    'logo_name': 'returns',
     'description': 'Monads for python made simple and safe',
-    'github_user': 'sobolevn',
-    'github_repo': 'dry-monads',
+    'github_user': 'dry-python',
+    'github_repo': 'returns',
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,

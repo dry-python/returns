@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from dry_monads.either import Left, Right
+from returns.either import Left, Right
 
 
 def test_success_value():

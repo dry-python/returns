@@ -2,8 +2,8 @@
 
 import pytest
 
-from dry_monads.either import Left, Right
-from dry_monads.primitives.exceptions import UnwrapFailedError
+from returns.either import Left, Right
+from returns.primitives.exceptions import UnwrapFailedError
 
 
 def test_unwrap_success():

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from dry_monads.do_notation import do_notation
-from dry_monads.either import Either, Failure, Success
+from returns.do_notation import do_notation
+from returns.either import Either, Failure, Success
 
 
 @do_notation

@@ -3,9 +3,9 @@
 from functools import wraps
 from typing import Callable, TypeVar
 
-from dry_monads.either import Either, Failure, Success
-from dry_monads.primitives.exceptions import UnwrapFailedError
-from dry_monads.primitives.types import MonadType
+from returns.either import Either, Failure, Success
+from returns.primitives.exceptions import UnwrapFailedError
+from returns.primitives.types import MonadType
 
 _ReturnType = TypeVar('_ReturnType')
 
