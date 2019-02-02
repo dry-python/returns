@@ -10,7 +10,7 @@ from returns.primitives.monad import Monad, NewValueType, ValueType
 # There's a wierd bug with mypy when we remove this line and use import:
 _MonadType = TypeVar('_MonadType', bound=Union['Monad', 'Either'])
 
-
+# Regular type var, works correctly:
 _ErrorType = TypeVar('_ErrorType')
 
 
@@ -87,6 +87,7 @@ class Right(Either[ValueType, Any], Monad[ValueType]):
 
     def failure(self) -> NoReturn:
         ...
+
 
 # Useful aliases for end users:
 

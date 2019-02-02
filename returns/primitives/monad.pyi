@@ -3,8 +3,9 @@
 from abc import ABCMeta, abstractmethod
 from typing import Any, Generic, NoReturn, TypeVar
 
-ValueType = TypeVar('ValueType')
-NewValueType = TypeVar('NewValueType')
+# These type variables are widely used in our source code.
+ValueType = TypeVar('ValueType')  # noqa: Y001
+NewValueType = TypeVar('NewValueType')  # noqa: Y001
 
 
 class _BaseMonad(Generic[ValueType], metaclass=ABCMeta):

@@ -89,5 +89,3 @@ class Some(Maybe[ValueType]):
 
     def failure(self) -> NoReturn:
         ...
-
-reveal_type(Some(1).bind(lambda x: Success('s')).unwrap())
