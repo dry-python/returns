@@ -6,7 +6,10 @@ from typing import Any, Callable, Generic, NoReturn, TypeVar, Union
 from typing_extensions import final
 
 from returns.primitives.monad import Monad, NewValueType, ValueType
-from returns.primitives.types import MonadType
+
+# There's a wierd bug with mypy when we remove this line and use import:
+_MonadType = TypeVar('_MonadType', bound=Union['Monad', 'Either'])
+
 
 _ErrorType = TypeVar('_ErrorType')
 
@@ -38,7 +41,7 @@ class Left(Either[Any, _ErrorType], Monad[_ErrorType]):
     ) -> 'Right[NewValueType]':
         ...
 
-    def ebind(self, function: Callable[[_ErrorType], MonadType]) -> MonadType:
+    def ebind(self, function: Callable[[_ErrorType], _MonadType]) -> _MonadType:
         ...
 
     def value_or(self, default_value: NewValueType) -> NewValueType:
@@ -66,8 +69,8 @@ class Right(Either[ValueType, Any], Monad[ValueType]):
 
     def bind(
         self,
-        function: Callable[[ValueType], MonadType],
-    ) -> MonadType:
+        function: Callable[[ValueType], _MonadType],
+    ) -> _MonadType:
         ...
 
     def efmap(self, function) -> 'Right[ValueType]':
@@ -84,7 +87,6 @@ class Right(Either[ValueType, Any], Monad[ValueType]):
 
     def failure(self) -> NoReturn:
         ...
-
 
 # Useful aliases for end users:
 
