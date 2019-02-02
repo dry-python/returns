@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from abc import ABCMeta
 from typing import Callable, NoReturn, Union, overload
 
 from typing_extensions import Literal, final
@@ -9,7 +10,7 @@ from returns.primitives.monad import Monad, NewValueType, ValueType
 from returns.primitives.types import MonadType
 
 
-class Maybe(Monad[ValueType]):
+class Maybe(Monad[ValueType], metaclass=ABCMeta):
     """
     Represents a result of a series of commutation that can return ``None``.
 

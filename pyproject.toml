@@ -49,6 +49,7 @@ sphinxcontrib-mermaid = "^0.3.1"
 doc8 = "^0.8.0"
 m2r = "^0.2.1"
 tomlkit = "^0.5.3"
+flake8-pyi = "^18.3"
 
 [build-system]
 requires = ["poetry>=0.12"]

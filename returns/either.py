@@ -9,14 +9,14 @@ from returns.primitives.exceptions import UnwrapFailedError
 from returns.primitives.monad import Monad, NewValueType, ValueType
 from returns.primitives.types import MonadType
 
-ErrorType = TypeVar('ErrorType')
+_ErrorType = TypeVar('_ErrorType')
 
 
 # That's the most ugly part.
 # We need to express `Either` with two type parameters and
 # Left and Right with just one parameter.
 # And that's how we do it. Any other and more cleaner ways are appreciated.
-class Either(Generic[ValueType, ErrorType], metaclass=ABCMeta):
+class Either(Generic[ValueType, _ErrorType], metaclass=ABCMeta):
     """
     Represents a calculation that may either fail or succeed.
 
@@ -26,7 +26,7 @@ class Either(Generic[ValueType, ErrorType], metaclass=ABCMeta):
     and 'Left' (or its alias 'Failure').
     """
 
-    _inner_value: Union[ValueType, ErrorType]
+    _inner_value: Union[ValueType, _ErrorType]
 
     @abstractmethod
     def unwrap(self) -> ValueType:  # pragma: no cover
@@ -40,7 +40,7 @@ class Either(Generic[ValueType, ErrorType], metaclass=ABCMeta):
 
 
 @final
-class Left(Either[Any, ErrorType], Monad[ErrorType]):
+class Left(Either[Any, _ErrorType], Monad[_ErrorType]):
     """
     Represents a calculation which has failed.
 
@@ -48,7 +48,7 @@ class Left(Either[Any, ErrorType], Monad[ErrorType]):
     To help with readability you may alternatively use the alias 'Failure'.
     """
 
-    def __init__(self, inner_value: ErrorType) -> None:
+    def __init__(self, inner_value: _ErrorType) -> None:
         """
         Wraps the given value in the Container.
 
@@ -56,17 +56,17 @@ class Left(Either[Any, ErrorType], Monad[ErrorType]):
         """
         object.__setattr__(self, '_inner_value', inner_value)
 
-    def fmap(self, function) -> 'Left[ErrorType]':
+    def fmap(self, function) -> 'Left[_ErrorType]':
         """Returns the 'Left' instance that was used to call the method."""
         return self
 
-    def bind(self, function) -> 'Left[ErrorType]':
+    def bind(self, function) -> 'Left[_ErrorType]':
         """Returns the 'Left' instance that was used to call the method."""
         return self
 
     def efmap(
         self,
-        function: Callable[[ErrorType], NewValueType],
+        function: Callable[[_ErrorType], NewValueType],
     ) -> 'Right[NewValueType]':
         """
         Applies function to the inner value.
@@ -78,7 +78,7 @@ class Left(Either[Any, ErrorType], Monad[ErrorType]):
         """
         return Right(function(self._inner_value))
 
-    def ebind(self, function: Callable[[ErrorType], MonadType]) -> MonadType:
+    def ebind(self, function: Callable[[_ErrorType], MonadType]) -> MonadType:
         """
         Applies 'function' to the result of a previous calculation.
 
@@ -95,7 +95,7 @@ class Left(Either[Any, ErrorType], Monad[ErrorType]):
         """Raises an exception, since it does not have a value inside."""
         raise UnwrapFailedError(self)
 
-    def failure(self) -> ErrorType:
+    def failure(self) -> _ErrorType:
         """Unwraps inner error value from failed monad."""
         return self._inner_value
 
