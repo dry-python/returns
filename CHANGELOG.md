@@ -2,6 +2,14 @@
 
 We follow Semantic Versions since the `0.1.0` release.
 
+
+## Version 0.3.1
+
+### Bugfixes
+
+- Adds `py.typed` file to be `PEP561` compatible
+
+
 ## Version 0.3.0, Renamed to `returns`
 
 The project is renamed to `returns` and moved to `dry-python` org.
