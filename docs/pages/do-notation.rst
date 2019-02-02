@@ -26,7 +26,7 @@ Here's the code to illustrate the task.
 .. code:: python
 
   from returns.do_notation import do_notation
-  from returns.either import Result, Success, Failure
+  from returns.result import Result, Success, Failure
 
 
   class CreateAccountAndUser(object):
@@ -138,21 +138,21 @@ Limitations
 -----------
 
 There's one limitation in typing
-that we are facing right now
+that we are facing Success now
 due to `mypy issue <https://github.com/python/mypy/issues/3157>`_:
 
 .. code:: python
 
   from returns.do_notation import do_notation
-  from returns.either import Success
+  from returns.result import Success
 
   @do_notation
   def function(param: int) -> Success[int]:
       return Success(param)
 
   reveal_type(function)
-  # Actual => def (*Any, **Any) -> returns.either.Right*[builtins.int]
-  # Expected => def (int) -> returns.either.Right*[builtins.int]
+  # Actual => def (*Any, **Any) -> returns.result.Success*[builtins.int]
+  # Expected => def (int) -> returns.result.Success*[builtins.int]
 
 This effect can be reduced with the help of `Design by Contract <https://en.wikipedia.org/wiki/Design_by_contract>`_
 with these implementations:

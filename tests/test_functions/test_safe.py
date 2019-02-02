@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from returns.either import Failure, Success
 from returns.functions import safe
+from returns.result import Failure, Success
 
 
 @safe

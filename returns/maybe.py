@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
 
 from abc import ABCMeta
-from typing import Callable, NoReturn, Union, overload
+from typing import Generic, TypeVar
 
-from typing_extensions import Literal, final
+from typing_extensions import Literal
 
 from returns.primitives.exceptions import UnwrapFailedError
-from returns.primitives.monad import Monad, NewValueType, ValueType
-from returns.primitives.types import MonadType
+from returns.primitives.monad import Monad
+
+_ValueType = TypeVar('_ValueType')
 
 
-class Maybe(Monad, metaclass=ABCMeta):
+class Maybe(Generic[_ValueType], Monad[_ValueType], metaclass=ABCMeta):
     """
     Represents a result of a series of commutation that can return ``None``.
 
@@ -27,10 +28,10 @@ class Maybe(Monad, metaclass=ABCMeta):
         return Some(inner_value)
 
 
-class Nothing(Maybe):
+class Nothing(Maybe[Literal[None]]):
     """Represents an empty state."""
 
-    def __init__(self, inner_value = None):
+    def __init__(self, inner_value=None):
         """
         Wraps the given value in the Container.
 
@@ -62,7 +63,7 @@ class Nothing(Maybe):
         Applies 'function' to the result of a previous calculation.
 
         'function' should accept a single "normal" (non-monad) argument
-        and return either a 'Nothing' or 'Some' type object.
+        and return Result a 'Nothing' or 'Some' type object.
         """
         return function(self._inner_value)
 
@@ -79,7 +80,7 @@ class Nothing(Maybe):
         return self._inner_value
 
 
-class Some(Maybe):
+class Some(Maybe[_ValueType]):
     """
     Represents a calculation which has succeeded and contains the result.
 
@@ -102,7 +103,7 @@ class Some(Maybe):
         Applies 'function' to the result of a previous calculation.
 
         'function' should accept a single "normal" (non-monad) argument
-        and return either a 'Nothing' or 'Some' type object.
+        and return Result a 'Nothing' or 'Some' type object.
         """
         return function(self._inner_value)
 

@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from abc import ABCMeta, abstractmethod
+from typing import Generic, TypeVar
 
 from returns.primitives.exceptions import ImmutableStateError
 
+_ValueType = TypeVar('_ValueType')
 
-class _BaseMonad(object, metaclass=ABCMeta):
+
+class _BaseMonad(Generic[_ValueType], metaclass=ABCMeta):
     """Utility class to provide all needed magic methods to the contest."""
 
     __slots__ = ('_inner_value',)
@@ -42,7 +45,7 @@ class _BaseMonad(object, metaclass=ABCMeta):
         return self._inner_value == other._inner_value  # noqa: Z441
 
 
-class Monad(_BaseMonad):
+class Monad(_BaseMonad[_ValueType]):
     """
     Represents a "context" in which calculations can be executed.
 

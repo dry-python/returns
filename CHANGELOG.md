@@ -3,6 +3,14 @@
 We follow Semantic Versions since the `0.1.0` release.
 
 
+## Version 0.4.0
+
+### Features
+
+- Moves all types to `.pyi` files
+- Renames all classes according to new naming pattern
+
+
 ## Version 0.3.1
 
 ### Bugfixes
@@ -27,7 +35,7 @@ The project is renamed to `returns` and moved to `dry-python` org.
 - Adds `Maybe` monad
 - Adds immutability and `__slots__` to all monads
 - Adds methods to work with failures
-- Adds `safe` decorator to convert exceptions to `Either` monad
+- Adds `safe` decorator to convert exceptions to `Result` monad
 - Adds `is_successful()` function to detect if your result is a success
 - Adds `failure()` method to unwrap values from failed monads
 

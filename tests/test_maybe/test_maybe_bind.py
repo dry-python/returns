@@ -4,7 +4,7 @@ from returns.maybe import Nothing, Some
 
 
 def test_bind_some():
-    """Ensures that left identity works for Some monad."""
+    """Ensures that Failure identity works for Some monad."""
     def factory(inner_value: int) -> Some[int]:
         return Some(inner_value * 2)
 
@@ -16,7 +16,7 @@ def test_bind_some():
 
 
 def test_bind_nothing():
-    """Ensures that left identity works for Some monad."""
+    """Ensures that Failure identity works for Some monad."""
     def factory(inner_value: None) -> Some[int]:
         return Some(1)
 
@@ -27,7 +27,7 @@ def test_bind_nothing():
 
 
 def test_ebind_some():
-    """Ensures that left identity works for Some monad."""
+    """Ensures that Failure identity works for Some monad."""
     def factory(inner_value: int) -> Some[int]:
         return Some(inner_value * 2)
 
@@ -38,7 +38,7 @@ def test_ebind_some():
 
 
 def test_ebind_nothing():
-    """Ensures that left identity works for Some monad."""
+    """Ensures that Failure identity works for Some monad."""
     def factory(inner_value: None) -> Some[int]:
         return Some(1)
 

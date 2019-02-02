@@ -1,4 +1,4 @@
-Either
+Result
 ======
 
 Also known as ``Result``.
@@ -13,9 +13,9 @@ and ``Failure`` indicates that something has failed.
 
 .. code:: python
 
-  from returns.either import Result, Success, Failure
+  from returns.result import Result, Success, Failure
 
-  def find_user(user_id: int) -> Either['User', str]:
+  def find_user(user_id: int) -> Result['User', str]:
       user = User.objects.filter(id=user_id)
       if user.exists():
           return Success(user[0])
@@ -36,7 +36,7 @@ and other ``None`` exception-friends.
 API Reference
 -------------
 
-.. autoclasstree:: returns.either
+.. autoclasstree:: returns.result
 
-.. automodule:: returns.either
+.. automodule:: returns.result
    :members:

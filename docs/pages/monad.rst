@@ -47,13 +47,13 @@ is used to literally bind two different monads together.
 
 .. code:: python
 
-  from returns.either import Either, Success
+  from returns.result import Result, Success
 
-  def make_http_call(user_id: int) -> Either[int, str]:
+  def make_http_call(user_id: int) -> Result[int, str]:
       ...
 
   result = Success(1).bind(make_http_call)
-  # => Will be equal to either Success[int] or Failure[str]
+  # => Will be equal to Result Success[int] or Failure[str]
 
 So, the rule is: whenever you have some impure functions,
 it should return a monad instead.
@@ -63,7 +63,7 @@ to use monads with pure functions.
 
 .. code:: python
 
-  from returns.either import Success
+  from returns.result import Success
 
   def double(state: int) -> int:
       return state * 2
@@ -87,7 +87,7 @@ during the pipeline execution:
 
 .. code:: python
 
-  from returns.either import Failure
+  from returns.result import Failure
 
   def double(state: int) -> float:
       return state * 2.0
@@ -96,13 +96,13 @@ during the pipeline execution:
   # => Will be equal to Success(2.0)
 
 ``ebind`` can return any monad you want.
-It can also fix your flow and get on the right track again:
+It can also fix your flow and get on the Success track again:
 
 .. code:: python
 
-  from returns.either import Either, Failure, Success
+  from returns.result import Result, Failure, Success
 
-  def fix(state: Exception) -> Either[int, Exception]:
+  def fix(state: Exception) -> Result[int, Exception]:
       if isinstance(state, ZeroDivisionError):
           return Success(0)
       return Failure(state)
@@ -123,7 +123,7 @@ inner state of monads into a regular types:
 
 .. code:: python
 
-  from returns.either import Failure, Success
+  from returns.result import Failure, Success
 
   Success(1).value_or(None)
   # => 1

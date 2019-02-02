@@ -2,8 +2,8 @@
 
 from typing import Callable, TypeVar
 
-from returns.either import Either
 from returns.primitives.types import MonadType
+from returns.result import Result
 
 _ReturnType = TypeVar('_ReturnType')
 
@@ -14,5 +14,5 @@ def is_successful(monad: MonadType) -> bool:
 
 def safe(
     function: Callable[..., _ReturnType],
-) -> Callable[..., Either[_ReturnType, Exception]]:
+) -> Callable[..., Result[_ReturnType, Exception]]:
     ...

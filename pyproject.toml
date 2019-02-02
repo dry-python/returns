@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "returns"
 version = "0.3.1"
-description = "Make your functions return something meaningful and safe!"
+description = "Make your functions return something meaningful, typed, and safe!"
 license = "MIT"
 
 authors = [

@@ -9,12 +9,12 @@ is_successful
 :func:`is_succesful <returns.functions.is_successful>` is used to
 tell whether or not your monad is a success.
 We treat only treat monads that does not throw as a successful ones,
-basically: :class:`Right <returns.either.Right>`
+basically: :class:`Success <returns.result.Success>`
 and :class:`Some <returns.maybe.Some>`.
 
 .. code:: python
 
-  from returns.either import Success, Failure
+  from returns.result import Success, Failure
   from returns.functions import is_successful
   from returns.maybe import Some, Nothing
 
@@ -29,7 +29,7 @@ safe
 
 :func:`safe <returns.functions.safe>` is used to convert
 regular functions that can throw exceptions to functions
-that return :class:`Either <returns.either.Either>` monad.
+that return :class:`Result <returns.result.Result>` monad.
 
 .. code:: python
 

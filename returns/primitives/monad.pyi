@@ -4,18 +4,18 @@ from abc import ABCMeta, abstractmethod
 from typing import Any, Generic, NoReturn, TypeVar
 
 # These type variables are widely used in our source code.
-ValueType = TypeVar('ValueType')  # noqa: Y001
-NewValueType = TypeVar('NewValueType')  # noqa: Y001
+_ValueType = TypeVar('_ValueType')
+_NewValueType = TypeVar('_NewValueType')
 
 
-class _BaseMonad(Generic[ValueType], metaclass=ABCMeta):
+class _BaseMonad(Generic[_ValueType], metaclass=ABCMeta):
     __slots__ = ('_inner_value',)
     _inner_value: Any
 
-    def __setattr__(self, attr_name, attr_value) -> NoReturn:
+    def __setattr__(self, attr_name: str, attr_value) -> NoReturn:
         ...
 
-    def __delattr__(self, attr_name) -> NoReturn:  # noqa: Z434
+    def __delattr__(self, attr_name: str) -> NoReturn:  # noqa: Z434
         ...
 
     def __str__(self) -> str:
@@ -25,7 +25,7 @@ class _BaseMonad(Generic[ValueType], metaclass=ABCMeta):
         ...
 
 
-class Monad(_BaseMonad[ValueType]):
+class Monad(_BaseMonad[_ValueType]):
     @abstractmethod
     def fmap(self, function):
         ...
@@ -47,7 +47,7 @@ class Monad(_BaseMonad[ValueType]):
         ...
 
     @abstractmethod
-    def unwrap(self) -> ValueType:
+    def unwrap(self) -> _ValueType:
         ...
 
     @abstractmethod

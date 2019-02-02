@@ -1,16 +1,20 @@
 # -*- coding: utf-8 -*-
 
 from abc import ABCMeta
+from typing import Any, Generic, TypeVar
 
 from returns.primitives.exceptions import UnwrapFailedError
 from returns.primitives.monad import Monad
 
+_ValueType = TypeVar('_ValueType')
+_ErrorType = TypeVar('_ErrorType')
 
-class Either(Monad, metaclass=ABCMeta):
-    """Base class for Left and Right."""
+
+class Result(Generic[_ValueType, _ErrorType], Monad, metaclass=ABCMeta):
+    """Base class for Failure and Success."""
 
 
-class Left(Either):
+class Failure(Result[Any, _ErrorType]):
     """
     Represents a calculation which has failed.
 
@@ -19,35 +23,35 @@ class Left(Either):
     """
 
     def fmap(self, function):
-        """Returns the 'Left' instance that was used to call the method."""
+        """Returns the 'Failure' instance that was used to call the method."""
         return self
 
     def bind(self, function):
-        """Returns the 'Left' instance that was used to call the method."""
+        """Returns the 'Failure' instance that was used to call the method."""
         return self
 
     def efmap(self, function):
         """
         Applies function to the inner value.
 
-        Applies 'function' to the contents of the 'Right' instance
-        and returns a new 'Right' object containing the result.
+        Applies 'function' to the contents of the 'Success' instance
+        and returns a new 'Success' object containing the result.
         'function' should accept a single "normal" (non-monad) argument
         and return a non-monad result.
         """
-        return Right(function(self._inner_value))
+        return Success(function(self._inner_value))
 
     def ebind(self, function):
         """
         Applies 'function' to the result of a previous calculation.
 
         'function' should accept a single "normal" (non-monad) argument
-        and return either a 'Left' or 'Right' type object.
+        and return Result a 'Failure' or 'Success' type object.
         """
         return function(self._inner_value)
 
     def value_or(self, default_value):
-        """Returns the value if we deal with 'Right' or default if 'Left'."""
+        """Returns the value if we deal with 'Success' or default otherwise."""
         return default_value
 
     def unwrap(self):
@@ -59,7 +63,7 @@ class Left(Either):
         return self._inner_value
 
 
-class Right(Either):
+class Success(Result[_ValueType, Any]):
     """
     Represents a calculation which has succeeded and contains the result.
 
@@ -70,32 +74,32 @@ class Right(Either):
         """
         Applies function to the inner value.
 
-        Applies 'function' to the contents of the 'Right' instance
-        and returns a new 'Right' object containing the result.
+        Applies 'function' to the contents of the 'Success' instance
+        and returns a new 'Success' object containing the result.
         'function' should accept a single "normal" (non-monad) argument
         and return a non-monad result.
         """
-        return Right(function(self._inner_value))
+        return Success(function(self._inner_value))
 
     def bind(self, function):
         """
         Applies 'function' to the result of a previous calculation.
 
         'function' should accept a single "normal" (non-monad) argument
-        and return either a 'Left' or 'Right' type object.
+        and return Result a 'Failure' or 'Success' type object.
         """
         return function(self._inner_value)
 
     def efmap(self, function):
-        """Returns the 'Right' instance that was used to call the method."""
+        """Returns the 'Success' instance that was used to call the method."""
         return self
 
     def ebind(self, function):
-        """Returns the 'Right' instance that was used to call the method."""
+        """Returns the 'Success' instance that was used to call the method."""
         return self
 
     def value_or(self, default_value):
-        """Returns the value if we deal with 'Right' or default if 'Left'."""
+        """Returns the value if we deal with 'Success' or default otherwise."""
         return self._inner_value
 
     def unwrap(self):
@@ -105,10 +109,3 @@ class Right(Either):
     def failure(self):
         """Raises an exception, since it does not have an error inside."""
         raise UnwrapFailedError(self)
-
-
-# Useful aliases for end users:
-
-Result = Either
-Success = Right
-Failure = Left

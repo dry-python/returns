@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from returns.do_notation import do_notation
-from returns.either import Either, Failure, Success
+from returns.result import Failure, Result, Success
 
 
 @do_notation
-def _example1(number: int) -> Either[int, str]:
+def _example1(number: int) -> Result[int, str]:
     first = Success(1).unwrap()
     second = Success(number).unwrap() if number else Failure('E').unwrap()
     return Success(first + second)

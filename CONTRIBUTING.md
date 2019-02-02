@@ -9,7 +9,7 @@ you will need to get familiar with these concepts:
 
 Here are some practical examples of what we are doing here:
 
-- https://medium.com/@rnesytov/using-either-monad-in-python-b6eac698dff5
+- https://medium.com/@rnesytov/using-Result-monad-in-python-b6eac698dff5
 - https://www.morozov.is/2018/09/08/monad-laws-in-ruby.html
 
 

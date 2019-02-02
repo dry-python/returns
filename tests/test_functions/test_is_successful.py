@@ -2,9 +2,9 @@
 
 import pytest
 
-from returns.either import Failure, Success
 from returns.functions import is_successful
 from returns.maybe import Nothing, Some
+from returns.result import Failure, Success
 
 
 @pytest.mark.parametrize('monad, correct_result', [

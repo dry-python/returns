@@ -31,7 +31,7 @@ def _get_project_meta():
 
 pkg_meta = _get_project_meta()
 project = pkg_meta['name']
-copyright = '2019, wemake.services'  # noqa: A001
+copySuccess = '2019, wemake.services'  # noqa: A001
 author = 'wemake.services'
 
 # The short X.Y version
