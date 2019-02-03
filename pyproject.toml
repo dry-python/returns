@@ -39,17 +39,21 @@ typing-extensions = "^3.7"
 mypy = "^0.660.0"
 wemake-python-styleguide = "^0.7.0"
 flake8-pytest = "^1.3"
+flake8-pyi = "^18.3"
+
 safety = "^1.8"
+
 pytest = "^4.1"
 pytest-cov = "^2.6"
 pytest-randomly = "^1.2"
+
 sphinx = "^1.8"
 sphinx-autodoc-typehints = "^1.6"
 sphinxcontrib-mermaid = "^0.3.1"
+sphinx-typlog-theme = "^0.7.1"
 doc8 = "^0.8.0"
 m2r = "^0.2.1"
 tomlkit = "^0.5.3"
-flake8-pyi = "^18.3"
 
 [build-system]
 requires = ["poetry>=0.12"]

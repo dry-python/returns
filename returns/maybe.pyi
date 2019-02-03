@@ -5,14 +5,14 @@ from typing import Any, Callable, NoReturn, TypeVar, Union, overload
 
 from typing_extensions import Literal, final
 
-from returns.primitives.monad import GenericMonadOneSlot, Monad
+from returns.primitives.container import Container, GenericContainerOneSlot
 
-_MonadType = TypeVar('_MonadType', bound=Monad)
+_ContainerType = TypeVar('_ContainerType', bound=Container)
 _ValueType = TypeVar('_ValueType')
 _NewValueType = TypeVar('_NewValueType')
 
 
-class Maybe(GenericMonadOneSlot[_ValueType], metaclass=ABCMeta):
+class Maybe(GenericContainerOneSlot[_ValueType], metaclass=ABCMeta):
     @overload
     @classmethod
     def new(cls, inner_value: Literal[None]) -> 'Nothing':  # type: ignore
@@ -31,8 +31,8 @@ class Maybe(GenericMonadOneSlot[_ValueType], metaclass=ABCMeta):
 
     def bind(
         self,
-        function: Callable[[_ValueType], _MonadType],
-    ) -> Union[_MonadType, 'Maybe[_ValueType]']:
+        function: Callable[[_ValueType], _ContainerType],
+    ) -> Union[_ContainerType, 'Maybe[_ValueType]']:
         ...
 
     def fix(
@@ -43,8 +43,8 @@ class Maybe(GenericMonadOneSlot[_ValueType], metaclass=ABCMeta):
 
     def rescue(
         self,
-        function: Callable[[Literal[None]], _MonadType],
-    ) -> Union[_MonadType, 'Maybe[_ValueType]']:
+        function: Callable[[Literal[None]], _ContainerType],
+    ) -> Union[_ContainerType, 'Maybe[_ValueType]']:
         ...
 
     def value_or(
@@ -81,8 +81,8 @@ class Nothing(Maybe[Any]):
 
     def rescue(
         self,
-        function: Callable[[Literal[None]], _MonadType],
-    ) -> _MonadType:
+        function: Callable[[Literal[None]], _ContainerType],
+    ) -> _ContainerType:
         ...
 
     def value_or(self, default_value: _NewValueType) -> _NewValueType:
@@ -110,8 +110,8 @@ class Some(Maybe[_ValueType]):
 
     def bind(
         self,
-        function: Callable[[_ValueType], _MonadType],
-    ) -> _MonadType:
+        function: Callable[[_ValueType], _ContainerType],
+    ) -> _ContainerType:
         ...
 
     def fix(self, function) -> 'Some[_ValueType]':

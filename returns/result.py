@@ -3,14 +3,17 @@
 from abc import ABCMeta
 from typing import Any, TypeVar
 
+from returns.primitives.container import GenericContainerTwoSlots
 from returns.primitives.exceptions import UnwrapFailedError
-from returns.primitives.monad import GenericMonadTwoSlots
 
 _ValueType = TypeVar('_ValueType')
 _ErrorType = TypeVar('_ErrorType')
 
 
-class Result(GenericMonadTwoSlots[_ValueType, _ErrorType], metaclass=ABCMeta):
+class Result(
+    GenericContainerTwoSlots[_ValueType, _ErrorType],
+    metaclass=ABCMeta,
+):
     """Base class for Failure and Success."""
 
 

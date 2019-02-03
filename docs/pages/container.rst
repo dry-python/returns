@@ -1,11 +1,11 @@
-Monad: the concept
-==================
+Container: the concept
+======================
 
 .. currentmodule:: returns.primitives.monads
 
 We won't say that monad is `a monoid in the category of endofunctors <https://stackoverflow.com/questions/3870088/a-monad-is-just-a-monoid-in-the-category-of-endofunctors-whats-the-problem>`_.
 
-Monad is a concept that allows you
+Container is a concept that allows you
 to write code without traditional error handling
 while maintaining the execution context.
 
@@ -16,7 +16,7 @@ Internals
 
 The main idea behind a monad is that it wraps some internal state.
 That's what
-:py:attr:`Monad._inner_value <returns.primitives.monad.Monad._inner_value>`
+:py:attr:`Container._inner_value <returns.primitives.monad.Container._inner_value>`
 is used for.
 
 And we have several functions to create new monads based on the previous state.
@@ -42,7 +42,7 @@ The difference is simple:
 - ``map`` works with functions that return regular values
 - ``bind`` works with functions that return monads
 
-:func:`Monad.bind <returns.primitives.monad.Monad.bind>`
+:func:`Container.bind <returns.primitives.monad.Container.bind>`
 is used to literally bind two different monads together.
 
 .. code:: python
@@ -58,7 +58,7 @@ is used to literally bind two different monads together.
 So, the rule is: whenever you have some impure functions,
 it should return a monad instead.
 
-And we use :func:`Monad.map <returns.primitives.monad.Monad.map>`
+And we use :func:`Container.map <returns.primitives.monad.Container.map>`
 to use monads with pure functions.
 
 .. code:: python
@@ -77,9 +77,9 @@ Reverse operations
 We also support two special methods to work with "failed"
 monads like ``Failure`` and ``Nothing``:
 
-- :func:`Monad.fix <returns.primitives.monad.Monad.fix>` the opposite
+- :func:`Container.fix <returns.primitives.monad.Container.fix>` the opposite
   of ``map`` method that works only when monad is failed
-- :func:`Monad.rescue <returns.primitives.monad.Monad.rescue>` the opposite
+- :func:`Container.rescue <returns.primitives.monad.Container.rescue>` the opposite
   of ``bind`` method that works only when monad is failed
 
 ``fix`` can be used to fix some fixable errors
@@ -116,9 +116,9 @@ Unwrapping values
 And we have two more functions to unwrap
 inner state of monads into a regular types:
 
-- :func:`Monad.value_or <returns.primitives.monad.Monad.value_or>` - returns
+- :func:`Container.value_or <returns.primitives.monad.Container.value_or>` - returns
   a value if it is possible, returns ``default_value`` otherwise
-- :func:`Monad.unwrap <returns.primitives.monad.Monad.unwrap>` - returns
+- :func:`Container.unwrap <returns.primitives.monad.Container.unwrap>` - returns
   a value if it possible, raises ``UnwrapFailedError`` otherwise
 
 .. code:: python
@@ -140,7 +140,7 @@ inner state of monads into a regular types:
 The most user-friendly way to use ``unwrap`` method is with :ref:`do-notation`.
 
 For failing monads you can
-use :func:`Monad.failure <returns.primitives.monad.Monad.failure>`
+use :func:`Container.failure <returns.primitives.monad.Container.failure>`
 to unwrap failed state:
 
 .. code:: python
@@ -196,7 +196,7 @@ This way your code will be type-safe from errors.
 API Reference
 -------------
 
-.. autoclasstree:: returns.primitives.monad
+.. autoclasstree:: returns.primitives.container
 
-.. automodule:: returns.primitives.monad
+.. automodule:: returns.primitives.container
    :members:

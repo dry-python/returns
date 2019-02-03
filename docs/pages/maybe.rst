@@ -1,14 +1,14 @@
 Maybe
 =====
 
-The ``Maybe`` monad is used when a series of computations
+The ``Maybe`` type is used when a series of computations
 could return ``None`` at any point.
 
 Maybe.new
 ---------
 
 ``Maybe`` consist of two types: ``Some`` and ``Nothing``.
-We have a convenient method to create different ``Maybe`` monad types
+We have a convenient method to create different ``Maybe`` types
 based on just a single value:
 
 .. code:: python

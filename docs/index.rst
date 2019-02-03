@@ -19,7 +19,6 @@ Contents
   pages/monad.rst
   pages/maybe.rst
   pages/result.rst
-  pages/do-notation.rst
   pages/functions.rst
 
 .. toctree::

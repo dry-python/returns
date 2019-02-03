@@ -9,7 +9,7 @@ _ValueType = TypeVar('_ValueType')
 _ErrorType = TypeVar('_ErrorType')
 
 
-class _BaseMonad(object, metaclass=ABCMeta):
+class _BaseContainer(object, metaclass=ABCMeta):
     """Utility class to provide all needed magic methods to the contest."""
 
     __slots__ = ('_inner_value',)
@@ -38,19 +38,19 @@ class _BaseMonad(object, metaclass=ABCMeta):
         )
 
     def __eq__(self, other):
-        """Used to compare two 'Monad' objects."""
-        if not isinstance(other, _BaseMonad):
+        """Used to compare two 'Container' objects."""
+        if not isinstance(other, _BaseContainer):
             return False
         if type(self) != type(other):
             return False
         return self._inner_value == other._inner_value  # noqa: Z441
 
 
-class Monad(_BaseMonad, metaclass=ABCMeta):
+class Container(_BaseContainer, metaclass=ABCMeta):
     """
     Represents a "context" in which calculations can be executed.
 
-    You won't create 'Monad' instances directly.
+    You won't create 'Container' instances directly.
     Instead, sub-classes implement specific contexts.
     Monads allow you to bind together
     a series of calculations while maintaining
@@ -134,19 +134,19 @@ class Monad(_BaseMonad, metaclass=ABCMeta):
         raise NotImplementedError()
 
 
-class GenericMonadOneSlot(Generic[_ValueType], Monad):
+class GenericContainerOneSlot(Generic[_ValueType], Container):
     """
     Base class for monads with one typed slot.
 
     Use this type for generic inheritance only.
-    Use :class:`~Monad` as a general type for polymorphism.
+    Use :class:`~Container` as a general type for polymorphism.
     """
 
 
-class GenericMonadTwoSlots(Generic[_ValueType, _ErrorType], Monad):
+class GenericContainerTwoSlots(Generic[_ValueType, _ErrorType], Container):
     """
     Base class for monads with two typed slot.
 
     Use this type for generic inheritance only.
-    Use :class:`~Monad` as a general type for polymorphism.
+    Use :class:`~Container` as a general type for polymorphism.
     """

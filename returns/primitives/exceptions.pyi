@@ -2,14 +2,14 @@
 
 from typing import TypeVar
 
-from returns.primitives.monad import Monad
+from returns.primitives.container import Container
 
-_MonadType = TypeVar('_MonadType', bound=Monad)
+_ContainerType = TypeVar('_ContainerType', bound=Container)
 
 
 class UnwrapFailedError(Exception):
-    def __init__(self, monad: _MonadType) -> None:
-        self.halted_monad = monad
+    def __init__(self, container: _ContainerType) -> None:
+        self.halted_container = container
 
 
 class ImmutableStateError(Exception):

@@ -119,7 +119,9 @@ html_theme = 'sphinx_typlog_theme'
 # documentation.
 html_theme_options = {
     'logo_name': 'returns',
-    'description': 'Monads for python made simple and safe',
+    'description': (
+        'Make your functions return something meaningful, typed, and safe!'
+    ),
     'github_user': 'dry-python',
     'github_repo': 'returns',
 }

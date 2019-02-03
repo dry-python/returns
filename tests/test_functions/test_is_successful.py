@@ -7,12 +7,12 @@ from returns.maybe import Nothing, Some
 from returns.result import Failure, Success
 
 
-@pytest.mark.parametrize('monad, correct_result', [
+@pytest.mark.parametrize('container, correct_result', [
     (Some, True),
     (Success, True),
     (Nothing, False),
     (Failure, False),
 ])
-def test_is_successful(monad, correct_result):
+def test_is_successful(container, correct_result):
     """Ensures that successful state works correctly."""
-    assert is_successful(monad(1)) is correct_result
+    assert is_successful(container('some value')) is correct_result

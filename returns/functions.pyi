@@ -2,15 +2,18 @@
 
 from typing import Callable, TypeVar
 
-from returns.primitives.monad import Monad
+from returns.primitives.container import Container
 from returns.result import Result
 
-_MonadType = TypeVar('_MonadType', bound=Monad)
-_ReturnsMonadType = TypeVar('_ReturnsMonadType', bound=Callable[..., Monad])
+_ContainerType = TypeVar('_ContainerType', bound=Container)
 _ReturnType = TypeVar('_ReturnType')
+_ReturnsMonadType = TypeVar(
+    '_ReturnsMonadType',
+    bound=Callable[..., Container],
+)
 
 
-def is_successful(monad: _MonadType) -> bool:
+def is_successful(monad: _ContainerType) -> bool:
     ...
 
 

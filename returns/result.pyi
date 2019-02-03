@@ -5,9 +5,9 @@ from typing import Any, Callable, NoReturn, TypeVar, Union
 
 from typing_extensions import final
 
-from returns.primitives.monad import GenericMonadTwoSlots, Monad
+from returns.primitives.container import Container, GenericContainerTwoSlots
 
-_MonadType = TypeVar('_MonadType', bound=Monad)
+_ContainerType = TypeVar('_ContainerType', bound=Container)
 _ResultType = TypeVar('_ResultType', bound='Result')
 
 # Regular type vars, work correctly:
@@ -16,7 +16,10 @@ _NewValueType = TypeVar('_NewValueType')
 _ErrorType = TypeVar('_ErrorType')
 
 
-class Result(GenericMonadTwoSlots[_ValueType, _ErrorType], metaclass=ABCMeta):
+class Result(
+    GenericContainerTwoSlots[_ValueType, _ErrorType],
+    metaclass=ABCMeta,
+):
     _inner_value: Union[_ValueType, _ErrorType]
 
     def map(  # noqa: A003
@@ -27,8 +30,8 @@ class Result(GenericMonadTwoSlots[_ValueType, _ErrorType], metaclass=ABCMeta):
 
     def bind(
         self,
-        function: Callable[[_ValueType], _MonadType],
-    ) -> Union[_MonadType, 'Result[_ValueType, _ErrorType]']:
+        function: Callable[[_ValueType], _ContainerType],
+    ) -> Union[_ContainerType, 'Result[_ValueType, _ErrorType]']:
         ...
 
     def fix(
@@ -39,8 +42,8 @@ class Result(GenericMonadTwoSlots[_ValueType, _ErrorType], metaclass=ABCMeta):
 
     def rescue(
         self,
-        function: Callable[[_ErrorType], _MonadType],
-    ) -> Union[_MonadType, 'Result[_ValueType, _ErrorType]']:
+        function: Callable[[_ErrorType], _ContainerType],
+    ) -> Union[_ContainerType, 'Result[_ValueType, _ErrorType]']:
         ...
 
     def value_or(
@@ -76,8 +79,8 @@ class Failure(Result[Any, _ErrorType]):
         ...
 
     def rescue(
-        self, function: Callable[[_ErrorType], _MonadType],
-    ) -> _MonadType:
+        self, function: Callable[[_ErrorType], _ContainerType],
+    ) -> _ContainerType:
         ...
 
     def value_or(self, default_value: _NewValueType) -> _NewValueType:
@@ -105,8 +108,8 @@ class Success(Result[_ValueType, Any]):
 
     def bind(
         self,
-        function: Callable[[_ValueType], _MonadType],
-    ) -> _MonadType:
+        function: Callable[[_ValueType], _ContainerType],
+    ) -> _ContainerType:
         ...
 
     def fix(self, function) -> 'Success[_ValueType]':

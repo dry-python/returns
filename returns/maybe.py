@@ -5,13 +5,13 @@ from typing import TypeVar
 
 from typing_extensions import Literal
 
+from returns.primitives.container import GenericContainerOneSlot
 from returns.primitives.exceptions import UnwrapFailedError
-from returns.primitives.monad import GenericMonadOneSlot
 
 _ValueType = TypeVar('_ValueType')
 
 
-class Maybe(GenericMonadOneSlot[_ValueType], metaclass=ABCMeta):
+class Maybe(GenericContainerOneSlot[_ValueType], metaclass=ABCMeta):
     """
     Represents a result of a series of commutation that can return ``None``.
 

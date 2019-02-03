@@ -43,5 +43,5 @@ def pipeline(function):
         try:
             return function(*args, **kwargs)
         except UnwrapFailedError as exc:
-            return exc.halted_monad
+            return exc.halted_container
     return decorator

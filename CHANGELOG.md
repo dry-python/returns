@@ -14,6 +14,7 @@ We follow Semantic Versions since the `0.1.0` release.
 - Renames `do_notation` to `pipeline`, moves it to `functions.py`
 - Renames `ebind` to `rescue`
 - Renames `efmap` to `fix`
+- Renames `Monad` to `Container`
 
 
 ## Version 0.3.1

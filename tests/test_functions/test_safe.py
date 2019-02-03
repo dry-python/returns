@@ -16,4 +16,6 @@ def test_safe_success():
 
 def test_safe_failure():
     """Ensures that safe decorator works correctly for failure case."""
-    assert isinstance(_function(0), Failure)
+    failed = _function(0)
+    assert isinstance(failed, Failure)
+    assert isinstance(failed.failure(), ZeroDivisionError)

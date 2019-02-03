@@ -7,7 +7,7 @@ _ValueType = TypeVar('_ValueType')
 _ErrorType = TypeVar('_ErrorType')
 
 
-class _BaseMonad(object, metaclass=ABCMeta):
+class _BaseContainer(object, metaclass=ABCMeta):
     __slots__ = ('_inner_value',)
     _inner_value: Any
 
@@ -24,7 +24,7 @@ class _BaseMonad(object, metaclass=ABCMeta):
         ...
 
 
-class Monad(_BaseMonad, metaclass=ABCMeta):
+class Container(_BaseContainer, metaclass=ABCMeta):
     @abstractmethod  # noqa: A003
     def map(self, function):
         ...
@@ -54,17 +54,17 @@ class Monad(_BaseMonad, metaclass=ABCMeta):
         ...
 
 
-class GenericMonadOneSlot(
+class GenericContainerOneSlot(
     Generic[_ValueType],
-    Monad,
+    Container,
     metaclass=ABCMeta,
 ):
     ...
 
 
-class GenericMonadTwoSlots(
+class GenericContainerTwoSlots(
     Generic[_ValueType, _ErrorType],
-    Monad,
+    Container,
     metaclass=ABCMeta,
 ):
     ...
