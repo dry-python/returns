@@ -1,8 +1,6 @@
 Result
 ======
 
-Also known as ``Result``.
-
 ``Result`` is obviously a result of some series of computations.
 It might succeed with some resulting value.
 Or it might return an error with some extra details.

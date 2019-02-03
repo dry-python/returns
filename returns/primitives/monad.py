@@ -6,9 +6,10 @@ from typing import Generic, TypeVar
 from returns.primitives.exceptions import ImmutableStateError
 
 _ValueType = TypeVar('_ValueType')
+_ErrorType = TypeVar('_ErrorType')
 
 
-class _BaseMonad(Generic[_ValueType], metaclass=ABCMeta):
+class _BaseMonad(object, metaclass=ABCMeta):
     """Utility class to provide all needed magic methods to the contest."""
 
     __slots__ = ('_inner_value',)
@@ -45,7 +46,7 @@ class _BaseMonad(Generic[_ValueType], metaclass=ABCMeta):
         return self._inner_value == other._inner_value  # noqa: Z441
 
 
-class Monad(_BaseMonad[_ValueType]):
+class Monad(_BaseMonad, metaclass=ABCMeta):
     """
     Represents a "context" in which calculations can be executed.
 
@@ -131,3 +132,21 @@ class Monad(_BaseMonad[_ValueType]):
         This method is the opposite of :meth:`~unwrap`.
         """
         raise NotImplementedError()
+
+
+class GenericMonadOneSlot(Generic[_ValueType], Monad):
+    """
+    Base class for monads with one typed slot.
+
+    Use this type for generic inheritance only.
+    Use :class:`~Monad` as a general type for polymorphism.
+    """
+
+
+class GenericMonadTwoSlots(Generic[_ValueType, _ErrorType], Monad):
+    """
+    Base class for monads with two typed slot.
+
+    Use this type for generic inheritance only.
+    Use :class:`~Monad` as a general type for polymorphism.
+    """

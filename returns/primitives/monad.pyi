@@ -3,12 +3,11 @@
 from abc import ABCMeta, abstractmethod
 from typing import Any, Generic, NoReturn, TypeVar
 
-# These type variables are widely used in our source code.
 _ValueType = TypeVar('_ValueType')
-_NewValueType = TypeVar('_NewValueType')
+_ErrorType = TypeVar('_ErrorType')
 
 
-class _BaseMonad(Generic[_ValueType], metaclass=ABCMeta):
+class _BaseMonad(object, metaclass=ABCMeta):
     __slots__ = ('_inner_value',)
     _inner_value: Any
 
@@ -25,7 +24,7 @@ class _BaseMonad(Generic[_ValueType], metaclass=ABCMeta):
         ...
 
 
-class Monad(_BaseMonad[_ValueType]):
+class Monad(_BaseMonad, metaclass=ABCMeta):
     @abstractmethod
     def fmap(self, function):
         ...
@@ -47,9 +46,25 @@ class Monad(_BaseMonad[_ValueType]):
         ...
 
     @abstractmethod
-    def unwrap(self) -> _ValueType:
+    def unwrap(self):
         ...
 
     @abstractmethod
     def failure(self):
         ...
+
+
+class GenericMonadOneSlot(
+    Generic[_ValueType],
+    Monad,
+    metaclass=ABCMeta,
+):
+    ...
+
+
+class GenericMonadTwoSlots(
+    Generic[_ValueType, _ErrorType],
+    Monad,
+    metaclass=ABCMeta,
+):
+    ...

@@ -9,6 +9,7 @@ We follow Semantic Versions since the `0.1.0` release.
 
 - Moves all types to `.pyi` files
 - Renames all classes according to new naming pattern
+- **HUGE** improvement of types
 
 
 ## Version 0.3.1

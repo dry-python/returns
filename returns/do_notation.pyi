@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from typing import Callable
+from typing import Callable, TypeVar
 
-from returns.primitives.types import MonadType
+from returns.primitives.monad import Monad
 
-# Typing decorators is not an easy task, see:
-# https://github.com/python/mypy/issues/3157
+_ReturnsMonad = TypeVar('_ReturnsMonad', bound=Callable[..., Monad])
 
 
 def do_notation(
-    function: Callable[..., MonadType],
-) -> Callable[..., MonadType]:
+    function: _ReturnsMonad,
+) -> _ReturnsMonad:
     ...

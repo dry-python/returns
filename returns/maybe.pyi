@@ -5,14 +5,14 @@ from typing import Any, Callable, NoReturn, TypeVar, Union, overload
 
 from typing_extensions import Literal, final
 
-from returns.primitives.monad import Monad
+from returns.primitives.monad import GenericMonadOneSlot, Monad
 
-_MonadType = TypeVar('_MonadType', bound='Monad')
+_MonadType = TypeVar('_MonadType', bound=Monad)
 _ValueType = TypeVar('_ValueType')
 _NewValueType = TypeVar('_NewValueType')
 
 
-class Maybe(Monad[_ValueType], metaclass=ABCMeta):
+class Maybe(GenericMonadOneSlot[_ValueType], metaclass=ABCMeta):
     @overload
     @classmethod
     def new(cls, inner_value: Literal[None]) -> 'Nothing':  # type: ignore
@@ -26,19 +26,25 @@ class Maybe(Monad[_ValueType], metaclass=ABCMeta):
     def fmap(
         self,
         function: Callable[[_ValueType], _NewValueType],
-    ) -> _MonadType:
+    ) -> Union['Some[_NewValueType]', 'Maybe[_ValueType]']:
         ...
 
     def bind(
         self,
         function: Callable[[_ValueType], _MonadType],
-    ) -> _MonadType:
+    ) -> Union[_MonadType, 'Maybe[_ValueType]']:
         ...
 
-    def efmap(self, function) -> 'Some[_NewValueType]':
+    def efmap(
+        self,
+        function: Callable[[Literal[None]], '_NewValueType'],
+    ) -> Union['Some[_ValueType]', 'Some[_NewValueType]']:
         ...
 
-    def ebind(self, function) -> _MonadType:
+    def ebind(
+        self,
+        function: Callable[[Literal[None]], _MonadType],
+    ) -> Union[_MonadType, 'Maybe[_ValueType]']:
         ...
 
     def value_or(
@@ -61,10 +67,10 @@ class Nothing(Maybe[Any]):
     def __init__(self, inner_value: Literal[None] = ...) -> None:
         ...
 
-    def fmap(self, function) -> 'Nothing':  # type: ignore
+    def fmap(self, function) -> 'Nothing':
         ...
 
-    def bind(self, function) -> 'Nothing':  # type: ignore
+    def bind(self, function) -> 'Nothing':
         ...
 
     def efmap(
@@ -96,7 +102,7 @@ class Some(Maybe[_ValueType]):
     def __init__(self, inner_value: _ValueType) -> None:
         ...
 
-    def fmap(  # type: ignore
+    def fmap(
         self,
         function: Callable[[_ValueType], _NewValueType],
     ) -> 'Some[_NewValueType]':
@@ -108,10 +114,10 @@ class Some(Maybe[_ValueType]):
     ) -> _MonadType:
         ...
 
-    def efmap(self, function) -> 'Some[_ValueType]':  # type: ignore
+    def efmap(self, function) -> 'Some[_ValueType]':
         ...
 
-    def ebind(self, function) -> 'Some[_ValueType]':  # type: ignore
+    def ebind(self, function) -> 'Some[_ValueType]':
         ...
 
     def value_or(self, default_value: _NewValueType) -> _ValueType:

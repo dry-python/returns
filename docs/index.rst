@@ -18,7 +18,7 @@ Contents
 
   pages/monad.rst
   pages/maybe.rst
-  pages/Result.rst
+  pages/result.rst
   pages/do-notation.rst
   pages/functions.rst
 
