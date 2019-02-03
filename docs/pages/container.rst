@@ -1,9 +1,7 @@
 Container: the concept
 ======================
 
-.. currentmodule:: returns.primitives.monads
-
-We won't say that monad is `a monoid in the category of endofunctors <https://stackoverflow.com/questions/3870088/a-monad-is-just-a-monoid-in-the-category-of-endofunctors-whats-the-problem>`_.
+.. currentmodule:: returns.primitives.container
 
 Container is a concept that allows you
 to write code without traditional error handling
@@ -14,12 +12,13 @@ We will show you its simple API of one attribute and several simple methods.
 Internals
 ---------
 
-The main idea behind a monad is that it wraps some internal state.
+The main idea behind a container is that it wraps some internal state.
 That's what
-:py:attr:`Container._inner_value <returns.primitives.monad.Container._inner_value>`
+:py:attr:`_inner_value <returns.primitives.container.Container._inner_value>`
 is used for.
 
-And we have several functions to create new monads based on the previous state.
+And we have several functions
+to create new containers based on the previous state.
 And we can see how this state is evolving during the execution.
 
 .. mermaid::
@@ -31,19 +30,19 @@ And we can see how this state is evolving during the execution.
        F3            --> F4["State(FailedLoginAttempt(1))"]
        F4            --> F5["State(SentNotificationId(992))"]
 
-Creating new monads
-~~~~~~~~~~~~~~~~~~~
+Creating new containers
+~~~~~~~~~~~~~~~~~~~~~~~
 
-We use two methods to create new monads from the previous one.
+We use two methods to create new containers from the previous one.
 ``bind`` and ``map``.
 
 The difference is simple:
 
 - ``map`` works with functions that return regular values
-- ``bind`` works with functions that return monads
+- ``bind`` works with functions that return containers
 
-:func:`Container.bind <returns.primitives.monad.Container.bind>`
-is used to literally bind two different monads together.
+:func:`Container.bind <returns.primitives.container.Container.bind>`
+is used to literally bind two different containers together.
 
 .. code:: python
 
@@ -56,10 +55,10 @@ is used to literally bind two different monads together.
   # => Will be equal to Result Success[int] or Failure[str]
 
 So, the rule is: whenever you have some impure functions,
-it should return a monad instead.
+it should return a container type instead.
 
-And we use :func:`Container.map <returns.primitives.monad.Container.map>`
-to use monads with pure functions.
+And we use :func:`Container.map <returns.primitives.container.Container.map>`
+to use containers with `pure functions <https://en.wikipedia.org/wiki/Pure_function>`_.
 
 .. code:: python
 
@@ -75,12 +74,14 @@ Reverse operations
 ~~~~~~~~~~~~~~~~~~
 
 We also support two special methods to work with "failed"
-monads like ``Failure`` and ``Nothing``:
+types like ``Failure`` and ``Nothing``:
 
-- :func:`Container.fix <returns.primitives.monad.Container.fix>` the opposite
-  of ``map`` method that works only when monad is failed
-- :func:`Container.rescue <returns.primitives.monad.Container.rescue>` the opposite
-  of ``bind`` method that works only when monad is failed
+- :func:`Container.fix <returns.primitives.container.Container.fix>`
+  is the opposite of ``map`` method
+  that works only when container is in failed state
+- :func:`Container.rescue <returns.primitives.container.Container.rescue>`
+  is the opposite of ``bind`` method
+  that works only when container is in failed state
 
 ``fix`` can be used to fix some fixable errors
 during the pipeline execution:
@@ -95,8 +96,8 @@ during the pipeline execution:
   Failure(1).fix(double)
   # => Will be equal to Success(2.0)
 
-``rescue`` can return any monad you want.
-It can also fix your flow and get on the Success track again:
+``rescue`` can return any container type you want.
+It can also fix your flow and get on the successful track again:
 
 .. code:: python
 
@@ -114,12 +115,12 @@ Unwrapping values
 ~~~~~~~~~~~~~~~~~
 
 And we have two more functions to unwrap
-inner state of monads into a regular types:
+inner state of containers into a regular types:
 
-- :func:`Container.value_or <returns.primitives.monad.Container.value_or>` - returns
-  a value if it is possible, returns ``default_value`` otherwise
-- :func:`Container.unwrap <returns.primitives.monad.Container.unwrap>` - returns
-  a value if it possible, raises ``UnwrapFailedError`` otherwise
+- :func:`Container.value_or <returns.primitives.container.Container.value_or>`
+  returns a value if it is possible, returns ``default_value`` otherwise
+- :func:`Container.unwrap <returns.primitives.container.Container.unwrap>`
+  returns a value if it is possible, raises ``UnwrapFailedError`` otherwise
 
 .. code:: python
 
@@ -139,9 +140,9 @@ inner state of monads into a regular types:
 
 The most user-friendly way to use ``unwrap`` method is with :ref:`do-notation`.
 
-For failing monads you can
-use :func:`Container.failure <returns.primitives.monad.Container.failure>`
-to unwrap failed state:
+For failing containers you can
+use :func:`Container.failure <returns.primitives.container.Container.failure>`
+to unwrap the failed state:
 
 .. code:: python
 
@@ -152,16 +153,16 @@ to unwrap failed state:
   # => Traceback (most recent call last): UnwrapFailedError
 
 Be careful, since this method will raise an exception
-when you try to ``failure`` a successful monad.
+when you try to ``failure`` a successful container.
 
 Immutability
 ------------
 
 We like to think of ``returns`` as immutable structures.
-You cannot mutate the inner state of the created monad,
+You cannot mutate the inner state of the created container,
 because we redefine ``__setattr__`` and ``__delattr__`` magic methods.
 
-You cannot also set new attributes to monad instances,
+You cannot also set new attributes to container instances,
 since we are using ``__slots__`` for better performance and strictness.
 
 Well, nothing is **really** immutable in python, but you were warned.
@@ -178,7 +179,7 @@ So, instead of:
 
 .. code:: python
 
-  some_monad.map(lambda x: x + 2)  #: Callable[[Any], Any]
+  some_container.map(lambda x: x + 2)  #: Callable[[Any], Any]
 
 Write:
 
@@ -189,7 +190,7 @@ Write:
   def increment(addition: int, number: int) -> int:
       return number + addition
 
-  some_monad.map(partial(increment, 2))  #: functools.partial[builtins.int*]
+  some_container.map(partial(increment, 2))  # functools.partial[builtins.int]
 
 This way your code will be type-safe from errors.
 

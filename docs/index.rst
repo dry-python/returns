@@ -16,7 +16,7 @@ Contents
   :maxdepth: 2
   :caption: Userguide
 
-  pages/monad.rst
+  pages/container.rst
   pages/maybe.rst
   pages/result.rst
   pages/functions.rst
