@@ -9,8 +9,9 @@ while maintaining the execution context.
 
 We will show you its simple API of one attribute and several simple methods.
 
-Internals
----------
+
+Basics
+------
 
 The main idea behind a container is that it wraps some internal state.
 That's what
@@ -25,13 +26,57 @@ And we can see how this state is evolving during the execution.
   :caption: State evolution.
 
    graph LR
-       F1["State()"] --> F2["State(UserId(1))"]
-       F2            --> F3["State(UserAccount(156))"]
-       F3            --> F4["State(FailedLoginAttempt(1))"]
-       F4            --> F5["State(SentNotificationId(992))"]
+       F1["Container(Initial)"] --> F2["Container(UserId(1))"]
+       F2                       --> F3["Container(UserAccount(156))"]
+       F3                       --> F4["Container(FailedLoginAttempt(1))"]
+       F4                       --> F5["Container(SentNotificationId(992))"]
 
-Creating new containers
-~~~~~~~~~~~~~~~~~~~~~~~
+
+Railway oriented programming
+----------------------------
+
+We use a concept of
+`Railway oriented programming <https://fsharpforfunandprofit.com/rop/>`_.
+It mean that our code can go on two tracks:
+
+1. Successful one: where everything goes perfectly: HTTP requests work,
+   database is always serving us data, parsing values does not failed
+2. Failed one: where something went wrong
+
+We can switch from track to track: we can fail something
+or we can rescue the situation.
+
+.. mermaid::
+  :caption: Railway oriented programming.
+
+   graph LR
+       S1 --> S3
+       S3 --> S5
+       S5 --> S7
+
+       F2 --> F4
+       F4 --> F6
+       F6 --> F8
+
+       S1 -- Fail --> F2
+       F2 -- Fix --> S3
+       S3 -- Fail --> F4
+       S5 -- Fail --> F6
+       F6 -- Rescue --> S7
+
+       style S1 fill:green
+       style S3 fill:green
+       style S5 fill:green
+       style S7 fill:green
+       style F2 fill:red
+       style F4 fill:red
+       style F6 fill:red
+       style F8 fill:red
+
+
+
+Working with containers
+-----------------------
 
 We use two methods to create new containers from the previous one.
 ``bind`` and ``map``.
@@ -39,7 +84,7 @@ We use two methods to create new containers from the previous one.
 The difference is simple:
 
 - ``map`` works with functions that return regular values
-- ``bind`` works with functions that return containers
+- ``bind`` works with functions that return other containers
 
 :func:`Container.bind <returns.primitives.container.Container.bind>`
 is used to literally bind two different containers together.
@@ -70,8 +115,8 @@ to use containers with `pure functions <https://en.wikipedia.org/wiki/Pure_funct
   result = Success(1).map(double)
   # => Will be equal to Success(2)
 
-Reverse operations
-~~~~~~~~~~~~~~~~~~
+Returning execution to the right track
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We also support two special methods to work with "failed"
 types like ``Failure`` and ``Nothing``:
@@ -138,7 +183,7 @@ inner state of containers into a regular types:
   Failure(1).unwrap()
   # => Traceback (most recent call last): UnwrapFailedError
 
-The most user-friendly way to use ``unwrap`` method is with :ref:`do-notation`.
+The most user-friendly way to use ``unwrap`` method is with :ref:`pipeline`.
 
 For failing containers you can
 use :func:`Container.failure <returns.primitives.container.Container.failure>`
@@ -155,6 +200,7 @@ to unwrap the failed state:
 Be careful, since this method will raise an exception
 when you try to ``failure`` a successful container.
 
+
 Immutability
 ------------
 
@@ -167,32 +213,25 @@ since we are using ``__slots__`` for better performance and strictness.
 
 Well, nothing is **really** immutable in python, but you were warned.
 
-Using lambda functions
-----------------------
 
-Please, do not use ``lambda`` functions in ``python``. Why?
-Because all ``lambda`` functions arguments are typed as ``Any``.
-This way you won't have any practical typing features
-from ``map`` and ``bind`` methods.
+Type safety
+-----------
 
-So, instead of:
+We try to make our containers optionally type safe.
 
-.. code:: python
+What does it mean?
 
-  some_container.map(lambda x: x + 2)  #: Callable[[Any], Any]
+1. It is still good old ``python``, do whatever you want without ``mypy``
+2. If you are using ``mypy`` you will be notified about type violations
 
-Write:
+We also ship `PEP561 <https://www.python.org/dev/peps/pep-0561/>`_
+compatible ``.pyi`` files together with the source code.
+In this case these types will be available to users
+when they install our application.
 
-.. code:: python
+However, this is still good old ``python`` type system,
+and it has its drawbacks.
 
-  from functools import partial
-
-  def increment(addition: int, number: int) -> int:
-      return number + addition
-
-  some_container.map(partial(increment, 2))  # functools.partial[builtins.int]
-
-This way your code will be type-safe from errors.
 
 API Reference
 -------------

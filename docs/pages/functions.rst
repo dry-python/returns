@@ -25,6 +25,7 @@ and :class:`Some <returns.maybe.Some>`.
   is_successful(Nothing) or is_successful(Failure('text'))
   # => False
 
+.. _pipeline:
 
 pipeline
 --------
