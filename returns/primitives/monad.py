@@ -63,14 +63,14 @@ class Monad(_BaseMonad, metaclass=ABCMeta):
 
     """
 
-    @abstractmethod
-    def fmap(self, function):  # pragma: no cover
+    @abstractmethod  # noqa: A003
+    def map(self, function):  # pragma: no cover
         """
         Applies 'function' to the contents of the functor.
 
         And returns a new functor value.
         Works for monads that represent success.
-        Is the opposite of :meth:`~efmap`.
+        Is the opposite of :meth:`~fix`.
         """
         raise NotImplementedError()
 
@@ -81,23 +81,23 @@ class Monad(_BaseMonad, metaclass=ABCMeta):
 
         And returns a new monad.
         Works for monads that represent success.
-        Is the opposite of :meth:`~ebind`.
+        Is the opposite of :meth:`~rescue`.
         """
         raise NotImplementedError()
 
     @abstractmethod
-    def efmap(self, function):  # pragma: no cover
+    def fix(self, function):  # pragma: no cover
         """
         Applies 'function' to the contents of the functor.
 
         And returns a new functor value.
         Works for monads that represent failure.
-        Is the opposite of :meth:`~fmap`.
+        Is the opposite of :meth:`~map`.
         """
         raise NotImplementedError()
 
     @abstractmethod
-    def ebind(self, function):  # pragma: no cover
+    def rescue(self, function):  # pragma: no cover
         """
         Applies 'function' to the result of a previous calculation.
 

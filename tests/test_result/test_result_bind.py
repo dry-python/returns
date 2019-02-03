@@ -27,24 +27,24 @@ def test_left_identity_failure():
     assert str(bound) == 'Failure: 5'
 
 
-def test_ebind_success():
-    """Ensures that ebind works for Success monad."""
+def test_rescue_success():
+    """Ensures that rescue works for Success monad."""
     def factory(inner_value: int) -> Success[int]:
         return Success(inner_value * 2)
 
-    bound = Success(5).ebind(factory)
+    bound = Success(5).rescue(factory)
 
     assert bound == Success(5)
     assert str(bound) == 'Success: 5'
 
 
-def test_ebind_failure():
-    """Ensures that ebind works for Success monad."""
+def test_rescue_failure():
+    """Ensures that rescue works for Success monad."""
     def factory(inner_value: int) -> Failure[float]:
         return Failure(float(inner_value + 1))
 
     expected = 6.0
-    bound = Failure(5).ebind(factory)
+    bound = Failure(5).rescue(factory)
 
     assert bound == Failure(expected)
     assert str(bound) == 'Failure: 6.0'

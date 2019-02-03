@@ -21,7 +21,7 @@ def test_is_compare():
     right = Success(1)
 
     assert left.bind(lambda state: state) is left
-    assert right.ebind(lambda state: state) is right
+    assert right.rescue(lambda state: state) is right
     assert right is not Success(1)
 
 

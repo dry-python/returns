@@ -25,8 +25,8 @@ class _BaseMonad(object, metaclass=ABCMeta):
 
 
 class Monad(_BaseMonad, metaclass=ABCMeta):
-    @abstractmethod
-    def fmap(self, function):
+    @abstractmethod  # noqa: A003
+    def map(self, function):
         ...
 
     @abstractmethod
@@ -34,11 +34,11 @@ class Monad(_BaseMonad, metaclass=ABCMeta):
         ...
 
     @abstractmethod
-    def efmap(self, function):
+    def fix(self, function):
         ...
 
     @abstractmethod
-    def ebind(self, function):
+    def rescue(self, function):
         ...
 
     @abstractmethod

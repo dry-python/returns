@@ -3,13 +3,17 @@
 We follow Semantic Versions since the `0.1.0` release.
 
 
-## Version 0.4.0
+## Version 0.4.0 aka Goodbye, Monads!
 
 ### Features
 
 - Moves all types to `.pyi` files
 - Renames all classes according to new naming pattern
 - **HUGE** improvement of types
+- Renames `fmap` to `map`
+- Renames `do_notation` to `pipeline`, moves it to `functions.py`
+- Renames `ebind` to `rescue`
+- Renames `efmap` to `fix`
 
 
 ## Version 0.3.1

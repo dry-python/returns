@@ -26,23 +26,23 @@ def test_bind_nothing():
     assert str(bound) == 'Nothing: None'
 
 
-def test_ebind_some():
+def test_rescue_some():
     """Ensures that Failure identity works for Some monad."""
     def factory(inner_value: int) -> Some[int]:
         return Some(inner_value * 2)
 
-    bound = Some(5).ebind(factory)
+    bound = Some(5).rescue(factory)
 
     assert bound == Some(5)
     assert str(bound) == 'Some: 5'
 
 
-def test_ebind_nothing():
+def test_rescue_nothing():
     """Ensures that Failure identity works for Some monad."""
     def factory(inner_value: None) -> Some[int]:
         return Some(1)
 
-    bound = Nothing().ebind(factory)
+    bound = Nothing().rescue(factory)
 
     assert bound == Some(1)
     assert str(bound) == 'Some: 1'

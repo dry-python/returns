@@ -19,7 +19,7 @@ _ErrorType = TypeVar('_ErrorType')
 class Result(GenericMonadTwoSlots[_ValueType, _ErrorType], metaclass=ABCMeta):
     _inner_value: Union[_ValueType, _ErrorType]
 
-    def fmap(
+    def map(  # noqa: A003
         self,
         function: Callable[[_ValueType], _NewValueType],
     ) -> Union['Success[_NewValueType]', 'Result[_ValueType, _ErrorType]']:
@@ -31,13 +31,13 @@ class Result(GenericMonadTwoSlots[_ValueType, _ErrorType], metaclass=ABCMeta):
     ) -> Union[_MonadType, 'Result[_ValueType, _ErrorType]']:
         ...
 
-    def efmap(
+    def fix(
         self,
         function: Callable[[_ErrorType], _NewValueType],
     ) -> Union['Success[_ValueType]', 'Success[_NewValueType]']:
         ...
 
-    def ebind(
+    def rescue(
         self,
         function: Callable[[_ErrorType], _MonadType],
     ) -> Union[_MonadType, 'Result[_ValueType, _ErrorType]']:
@@ -63,19 +63,19 @@ class Failure(Result[Any, _ErrorType]):
     def __init__(self, inner_value: _ErrorType) -> None:
         ...
 
-    def fmap(self, function) -> 'Failure[_ErrorType]':
+    def map(self, function) -> 'Failure[_ErrorType]':  # noqa: A003
         ...
 
     def bind(self, function) -> 'Failure[_ErrorType]':
         ...
 
-    def efmap(
+    def fix(
         self,
         function: Callable[[_ErrorType], _NewValueType],
     ) -> 'Success[_NewValueType]':
         ...
 
-    def ebind(
+    def rescue(
         self, function: Callable[[_ErrorType], _MonadType],
     ) -> _MonadType:
         ...
@@ -97,7 +97,7 @@ class Success(Result[_ValueType, Any]):
     def __init__(self, inner_value: _ValueType) -> None:
         ...
 
-    def fmap(
+    def map(  # noqa: A003
         self,
         function: Callable[[_ValueType], _NewValueType],
     ) -> 'Success[_NewValueType]':
@@ -109,10 +109,10 @@ class Success(Result[_ValueType, Any]):
     ) -> _MonadType:
         ...
 
-    def efmap(self, function) -> 'Success[_ValueType]':
+    def fix(self, function) -> 'Success[_ValueType]':
         ...
 
-    def ebind(self, function) -> 'Success[_ValueType]':
+    def rescue(self, function) -> 'Success[_ValueType]':
         ...
 
     def value_or(self, default_value: _NewValueType) -> _ValueType:

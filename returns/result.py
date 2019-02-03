@@ -22,7 +22,7 @@ class Failure(Result[Any, _ErrorType]):
     To help with readability you may alternatively use the alias 'Failure'.
     """
 
-    def fmap(self, function):
+    def map(self, function):  # noqa: A003
         """Returns the 'Failure' instance that was used to call the method."""
         return self
 
@@ -30,7 +30,7 @@ class Failure(Result[Any, _ErrorType]):
         """Returns the 'Failure' instance that was used to call the method."""
         return self
 
-    def efmap(self, function):
+    def fix(self, function):
         """
         Applies function to the inner value.
 
@@ -41,7 +41,7 @@ class Failure(Result[Any, _ErrorType]):
         """
         return Success(function(self._inner_value))
 
-    def ebind(self, function):
+    def rescue(self, function):
         """
         Applies 'function' to the result of a previous calculation.
 
@@ -70,7 +70,7 @@ class Success(Result[_ValueType, Any]):
     To help with readability you may alternatively use the alias 'Success'.
     """
 
-    def fmap(self, function):
+    def map(self, function):  # noqa: A003
         """
         Applies function to the inner value.
 
@@ -90,11 +90,11 @@ class Success(Result[_ValueType, Any]):
         """
         return function(self._inner_value)
 
-    def efmap(self, function):
+    def fix(self, function):
         """Returns the 'Success' instance that was used to call the method."""
         return self
 
-    def ebind(self, function):
+    def rescue(self, function):
         """Returns the 'Success' instance that was used to call the method."""
         return self
 

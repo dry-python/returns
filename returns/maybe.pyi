@@ -23,7 +23,7 @@ class Maybe(GenericMonadOneSlot[_ValueType], metaclass=ABCMeta):
     def new(cls, inner_value: _ValueType) -> 'Some[_ValueType]':
         ...
 
-    def fmap(
+    def map(  # noqa: A003
         self,
         function: Callable[[_ValueType], _NewValueType],
     ) -> Union['Some[_NewValueType]', 'Maybe[_ValueType]']:
@@ -35,13 +35,13 @@ class Maybe(GenericMonadOneSlot[_ValueType], metaclass=ABCMeta):
     ) -> Union[_MonadType, 'Maybe[_ValueType]']:
         ...
 
-    def efmap(
+    def fix(
         self,
         function: Callable[[Literal[None]], '_NewValueType'],
     ) -> Union['Some[_ValueType]', 'Some[_NewValueType]']:
         ...
 
-    def ebind(
+    def rescue(
         self,
         function: Callable[[Literal[None]], _MonadType],
     ) -> Union[_MonadType, 'Maybe[_ValueType]']:
@@ -67,19 +67,19 @@ class Nothing(Maybe[Any]):
     def __init__(self, inner_value: Literal[None] = ...) -> None:
         ...
 
-    def fmap(self, function) -> 'Nothing':
+    def map(self, function) -> 'Nothing':  # noqa: A003
         ...
 
     def bind(self, function) -> 'Nothing':
         ...
 
-    def efmap(
+    def fix(
         self,
         function: Callable[[Literal[None]], '_NewValueType'],
     ) -> 'Some[_NewValueType]':
         ...
 
-    def ebind(
+    def rescue(
         self,
         function: Callable[[Literal[None]], _MonadType],
     ) -> _MonadType:
@@ -102,7 +102,7 @@ class Some(Maybe[_ValueType]):
     def __init__(self, inner_value: _ValueType) -> None:
         ...
 
-    def fmap(
+    def map(  # noqa: A003
         self,
         function: Callable[[_ValueType], _NewValueType],
     ) -> 'Some[_NewValueType]':
@@ -114,10 +114,10 @@ class Some(Maybe[_ValueType]):
     ) -> _MonadType:
         ...
 
-    def efmap(self, function) -> 'Some[_ValueType]':
+    def fix(self, function) -> 'Some[_ValueType]':
         ...
 
-    def ebind(self, function) -> 'Some[_ValueType]':
+    def rescue(self, function) -> 'Some[_ValueType]':
         ...
 
     def value_or(self, default_value: _NewValueType) -> _ValueType:

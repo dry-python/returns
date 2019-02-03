@@ -30,13 +30,13 @@ TODO: example with `requests` and `json`
 
 
 ```python
-from returns.do_notation import do_notation
+from returns.pipeline import pipeline
 from returns.result import Result, Success, Failure
 
 class CreateAccountAndUser(object):
     """Creates new Account-User pair."""
 
-    @do_notation
+    @pipeline
     def __call__(self, username: str, email: str) -> Result['User', str]:
         """Can return a Success(user) or Failure(str_reason)."""
         user_schema = self._validate_user(username, email).unwrap()

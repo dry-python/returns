@@ -20,7 +20,7 @@ def test_is_compare():
     some_monad = Some(1)
 
     assert nothing.bind(lambda state: state) is nothing
-    assert some_monad.ebind(lambda state: state) is some_monad
+    assert some_monad.rescue(lambda state: state) is some_monad
     assert some_monad is not Some(1)
 
 

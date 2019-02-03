@@ -25,7 +25,7 @@ Here's the code to illustrate the task.
 
 .. code:: python
 
-  from returns.do_notation import do_notation
+  from returns.pipeline import pipeline
   from returns.result import Result, Success, Failure
 
 
@@ -87,7 +87,7 @@ And here's how we can refactor this monadic code to be more clear.
   class CreateAccountAndUser(object):
       """Creates new Account-User pair."""
 
-      @do_notation
+      @pipeline
       def __call__(self, username: str, email: str) -> Result['User', str]:
           """Can return a Success(user) or Failure(str_reason)."""
           user_schema = self._validate_user(username, email).unwrap()
@@ -102,7 +102,7 @@ Let's see how this new ``.unwrap()`` method works:
 - if you monad is ``Success`` it will return its inner value
 - if your monad is ``Failure`` it will raise a ``UnwrapFailedError``
 
-And that's where ``@do_notation`` decorator becomes in handy.
+And that's where ``@pipeline`` decorator becomes in handy.
 It will catch any ``UnwrapFailedError`` during the pipeline
 and then return a simple ``Failure`` monad.
 
@@ -131,7 +131,7 @@ And that's it!
 
 See also:
   - https://dry-rb.org/gems/returns/do-notation/
-  - https://en.wikibooks.org/wiki/Haskell/do_notation
+  - https://en.wikibooks.org/wiki/Haskell/pipeline
   - https://wiki.haskell.org/Do_notation_considered_harmful
 
 Limitations
@@ -143,10 +143,10 @@ due to `mypy issue <https://github.com/python/mypy/issues/3157>`_:
 
 .. code:: python
 
-  from returns.do_notation import do_notation
+  from returns.pipeline import pipeline
   from returns.result import Success
 
-  @do_notation
+  @pipeline
   def function(param: int) -> Success[int]:
       return Success(param)
 
@@ -164,5 +164,5 @@ with these implementations:
 API Reference
 -------------
 
-.. automodule:: returns.do_notation
+.. automodule:: returns.pipeline
    :members:

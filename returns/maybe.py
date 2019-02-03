@@ -39,7 +39,7 @@ class Nothing(Maybe[Literal[None]]):
         """
         object.__setattr__(self, '_inner_value', inner_value)
 
-    def fmap(self, function):
+    def map(self, function):  # noqa: A003
         """Returns the 'Nothing' instance that was used to call the method."""
         return self
 
@@ -47,7 +47,7 @@ class Nothing(Maybe[Literal[None]]):
         """Returns the 'Nothing' instance that was used to call the method."""
         return self
 
-    def efmap(self, function):
+    def fix(self, function):
         """
         Applies function to the inner value.
 
@@ -58,7 +58,7 @@ class Nothing(Maybe[Literal[None]]):
         """
         return Some(function(self._inner_value))
 
-    def ebind(self, function):
+    def rescue(self, function):
         """
         Applies 'function' to the result of a previous calculation.
 
@@ -87,7 +87,7 @@ class Some(Maybe[_ValueType]):
     Quite similar to ``Success`` type.
     """
 
-    def fmap(self, function):
+    def map(self, function):  # noqa: A003
         """
         Applies function to the inner value.
 
@@ -107,11 +107,11 @@ class Some(Maybe[_ValueType]):
         """
         return function(self._inner_value)
 
-    def efmap(self, function):
+    def fix(self, function):
         """Returns the 'Some' instance that was used to call the method."""
         return self
 
-    def ebind(self, function):
+    def rescue(self, function):
         """Returns the 'Some' instance that was used to call the method."""
         return self
 

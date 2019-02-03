@@ -35,11 +35,11 @@ Creating new monads
 ~~~~~~~~~~~~~~~~~~~
 
 We use two methods to create new monads from the previous one.
-``bind`` and ``fmap``.
+``bind`` and ``map``.
 
 The difference is simple:
 
-- ``fmap`` works with functions that return regular values
+- ``map`` works with functions that return regular values
 - ``bind`` works with functions that return monads
 
 :func:`Monad.bind <returns.primitives.monad.Monad.bind>`
@@ -58,7 +58,7 @@ is used to literally bind two different monads together.
 So, the rule is: whenever you have some impure functions,
 it should return a monad instead.
 
-And we use :func:`Monad.fmap <returns.primitives.monad.Monad.fmap>`
+And we use :func:`Monad.map <returns.primitives.monad.Monad.map>`
 to use monads with pure functions.
 
 .. code:: python
@@ -68,7 +68,7 @@ to use monads with pure functions.
   def double(state: int) -> int:
       return state * 2
 
-  result = Success(1).fmap(double)
+  result = Success(1).map(double)
   # => Will be equal to Success(2)
 
 Reverse operations
@@ -77,12 +77,12 @@ Reverse operations
 We also support two special methods to work with "failed"
 monads like ``Failure`` and ``Nothing``:
 
-- :func:`Monad.efmap <returns.primitives.monad.Monad.efmap>` the opposite
-  of ``fmap`` method that works only when monad is failed
-- :func:`Monad.ebind <returns.primitives.monad.Monad.ebind>` the opposite
+- :func:`Monad.fix <returns.primitives.monad.Monad.fix>` the opposite
+  of ``map`` method that works only when monad is failed
+- :func:`Monad.rescue <returns.primitives.monad.Monad.rescue>` the opposite
   of ``bind`` method that works only when monad is failed
 
-``efmap`` can be used to fix some fixable errors
+``fix`` can be used to fix some fixable errors
 during the pipeline execution:
 
 .. code:: python
@@ -92,10 +92,10 @@ during the pipeline execution:
   def double(state: int) -> float:
       return state * 2.0
 
-  Failure(1).efmap(double)
+  Failure(1).fix(double)
   # => Will be equal to Success(2.0)
 
-``ebind`` can return any monad you want.
+``rescue`` can return any monad you want.
 It can also fix your flow and get on the Success track again:
 
 .. code:: python
@@ -107,7 +107,7 @@ It can also fix your flow and get on the Success track again:
           return Success(0)
       return Failure(state)
 
-  Failure(ZeroDivisionError).ebind(fix)
+  Failure(ZeroDivisionError).rescue(fix)
   # => Will be equal to Success(0)
 
 Unwrapping values
@@ -172,13 +172,13 @@ Using lambda functions
 Please, do not use ``lambda`` functions in ``python``. Why?
 Because all ``lambda`` functions arguments are typed as ``Any``.
 This way you won't have any practical typing features
-from ``fmap`` and ``bind`` methods.
+from ``map`` and ``bind`` methods.
 
 So, instead of:
 
 .. code:: python
 
-  some_monad.fmap(lambda x: x + 2)  #: Callable[[Any], Any]
+  some_monad.map(lambda x: x + 2)  #: Callable[[Any], Any]
 
 Write:
 
@@ -189,7 +189,7 @@ Write:
   def increment(addition: int, number: int) -> int:
       return number + addition
 
-  some_monad.fmap(partial(increment, 2))  #: functools.partial[builtins.int*]
+  some_monad.map(partial(increment, 2))  #: functools.partial[builtins.int*]
 
 This way your code will be type-safe from errors.
 
