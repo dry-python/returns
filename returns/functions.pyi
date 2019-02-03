@@ -7,20 +7,20 @@ from returns.result import Result
 
 _ContainerType = TypeVar('_ContainerType', bound=Container)
 _ReturnType = TypeVar('_ReturnType')
-_ReturnsMonadType = TypeVar(
-    '_ReturnsMonadType',
+_ReturnsContainerType = TypeVar(
+    '_ReturnsContainerType',
     bound=Callable[..., Container],
 )
 
 
-def is_successful(monad: _ContainerType) -> bool:
+def is_successful(container: _ContainerType) -> bool:
     ...
 
 
 # Typing decorators is not an easy task, see:
 # https://github.com/python/mypy/issues/3157
 
-def pipeline(function: _ReturnsMonadType) -> _ReturnsMonadType:
+def pipeline(function: _ReturnsContainerType) -> _ReturnsContainerType:
     ...
 
 

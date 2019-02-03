@@ -6,10 +6,15 @@ from returns.primitives.exceptions import UnwrapFailedError
 from returns.result import Failure, Success
 
 
-def is_successful(monad):
-    """Determins if a monad was a success or not."""
+def is_successful(container):
+    """
+    Determins if a container was successful or not.
+
+    We treat container that raise ``UnwrapFailedError`` on ``.unwrap()``
+    not successful.
+    """
     try:
-        monad.unwrap()
+        container.unwrap()
     except UnwrapFailedError:
         return False
     else:
