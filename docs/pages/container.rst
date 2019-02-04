@@ -97,7 +97,7 @@ is used to literally bind two different containers together.
       ...
 
   result = Success(1).bind(make_http_call)
-  # => Will be equal to Result Success[int] or Failure[str]
+  # => Will be equal to either Success[int] or Failure[str]
 
 So, the rule is: whenever you have some impure functions,
 it should return a container type instead.

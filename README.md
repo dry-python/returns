@@ -27,7 +27,7 @@ Make your functions return something meaningful, typed, and safe!
 pip install returns
 ```
 
-Make sure you know how to get started, [checkout our docs](https://returns.readthedocs.io/en/latest/)!
+Make sure you know how to get started, [check out our docs](https://returns.readthedocs.io/en/latest/)!
 
 
 ## Why?
