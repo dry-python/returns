@@ -15,6 +15,7 @@ We follow Semantic Versions since the `0.1.0` release.
 - Renames `ebind` to `rescue`
 - Renames `efmap` to `fix`
 - Renames `Monad` to `Container`
+- Removes `Maybe` monad, since typing does not have `NonNullable` type
 
 
 ## Version 0.3.1

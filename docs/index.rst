@@ -17,7 +17,6 @@ Contents
   :caption: Userguide
 
   pages/container.rst
-  pages/maybe.rst
   pages/result.rst
   pages/functions.rst
 

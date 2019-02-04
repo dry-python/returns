@@ -10,19 +10,17 @@ is_successful
 :func:`is_succesful <returns.functions.is_successful>` is used to
 tell whether or not your result is a success.
 We treat only treat types that does not throw as a successful ones,
-basically: :class:`Success <returns.result.Success>`
-and :class:`Some <returns.maybe.Some>`.
+basically: :class:`Success <returns.result.Success>`.
 
 .. code:: python
 
   from returns.result import Success, Failure
   from returns.functions import is_successful
-  from returns.maybe import Some, Nothing
 
-  is_successful(Some(1)) and is_successful(Success(1))
+  is_successful(Success(1))
   # => True
 
-  is_successful(Nothing) or is_successful(Failure('text'))
+  is_successful(Failure('text'))
   # => False
 
 .. _pipeline:
