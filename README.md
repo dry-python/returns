@@ -1,5 +1,3 @@
-# returns
-
 [![Returns logo](https://raw.githubusercontent.com/dry-python/brand/master/logo/returns.png)](https://github.com/dry-python/returns)
 
 -----
