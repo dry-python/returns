@@ -785,7 +785,7 @@ description = "A typlog Sphinx theme"
 name = "sphinx-typlog-theme"
 optional = false
 python-versions = "*"
-version = "0.7.1"
+version = "0.7.2"
 
 [[package]]
 category = "dev"
@@ -900,7 +900,7 @@ pep8-naming = ">=0.7,<0.8"
 typing_extensions = ">=3.6,<4.0"
 
 [metadata]
-content-hash = "dd99cc0ecb4c0dfb836fe7c70e0d55cae831ebd64fab9c387e5235cfd0310978"
+content-hash = "a58de772124d2fb52e5903adb205c25760a36d8ec0f1df499203442a2cbd01bd"
 python-versions = "^3.6"
 
 [metadata.hashes]
@@ -978,7 +978,7 @@ smmap2 = ["0555a7bf4df71d1ef4218e4807bbf9b201f910174e6e08af2e138d4e517b4dde", "2
 snowballstemmer = ["919f26a68b2c17a7634da993d91339e288964f93c274f1343e3bbbe2096e1128", "9f3bcd3c401c3e862ec0ebe6d2c069ebc012ce142cce209c098ccb5b09136e89"]
 sphinx = ["429e3172466df289f0f742471d7e30ba3ee11f3b5aecd9a840480d03f14bcfe5", "c4cb17ba44acffae3d3209646b6baec1e215cad3065e852c68cc569d4df1b9f8"]
 sphinx-autodoc-typehints = ["19fe0b426b7c008181f67f816060da7f046bd8a42723f67a685d26d875bcefd7", "f9c06acfec80766fe8f542a6d6a042e751fcf6ce2e2711a7dc00d8b6daf8aa36"]
-sphinx-typlog-theme = ["1eeb41806bfa0d8f56cb9985ce9014fbc3038b619181ead777900599b2430b4b", "618d4ed5948a70d71c437c8e6cbc4ea6026d6d39bca87d15dc13ace7412085b6"]
+sphinx-typlog-theme = ["0a253a0056060dc2c2bff73edcc905a36337c185c0c517fda9b81a4636178880", "73a513206b6c04eb9ff7b5adc0097c25928948229331b82b7d0b1ec4dfa1c551"]
 sphinxcontrib-mermaid = ["d2e33529c63c12724193b210dcbd4285ca6cff17b8f91f9dbcb8b4b7d07595e7"]
 sphinxcontrib-websupport = ["68ca7ff70785cbe1e7bccc71a48b5b6d965d79ca50629606c7861a21b206d9dd", "9de47f375baf1ea07cdb3436ff39d7a9c76042c10a769c52353ec46e4e8fc3b9"]
 stevedore = ["b92bc7add1a53fb76c634a178978d113330aaf2006f9498d9e2414b31fbfc104", "c58b7c231a9c4890cd3c2b5d2b23bd63fa807ff934d68579e3f6c3a1735e8a7c"]
