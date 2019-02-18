@@ -16,6 +16,7 @@ _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')
 _ThirdType = TypeVar('_ThirdType')
 
+
 def is_successful(container: _ContainerType) -> bool:
     ...
 
