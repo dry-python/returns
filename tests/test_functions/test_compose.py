@@ -3,12 +3,12 @@
 from returns.functions import compose
 
 
-def _first(a: int) -> str:
-    return str(a)
+def _first(argument: int) -> str:
+    return str(argument)
 
 
-def _second(b: str) -> bool:
-    return bool(b)
+def _second(argument: str) -> bool:
+    return bool(argument)
 
 
 def test_function_composition():
