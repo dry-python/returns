@@ -219,7 +219,7 @@ We also ship an utility function to compose two different functions together.
 
 Composition is also type-safe.
 The only limitation is that we only support
-functions with one argument and one return.
+functions with one argument and one return to be composed.
 
 API Reference
 -------------

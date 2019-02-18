@@ -31,8 +31,8 @@ def _get_project_meta():
 
 pkg_meta = _get_project_meta()
 project = pkg_meta['name']
-copySuccess = '2019, wemake.services'  # noqa: A001
-author = 'wemake.services'
+copyright = '2019, dry-python team'  # noqa: A001
+author = 'dry-python team'
 
 # The short X.Y version
 version = pkg_meta['version']
@@ -138,6 +138,7 @@ html_sidebars = {
         'logo.html',
         'globaltoc.html',
         'github.html',
+        'searchbox.html',
         'moreinfo.html',
     ],
 }

@@ -10,6 +10,14 @@ We follow Semantic Versions since the `0.1.0` release.
 - Adds `compose` function
 
 
+### Misc
+
+- Updates multiple dev-dependencies, including `mypy`
+- Now search in the docs is working again
+- Relicenses this project to `BSD`
+- Fixes copyright notice in the docs
+
+
 ## Version 0.4.0 aka Goodbye, Monads!
 
 ### Features
