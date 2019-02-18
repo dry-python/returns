@@ -50,3 +50,15 @@ def pipeline(function):
         except UnwrapFailedError as exc:
             return exc.halted_container
     return decorator
+
+
+def compose(first, second):
+    """
+    Allows function composition.
+
+    Works as: second . first
+    You can read it as "second after first".
+
+    We can only compose functions with one argument and one return.
+    """
+    return lambda argument: second(first(argument))

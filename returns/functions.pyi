@@ -12,6 +12,9 @@ _ReturnsContainerType = TypeVar(
     bound=Callable[..., Container],
 )
 
+_FirstType = TypeVar('_FirstType')
+_SecondType = TypeVar('_SecondType')
+_ThirdType = TypeVar('_ThirdType')
 
 def is_successful(container: _ContainerType) -> bool:
     ...
@@ -27,4 +30,11 @@ def pipeline(function: _ReturnsContainerType) -> _ReturnsContainerType:
 def safe(
     function: Callable[..., _ReturnType],
 ) -> Callable[..., Result[_ReturnType, Exception]]:
+    ...
+
+
+def compose(
+    first: Callable[[_FirstType], _SecondType],
+    second: Callable[[_SecondType], _ThirdType],
+) -> Callable[[_FirstType], _ThirdType]:
     ...

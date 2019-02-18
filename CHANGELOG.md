@@ -3,6 +3,13 @@
 We follow Semantic Versions since the `0.1.0` release.
 
 
+## WIP
+
+### Features
+
+- Adds `compose` function
+
+
 ## Version 0.4.0 aka Goodbye, Monads!
 
 ### Features

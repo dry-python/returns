@@ -204,6 +204,22 @@ with these implementations:
 - https://github.com/deadpixi/contracts
 
 
+compose
+-------
+
+We also ship an utility function to compose two different functions together.
+
+.. code:: python
+
+  from returns.functions import compose
+
+  bool_after_int = compose(int, bool)
+  bool_after_int('1')  # => True
+  bool_after_int('0')  # => False
+
+Composition is also type-safe.
+The only limitation is that we only support
+functions with one argument and one return.
 
 API Reference
 -------------
