@@ -901,7 +901,7 @@ pep8-naming = ">=0.7,<0.9"
 typing_extensions = ">=3.6,<4.0"
 
 [metadata]
-content-hash = "dd99cc0ecb4c0dfb836fe7c70e0d55cae831ebd64fab9c387e5235cfd0310978"
+content-hash = "246658c5e30ff362879f035f2aaf61c40ed0e19b0e11efa6eab80cac80c472d5"
 python-versions = "^3.6"
 
 [metadata.hashes]
