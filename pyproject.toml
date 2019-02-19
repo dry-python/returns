@@ -43,7 +43,7 @@ flake8-pyi = "^18.3"
 
 safety = "^1.8"
 
-pytest = "^4.2"
+pytest = "^4.3"
 pytest-cov = "^2.6"
 pytest-randomly = "^1.2"
 
