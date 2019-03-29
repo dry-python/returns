@@ -751,8 +751,8 @@ category = "dev"
 description = "Python documentation generator"
 name = "sphinx"
 optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-version = "1.8.5"
+python-versions = ">=3.5"
+version = "2.0.0"
 
 [package.dependencies]
 Jinja2 = ">=2.3"
@@ -760,14 +760,18 @@ Pygments = ">=2.0"
 alabaster = ">=0.7,<0.8"
 babel = ">=1.3,<2.0 || >2.0"
 colorama = ">=0.3.5"
-docutils = ">=0.11"
+docutils = ">=0.12"
 imagesize = "*"
 packaging = "*"
-requests = ">=2.0.0"
+requests = ">=2.5.0"
 setuptools = "*"
-six = ">=1.5"
 snowballstemmer = ">=1.1"
-sphinxcontrib-websupport = "*"
+sphinxcontrib-applehelp = "*"
+sphinxcontrib-devhelp = "*"
+sphinxcontrib-htmlhelp = "*"
+sphinxcontrib-jsmath = "*"
+sphinxcontrib-qthelp = "*"
+sphinxcontrib-serializinghtml = "*"
 
 [[package]]
 category = "dev"
@@ -790,6 +794,38 @@ version = "0.7.2"
 
 [[package]]
 category = "dev"
+description = ""
+name = "sphinxcontrib-applehelp"
+optional = false
+python-versions = "*"
+version = "1.0.1"
+
+[[package]]
+category = "dev"
+description = ""
+name = "sphinxcontrib-devhelp"
+optional = false
+python-versions = "*"
+version = "1.0.1"
+
+[[package]]
+category = "dev"
+description = ""
+name = "sphinxcontrib-htmlhelp"
+optional = false
+python-versions = "*"
+version = "1.0.1"
+
+[[package]]
+category = "dev"
+description = "A sphinx extension which renders display math in HTML via JavaScript"
+name = "sphinxcontrib-jsmath"
+optional = false
+python-versions = ">=3.5"
+version = "1.0.1"
+
+[[package]]
+category = "dev"
 description = "Mermaid diagrams in yours Sphinx powered docs"
 name = "sphinxcontrib-mermaid"
 optional = false
@@ -798,11 +834,19 @@ version = "0.3.1"
 
 [[package]]
 category = "dev"
-description = "Sphinx API for Web Apps"
-name = "sphinxcontrib-websupport"
+description = ""
+name = "sphinxcontrib-qthelp"
 optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-version = "1.1.0"
+python-versions = "*"
+version = "1.0.2"
+
+[[package]]
+category = "dev"
+description = ""
+name = "sphinxcontrib-serializinghtml"
+optional = false
+python-versions = "*"
+version = "1.1.1"
 
 [[package]]
 category = "dev"
@@ -901,7 +945,7 @@ pep8-naming = ">=0.7,<0.9"
 typing_extensions = ">=3.6,<4.0"
 
 [metadata]
-content-hash = "61ad3c0df42769f11a5e42c27b092cf681293230f7df905602086081398bac0c"
+content-hash = "9ca65bd3020400a84801baf7ec8dc350ec3a1480854718681fdaf1b018cc1409"
 python-versions = "^3.6"
 
 [metadata.hashes]
@@ -977,11 +1021,16 @@ safety = ["0a3a8a178a9c96242b224f033ee8d1d130c0448b0e6622d12deaf37f6c3b4e59", "5
 six = ["3350809f0555b11f552448330d0b52d5f24c91a322ea4a15ef22629740f3761c", "d16a0141ec1a18405cd4ce8b4613101da75da0e9a7aec5bdd4fa804d0e0eba73"]
 smmap2 = ["0555a7bf4df71d1ef4218e4807bbf9b201f910174e6e08af2e138d4e517b4dde", "29a9ffa0497e7f2be94ca0ed1ca1aa3cd4cf25a1f6b4f5f87f74b46ed91d609a"]
 snowballstemmer = ["919f26a68b2c17a7634da993d91339e288964f93c274f1343e3bbbe2096e1128", "9f3bcd3c401c3e862ec0ebe6d2c069ebc012ce142cce209c098ccb5b09136e89"]
-sphinx = ["9f3e17c64b34afc653d7c5ec95766e03043cc6d80b0de224f59b6b6e19d37c3c", "c7658aab75c920288a8cf6f09f244c6cfdae30d82d803ac1634d9f223a80ca08"]
+sphinx = ["5a54f9132766c8ffdd4021de4d0ef8afeb93235569d64b617612e60070332583", "91b29c8e98d18ed474bb92777e7af31931fae96e625b8f1bc595c67fb641c46d"]
 sphinx-autodoc-typehints = ["19fe0b426b7c008181f67f816060da7f046bd8a42723f67a685d26d875bcefd7", "f9c06acfec80766fe8f542a6d6a042e751fcf6ce2e2711a7dc00d8b6daf8aa36"]
 sphinx-typlog-theme = ["0a253a0056060dc2c2bff73edcc905a36337c185c0c517fda9b81a4636178880", "73a513206b6c04eb9ff7b5adc0097c25928948229331b82b7d0b1ec4dfa1c551"]
+sphinxcontrib-applehelp = ["edaa0ab2b2bc74403149cb0209d6775c96de797dfd5b5e2a71981309efab3897", "fb8dee85af95e5c30c91f10e7eb3c8967308518e0f7488a2828ef7bc191d0d5d"]
+sphinxcontrib-devhelp = ["6c64b077937330a9128a4da74586e8c2130262f014689b4b89e2d08ee7294a34", "9512ecb00a2b0821a146736b39f7aeb90759834b07e81e8cc23a9c70bacb9981"]
+sphinxcontrib-htmlhelp = ["0d691ca8edf5995fbacfe69b191914256071a94cbad03c3688dca47385c9206c", "e31c8271f5a8f04b620a500c0442a7d5cfc1a732fa5c10ec363f90fe72af0cb8"]
+sphinxcontrib-jsmath = ["2ec2eaebfb78f3f2078e73666b1415417a116cc848b72e5172e596c871103178", "a9925e4a4587247ed2191a22df5f6970656cb8ca2bd6284309578f2153e0c4b8"]
 sphinxcontrib-mermaid = ["d2e33529c63c12724193b210dcbd4285ca6cff17b8f91f9dbcb8b4b7d07595e7"]
-sphinxcontrib-websupport = ["68ca7ff70785cbe1e7bccc71a48b5b6d965d79ca50629606c7861a21b206d9dd", "9de47f375baf1ea07cdb3436ff39d7a9c76042c10a769c52353ec46e4e8fc3b9"]
+sphinxcontrib-qthelp = ["513049b93031beb1f57d4daea74068a4feb77aa5630f856fcff2e50de14e9a20", "79465ce11ae5694ff165becda529a600c754f4bc459778778c7017374d4d406f"]
+sphinxcontrib-serializinghtml = ["01d9b2617d7e8ddf7a00cae091f08f9fa4db587cc160b493141ee56710810932", "392187ac558863b8aff0d76dc78e0731fed58f3b06e2b00e22995dcdb630f213"]
 stevedore = ["b92bc7add1a53fb76c634a178978d113330aaf2006f9498d9e2414b31fbfc104", "c58b7c231a9c4890cd3c2b5d2b23bd63fa807ff934d68579e3f6c3a1735e8a7c"]
 testfixtures = ["59df1b51118978400d9926d5c1efb295f900ae626a54113323732647e453a80f", "cbd0f095d178de578709bcf4cc6eea896964635d2b41386d1cc7583674809b0e"]
 tomlkit = ["d6506342615d051bc961f70bfcfa3d29b6616cc08a3ddfd4bc24196f16fd4ec2", "f077456d35303e7908cc233b340f71e0bec96f63429997f38ca9272b7d64029e"]
