@@ -18,9 +18,8 @@ def test_unwrap_failure():
 
 
 def test_unwrap_failure_with_exception():
-    """Ensures that unwrap raises UnwrapFailedError from the
-    original exception."""
-    expected_exception = ValueError("error")
+    """Ensures that unwrap raises from the original exception."""
+    expected_exception = ValueError('error')
     with pytest.raises(UnwrapFailedError) as excinfo:
         Failure(expected_exception).unwrap()
 
