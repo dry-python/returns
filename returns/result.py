@@ -59,6 +59,9 @@ class Failure(Result[Any, _ErrorType]):
 
     def unwrap(self):
         """Raises an exception, since it does not have a value inside."""
+        if isinstance(self._inner_value, Exception):
+            raise UnwrapFailedError(self) from self._inner_value
+
         raise UnwrapFailedError(self)
 
     def failure(self):

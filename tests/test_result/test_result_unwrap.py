@@ -15,3 +15,12 @@ def test_unwrap_failure():
     """Ensures that unwrap works for Failure monad."""
     with pytest.raises(UnwrapFailedError):
         assert Failure(5).unwrap()
+
+
+def test_unwrap_failure_with_exception():
+    """Ensures that unwrap raises from the original exception."""
+    expected_exception = ValueError('error')
+    with pytest.raises(UnwrapFailedError) as excinfo:
+        Failure(expected_exception).unwrap()
+
+    assert 'ValueError: error' in str(excinfo.getrepr())
