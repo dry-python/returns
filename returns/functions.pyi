@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from typing import Callable, TypeVar
+from typing import Callable, NoReturn, TypeVar
 
 from returns.primitives.container import Container
 from returns.result import Result
@@ -38,4 +38,8 @@ def compose(
     first: Callable[[_FirstType], _SecondType],
     second: Callable[[_SecondType], _ThirdType],
 ) -> Callable[[_FirstType], _ThirdType]:
+    ...
+
+
+def raise_exception(exception: Exception) -> NoReturn:
     ...

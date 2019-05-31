@@ -7,7 +7,10 @@ We follow Semantic Versions since the `0.1.0` release.
 
 ### Features
 
-- Adds `compose` function
+- Adds `compose` helper function
+- Adds public API to `import returns`
+- Adds `raise_exception` helper function
+- Adds full traceback to `.unwrap()`
 
 
 ### Misc

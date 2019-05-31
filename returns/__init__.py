@@ -1,1 +1,28 @@
 # -*- coding: utf-8 -*-
+
+"""
+We define public API here.
+
+So, later our code can be used like so:
+
+.. code:: python
+
+  import returns
+  result: returns.Result[int, str]
+
+See: https://github.com/dry-python/returns/issues/73
+"""
+
+from returns.functions import compose, safe, pipeline
+from returns.result import Failure, Result, Success
+from returns.primitives.exceptions import UnwrapFailedError
+
+__all__ = (  # noqa: Z410
+    'compose',
+    'safe',
+    'pipeline',
+    'Failure',
+    'Result',
+    'Success',
+    'UnwrapFailedError',
+)
