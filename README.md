@@ -13,13 +13,12 @@ Make your functions return something meaningful, typed, and safe!
 
 - Provides a bunch of primitives to write declarative business logic
 - Enforces [Railway Oriented Programming](https://fsharpforfunandprofit.com/rop/)
-- Fully typed with annotations and checked with `mypy`,
-  allowing you to write type-safe code as well, [PEP561 compatible](https://www.python.org/dev/peps/pep-0561/)
+- Fully typed with annotations and checked with `mypy`, [PEP561 compatible](https://www.python.org/dev/peps/pep-0561/)
 - Pythonic and pleasant to write and to read (!)
+- WIP: `asyncio` support
 
 
 ## Installation
-
 
 ```bash
 pip install returns
