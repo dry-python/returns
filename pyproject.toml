@@ -47,7 +47,7 @@ pytest = "^4.5"
 pytest-cov = "^2.7"
 pytest-randomly = "^3.0"
 
-sphinx = "^2.0"
+sphinx = "^2.1"
 sphinx-autodoc-typehints = "^1.6"
 sphinxcontrib-mermaid = "^0.3.1"
 sphinx-typlog-theme = "^0.7.1"
