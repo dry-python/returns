@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "returns"
-version = "0.5.0"
+version = "0.6.0"
 description = "Make your functions return something meaningful, typed, and safe!"
 license = "MIT"
 
@@ -46,6 +46,7 @@ safety = "^1.8"
 pytest = "^4.6"
 pytest-cov = "^2.7"
 pytest-randomly = "^3.0"
+pytest-asyncio = "^0.10.0"
 
 sphinx = "^2.1"
 sphinx-autodoc-typehints = "^1.6"
@@ -54,7 +55,6 @@ sphinx-typlog-theme = "^0.7.1"
 doc8 = "^0.8.0"
 m2r = "^0.2.1"
 tomlkit = "^0.5.3"
-pytest-asyncio = "^0.10.0"
 
 [build-system]
 requires = ["poetry>=0.12"]
