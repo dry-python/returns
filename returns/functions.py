@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from functools import wraps
+from inspect import iscoroutinefunction
 
 from returns.primitives.exceptions import UnwrapFailedError
 from returns.result import Failure, Success
@@ -21,35 +22,51 @@ def is_successful(container):
         return True
 
 
-def safe(function):
+def safe(function):  # noqa: C901
     """
     Decorator to covert exception throwing function to 'Result' monad.
 
     Show be used with care, since it only catches 'Exception' subclasses.
     It does not catch 'BaseException' subclasses.
+
+    Supports both async and regular functions.
     """
-    @wraps(function)
-    def decorator(*args, **kwargs):
-        try:
-            return Success(function(*args, **kwargs))
-        except Exception as exc:
-            return Failure(exc)
-    return decorator
+    if iscoroutinefunction(function):
+        async def decorator(*args, **kwargs):
+            try:
+                return Success(await function(*args, **kwargs))
+            except Exception as exc:
+                return Failure(exc)
+    else:
+        def decorator(*args, **kwargs):
+            try:
+                return Success(function(*args, **kwargs))
+            except Exception as exc:
+                return Failure(exc)
+    return wraps(function)(decorator)
 
 
-def pipeline(function):
+def pipeline(function):  # noqa: C901
     """
     Decorator to enable 'do-notation' context.
 
     Should be used for series of computations that rely on ``.unwrap`` method.
+
+    Supports both async and regular functions.
     """
-    @wraps(function)
-    def decorator(*args, **kwargs):
-        try:
-            return function(*args, **kwargs)
-        except UnwrapFailedError as exc:
-            return exc.halted_container
-    return decorator
+    if iscoroutinefunction(function):
+        async def decorator(*args, **kwargs):
+            try:
+                return await function(*args, **kwargs)
+            except UnwrapFailedError as exc:
+                return exc.halted_container
+    else:
+        def decorator(*args, **kwargs):
+            try:
+                return function(*args, **kwargs)
+            except UnwrapFailedError as exc:
+                return exc.halted_container
+    return wraps(function)(decorator)
 
 
 def compose(first, second):

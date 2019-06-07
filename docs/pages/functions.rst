@@ -29,7 +29,8 @@ pipeline
 --------
 
 What is a ``pipeline``?
-It is a more user-friendly syntax to work with containers.
+It is a more user-friendly syntax to work with containers
+that support both async and regular functions.
 
 Consider this task.
 We were asked to create a method
@@ -162,6 +163,8 @@ safe
 regular functions that can throw exceptions to functions
 that return :class:`Result <returns.result.Result>` type.
 
+Supports both async and regular functions.
+
 .. code:: python
 
   from returns.functions import safe
@@ -199,9 +202,9 @@ This effect can be reduced
 with the help of `Design by Contract <https://en.wikipedia.org/wiki/Design_by_contract>`_
 with these implementations:
 
-- https://github.com/Parquery/icontract
-- https://github.com/orsinium/deal
 - https://github.com/deadpixi/contracts
+- https://github.com/orsinium/deal
+- https://github.com/Parquery/icontract
 
 
 compose
@@ -220,6 +223,8 @@ We also ship an utility function to compose two different functions together.
 Composition is also type-safe.
 The only limitation is that we only support
 functions with one argument and one return to be composed.
+
+Only works with regular functions (not async).
 
 
 raise_exception

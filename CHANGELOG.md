@@ -3,6 +3,14 @@
 We follow Semantic Versions since the `0.1.0` release.
 
 
+## Version 0.6.0
+
+### Features
+
+- `safe` and `pipeline` now supports `asyncio`
+- `is_successful` now returns `Literal` types if possible
+
+
 ## Version 0.5.0
 
 ### Features

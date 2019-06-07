@@ -15,7 +15,7 @@ Make your functions return something meaningful, typed, and safe!
 - Enforces [Railway Oriented Programming](https://fsharpforfunandprofit.com/rop/)
 - Fully typed with annotations and checked with `mypy`, [PEP561 compatible](https://www.python.org/dev/peps/pep-0561/)
 - Pythonic and pleasant to write and to read (!)
-- WIP: `asyncio` support
+- Support functions and coroutines, framework agnostic
 
 
 ## Installation
