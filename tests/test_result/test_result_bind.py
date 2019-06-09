@@ -12,7 +12,7 @@ def test_left_identity_success():
     bound = Success(input_value).bind(factory)
 
     assert bound == factory(input_value)
-    assert str(bound) == 'Success: 10'
+    assert str(bound) == '<Success: 10>'
 
 
 def test_left_identity_failure():
@@ -24,7 +24,7 @@ def test_left_identity_failure():
     bound = Failure(input_value).bind(factory)
 
     assert bound == Failure(input_value)
-    assert str(bound) == 'Failure: 5'
+    assert str(bound) == '<Failure: 5>'
 
 
 def test_rescue_success():
@@ -35,7 +35,7 @@ def test_rescue_success():
     bound = Success(5).rescue(factory)
 
     assert bound == Success(5)
-    assert str(bound) == 'Success: 5'
+    assert str(bound) == '<Success: 5>'
 
 
 def test_rescue_failure():
@@ -47,4 +47,4 @@ def test_rescue_failure():
     bound = Failure(5).rescue(factory)
 
     assert bound == Failure(expected)
-    assert str(bound) == 'Failure: 6.0'
+    assert str(bound) == '<Failure: 6.0>'

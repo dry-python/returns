@@ -24,7 +24,7 @@ def is_successful(container):
 
 def safe(function):  # noqa: C901
     """
-    Decorator to covert exception throwing function to 'Result' monad.
+    Decorator to covert exception throwing function to 'Result' container.
 
     Show be used with care, since it only catches 'Exception' subclasses.
     It does not catch 'BaseException' subclasses.

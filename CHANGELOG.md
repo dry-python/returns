@@ -3,6 +3,14 @@
 We follow Semantic Versions since the `0.1.0` release.
 
 
+## WIP
+
+### Misc
+
+- Changes how `str()` function works for container types
+- Total rename to "container" in the source code
+
+
 ## Version 0.6.0
 
 ### Features

@@ -39,8 +39,8 @@ class Failure(Result[Any, _ErrorType]):
 
         Applies 'function' to the contents of the 'Success' instance
         and returns a new 'Success' object containing the result.
-        'function' should accept a single "normal" (non-monad) argument
-        and return a non-monad result.
+        'function' should accept a single "normal" (non-container) argument
+        and return a non-container result.
         """
         return Success(function(self._inner_value))
 
@@ -48,7 +48,7 @@ class Failure(Result[Any, _ErrorType]):
         """
         Applies 'function' to the result of a previous calculation.
 
-        'function' should accept a single "normal" (non-monad) argument
+        'function' should accept a single "normal" (non-container) argument
         and return Result a 'Failure' or 'Success' type object.
         """
         return function(self._inner_value)
@@ -65,7 +65,7 @@ class Failure(Result[Any, _ErrorType]):
         raise UnwrapFailedError(self)
 
     def failure(self):
-        """Unwraps inner error value from failed monad."""
+        """Unwraps inner error value from failed container."""
         return self._inner_value
 
 
@@ -82,8 +82,8 @@ class Success(Result[_ValueType, Any]):
 
         Applies 'function' to the contents of the 'Success' instance
         and returns a new 'Success' object containing the result.
-        'function' should accept a single "normal" (non-monad) argument
-        and return a non-monad result.
+        'function' should accept a single "normal" (non-container) argument
+        and return a non-container result.
         """
         return Success(function(self._inner_value))
 
@@ -91,7 +91,7 @@ class Success(Result[_ValueType, Any]):
         """
         Applies 'function' to the result of a previous calculation.
 
-        'function' should accept a single "normal" (non-monad) argument
+        'function' should accept a single "normal" (non-container) argument
         and return Result a 'Failure' or 'Success' type object.
         """
         return function(self._inner_value)
@@ -109,7 +109,7 @@ class Success(Result[_ValueType, Any]):
         return self._inner_value
 
     def unwrap(self):
-        """Returns the unwrapped value from the inside of this monad."""
+        """Returns the unwrapped value from the inside of this container."""
         return self._inner_value
 
     def failure(self):

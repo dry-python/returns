@@ -23,16 +23,16 @@ class _BaseContainer(object, metaclass=ABCMeta):
         object.__setattr__(self, '_inner_value', inner_value)
 
     def __setattr__(self, attr_name, attr_value):
-        """Makes inner state of the monads immutable."""
+        """Makes inner state of the containers immutable."""
         raise ImmutableStateError()
 
     def __delattr__(self, attr_name):  # noqa: Z434
-        """Makes inner state of the monads immutable."""
+        """Makes inner state of the containers immutable."""
         raise ImmutableStateError()
 
     def __str__(self):
         """Converts to string."""
-        return '{0}: {1}'.format(
+        return '<{0}: {1}>'.format(
             self.__class__.__qualname__,
             str(self._inner_value),
         )
@@ -52,9 +52,9 @@ class Container(_BaseContainer, metaclass=ABCMeta):
 
     You won't create 'Container' instances directly.
     Instead, sub-classes implement specific contexts.
-    Monads allow you to bind together
+    containers allow you to bind together
     a series of calculations while maintaining
-    the context of that specific monad.
+    the context of that specific container.
 
     This is an abstract class with the API declaration.
 
@@ -69,7 +69,7 @@ class Container(_BaseContainer, metaclass=ABCMeta):
         Applies 'function' to the contents of the functor.
 
         And returns a new functor value.
-        Works for monads that represent success.
+        Works for containers that represent success.
         Is the opposite of :meth:`~fix`.
         """
         raise NotImplementedError()
@@ -79,8 +79,8 @@ class Container(_BaseContainer, metaclass=ABCMeta):
         """
         Applies 'function' to the result of a previous calculation.
 
-        And returns a new monad.
-        Works for monads that represent success.
+        And returns a new container.
+        Works for containers that represent success.
         Is the opposite of :meth:`~rescue`.
         """
         raise NotImplementedError()
@@ -91,7 +91,7 @@ class Container(_BaseContainer, metaclass=ABCMeta):
         Applies 'function' to the contents of the functor.
 
         And returns a new functor value.
-        Works for monads that represent failure.
+        Works for containers that represent failure.
         Is the opposite of :meth:`~map`.
         """
         raise NotImplementedError()
@@ -101,21 +101,21 @@ class Container(_BaseContainer, metaclass=ABCMeta):
         """
         Applies 'function' to the result of a previous calculation.
 
-        And returns a new monad.
-        Works for monads that represent failure.
+        And returns a new container.
+        Works for containers that represent failure.
         Is the opposite of :meth:`~bind`.
         """
         raise NotImplementedError()
 
     @abstractmethod
     def value_or(self, default_value):  # pragma: no cover
-        """Forces to unwrap value from monad or return a default."""
+        """Forces to unwrap value from container or return a default."""
         raise NotImplementedError()
 
     @abstractmethod
     def unwrap(self):  # pragma: no cover
         """
-        Custom magic method to unwrap inner value from monad.
+        Custom magic method to unwrap inner value from container.
 
         Should be redefined for ones that actually have values.
         And for ones that raise an exception for no values.
@@ -127,7 +127,7 @@ class Container(_BaseContainer, metaclass=ABCMeta):
     @abstractmethod
     def failure(self):  # pragma: no cover
         """
-        Custom magic method to unwrap inner value from the failed monad.
+        Custom magic method to unwrap inner value from the failed container.
 
         This method is the opposite of :meth:`~unwrap`.
         """
@@ -136,7 +136,7 @@ class Container(_BaseContainer, metaclass=ABCMeta):
 
 class GenericContainerOneSlot(Generic[_ValueType], Container):
     """
-    Base class for monads with one typed slot.
+    Base class for containers with one typed slot.
 
     Use this type for generic inheritance only.
     Use :class:`~Container` as a general type for polymorphism.
@@ -145,7 +145,7 @@ class GenericContainerOneSlot(Generic[_ValueType], Container):
 
 class GenericContainerTwoSlots(Generic[_ValueType, _ErrorType], Container):
     """
-    Base class for monads with two typed slot.
+    Base class for containers with two typed slot.
 
     Use this type for generic inheritance only.
     Use :class:`~Container` as a general type for polymorphism.
