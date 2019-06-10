@@ -164,7 +164,8 @@ And we should explicitly mark impure parts of the program.
 
 ### Explicit IO
 
-Let's refactor it to make our `IO` explicit!
+Let's refactor it to make our
+[IO](https://returns.readthedocs.io/en/latest/pages/io.html) explicit!
 
 ```python
 import requests
@@ -204,7 +205,7 @@ So, we act accordingly!
 
 ## More!
 
-What more? [Go to the docs!](https://returns.readthedocs.io)
+Want more? [Go to the docs!](https://returns.readthedocs.io)
 Or read these articles:
 
 - [Python exceptions considered an anti-pattern](https://sobolevn.me/2019/02/python-exceptions-considered-an-antipattern)
