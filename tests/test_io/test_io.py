@@ -15,3 +15,8 @@ def test_io_bind():
     assert IO('a').bind(
         lambda number: IO(number + 'b'),
     ) == IO('ab')
+
+
+def test_io_str():
+    """Ensures that IO container supports str cast."""
+    assert str(IO([])) == '<IO: []>'

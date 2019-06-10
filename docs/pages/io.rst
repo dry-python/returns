@@ -95,7 +95,8 @@ It means, that it cannot be used where regular ``bool`` can be:
       ...
 
   is_successful: IO[bool] = can_book_seats(number_of_seats, place_id)
-  notify_user_about_booking_result(is_successful)  # Boom! Expects `bool`
+  notify_user_about_booking_result(is_successful)  # Boom!
+  # => Argument 1 has incompatible type "IO[bool]"; expected "bool"
 
 See? It is now impossible for a pure function to use ``IO[bool]``.
 It is impossible to unwrap or get a value from this container.
