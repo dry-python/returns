@@ -115,6 +115,10 @@ to use containers with `pure functions <https://en.wikipedia.org/wiki/Pure_funct
   result = Success(1).map(double)
   # => Will be equal to Success(2)
 
+Note::
+
+  All containers support these methods.
+
 Returning execution to the right track
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -155,6 +159,11 @@ It can also fix your flow and get on the successful track again:
 
   Failure(ZeroDivisionError).rescue(fix)
   # => Will be equal to Success(0)
+
+Note::
+
+  Not all containers support these methods.
+  IO cannot be fixed or rescued.
 
 Unwrapping values
 ~~~~~~~~~~~~~~~~~
@@ -199,6 +208,11 @@ to unwrap the failed state:
 
 Be careful, since this method will raise an exception
 when you try to ``failure`` a successful container.
+
+Note::
+
+  Not all containers support these methods.
+  IO cannot be unwrapped.
 
 
 Immutability

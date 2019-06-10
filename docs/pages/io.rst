@@ -5,8 +5,8 @@ IO
 
 Why? Let me illustrate it with the example.
 
-IO container
-------------
+IO marker
+---------
 
 Imagine we have this beautiful pure function:
 
