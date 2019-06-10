@@ -19,6 +19,7 @@ Contents
   pages/container.rst
   pages/result.rst
   pages/io.rst
+  pages/unsafe.rst
   pages/functions.rst
 
 .. toctree::

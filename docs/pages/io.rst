@@ -101,6 +101,9 @@ See? It is now impossible for a pure function to use ``IO[bool]``.
 It is impossible to unwrap or get a value from this container.
 Once it is marked as ``IO`` it will never return to the pure state.
 
+Well, there's a hack actually:
+:py:func:`unsafe_perform_io <returns.unsafe.unsafe_perform_io>`
+
 It also needs to be explicitly mapped to produce new ``IO`` result:
 
 .. code:: python
@@ -148,37 +151,6 @@ There's one limitation in typing
 that we are facing right now
 due to `mypy issue <https://github.com/python/mypy/issues/3157>`_.
 
-unsafe
-------
-
-Sometimes you really need to get the raw value.
-For example:
-
-.. code:: python
-
-  def index_view(request, user_id):
-      user: IO[User] = get_user(user_id)
-      return render('index.html', { user: user })  # ???
-
-In this case your web-framework will not render your user correctly.
-Since it does not expect it to be wrapped inside ``IO`` containers.
-
-What to do? Use ``unsafe_perform_io``:
-
-.. code::
-
-  from returns.unsafe import unsafe_perform_io
-
-  def index_view(request, user_id):
-      user: IO[User] = get_user(user_id)
-      return render('index.html', { user: unsafe_perform_io(user) })  # Ok
-
-We need it as an escape and compatibility mechanism for our imperative shell.
-
-It is recommended
-to use `import-linter <https://github.com/seddonym/import-linter>`_
-to restrict imports from ``returns.unsafe`` expect the top-level modules.
-
 Further reading
 ---------------
 
@@ -192,7 +164,4 @@ API Reference
 .. autoclasstree:: returns.io
 
 .. automodule:: returns.io
-   :members:
-
-.. automodule:: returns.unsafe
    :members:
