@@ -12,7 +12,7 @@ Make your functions return something meaningful, typed, and safe!
 ## Features
 
 - Provides a bunch of primitives to write declarative business logic
-- Enforces [Railway Oriented Programming](https://fsharpforfunandprofit.com/rop/)
+- Enforces better architecture
 - Fully typed with annotations and checked with `mypy`, [PEP561 compatible](https://www.python.org/dev/peps/pep-0561/)
 - Pythonic and pleasant to write and to read (!)
 - Support functions and coroutines, framework agnostic
@@ -27,11 +27,20 @@ pip install returns
 Make sure you know how to get started, [check out our docs](https://returns.readthedocs.io/en/latest/)!
 
 
-## Why?
+## Contents
 
-Consider this code that you can find in **any** `python` project.
+- [Result container](#result-container) that let's you to get rid of exceptions
+- [IO marker](#io-marker) that marks all impure operations and structures them
+
+
+## Result container
+
+Please, make sure that you are also aware of
+[Railway Oriented Programming](https://fsharpforfunandprofit.com/rop/).
 
 ### Straight-forward approach
+
+Consider this code that you can find in **any** `python` project.
 
 ```python
 import requests
@@ -84,21 +93,14 @@ just to catch the expected exceptions.
 
 Our code will become complex and unreadable with all this mess!
 
-
 ### Pipeline example
-
 
 ```python
 import requests
-from returns.functions import pipeline, safe
-from returns.result import Result
+from returns.result import Result, pipeline, safe
 
 class FetchUserProfile(object):
     """Single responsibility callable object that fetches user profile."""
-
-    #: You can later use dependency injection to replace `requests`
-    #: with any other http library (or even a custom service).
-    _http = requests
 
     @pipeline
     def __call__(self, user_id: int) -> Result['UserProfile', Exception]:
@@ -107,8 +109,9 @@ class FetchUserProfile(object):
         return self._parse_json(response)
 
     @safe
+    @impure
     def _make_request(self, user_id: int) -> requests.Response:
-        response = self._http.get('/api/users/{0}'.format(user_id))
+        response = requests.get('/api/users/{0}'.format(user_id))
         response.raise_for_status()
         return response
 
@@ -141,8 +144,71 @@ And we can clearly see all result patterns that might happen in this particular 
 - `Failure[JsonDecodeException]`
 
 And we can work with each of them precisely.
+It is a good practice to create `enum` classes or `Union` types
+with all the possible errors.
+
+
+## IO marker
+
+But is that all we can improve?
+Let's look at `FetchUserProfile` from another angle.
+All its methods looks like a regular ones:
+it is impossible to tell whether they are pure or impure from the first sight.
+
+It leads to a very important consequence:
+*we start to mix pure and impure code together*.
+
+And suffer really bad when testing / reusing it.
+Almost everything should be pure by default.
+And we should explicitly mark impure parts of the program.
+
+### Explicit IO
+
+Let's refactor it to make our `IO` explicit!
+
+```python
+import requests
+from returns.io import IO, impure
+from returns.result import Result, pipeline, safe
+
+class FetchUserProfile(object):
+    """Single responsibility callable object that fetches user profile."""
+
+    @pipeline
+    def __call__(self, user_id: int) -> Result[IO['UserProfile'], Exception]]:
+        """Fetches UserProfile dict from foreign API."""
+        response = self._make_request(user_id).unwrap()
+        return self._parse_json(response)
+
+    @safe
+    @impure
+    def _make_request(self, user_id: int) -> requests.Response:
+        response = requests.get('/api/users/{0}'.format(user_id))
+        response.raise_for_status()
+        return response
+
+    @safe
+    def _parse_json(
+      self,
+      io_response: IO[requests.Response],
+    ) -> IO['UserProfile']:
+        return io_response.map(lambda response: response.json())
+```
+
+Now we have explicit markers where the `IO` did happen
+and these markers cannot be removed.
+
+Whenever we access `FetchUserProfile` we now know
+that it does `IO` and might fail.
+So, we act accordingly!
+
+## More!
 
 What more? [Go to the docs!](https://returns.readthedocs.io)
+Or read these articles:
+
+- [Python exceptions considered an anti-pattern](https://sobolevn.me/2019/02/python-exceptions-considered-an-antipattern)
+- [Enforcing Single Responsibility Principle in Python](https://sobolevn.me/2019/03/enforcing-srp)
 
 ## License
 

@@ -2,8 +2,7 @@
 
 import pytest
 
-from returns.functions import is_successful
-from returns.result import Failure, Success
+from returns.result import Failure, Success, is_successful
 
 
 @pytest.mark.parametrize('container, correct_result', [

@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from abc import ABCMeta
+from abc import ABCMeta, abstractmethod
+from functools import wraps
+from inspect import iscoroutinefunction
 from typing import Any, TypeVar
 
 from returns.primitives.container import GenericContainerTwoSlots
@@ -15,6 +17,54 @@ class Result(
     metaclass=ABCMeta,
 ):
     """Base class for Failure and Success."""
+
+    @abstractmethod
+    def fix(self, function):  # pragma: no cover
+        """
+        Applies 'function' to the contents of the functor.
+
+        And returns a new functor value.
+        Works for containers that represent failure.
+        Is the opposite of :meth:`~map`.
+        """
+        raise NotImplementedError()
+
+    @abstractmethod
+    def rescue(self, function):  # pragma: no cover
+        """
+        Applies 'function' to the result of a previous calculation.
+
+        And returns a new container.
+        Works for containers that represent failure.
+        Is the opposite of :meth:`~bind`.
+        """
+        raise NotImplementedError()
+
+    @abstractmethod
+    def value_or(self, default_value):  # pragma: no cover
+        """Forces to unwrap value from container or return a default."""
+        raise NotImplementedError()
+
+    @abstractmethod
+    def unwrap(self):  # pragma: no cover
+        """
+        Custom magic method to unwrap inner value from container.
+
+        Should be redefined for ones that actually have values.
+        And for ones that raise an exception for no values.
+
+        This method is the opposite of :meth:`~failure`.
+        """
+        raise NotImplementedError()
+
+    @abstractmethod
+    def failure(self):  # pragma: no cover
+        """
+        Custom magic method to unwrap inner value from the failed container.
+
+        This method is the opposite of :meth:`~unwrap`.
+        """
+        raise NotImplementedError()
 
 
 class Failure(Result[Any, _ErrorType]):
@@ -115,3 +165,65 @@ class Success(Result[_ValueType, Any]):
     def failure(self):
         """Raises an exception, since it does not have an error inside."""
         raise UnwrapFailedError(self)
+
+
+def is_successful(container):
+    """
+    Determins if a container was successful or not.
+
+    We treat container that raise ``UnwrapFailedError`` on ``.unwrap()``
+    not successful.
+    """
+    try:
+        container.unwrap()
+    except UnwrapFailedError:
+        return False
+    else:
+        return True
+
+
+def safe(function):  # noqa: C901
+    """
+    Decorator to covert exception throwing function to 'Result' container.
+
+    Show be used with care, since it only catches 'Exception' subclasses.
+    It does not catch 'BaseException' subclasses.
+
+    Supports both async and regular functions.
+    """
+    if iscoroutinefunction(function):
+        async def decorator(*args, **kwargs):
+            try:
+                return Success(await function(*args, **kwargs))
+            except Exception as exc:
+                return Failure(exc)
+    else:
+        def decorator(*args, **kwargs):
+            try:
+                return Success(function(*args, **kwargs))
+            except Exception as exc:
+                return Failure(exc)
+    return wraps(function)(decorator)
+
+
+def pipeline(function):  # noqa: C901
+    """
+    Decorator to enable 'do-notation' context.
+
+    Should be used for series of computations that rely on ``.unwrap`` method.
+
+    Supports both async and regular functions.
+    """
+    if iscoroutinefunction(function):
+        async def decorator(*args, **kwargs):
+            try:
+                return await function(*args, **kwargs)
+            except UnwrapFailedError as exc:
+                return exc.halted_container
+    else:
+        def decorator(*args, **kwargs):
+            try:
+                return function(*args, **kwargs)
+            except UnwrapFailedError as exc:
+                return exc.halted_container
+    return wraps(function)(decorator)

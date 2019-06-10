@@ -33,26 +33,6 @@ class Container(_BaseContainer, metaclass=ABCMeta):
     def bind(self, function):
         ...
 
-    @abstractmethod
-    def fix(self, function):
-        ...
-
-    @abstractmethod
-    def rescue(self, function):
-        ...
-
-    @abstractmethod
-    def value_or(self, default_value):
-        ...
-
-    @abstractmethod
-    def unwrap(self):
-        ...
-
-    @abstractmethod
-    def failure(self):
-        ...
-
 
 class GenericContainerOneSlot(
     Generic[_ValueType],

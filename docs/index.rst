@@ -18,6 +18,7 @@ Contents
 
   pages/container.rst
   pages/result.rst
+  pages/io.rst
   pages/functions.rst
 
 .. toctree::

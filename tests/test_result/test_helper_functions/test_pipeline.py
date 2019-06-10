@@ -2,8 +2,7 @@
 
 import pytest
 
-from returns.functions import pipeline
-from returns.result import Failure, Result, Success
+from returns.result import Failure, Result, Success, pipeline
 
 
 @pipeline

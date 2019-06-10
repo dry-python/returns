@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from abc import ABCMeta
-from typing import Any, Callable, NoReturn, TypeVar, Union
+from typing import Any, Callable, Coroutine, NoReturn, TypeVar, Union, overload
 
-from typing_extensions import final
+from typing_extensions import Literal, final
 
 from returns.primitives.container import Container, GenericContainerTwoSlots
 
@@ -14,6 +14,21 @@ _ResultType = TypeVar('_ResultType', bound='Result')
 _ValueType = TypeVar('_ValueType')
 _NewValueType = TypeVar('_NewValueType')
 _ErrorType = TypeVar('_ErrorType')
+
+# Just aliases:
+_FirstType = TypeVar('_FirstType')
+_SecondType = TypeVar('_SecondType')
+_ThirdType = TypeVar('_ThirdType')
+
+# Hacks for functions:
+_ReturnsContainerType = TypeVar(
+    '_ReturnsContainerType',
+    bound=Callable[..., Container],
+)
+_ReturnsAsyncContainerType = TypeVar(
+    '_ReturnsAsyncContainerType',
+    bound=Callable[..., Coroutine[_FirstType, _SecondType, Container]],
+)
 
 
 class Result(
@@ -126,3 +141,45 @@ class Success(Result[_ValueType, Any]):
 
     def failure(self) -> NoReturn:
         ...
+
+
+@overload
+def is_successful(container: Success) -> Literal[True]:
+    ...
+
+
+@overload
+def is_successful(container: Failure) -> Literal[False]:
+    ...
+
+
+# Typing decorators is not an easy task, see:
+# https://github.com/python/mypy/issues/3157
+
+@overload
+def pipeline(
+    function: _ReturnsAsyncContainerType,
+) -> _ReturnsAsyncContainerType:
+    ...
+
+
+@overload
+def pipeline(function: _ReturnsContainerType) -> _ReturnsContainerType:
+    ...
+
+
+@overload  # noqa: Z320
+def safe(  # type: ignore
+    function: Callable[..., Coroutine[_ValueType, _ErrorType, _NewValueType]],
+) -> Callable[
+    ...,
+    Coroutine[_ValueType, _ErrorType, Result[_NewValueType, Exception]],
+]:
+    ...
+
+
+@overload
+def safe(
+    function: Callable[..., _NewValueType],
+) -> Callable[..., Result[_NewValueType, Exception]]:
+    ...

@@ -2,8 +2,7 @@
 
 import pytest
 
-from returns.functions import safe
-from returns.result import Failure, Success
+from returns.result import Failure, Success, safe
 
 
 @safe

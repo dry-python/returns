@@ -5,6 +5,18 @@ We follow Semantic Versions since the `0.1.0` release.
 
 ## WIP
 
+### Features
+
+- Adds `IO` marker
+- Adds `unsafe` module with unsafe functions
+- Changes how functions are located inside the project
+
+### Bugfixes
+
+- Fixes container type in `@pipeline`
+- Now `is_successful` is public
+- Now `raise_exception` is public
+
 ### Misc
 
 - Changes how `str()` function works for container types
