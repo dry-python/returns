@@ -133,12 +133,16 @@ It will return [Success[Response] or Failure[Exception]](https://returns.readthe
 And will never throw this exception at us.
 
 When we will need raw value, we can use `.unwrap()` method to get it.
-If the result is `Failure[Exception]` we will actually raise an exception at this point.
-But it is safe to use `.unwrap()` inside [@pipeline](https://returns.readthedocs.io/en/latest/pages/functions.html#returns.functions.pipeline)
+If the result is `Failure[Exception]`
+we will actually raise an exception at this point.
+But it is safe to use `.unwrap()` inside
+[@pipeline](https://returns.readthedocs.io/en/latest/pages/functions.html#returns.functions.pipeline)
 functions.
-Because it will catch this exception and wrap it inside a new `Failure[Exception]`!
+Because it will catch this exception
+and wrap it inside a new `Failure[Exception]`!
 
-And we can clearly see all result patterns that might happen in this particular case:
+And we can clearly see all result patterns
+that might happen in this particular case:
 - `Success[UserProfile]`
 - `Failure[HttpException]`
 - `Failure[JsonDecodeException]`
@@ -152,7 +156,7 @@ with all the possible errors.
 
 But is that all we can improve?
 Let's look at `FetchUserProfile` from another angle.
-All its methods looks like a regular ones:
+All its methods looks like regular ones:
 it is impossible to tell whether they are pure or impure from the first sight.
 
 It leads to a very important consequence:
