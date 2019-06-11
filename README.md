@@ -181,7 +181,7 @@ class FetchUserProfile(object):
     """Single responsibility callable object that fetches user profile."""
 
     @pipeline
-    def __call__(self, user_id: int) -> Result[IO['UserProfile'], Exception]]:
+    def __call__(self, user_id: int) -> Result[IO['UserProfile'], Exception]:
         """Fetches UserProfile dict from foreign API."""
         response = self._make_request(user_id).unwrap()
         return self._parse_json(response)
