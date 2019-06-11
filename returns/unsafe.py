@@ -3,7 +3,7 @@
 
 def unsafe_perform_io(wrapped_in_io):
     """
-    Compatibility utility and escape mechanism from IO world.
+    Compatibility utility and escape mechanism from ``IO`` world.
 
     Just unwraps the internal value
     from :py:class:`IO <returns.io.IO>` container.

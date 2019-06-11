@@ -3,7 +3,7 @@
 We follow Semantic Versions since the `0.1.0` release.
 
 
-## WIP
+## 0.7.0
 
 ### Features
 

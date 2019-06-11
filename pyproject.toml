@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "returns"
-version = "0.6.0"
+version = "0.7.0"
 description = "Make your functions return something meaningful, typed, and safe!"
 license = "MIT"
 

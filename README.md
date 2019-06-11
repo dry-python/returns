@@ -109,7 +109,6 @@ class FetchUserProfile(object):
         return self._parse_json(response)
 
     @safe
-    @impure
     def _make_request(self, user_id: int) -> requests.Response:
         response = requests.get('/api/users/{0}'.format(user_id))
         response.raise_for_status()
@@ -148,21 +147,23 @@ that might happen in this particular case:
 - `Failure[JsonDecodeException]`
 
 And we can work with each of them precisely.
-It is a good practice to create `enum` classes or `Union` types
-with all the possible errors.
+It is a good practice to create `Enum` classes or `Union` types
+with a list of all the possible errors.
 
 
 ## IO marker
 
 But is that all we can improve?
 Let's look at `FetchUserProfile` from another angle.
-All its methods looks like regular ones:
+All its methods look like regular ones:
 it is impossible to tell whether they are pure or impure from the first sight.
 
 It leads to a very important consequence:
 *we start to mix pure and impure code together*.
+We should not do that!
 
-And suffer really bad when testing / reusing it.
+When these two concepts are mixed
+we suffer really bad when testing or reusing it.
 Almost everything should be pure by default.
 And we should explicitly mark impure parts of the program.
 
@@ -194,8 +195,8 @@ class FetchUserProfile(object):
 
     @safe
     def _parse_json(
-      self,
-      io_response: IO[requests.Response],
+        self,
+        io_response: IO[requests.Response],
     ) -> IO['UserProfile']:
         return io_response.map(lambda response: response.json())
 ```

@@ -10,7 +10,16 @@ _ValueType = TypeVar('_ValueType')
 
 
 class IO(GenericContainerOneSlot[_ValueType]):
-    """Explicit marker for impure function results."""
+    """
+    Explicit marker for impure function results.
+
+    We call it "marker" since once it is marked, it cannot be unmarked.
+
+    ``IO`` is also a container.
+    But, it is different in a way
+    that it cannot be unwrapped / rescued / fixed.
+    There's no way to directly get its internal value.
+    """
 
     def map(self, function):  # noqa: A003
         """
@@ -35,7 +44,7 @@ class IO(GenericContainerOneSlot[_ValueType]):
 
 def impure(function):
     """
-    Decorator to mark function that it returns IO container.
+    Decorator to mark function that it returns :py:class:`IO` container.
 
     Supports both async and regular functions.
     """
