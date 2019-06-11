@@ -215,7 +215,3 @@ Or read these articles:
 
 - [Python exceptions considered an anti-pattern](https://sobolevn.me/2019/02/python-exceptions-considered-an-antipattern)
 - [Enforcing Single Responsibility Principle in Python](https://sobolevn.me/2019/03/enforcing-srp)
-
-## License
-
-MIT.
