@@ -54,9 +54,9 @@ is used to literally bind two different containers together.
       ...
 
   result = Success(1).bind(may_fail)
-  # => Will be equal to either Success[int] or Failure[str]
+  # => Either Success[int] or Failure[str]
 
-And we use :func:`.map <returns.primitives.container.Container.map>`
+And we have :func:`.map <returns.primitives.container.Container.map>`
 to use containers with regular functions.
 
 .. code:: python
@@ -67,7 +67,9 @@ to use containers with regular functions.
       return state * 2
 
   result = Success(1).map(double)
-  # => Will be equal to Success(2)
+  # => Success(2)
+  result.map(lambda state: state + 1)
+  # => Success(3)
 
 The same work with built-in functions as well:
 
@@ -148,7 +150,7 @@ during the pipeline execution:
       return state * 2.0
 
   Failure(1).fix(double)
-  # => Will be equal to Success(2.0)
+  # => Success(2.0)
 
 ``rescue`` should return one of ``Success`` or ``Failure`` types.
 It can also rescue your flow and get on the successful track again:
@@ -201,6 +203,7 @@ inner state of containers into a regular types:
   # => Traceback (most recent call last): UnwrapFailedError
 
 The most user-friendly way to use ``unwrap`` method is with :ref:`pipeline`.
+We even discourage using ``.unwrap()`` without a ``@pipeline``.
 
 For failing containers you can
 use :func:`.failure <returns.primitives.container.FixableContainer.failure>`
