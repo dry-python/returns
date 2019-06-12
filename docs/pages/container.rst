@@ -35,13 +35,13 @@ And we can see how this state is evolving during the execution.
 Working with containers
 -----------------------
 
-We use two methods to create new containers from the previous one.
+We use two methods to create a new container from the previous one.
 ``bind`` and ``map``.
 
 The difference is simple:
 
-- ``map`` works with functions that return regular values
-- ``bind`` works with functions that return other containers of the same type
+- ``map`` works with functions that return regular value
+- ``bind`` works with functions that return new container of the same type
 
 :func:`.bind <returns.primitives.container.Container.bind>`
 is used to literally bind two different containers together.
