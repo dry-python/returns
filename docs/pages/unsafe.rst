@@ -1,7 +1,7 @@
 unsafe
 ======
 
-Sometimes you really need to get the raw value.
+Sometimes you really need to get the raw value from ``IO`` container.
 For example:
 
 .. code:: python
@@ -12,8 +12,9 @@ For example:
 
 In this case your web-framework will not render your user correctly.
 Since it does not expect it to be wrapped inside ``IO`` containers.
+And we obviously cannot ``map`` or ``bind`` this function.
 
-What to do? Use ``unsafe_perform_io``:
+What to do? Use :func:`unsafe_perform_io <returns.unsafe.unsafe_perform_io>`:
 
 .. code::
 
@@ -31,6 +32,7 @@ to restrict imports from ``returns.unsafe`` expect the top-level modules.
 
 Inspired by Haskell's
 `unsafePerformIO <https://hackage.haskell.org/package/base-4.12.0.0/docs/System-IO-Unsafe.html#v:unsafePerformIO>`_
+
 
 API Reference
 -------------

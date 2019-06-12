@@ -34,6 +34,9 @@ We can later use its result to notify users about their booking request:
 
   notify_user_about_booking_result(is_successful)  # works just fine!
 
+Impure functions
+~~~~~~~~~~~~~~~~
+
 But, imagine that our requirements had changed.
 And now we have to grab the number of already booked tickets
 from some other provider and fetch the maximum capacity from the database:
@@ -57,13 +60,17 @@ It will require to setup:
 - real database and tables
 - fixture data
 - ``requests`` mocks for different outcomes
+- and the whole Universe!
 
 Our complexity has sky-rocketed!
 And the most annoying part is that all other functions
 that call ``can_book_seats`` now also have to do the same setup.
-It seams like ``IO`` is indelible mark.
+It seams like ``IO`` is indelible mark (some people also call it "effect").
 
 And at some point it time we will start to mix pure and impure code together.
+
+Separating two worlds
+~~~~~~~~~~~~~~~~~~~~~
 
 Well, our :py:class:`IO <returns.io.IO>`
 mark is indeed indelible and should be respected.
@@ -133,6 +140,7 @@ We can track it, we can fight it, we can design it better.
 By saying that, it is assumed that
 you have a functional core and imperative shell.
 
+
 impure
 ------
 
@@ -145,12 +153,59 @@ you with the existing impure things in Python:
 
   name: IO[str] = impure(input)('What is your name?')
 
+You can also decorate your own functions
+with ``@impure`` for better readability and clearness:
+
+.. code:: python
+
+  import requests
+  from returns.io import impure
+
+  @impure
+  def get_user() -> 'User':
+      return requests.get('https:...').json()
+
 Limitations
 ~~~~~~~~~~~
 
 There's one limitation in typing
 that we are facing right now
 due to `mypy issue <https://github.com/python/mypy/issues/3157>`_.
+
+
+FAQ
+---
+
+What is the difference between IO[T] and T?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+What kind of input parameter should
+my function accept ``IO[T]`` or simple ``T``?
+
+It really depends on your domain / context.
+If the value is pure, than use raw unwrapped values.
+If the value is fetched, input, received, selected, than use ``IO`` container.
+
+Most web applications are just covered with ``IO``.
+
+Why can't we unwrap values or use @pipeline with IO?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Our design decision was not let people unwrap ``IO`` containers,
+so it will indeed infect the whole call-stack with its effect.
+
+Otherwise, people might hack the system
+in some dirty (from our point of view)
+but valid (from the python's point of view) ways.
+
+Warning::
+
+  Of course, you can directly access
+  the internal state of the IO with `._internal_state`,
+  but your are considered to be a grown-up!
+
+  Use wemake-python-styleguide to restrict `._` access in your code.
+
 
 Further reading
 ---------------

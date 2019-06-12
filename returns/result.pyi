@@ -5,7 +5,12 @@ from typing import Any, Callable, Coroutine, NoReturn, TypeVar, Union, overload
 
 from typing_extensions import Literal, final
 
-from returns.primitives.container import Container, GenericContainerTwoSlots
+from returns.primitives.container import (
+    Container,
+    FixableContainer,
+    GenericContainerTwoSlots,
+    ValueUnwrapContainer,
+)
 
 _ContainerType = TypeVar('_ContainerType', bound=Container)
 _ResultType = TypeVar('_ResultType', bound='Result')
@@ -33,6 +38,8 @@ _ReturnsAsyncContainerType = TypeVar(
 
 class Result(
     GenericContainerTwoSlots[_ValueType, _ErrorType],
+    FixableContainer,
+    ValueUnwrapContainer,
     metaclass=ABCMeta,
 ):
     _inner_value: Union[_ValueType, _ErrorType]

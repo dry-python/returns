@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from abc import ABCMeta, abstractmethod
+from abc import ABCMeta
 from functools import wraps
 from inspect import iscoroutinefunction
 from typing import Any, TypeVar
 
-from returns.primitives.container import GenericContainerTwoSlots
+from returns.primitives.container import (
+    FixableContainer,
+    GenericContainerTwoSlots,
+    ValueUnwrapContainer,
+)
 from returns.primitives.exceptions import UnwrapFailedError
 
 _ValueType = TypeVar('_ValueType')
@@ -14,57 +18,11 @@ _ErrorType = TypeVar('_ErrorType')
 
 class Result(
     GenericContainerTwoSlots[_ValueType, _ErrorType],
+    FixableContainer,
+    ValueUnwrapContainer,
     metaclass=ABCMeta,
 ):
     """Base class for Failure and Success."""
-
-    @abstractmethod
-    def fix(self, function):  # pragma: no cover
-        """
-        Applies 'function' to the contents of the functor.
-
-        And returns a new functor value.
-        Works for containers that represent failure.
-        Is the opposite of :meth:`~map`.
-        """
-        raise NotImplementedError()
-
-    @abstractmethod
-    def rescue(self, function):  # pragma: no cover
-        """
-        Applies 'function' to the result of a previous calculation.
-
-        And returns a new container.
-        Works for containers that represent failure.
-        Is the opposite of :meth:`~bind`.
-        """
-        raise NotImplementedError()
-
-    @abstractmethod
-    def value_or(self, default_value):  # pragma: no cover
-        """Forces to unwrap value from container or return a default."""
-        raise NotImplementedError()
-
-    @abstractmethod
-    def unwrap(self):  # pragma: no cover
-        """
-        Custom magic method to unwrap inner value from container.
-
-        Should be redefined for ones that actually have values.
-        And for ones that raise an exception for no values.
-
-        This method is the opposite of :meth:`~failure`.
-        """
-        raise NotImplementedError()
-
-    @abstractmethod
-    def failure(self):  # pragma: no cover
-        """
-        Custom magic method to unwrap inner value from the failed container.
-
-        This method is the opposite of :meth:`~unwrap`.
-        """
-        raise NotImplementedError()
 
 
 class Failure(Result[Any, _ErrorType]):

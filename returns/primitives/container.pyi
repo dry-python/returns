@@ -34,6 +34,30 @@ class Container(_BaseContainer, metaclass=ABCMeta):
         ...
 
 
+class FixableContainer(object, metaclass=ABCMeta):
+    @abstractmethod
+    def fix(self, function):
+        ...
+
+    @abstractmethod
+    def rescue(self, function):
+        ...
+
+    @abstractmethod
+    def failure(self):
+        ...
+
+
+class ValueUnwrapContainer(object, metaclass=ABCMeta):
+    @abstractmethod
+    def value_or(self, default_value):
+        ...
+
+    @abstractmethod
+    def unwrap(self):
+        ...
+
+
 class GenericContainerOneSlot(
     Generic[_ValueType],
     Container,

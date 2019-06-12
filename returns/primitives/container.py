@@ -86,6 +86,62 @@ class Container(_BaseContainer, metaclass=ABCMeta):
         raise NotImplementedError()
 
 
+class FixableContainer(object, metaclass=ABCMeta):
+    """Represents containers that can be fixed and rescued."""
+
+    @abstractmethod
+    def fix(self, function):  # pragma: no cover
+        """
+        Applies 'function' to the contents of the functor.
+
+        And returns a new functor value.
+        Works for containers that represent failure.
+        Is the opposite of :meth:`~map`.
+        """
+        raise NotImplementedError()
+
+    @abstractmethod
+    def rescue(self, function):  # pragma: no cover
+        """
+        Applies 'function' to the result of a previous calculation.
+
+        And returns a new container.
+        Works for containers that represent failure.
+        Is the opposite of :meth:`~bind`.
+        """
+        raise NotImplementedError()
+
+    @abstractmethod
+    def failure(self):  # pragma: no cover
+        """
+        Custom magic method to unwrap inner value from the failed container.
+
+        This method is the opposite of :meth:`~unwrap`.
+        """
+        raise NotImplementedError()
+
+
+class ValueUnwrapContainer(object, metaclass=ABCMeta):
+    """Represents containers that can unwrap and return its wrapped value."""
+
+    @abstractmethod
+    def value_or(self, default_value):  # pragma: no cover
+        """Forces to unwrap value from container or return a default."""
+        raise NotImplementedError()
+
+    @abstractmethod
+    def unwrap(self):  # pragma: no cover
+        """
+        Custom magic method to unwrap inner value from container.
+
+        Should be redefined for ones that actually have values.
+        And for ones that raise an exception for no values.
+
+        This method is the opposite of :meth:`~failure`.
+        """
+        raise NotImplementedError()
+
+
 class GenericContainerOneSlot(Generic[_ValueType], Container):
     """
     Base class for containers with one typed slot.

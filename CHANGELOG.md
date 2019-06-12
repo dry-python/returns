@@ -3,6 +3,17 @@
 We follow Semantic Versions since the `0.1.0` release.
 
 
+## WIP
+
+### Features
+
+- New types introduced: `FixableContainer` and `ValueUnwrapContainer`
+
+### Misc
+
+- Improved docs about `IO` and `Container` concept
+
+
 ## 0.7.0
 
 ### Features

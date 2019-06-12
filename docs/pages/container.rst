@@ -4,7 +4,7 @@ Container: the concept
 .. currentmodule:: returns.primitives.container
 
 Container is a concept that allows you
-to write code without traditional error handling
+to write code around the existing wrapped values
 while maintaining the execution context.
 
 We will show you its simple API of one attribute and several simple methods.
@@ -15,7 +15,7 @@ Basics
 
 The main idea behind a container is that it wraps some internal state.
 That's what
-:py:attr:`_inner_value <returns.primitives.container.Container._inner_value>`
+:py:attr:`._inner_value <returns.primitives.container.Container._inner_value>`
 is used for.
 
 And we have several functions
@@ -32,10 +32,61 @@ And we can see how this state is evolving during the execution.
        F4                       --> F5["Container(SentNotificationId(992))"]
 
 
+Working with containers
+-----------------------
+
+We use two methods to create new containers from the previous one.
+``bind`` and ``map``.
+
+The difference is simple:
+
+- ``map`` works with functions that return regular values
+- ``bind`` works with functions that return other containers of the same type
+
+:func:`.bind <returns.primitives.container.Container.bind>`
+is used to literally bind two different containers together.
+
+.. code:: python
+
+  from returns.result import Result, Success
+
+  def may_fail(user_id: int) -> Result[int, str]:
+      ...
+
+  result = Success(1).bind(may_fail)
+  # => Will be equal to either Success[int] or Failure[str]
+
+And we use :func:`.map <returns.primitives.container.Container.map>`
+to use containers with regular functions.
+
+.. code:: python
+
+  from returns.result import Success
+
+  def double(state: int) -> int:
+      return state * 2
+
+  result = Success(1).map(double)
+  # => Will be equal to Success(2)
+
+The same work with built-in functions as well:
+
+.. code:: python
+
+  from returns.io import IO
+
+  IO('bytes').map(list)
+  # => <IO: ['b', 'y', 't', 'e', 's']>
+
+Note::
+
+  All containers support these methods.
+
+
 Railway oriented programming
 ----------------------------
 
-We use a concept of
+When talking about error handling we use a concept of
 `Railway oriented programming <https://fsharpforfunandprofit.com/rop/>`_.
 It mean that our code can go on two tracks:
 
@@ -73,62 +124,16 @@ or we can rescue the situation.
        style F6 fill:red
        style F8 fill:red
 
-
-
-Working with containers
------------------------
-
-We use two methods to create new containers from the previous one.
-``bind`` and ``map``.
-
-The difference is simple:
-
-- ``map`` works with functions that return regular values
-- ``bind`` works with functions that return other containers
-
-:func:`Container.bind <returns.primitives.container.Container.bind>`
-is used to literally bind two different containers together.
-
-.. code:: python
-
-  from returns.result import Result, Success
-
-  def make_http_call(user_id: int) -> Result[int, str]:
-      ...
-
-  result = Success(1).bind(make_http_call)
-  # => Will be equal to either Success[int] or Failure[str]
-
-So, the rule is: whenever you have some impure functions,
-it should return a container type instead.
-
-And we use :func:`Container.map <returns.primitives.container.Container.map>`
-to use containers with `pure functions <https://en.wikipedia.org/wiki/Pure_function>`_.
-
-.. code:: python
-
-  from returns.result import Success
-
-  def double(state: int) -> int:
-      return state * 2
-
-  result = Success(1).map(double)
-  # => Will be equal to Success(2)
-
-Note::
-
-  All containers support these methods.
-
 Returning execution to the right track
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We also support two special methods to work with "failed"
-types like ``Failure`` and ``Nothing``:
+types like ``Failure``:
 
-- :func:`Container.fix <returns.primitives.container.Container.fix>`
+- :func:`.fix <returns.primitives.container.FixableContainer.fix>`
   is the opposite of ``map`` method
   that works only when container is in failed state
-- :func:`Container.rescue <returns.primitives.container.Container.rescue>`
+- :func:`.rescue <returns.primitives.container.FixableContainer.rescue>`
   is the opposite of ``bind`` method
   that works only when container is in failed state
 
@@ -145,20 +150,23 @@ during the pipeline execution:
   Failure(1).fix(double)
   # => Will be equal to Success(2.0)
 
-``rescue`` can return any container type you want.
-It can also fix your flow and get on the successful track again:
+``rescue`` should return one of ``Success`` or ``Failure`` types.
+It can also rescue your flow and get on the successful track again:
 
 .. code:: python
 
   from returns.result import Result, Failure, Success
 
-  def fix(state: Exception) -> Result[int, Exception]:
+  def tolerate_exception(state: Exception) -> Result[int, Exception]:
       if isinstance(state, ZeroDivisionError):
           return Success(0)
       return Failure(state)
 
-  Failure(ZeroDivisionError).rescue(fix)
-  # => Will be equal to Success(0)
+  Failure(ZeroDivisionError()).rescue(tolerate_exception)
+  # => Success(0)
+
+  Failure(ValueError()).rescue(tolerate_exception)
+  # => Failure(ValueError())
 
 Note::
 
@@ -171,9 +179,9 @@ Unwrapping values
 And we have two more functions to unwrap
 inner state of containers into a regular types:
 
-- :func:`Container.value_or <returns.primitives.container.Container.value_or>`
+- :func:`.value_or <returns.primitives.container.ValueUnwrapContainer.value_or>`
   returns a value if it is possible, returns ``default_value`` otherwise
-- :func:`Container.unwrap <returns.primitives.container.Container.unwrap>`
+- :func:`.unwrap <returns.primitives.container.ValueUnwrapContainer.unwrap>`
   returns a value if it is possible, raises ``UnwrapFailedError`` otherwise
 
 .. code:: python
@@ -195,7 +203,7 @@ inner state of containers into a regular types:
 The most user-friendly way to use ``unwrap`` method is with :ref:`pipeline`.
 
 For failing containers you can
-use :func:`Container.failure <returns.primitives.container.Container.failure>`
+use :func:`.failure <returns.primitives.container.FixableContainer.failure>`
 to unwrap the failed state:
 
 .. code:: python
