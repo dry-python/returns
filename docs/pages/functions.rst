@@ -41,21 +41,22 @@ We allow you to do that with ease!
       @pipeline
       def __call__(self, username: str) -> ...:
           """Imagine, that you need to reraise ValidationErrors due to API."""
-          user_schema = self._validate_user(
-            username,
+          return self._validate_user(
+              username,
+              # TODO: change in #84 to `.map_failure()`
           ).fix(
-            # What happens here is interesting, since you do not let your
-            # unwrap to fail with UnwrapFailedError, but instead
-            # allows you to reraise a wrapped exception.
-            # In this case `ValidationError()` will be thrown
-            # before `UnwrapFailedError`
-            raise_exception,
-          ).unwrap()
+              # What happens here is interesting, since you do not let your
+              # unwrap to fail with UnwrapFailedError, but instead
+              # allows you to reraise a wrapped exception.
+              # In this case `ValidationError()` will be thrown
+              # before `UnwrapFailedError`
+              raise_exception,
+          )
 
       def _validate_user(
-        self, username: str,
+          self, username: str,
       ) -> Result['User', ValidationError]:
-        ...
+          ...
 
 Use this with caution. We try to remove exceptions from our code base.
 Original proposal is `here <https://github.com/dry-python/returns/issues/56>`_.

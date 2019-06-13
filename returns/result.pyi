@@ -59,8 +59,8 @@ class Result(
 
     def fix(
         self,
-        function: Callable[[_ErrorType], _NewErrorType],
-    ) -> 'Result[_ValueType, _NewErrorType]':
+        function: Callable[[_ErrorType], _NewValueType],
+    ) -> 'Result[_NewValueType, _ErrorType]':
         ...
 
     def rescue(

@@ -196,7 +196,7 @@ Supports both async and regular functions.
 
   from returns.result import safe
 
-  @safe
+  @safe  # Will convert type to: Callable[[int], Result[float, Exception]]
   def divide(number: int) -> float:
       return number / number
 
