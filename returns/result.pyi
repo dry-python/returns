@@ -3,7 +3,7 @@
 from abc import ABCMeta
 from typing import Any, Callable, Coroutine, NoReturn, TypeVar, Union, overload
 
-from typing_extensions import Literal, final
+from typing_extensions import final
 
 from returns.primitives.container import (
     FixableContainer,
@@ -43,7 +43,7 @@ class Result(
 ):
     _inner_value: Union[_ValueType, _ErrorType]
 
-    def map(
+    def map(  # noqa: A003
         self,
         function: Callable[[_ValueType], _NewValueType],
     ) -> 'Result[_NewValueType, _ErrorType]':
@@ -100,11 +100,11 @@ class _Success(Result[_ValueType, Any]):
         ...
 
 
-def Success(inner_value: _ValueType) -> Result[_ValueType, Any]:
+def Success(inner_value: _ValueType) -> Result[_ValueType, Any]:  # noqa: N802
     ...
 
 
-def Failure(inner_value: _ErrorType) -> Result[Any, _ErrorType]:
+def Failure(inner_value: _ErrorType) -> Result[Any, _ErrorType]:  # noqa: N802
     ...
 
 

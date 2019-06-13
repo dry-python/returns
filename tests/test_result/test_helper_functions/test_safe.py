@@ -2,7 +2,7 @@
 
 import pytest
 
-from returns.result import Failure, Success, safe
+from returns.result import Success, _Failure, safe
 
 
 @safe
@@ -23,7 +23,7 @@ def test_safe_success():
 def test_safe_failure():
     """Ensures that safe decorator works correctly for Failure case."""
     failed = _function(0)
-    assert isinstance(failed, Failure)
+    assert isinstance(failed, _Failure)
     assert isinstance(failed.failure(), ZeroDivisionError)
 
 
@@ -39,5 +39,5 @@ async def test_async_safe_success():
 async def test_async_safe_failure():
     """Ensures that safe decorator works correctly for Failure case."""
     failed = await _coroutine(0)
-    assert isinstance(failed, Failure)
+    assert isinstance(failed, _Failure)
     assert isinstance(failed.failure(), ZeroDivisionError)

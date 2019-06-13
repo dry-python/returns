@@ -7,7 +7,7 @@ from returns.result import Failure, Success
 
 
 def test_nonequality():
-    """Ensures that monads are not compared to regular values."""
+    """Ensures that containers are not compared to regular values."""
     input_value = 5
 
     assert Failure(input_value) != input_value
@@ -26,7 +26,7 @@ def test_is_compare():
 
 
 def test_immutability_failure():
-    """Ensures that Failure monad is immutable."""
+    """Ensures that Failure container is immutable."""
     with pytest.raises(ImmutableStateError):
         Failure(0)._inner_state = 1  # noqa: Z441
 
@@ -41,7 +41,7 @@ def test_immutability_failure():
 
 
 def test_immutability_success():
-    """Ensures that Success monad is immutable."""
+    """Ensures that Success container is immutable."""
     with pytest.raises(ImmutableStateError):
         Success(0)._inner_state = 1  # noqa: Z441
 

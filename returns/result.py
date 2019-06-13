@@ -30,7 +30,7 @@ class _Failure(Result[Any, _ErrorType]):
     Represents a calculation which has failed.
 
     It should contain an error code or message.
-    To help with readability you may alternatively use the alias '_Failure'.
+    Should not be used directly.
     """
 
     def map(self, function):  # noqa: A003
@@ -81,7 +81,8 @@ class _Success(Result[_ValueType, Any]):
     """
     Represents a calculation which has succeeded and contains the result.
 
-    To help with readability you may alternatively use the alias '_Success'.
+    Contains the computation value.
+    Should not be used directly.
     """
 
     def map(self, function):  # noqa: A003
@@ -125,11 +126,13 @@ class _Success(Result[_ValueType, Any]):
         raise UnwrapFailedError(self)
 
 
-def Success(inner_value):
+def Success(inner_value):  # noqa: N802
+    """Public unit function of protected `_Success` type."""
     return _Success(inner_value)
 
 
-def Failure(inner_value):
+def Failure(inner_value):  # noqa: N802
+    """Public unit function of protected `_Failure` type."""
     return _Failure(inner_value)
 
 
