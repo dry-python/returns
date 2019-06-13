@@ -22,47 +22,47 @@ class Result(
     ValueUnwrapContainer,
     metaclass=ABCMeta,
 ):
-    """Base class for Failure and Success."""
+    """Base class for _Failure and _Success."""
 
 
-class Failure(Result[Any, _ErrorType]):
+class _Failure(Result[Any, _ErrorType]):
     """
     Represents a calculation which has failed.
 
     It should contain an error code or message.
-    To help with readability you may alternatively use the alias 'Failure'.
+    To help with readability you may alternatively use the alias '_Failure'.
     """
 
     def map(self, function):  # noqa: A003
-        """Returns the 'Failure' instance that was used to call the method."""
+        """Returns the '_Failure' instance that was used to call the method."""
         return self
 
     def bind(self, function):
-        """Returns the 'Failure' instance that was used to call the method."""
+        """Returns the '_Failure' instance that was used to call the method."""
         return self
 
     def fix(self, function):
         """
         Applies function to the inner value.
 
-        Applies 'function' to the contents of the 'Success' instance
-        and returns a new 'Success' object containing the result.
+        Applies 'function' to the contents of the '_Success' instance
+        and returns a new '_Success' object containing the result.
         'function' should accept a single "normal" (non-container) argument
         and return a non-container result.
         """
-        return Success(function(self._inner_value))
+        return _Success(function(self._inner_value))
 
     def rescue(self, function):
         """
         Applies 'function' to the result of a previous calculation.
 
         'function' should accept a single "normal" (non-container) argument
-        and return Result a 'Failure' or 'Success' type object.
+        and return Result a '_Failure' or '_Success' type object.
         """
         return function(self._inner_value)
 
     def value_or(self, default_value):
-        """Returns the value if we deal with 'Success' or default otherwise."""
+        """Returns the value if we deal with '_Success' or default otherwise."""
         return default_value
 
     def unwrap(self):
@@ -77,43 +77,43 @@ class Failure(Result[Any, _ErrorType]):
         return self._inner_value
 
 
-class Success(Result[_ValueType, Any]):
+class _Success(Result[_ValueType, Any]):
     """
     Represents a calculation which has succeeded and contains the result.
 
-    To help with readability you may alternatively use the alias 'Success'.
+    To help with readability you may alternatively use the alias '_Success'.
     """
 
     def map(self, function):  # noqa: A003
         """
         Applies function to the inner value.
 
-        Applies 'function' to the contents of the 'Success' instance
-        and returns a new 'Success' object containing the result.
+        Applies 'function' to the contents of the '_Success' instance
+        and returns a new '_Success' object containing the result.
         'function' should accept a single "normal" (non-container) argument
         and return a non-container result.
         """
-        return Success(function(self._inner_value))
+        return _Success(function(self._inner_value))
 
     def bind(self, function):
         """
         Applies 'function' to the result of a previous calculation.
 
         'function' should accept a single "normal" (non-container) argument
-        and return Result a 'Failure' or 'Success' type object.
+        and return Result a '_Failure' or '_Success' type object.
         """
         return function(self._inner_value)
 
     def fix(self, function):
-        """Returns the 'Success' instance that was used to call the method."""
+        """Returns the '_Success' instance that was used to call the method."""
         return self
 
     def rescue(self, function):
-        """Returns the 'Success' instance that was used to call the method."""
+        """Returns the '_Success' instance that was used to call the method."""
         return self
 
     def value_or(self, default_value):
-        """Returns the value if we deal with 'Success' or default otherwise."""
+        """Returns the value if we deal with '_Success' or default otherwise."""
         return self._inner_value
 
     def unwrap(self):
@@ -123,6 +123,14 @@ class Success(Result[_ValueType, Any]):
     def failure(self):
         """Raises an exception, since it does not have an error inside."""
         raise UnwrapFailedError(self)
+
+
+def Success(inner_value):
+    return _Success(inner_value)
+
+
+def Failure(inner_value):
+    return _Failure(inner_value)
 
 
 def is_successful(container):
@@ -152,15 +160,15 @@ def safe(function):  # noqa: C901
     if iscoroutinefunction(function):
         async def decorator(*args, **kwargs):
             try:
-                return Success(await function(*args, **kwargs))
+                return _Success(await function(*args, **kwargs))
             except Exception as exc:
-                return Failure(exc)
+                return _Failure(exc)
     else:
         def decorator(*args, **kwargs):
             try:
-                return Success(function(*args, **kwargs))
+                return _Success(function(*args, **kwargs))
             except Exception as exc:
-                return Failure(exc)
+                return _Failure(exc)
     return wraps(function)(decorator)
 
 

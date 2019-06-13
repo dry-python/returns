@@ -6,19 +6,18 @@ from typing import Any, Callable, Coroutine, NoReturn, TypeVar, Union, overload
 from typing_extensions import Literal, final
 
 from returns.primitives.container import (
-    Container,
     FixableContainer,
     GenericContainerTwoSlots,
     ValueUnwrapContainer,
 )
 
-_ContainerType = TypeVar('_ContainerType', bound=Container)
 _ResultType = TypeVar('_ResultType', bound='Result')
 
 # Regular type vars, work correctly:
 _ValueType = TypeVar('_ValueType')
 _NewValueType = TypeVar('_NewValueType')
 _ErrorType = TypeVar('_ErrorType')
+_NewErrorType = TypeVar('_NewErrorType')
 
 # Just aliases:
 _FirstType = TypeVar('_FirstType')
@@ -26,13 +25,13 @@ _SecondType = TypeVar('_SecondType')
 _ThirdType = TypeVar('_ThirdType')
 
 # Hacks for functions:
-_ReturnsContainerType = TypeVar(
-    '_ReturnsContainerType',
-    bound=Callable[..., Container],
+_ReturnsResultType = TypeVar(
+    '_ReturnsResultType',
+    bound=Callable[..., 'Result'],
 )
-_ReturnsAsyncContainerType = TypeVar(
-    '_ReturnsAsyncContainerType',
-    bound=Callable[..., Coroutine[_FirstType, _SecondType, Container]],
+_AsyncReturnsResultType = TypeVar(
+    '_AsyncReturnsResultType',
+    bound=Callable[..., Coroutine[_FirstType, _SecondType, 'Result']],
 )
 
 
@@ -44,119 +43,72 @@ class Result(
 ):
     _inner_value: Union[_ValueType, _ErrorType]
 
-    def map(  # noqa: A003
+    def map(
         self,
         function: Callable[[_ValueType], _NewValueType],
-    ) -> Union['Success[_NewValueType]', 'Result[_ValueType, _ErrorType]']:
+    ) -> 'Result[_NewValueType, _ErrorType]':
         ...
 
     def bind(
         self,
-        function: Callable[[_ValueType], _ContainerType],
-    ) -> Union[_ContainerType, 'Result[_ValueType, _ErrorType]']:
+        function: Callable[
+            [_ValueType], 'Result[_NewValueType, _NewErrorType]',
+        ],
+    ) -> 'Result[_NewValueType, _NewErrorType]':
         ...
 
     def fix(
         self,
-        function: Callable[[_ErrorType], _NewValueType],
-    ) -> Union['Success[_ValueType]', 'Success[_NewValueType]']:
+        function: Callable[[_ErrorType], _NewErrorType],
+    ) -> 'Result[_ValueType, _NewErrorType]':
         ...
 
     def rescue(
         self,
-        function: Callable[[_ErrorType], _ContainerType],
-    ) -> Union[_ContainerType, 'Result[_ValueType, _ErrorType]']:
+        function: Callable[
+            [_ErrorType], 'Result[_NewValueType, _NewErrorType]',
+        ],
+    ) -> 'Result[_NewValueType, _NewErrorType]':
         ...
 
     def value_or(
         self,
         default_value: _NewValueType,
-    ) -> Union[_NewValueType, _ValueType]:
+    ) -> Union[_ValueType, _NewValueType]:
         ...
 
-    def unwrap(self) -> Union[NoReturn, _ValueType]:
+    def unwrap(self) -> Union[_ValueType, NoReturn]:
         ...
 
-    def failure(self) -> Union[NoReturn, _ErrorType]:
+    def failure(self) -> Union[_ErrorType, NoReturn]:
         ...
 
 
 @final
-class Failure(Result[Any, _ErrorType]):
+class _Failure(Result[Any, _ErrorType]):
     _inner_value: _ErrorType
 
     def __init__(self, inner_value: _ErrorType) -> None:
         ...
 
-    def map(self, function) -> 'Failure[_ErrorType]':  # noqa: A003
-        ...
-
-    def bind(self, function) -> 'Failure[_ErrorType]':
-        ...
-
-    def fix(
-        self,
-        function: Callable[[_ErrorType], _NewValueType],
-    ) -> 'Success[_NewValueType]':
-        ...
-
-    def rescue(
-        self, function: Callable[[_ErrorType], _ContainerType],
-    ) -> _ContainerType:
-        ...
-
-    def value_or(self, default_value: _NewValueType) -> _NewValueType:
-        ...
-
-    def unwrap(self) -> NoReturn:
-        ...
-
-    def failure(self) -> _ErrorType:
-        ...
-
 
 @final
-class Success(Result[_ValueType, Any]):
+class _Success(Result[_ValueType, Any]):
     _inner_value: _ValueType
 
     def __init__(self, inner_value: _ValueType) -> None:
         ...
 
-    def map(  # noqa: A003
-        self,
-        function: Callable[[_ValueType], _NewValueType],
-    ) -> 'Success[_NewValueType]':
-        ...
 
-    def bind(
-        self,
-        function: Callable[[_ValueType], _ContainerType],
-    ) -> _ContainerType:
-        ...
-
-    def fix(self, function) -> 'Success[_ValueType]':
-        ...
-
-    def rescue(self, function) -> 'Success[_ValueType]':
-        ...
-
-    def value_or(self, default_value: _NewValueType) -> _ValueType:
-        ...
-
-    def unwrap(self) -> _ValueType:
-        ...
-
-    def failure(self) -> NoReturn:
-        ...
-
-
-@overload
-def is_successful(container: Success) -> Literal[True]:
+def Success(inner_value: _ValueType) -> Result[_ValueType, Any]:
     ...
 
 
-@overload
-def is_successful(container: Failure) -> Literal[False]:
+def Failure(inner_value: _ErrorType) -> Result[Any, _ErrorType]:
+    ...
+
+
+def is_successful(container: Result) -> bool:
     ...
 
 
@@ -165,13 +117,13 @@ def is_successful(container: Failure) -> Literal[False]:
 
 @overload
 def pipeline(
-    function: _ReturnsAsyncContainerType,
-) -> _ReturnsAsyncContainerType:
+    function: _AsyncReturnsResultType,
+) -> _AsyncReturnsResultType:
     ...
 
 
 @overload
-def pipeline(function: _ReturnsContainerType) -> _ReturnsContainerType:
+def pipeline(function: _ReturnsResultType) -> _ReturnsResultType:
     ...
 
 
