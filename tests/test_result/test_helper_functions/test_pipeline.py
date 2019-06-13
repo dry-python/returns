@@ -1,8 +1,17 @@
 # -*- coding: utf-8 -*-
 
+from typing import Any
+
 import pytest
 
-from returns.result import Failure, Result, Success, pipeline
+from returns.result import (
+    Failure,
+    Result,
+    Success,
+    _Failure,
+    _Success,
+    pipeline,
+)
 
 
 @pipeline
@@ -13,7 +22,7 @@ def _example1(number: int) -> Result[int, str]:
 
 
 @pipeline
-def _example2(number: int) -> Success[int]:
+def _example2(number: int) -> Result[int, int]:
     first: int = Success(1).unwrap()
     return Success(first + Failure(number).unwrap())
 
@@ -25,7 +34,7 @@ async def _example_async(number: int) -> Result[int, str]:
     return Success(first + second)
 
 
-def _transformation(number: int) -> Success[int]:
+def _transformation(number: int) -> Result[int, Any]:
     return Success(-number)
 
 
@@ -47,7 +56,7 @@ def test_pipeline_failure():
 @pytest.mark.asyncio
 async def test_async_pipeline_success():
     """Ensures that async pipeline works well for Success."""
-    assert isinstance(await _example_async(3), Success)
+    assert isinstance(await _example_async(3), _Success)
     assert (await _example_async(1)).unwrap() == 2
     assert (await _example_async(1)).bind(
         _transformation,
@@ -57,5 +66,5 @@ async def test_async_pipeline_success():
 @pytest.mark.asyncio
 async def test_async_pipeline_failure():
     """Ensures that async pipeline works well for Failure."""
-    assert isinstance(await _example_async(0), Failure)
+    assert isinstance(await _example_async(0), _Failure)
     assert (await _example_async(0)).failure() == 'E'

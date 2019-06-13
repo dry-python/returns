@@ -33,7 +33,7 @@ class IO(GenericContainerOneSlot[_ValueType]):
         ...
 
 
-@overload  # noqa: Z320
+@overload
 def impure(  # type: ignore
     function: Callable[..., Coroutine[_FirstType, _SecondType, _NewValueType]],
 ) -> Callable[

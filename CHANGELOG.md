@@ -7,11 +7,19 @@ We follow Semantic Versions since the `0.1.0` release.
 
 ### Features
 
-- New types introduced: `FixableContainer` and `ValueUnwrapContainer`
+- Complete rewrite of `Result` types
+- Partial API change, now `Success` and `Failure` are not types, but functions
+- New internal types introduced: `FixableContainer` and `ValueUnwrapContainer`
+
+### Bugfixes
+
+- Fixes issue when you could return `IO` container from `Result.bind`
+- Fixes `@pipeline` return type
 
 ### Misc
 
 - Improved docs about `IO` and `Container` concept
+- Adds docs about container composition
 
 
 ## 0.7.0

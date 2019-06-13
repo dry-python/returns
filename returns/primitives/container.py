@@ -20,7 +20,7 @@ class _BaseContainer(object, metaclass=ABCMeta):
 
         'value' is any arbitrary value of any type including functions.
         """
-        object.__setattr__(self, '_inner_value', inner_value)
+        object.__setattr__(self, '_inner_value', inner_value)  # noqa: Z462
 
     def __setattr__(self, attr_name, attr_value):
         """Makes inner state of the containers immutable."""
@@ -33,14 +33,12 @@ class _BaseContainer(object, metaclass=ABCMeta):
     def __str__(self):
         """Converts to string."""
         return '<{0}: {1}>'.format(
-            self.__class__.__qualname__,
+            self.__class__.__qualname__.strip('_'),
             str(self._inner_value),
         )
 
     def __eq__(self, other):
         """Used to compare two 'Container' objects."""
-        if not isinstance(other, _BaseContainer):
-            return False
         if type(self) != type(other):
             return False
         return self._inner_value == other._inner_value  # noqa: Z441

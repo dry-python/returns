@@ -53,22 +53,23 @@ is used to literally bind two different containers together.
   def may_fail(user_id: int) -> Result[int, str]:
       ...
 
-  result = Success(1).bind(may_fail)
-  # => Either Success[int] or Failure[str]
+  # Can be assumed as either Success[int] or Failure[str]:
+  result: Result[int, str] = Success(1).bind(may_fail)
 
 And we have :func:`.map <returns.primitives.container.Container.map>`
 to use containers with regular functions.
 
 .. code:: python
 
-  from returns.result import Success
+  from typing import Any
+  from returns.result import Success, Result
 
   def double(state: int) -> int:
       return state * 2
 
-  result = Success(1).map(double)
+  result: Result[int, Any] = Success(1).map(double)
   # => Success(2)
-  result.map(lambda state: state + 1)
+  result: Result[int, Any] = result.map(lambda state: state + 1)
   # => Success(3)
 
 The same work with built-in functions as well:
@@ -144,12 +145,12 @@ during the pipeline execution:
 
 .. code:: python
 
-  from returns.result import Failure
+  from returns.result import Failure, Result
 
   def double(state: int) -> float:
       return state * 2.0
 
-  Failure(1).fix(double)
+  result: Result[float, int] = Failure(1).fix(double)
   # => Success(2.0)
 
 ``rescue`` should return one of ``Success`` or ``Failure`` types.
@@ -164,11 +165,16 @@ It can also rescue your flow and get on the successful track again:
           return Success(0)
       return Failure(state)
 
-  Failure(ZeroDivisionError()).rescue(tolerate_exception)
+  result: Result[int, Exception] = Failure(
+      ZeroDivisionError(),
+  ).rescue(tolerate_exception)
   # => Success(0)
 
-  Failure(ValueError()).rescue(tolerate_exception)
+  result2: Result[int, Exception] = Failure(
+      ValueError(),
+  ).rescue(tolerate_exception)
   # => Failure(ValueError())
+
 
 Note::
 
@@ -256,6 +262,10 @@ when they install our application.
 
 However, this is still good old ``python`` type system,
 and it has its drawbacks.
+
+You can have a look at the suggested ``mypy``
+`configuration <https://github.com/dry-python/returns/blob/master/setup.cfg>`_
+in our own repository.
 
 
 API Reference
