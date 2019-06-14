@@ -1,5 +1,14 @@
-unsafe
-======
+Unsafe operations
+=================
+
+This doc describes compatibility functions and escape mechanisms
+that we consider unsafe to your types and code-base.
+
+Use them with great responsibility!
+
+
+unsafe_perform_io
+-----------------
 
 Sometimes you really need to get the raw value from ``IO`` container.
 For example:
