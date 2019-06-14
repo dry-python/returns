@@ -209,12 +209,12 @@ Long answer. Let's see these two examples:
 
   def get_user_age() -> Result[IO[int], ValueError]:
       # Safe, but impure operation:
-      prompt: IO[str] = impure(input)('What's your age?')
+      prompt: IO[str] = impure(input)("What's your age?")
 
       # Pure, but unsafe operation:
       return safe(int)(prompt)
 
-In this case we return `Result[IO[int], ValueError]`,
+In this case we return ``Result[IO[int], ValueError]``,
 since ``IO`` operation is safe and cannot throw.
 
 .. code:: python
