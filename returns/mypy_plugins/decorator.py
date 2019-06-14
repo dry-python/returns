@@ -7,6 +7,7 @@ from mypy.plugin import Plugin, FunctionContext
 
 TYPED_DECORATORS = {
     'returns.result.safe',
+    'returns.io.impure',
 }
 
 
