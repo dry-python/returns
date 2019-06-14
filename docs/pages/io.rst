@@ -188,6 +188,51 @@ If the value is fetched, input, received, selected, than use ``IO`` container.
 
 Most web applications are just covered with ``IO``.
 
+What is the difference between IO[Result[A, B]] and Result[IO[A], B]?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+As we state in :ref:`Composition docs <composition>`
+we allow to compose different containers together.
+
+That's where this question raises:
+should I apply ``IO`` to all ``Result`` or only to the value part?
+
+Short answer: we prefer ``IO[Result[A, B]]``
+and sticking to the single version allows better composition.
+
+Long answer. Let's see these two examples:
+
+.. code:: python
+
+  from returns.io import IO, impure
+  from returns.result import Result, safe
+
+  def get_user_age() -> Result[IO[int], ValueError]:
+      # Safe, but impure operation:
+      prompt: IO[str] = impure(input)('What's your age?')
+
+      # Pure, but unsafe operation:
+      return safe(int)(prompt)
+
+In this case we return `Result[IO[int], ValueError]`,
+since ``IO`` operation is safe and cannot throw.
+
+.. code:: python
+
+  import requests
+
+  from returns.io import IO, impure
+  from returns.result import Result, safe
+
+  @impure
+  @safe
+  def get_user_age() -> IO[Result[int, Exception]]:
+      # We ask another micro-service, it is impure and can fail:
+      return requests.get('https://...').json()
+
+In this case the whole result is marked as impure.
+Since its failures are impure as well.
+
 Why can't we unwrap values or use @pipeline with IO?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

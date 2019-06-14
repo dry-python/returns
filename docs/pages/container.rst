@@ -273,6 +273,7 @@ You can have a look at the suggested ``mypy``
 `configuration <https://github.com/dry-python/returns/blob/master/setup.cfg>`_
 in our own repository.
 
+.. _composition:
 
 Composition
 -----------
@@ -281,8 +282,8 @@ You can and should compose different containers together.
 Here's the full table of compositions that make sense:
 
 - ``IO[Result[A, B]]`` ✅
+- ``Result[IO[A], B]`` ✅
 - ``IO[IO[A]]`` 🚫
-- ``Result[IO[A], B]`` 🚫
 - ``Result[A, IO[A]]`` 🚫
 - ``Result[Result[A, B], C]`` 🚫
 - ``Result[A, Result[B, C]]`` 🚫
