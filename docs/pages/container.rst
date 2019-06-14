@@ -7,7 +7,13 @@ Container is a concept that allows you
 to write code around the existing wrapped values
 while maintaining the execution context.
 
-We will show you its simple API of one attribute and several simple methods.
+List of supported containers:
+
+- :class:`IO <returns.io.IO>` to mark explicit ``IO`` actions
+- :class:`Result <returns.result.Result>` to handle possible exceptions
+
+We will show you container's simple API of one attribute
+and several simple methods.
 
 
 Basics
@@ -267,6 +273,19 @@ You can have a look at the suggested ``mypy``
 `configuration <https://github.com/dry-python/returns/blob/master/setup.cfg>`_
 in our own repository.
 
+
+Composition
+-----------
+
+You can and should compose different containers together.
+Here's the full table of compositions that make sense:
+
+- ``IO[Result[A, B]]`` ✅
+- ``IO[IO[A]]`` 🚫
+- ``Result[IO[A], B]`` 🚫
+- ``Result[A, IO[A]]`` 🚫
+- ``Result[Result[A, B], C]`` 🚫
+- ``Result[A, Result[B, C]]`` 🚫
 
 API Reference
 -------------

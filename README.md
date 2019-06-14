@@ -181,24 +181,22 @@ class FetchUserProfile(object):
     """Single responsibility callable object that fetches user profile."""
 
     @pipeline
-    def __call__(self, user_id: int) -> Result[IO['UserProfile'], Exception]:
+    def __call__(self, user_id: int) -> IO[Result['UserProfile', Exception]]:
         """Fetches UserProfile dict from foreign API."""
-        response = self._make_request(user_id).unwrap()
-        return self._parse_json(response)
+        return self._make_request(user_id).map(
+            lambda response: self._parse_json(response.unwrap())
+        )
 
-    @safe
     @impure
+    @safe
     def _make_request(self, user_id: int) -> requests.Response:
         response = requests.get('/api/users/{0}'.format(user_id))
         response.raise_for_status()
         return response
 
     @safe
-    def _parse_json(
-        self,
-        io_response: IO[requests.Response],
-    ) -> IO['UserProfile']:
-        return io_response.map(lambda response: response.json())
+    def _parse_json(self,response: requests.Response) -> 'UserProfile':
+        return response.json()
 ```
 
 Now we have explicit markers where the `IO` did happen
