@@ -6,6 +6,7 @@ If you want to start working on this project,
 you will need to get familiar with these concepts:
 
 - http://learnyouahaskell.com/functors-applicative-functors-and-monoids
+- https://github.com/dbrattli/OSlash/wiki/Functors,-Applicatives,-And-Monads-In-Pictures
 
 Here are some practical examples of what we are doing here:
 
@@ -53,7 +54,7 @@ We use `mypy` to run type checks on our code.
 To use it:
 
 ```bash
-mypy returns
+mypy returns tests/**/*.py
 ```
 
 This step is mandatory during the CI.

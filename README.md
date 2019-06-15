@@ -27,7 +27,7 @@ pip install returns
 You might also need to [configure](https://returns.readthedocs.io/en/latest/pages/container.html#type-safety)
 `mypy` correctly and install our plugin:
 
-```cfg
+```ini
 [mypy]
 plugins =
   returns.contrib.mypy.decorator_plugin

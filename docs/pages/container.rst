@@ -273,6 +273,12 @@ since they increase your developer experience and type-safety:
 
 - ``decorator_plugin`` to solve untyped `decorator issue <https://github.com/python/mypy/issues/3157>`_
 
+.. code:: ini
+
+  [mypy]
+  plugins =
+    returns.contrib.mypy.decorator_plugin
+
 You can have a look at the suggested ``mypy``
 `configuration <https://github.com/dry-python/returns/blob/master/setup.cfg>`_
 in our own repository.
