@@ -106,6 +106,17 @@ class _Failure(Result[Any, _ErrorType]):
         """Returns the '_Failure' instance that was used to call the method."""
         return self
 
+    def map_failure(self, function):
+        """
+        Applies function to the error value.
+
+        Applies 'function' to the contents of the '_Failure' instance
+        and returns a new '_Failure' object containing the result.
+        'function' should accept a single "normal" (non-container) argument
+        and return a non-container result.
+        """
+        return _Failure(function(self._inner_value))
+
     def bind(self, function):
         """Returns the '_Failure' instance that was used to call the method."""
         return self
@@ -171,6 +182,10 @@ class _Success(Result[_ValueType, Any]):
         and return a non-container result.
         """
         return _Success(function(self._inner_value))
+
+    def map_failure(self, function):
+        """Returns the '_Success' instance that was used to call the method."""
+        return self
 
     def bind(self, function):
         """

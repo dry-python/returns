@@ -91,7 +91,7 @@ class FixableContainer(object, metaclass=ABCMeta):
     @abstractmethod
     def fix(self, function):  # pragma: no cover
         """
-        Applies 'function' to the contents of the functor.
+        Applies 'function' to the error and transforms failure to success.
 
         And returns a new functor value.
         Works for containers that represent failure.
@@ -116,6 +116,17 @@ class FixableContainer(object, metaclass=ABCMeta):
         Custom magic method to unwrap inner value from the failed container.
 
         This method is the opposite of :meth:`~unwrap`.
+        """
+        raise NotImplementedError()
+
+    @abstractmethod
+    def map_failure(self, function):  # pragma: no cover
+        """
+        Uses 'function' to transform one error to another.
+
+        And returns a new functor value.
+        Works for containers that represent failure.
+        Is the opposite of :meth:`~map`.
         """
         raise NotImplementedError()
 
