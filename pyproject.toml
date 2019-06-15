@@ -47,6 +47,7 @@ pytest = "^4.6"
 pytest-cov = "^2.7"
 pytest-randomly = "^3.0"
 pytest-asyncio = "^0.10.0"
+pytest-mypy-plugins = "^0.3.0"
 
 sphinx = "^2.1"
 sphinx-autodoc-typehints = "^1.6"

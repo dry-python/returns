@@ -34,7 +34,8 @@ We also use `wemake_python_styleguide` to enforce the code quality.
 To run all tests:
 
 ```bash
-pytest
+pytest tests
+pytest -p no:cov -o addopts="" --mypy-ini-file=setup.cfg typesafety
 ```
 
 To run linting:

@@ -23,6 +23,6 @@ def test_impure():
 @pytest.mark.asyncio
 async def test_impure_async():
     """Ensures that impure returns IO container for async."""
-    impure_result = await impure(_fake_impure_coroutine)(None)
+    impure_result = await impure(_fake_impure_coroutine)(1)
     assert isinstance(impure_result, IO)
-    assert impure_result == IO(None)
+    assert impure_result == IO(1)
