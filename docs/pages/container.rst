@@ -250,6 +250,7 @@ since we are using ``__slots__`` for better performance and strictness.
 
 Well, nothing is **really** immutable in python, but you were warned.
 
+.. _type-safety:
 
 Type safety
 -----------
@@ -266,8 +267,11 @@ compatible ``.pyi`` files together with the source code.
 In this case these types will be available to users
 when they install our application.
 
-However, this is still good old ``python`` type system,
-and it has its drawbacks.
+We also ship custom ``mypy`` plugins to overcome some existing problems,
+please make sure to use them,
+since they increase your developer experience and type-safety:
+
+- ``decorator_plugin`` to solve untyped `decorator issue <https://github.com/python/mypy/issues/3157>`_
 
 You can have a look at the suggested ``mypy``
 `configuration <https://github.com/dry-python/returns/blob/master/setup.cfg>`_

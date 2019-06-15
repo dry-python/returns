@@ -209,29 +209,9 @@ Supports both async and regular functions.
 Limitations
 ~~~~~~~~~~~
 
-There's one limitation in typing
-that we are facing right now
-due to `mypy issue <https://github.com/python/mypy/issues/3157>`_:
-
-.. code:: python
-
-  from returns.result import safe
-
-  @safe
-  def function(param: int) -> int:
-      return param
-
-  reveal_type(function)
-  # Actual => def (*Any, **Any) -> builtins.int
-  # Expected => def (int) -> builtins.int
-
-This effect can be reduced
-with the help of `Design by Contract <https://en.wikipedia.org/wiki/Design_by_contract>`_
-with these implementations:
-
-- https://github.com/deadpixi/contracts
-- https://github.com/orsinium/deal
-- https://github.com/Parquery/icontract
+Typing will only work correctly
+if :ref:`decorator_plugin <type-safety>` is used.
+This happens due to `mypy issue <https://github.com/python/mypy/issues/3157>`_.
 
 
 API Reference

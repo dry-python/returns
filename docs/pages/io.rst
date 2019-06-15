@@ -168,9 +168,9 @@ with ``@impure`` for better readability and clearness:
 Limitations
 ~~~~~~~~~~~
 
-There's one limitation in typing
-that we are facing right now
-due to `mypy issue <https://github.com/python/mypy/issues/3157>`_.
+Typing will only work correctly
+if :ref:`decorator_plugin <type-safety>` is used.
+This happens due to `mypy issue <https://github.com/python/mypy/issues/3157>`_.
 
 
 FAQ

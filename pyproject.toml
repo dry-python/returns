@@ -55,6 +55,7 @@ sphinx-typlog-theme = "^0.7.1"
 doc8 = "^0.8.0"
 m2r = "^0.2.1"
 tomlkit = "^0.5.3"
+pytest-mypy-plugins = "^0.3.0"
 
 [build-system]
 requires = ["poetry>=0.12"]

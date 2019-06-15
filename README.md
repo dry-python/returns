@@ -24,6 +24,15 @@ Make your functions return something meaningful, typed, and safe!
 pip install returns
 ```
 
+You might also need to [configure](https://returns.readthedocs.io/en/latest/pages/container.html#type-safety)
+`mypy` correctly and install our plugin:
+
+```cfg
+[mypy]
+plugins =
+  returns.contrib.mypy.decorator_plugin
+```
+
 Make sure you know how to get started, [check out our docs](https://returns.readthedocs.io/en/latest/)!
 
 
