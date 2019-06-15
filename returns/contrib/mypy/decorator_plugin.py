@@ -26,6 +26,7 @@ from mypy.types import CallableType
 _TYPED_DECORATORS = {
     'returns.result.safe',
     'returns.io.impure',
+    'returns.maybe.maybe',
 }
 
 

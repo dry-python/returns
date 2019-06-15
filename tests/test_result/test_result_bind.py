@@ -26,7 +26,7 @@ def test_bind():
 
 
 def test_left_identity_success():
-    """Ensures that Failure identity works for Success container."""
+    """Ensures that left identity works for Success container."""
     def factory(inner_value: int) -> Result[int, Any]:
         return Success(inner_value * 2)
 
@@ -38,7 +38,7 @@ def test_left_identity_success():
 
 
 def test_left_identity_failure():
-    """Ensures that Failure identity works for Success container."""
+    """Ensures that left identity works for Failure container."""
     def factory(inner_value: int) -> Result[Any, TypeError]:
         return Failure(TypeError())
 
@@ -61,7 +61,7 @@ def test_rescue_success():
 
 
 def test_rescue_failure():
-    """Ensures that rescue works for Success container."""
+    """Ensures that rescue works for Failure container."""
     def factory(inner_value: int) -> Result[Any, float]:
         return Failure(float(inner_value + 1))
 

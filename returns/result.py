@@ -155,7 +155,7 @@ def safe(function):  # noqa: C901
     """
     Decorator to covert exception throwing function to 'Result' container.
 
-    Show be used with care, since it only catches 'Exception' subclasses.
+    Should be used with care, since it only catches 'Exception' subclasses.
     It does not catch 'BaseException' subclasses.
 
     Supports both async and regular functions.
@@ -163,15 +163,15 @@ def safe(function):  # noqa: C901
     if iscoroutinefunction(function):
         async def decorator(*args, **kwargs):
             try:
-                return _Success(await function(*args, **kwargs))
+                return Success(await function(*args, **kwargs))
             except Exception as exc:
-                return _Failure(exc)
+                return Failure(exc)
     else:
         def decorator(*args, **kwargs):
             try:
-                return _Success(function(*args, **kwargs))
+                return Success(function(*args, **kwargs))
             except Exception as exc:
-                return _Failure(exc)
+                return Failure(exc)
     return wraps(function)(decorator)
 
 

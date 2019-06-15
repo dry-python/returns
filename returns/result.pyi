@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from abc import ABCMeta
-from typing import Any, Callable, Coroutine, NoReturn, TypeVar, Union, overload
+from typing import Any, Callable, Coroutine, TypeVar, Union, overload
 
 from typing_extensions import final
 
@@ -22,7 +22,6 @@ _NewErrorType = TypeVar('_NewErrorType')
 # Just aliases:
 _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')
-_ThirdType = TypeVar('_ThirdType')
 
 # Hacks for functions:
 _ReturnsResultType = TypeVar(
@@ -77,10 +76,10 @@ class Result(
     ) -> Union[_ValueType, _NewValueType]:
         ...
 
-    def unwrap(self) -> Union[_ValueType, NoReturn]:
+    def unwrap(self) -> _ValueType:
         ...
 
-    def failure(self) -> Union[_ErrorType, NoReturn]:
+    def failure(self) -> _ErrorType:
         ...
 
 

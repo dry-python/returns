@@ -47,6 +47,22 @@ flake8 returns tests docs
 
 These steps are mandatory during the CI.
 
+### Fixing pytest coverage issue
+
+Coverage does not work well with `pytest-mypy-plugin`,
+that's why we have two phases of `pytest` run.
+
+If you accidentally mess things up
+and see `INTERNALERROR> coverage.misc.CoverageException` in your log,
+do:
+
+```bash
+rm .coverage*
+rm -rf .pytest_cache htmlcov
+```
+
+And it should solve it.
+Then use correct test commands.
 
 ## Type checks
 
