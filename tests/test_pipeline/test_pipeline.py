@@ -4,7 +4,7 @@ from typing import Any
 
 import pytest
 
-from returns.maybe import Nothing, Some, Maybe
+from returns.maybe import Maybe, Nothing, Some
 from returns.pipeline import pipeline
 from returns.result import Failure, Result, Success, _Failure, _Success
 
