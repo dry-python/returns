@@ -6,6 +6,7 @@ from returns.maybe import Nothing, Some
 def test_map_some():
     """Ensures that map works for Some container."""
     assert Some(5).map(str) == Some('5')
+    assert Some(5).map(lambda num: None) == Nothing
 
 
 def test_map_nothing():
@@ -21,3 +22,4 @@ def test_fix_some():
 def test_fix_nothing():
     """Ensures that fix works for Nothing container."""
     assert Nothing.fix(lambda: 2) == Some(2)
+    assert Nothing.fix(lambda: None) == Nothing

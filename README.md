@@ -40,6 +40,7 @@ Make sure you know how to get started, [check out our docs](https://returns.read
 
 - [Result container](#result-container) that let's you to get rid of exceptions
 - [IO marker](#io-marker) that marks all impure operations and structures them
+- [Maybe container](#maybe-container) that allows you to write `None`-free code
 
 
 ## Result container
@@ -214,6 +215,38 @@ and these markers cannot be removed.
 Whenever we access `FetchUserProfile` we now know
 that it does `IO` and might fail.
 So, we act accordingly!
+
+
+## Maybe container
+
+Have you ever since code with a lot of `if some is not None` conditions?
+It really bloats your source code and makes it unreadable.
+
+But, having `None` in your source code is even worth.
+Actually, `None` is called the [worth mistake in the history of Computer Science](https://www.infoq.com/presentations/Null-References-The-Billion-Dollar-Mistake-Tony-Hoare/).
+
+So, what to do? Use `Maybe` container!
+It consists of `Some(...)` and `Nothing` types,
+representing existing state and `None` state respectively.
+
+```python
+from typing import Optional
+from returns.maybe import Maybe
+
+def bad_function() -> Optional[int]:
+    ...
+
+maybe_result: Maybe[float] = Maybe.new(
+  bad_function(),
+).map(
+    lambda number: number / 2
+)
+# => Maybe will return Some(float) only if there's a non-None value
+#    Otherwise, will return Nothing
+```
+
+Forget about `None`-related errors forever!
+
 
 ## More!
 

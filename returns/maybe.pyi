@@ -23,12 +23,12 @@ class Maybe(
     metaclass=ABCMeta,
 ):
     @classmethod
-    def new(cls, inner_value: _ValueType) -> 'Maybe[_ValueType]':
+    def new(cls, inner_value: Optional[_ValueType]) -> 'Maybe[_ValueType]':
         ...
 
     def map(  # noqa: A003
         self,
-        function: Callable[[_ValueType], _NewValueType],
+        function: Callable[[_ValueType], Optional[_NewValueType]],
     ) -> 'Maybe[_NewValueType]':
         ...
 
@@ -40,7 +40,7 @@ class Maybe(
 
     def fix(
         self,
-        function: Callable[[], '_NewValueType'],
+        function: Callable[[], Optional[_NewValueType]],
     ) -> 'Maybe[_NewValueType]':
         ...
 
@@ -79,7 +79,7 @@ class _Some(Maybe[_ValueType]):
         ...
 
 
-def Some(inner_value: _ValueType) -> Maybe[_ValueType]:  # noqa: N802
+def Some(inner_value: Optional[_ValueType]) -> Maybe[_ValueType]:  # noqa: N802
     ...
 
 

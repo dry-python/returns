@@ -19,20 +19,6 @@ _NewValueType = TypeVar('_NewValueType')
 _ErrorType = TypeVar('_ErrorType')
 _NewErrorType = TypeVar('_NewErrorType')
 
-# Just aliases:
-_FirstType = TypeVar('_FirstType')
-_SecondType = TypeVar('_SecondType')
-
-# Hacks for functions:
-_ReturnsResultType = TypeVar(
-    '_ReturnsResultType',
-    bound=Callable[..., 'Result'],
-)
-_AsyncReturnsResultType = TypeVar(
-    '_AsyncReturnsResultType',
-    bound=Callable[..., Coroutine[_FirstType, _SecondType, 'Result']],
-)
-
 
 class Result(
     GenericContainerTwoSlots[_ValueType, _ErrorType],
@@ -104,25 +90,6 @@ def Success(inner_value: _ValueType) -> Result[_ValueType, Any]:  # noqa: N802
 
 
 def Failure(inner_value: _ErrorType) -> Result[Any, _ErrorType]:  # noqa: N802
-    ...
-
-
-def is_successful(container: Result) -> bool:
-    ...
-
-
-# Typing decorators is not an easy task, see:
-# https://github.com/python/mypy/issues/3157
-
-@overload
-def pipeline(
-    function: _AsyncReturnsResultType,
-) -> _AsyncReturnsResultType:
-    ...
-
-
-@overload
-def pipeline(function: _ReturnsResultType) -> _ReturnsResultType:
     ...
 
 

@@ -69,7 +69,7 @@ class _Nothing(Maybe[None]):  # noqa: Z214
         'function' should not accept any arguments
         and return a non-container result.
         """
-        return _Some(function())
+        return Maybe.new(function())
 
     def rescue(self, function):
         """
@@ -105,11 +105,11 @@ class _Some(Maybe[_ValueType]):
         Applies function to the inner value.
 
         Applies 'function' to the contents of the 'Some' instance
-        and returns a new 'Some' object containing the result.
+        and returns a new 'Maybe' object containing the result.
         'function' should accept a single "normal" (non-container) argument
         and return a non-container result.
         """
-        return _Some(function(self._inner_value))
+        return Maybe.new(function(self._inner_value))
 
     def bind(self, function):
         """
