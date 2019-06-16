@@ -31,14 +31,17 @@ _TYPED_DECORATORS = {
 
 
 def _change_decorator_function_type(
-    decorated: CallableType,
     decorator: CallableType,
+    arg_type: CallableType,
 ) -> CallableType:
     """Replaces revealed argument types by mypy with types from decorated."""
-    decorator.arg_types = decorated.arg_types
-    decorator.arg_kinds = decorated.arg_kinds
-    decorator.arg_names = decorated.arg_names
-    return decorator
+    return decorator.copy_modified(
+        arg_types=arg_type.arg_types,
+        arg_kinds=arg_type.arg_kinds,
+        arg_names=arg_type.arg_names,
+        variables=arg_type.variables,
+        is_ellipsis_args=arg_type.is_ellipsis_args,
+    )
 
 
 def _analyze_decorator(function_ctx: FunctionContext):
@@ -48,8 +51,8 @@ def _analyze_decorator(function_ctx: FunctionContext):
     if not isinstance(function_ctx.default_return_type, CallableType):
         return function_ctx.default_return_type
     return _change_decorator_function_type(
-        function_ctx.arg_types[0][0],
         function_ctx.default_return_type,
+        function_ctx.arg_types[0][0],
     )
 
 
