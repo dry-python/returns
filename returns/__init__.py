@@ -15,17 +15,12 @@ See: https://github.com/dry-python/returns/issues/73
 
 from returns.functions import compose, raise_exception
 from returns.io import IO, impure
+from returns.maybe import Maybe, Nothing, Some, maybe
+from returns.pipeline import is_successful, pipeline
 from returns.primitives.exceptions import UnwrapFailedError
-from returns.result import (
-    Failure,
-    Result,
-    Success,
-    is_successful,
-    pipeline,
-    safe,
-)
+from returns.result import Failure, Result, Success, safe
 
-__all__ = (  # noqa: Z410
+__all__ = (
     # Functions:
     'compose',
     'raise_exception',
@@ -34,12 +29,20 @@ __all__ = (  # noqa: Z410
     'IO',
     'impure',
 
+    # Maybe:
+    'Some',
+    'Nothing',
+    'Maybe',
+    'maybe',
+
     # Result:
-    'is_successful',
     'safe',
-    'pipeline',
     'Failure',
     'Result',
     'Success',
     'UnwrapFailedError',
+
+    # pipeline:
+    'is_successful',
+    'pipeline',
 )

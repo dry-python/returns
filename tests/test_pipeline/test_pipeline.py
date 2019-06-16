@@ -4,14 +4,21 @@ from typing import Any
 
 import pytest
 
-from returns.result import (
-    Failure,
-    Result,
-    Success,
-    _Failure,
-    _Success,
-    pipeline,
-)
+from returns.maybe import Maybe, Nothing, Some
+from returns.pipeline import pipeline
+from returns.result import Failure, Result, Success, _Failure, _Success
+
+
+@pipeline
+def _maybe_pipeline(number: int) -> Maybe[int]:
+    first: int = Some(number).unwrap() if number else Nothing.unwrap()
+    return Some(first + number)
+
+
+@pipeline
+def _async_maybe_pipeline(number: int) -> Maybe[int]:
+    first: int = Some(number).unwrap() if number else Nothing.unwrap()
+    return Some(first + number)
 
 
 @pipeline
@@ -36,6 +43,10 @@ async def _example_async(number: int) -> Result[int, str]:
 
 def _transformation(number: int) -> Result[int, Any]:
     return Success(-number)
+
+
+def test_maybe_pipeline_some():
+    """Ensures that pipeline works well for Some."""
 
 
 def test_pipeline_success():
