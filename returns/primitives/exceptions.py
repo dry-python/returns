@@ -2,7 +2,7 @@
 
 from typing import TYPE_CHECKING, TypeVar
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from returns.primitives.container import Container  # noqa: F401, Z435
 
 _ContainerType = TypeVar('_ContainerType', bound='Container')

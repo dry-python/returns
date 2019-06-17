@@ -36,7 +36,7 @@ class Result(
     def map(
         self,
         function: Callable[[_ValueType], _NewValueType],
-    ) -> 'Result[_NewValueType, _ErrorType]':
+    ) -> 'Result[_NewValueType, _ErrorType]':  # pragma: no cover
         """Abstract method to compose container with pure function."""
         raise NotImplementedError()
 
@@ -46,7 +46,7 @@ class Result(
         function: Callable[
             [_ValueType], 'Result[_NewValueType, _NewErrorType]',
         ],
-    ) -> 'Result[_NewValueType, _NewErrorType]':
+    ) -> 'Result[_NewValueType, _NewErrorType]':  # pragma: no cover
         """Abstract method to compose container with other container."""
         raise NotImplementedError()
 
@@ -54,7 +54,7 @@ class Result(
     def fix(
         self,
         function: Callable[[_ErrorType], _NewValueType],
-    ) -> 'Result[_NewValueType, _ErrorType]':
+    ) -> 'Result[_NewValueType, _ErrorType]':  # pragma: no cover
         """Abstract method to compose container with pure function."""
         raise NotImplementedError()
 
@@ -64,7 +64,7 @@ class Result(
         function: Callable[
             [_ErrorType], 'Result[_NewValueType, _NewErrorType]',
         ],
-    ) -> 'Result[_NewValueType, _NewErrorType]':
+    ) -> 'Result[_NewValueType, _NewErrorType]':  # pragma: no cover
         """Abstract method to compose container with other container."""
         raise NotImplementedError()
 
@@ -72,17 +72,17 @@ class Result(
     def value_or(
         self,
         default_value: _NewValueType,
-    ) -> Union[_ValueType, _NewValueType]:
+    ) -> Union[_ValueType, _NewValueType]:  # pragma: no cover
         """Get value or default value."""
         raise NotImplementedError()
 
     @abstractmethod
-    def unwrap(self) -> _ValueType:
+    def unwrap(self) -> _ValueType:  # pragma: no cover
         """Get value or raise exception."""
         raise NotImplementedError()
 
     @abstractmethod
-    def failure(self) -> _ErrorType:
+    def failure(self) -> _ErrorType:  # pragma: no cover
         """Get failed value or raise exception."""
         raise NotImplementedError()
 

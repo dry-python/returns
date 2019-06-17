@@ -46,7 +46,7 @@ class Maybe(
     def map(
         self,
         function: Callable[[_ValueType], Optional[_NewValueType]],
-    ) -> 'Maybe[_NewValueType]':
+    ) -> 'Maybe[_NewValueType]':  # pragma: no cover
         """Abstract method to compose container with pure function."""
         raise NotImplementedError()
 
@@ -54,7 +54,7 @@ class Maybe(
     def bind(
         self,
         function: Callable[[_ValueType], 'Maybe[_NewValueType]'],
-    ) -> 'Maybe[_NewValueType]':
+    ) -> 'Maybe[_NewValueType]':  # pragma: no cover
         """Abstract method to compose container with other container."""
         raise NotImplementedError()
 
@@ -62,7 +62,7 @@ class Maybe(
     def fix(
         self,
         function: Callable[[], Optional[_NewValueType]],
-    ) -> 'Maybe[_NewValueType]':
+    ) -> 'Maybe[_NewValueType]':  # pragma: no cover
         """Abstract method to compose container with pure function."""
         raise NotImplementedError()
 
@@ -70,7 +70,7 @@ class Maybe(
     def rescue(
         self,
         function: Callable[[], 'Maybe[_NewValueType]'],
-    ) -> 'Maybe[_NewValueType]':
+    ) -> 'Maybe[_NewValueType]':  # pragma: no cover
         """Abstract method to compose container with other container."""
         raise NotImplementedError()
 
@@ -78,17 +78,17 @@ class Maybe(
     def value_or(
         self,
         default_value: _NewValueType,
-    ) -> Union[_ValueType, _NewValueType]:
+    ) -> Union[_ValueType, _NewValueType]:  # pragma: no cover
         """Get value or default value."""
         raise NotImplementedError()
 
     @abstractmethod
-    def unwrap(self) -> _ValueType:
+    def unwrap(self) -> _ValueType:  # pragma: no cover
         """Get value or raise exception."""
         raise NotImplementedError()
 
     @abstractmethod
-    def failure(self) -> None:
+    def failure(self) -> None:  # pragma: no cover
         """Get failed value or raise exception."""
         raise NotImplementedError()
 
