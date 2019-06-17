@@ -1,7 +1,17 @@
 # -*- coding: utf-8 -*-
 
+from typing import Callable, NoReturn, TypeVar
 
-def compose(first, second):
+# Just aliases:
+_FirstType = TypeVar('_FirstType')
+_SecondType = TypeVar('_SecondType')
+_ThirdType = TypeVar('_ThirdType')
+
+
+def compose(
+    first: Callable[[_FirstType], _SecondType],
+    second: Callable[[_SecondType], _ThirdType],
+) -> Callable[[_FirstType], _ThirdType]:
     """
     Allows function composition.
 
@@ -22,7 +32,7 @@ def compose(first, second):
     return lambda argument: second(first(argument))
 
 
-def raise_exception(exception):
+def raise_exception(exception: Exception) -> NoReturn:
     """
     Helper function to raise exceptions as a function.
 

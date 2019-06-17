@@ -1,7 +1,13 @@
 # -*- coding: utf-8 -*-
 
+from typing import TypeVar
 
-def unsafe_perform_io(wrapped_in_io):
+from returns.io import IO
+
+_ValueType = TypeVar('_ValueType')
+
+
+def unsafe_perform_io(wrapped_in_io: IO[_ValueType]) -> _ValueType:
     """
     Compatibility utility and escape mechanism from ``IO`` world.
 

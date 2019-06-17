@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from abc import ABCMeta, abstractmethod
-from typing import Generic, TypeVar
+from typing import Any, Generic, NoReturn, TypeVar
 
 from returns.primitives.exceptions import ImmutableStateError
 
@@ -13,6 +13,7 @@ class _BaseContainer(object, metaclass=ABCMeta):
     """Utility class to provide all needed magic methods to the contest."""
 
     __slots__ = ('_inner_value',)
+    _inner_value: Any
 
     def __init__(self, inner_value):
         """
@@ -22,22 +23,22 @@ class _BaseContainer(object, metaclass=ABCMeta):
         """
         object.__setattr__(self, '_inner_value', inner_value)  # noqa: Z462
 
-    def __setattr__(self, attr_name, attr_value):
+    def __setattr__(self, attr_name: str, attr_value) -> NoReturn:
         """Makes inner state of the containers immutable."""
         raise ImmutableStateError()
 
-    def __delattr__(self, attr_name):  # noqa: Z434
+    def __delattr__(self, attr_name: str) -> NoReturn:  # noqa: Z434
         """Makes inner state of the containers immutable."""
         raise ImmutableStateError()
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Converts to string."""
         return '<{0}: {1}>'.format(
             self.__class__.__qualname__.strip('_'),
             str(self._inner_value),
         )
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         """Used to compare two 'Container' objects."""
         if type(self) != type(other):
             return False

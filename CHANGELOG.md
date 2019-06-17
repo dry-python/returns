@@ -21,8 +21,10 @@ We follow Semantic Versions since the `0.1.0` release.
 
 ### Misc
 
+- Reapplied all types to `.py` files
 - Improved docs about `IO` and `Container` concept
 - Adds docs about container composition
+- Moves from `Alpha` to `Beta`
 
 
 ## 0.7.0

@@ -1,18 +1,24 @@
 # -*- coding: utf-8 -*-
 
-from abc import ABCMeta
+from abc import ABCMeta, abstractmethod
 from functools import wraps
 from inspect import iscoroutinefunction
-from typing import TypeVar
+from typing import Any, Callable, Coroutine, Optional, TypeVar, Union, overload
+
+from typing_extensions import final
 
 from returns.primitives.container import (
+    Container,
     FixableContainer,
     GenericContainerOneSlot,
     ValueUnwrapContainer,
 )
 from returns.primitives.exceptions import UnwrapFailedError
 
+# Aliases:
 _ValueType = TypeVar('_ValueType')
+_NewValueType = TypeVar('_NewValueType')
+_ErrorType = TypeVar('_ErrorType')
 
 
 class Maybe(
@@ -30,23 +36,76 @@ class Maybe(
     """
 
     @classmethod
-    def new(cls, inner_value):
+    def new(cls, inner_value: Optional[_ValueType]) -> 'Maybe[_ValueType]':
         """Creates new instance of Maybe container based on a value."""
         if inner_value is None:
             return _Nothing(inner_value)
         return _Some(inner_value)
 
+    @abstractmethod  # noqa: A003
+    def map(
+        self,
+        function: Callable[[_ValueType], Optional[_NewValueType]],
+    ) -> 'Maybe[_NewValueType]':
+        """Abstract method to compose container with pure function."""
+        raise NotImplementedError()
 
-class _Nothing(Maybe[None]):  # noqa: Z214
+    @abstractmethod
+    def bind(
+        self,
+        function: Callable[[_ValueType], 'Maybe[_NewValueType]'],
+    ) -> 'Maybe[_NewValueType]':
+        """Abstract method to compose container with other container."""
+        raise NotImplementedError()
+
+    @abstractmethod
+    def fix(
+        self,
+        function: Callable[[], Optional[_NewValueType]],
+    ) -> 'Maybe[_NewValueType]':
+        """Abstract method to compose container with pure function."""
+        raise NotImplementedError()
+
+    @abstractmethod
+    def rescue(
+        self,
+        function: Callable[[], 'Maybe[_NewValueType]'],
+    ) -> 'Maybe[_NewValueType]':
+        """Abstract method to compose container with other container."""
+        raise NotImplementedError()
+
+    @abstractmethod
+    def value_or(
+        self,
+        default_value: _NewValueType,
+    ) -> Union[_ValueType, _NewValueType]:
+        """Get value or default value."""
+        raise NotImplementedError()
+
+    @abstractmethod
+    def unwrap(self) -> _ValueType:
+        """Get value or raise exception."""
+        raise NotImplementedError()
+
+    @abstractmethod
+    def failure(self) -> None:
+        """Get failed value or raise exception."""
+        raise NotImplementedError()
+
+
+@final  # noqa: Z214
+class _Nothing(Maybe[Any]):
     """Represents an empty state."""
 
-    def __init__(self, inner_value=None):
+    _inner_value: None
+
+    def __init__(self, inner_value: None = None) -> None:  # noqa: Z459
         """
         Wraps the given value in the Container.
 
         'value' can only be ``None``.
         """
-        object.__setattr__(self, '_inner_value', inner_value)  # noqa: Z462
+        Container.__init__(self, inner_value)  # type: ignore # noqa: Z462
 
     def __str__(self):
         """Custom str definition without state inside."""
@@ -93,12 +152,19 @@ class _Nothing(Maybe[None]):  # noqa: Z214
         return self._inner_value
 
 
+@final
 class _Some(Maybe[_ValueType]):
     """
     Represents a calculation which has succeeded and contains the value.
 
     Quite similar to ``Success`` type.
     """
+
+    _inner_value: _ValueType
+
+    def __init__(self, inner_value: _ValueType) -> None:
+        """Required for typing."""
+        Container.__init__(self, inner_value)  # type: ignore # noqa: Z462
 
     def map(self, function):  # noqa: A003
         """
@@ -141,13 +207,33 @@ class _Some(Maybe[_ValueType]):
         raise UnwrapFailedError(self)
 
 
-def Some(inner_value):  # noqa: N802
+def Some(inner_value: Optional[_ValueType]) -> Maybe[_ValueType]:  # noqa: N802
     """Public unit function of protected `_Some` type."""
     return Maybe.new(inner_value)
 
 
 #: Public unit value of protected `_Nothing` type.
-Nothing = _Nothing()
+Nothing: Maybe[Any] = _Nothing()
+
+
+@overload  # noqa: Z320
+def maybe(  # type: ignore
+    function: Callable[
+        ...,
+        Coroutine[_ValueType, _ErrorType, Optional[_NewValueType]],
+    ],
+) -> Callable[
+    ...,
+    Coroutine[_ValueType, _ErrorType, Maybe[_NewValueType]],
+]:
+    """Case for async functions."""
+
+
+@overload
+def maybe(
+    function: Callable[..., Optional[_NewValueType]],
+) -> Callable[..., Maybe[_NewValueType]]:
+    """Case for regular functions."""
 
 
 def maybe(function):

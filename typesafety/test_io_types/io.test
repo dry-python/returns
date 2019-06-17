@@ -1,0 +1,6 @@
+[CASE io_constructor]
+[disable_cache]
+from returns.io import IO
+
+reveal_type(IO(1))  # E: Revealed type is 'returns.io.IO[builtins.int*]'
+[/CASE]

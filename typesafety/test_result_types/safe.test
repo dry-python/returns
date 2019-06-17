@@ -66,3 +66,17 @@ def test(*args: int, **kwargs: str) -> int:
 
 reveal_type(test)  # E: Revealed type is 'def (*args: builtins.int, **kwargs: builtins.str) -> returns.result.Result[builtins.int*, builtins.Exception]'
 [/CASE]
+
+
+[CASE safe_decorator_composition]
+[disable_cache]
+from returns.io import impure
+from returns.result import safe
+
+@impure
+@safe
+def test(*args: int, **kwargs: str) -> int:
+    return 1
+
+reveal_type(test)  # E: Revealed type is 'def (*args: builtins.int, **kwargs: builtins.str) -> returns.io.IO[returns.result.Result*[builtins.int*, builtins.Exception]]'
+[/CASE]

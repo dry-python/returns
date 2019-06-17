@@ -1,10 +1,17 @@
 # -*- coding: utf-8 -*-
 
+from typing import TYPE_CHECKING, TypeVar
+
+if TYPE_CHECKING:
+    from returns.primitives.container import Container  # noqa: F401, Z435
+
+_ContainerType = TypeVar('_ContainerType', bound='Container')
+
 
 class UnwrapFailedError(Exception):
     """Raised when a container can not be unwrapped into a meaningful value."""
 
-    def __init__(self, container):
+    def __init__(self, container: _ContainerType) -> None:
         """
         Saves halted container in the inner state.
 

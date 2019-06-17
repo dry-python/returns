@@ -378,19 +378,6 @@ six = "*"
 
 [[package]]
 category = "dev"
-description = "A plugin for flake8 to enable linting .pyi files."
-name = "flake8-pyi"
-optional = false
-python-versions = ">=3.6"
-version = "19.3.0"
-
-[package.dependencies]
-attrs = "*"
-flake8 = ">=3.2.1"
-pyflakes = ">=2.1.1"
-
-[[package]]
-category = "dev"
 description = "pytest assert checker plugin for flake8"
 name = "flake8-pytest"
 optional = false
@@ -1035,7 +1022,7 @@ python-versions = ">=2.7"
 version = "0.5.1"
 
 [metadata]
-content-hash = "b3727185186422f200b4484a59b12fa767cbc574b1991e2ad35e859ffa501417"
+content-hash = "7da3dfc6316b77d7e9ce6b7c48566a74277d81410c3f41ff78eee540375fbcb0"
 python-versions = "^3.6"
 
 [metadata.hashes]
@@ -1075,7 +1062,6 @@ flake8-logging-format = ["ca5f2b7fc31c3474a0aa77d227e022890f641a025f0ba664418797
 flake8-pep3101 = ["493821d6bdd083794eb0691ebe5b68e5c520b622b269d60e54308fb97440e21a", "b661ab718df42b87743dde266ef5de4f9e900b56c67dbccd45d24cf527545553"]
 flake8-polyfill = ["12be6a34ee3ab795b19ca73505e7b55826d5f6ad7230d31b18e106400169b9e9", "e44b087597f6da52ec6393a709e7108b2905317d0c0b744cdca6208e670d8eda"]
 flake8-print = ["5010e6c138b63b62400da4b06afa33becc5e08bd1fcce9af3752445cf3342f54"]
-flake8-pyi = ["3646134dcc5269d3fd017624961de83cc0a0404f620233885ad86faf64265a11", "a93a47ac78b6d363545885e9254d0eccac8a88c3806ab8af27e30dd8c058654f"]
 flake8-pytest = ["61686128a79e1513db575b2bcac351081d5a293811ddce2d5dfc25e8c762d33e", "b4d6703f7d7b646af1e2660809e795886dd349df11843613dbe6515efa82c0f3"]
 flake8-quotes = ["fd9127ad8bbcf3b546fa7871a5266fd8623ce765ebe3d5aa5eabb80c01212b26"]
 flake8-string-format = ["68ea72a1a5b75e7018cae44d14f32473c798cf73d75cbaed86c6a9a907b770b2", "774d56103d9242ed968897455ef49b7d6de272000cfa83de5814273a868832f1"]

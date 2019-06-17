@@ -2,13 +2,21 @@
 
 from functools import wraps
 from inspect import iscoroutinefunction
-from typing import TypeVar
+from typing import Callable, Coroutine, TypeVar, overload
 
-from returns.primitives.container import GenericContainerOneSlot
+from typing_extensions import final
+
+from returns.primitives.container import Container, GenericContainerOneSlot
 
 _ValueType = TypeVar('_ValueType')
+_NewValueType = TypeVar('_NewValueType')
+
+# Helpers:
+_FirstType = TypeVar('_FirstType')
+_SecondType = TypeVar('_SecondType')
 
 
+@final
 class IO(GenericContainerOneSlot[_ValueType]):
     """
     Explicit marker for impure function results.
@@ -21,7 +29,16 @@ class IO(GenericContainerOneSlot[_ValueType]):
     There's no way to directly get its internal value.
     """
 
-    def map(self, function):  # noqa: A003
+    _inner_value: _ValueType
+
+    def __init__(self, inner_value: _ValueType) -> None:
+        """Required for typing."""
+        Container.__init__(self, inner_value)  # type: ignore # noqa: Z462
+
+    def map(  # noqa: A003
+        self,
+        function: Callable[[_ValueType], _NewValueType],
+    ) -> 'IO[_NewValueType]':
         """
         Applies function to the inner value.
 
@@ -32,7 +49,9 @@ class IO(GenericContainerOneSlot[_ValueType]):
         """
         return IO(function(self._inner_value))
 
-    def bind(self, function):
+    def bind(
+        self, function: Callable[[_ValueType], 'IO[_NewValueType]'],
+    ) -> 'IO[_NewValueType]':
         """
         Applies 'function' to the result of a previous calculation.
 
@@ -40,6 +59,23 @@ class IO(GenericContainerOneSlot[_ValueType]):
         and return IO type object.
         """
         return function(self._inner_value)
+
+
+@overload
+def impure(  # type: ignore
+    function: Callable[..., Coroutine[_FirstType, _SecondType, _NewValueType]],
+) -> Callable[
+    ...,
+    Coroutine[_FirstType, _SecondType, IO[_NewValueType]],
+]:
+    """Case for async functions."""
+
+
+@overload
+def impure(
+    function: Callable[..., _NewValueType],
+) -> Callable[..., IO[_NewValueType]]:
+    """Case for regular functions."""
 
 
 def impure(function):

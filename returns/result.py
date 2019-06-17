@@ -1,19 +1,25 @@
 # -*- coding: utf-8 -*-
 
-from abc import ABCMeta
+from abc import ABCMeta, abstractmethod
 from functools import wraps
 from inspect import iscoroutinefunction
-from typing import Any, TypeVar
+from typing import Any, Callable, Coroutine, TypeVar, Union, overload
+
+from typing_extensions import final
 
 from returns.primitives.container import (
+    Container,
     FixableContainer,
     GenericContainerTwoSlots,
     ValueUnwrapContainer,
 )
 from returns.primitives.exceptions import UnwrapFailedError
 
+# Regular type vars, work correctly:
 _ValueType = TypeVar('_ValueType')
+_NewValueType = TypeVar('_NewValueType')
 _ErrorType = TypeVar('_ErrorType')
+_NewErrorType = TypeVar('_NewErrorType')
 
 
 class Result(
@@ -24,7 +30,64 @@ class Result(
 ):
     """Base class for _Failure and _Success."""
 
+    _inner_value: Union[_ValueType, _ErrorType]
 
+    @abstractmethod  # noqa: A003
+    def map(
+        self,
+        function: Callable[[_ValueType], _NewValueType],
+    ) -> 'Result[_NewValueType, _ErrorType]':
+        """Abstract method to compose container with pure function."""
+        raise NotImplementedError()
+
+    @abstractmethod
+    def bind(
+        self,
+        function: Callable[
+            [_ValueType], 'Result[_NewValueType, _NewErrorType]',
+        ],
+    ) -> 'Result[_NewValueType, _NewErrorType]':
+        """Abstract method to compose container with other container."""
+        raise NotImplementedError()
+
+    @abstractmethod
+    def fix(
+        self,
+        function: Callable[[_ErrorType], _NewValueType],
+    ) -> 'Result[_NewValueType, _ErrorType]':
+        """Abstract method to compose container with pure function."""
+        raise NotImplementedError()
+
+    @abstractmethod
+    def rescue(
+        self,
+        function: Callable[
+            [_ErrorType], 'Result[_NewValueType, _NewErrorType]',
+        ],
+    ) -> 'Result[_NewValueType, _NewErrorType]':
+        """Abstract method to compose container with other container."""
+        raise NotImplementedError()
+
+    @abstractmethod
+    def value_or(
+        self,
+        default_value: _NewValueType,
+    ) -> Union[_ValueType, _NewValueType]:
+        """Get value or default value."""
+        raise NotImplementedError()
+
+    @abstractmethod
+    def unwrap(self) -> _ValueType:
+        """Get value or raise exception."""
+        raise NotImplementedError()
+
+    @abstractmethod
+    def failure(self) -> _ErrorType:
+        """Get failed value or raise exception."""
+        raise NotImplementedError()
+
+
+@final
 class _Failure(Result[Any, _ErrorType]):
     """
     Represents a calculation which has failed.
@@ -32,6 +95,12 @@ class _Failure(Result[Any, _ErrorType]):
     It should contain an error code or message.
     Should not be used directly.
     """
+
+    _inner_value: _ErrorType
+
+    def __init__(self, inner_value: _ErrorType) -> None:
+        """Required for typing."""
+        Container.__init__(self, inner_value)  # type: ignore # noqa: Z462
 
     def map(self, function):  # noqa: A003
         """Returns the '_Failure' instance that was used to call the method."""
@@ -77,6 +146,7 @@ class _Failure(Result[Any, _ErrorType]):
         return self._inner_value
 
 
+@final
 class _Success(Result[_ValueType, Any]):
     """
     Represents a calculation which has succeeded and contains the result.
@@ -84,6 +154,12 @@ class _Success(Result[_ValueType, Any]):
     Contains the computation value.
     Should not be used directly.
     """
+
+    _inner_value: _ValueType
+
+    def __init__(self, inner_value: _ValueType) -> None:
+        """Required for typing."""
+        Container.__init__(self, inner_value)  # type: ignore # noqa: Z462
 
     def map(self, function):  # noqa: A003
         """
@@ -126,14 +202,31 @@ class _Success(Result[_ValueType, Any]):
         raise UnwrapFailedError(self)
 
 
-def Success(inner_value):  # noqa: N802
+def Success(inner_value: _ValueType) -> Result[_ValueType, Any]:  # noqa: N802
     """Public unit function of protected `_Success` type."""
     return _Success(inner_value)
 
 
-def Failure(inner_value):  # noqa: N802
+def Failure(inner_value: _ErrorType) -> Result[Any, _ErrorType]:  # noqa: N802
     """Public unit function of protected `_Failure` type."""
     return _Failure(inner_value)
+
+
+@overload  # noqa: Z320
+def safe(  # type: ignore
+    function: Callable[..., Coroutine[_ValueType, _ErrorType, _NewValueType]],
+) -> Callable[
+    ...,
+    Coroutine[_ValueType, _ErrorType, Result[_NewValueType, Exception]],
+]:
+    """Case for async functions."""
+
+
+@overload
+def safe(
+    function: Callable[..., _NewValueType],
+) -> Callable[..., Result[_NewValueType, Exception]]:
+    """Case for regular functions."""
 
 
 def safe(function):  # noqa: C901

@@ -92,3 +92,18 @@ def test() -> Optional[int]:
 
 reveal_type(test)  # E: Revealed type is 'def () -> returns.maybe.Maybe[builtins.int*]'
 [/CASE]
+
+
+[CASE maybe_multiple_decorators]
+[disable_cache]
+from typing import Optional
+from returns.maybe import maybe
+from returns.io import impure
+
+@impure
+@maybe
+def test() -> Optional[int]:
+    return 1
+
+reveal_type(test)  # E: Revealed type is 'def () -> returns.io.IO[returns.maybe.Maybe*[builtins.int*]]'
+[/CASE]
