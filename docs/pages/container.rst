@@ -293,10 +293,46 @@ Here's the full table of compositions that make sense:
 
 - ``IO[Result[A, B]]`` ✅
 - ``Result[IO[A], B]`` ✅
+- ``IO[Maybe[A]]`` ✅
+- ``Maybe[IO[A]]`` ✅
 - ``IO[IO[A]]`` 🚫
 - ``Result[A, IO[A]]`` 🚫
+- ``Result[Maybe[A], B]`` 🚫
+- ``Result[A, Maybe[B]]`` 🚫
 - ``Result[Result[A, B], C]`` 🚫
 - ``Result[A, Result[B, C]]`` 🚫
+- ``Maybe[Result[A, B]]`` 🚫
+
+You can use :ref:`converters` to convert ``Maybe`` and ``Result`` containers.
+So, you don't have to compose them.
+
+
+.. converters_:
+
+Converters
+----------
+
+We have several helper functions
+to convert containers from ``Maybe`` to ``Result`` and back again:
+
+- ``maybe_to_result`` that converts ``Maybe`` to ``Result``
+- ``result_to_maybe`` that converts ``Result`` to ``Maybe``
+
+That's how they work:
+
+.. code:: python
+
+  from returns.converters import maybe_to_result, result_to_maybe
+  from returns.maybe import Maybe
+  from returns.result import Result
+
+  result: Result[int, Exception]
+  maybe: Maybe[int] = result_to_maybe(result)
+  new_result: Result[int, None] = maybe_to_result(maybe)
+
+Take a note, that type changes.
+Also, take a note that ``Success(None)`` will be converted to ``Nothing``.
+
 
 API Reference
 -------------

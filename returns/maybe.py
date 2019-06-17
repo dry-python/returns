@@ -143,7 +143,7 @@ class _Some(Maybe[_ValueType]):
 
 def Some(inner_value):  # noqa: N802
     """Public unit function of protected `_Some` type."""
-    return _Some(inner_value)
+    return Maybe.new(inner_value)
 
 
 #: Public unit value of protected `_Nothing` type.

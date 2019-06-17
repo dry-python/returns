@@ -220,7 +220,6 @@ since ``IO`` operation is safe and cannot throw.
 .. code:: python
 
   import requests
-
   from returns.io import IO, impure
   from returns.result import Result, safe
 
@@ -232,6 +231,39 @@ since ``IO`` operation is safe and cannot throw.
 
 In this case the whole result is marked as impure.
 Since its failures are impure as well.
+
+What is the difference between IO[Maybe[A]] and Maybe[IO[A]]?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The similar question is about ``IO`` and ``Maybe`` composition.
+Let's illustrate it with the code example:
+
+.. code:: python
+
+  from returns.maybe import Maybe, Nothing
+  from returns.io import IO
+
+  def maybe_ask_user(should_ask: bool) -> Maybe[IO[str]]:
+      if should_ask:
+          return Maybe.new(IO(input('Asking!')))
+      return Nothing
+
+In this example ``IO`` might not happen at all.
+
+.. code:: python
+
+  from returns.maybe import Maybe, Nothing
+  from returns.io import IO
+
+  def ask_user() -> IO[Maybe[str]]:
+      prompt = input('Asking!')
+      if prompt:
+          return Maybe.new(IO(prompt))
+      return IO(Nothing)
+
+In this second case, we always do ``IO``, but we return ``Nothing``
+if user inputs an empty string
+(because we need this business logic for some reason).
 
 Why can't we unwrap values or use @pipeline with IO?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

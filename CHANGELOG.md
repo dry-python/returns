@@ -8,6 +8,7 @@ We follow Semantic Versions since the `0.1.0` release.
 ### Features
 
 - Reintroduces the `Maybe` monad, typed!
+- Introduces converters from one type to another
 - Adds `mypy` plugin to type decorators
 - Complete rewrite of `Result` types
 - Partial API change, now `Success` and `Failure` are not types, but functions

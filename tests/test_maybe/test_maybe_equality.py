@@ -11,7 +11,7 @@ def test_equality():
     assert Nothing is Nothing  # noqa: Z312
     assert Nothing == _Nothing() == _Nothing(None)
     assert Some(5) == Some(5)
-    assert Some(None) == Some(None)
+    assert Some(None) == Nothing
 
 
 def test_nonequality():
@@ -22,7 +22,6 @@ def test_nonequality():
     assert _Nothing(None) != None  # noqa: E711
     assert Some(5) != 5
     assert Some(3) is not Some(3)
-    assert Some(None) != Nothing
 
 
 def test_is_compare():
