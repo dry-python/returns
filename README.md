@@ -24,10 +24,11 @@ Make your functions return something meaningful, typed, and safe!
 pip install returns
 ```
 
-You might also need to [configure](https://returns.readthedocs.io/en/latest/pages/container.html#type-safety)
+You might also want to [configure](https://returns.readthedocs.io/en/latest/pages/container.html#type-safety)
 `mypy` correctly and install our plugin:
 
 ```ini
+# In setup.cfg or mypy.ini:
 [mypy]
 plugins =
   returns.contrib.mypy.decorator_plugin
@@ -225,20 +226,20 @@ It really bloats your source code and makes it unreadable.
 But, having `None` in your source code is even worth.
 Actually, `None` is called the [worth mistake in the history of Computer Science](https://www.infoq.com/presentations/Null-References-The-Billion-Dollar-Mistake-Tony-Hoare/).
 
-So, what to do? Use `Maybe` container!
-It consists of `Some(...)` and `Nothing` types,
-representing existing state and `None` state respectively.
+So, what to do?
+Use [Maybe](https://returns.readthedocs.io/en/latest/pages/maybe.html) container!
+It consists of `Some` and `Nothing` types,
+representing existing state and empty (or `None`) state respectively.
 
 ```python
 from typing import Optional
-from returns.maybe import Maybe
+from returns.maybe import Maybe, maybe
 
+@maybe
 def bad_function() -> Optional[int]:
     ...
 
-maybe_result: Maybe[float] = Maybe.new(
-    bad_function(),
-).map(
+maybe_result: Maybe[float] = bad_function().map(
     lambda number: number / 2,
 )
 # => Maybe will return Some(float) only if there's a non-None value
@@ -255,3 +256,5 @@ Or read these articles:
 
 - [Python exceptions considered an anti-pattern](https://sobolevn.me/2019/02/python-exceptions-considered-an-antipattern)
 - [Enforcing Single Responsibility Principle in Python](https://sobolevn.me/2019/03/enforcing-srp)
+
+Do you have an article to submit? Feel free to open a pull request!

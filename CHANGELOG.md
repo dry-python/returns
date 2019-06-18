@@ -3,6 +3,13 @@
 We follow Semantic Versions since the `0.1.0` release.
 
 
+## WIP
+
+### Misc
+
+- Improves `README`
+
+
 ## 0.8.0
 
 ### Features
