@@ -87,7 +87,7 @@ class Result(
         raise NotImplementedError()
 
 
-@final
+@final  # noqa: Z214
 class _Failure(Result[Any, _ErrorType]):
     """
     Represents a calculation which has failed.
@@ -157,7 +157,7 @@ class _Failure(Result[Any, _ErrorType]):
         return self._inner_value
 
 
-@final
+@final  # noqa: Z214
 class _Success(Result[_ValueType, Any]):
     """
     Represents a calculation which has succeeded and contains the result.
