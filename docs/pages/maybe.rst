@@ -93,7 +93,7 @@ and converts it to return ``Maybe`` instead:
 
   @maybe
   def number(num: int) -> Optional[int]:
-      if number > 0:
+      if num > 0:
           return num
       return None
 
