@@ -3,7 +3,30 @@
 import pytest
 
 from returns.maybe import Nothing, Some, _Nothing
+from returns.primitives.container import (
+    Bindable,
+    Fixable,
+    Mappable,
+    Rescueable,
+    Unwrapable,
+)
 from returns.primitives.exceptions import ImmutableStateError
+
+
+@pytest.mark.parametrize('container', [
+    Nothing,
+    Some(1),
+])
+@pytest.mark.parametrize('protocol', [
+    Bindable,
+    Mappable,
+    Fixable,
+    Rescueable,
+    Unwrapable,
+])
+def test_protocols(container, protocol):
+    """Ensures that Maybe has all the right protocols."""
+    assert isinstance(container, protocol)
 
 
 def test_equality():

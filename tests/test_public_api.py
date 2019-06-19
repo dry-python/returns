@@ -6,16 +6,34 @@ import returns
 
 
 @pytest.mark.parametrize('member', [
-    'Result',
-    'Success',
-    'Failure',
-    'is_successful',
-    'safe',
-    'pipeline',
-    'raise_exception',
+    # Functions:
     'compose',
+    'raise_exception',
+
+    # IO:
     'IO',
     'impure',
+
+    # Maybe:
+    'Some',
+    'Nothing',
+    'Maybe',
+    'maybe',
+
+    # Result:
+    'safe',
+    'Failure',
+    'Result',
+    'Success',
+    'UnwrapFailedError',
+
+    # pipeline:
+    'is_successful',
+    'pipeline',
+
+    # Converters:
+    'result_to_maybe',
+    'maybe_to_result',
 ])
 def test_public_api(member):
     """Ensures that all public API members are importable."""

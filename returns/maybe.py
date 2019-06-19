@@ -3,16 +3,20 @@
 from abc import ABCMeta, abstractmethod
 from functools import wraps
 from inspect import iscoroutinefunction
-from typing import Any, Callable, Coroutine, Optional, TypeVar, Union, overload
+from typing import (
+    Any,
+    Callable,
+    Coroutine,
+    Generic,
+    Optional,
+    TypeVar,
+    Union,
+    overload,
+)
 
 from typing_extensions import final
 
-from returns.primitives.container import (
-    Container,
-    FixableContainer,
-    GenericContainerOneSlot,
-    ValueUnwrapContainer,
-)
+from returns.primitives.container import BaseContainer
 from returns.primitives.exceptions import UnwrapFailedError
 
 # Aliases:
@@ -22,9 +26,8 @@ _ErrorType = TypeVar('_ErrorType')
 
 
 class Maybe(
-    GenericContainerOneSlot[_ValueType],
-    FixableContainer,
-    ValueUnwrapContainer,
+    Generic[_ValueType],
+    BaseContainer,
     metaclass=ABCMeta,
 ):
     """
@@ -34,6 +37,8 @@ class Maybe(
     ``Maybe`` is an abstract type and should not be instantiated directly.
     Instead use ``Some`` and ``Nothing``.
     """
+
+    _inner_value: Optional[_ValueType]
 
     @classmethod
     def new(cls, inner_value: Optional[_ValueType]) -> 'Maybe[_ValueType]':
@@ -47,7 +52,7 @@ class Maybe(
         self,
         function: Callable[[_ValueType], Optional[_NewValueType]],
     ) -> 'Maybe[_NewValueType]':  # pragma: no cover
-        """Abstract method to compose container with pure function."""
+        """Abstract method to compose container with a pure function."""
         raise NotImplementedError()
 
     @abstractmethod
@@ -61,17 +66,28 @@ class Maybe(
     @abstractmethod
     def fix(
         self,
-        function: Callable[[], Optional[_NewValueType]],
+        function: Union[
+            # We use this union to make a good balance
+            # between correct and useful typing:
+            Callable[[None], Optional[_NewValueType]],  # correct
+            Callable[[], Optional[_NewValueType]],  # useful
+        ],
     ) -> 'Maybe[_NewValueType]':  # pragma: no cover
-        """Abstract method to compose container with pure function."""
+        """Abstract method to compose container with a pure function."""
         raise NotImplementedError()
 
     @abstractmethod
     def rescue(
         self,
-        function: Callable[[], 'Maybe[_NewValueType]'],
+        function: Union[
+            # We use this union to make a good balance
+            # between correct and useful typing:
+            Callable[[None], 'Maybe[_NewValueType]'],  # correct
+            Callable[[], 'Maybe[_NewValueType]'],  # useful
+        ],
     ) -> 'Maybe[_NewValueType]':  # pragma: no cover
         """Abstract method to compose container with other container."""
+        # TODO: allow Callable[[None], 'Maybe[_NewValueType]']
         raise NotImplementedError()
 
     @abstractmethod
@@ -87,11 +103,6 @@ class Maybe(
         """Get value or raise exception."""
         raise NotImplementedError()
 
-    @abstractmethod
-    def failure(self) -> None:  # pragma: no cover
-        """Get failed value or raise exception."""
-        raise NotImplementedError()
-
 
 @final  # noqa: Z214
 class _Nothing(Maybe[Any]):
@@ -105,7 +116,7 @@ class _Nothing(Maybe[Any]):
 
         'value' can only be ``None``.
         """
-        Container.__init__(self, inner_value)  # type: ignore # noqa: Z462
+        BaseContainer.__init__(self, inner_value)  # type: ignore # noqa: Z462
 
     def __str__(self):
         """Custom str definition without state inside."""
@@ -128,7 +139,10 @@ class _Nothing(Maybe[Any]):
         'function' should not accept any arguments
         and return a non-container result.
         """
-        return Maybe.new(function())
+        try:
+            return Maybe.new(function())
+        except TypeError:
+            return Maybe.new(function(self._inner_value))
 
     def rescue(self, function):
         """
@@ -137,7 +151,10 @@ class _Nothing(Maybe[Any]):
         'function' should not accept any arguments
         and return Maybe a 'Nothing' or 'Some' type object.
         """
-        return function()
+        try:
+            return function()
+        except TypeError:
+            return function(self._inner_value)
 
     def value_or(self, default_value):
         """Returns the value if we deal with 'Some' or default if 'Nothing'."""
@@ -146,10 +163,6 @@ class _Nothing(Maybe[Any]):
     def unwrap(self):
         """Raises an exception, since it does not have a value inside."""
         raise UnwrapFailedError(self)
-
-    def failure(self):
-        """Unwraps inner error value from failed container."""
-        return self._inner_value
 
 
 @final
@@ -164,7 +177,7 @@ class _Some(Maybe[_ValueType]):
 
     def __init__(self, inner_value: _ValueType) -> None:
         """Required for typing."""
-        Container.__init__(self, inner_value)  # type: ignore # noqa: Z462
+        BaseContainer.__init__(self, inner_value)  # type: ignore # noqa: Z462
 
     def map(self, function):  # noqa: A003
         """
@@ -201,10 +214,6 @@ class _Some(Maybe[_ValueType]):
     def unwrap(self):
         """Returns the unwrapped value from the inside of this container."""
         return self._inner_value
-
-    def failure(self):
-        """Raises an exception, since it does not have an error inside."""
-        raise UnwrapFailedError(self)
 
 
 def Some(inner_value: Optional[_ValueType]) -> Maybe[_ValueType]:  # noqa: N802

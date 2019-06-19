@@ -2,11 +2,11 @@
 
 from functools import wraps
 from inspect import iscoroutinefunction
-from typing import Callable, Coroutine, TypeVar, overload
+from typing import Callable, Coroutine, Generic, TypeVar, overload
 
 from typing_extensions import final
 
-from returns.primitives.container import Container, GenericContainerOneSlot
+from returns.primitives.container import BaseContainer
 
 _ValueType = TypeVar('_ValueType')
 _NewValueType = TypeVar('_NewValueType')
@@ -17,7 +17,7 @@ _SecondType = TypeVar('_SecondType')
 
 
 @final
-class IO(GenericContainerOneSlot[_ValueType]):
+class IO(Generic[_ValueType], BaseContainer):
     """
     Explicit marker for impure function results.
 
@@ -33,7 +33,7 @@ class IO(GenericContainerOneSlot[_ValueType]):
 
     def __init__(self, inner_value: _ValueType) -> None:
         """Required for typing."""
-        Container.__init__(self, inner_value)  # type: ignore # noqa: Z462
+        BaseContainer.__init__(self, inner_value)  # type: ignore # noqa: Z462
 
     def map(  # noqa: A003
         self,
