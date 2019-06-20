@@ -243,7 +243,7 @@ def bad_function() -> Optional[int]:
 maybe_result: Maybe[float] = bad_function().map(
     lambda number: number / 2,
 )
-# => Maybe will return Some(float) only if there's a non-None value
+# => Maybe will return Some[float] only if there's a non-None value
 #    Otherwise, will return Nothing
 ```
 
