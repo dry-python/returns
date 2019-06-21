@@ -232,7 +232,7 @@ description = "A plugin for flake8 finding likely bugs and design problems in yo
 name = "flake8-bugbear"
 optional = false
 python-versions = ">=3.5"
-version = "18.8.0"
+version = "19.3.0"
 
 [package.dependencies]
 attrs = "*"
@@ -987,16 +987,16 @@ description = "The strictest and most opinionated python linter ever"
 name = "wemake-python-styleguide"
 optional = false
 python-versions = ">=3.6,<4.0"
-version = "0.8.1"
+version = "0.9.0"
 
 [package.dependencies]
-astor = ">=0.7.1,<0.8.0"
-attrs = ">=18.2,<19.0"
+astor = ">=0.7.1,<0.9.0"
+attrs = "*"
 flake8 = ">=3.7,<4.0"
 flake8-annotations-complexity = ">=0.0.1,<0.0.3"
 flake8-bandit = ">=1,<3"
 flake8-broken-line = ">=0.1,<0.2"
-flake8-bugbear = ">=18.2,<19.0"
+flake8-bugbear = ">=19.3,<20.0"
 flake8-builtins = ">=1.4,<2.0"
 flake8-coding = ">=1.3,<2.0"
 flake8-commas = ">=2.0,<3.0"
@@ -1008,7 +1008,7 @@ flake8-isort = ">=2.6,<3.0"
 flake8-logging-format = ">=0.6,<0.7"
 flake8-pep3101 = ">=1.2,<2.0"
 flake8-print = ">=3.1,<4.0"
-flake8-quotes = ">=1.0,<2.0"
+flake8-quotes = ">=1,<3"
 flake8-string-format = ">=0.2,<0.3"
 pep8-naming = ">=0.7,<0.9"
 typing_extensions = ">=3.6,<4.0"
@@ -1022,7 +1022,7 @@ python-versions = ">=2.7"
 version = "0.5.1"
 
 [metadata]
-content-hash = "7da3dfc6316b77d7e9ce6b7c48566a74277d81410c3f41ff78eee540375fbcb0"
+content-hash = "ea2a5d1fc73be92996503a376c84279ea00ba5842cf69abe11b1e00d6a8d2b11"
 python-versions = "^3.6"
 
 [metadata.hashes]
@@ -1049,7 +1049,7 @@ flake8 = ["859996073f341f2670741b51ec1e67a01da142831aa1fdc6242dbf88dffbe661", "a
 flake8-annotations-complexity = ["e499d2186efcc5f6f2f1c7eb18568d08f4d9313fad15f614645f3f445f70b45c"]
 flake8-bandit = ["52a67f453ba765398098b39a2273e138983b3499465ef39a12e8ee544c4598fc"]
 flake8-broken-line = ["3eb823f48b4ec67735ebbe8e282319826c8e8be7dfc185c9e259228084c21de2", "84147d38a1562d011a8de0bb1de299a715f7dea1a7332bd6946db04a1e4c3ddd"]
-flake8-bugbear = ["07b6e769d7f4e168d590f7088eae40f6ddd9fa4952bed31602def65842682c83", "0ccf56975f4db1d69dc1cf3598c99d768ebf95d0cad27d76087954aa399b515a"]
+flake8-bugbear = ["5070774b668be92c4312e5ca82748ddf4ecaa7a24ff062662681bb745c7896eb", "fef9c9826d14ec23187ae1edeb3c6513c4e46bf0e70d86bac38f7d9aabae113d"]
 flake8-builtins = ["8d806360767947c0035feada4ddef3ede32f0a586ef457e62d811b8456ad9a51", "cd7b1b7fec4905386a3643b59f9ca8e305768da14a49a7efb31fe9364f33cd04"]
 flake8-coding = ["79704112c44d09d4ab6c8965e76a20c3f7073d52146db60303bce777d9612260", "b8f4d5157a8f74670e6cfea732c3d9f4291a4e994c8701d2c55f787c6e6cb741"]
 flake8-commas = ["d3005899466f51380387df7151fb59afec666a0f4f4a2c6a8995b975de0f44b7", "ee2141a3495ef9789a3894ed8802d03eff1eaaf98ce6d8653a7c573ef101935e"]
@@ -1122,5 +1122,5 @@ typing = ["38566c558a0a94d6531012c8e917b1b8518a41e418f7f15f00e129cc80162ad3", "5
 typing-extensions = ["2ed632b30bb54fc3941c382decfd0ee4148f5c591651c9272473fea2c6397d95", "b1edbbf0652660e32ae780ac9433f4231e7339c7f9a8057d0f042fcbcea49b87", "d8179012ec2c620d3791ca6fe2bf7979d979acdbef1fca0bc56b37411db682ed"]
 urllib3 = ["b246607a25ac80bedac05c6f282e3cdaf3afb65420fd024ac94435cabe6e18d1", "dbe59173209418ae49d485b87d1681aefa36252ee85884c31346debd19463232"]
 wcwidth = ["3df37372226d6e63e1b1e1eda15c594bca98a22d33a23832a90998faa96bc65e", "f4ebe71925af7b40a864553f761ed559b43544f8f71746c2d756c7fe788ade7c"]
-wemake-python-styleguide = ["0509b114f0446a30595e99d25566669c9f1ad9972b9d322ef27a22b8db19ba20", "0a94915dd1c48ca541a78a73b1c7e65cc023c3bd1c5d10b0a3f9dd23f2d4c4e6"]
+wemake-python-styleguide = ["6c9920a9894b03778e157afac871f2088a91f79c9d57d9e90bc98ad2cfd0e0b0", "e2ae8e5c54bc50889088dc71c6ad60960f540bd45b8c8318db7a50c1c22d695e"]
 zipp = ["8c1019c6aad13642199fbe458275ad6a84907634cc9f0989877ccc4a2840139d", "ca943a7e809cc12257001ccfb99e3563da9af99d52f261725e96dfe0f9275bc3"]
