@@ -22,9 +22,8 @@ based on just a single value:
   Maybe.new(None)
   # => Nothing
 
-
 Usage
------
+~~~~~
 
 It might be very useful for complex operations like the following one:
 

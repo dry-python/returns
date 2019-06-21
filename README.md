@@ -221,16 +221,16 @@ So, we act accordingly!
 
 ## Maybe container
 
-Have you ever since code with a lot of `if some is not None` conditions?
-It really bloats your source code and makes it unreadable.
+`None` is called the [worst mistake in the history of Computer Science](https://www.infoq.com/presentations/Null-References-The-Billion-Dollar-Mistake-Tony-Hoare/).
 
-But, having `None` in your source code is even worth.
-Actually, `None` is called the [worth mistake in the history of Computer Science](https://www.infoq.com/presentations/Null-References-The-Billion-Dollar-Mistake-Tony-Hoare/).
+So, what can we do?
+You can use `Optional` and write a lot of `if some is not None` conditions.
+But, having them here and there makes your code unreadable.
 
-So, what to do?
-Use [Maybe](https://returns.readthedocs.io/en/latest/pages/maybe.html) container!
+Or you can use
+[Maybe](https://returns.readthedocs.io/en/latest/pages/maybe.html) container!
 It consists of `Some` and `Nothing` types,
-representing existing state and empty (or `None`) state respectively.
+representing existing state and empty (instead of `None`) state respectively.
 
 ```python
 from typing import Optional
@@ -247,6 +247,8 @@ maybe_result: Maybe[float] = bad_function().map(
 #    Otherwise, will return Nothing
 ```
 
+It follows the same composition rules as the `Result` type.
+You can be sure that `.map()` method won't be called for `Nothing`.
 Forget about `None`-related errors forever!
 
 
