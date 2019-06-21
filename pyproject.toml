@@ -36,7 +36,7 @@ python = "^3.6"
 typing-extensions = "^3.7"
 
 [tool.poetry.dev-dependencies]
-mypy = "^0.701"
+mypy = "^0.710"
 wemake-python-styleguide = "^0.9.0"
 flake8-pytest = "^1.3"
 
