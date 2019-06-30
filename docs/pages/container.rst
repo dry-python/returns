@@ -140,12 +140,13 @@ Returning execution to the right track
 We also support two special methods to work with "failed"
 types like ``Failure``:
 
-- :func:`.fix <returns.primitives.container.Fixable.fix>`
-  is the opposite of ``map`` method
-  that works only when container is in failed state
 - :func:`.rescue <returns.primitives.container.Rescueable.rescue>`
   is the opposite of ``bind`` method
   that works only when container is in failed state
+- :func:`.fix <returns.primitives.container.Fixable.fix>`
+  transforms error to value (failure became success)
+  that works only when container is in failed state,
+  is the opposite of ``map`` method
 
 ``fix`` can be used to fix some fixable errors
 during the pipeline execution:
@@ -156,6 +157,9 @@ during the pipeline execution:
 
   def double(state: int) -> float:
       return state * 2.0
+
+  result: Result[Any, float] = Failure(1).map_error(double)
+  # => Failure(2.0)
 
   result: Result[float, int] = Failure(1).fix(double)
   # => Success(2.0)

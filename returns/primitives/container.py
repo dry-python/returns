@@ -95,10 +95,10 @@ class Fixable(Protocol[_ValueType, _ErrorType]):
     """Represents containers that can be fixed and rescued."""
 
     def fix(
-        self, function: Callable[[_ErrorType], _NewErrorType],
-    ) -> 'Fixable[_ValueType, _NewErrorType]':
+        self, function: Callable[[_ErrorType], _NewValueType],
+    ) -> 'Fixable[_NewValueType, _ErrorType]':
         """
-        Applies 'function' to the contents of the functor.
+        Applies 'function' to the error and transforms failure to success.
 
         And returns a new functor value.
         Works for containers that represent failure.
@@ -128,6 +128,18 @@ class Rescueable(Protocol[_ValueType, _ErrorType]):
         And returns a new container.
         Works for containers that represent failure.
         Is the opposite of :meth:`~bind`.
+        """
+
+    def map_failure(
+        self, 
+        function: Callable[[_ErrorType], _NewErrorType],
+    ) -> 'Fixable[_ValueType, _NewErrorType]':
+        """
+        Uses 'function' to transform one error to another.
+
+        And returns a new functor value.
+        Works for containers that represent failure.
+        Is the opposite of :meth:`~map`.
         """
 
 

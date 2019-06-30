@@ -81,7 +81,7 @@ class Result(
         raise NotImplementedError()
 
 
-@final
+@final  # noqa: Z214
 class _Failure(Result[Any, _ErrorType]):
     """
     Represents a calculation which has failed.
@@ -99,6 +99,17 @@ class _Failure(Result[Any, _ErrorType]):
     def map(self, function):  # noqa: A003
         """Returns the '_Failure' instance that was used to call the method."""
         return self
+
+    def map_failure(self, function):
+        """
+        Applies function to the error value.
+
+        Applies 'function' to the contents of the '_Failure' instance
+        and returns a new '_Failure' object containing the result.
+        'function' should accept a single "normal" (non-container) argument
+        and return a non-container result.
+        """
+        return _Failure(function(self._inner_value))
 
     def bind(self, function):
         """Returns the '_Failure' instance that was used to call the method."""
@@ -140,7 +151,7 @@ class _Failure(Result[Any, _ErrorType]):
         return self._inner_value
 
 
-@final
+@final  # noqa: Z214
 class _Success(Result[_ValueType, Any]):
     """
     Represents a calculation which has succeeded and contains the result.
@@ -165,6 +176,10 @@ class _Success(Result[_ValueType, Any]):
         and return a non-container result.
         """
         return _Success(function(self._inner_value))
+
+    def map_failure(self, function):
+        """Returns the '_Success' instance that was used to call the method."""
+        return self
 
     def bind(self, function):
         """
