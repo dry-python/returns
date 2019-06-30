@@ -1,20 +1,39 @@
 # -*- coding: utf-8 -*-
 
+import pytest
+
 from returns.io import IO
+from returns.primitives.container import Bindable, Mappable
+
+
+@pytest.mark.parametrize('container', [
+    IO(''),
+])
+@pytest.mark.parametrize('protocol', [
+    Bindable,
+    Mappable,
+])
+def test_protocols(container, protocol):
+    """Ensures that IO has all the right protocols."""
+    assert isinstance(container, protocol)
 
 
 def test_io_map():
     """Ensures that IO container supports ``.map()`` method."""
-    assert IO(1).map(
+    io: IO[float] = IO(1).map(
         lambda number: number / 2,
-    ) == IO(0.5)
+    )
+
+    assert io == IO(0.5)
 
 
 def test_io_bind():
     """Ensures that IO container supports ``.bind()`` method."""
-    assert IO('a').bind(
-        lambda number: IO(number + 'b'),
-    ) == IO('ab')
+    io: IO[int] = IO('1').bind(
+        lambda number: IO(int(number)),
+    )
+
+    assert io == IO(1)
 
 
 def test_io_str():

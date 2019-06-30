@@ -13,7 +13,7 @@ def test_bind():
         return Failure(str(inner_value))
 
     input_value = 5
-    bound = Success(input_value).bind(factory)
+    bound: Result[int, str] = Success(input_value).bind(factory)
 
     assert bound == factory(input_value)
     assert str(bound) == '<Success: 10>'

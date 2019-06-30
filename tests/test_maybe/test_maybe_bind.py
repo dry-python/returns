@@ -42,5 +42,6 @@ def test_rescue_nothing():
         return Some(1)
 
     bound = Nothing.rescue(factory)
+    bound2 = Nothing.rescue(lambda _: Some(1))
 
-    assert bound == Some(1)
+    assert bound == bound2

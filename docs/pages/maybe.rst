@@ -22,9 +22,8 @@ based on just a single value:
   Maybe.new(None)
   # => Nothing
 
-
 Usage
------
+~~~~~
 
 It might be very useful for complex operations like the following one:
 
@@ -47,9 +46,9 @@ It might be very useful for complex operations like the following one:
 
   order: Order  # some existing Order instance
   street: Maybe[str] = Maybe.new(order.user).map(
-    lambda user: user.address,
+      lambda user: user.address,
   ).map(
-    lambda address: address.street,
+      lambda address: address.street,
   )
   # => `Some('address street info')` if all fields are not None
   # => `Nothing` if at least one field is `None`
@@ -81,7 +80,8 @@ when new logic will be introduced.
 Sometimes we have to deal with functions
 that dears to return ``Optional`` values!
 
-We have to work with the carefully and write ``if x is not None:`` everywhere.
+We have to work with it the carefully
+and write ``if x is not None:`` everywhere.
 Luckily, we have your back! ``maybe`` function decorates
 any other function that returns ``Optional``
 and converts it to return ``Maybe`` instead:
@@ -93,12 +93,12 @@ and converts it to return ``Maybe`` instead:
 
   @maybe
   def number(num: int) -> Optional[int]:
-      if number > 0:
+      if num > 0:
           return num
       return None
 
   result: Maybe[int] = number(1)
-  # => 1
+  # => Some(1)
 
 
 API Reference

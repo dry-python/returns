@@ -1,7 +1,7 @@
 # This file is used to setup env
 # to generate documentation.
 
-sphinx==2.1.1
+sphinx==2.1.2
 sphinx_autodoc_typehints==1.6.0
 sphinxcontrib-mermaid==0.3.1
 sphinx-typlog-theme==0.7.2
@@ -10,4 +10,4 @@ m2r==0.2.1
 tomlkit==0.5.3
 
 # Dependencies of our project:
-typing-extensions==3.7.2
+typing-extensions==3.7.4

@@ -11,6 +11,7 @@ List of supported containers:
 
 - :class:`IO <returns.io.IO>` to mark explicit ``IO`` actions
 - :class:`Result <returns.result.Result>` to handle possible exceptions
+- :class:`Maybe <returns.maybe.Maybe>` to handle ``None`` cases
 
 We will show you container's simple API of one attribute
 and several simple methods.
@@ -49,7 +50,7 @@ The difference is simple:
 - ``map`` works with functions that return regular value
 - ``bind`` works with functions that return new container of the same type
 
-:func:`.bind <returns.primitives.container.Container.bind>`
+:func:`.bind <returns.primitives.container.Bindable.bind>`
 is used to literally bind two different containers together.
 
 .. code:: python
@@ -62,7 +63,7 @@ is used to literally bind two different containers together.
   # Can be assumed as either Success[int] or Failure[str]:
   result: Result[int, str] = Success(1).bind(may_fail)
 
-And we have :func:`.map <returns.primitives.container.Container.map>`
+And we have :func:`.map <returns.primitives.container.Mappable.map>`
 to use containers with regular functions.
 
 .. code:: python
@@ -139,15 +140,13 @@ Returning execution to the right track
 We also support two special methods to work with "failed"
 types like ``Failure``:
 
-- :func:`.map_error <returns.primitives.container.FixableContainer.map_error>`
-  is the opposite of ``map`` method
-  that works only when container is in failed state
-- :func:`.rescue <returns.primitives.container.FixableContainer.rescue>`
+- :func:`.rescue <returns.primitives.container.Rescueable.rescue>`
   is the opposite of ``bind`` method
   that works only when container is in failed state
-- :func:`.fix <returns.primitives.container.FixableContainer.fix>`
+- :func:`.fix <returns.primitives.container.Fixable.fix>`
   transforms error to value (failure became success)
-  that works only when container is in failed state
+  that works only when container is in failed state,
+  is the opposite of ``map`` method
 
 ``fix`` can be used to fix some fixable errors
 during the pipeline execution:
@@ -199,19 +198,20 @@ Unwrapping values
 And we have two more functions to unwrap
 inner state of containers into a regular types:
 
-- :func:`.value_or <returns.primitives.container.ValueUnwrapContainer.value_or>`
+- :func:`.value_or <returns.primitives.container.Unwrapable.value_or>`
   returns a value if it is possible, returns ``default_value`` otherwise
-- :func:`.unwrap <returns.primitives.container.ValueUnwrapContainer.unwrap>`
+- :func:`.unwrap <returns.primitives.container.Unwrapable.unwrap>`
   returns a value if it is possible, raises ``UnwrapFailedError`` otherwise
 
 .. code:: python
 
   from returns.result import Failure, Success
+  from returns.maybe import Some, Nothing
 
   Success(1).value_or(None)
   # => 1
 
-  Success(0).unwrap()
+  Some(0).unwrap()
   # => 0
 
   Failure(1).value_or(default_value=100)
@@ -220,11 +220,14 @@ inner state of containers into a regular types:
   Failure(1).unwrap()
   # => Traceback (most recent call last): UnwrapFailedError
 
-The most user-friendly way to use ``unwrap`` method is with :ref:`pipeline`.
+  Nothing.unwrap()
+  # => Traceback (most recent call last): UnwrapFailedError
+
+The most user-friendly way to use ``.unwrap()`` method is with :ref:`pipeline`.
 We even discourage using ``.unwrap()`` without a ``@pipeline``.
 
 For failing containers you can
-use :func:`.failure <returns.primitives.container.FixableContainer.failure>`
+use :func:`.failure <returns.primitives.container.Unwrapable.failure>`
 to unwrap the failed state:
 
 .. code:: python
@@ -236,7 +239,7 @@ to unwrap the failed state:
   # => Traceback (most recent call last): UnwrapFailedError
 
 Be careful, since this method will raise an exception
-when you try to ``failure`` a successful container.
+when you try to ``.failure()`` a successful container.
 
 Note::
 
@@ -313,7 +316,7 @@ You can use :ref:`converters` to convert ``Maybe`` and ``Result`` containers.
 So, you don't have to compose them.
 
 
-.. converters_:
+.. _converters:
 
 Converters
 ----------

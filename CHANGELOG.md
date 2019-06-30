@@ -3,11 +3,26 @@
 We follow Semantic Versions since the `0.1.0` release.
 
 
+## WIP
+
+### Features
+
+- Provides a bunch of primitive interfaces to write your own containers
+
+### Bugfixes
+
+- Fixes type of `Maybe.fix` and `Maybe.rescue` to work with both `lambda: 1` and `lambda _: 1`
+
+### Misc
+
+- Improves `README`
+
+
 ## 0.8.0
 
 ### Features
 
-- Reintroduces the `Maybe` monad, typed!
+- Reintroduces the `Maybe` container, typed!
 - Introduces converters from one type to another
 - Adds `mypy` plugin to type decorators
 - Complete rewrite of `Result` types
@@ -73,7 +88,7 @@ We follow Semantic Versions since the `0.1.0` release.
 - Fixes copyright notice in the docs
 
 
-## Version 0.4.0 aka Goodbye, Monads!
+## Version 0.4.0 aka Goodbye, containers!
 
 ### Features
 
@@ -84,8 +99,8 @@ We follow Semantic Versions since the `0.1.0` release.
 - Renames `do_notation` to `pipeline`, moves it to `functions.py`
 - Renames `ebind` to `rescue`
 - Renames `efmap` to `fix`
-- Renames `Monad` to `Container`
-- Removes `Maybe` monad, since typing does not have `NonNullable` type
+- Renames `container` to `Container`
+- Removes `Maybe` container, since typing does not have `NonNullable` type
 
 
 ## Version 0.3.1
@@ -109,16 +124,16 @@ The project is renamed to `returns` and moved to `dry-python` org.
 
 ### Features
 
-- Adds `Maybe` monad
-- Adds immutability and `__slots__` to all monads
+- Adds `Maybe` container
+- Adds immutability and `__slots__` to all containers
 - Adds methods to work with failures
-- Adds `safe` decorator to convert exceptions to `Result` monad
+- Adds `safe` decorator to convert exceptions to `Result` container
 - Adds `is_successful()` function to detect if your result is a success
-- Adds `failure()` method to unwrap values from failed monads
+- Adds `failure()` method to unwrap values from failed containers
 
 ### Bugfixes
 
-- Changes the type of `.bind` method for `Success` monad
+- Changes the type of `.bind` method for `Success` container
 - Changes how equality works, so now `Failure(1) != Success(1)`
 - Changes how new instances created on unused methods
 

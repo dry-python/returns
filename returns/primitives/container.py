@@ -1,16 +1,20 @@
 # -*- coding: utf-8 -*-
 
-from abc import ABCMeta, abstractmethod
-from typing import Any, Generic, NoReturn, TypeVar
+from abc import ABCMeta
+from typing import Any, Callable, NoReturn, TypeVar, Union
+
+from typing_extensions import Protocol, runtime
 
 from returns.primitives.exceptions import ImmutableStateError
 
-_ValueType = TypeVar('_ValueType')
-_ErrorType = TypeVar('_ErrorType')
+_ValueType = TypeVar('_ValueType', covariant=True)
+_NewValueType = TypeVar('_NewValueType')
+_ErrorType = TypeVar('_ErrorType', covariant=True)
+_NewErrorType = TypeVar('_NewErrorType')
 
 
-class _BaseContainer(object, metaclass=ABCMeta):
-    """Utility class to provide all needed magic methods to the contest."""
+class BaseContainer(object, metaclass=ABCMeta):
+    """Utility class to provide all needed magic methods to the context."""
 
     __slots__ = ('_inner_value',)
     _inner_value: Any
@@ -45,62 +49,79 @@ class _BaseContainer(object, metaclass=ABCMeta):
         return self._inner_value == other._inner_value  # noqa: Z441
 
 
-class Container(_BaseContainer, metaclass=ABCMeta):
+@runtime
+class Bindable(Protocol[_ValueType]):
     """
     Represents a "context" in which calculations can be executed.
 
-    You won't create 'Container' instances directly.
-    Instead, sub-classes implement specific contexts.
-    containers allow you to bind together
+    ``Bindable`` allows you to bind together
     a series of calculations while maintaining
     the context of that specific container.
-
-    This is an abstract class with the API declaration.
-
-    Attributes:
-        _inner_value: Wrapped internal immutable state.
-
     """
 
-    @abstractmethod  # noqa: A003
-    def map(self, function):  # pragma: no cover
-        """
-        Applies 'function' to the contents of the functor.
-
-        And returns a new functor value.
-        Works for containers that represent success.
-        Is the opposite of :meth:`~fix`.
-        """
-        raise NotImplementedError()
-
-    @abstractmethod
-    def bind(self, function):  # pragma: no cover
+    def bind(
+        self, function: Callable[[_ValueType], 'Bindable[_NewValueType]'],
+    ) -> 'Bindable[_NewValueType]':
         """
         Applies 'function' to the result of a previous calculation.
 
         And returns a new container.
         Works for containers that represent success.
-        Is the opposite of :meth:`~rescue`.
+        Is the opposite of :meth:`Rescueable.rescue`.
         """
-        raise NotImplementedError()
 
 
-class FixableContainer(object, metaclass=ABCMeta):
+@runtime
+class Mappable(Protocol[_ValueType]):
+    """
+    Allows to chain wrapped values with regular functions.
+
+    Behaves like functor.
+    """
+
+    def map(  # noqa: A003
+        self, function: Callable[[_ValueType], _NewValueType],
+    ) -> 'Mappable[_NewValueType]':
+        """
+        Applies 'function' to the contents of the functor.
+
+        And returns a new functor value.
+        Is the opposite of :meth:`Fixable.fix`.
+        """
+
+
+@runtime
+class Fixable(Protocol[_ValueType, _ErrorType]):
     """Represents containers that can be fixed and rescued."""
 
-    @abstractmethod
-    def fix(self, function):  # pragma: no cover
+    def fix(
+        self, function: Callable[[_ErrorType], _NewErrorType],
+    ) -> 'Fixable[_ValueType, _NewErrorType]':
         """
         Applies 'function' to the error and transforms failure to success.
 
         And returns a new functor value.
         Works for containers that represent failure.
-        Is the opposite of :meth:`~map`.
+        Is the opposite of :meth:`Mappable.map`.
         """
-        raise NotImplementedError()
 
-    @abstractmethod
-    def rescue(self, function):  # pragma: no cover
+
+@runtime
+class Rescueable(Protocol[_ValueType, _ErrorType]):
+    """
+    Represents a "context" in which calculations can be executed.
+
+    ``Rescueable`` allows you to bind together
+    a series of calculations while maintaining
+    the context of that specific container.
+    """
+
+    def rescue(
+        self,
+        function: Callable[
+            [_ErrorType], 'Rescueable[_NewValueType, _NewErrorType]',
+        ],
+    ) -> 'Rescueable[_NewValueType, _NewErrorType]':
         """
         Applies 'function' to the result of a previous calculation.
 
@@ -108,16 +129,6 @@ class FixableContainer(object, metaclass=ABCMeta):
         Works for containers that represent failure.
         Is the opposite of :meth:`~bind`.
         """
-        raise NotImplementedError()
-
-    @abstractmethod
-    def failure(self):  # pragma: no cover
-        """
-        Custom magic method to unwrap inner value from the failed container.
-
-        This method is the opposite of :meth:`~unwrap`.
-        """
-        raise NotImplementedError()
 
     @abstractmethod
     def map_failure(self, function):  # pragma: no cover
@@ -131,16 +142,16 @@ class FixableContainer(object, metaclass=ABCMeta):
         raise NotImplementedError()
 
 
-class ValueUnwrapContainer(object, metaclass=ABCMeta):
+@runtime
+class Unwrapable(Protocol[_ValueType]):
     """Represents containers that can unwrap and return its wrapped value."""
 
-    @abstractmethod
-    def value_or(self, default_value):  # pragma: no cover
+    def value_or(
+        self, default_value: _NewValueType,
+    ) -> Union[_ValueType, _NewValueType]:
         """Forces to unwrap value from container or return a default."""
-        raise NotImplementedError()
 
-    @abstractmethod
-    def unwrap(self):  # pragma: no cover
+    def unwrap(self) -> _ValueType:
         """
         Custom magic method to unwrap inner value from container.
 
@@ -149,22 +160,15 @@ class ValueUnwrapContainer(object, metaclass=ABCMeta):
 
         This method is the opposite of :meth:`~failure`.
         """
-        raise NotImplementedError()
 
 
-class GenericContainerOneSlot(Generic[_ValueType], Container):
-    """
-    Base class for containers with one typed slot.
+@runtime
+class UnwrapableFailure(Protocol[_ValueType, _ErrorType]):
+    """Allows to unwrap failures."""
 
-    Use this type for generic inheritance only.
-    Use :class:`~Container` as a general type for polymorphism.
-    """
+    def failure(self) -> _ErrorType:
+        """
+        Custom magic method to unwrap inner value from the failed container.
 
-
-class GenericContainerTwoSlots(Generic[_ValueType, _ErrorType], Container):
-    """
-    Base class for containers with two typed slot.
-
-    Use this type for generic inheritance only.
-    Use :class:`~Container` as a general type for polymorphism.
-    """
+        This method is the opposite of :meth:`~unwrap`.
+        """

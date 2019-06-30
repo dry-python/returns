@@ -2,8 +2,33 @@
 
 import pytest
 
+from returns.primitives.container import (
+    Bindable,
+    Fixable,
+    Mappable,
+    Rescueable,
+    Unwrapable,
+    UnwrapableFailure,
+)
 from returns.primitives.exceptions import ImmutableStateError
 from returns.result import Failure, Success
+
+
+@pytest.mark.parametrize('container', [
+    Failure(1),
+    Success(1),
+])
+@pytest.mark.parametrize('protocol', [
+    Bindable,
+    Mappable,
+    Fixable,
+    Rescueable,
+    Unwrapable,
+    UnwrapableFailure,
+])
+def test_protocols(container, protocol):
+    """Ensures that Result has all the right protocols."""
+    assert isinstance(container, protocol)
 
 
 def test_nonequality():

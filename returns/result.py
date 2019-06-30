@@ -3,16 +3,11 @@
 from abc import ABCMeta, abstractmethod
 from functools import wraps
 from inspect import iscoroutinefunction
-from typing import Any, Callable, Coroutine, TypeVar, Union, overload
+from typing import Any, Callable, Coroutine, Generic, TypeVar, Union, overload
 
 from typing_extensions import final
 
-from returns.primitives.container import (
-    Container,
-    FixableContainer,
-    GenericContainerTwoSlots,
-    ValueUnwrapContainer,
-)
+from returns.primitives.container import BaseContainer
 from returns.primitives.exceptions import UnwrapFailedError
 
 # Regular type vars, work correctly:
@@ -23,9 +18,8 @@ _NewErrorType = TypeVar('_NewErrorType')
 
 
 class Result(
-    GenericContainerTwoSlots[_ValueType, _ErrorType],
-    FixableContainer,
-    ValueUnwrapContainer,
+    Generic[_ValueType, _ErrorType],
+    BaseContainer,
     metaclass=ABCMeta,
 ):
     """Base class for _Failure and _Success."""
@@ -100,7 +94,7 @@ class _Failure(Result[Any, _ErrorType]):
 
     def __init__(self, inner_value: _ErrorType) -> None:
         """Required for typing."""
-        Container.__init__(self, inner_value)  # type: ignore # noqa: Z462
+        BaseContainer.__init__(self, inner_value)  # type: ignore # noqa: Z462
 
     def map(self, function):  # noqa: A003
         """Returns the '_Failure' instance that was used to call the method."""
@@ -170,7 +164,7 @@ class _Success(Result[_ValueType, Any]):
 
     def __init__(self, inner_value: _ValueType) -> None:
         """Required for typing."""
-        Container.__init__(self, inner_value)  # type: ignore # noqa: Z462
+        BaseContainer.__init__(self, inner_value)  # type: ignore # noqa: Z462
 
     def map(self, function):  # noqa: A003
         """

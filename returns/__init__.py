@@ -13,6 +13,7 @@ So, later our code can be used like so:
 See: https://github.com/dry-python/returns/issues/73
 """
 
+from returns.converters import maybe_to_result, result_to_maybe
 from returns.functions import compose, raise_exception
 from returns.io import IO, impure
 from returns.maybe import Maybe, Nothing, Some, maybe
@@ -45,4 +46,8 @@ __all__ = (
     # pipeline:
     'is_successful',
     'pipeline',
+
+    # Converters:
+    'result_to_maybe',
+    'maybe_to_result',
 )

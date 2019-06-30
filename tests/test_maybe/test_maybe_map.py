@@ -23,3 +23,4 @@ def test_fix_nothing():
     """Ensures that fix works for Nothing container."""
     assert Nothing.fix(lambda: 2) == Some(2)
     assert Nothing.fix(lambda: None) == Nothing
+    assert Nothing.fix(lambda _: 1) == Some(1)
