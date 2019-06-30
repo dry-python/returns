@@ -50,7 +50,7 @@ The difference is simple:
 - ``map`` works with functions that return regular value
 - ``bind`` works with functions that return new container of the same type
 
-:func:`.bind <returns.primitives.container.Bindable.bind>`
+:func:`~returns.primitives.container.Bindable.bind`
 is used to literally bind two different containers together.
 
 .. code:: python
@@ -63,7 +63,7 @@ is used to literally bind two different containers together.
   # Can be assumed as either Success[int] or Failure[str]:
   result: Result[int, str] = Success(1).bind(may_fail)
 
-And we have :func:`.map <returns.primitives.container.Mappable.map>`
+And we have :func:`~returns.primitives.container.Mappable.map`
 to use containers with regular functions.
 
 .. code:: python
@@ -140,11 +140,15 @@ Returning execution to the right track
 We also support two special methods to work with "failed"
 types like ``Failure``:
 
-- :func:`.rescue <returns.primitives.container.Rescueable.rescue>`
+- :func:`~returns.primitives.container.Rescueable.rescue`
   is the opposite of ``bind`` method
   that works only when container is in failed state
-- :func:`.fix <returns.primitives.container.Fixable.fix>`
+- :func:`~returns.primitives.container.Fixable.fix`
   transforms error to value (failure became success)
+  that works only when container is in failed state,
+  is the opposite of ``map`` method
+- :func:`~returns.primitives.container.UnwrapableFailure.map_failure`
+  transforms error to another error
   that works only when container is in failed state,
   is the opposite of ``map`` method
 
@@ -158,7 +162,7 @@ during the pipeline execution:
   def double(state: int) -> float:
       return state * 2.0
 
-  result: Result[Any, float] = Failure(1).map_error(double)
+  result: Result[Any, float] = Failure(1).map_failure(double)
   # => Failure(2.0)
 
   result: Result[float, int] = Failure(1).fix(double)
@@ -301,19 +305,25 @@ You can and should compose different containers together.
 Here's the full table of compositions that make sense:
 
 - ``IO[Result[A, B]]`` ✅
-- ``Result[IO[A], B]`` ✅
 - ``IO[Maybe[A]]`` ✅
-- ``Maybe[IO[A]]`` ✅
-- ``IO[IO[A]]`` 🚫
+- ``IO[IO[A]]`` 🤔, use :func:`join <returns.converters.join>`
+- ``Maybe[Maybe[A]]`` 🤔, use :func:`join <returns.converters.join>`
+- ``Result[Result[A, B], C]`` 🤔, use :func:`join <returns.converters.join>`
+- ``Result[Maybe[A], B]`` 🤔,
+    use :func:`maybe_to_result <returns.converters.maybe_to_result>`
+- ``Maybe[Result[A, B]]`` 🤔,
+    use :func:`result_to_maybe <returns.converters.result_to_maybe>`
+- ``Result[IO[A], B]`` 🚫
 - ``Result[A, IO[A]]`` 🚫
-- ``Result[Maybe[A], B]`` 🚫
 - ``Result[A, Maybe[B]]`` 🚫
-- ``Result[Result[A, B], C]`` 🚫
 - ``Result[A, Result[B, C]]`` 🚫
-- ``Maybe[Result[A, B]]`` 🚫
+- ``Maybe[IO[A]]`` 🚫
 
 You can use :ref:`converters` to convert ``Maybe`` and ``Result`` containers.
 So, you don't have to compose them.
+
+You can also use :func:`join <returns.converters.join>`
+to merge nested containers.
 
 
 .. _converters:
@@ -342,6 +352,19 @@ That's how they work:
 Take a note, that type changes.
 Also, take a note that ``Success(None)`` will be converted to ``Nothing``.
 
+You can also use ``join`` to merge nested containers together:
+
+.. code:: python
+
+  from returns.converters import join
+  from returns.maybe import Maybe
+  from returns.result import Success
+  from returns.io import IO
+
+  assert join(IO(IO(1))) == IO(1)
+  assert Maybe(Maybe(1)) == Maybe(1)
+  assert Success(Success(1)) == Success(1)
+
 
 API Reference
 -------------
@@ -349,4 +372,7 @@ API Reference
 .. autoclasstree:: returns.primitives.container
 
 .. automodule:: returns.primitives.container
+   :members:
+
+.. automodule:: returns.converters
    :members:

@@ -53,6 +53,14 @@ class Result(
         raise NotImplementedError()
 
     @abstractmethod
+    def map_failure(
+        self,
+        function: Callable[[_ErrorType], _NewErrorType],
+    ) -> 'Result[_ValueType, _NewErrorType]':  # pragma: no cover
+        """Abstract method to compose container with pure function."""
+        raise NotImplementedError()
+
+    @abstractmethod
     def rescue(
         self,
         function: Callable[

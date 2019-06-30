@@ -8,6 +8,8 @@ We follow Semantic Versions since the `0.1.0` release.
 ### Features
 
 - Provides a bunch of primitive interfaces to write your own containers
+- Adds `.map_failure()` method
+- Adds `join()` function to join nested containers
 
 ### Bugfixes
 

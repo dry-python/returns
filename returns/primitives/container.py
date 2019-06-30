@@ -130,18 +130,6 @@ class Rescueable(Protocol[_ValueType, _ErrorType]):
         Is the opposite of :meth:`~bind`.
         """
 
-    def map_failure(
-        self, 
-        function: Callable[[_ErrorType], _NewErrorType],
-    ) -> 'Fixable[_ValueType, _NewErrorType]':
-        """
-        Uses 'function' to transform one error to another.
-
-        And returns a new functor value.
-        Works for containers that represent failure.
-        Is the opposite of :meth:`~map`.
-        """
-
 
 @runtime
 class Unwrapable(Protocol[_ValueType]):
@@ -166,6 +154,18 @@ class Unwrapable(Protocol[_ValueType]):
 @runtime
 class UnwrapableFailure(Protocol[_ValueType, _ErrorType]):
     """Allows to unwrap failures."""
+
+    def map_failure(
+        self,
+        function: Callable[[_ErrorType], _NewErrorType],
+    ) -> 'Fixable[_ValueType, _NewErrorType]':
+        """
+        Uses 'function' to transform one error to another.
+
+        And returns a new functor value.
+        Works for containers that represent failure.
+        Is the opposite of :meth:`~map`.
+        """
 
     def failure(self) -> _ErrorType:
         """
