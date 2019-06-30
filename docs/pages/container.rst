@@ -111,11 +111,11 @@ or we can rescue the situation.
   :caption: Railway oriented programming.
 
    graph LR
-       S1 --> S3
+       S1 -- Map --> S3
        S3 --> S5
        S5 --> S7
 
-       F2 --> F4
+       F2 -- Map Failure --> F4
        F4 --> F6
        F6 --> F8
 
