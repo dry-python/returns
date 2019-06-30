@@ -95,8 +95,8 @@ class Fixable(Protocol[_ValueType, _ErrorType]):
     """Represents containers that can be fixed and rescued."""
 
     def fix(
-        self, function: Callable[[_ErrorType], _NewErrorType],
-    ) -> 'Fixable[_ValueType, _NewErrorType]':
+        self, function: Callable[[_ErrorType], _NewValueType],
+    ) -> 'Fixable[_NewValueType, _ErrorType]':
         """
         Applies 'function' to the error and transforms failure to success.
 
@@ -130,8 +130,10 @@ class Rescueable(Protocol[_ValueType, _ErrorType]):
         Is the opposite of :meth:`~bind`.
         """
 
-    @abstractmethod
-    def map_failure(self, function):  # pragma: no cover
+    def map_failure(
+        self, 
+        function: Callable[[_ErrorType], _NewErrorType],
+    ) -> 'Fixable[_ValueType, _NewErrorType]':
         """
         Uses 'function' to transform one error to another.
 
@@ -139,7 +141,6 @@ class Rescueable(Protocol[_ValueType, _ErrorType]):
         Works for containers that represent failure.
         Is the opposite of :meth:`~map`.
         """
-        raise NotImplementedError()
 
 
 @runtime
