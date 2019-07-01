@@ -2,7 +2,7 @@
 name = "returns"
 version = "0.9.0"
 description = "Make your functions return something meaningful, typed, and safe!"
-license = "MIT"
+license = "BSD-2-Clause"
 
 authors = [
   "sobolevn <mail@sobolevn.me>"
