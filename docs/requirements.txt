@@ -7,7 +7,7 @@ sphinxcontrib-mermaid==0.3.1
 sphinx-typlog-theme==0.7.2
 recommonmark==0.5.0
 m2r==0.2.1
-tomlkit==0.5.3
+tomlkit==0.5.4
 
 # Dependencies of our project:
 typing-extensions==3.7.4
