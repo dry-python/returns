@@ -188,82 +188,21 @@ If the value is fetched, input, received, selected, than use ``IO`` container.
 
 Most web applications are just covered with ``IO``.
 
-What is the difference between IO[Result[A, B]] and Result[IO[A], B]?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Why IO should be at the top level of composition?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 As we state in :ref:`Composition docs <composition>`
 we allow to compose different containers together.
 
-That's where this question raises:
-should I apply ``IO`` to all ``Result`` or only to the value part?
-
-Short answer: we prefer ``IO[Result[A, B]]``
+We prefer ``IO[Result[A, B]]``
 and sticking to the single version allows better composition.
+The same rule is applied to ``Maybe`` and all other containers we have.
 
-Long answer. Let's see these two examples:
+Composing ``IO`` at the top level is easier
+because you can ``join`` things easily.
 
-.. code:: python
-
-  from returns.io import IO, impure
-  from returns.result import Result, safe
-
-  def get_user_age() -> Result[IO[int], ValueError]:
-      # Safe, but impure operation:
-      prompt: IO[str] = impure(input)("What's your age?")
-
-      # Pure, but unsafe operation:
-      return safe(int)(prompt)
-
-In this case we return ``Result[IO[int], ValueError]``,
-since ``IO`` operation is safe and cannot throw.
-
-.. code:: python
-
-  import requests
-  from returns.io import IO, impure
-  from returns.result import Result, safe
-
-  @impure
-  @safe
-  def get_user_age() -> IO[Result[int, Exception]]:
-      # We ask another micro-service, it is impure and can fail:
-      return requests.get('https://...').json()
-
-In this case the whole result is marked as impure.
-Since its failures are impure as well.
-
-What is the difference between IO[Maybe[A]] and Maybe[IO[A]]?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The similar question is about ``IO`` and ``Maybe`` composition.
-Let's illustrate it with the code example:
-
-.. code:: python
-
-  from returns.maybe import Maybe, Nothing
-  from returns.io import IO
-
-  def maybe_ask_user(should_ask: bool) -> Maybe[IO[str]]:
-      if should_ask:
-          return Maybe.new(IO(input('Asking!')))
-      return Nothing
-
-In this example ``IO`` might not happen at all.
-
-.. code:: python
-
-  from returns.maybe import Maybe, Nothing
-  from returns.io import IO
-
-  def ask_user() -> IO[Maybe[str]]:
-      prompt = input('Asking!')
-      if prompt:
-          return Maybe.new(IO(prompt))
-      return IO(Nothing)
-
-In this second case, we always do ``IO``, but we return ``Nothing``
-if user inputs an empty string
-(because we need this business logic for some reason).
+And other containers not always make sense.
+If some operation performs ``IO`` it should mark all internals.
 
 Why can't we unwrap values or use @pipeline with IO?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
