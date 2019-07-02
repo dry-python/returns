@@ -362,8 +362,8 @@ You can also use ``join`` to merge nested containers together:
   from returns.io import IO
 
   assert join(IO(IO(1))) == IO(1)
-  assert Maybe(Maybe(1)) == Maybe(1)
-  assert Success(Success(1)) == Success(1)
+  assert join(Maybe(Maybe(1))) == Maybe(1)
+  assert join(Success(Success(1))) == Success(1)
 
 
 API Reference
