@@ -23,11 +23,11 @@ from mypy.plugin import FunctionContext, Plugin
 from mypy.types import CallableType
 
 #: Set of full names of our decorators.
-_TYPED_DECORATORS = {
+_TYPED_DECORATORS = frozenset((
     'returns.result.safe',
     'returns.io.impure',
     'returns.maybe.maybe',
-}
+))
 
 
 def _change_decorator_function_type(
