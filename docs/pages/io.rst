@@ -107,12 +107,12 @@ It means, that it cannot be used where regular ``bool`` can be:
 
 See? It is now impossible for a pure function to use ``IO[bool]``.
 It is impossible to unwrap or get a value from this container.
-Once it is marked as ``IO`` it will never return to the pure state.
+Once it is marked as ``IO`` it will never return to the pure state
+(well, there's a hack actually:
+:py:func:`unsafe_perform_io <returns.unsafe.unsafe_perform_io>`).
 
-Well, there's a hack actually:
-:py:func:`unsafe_perform_io <returns.unsafe.unsafe_perform_io>`
-
-It also needs to be explicitly mapped to produce new ``IO`` result:
+``IO`` container also needs to be explicitly 
+mapped to produce new ``IO`` result:
 
 .. code:: python
 
@@ -228,6 +228,7 @@ Further reading
 
 - `Functional core, imperative shell <https://www.destroyallsoftware.com/screencasts/catalog/functional-core-imperative-shell>`_
 - `Functional architecture is Ports and Adapters <https://blog.ploeh.dk/2016/03/18/functional-architecture-is-ports-and-adapters/>`_
+- `IO effect in Scala <https://typelevel.org/cats-effect/datatypes/io.html>`_
 
 
 API Reference
