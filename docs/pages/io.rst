@@ -111,7 +111,7 @@ Once it is marked as ``IO`` it will never return to the pure state
 (well, there's a hack actually:
 :py:func:`unsafe_perform_io <returns.unsafe.unsafe_perform_io>`).
 
-``IO`` container also needs to be explicitly 
+``IO`` container also needs to be explicitly
 mapped to produce new ``IO`` result:
 
 .. code:: python
