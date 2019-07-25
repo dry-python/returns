@@ -94,7 +94,7 @@ version = "7.0"
 [[package]]
 category = "dev"
 description = "Cross-platform colored terminal text."
-marker = "platform_system == \"Windows\" or sys_platform == \"win32\""
+marker = "sys_platform == \"win32\" or platform_system == \"Windows\""
 name = "colorama"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
@@ -759,7 +759,7 @@ category = "dev"
 description = "YAML parser and emitter for Python"
 name = "pyyaml"
 optional = false
-python-versions = "*"
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "5.1.1"
 
 [[package]]
@@ -858,11 +858,11 @@ category = "dev"
 description = "Type hints (PEP 484) support for the Sphinx autodoc extension"
 name = "sphinx-autodoc-typehints"
 optional = false
-python-versions = "!=3.5.0, !=3.5.1"
-version = "1.6.0"
+python-versions = ">=3.5.2"
+version = "1.7.0"
 
 [package.dependencies]
-Sphinx = ">=1.7"
+Sphinx = ">=2.1"
 
 [[package]]
 category = "dev"
@@ -1043,7 +1043,7 @@ python-versions = ">=2.7"
 version = "0.5.1"
 
 [metadata]
-content-hash = "d0c817cff2b816e954872beadf05165b2bda596ee416317f62cb3292573bb4ce"
+content-hash = "bcab3f9e0e7d650ddb0b00845d3eb68e83cad6cc175a83e673d00286699acd05"
 python-versions = "^3.6"
 
 [metadata.hashes]
@@ -1128,7 +1128,7 @@ six = ["3350809f0555b11f552448330d0b52d5f24c91a322ea4a15ef22629740f3761c", "d16a
 smmap2 = ["0555a7bf4df71d1ef4218e4807bbf9b201f910174e6e08af2e138d4e517b4dde", "29a9ffa0497e7f2be94ca0ed1ca1aa3cd4cf25a1f6b4f5f87f74b46ed91d609a"]
 snowballstemmer = ["9f3b9ffe0809d174f7047e121431acf99c89a7040f0ca84f94ba53a498e6d0c9"]
 sphinx = ["22538e1bbe62b407cf5a8aabe1bb15848aa66bb79559f42f5202bbce6b757a69", "f9a79e746b87921cabc3baa375199c6076d1270cee53915dbd24fdbeaaacc427"]
-sphinx-autodoc-typehints = ["19fe0b426b7c008181f67f816060da7f046bd8a42723f67a685d26d875bcefd7", "f9c06acfec80766fe8f542a6d6a042e751fcf6ce2e2711a7dc00d8b6daf8aa36"]
+sphinx-autodoc-typehints = ["8eb1e2bc248d316a9faeca086c6133623f6d45770e342738158249356989b95c", "cedf37dde99096e3024ffcd498ee917c2ccf667e04e23d868d481eae2cb84910"]
 sphinx-typlog-theme = ["a2a2a3a5f3d1f89b165835762469e386e977251c98b4d76b073d9b04f939571a", "effba0175ca2cadebbb47671ce6471e4095ad563239431e9b6326feed2dec3ee"]
 sphinxcontrib-applehelp = ["edaa0ab2b2bc74403149cb0209d6775c96de797dfd5b5e2a71981309efab3897", "fb8dee85af95e5c30c91f10e7eb3c8967308518e0f7488a2828ef7bc191d0d5d"]
 sphinxcontrib-devhelp = ["6c64b077937330a9128a4da74586e8c2130262f014689b4b89e2d08ee7294a34", "9512ecb00a2b0821a146736b39f7aeb90759834b07e81e8cc23a9c70bacb9981"]

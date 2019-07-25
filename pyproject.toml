@@ -49,7 +49,7 @@ pytest-asyncio = "^0.10.0"
 pytest-mypy-plugins = "^0.3.0"
 
 sphinx = "^2.1"
-sphinx-autodoc-typehints = "^1.6"
+sphinx-autodoc-typehints = "^1.7"
 sphinxcontrib-mermaid = "^0.3.1"
 sphinx-typlog-theme = "^0.7.1"
 doc8 = "^0.8.0"
