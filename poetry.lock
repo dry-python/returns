@@ -1005,7 +1005,7 @@ description = "The strictest and most opinionated python linter ever"
 name = "wemake-python-styleguide"
 optional = false
 python-versions = ">=3.6,<4.0"
-version = "0.10.0"
+version = "0.11.1"
 
 [package.dependencies]
 astor = ">=0.7.1,<0.9.0"
@@ -1032,6 +1032,7 @@ flake8-rst-docstrings = ">=0.0.10,<0.0.11"
 flake8-string-format = ">=0.2,<0.3"
 pep8-naming = ">=0.8.2,<0.9.0"
 pydocstyle = "<4"
+pygments = ">=2.4,<3.0"
 typing_extensions = ">=3.6,<4.0"
 
 [[package]]
@@ -1043,7 +1044,7 @@ python-versions = ">=2.7"
 version = "0.5.1"
 
 [metadata]
-content-hash = "bcab3f9e0e7d650ddb0b00845d3eb68e83cad6cc175a83e673d00286699acd05"
+content-hash = "95c7d98988f56d7c042cfbd7620d9b6ce9788db53f4b50c0e9b19905d2e57f41"
 python-versions = "^3.6"
 
 [metadata.hashes]
@@ -1145,5 +1146,5 @@ typing = ["38566c558a0a94d6531012c8e917b1b8518a41e418f7f15f00e129cc80162ad3", "5
 typing-extensions = ["2ed632b30bb54fc3941c382decfd0ee4148f5c591651c9272473fea2c6397d95", "b1edbbf0652660e32ae780ac9433f4231e7339c7f9a8057d0f042fcbcea49b87", "d8179012ec2c620d3791ca6fe2bf7979d979acdbef1fca0bc56b37411db682ed"]
 urllib3 = ["b246607a25ac80bedac05c6f282e3cdaf3afb65420fd024ac94435cabe6e18d1", "dbe59173209418ae49d485b87d1681aefa36252ee85884c31346debd19463232"]
 wcwidth = ["3df37372226d6e63e1b1e1eda15c594bca98a22d33a23832a90998faa96bc65e", "f4ebe71925af7b40a864553f761ed559b43544f8f71746c2d756c7fe788ade7c"]
-wemake-python-styleguide = ["00249201c51d1e1e99580c6f0d00e9ebd0923ac653ae25c8d7a28431509998c0", "eec97093eb500cbed56ed5ce3cf02c2a1d17a629866610541118a1411d6b1d5f"]
+wemake-python-styleguide = ["5a25f6d877000cc6d657438a94474f44db6563adba3a518d75d6e17d8017cc4f", "933b5baf551daf73469cd61b124c222cfb06b851164681426aab8d44b94de4e7"]
 zipp = ["8c1019c6aad13642199fbe458275ad6a84907634cc9f0989877ccc4a2840139d", "ca943a7e809cc12257001ccfb99e3563da9af99d52f261725e96dfe0f9275bc3"]
