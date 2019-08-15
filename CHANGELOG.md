@@ -5,6 +5,10 @@ We follow Semantic Versions since the `0.1.0` release.
 
 ## 0.10.0 WIP
 
+### Features
+
+- Adds `__hash__` magic methods to all containers
+
 ### Misc
 
 - Updates `mypy` version
