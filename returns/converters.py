@@ -32,18 +32,18 @@ def join(container: IO[IO[_ValueType]]) -> IO[_ValueType]:
     """Case for ``IO`` container."""
 
 
-@overload  # noqa: WPS440
+@overload
 def join(container: Maybe[Maybe[_ValueType]]) -> Maybe[_ValueType]:
     """Case for ``Maybe`` container."""
 
 
-@overload  # noqa: WPS440
+@overload
 def join(
     container: Result[Result[_ValueType, _ErrorType], _ErrorType],
 ) -> Result[_ValueType, _ErrorType]:
     """Case for ``Result`` container."""
 
 
-def join(container):  # noqa: WPS440
+def join(container):
     """Joins two nested containers together."""
     return container._inner_value  # noqa: WPS437

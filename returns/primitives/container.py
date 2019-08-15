@@ -48,6 +48,10 @@ class BaseContainer(object, metaclass=ABCMeta):
             return False
         return self._inner_value == other._inner_value  # noqa: WPS437
 
+    def __hash__(self) -> int:
+        """Used to use this value as a key."""
+        return hash(self._inner_value)
+
 
 @runtime
 class Bindable(Protocol[_ValueType]):

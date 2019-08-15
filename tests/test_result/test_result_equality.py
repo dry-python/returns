@@ -38,6 +38,8 @@ def test_nonequality():
     assert Failure(input_value) != input_value
     assert Success(input_value) != input_value
     assert Failure(input_value) != Success(input_value)
+    assert hash(Failure(1))
+    assert hash(Success(1))
 
 
 def test_is_compare():

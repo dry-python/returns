@@ -32,9 +32,10 @@ def test_protocols(container, protocol):
 def test_equality():
     """Ensures that containers can be compared."""
     assert Nothing is Nothing  # noqa: WPS312
-    assert Nothing == _Nothing() == _Nothing(None)
+    assert Nothing == _Nothing() == _Nothing(None) == Some(None)
     assert Some(5) == Some(5)
-    assert Some(None) == Nothing
+    assert hash(Some(1))
+    assert hash(Nothing)
 
 
 def test_nonequality():
