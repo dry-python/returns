@@ -53,28 +53,28 @@ def test_is_compare():
 def test_immutability_failure():
     """Ensures that Failure container is immutable."""
     with pytest.raises(ImmutableStateError):
-        Failure(0)._inner_state = 1  # noqa: Z441
+        Failure(0)._inner_state = 1  # noqa: WPS437
 
     with pytest.raises(ImmutableStateError):
         Failure(1).missing = 2
 
     with pytest.raises(ImmutableStateError):
-        del Failure(0)._inner_state  # type: ignore # noqa: Z420, Z441
+        del Failure(0)._inner_state  # type: ignore # noqa: WPS420, WPS437
 
     with pytest.raises(AttributeError):
-        Failure(1).missing  # type: ignore # noqa: Z444
+        Failure(1).missing  # type: ignore # noqa: WPS428
 
 
 def test_immutability_success():
     """Ensures that Success container is immutable."""
     with pytest.raises(ImmutableStateError):
-        Success(0)._inner_state = 1  # noqa: Z441
+        Success(0)._inner_state = 1  # noqa: WPS437
 
     with pytest.raises(ImmutableStateError):
         Success(1).missing = 2
 
     with pytest.raises(ImmutableStateError):
-        del Success(0)._inner_state  # type: ignore # noqa: Z420, Z441
+        del Success(0)._inner_state  # type: ignore # noqa: WPS420, WPS437
 
     with pytest.raises(AttributeError):
-        Success(1).missing  # type: ignore # noqa: Z444
+        Success(1).missing  # type: ignore # noqa: WPS428

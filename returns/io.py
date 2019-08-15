@@ -33,7 +33,7 @@ class IO(Generic[_ValueType], BaseContainer):
 
     def __init__(self, inner_value: _ValueType) -> None:
         """Required for typing."""
-        BaseContainer.__init__(self, inner_value)  # type: ignore # noqa: Z462
+        BaseContainer.__init__(self, inner_value)  # noqa: WPS609
 
     def map(  # noqa: A003
         self,
@@ -85,9 +85,9 @@ def impure(function):
     Supports both async and regular functions.
     """
     if iscoroutinefunction(function):
-        async def decorator(*args, **kwargs):
+        async def decorator(*args, **kwargs):  # noqa: WPS430
             return IO(await function(*args, **kwargs))
     else:
-        def decorator(*args, **kwargs):
+        def decorator(*args, **kwargs):  # noqa: WPS430
             return IO(function(*args, **kwargs))
     return wraps(function)(decorator)

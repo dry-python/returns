@@ -1,0 +1,12 @@
+- case: compose_two_functions
+  disable_cache: true
+  main: |
+    from returns.functions import compose
+
+    def first(num: int) -> float:
+        return float(num)
+
+    def second(num: float) -> str:
+        return str(num)
+
+    reveal_type(compose(first, second))  # N: Revealed type is 'def (builtins.int*) -> builtins.str*'

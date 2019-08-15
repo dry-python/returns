@@ -7,7 +7,7 @@ from returns.pipeline import is_successful
 from returns.result import Failure, Success
 
 
-@pytest.mark.parametrize('container, correct_result', [
+@pytest.mark.parametrize(('container', 'correct_result'), [
     (Success('a'), True),
     (Failure('a'), False),
     (Some('a'), True),

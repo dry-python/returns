@@ -62,13 +62,13 @@ def pipeline(function):  # noqa: C901
     Supports both async and regular functions.
     """
     if iscoroutinefunction(function):
-        async def decorator(*args, **kwargs):
+        async def decorator(*args, **kwargs):  # noqa: WPS430
             try:
                 return await function(*args, **kwargs)
             except UnwrapFailedError as exc:
                 return exc.halted_container
     else:
-        def decorator(*args, **kwargs):
+        def decorator(*args, **kwargs):  # noqa: WPS430
             try:
                 return function(*args, **kwargs)
             except UnwrapFailedError as exc:

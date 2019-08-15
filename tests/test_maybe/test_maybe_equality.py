@@ -31,7 +31,7 @@ def test_protocols(container, protocol):
 
 def test_equality():
     """Ensures that containers can be compared."""
-    assert Nothing is Nothing  # noqa: Z312
+    assert Nothing is Nothing  # noqa: WPS312
     assert Nothing == _Nothing() == _Nothing(None)
     assert Some(5) == Some(5)
     assert Some(None) == Nothing
@@ -43,8 +43,7 @@ def test_nonequality():
     assert Nothing != None  # noqa: E711
     assert _Nothing(None) is not None
     assert _Nothing(None) != None  # noqa: E711
-    assert Some(5) != 5
-    assert Some(3) is not Some(3)
+    assert Some(5) != 5 and Some(3) is not Some(3)
 
 
 def test_is_compare():
@@ -59,28 +58,28 @@ def test_is_compare():
 def test_immutability_failure():
     """Ensures that Failure container is immutable."""
     with pytest.raises(ImmutableStateError):
-        Nothing._inner_state = 1  # noqa: Z441
+        Nothing._inner_state = 1  # noqa: WPS437
 
     with pytest.raises(ImmutableStateError):
         Nothing.missing = 2
 
     with pytest.raises(ImmutableStateError):
-        del Nothing._inner_state  # type: ignore # noqa: Z420, Z441
+        del Nothing._inner_state  # type: ignore # noqa: WPS420, WPS437
 
     with pytest.raises(AttributeError):
-        Nothing.missing  # type: ignore # noqa: Z444
+        Nothing.missing  # type: ignore # noqa: WPS428
 
 
 def test_immutability_success():
     """Ensures that Success container is immutable."""
     with pytest.raises(ImmutableStateError):
-        Some(0)._inner_state = 1  # noqa: Z441
+        Some(0)._inner_state = 1  # noqa: WPS437
 
     with pytest.raises(ImmutableStateError):
         Some(1).missing = 2
 
     with pytest.raises(ImmutableStateError):
-        del Some(0)._inner_state  # type: ignore # noqa: Z420, Z441
+        del Some(0)._inner_state  # type: ignore # noqa: WPS420, WPS437
 
     with pytest.raises(AttributeError):
-        Some(1).missing  # type: ignore # noqa: Z444
+        Some(1).missing  # type: ignore # noqa: WPS428

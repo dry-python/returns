@@ -1,0 +1,25 @@
+- case: io_constructor
+  disable_cache: true
+  main: |
+    from returns.io import IO
+
+    reveal_type(IO(1))  # N: Revealed type is 'returns.io.IO[builtins.int*]'
+
+
+- case: io_bind
+  disable_cache: true
+  main: |
+    from returns.io import IO
+
+    def bind_io(input_io: int) -> IO[str]:
+        ...
+
+    reveal_type(IO(1).bind(bind_io))  # N: Revealed type is 'returns.io.IO[builtins.str*]'
+
+
+- case: io_map
+  disable_cache: true
+  main: |
+    from returns.io import IO
+
+    reveal_type(IO(1).map(str))  # N: Revealed type is 'returns.io.IO[builtins.str*]'

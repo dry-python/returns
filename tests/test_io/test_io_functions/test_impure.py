@@ -5,12 +5,12 @@ import pytest
 from returns.io import IO, impure
 
 
-def _fake_impure_function(param: int) -> int:
-    return param
+def _fake_impure_function(some_param: int) -> int:
+    return some_param
 
 
-async def _fake_impure_coroutine(param: int) -> int:
-    return param
+async def _fake_impure_coroutine(some_param: int) -> int:
+    return some_param
 
 
 def test_impure():

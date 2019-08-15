@@ -1,0 +1,7 @@
+- case: maybe_to_result
+  disable_cache: true
+  main: |
+    from returns.converters import maybe_to_result
+    from returns.maybe import Maybe
+
+    reveal_type(maybe_to_result(Maybe.new(1)))  # N: Revealed type is 'returns.result.Result[builtins.int*, None]'

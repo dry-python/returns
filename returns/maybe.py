@@ -51,17 +51,17 @@ class Maybe(
     def map(
         self,
         function: Callable[[_ValueType], Optional[_NewValueType]],
-    ) -> 'Maybe[_NewValueType]':  # pragma: no cover
+    ) -> 'Maybe[_NewValueType]':
         """Abstract method to compose container with a pure function."""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     @abstractmethod
     def bind(
         self,
         function: Callable[[_ValueType], 'Maybe[_NewValueType]'],
-    ) -> 'Maybe[_NewValueType]':  # pragma: no cover
+    ) -> 'Maybe[_NewValueType]':
         """Abstract method to compose container with other container."""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     @abstractmethod
     def fix(
@@ -72,9 +72,9 @@ class Maybe(
             Callable[[None], Optional[_NewValueType]],  # correct
             Callable[[], Optional[_NewValueType]],  # useful
         ],
-    ) -> 'Maybe[_NewValueType]':  # pragma: no cover
+    ) -> 'Maybe[_NewValueType]':
         """Abstract method to compose container with a pure function."""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     @abstractmethod
     def rescue(
@@ -85,38 +85,37 @@ class Maybe(
             Callable[[None], 'Maybe[_NewValueType]'],  # correct
             Callable[[], 'Maybe[_NewValueType]'],  # useful
         ],
-    ) -> 'Maybe[_NewValueType]':  # pragma: no cover
+    ) -> 'Maybe[_NewValueType]':
         """Abstract method to compose container with other container."""
-        # TODO: allow Callable[[None], 'Maybe[_NewValueType]']
-        raise NotImplementedError()
+        raise NotImplementedError
 
     @abstractmethod
     def value_or(
         self,
         default_value: _NewValueType,
-    ) -> Union[_ValueType, _NewValueType]:  # pragma: no cover
+    ) -> Union[_ValueType, _NewValueType]:
         """Get value or default value."""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     @abstractmethod
-    def unwrap(self) -> _ValueType:  # pragma: no cover
+    def unwrap(self) -> _ValueType:
         """Get value or raise exception."""
-        raise NotImplementedError()
+        raise NotImplementedError
 
 
-@final  # noqa: Z214
+@final
 class _Nothing(Maybe[Any]):
     """Represents an empty state."""
 
     _inner_value: None
 
-    def __init__(self, inner_value: None = None) -> None:  # noqa: Z459
+    def __init__(self, inner_value: None = None) -> None:
         """
         Wraps the given value in the Container.
 
         'value' can only be ``None``.
         """
-        BaseContainer.__init__(self, inner_value)  # type: ignore # noqa: Z462
+        BaseContainer.__init__(self, inner_value)  # noqa: WPS609
 
     def __str__(self):
         """Custom str definition without state inside."""
@@ -177,7 +176,7 @@ class _Some(Maybe[_ValueType]):
 
     def __init__(self, inner_value: _ValueType) -> None:
         """Required for typing."""
-        BaseContainer.__init__(self, inner_value)  # type: ignore # noqa: Z462
+        BaseContainer.__init__(self, inner_value)  # noqa: WPS609
 
     def map(self, function):  # noqa: A003
         """
@@ -225,7 +224,7 @@ def Some(inner_value: Optional[_ValueType]) -> Maybe[_ValueType]:  # noqa: N802
 Nothing: Maybe[Any] = _Nothing()
 
 
-@overload  # noqa: Z320
+@overload
 def maybe(  # type: ignore
     function: Callable[
         ...,
@@ -252,13 +251,13 @@ def maybe(function):
     Supports both async and regular functions.
     """
     if iscoroutinefunction(function):
-        async def decorator(*args, **kwargs):
+        async def decorator(*args, **kwargs):  # noqa: WPS430
             regular_result = await function(*args, **kwargs)
             if regular_result is None:
                 return Nothing
             return Some(regular_result)
     else:
-        def decorator(*args, **kwargs):
+        def decorator(*args, **kwargs):  # noqa: WPS430
             regular_result = function(*args, **kwargs)
             if regular_result is None:
                 return Nothing

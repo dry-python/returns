@@ -18,12 +18,9 @@ install:
   - poetry install
 
 script:
-  - poetry run flake8 returns tests docs
+  - poetry run flake8 .
   - poetry run mypy returns tests/**/*.py
-  - poetry run pytest tests
-  # Temporary work-around of
-  # https://github.com/mkurnikov/pytest-mypy-plugins/issues/2
-  - poetry run pytest -p no:cov -o addopts="" --mypy-ini-file=setup.cfg typesafety
+  - poetry run pytest
   - poetry run doc8 -q docs
   - poetry check
   - poetry run pip check

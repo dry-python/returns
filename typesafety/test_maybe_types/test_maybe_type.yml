@@ -1,0 +1,112 @@
+- case: maybe_type_regular
+  disable_cache: true
+  main: |
+    from returns.maybe import Maybe
+
+    value: int
+    reveal_type(Maybe.new(value))  # N: Revealed type is 'returns.maybe.Maybe[builtins.int*]'
+
+
+- case: maybe_type_regular
+  disable_cache: true
+  main: |
+    from typing import Optional
+    from returns.maybe import Maybe
+
+    value: Optional[int]
+    reveal_type(Maybe.new(value))  # N: Revealed type is 'returns.maybe.Maybe[builtins.int*]'
+
+
+- case: maybe_map_regular
+  disable_cache: true
+  main: |
+    from returns.maybe import Maybe
+
+    result = Maybe.new(1).map(lambda i: i / i)
+    reveal_type(result)  # N: Revealed type is 'returns.maybe.Maybe[builtins.float*]'
+
+
+- case: maybe_map_optional
+  disable_cache: true
+  main: |
+    from returns.maybe import Maybe
+
+    result = Maybe.new({'a': 'b'}).map(lambda d: d.get('a', None))
+    reveal_type(result)  # N: Revealed type is 'returns.maybe.Maybe[builtins.str*]'
+
+
+- case: maybe_map_optional
+  disable_cache: true
+  main: |
+    from returns.maybe import Maybe
+
+    result = Maybe.new(1).bind(lambda d: Maybe.new(str(d)))
+    reveal_type(result)  # N: Revealed type is 'returns.maybe.Maybe[builtins.str*]'
+
+
+- case: maybe_bind
+  disable_cache: true
+  main: |
+    from returns.maybe import Maybe
+
+    result = Maybe.new(1).bind(lambda d: Maybe.new(str(d)))
+    reveal_type(result)  # N: Revealed type is 'returns.maybe.Maybe[builtins.str*]'
+
+
+- case: maybe_bind_optional
+  disable_cache: true
+  main: |
+    from returns.maybe import Maybe
+
+    result = Maybe.new({'a': 'b'}).bind(lambda d: Maybe.new(d.get('a', None)))
+    reveal_type(result)  # N: Revealed type is 'returns.maybe.Maybe[builtins.str*]'
+
+
+- case: maybe_fix_regular
+  disable_cache: true
+  main: |
+    from returns.maybe import Maybe
+
+    result = Maybe.new({'a': 'b'}).fix(lambda: 'b')
+    reveal_type(result)  # N: Revealed type is 'returns.maybe.Maybe[builtins.str*]'
+
+
+- case: maybe_value_or
+  disable_cache: true
+  main: |
+    from returns.maybe import Maybe
+
+    result = Maybe.new(1).value_or(None)
+    reveal_type(result)  # N: Revealed type is 'Union[builtins.int, None]'
+
+
+- case: maybe_fix_optional
+  disable_cache: true
+  main: |
+    from typing import Optional
+    from returns.maybe import Maybe
+
+    value: Optional[int]
+    result = Maybe.new({'a': 'b'}).fix(lambda: value)
+    reveal_type(result)  # N: Revealed type is 'returns.maybe.Maybe[builtins.int*]'
+
+
+- case: maybe_rescue_regular
+  disable_cache: true
+  main: |
+    from returns.maybe import Maybe
+
+    result = Maybe.new({'a': 'b'}).rescue(lambda: Maybe.new('b'))
+    reveal_type(result)  # N: Revealed type is 'returns.maybe.Maybe[builtins.str*]'
+
+
+- case: maybe_rescue_optional
+  disable_cache: true
+  main: |
+    from typing import Optional
+    from returns.maybe import Maybe
+
+    value: Optional[int]
+    result = Maybe.new({'a': 'b'}).rescue(lambda: Maybe.new(value))
+    reveal_type(result)  # N: Revealed type is 'returns.maybe.Maybe[builtins.int*]'
+

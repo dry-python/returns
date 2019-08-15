@@ -1,0 +1,28 @@
+- case: join_io
+  disable_cache: true
+  main: |
+    from returns.converters import join
+    from returns.io import IO
+
+    reveal_type(join(IO(IO(1))))  # N: Revealed type is 'returns.io.IO[builtins.int*]'
+
+
+- case: join_maybe
+  disable_cache: true
+  main: |
+    from returns.converters import join
+    from returns.maybe import Some
+
+    reveal_type(join(Some(Some(1))))  # N: Revealed type is 'returns.maybe.Maybe[builtins.int*]'
+
+
+- case: join_result
+  disable_cache: true
+  main: |
+    from returns.converters import join
+    from returns.result import Result
+
+    def returns_result() -> Result[Result[int, str], str]:
+        ...
+
+    reveal_type(join(returns_result()))  # N: Revealed type is 'returns.result.Result[builtins.int*, builtins.str*]'

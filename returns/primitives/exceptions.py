@@ -3,7 +3,7 @@
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:  # pragma: no cover
-    from returns.primitives.container import BaseContainer  # noqa: F401, Z435
+    from returns.primitives.container import BaseContainer  # noqa: F401, WPS433
 
 
 class UnwrapFailedError(Exception):

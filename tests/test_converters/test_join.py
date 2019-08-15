@@ -8,7 +8,7 @@ from returns.maybe import Nothing, Some
 from returns.result import Failure, Success
 
 
-@pytest.mark.parametrize('container, merged', [
+@pytest.mark.parametrize(('container', 'merged'), [
     (IO(IO(1)), IO(1)),
     (Failure(Failure('a')), Failure('a')),
     (Success(Success({})), Success({})),

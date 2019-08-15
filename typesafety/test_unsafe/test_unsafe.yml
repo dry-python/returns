@@ -1,0 +1,7 @@
+- case: unsafe_perform_io
+  disable_cache: true
+  main: |
+    from returns.io import IO
+    from returns.unsafe import unsafe_perform_io
+
+    reveal_type(unsafe_perform_io(IO(1)))  # N: Revealed type is 'builtins.int*'

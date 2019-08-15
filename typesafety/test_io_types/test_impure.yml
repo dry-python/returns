@@ -1,0 +1,70 @@
+- case: impure_decorator_no_params
+  disable_cache: true
+  main: |
+    from returns.io import impure
+
+    @impure
+    def test() -> int:
+        return 1
+
+    reveal_type(test)  # N: Revealed type is 'def () -> returns.io.IO[builtins.int*]'
+
+
+- case: impure_composition_no_params
+  disable_cache: true
+  main: |
+    from returns.io import impure
+
+    def test() -> int:
+        return 1
+
+    reveal_type(impure(test))  # N: Revealed type is 'def () -> returns.io.IO[builtins.int*]'
+
+
+- case: impure_decorator_with_args
+  disable_cache: true
+  main: |
+    from typing import Optional
+    from returns.io import impure
+
+    @impure
+    def test(first: int, second: Optional[str] = None, *, kw: bool = True) -> int:
+        return 1
+
+    reveal_type(test)  # N: Revealed type is 'def (first: builtins.int, second: Union[builtins.str, None] =, *, kw: builtins.bool =) -> returns.io.IO[builtins.int*]'
+
+
+- case: impure_composition_with_args
+  disable_cache: true
+  main: |
+    from typing import Optional
+    from returns.io import impure
+
+    def test(first: int, second: Optional[str] = None, *, kw: bool = True) -> int:
+        return 1
+
+    reveal_type(impure(test))  # N: Revealed type is 'def (first: builtins.int, second: Union[builtins.str, None] =, *, kw: builtins.bool =) -> returns.io.IO[builtins.int*]'
+
+
+- case: impure_decorator_with_args_kwargs
+  disable_cache: true
+  main: |
+    from returns.io import impure
+
+    @impure
+    def test(*args, **kwargs) -> int:
+        return 1
+
+    reveal_type(test)  # N: Revealed type is 'def (*args: Any, **kwargs: Any) -> returns.io.IO[builtins.int*]'
+
+
+- case: impure_decorator_with_typed_args_kwargs
+  disable_cache: true
+  main: |
+    from returns.io import impure
+
+    @impure
+    def test(*args: int, **kwargs: str) -> int:
+        return 1
+
+    reveal_type(test)  # N: Revealed type is 'def (*args: builtins.int, **kwargs: builtins.str) -> returns.io.IO[builtins.int*]'

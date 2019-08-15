@@ -21,7 +21,7 @@ from returns.pipeline import is_successful, pipeline
 from returns.primitives.exceptions import UnwrapFailedError
 from returns.result import Failure, Result, Success, safe
 
-__all__ = (
+__all__ = (  # noqa: WPS410
     # Functions:
     'compose',
     'raise_exception',

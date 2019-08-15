@@ -23,7 +23,7 @@ def maybe_to_result(
     """Converts ``Maybe`` container to ``Result`` container."""
     inner_value = maybe_container.value_or(None)
     if inner_value is not None:
-        return Success(inner_value)
+        return Success(inner_value)  # type: ignore
     return Failure(inner_value)
 
 
@@ -32,18 +32,18 @@ def join(container: IO[IO[_ValueType]]) -> IO[_ValueType]:
     """Case for ``IO`` container."""
 
 
-@overload
+@overload  # noqa: WPS440
 def join(container: Maybe[Maybe[_ValueType]]) -> Maybe[_ValueType]:
     """Case for ``Maybe`` container."""
 
 
-@overload
+@overload  # noqa: WPS440
 def join(
     container: Result[Result[_ValueType, _ErrorType], _ErrorType],
 ) -> Result[_ValueType, _ErrorType]:
     """Case for ``Result`` container."""
 
 
-def join(container):
+def join(container):  # noqa: WPS440
     """Joins two nested containers together."""
-    return container._inner_value  # noqa: Z441
+    return container._inner_value  # noqa: WPS437

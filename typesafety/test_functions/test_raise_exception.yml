@@ -1,0 +1,6 @@
+- case: raise_exception
+  disable_cache: true
+  main: |
+    from returns.functions import raise_exception
+
+    reveal_type(raise_exception(ValueError()))  # N: Revealed type is '<nothing>'

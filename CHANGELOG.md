@@ -3,6 +3,14 @@
 We follow Semantic Versions since the `0.1.0` release.
 
 
+## 0.10.0 WIP
+
+### Misc
+
+- Updates `mypy` version
+- Updates `wemake-python-styleguide` and introduces `nitpick`
+
+
 ## 0.9.0
 
 ### Features

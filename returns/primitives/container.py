@@ -19,19 +19,19 @@ class BaseContainer(object, metaclass=ABCMeta):
     __slots__ = ('_inner_value',)
     _inner_value: Any
 
-    def __init__(self, inner_value):
+    def __init__(self, inner_value) -> None:
         """
         Wraps the given value in the Container.
 
         'value' is any arbitrary value of any type including functions.
         """
-        object.__setattr__(self, '_inner_value', inner_value)  # noqa: Z462
+        object.__setattr__(self, '_inner_value', inner_value)  # noqa: WPS609
 
     def __setattr__(self, attr_name: str, attr_value) -> NoReturn:
         """Makes inner state of the containers immutable."""
         raise ImmutableStateError()
 
-    def __delattr__(self, attr_name: str) -> NoReturn:  # noqa: Z434
+    def __delattr__(self, attr_name: str) -> NoReturn:  # noqa: WPS603
         """Makes inner state of the containers immutable."""
         raise ImmutableStateError()
 
@@ -44,9 +44,9 @@ class BaseContainer(object, metaclass=ABCMeta):
 
     def __eq__(self, other) -> bool:
         """Used to compare two 'Container' objects."""
-        if type(self) != type(other):
+        if not isinstance(self, type(other)):
             return False
-        return self._inner_value == other._inner_value  # noqa: Z441
+        return self._inner_value == other._inner_value  # noqa: WPS437
 
 
 @runtime

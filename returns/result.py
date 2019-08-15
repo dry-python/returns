@@ -30,9 +30,9 @@ class Result(
     def map(
         self,
         function: Callable[[_ValueType], _NewValueType],
-    ) -> 'Result[_NewValueType, _ErrorType]':  # pragma: no cover
+    ) -> 'Result[_NewValueType, _ErrorType]':
         """Abstract method to compose container with pure function."""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     @abstractmethod
     def bind(
@@ -40,25 +40,25 @@ class Result(
         function: Callable[
             [_ValueType], 'Result[_NewValueType, _NewErrorType]',
         ],
-    ) -> 'Result[_NewValueType, _NewErrorType]':  # pragma: no cover
+    ) -> 'Result[_NewValueType, _NewErrorType]':
         """Abstract method to compose container with other container."""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     @abstractmethod
     def fix(
         self,
         function: Callable[[_ErrorType], _NewValueType],
-    ) -> 'Result[_NewValueType, _ErrorType]':  # pragma: no cover
+    ) -> 'Result[_NewValueType, _ErrorType]':
         """Abstract method to compose container with pure function."""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     @abstractmethod
     def map_failure(
         self,
         function: Callable[[_ErrorType], _NewErrorType],
-    ) -> 'Result[_ValueType, _NewErrorType]':  # pragma: no cover
+    ) -> 'Result[_ValueType, _NewErrorType]':
         """Abstract method to compose container with pure function."""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     @abstractmethod
     def rescue(
@@ -66,30 +66,30 @@ class Result(
         function: Callable[
             [_ErrorType], 'Result[_NewValueType, _NewErrorType]',
         ],
-    ) -> 'Result[_NewValueType, _NewErrorType]':  # pragma: no cover
+    ) -> 'Result[_NewValueType, _NewErrorType]':
         """Abstract method to compose container with other container."""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     @abstractmethod
     def value_or(
         self,
         default_value: _NewValueType,
-    ) -> Union[_ValueType, _NewValueType]:  # pragma: no cover
+    ) -> Union[_ValueType, _NewValueType]:
         """Get value or default value."""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     @abstractmethod
-    def unwrap(self) -> _ValueType:  # pragma: no cover
+    def unwrap(self) -> _ValueType:
         """Get value or raise exception."""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     @abstractmethod
-    def failure(self) -> _ErrorType:  # pragma: no cover
+    def failure(self) -> _ErrorType:
         """Get failed value or raise exception."""
-        raise NotImplementedError()
+        raise NotImplementedError
 
 
-@final  # noqa: Z214
+@final
 class _Failure(Result[Any, _ErrorType]):
     """
     Represents a calculation which has failed.
@@ -102,7 +102,7 @@ class _Failure(Result[Any, _ErrorType]):
 
     def __init__(self, inner_value: _ErrorType) -> None:
         """Required for typing."""
-        BaseContainer.__init__(self, inner_value)  # type: ignore # noqa: Z462
+        BaseContainer.__init__(self, inner_value)  # noqa: WPS609
 
     def map(self, function):  # noqa: A003
         """Returns the '_Failure' instance that was used to call the method."""
@@ -159,7 +159,7 @@ class _Failure(Result[Any, _ErrorType]):
         return self._inner_value
 
 
-@final  # noqa: Z214
+@final
 class _Success(Result[_ValueType, Any]):
     """
     Represents a calculation which has succeeded and contains the result.
@@ -172,7 +172,7 @@ class _Success(Result[_ValueType, Any]):
 
     def __init__(self, inner_value: _ValueType) -> None:
         """Required for typing."""
-        BaseContainer.__init__(self, inner_value)  # type: ignore # noqa: Z462
+        BaseContainer.__init__(self, inner_value)  # noqa: WPS609
 
     def map(self, function):  # noqa: A003
         """
@@ -229,7 +229,7 @@ def Failure(inner_value: _ErrorType) -> Result[Any, _ErrorType]:  # noqa: N802
     return _Failure(inner_value)
 
 
-@overload  # noqa: Z320
+@overload
 def safe(  # type: ignore
     function: Callable[..., Coroutine[_ValueType, _ErrorType, _NewValueType]],
 ) -> Callable[
@@ -256,13 +256,13 @@ def safe(function):  # noqa: C901
     Supports both async and regular functions.
     """
     if iscoroutinefunction(function):
-        async def decorator(*args, **kwargs):
+        async def decorator(*args, **kwargs):  # noqa: WPS430
             try:
                 return Success(await function(*args, **kwargs))
             except Exception as exc:
                 return Failure(exc)
     else:
-        def decorator(*args, **kwargs):
+        def decorator(*args, **kwargs):  # noqa: WPS430
             try:
                 return Success(function(*args, **kwargs))
             except Exception as exc:

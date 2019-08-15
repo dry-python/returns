@@ -21,7 +21,7 @@ sys.path.insert(0, os.path.abspath('..'))
 # -- Project information -----------------------------------------------------
 
 def _get_project_meta():
-    import tomlkit  # noqa: Z435
+    import tomlkit  # noqa: WPS433
 
     with open('../pyproject.toml') as pyproject:
         file_contents = pyproject.read()
