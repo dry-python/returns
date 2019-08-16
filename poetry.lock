@@ -774,18 +774,21 @@ description = "pytest: simple powerful testing with Python"
 name = "pytest"
 optional = false
 python-versions = ">=3.5"
-version = "5.0.1"
+version = "5.1.0"
 
 [package.dependencies]
 atomicwrites = ">=1.0"
 attrs = ">=17.4.0"
 colorama = "*"
-importlib-metadata = ">=0.12"
 more-itertools = ">=4.0.0"
 packaging = "*"
 pluggy = ">=0.12,<1.0"
 py = ">=1.5.0"
 wcwidth = "*"
+
+[package.dependencies.importlib-metadata]
+python = "<3.8"
+version = ">=0.12"
 
 [[package]]
 category = "dev"
@@ -907,7 +910,7 @@ description = "ruamel.yaml is a YAML parser/emitter that supports roundtrip pres
 name = "ruamel.yaml"
 optional = false
 python-versions = "*"
-version = "0.16.2"
+version = "0.16.4"
 
 [package.dependencies]
 [package.dependencies."ruamel.yaml.clib"]
@@ -1205,7 +1208,7 @@ python-versions = ">=2.7"
 version = "0.5.2"
 
 [metadata]
-content-hash = "05daba3594b72af3b9366dc987360503bcc4137b98d750915779eeb8dd2073ba"
+content-hash = "193439cee605a046d5015f8554759501833d993bc4d54c0c998efe9744cefb90"
 python-versions = "^3.6"
 
 [metadata.hashes]
@@ -1284,7 +1287,7 @@ pyflakes = ["17dbeb2e3f4d772725c777fabc446d5634d1038f234e77343108ce445ea69ce0", 
 pygments = ["71e430bc85c88a430f000ac1d9b331d2407f681d6f6aec95e8bcfbc3df5b0127", "881c4c157e45f30af185c1ffe8d549d48ac9127433f2c380c24b84572ad66297"]
 pyparsing = ["6f98a7b9397e206d78cc01df10131398f1c8b8510a2f4d97d9abd82e1aacdd80", "d9338df12903bbf5d65a0e4e87c2161968b10d2e489652bb47001d82a9b028b4"]
 pyreadline = ["4530592fc2e85b25b1a9f79664433da09237c1a270e4d78ea5aa3a2c7229e2d1", "65540c21bfe14405a3a77e4c085ecfce88724743a4ead47c66b84defcf82c32e", "9ce5fa65b8992dfa373bddc5b6e0864ead8f291c94fbfec05fbd5c836162e67b"]
-pytest = ["6ef6d06de77ce2961156013e9dff62f1b2688aa04d0dc244299fe7d67e09370d", "a736fed91c12681a7b34617c8fcefe39ea04599ca72c608751c31d89579a3f77"]
+pytest = ["3805d095f1ea279b9870c3eeae5dddf8a81b10952c8835cd628cf1875b0ef031", "abc562321c2d190dd63c2faadf70b86b7af21a553b61f0df5f5e1270717dc5a3"]
 pytest-asyncio = ["9fac5100fd716cbecf6ef89233e8590a4ad61d729d1732e0a96b84182df1daaf", "d734718e25cfc32d2bf78d346e99d33724deeba774cc4afdf491530c6184b63b"]
 pytest-cov = ["2b097cde81a302e1047331b48cadacf23577e431b61e9c6f49a1170bbe3d3da6", "e00ea4fdde970725482f1f35630d12f074e121a23801aabf2ae154ec6bdd343a"]
 pytest-mypy-plugins = ["36af4c45f8083be64982a2bbb78e2735cb805f0c5c8076bc70b5a071fe78b5e9", "90b451ebf8126a8eb919ecdce18eaf50fc063e0f2db99ab843f86bea77f41618"]
@@ -1295,7 +1298,7 @@ pyyaml = ["0113bc0ec2ad727182326b61326afa3d1d8280ae1122493553fd6f4397f33df9", "0
 radon = ["38e495a4aa4c1d7293d3c1733393961fb52209c9bc2d75163c3ba8124d8bbbaa", "f893f2faa632a060f6d0f01843d10a0395515bde865c759c0dd3f15239caf11b"]
 requests = ["11e007a8a2aa0323f5a921e9e6a2d7e4e67d9877e85773fba9ba6419025cbeb4", "9cf5292fcd0f598c671cfc1e0d7d1a7f13bb8085e9a590f48c010551dc6c4b31"]
 restructuredtext-lint = ["97b3da356d5b3a8514d8f1f9098febd8b41463bed6a1d9f126cf0a048b6fd908"]
-"ruamel.yaml" = ["1dce3220c6a9a91a2ac1928b2abe8358608b5ee97d485a31e931ea9f956773a4", "3e425cf46c988059f7e086d8dd4be6015748bd8bfbb13b81ebff485eaa440157"]
+"ruamel.yaml" = ["3aa5573a986ab6627c37e2c79befeff2e6eb7bcf780a49250b4fb19142309ecd", "8fa2ca602fef5d4eed9da2f49e22a04ac6d1e1a5c673bf8f65fbd0529ac2cb6c"]
 "ruamel.yaml.clib" = ["0bbe19d3e099f8ba384e1846e6b54f245f58aeec8700edbbf9abb87afa54fd82", "2f38024592613f3a8772bbc2904be027d9abf463518ba145f2d0c8e6da27009f", "44449b3764a3f75815eea8ae5930b98e8326be64a90b0f782747318f861abfe0", "5710be9a357801c31c1eaa37b9bc92d38176d785af5b2f0c9751385c5dc9659a", "5a089acb6833ed5f412e24cbe3e665683064c1429824d2819137b5ade54435c3", "6143386ddd61599ea081c012a69a16e5bdd7b3c6c231bd039534365a48940f30", "6726aaf851f5f9e4cbdd3e1e414bc700bdd39220e8bc386415fd41c87b1b53c2", "68fbc3b5d94d145a391452f886ae5fca240cb7e3ab6bd66e1a721507cdaac28a", "75ebddf99ba9e0b48f32b5bdcf9e5a2b84c017da9e0db7bf11995fa414aa09cd", "79948a6712baa686773a43906728e20932c923f7b2a91be7347993be2d745e55", "8a2dd8e8b08d369558cade05731172c4b5e2f4c5097762c6b352bd28fd9f9dc4", "c747acdb5e8c242ab2280df6f0c239e62838af4bee647031d96b3db2f9cefc04", "cadc8eecd27414dca30366b2535cb5e3f3b47b4e2d6be7a0b13e4e52e459ff9f", "cee86ecc893a6a8ecaa7c6a9c2d06f75f614176210d78a5f155f8e78d6989509", "e59af39e895aff28ee5f55515983cab3466d1a029c91c04db29da1c0f09cf333", "eee7ecd2eee648884fae6c51ae50c814acdcc5d6340dc96c970158aebcd25ac6", "ef8d4522d231cb9b29f6cdd0edc8faac9d9715c60dc7becbd6eb82c915a98e5b", "f504d45230cc9abf2810623b924ae048b224a90adb01f97db4e766cfdda8e6eb"]
 safety = ["0a3a8a178a9c96242b224f033ee8d1d130c0448b0e6622d12deaf37f6c3b4e59", "5059f3ffab3648330548ea9c7403405bbfaf085b11235770825d14c58f24cb78"]
 six = ["3350809f0555b11f552448330d0b52d5f24c91a322ea4a15ef22629740f3761c", "d16a0141ec1a18405cd4ce8b4613101da75da0e9a7aec5bdd4fa804d0e0eba73"]
