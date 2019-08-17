@@ -8,7 +8,6 @@ from typing import (
     Callable,
     Coroutine,
     Generic,
-    NoReturn,
     Optional,
     TypeVar,
     Union,
@@ -225,7 +224,7 @@ def Some(inner_value: Optional[_ValueType]) -> Maybe[_ValueType]:  # noqa: N802
 
 
 #: Public unit value of protected `_Nothing` type.
-Nothing: Maybe[NoReturn] = _Nothing()
+Nothing: Maybe[Any] = _Nothing()
 
 
 @overload
