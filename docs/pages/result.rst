@@ -32,6 +32,37 @@ since it will raise ``TypeError`` somewhere
 and other ``None`` exception-friends.
 
 
+FAQ
+---
+
+How to create unit objects?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Use ``Success`` or ``Failure`` together with the explicit annotation.
+Python's type system does not allow us to do much, so this is required:
+
+.. code:: python
+
+  def callback(arg: int) -> Result[float, int]:
+      return Success(float(arg))
+
+  first: Result[int, int] = Success(1)
+  first.bind(callback)
+
+Otherwise it would raise a ``mypy`` error:
+
+.. code:: python
+
+  first = Success(1)
+  first.bind(callback)
+  # Argument 1 to "bind" of "Result" has incompatible type
+  # "Callable[[int], Result[float, int]]";
+  # expected "Callable[[int], Result[float, NoReturn]]"
+
+This happens because ``mypy`` is unable to implicitly
+cast ``NoReturn`` to any other type.
+
+
 is_successful
 -------------
 

@@ -43,8 +43,7 @@ We allow you to do that with ease!
           """Imagine, that you need to reraise ValidationErrors due to API."""
           return self._validate_user(
               username,
-              # TODO: change in #84 to `.map_failure()`
-          ).fix(
+          ).alt(
               # What happens here is interesting, since you do not let your
               # unwrap to fail with UnwrapFailedError, but instead
               # allows you to reraise a wrapped exception.

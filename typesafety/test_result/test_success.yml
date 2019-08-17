@@ -6,7 +6,8 @@
     def returns_result(param: int) -> Result[str, Exception]:
         ...
 
-    reveal_type(Success(1).bind(returns_result))  # N: Revealed type is 'returns.result.Result[builtins.str*, builtins.Exception*]'
+    first: Result[int, Exception] = Success(1)
+    reveal_type(first.bind(returns_result))  # N: Revealed type is 'returns.result.Result[builtins.str*, builtins.Exception]'
 
 
 - case: success_map
@@ -14,7 +15,7 @@
   main: |
     from returns.result import Success, Result
 
-    reveal_type(Success(1).map(str))  # N: Revealed type is 'returns.result.Result[builtins.str*, Any]'
+    reveal_type(Success(1).map(str))  # N: Revealed type is 'returns.result.Result[builtins.str*, <nothing>]'
 
 
 - case: success_value_or

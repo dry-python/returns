@@ -8,7 +8,7 @@ from typing_extensions import final
 
 from returns.primitives.container import BaseContainer
 
-_ValueType = TypeVar('_ValueType')
+_ValueType = TypeVar('_ValueType', covariant=True)
 _NewValueType = TypeVar('_NewValueType')
 
 # Helpers:

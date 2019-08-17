@@ -1,20 +1,34 @@
 # -*- coding: utf-8 -*-
 
-from abc import ABCMeta, abstractmethod
+from abc import ABCMeta
 from functools import wraps
 from inspect import iscoroutinefunction
-from typing import Any, Callable, Coroutine, Generic, TypeVar, Union, overload
+from typing import (
+    Any,
+    Callable,
+    Coroutine,
+    Generic,
+    NoReturn,
+    TypeVar,
+    Union,
+    overload,
+)
 
 from typing_extensions import final
 
 from returns.primitives.container import BaseContainer
 from returns.primitives.exceptions import UnwrapFailedError
 
-# Regular type vars, work correctly:
-_ValueType = TypeVar('_ValueType')
+# Definitions:
+_ValueType = TypeVar('_ValueType', covariant=True)
 _NewValueType = TypeVar('_NewValueType')
-_ErrorType = TypeVar('_ErrorType')
+_ErrorType = TypeVar('_ErrorType', covariant=True)
 _NewErrorType = TypeVar('_NewErrorType')
+
+# Aliases:
+_DefaultValueType = TypeVar('_DefaultValueType')
+_FirstType = TypeVar('_FirstType')
+_SecondType = TypeVar('_SecondType')
 
 
 class Result(
@@ -22,68 +36,76 @@ class Result(
     BaseContainer,
     metaclass=ABCMeta,
 ):
-    """Base class for _Failure and _Success."""
+    """
+    Base class for :py:`_Failure` and :py:`_Success`.
+
+    :py:`Result` does not have
+    """
 
     _inner_value: Union[_ValueType, _ErrorType]
 
-    @abstractmethod  # noqa: A003
-    def map(
+    def map(  # noqa: A003
         self,
         function: Callable[[_ValueType], _NewValueType],
     ) -> 'Result[_NewValueType, _ErrorType]':
-        """Abstract method to compose container with pure function."""
+        """Abstract method to compose container with a pure function."""
         raise NotImplementedError
 
-    @abstractmethod
     def bind(
         self,
-        function: Callable[
-            [_ValueType], 'Result[_NewValueType, _NewErrorType]',
-        ],
-    ) -> 'Result[_NewValueType, _NewErrorType]':
-        """Abstract method to compose container with other container."""
+        function: Callable[[_ValueType], 'Result[_NewValueType, _ErrorType]'],
+    ) -> 'Result[_NewValueType, _ErrorType]':
+        """Abstract method to compose a container with another container."""
         raise NotImplementedError
 
-    @abstractmethod
     def fix(
         self,
         function: Callable[[_ErrorType], _NewValueType],
     ) -> 'Result[_NewValueType, _ErrorType]':
-        """Abstract method to compose container with pure function."""
+        """
+        Abstract method to compose failed container and a pure function.
+
+        This pure function should return a new state
+        for a successful container.
+        """
         raise NotImplementedError
 
-    @abstractmethod
-    def map_failure(
+    def alt(
         self,
         function: Callable[[_ErrorType], _NewErrorType],
     ) -> 'Result[_ValueType, _NewErrorType]':
-        """Abstract method to compose container with pure function."""
+        """
+        Abstract method to compose failed container and a pure function.
+
+        This pure function should return a new state
+        for a new failed container.
+        """
         raise NotImplementedError
 
-    @abstractmethod
     def rescue(
         self,
         function: Callable[
-            [_ErrorType], 'Result[_NewValueType, _NewErrorType]',
+            [_ErrorType], 'Result[_ValueType, _NewErrorType]',
         ],
-    ) -> 'Result[_NewValueType, _NewErrorType]':
-        """Abstract method to compose container with other container."""
+    ) -> 'Result[_ValueType, _NewErrorType]':
+        """
+        Abstract method to compose a failed container with another container.
+
+        This method is the oposite of ``.bind()``.
+        """
         raise NotImplementedError
 
-    @abstractmethod
     def value_or(
         self,
-        default_value: _NewValueType,
-    ) -> Union[_ValueType, _NewValueType]:
+        default_value: _DefaultValueType,
+    ) -> Union[_ValueType, _DefaultValueType]:
         """Get value or default value."""
         raise NotImplementedError
 
-    @abstractmethod
     def unwrap(self) -> _ValueType:
         """Get value or raise exception."""
         raise NotImplementedError
 
-    @abstractmethod
     def failure(self) -> _ErrorType:
         """Get failed value or raise exception."""
         raise NotImplementedError
@@ -107,17 +129,6 @@ class _Failure(Result[Any, _ErrorType]):
     def map(self, function):  # noqa: A003
         """Returns the '_Failure' instance that was used to call the method."""
         return self
-
-    def map_failure(self, function):
-        """
-        Applies function to the error value.
-
-        Applies 'function' to the contents of the '_Failure' instance
-        and returns a new '_Failure' object containing the result.
-        'function' should accept a single "normal" (non-container) argument
-        and return a non-container result.
-        """
-        return _Failure(function(self._inner_value))
 
     def bind(self, function):
         """Returns the '_Failure' instance that was used to call the method."""
@@ -143,6 +154,17 @@ class _Failure(Result[Any, _ErrorType]):
         """
         return function(self._inner_value)
 
+    def alt(self, function):
+        """
+        Applies function to the error value.
+
+        Applies 'function' to the contents of the '_Failure' instance
+        and returns a new '_Failure' object containing the result.
+        'function' should accept a single "normal" (non-container) argument
+        and return a non-container result.
+        """
+        return _Failure(function(self._inner_value))
+
     def value_or(self, default_value):
         """Returns the value if we deal with '_Success' or default otherwise."""
         return default_value
@@ -151,7 +173,6 @@ class _Failure(Result[Any, _ErrorType]):
         """Raises an exception, since it does not have a value inside."""
         if isinstance(self._inner_value, Exception):
             raise UnwrapFailedError(self) from self._inner_value
-
         raise UnwrapFailedError(self)
 
     def failure(self):
@@ -185,10 +206,6 @@ class _Success(Result[_ValueType, Any]):
         """
         return _Success(function(self._inner_value))
 
-    def map_failure(self, function):
-        """Returns the '_Success' instance that was used to call the method."""
-        return self
-
     def bind(self, function):
         """
         Applies 'function' to the result of a previous calculation.
@@ -206,6 +223,10 @@ class _Success(Result[_ValueType, Any]):
         """Returns the '_Success' instance that was used to call the method."""
         return self
 
+    def alt(self, function):
+        """Returns the '_Success' instance that was used to call the method."""
+        return self
+
     def value_or(self, default_value):
         """Returns the value if we deal with '_Success' or default otherwise."""
         return self._inner_value
@@ -219,30 +240,34 @@ class _Success(Result[_ValueType, Any]):
         raise UnwrapFailedError(self)
 
 
-def Success(inner_value: _ValueType) -> Result[_ValueType, Any]:  # noqa: N802
+def Success(  # noqa: N802
+    inner_value: _ValueType,  # type: ignore
+) -> Result[_ValueType, NoReturn]:
     """Public unit function of protected `_Success` type."""
     return _Success(inner_value)
 
 
-def Failure(inner_value: _ErrorType) -> Result[Any, _ErrorType]:  # noqa: N802
+def Failure(  # noqa: N802
+    inner_value: _ErrorType,  # type: ignore
+) -> Result[NoReturn, _ErrorType]:
     """Public unit function of protected `_Failure` type."""
     return _Failure(inner_value)
 
 
 @overload
 def safe(  # type: ignore
-    function: Callable[..., Coroutine[_ValueType, _ErrorType, _NewValueType]],
+    function: Callable[..., Coroutine[_FirstType, _SecondType, _ValueType]],
 ) -> Callable[
     ...,
-    Coroutine[_ValueType, _ErrorType, Result[_NewValueType, Exception]],
+    Coroutine[_FirstType, _SecondType, Result[_ValueType, Exception]],
 ]:
     """Case for async functions."""
 
 
 @overload
 def safe(
-    function: Callable[..., _NewValueType],
-) -> Callable[..., Result[_NewValueType, Exception]]:
+    function: Callable[..., _ValueType],
+) -> Callable[..., Result[_ValueType, Exception]]:
     """Case for regular functions."""
 
 

@@ -7,6 +7,7 @@ you will need to get familiar with these concepts:
 
 - http://learnyouahaskell.com/functors-applicative-functors-and-monoids
 - https://github.com/dbrattli/OSlash/wiki/Functors,-Applicatives,-And-Monads-In-Pictures
+- https://gcanti.github.io/fp-ts/
 
 Here are some practical examples of what we are doing here:
 

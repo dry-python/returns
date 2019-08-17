@@ -35,6 +35,8 @@ plugins =
   returns.contrib.mypy.decorator_plugin
 ```
 
+We also recommend to use the same `mypy` settings [we use](https://github.com/wemake-services/wemake-python-styleguide/blob/master/styles/mypy.toml).
+
 Make sure you know how to get started, [check out our docs](https://returns.readthedocs.io/en/latest/)!
 
 
@@ -155,12 +157,11 @@ and wrap it inside a new `Failure[Exception]`!
 And we can clearly see all result patterns
 that might happen in this particular case:
 - `Success[UserProfile]`
-- `Failure[HttpException]`
-- `Failure[JsonDecodeException]`
+- `Failure[Exception]`
 
 And we can work with each of them precisely.
-It is a good practice to create `Enum` classes or `Union` types
-with a list of all the possible errors.
+It is a good practice to create `Enum` classes or `Union` sum type
+with all the possible errors.
 
 
 ## IO marker

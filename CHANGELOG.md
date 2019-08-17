@@ -7,12 +7,21 @@ We follow Semantic Versions since the `0.1.0` release.
 
 ### Features
 
+- Now `bind` does not change the type of an error
+- Now `rescue` does not change the type of a value
+- Renames `map_failure` to `alt`
 - Adds `__hash__` magic methods to all containers
+
+### Bugfixes
+
+- Changes `Any` to `NoReturn` in `Success` and `Failure`
+- Now all type parameters in `Result`, `Maybe`, and `IO` are covariant
 
 ### Misc
 
 - Updates `mypy` version
 - Updates `wemake-python-styleguide` and introduces `nitpick`
+- Updates `pytest-plugin-mypy`
 
 
 ## 0.9.0

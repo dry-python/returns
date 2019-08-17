@@ -8,6 +8,7 @@ from typing import (
     Callable,
     Coroutine,
     Generic,
+    NoReturn,
     Optional,
     TypeVar,
     Union,
@@ -19,10 +20,13 @@ from typing_extensions import final
 from returns.primitives.container import BaseContainer
 from returns.primitives.exceptions import UnwrapFailedError
 
-# Aliases:
-_ValueType = TypeVar('_ValueType')
+# Definitions:
+_ValueType = TypeVar('_ValueType', covariant=True)
 _NewValueType = TypeVar('_NewValueType')
-_ErrorType = TypeVar('_ErrorType')
+
+# Aliases:
+_FirstType = TypeVar('_FirstType')
+_SecondType = TypeVar('_SecondType')
 
 
 class Maybe(
@@ -113,7 +117,7 @@ class _Nothing(Maybe[Any]):
         """
         Wraps the given value in the Container.
 
-        'value' can only be ``None``.
+        ``inner_value`` can only be ``None``.
         """
         BaseContainer.__init__(self, inner_value)  # noqa: WPS609
 
@@ -221,26 +225,26 @@ def Some(inner_value: Optional[_ValueType]) -> Maybe[_ValueType]:  # noqa: N802
 
 
 #: Public unit value of protected `_Nothing` type.
-Nothing: Maybe[Any] = _Nothing()
+Nothing: Maybe[NoReturn] = _Nothing()
 
 
 @overload
 def maybe(  # type: ignore
     function: Callable[
         ...,
-        Coroutine[_ValueType, _ErrorType, Optional[_NewValueType]],
+        Coroutine[_FirstType, _SecondType, Optional[_ValueType]],
     ],
 ) -> Callable[
     ...,
-    Coroutine[_ValueType, _ErrorType, Maybe[_NewValueType]],
+    Coroutine[_FirstType, _SecondType, Maybe[_ValueType]],
 ]:
     """Case for async functions."""
 
 
 @overload
 def maybe(
-    function: Callable[..., Optional[_NewValueType]],
-) -> Callable[..., Maybe[_NewValueType]]:
+    function: Callable[..., Optional[_ValueType]],
+) -> Callable[..., Maybe[_ValueType]]:
     """Case for regular functions."""
 
 

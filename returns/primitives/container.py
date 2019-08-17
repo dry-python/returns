@@ -111,7 +111,7 @@ class Fixable(Protocol[_ValueType, _ErrorType]):
 
 
 @runtime
-class Rescueable(Protocol[_ValueType, _ErrorType]):
+class Rescueable(Protocol[_NewValueType, _ErrorType]):
     """
     Represents a "context" in which calculations can be executed.
 
@@ -159,7 +159,7 @@ class Unwrapable(Protocol[_ValueType]):
 class UnwrapableFailure(Protocol[_ValueType, _ErrorType]):
     """Allows to unwrap failures."""
 
-    def map_failure(
+    def alt(
         self,
         function: Callable[[_ErrorType], _NewErrorType],
     ) -> 'Fixable[_ValueType, _NewErrorType]':

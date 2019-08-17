@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from typing import Any
-
 from returns.result import Failure, Result, Success
 
 
@@ -13,45 +11,44 @@ def test_bind():
         return Failure(str(inner_value))
 
     input_value = 5
-    bound: Result[int, str] = Success(input_value).bind(factory)
+    bound: Result[int, str] = Success(input_value)
 
-    assert bound == factory(input_value)
-    assert str(bound) == '<Success: 10>'
+    assert bound.bind(factory) == factory(input_value)
+    assert str(bound.bind(factory)) == '<Success: 10>'
 
     input_value = 0
-    bound = Success(input_value).bind(factory)
+    bound2: Result[int, str] = Success(input_value)
 
-    assert bound == factory(input_value)
-    assert str(bound) == '<Failure: 0>'
+    assert bound2.bind(factory) == factory(input_value)
+    assert str(bound2.bind(factory)) == '<Failure: 0>'
 
 
 def test_left_identity_success():
     """Ensures that left identity works for Success container."""
-    def factory(inner_value: int) -> Result[int, Any]:
+    def factory(inner_value: int) -> Result[int, str]:
         return Success(inner_value * 2)
 
     input_value = 5
-    bound = Success(input_value).bind(factory)
+    bound: Result[int, str] = Success(input_value)
 
-    assert bound == factory(input_value)
-    assert str(bound) == '<Success: 10>'
+    assert bound.bind(factory) == factory(input_value)
 
 
 def test_left_identity_failure():
     """Ensures that left identity works for Failure container."""
-    def factory(inner_value: int) -> Result[Any, TypeError]:
-        return Failure(TypeError())
+    def factory(inner_value: int) -> Result[int, int]:
+        return Failure(6)
 
     input_value = 5
-    bound = Failure(input_value).bind(factory)
+    bound: Result[int, int] = Failure(input_value)
 
-    assert bound == Failure(input_value)
+    assert bound.bind(factory) == Failure(input_value)
     assert str(bound) == '<Failure: 5>'
 
 
 def test_rescue_success():
     """Ensures that rescue works for Success container."""
-    def factory(inner_value: int) -> Result[int, Any]:
+    def factory(inner_value) -> Result[int, str]:
         return Success(inner_value * 2)
 
     bound = Success(5).rescue(factory)
@@ -62,11 +59,11 @@ def test_rescue_success():
 
 def test_rescue_failure():
     """Ensures that rescue works for Failure container."""
-    def factory(inner_value: int) -> Result[Any, float]:
-        return Failure(float(inner_value + 1))
+    def factory(inner_value: int) -> Result[str, int]:
+        return Failure(inner_value + 1)
 
-    expected = 6.0
-    bound = Failure(5).rescue(factory)
+    expected = 6
+    bound: Result[str, int] = Failure(5)
 
-    assert bound == Failure(expected)
-    assert str(bound) == '<Failure: 6.0>'
+    assert bound.rescue(factory) == Failure(expected)
+    assert str(bound.rescue(factory)) == '<Failure: 6>'

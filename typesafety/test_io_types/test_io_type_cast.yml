@@ -1,0 +1,8 @@
+- case: io_correct_cast
+  disable_cache: true
+  main: |
+    from returns.io import IO
+
+    first: IO[ValueError]  # we cast both values
+    second: IO[Exception] = first
+    reveal_type(second)  # N: Revealed type is 'returns.io.IO[builtins.Exception]'

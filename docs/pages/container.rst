@@ -57,11 +57,12 @@ is used to literally bind two different containers together.
 
   from returns.result import Result, Success
 
-  def may_fail(user_id: int) -> Result[int, str]:
+  def may_fail(user_id: int) -> Result[float, str]:
       ...
 
-  # Can be assumed as either Success[int] or Failure[str]:
-  result: Result[int, str] = Success(1).bind(may_fail)
+  value: Result[int, str] = Success(1)
+  # Can be assumed as either Success[float] or Failure[str]:
+  result: Result[float, str] = value.bind(may_fail)
 
 And we have :func:`~returns.primitives.container.Mappable.map`
 to use containers with regular functions.
@@ -105,7 +106,7 @@ It mean that our code can go on two tracks:
 2. Failed one: where something went wrong
 
 We can switch from track to track: we can fail something
-or we can rescue the situation.
+or we can fix the situation.
 
 .. mermaid::
   :caption: Railway oriented programming.
@@ -123,7 +124,7 @@ or we can rescue the situation.
        F2 -- Fix --> S3
        S3 -- Fail --> F4
        S5 -- Fail --> F6
-       F6 -- Rescue --> S7
+       F6 -- Fix --> S7
 
        style S1 fill:green
        style S3 fill:green
@@ -147,7 +148,7 @@ types like ``Failure``:
   transforms error to value (failure became success)
   that works only when container is in failed state,
   is the opposite of ``map`` method
-- :func:`~returns.primitives.container.UnwrapableFailure.map_failure`
+- :func:`~returns.primitives.container.UnwrapableFailure.alt`
   transforms error to another error
   that works only when container is in failed state,
   is the opposite of ``map`` method
@@ -162,7 +163,7 @@ during the pipeline execution:
   def double(state: int) -> float:
       return state * 2.0
 
-  result: Result[Any, float] = Failure(1).map_failure(double)
+  result: Result[Any, float] = Failure(1).alt(double)
   # => Failure(2.0)
 
   result: Result[float, int] = Failure(1).fix(double)
@@ -180,14 +181,12 @@ It can also rescue your flow and get on the successful track again:
           return Success(0)
       return Failure(state)
 
-  result: Result[int, Exception] = Failure(
-      ZeroDivisionError(),
-  ).rescue(tolerate_exception)
+  value: Result[int, Exception] = Failure(ZeroDivisionError())
+  result: Result[int, Exception] = value.rescue(tolerate_exception)
   # => Success(0)
 
-  result2: Result[int, Exception] = Failure(
-      ValueError(),
-  ).rescue(tolerate_exception)
+  value2: Result[int, Exception] = Failure(ValueError())
+  result2: Result[int, Exception] = value2.rescue(tolerate_exception)
   # => Failure(ValueError())
 
 

@@ -10,7 +10,7 @@ from returns.result import Result
     'map',
     'rescue',
     'fix',
-    'map_failure',
+    'alt',
     'value_or',
 ])
 def test_result_abstract_method(method_name):
