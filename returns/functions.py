@@ -22,11 +22,9 @@ def compose(
 
     .. code:: python
 
-      from returns.functions import compose
-
-      logged_int = compose(int, print)('123')
-      # => returns: 123
-      # => prints: 123
+      >>> from returns.functions import compose
+      >>> compose(float, int)('123.5')
+      123
 
     We can only compose functions with one argument and one return.
     Type checked.
@@ -39,19 +37,22 @@ def raise_exception(exception: Exception) -> NoReturn:
     Helper function to raise exceptions as a function.
 
     It might be required as a compatibility tool for existing APIs.
-
     That's how it can be used:
 
     .. code:: python
 
-      from returns.functions import raise_exception
+      >>> from returns.functions import raise_exception
+      >>> from returns.result import Failure, Result
+      >>> # Some operation result:
+      >>> user: Result[int, ValueError] = Failure(ValueError('boom'))
+      >>> # Here we unwrap internal exception and raise it:
+      >>> user.fix(raise_exception)
+      Traceback (most recent call last):
+        ...
+      ValueError: boom
 
-      # Some operation result:
-      user: Failure[UserDoesNotExistError]
+    See also:
+        - https://github.com/dry-python/returns/issues/56
 
-      # Here we unwrap internal exception and raise it:
-      user.fix(raise_exception)
-
-    See: https://github.com/dry-python/returns/issues/56
     """
     raise exception

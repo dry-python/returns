@@ -9,9 +9,9 @@ while maintaining the execution context.
 
 List of supported containers:
 
+- :class:`Maybe <returns.maybe.Maybe>` to handle ``None`` cases
 - :class:`IO <returns.io.IO>` to mark explicit ``IO`` actions
 - :class:`Result <returns.result.Result>` to handle possible exceptions
-- :class:`Maybe <returns.maybe.Maybe>` to handle ``None`` cases
 
 We will show you container's simple API of one attribute
 and several simple methods.

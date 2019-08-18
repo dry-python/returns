@@ -83,8 +83,8 @@ class IO(Generic[_ValueType], BaseContainer):
           True
 
         See also:
-            https://wiki.haskell.org/Lifting
-            https://github.com/witchcrafters/witchcraft
+            - https://wiki.haskell.org/Lifting
+            - https://github.com/witchcrafters/witchcraft
 
         """
         return lambda container: cls.map(container, function)

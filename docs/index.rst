@@ -17,10 +17,10 @@ Contents
   :caption: Userguide
 
   pages/container.rst
-  pages/result.rst
   pages/maybe.rst
   pages/io.rst
-  pages/unsafe.rst
+  pages/result.rst
+  pages/pipeline.rst
   pages/functions.rst
 
 .. toctree::
@@ -31,7 +31,7 @@ Contents
 
 
 Indices and tables
-==================
+------------------
 
 * :ref:`genindex`
 * :ref:`modindex`

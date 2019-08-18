@@ -23,6 +23,35 @@ functions with one argument and one return to be composed.
 Only works with regular functions (not async).
 
 
+box
+---
+
+Without ``box()`` it would be very hard to declaratively compose two entities:
+
+1. Existings container
+2. Existing functions that accepts a regular value and returns a container
+
+We can compose these entities with ``.bind`` when calling it directly,
+but how can we do it inversevely?
+
+.. code:: python
+
+  from returns.functions import box
+  from returns.maybe import Maybe
+
+  def bindable(arg: int) -> Maybe[str]:
+      ...
+
+  container: Maybe[int]
+  # We now have two way of composining these entities.
+  # 1. Via ``.bind``:
+  container.bind(bindable)  # works!
+  # 2. Or via ``box``, the same but in the inverse way:
+  box(bindable)(container)
+
+That's it.
+
+
 raise_exception
 ---------------
 
@@ -65,3 +94,5 @@ API Reference
 
 .. automodule:: returns.functions
    :members:
+
+.. autofunction:: returns.functions.box

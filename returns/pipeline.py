@@ -56,7 +56,7 @@ def pipeline(function: _ReturnsResultType) -> _ReturnsResultType:
 
 def pipeline(function):  # noqa: C901
     """
-    Decorator to enable 'do-notation' context.
+    Decorator to enable ``do-notation`` context.
 
     Should be used for series of computations that rely on ``.unwrap`` method.
 

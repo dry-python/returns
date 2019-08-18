@@ -42,9 +42,41 @@ Make sure you know how to get started, [check out our docs](https://returns.read
 
 ## Contents
 
+- [Maybe container](#maybe-container) that allows you to write `None`-free code
 - [Result container](#result-container) that let's you to get rid of exceptions
 - [IO marker](#io-marker) that marks all impure operations and structures them
-- [Maybe container](#maybe-container) that allows you to write `None`-free code
+
+
+## Maybe container
+
+`None` is called the [worst mistake in the history of Computer Science](https://www.infoq.com/presentations/Null-References-The-Billion-Dollar-Mistake-Tony-Hoare/).
+
+So, what can we do to check for `None` in our programs?
+You can use `Optional` and write a lot of `if some is not None:` conditions.
+But, having them here and there makes your code unreadable.
+
+Or you can use
+[Maybe](https://returns.readthedocs.io/en/latest/pages/maybe.html) container!
+It consists of `Some` and `Nothing` types,
+representing existing state and empty (instead of `None`) state respectively.
+
+```python
+from typing import Optional
+from returns.maybe import Maybe, maybe
+
+@maybe  # decorator to convert existing Optional[int] to Maybe[int]
+def bad_function() -> Optional[int]:
+    ...
+
+maybe_result: Maybe[float] = bad_function().map(
+    lambda number: number / 2,
+)
+# => Maybe will return Some[float] only if there's a non-None value
+#    Otherwise, will return Nothing
+```
+
+You can be sure that `.map()` method won't be called for `Nothing`.
+Forget about `None`-related errors forever!
 
 
 ## Result container
@@ -113,7 +145,7 @@ Our code will become complex and unreadable with all this mess!
 import requests
 from returns.result import Result, safe
 from returns.pipeline import pipe
-from returns.functions import lift
+from returns.functions import box
 
 class FetchUserProfile(object):
     """Single responsibility callable object that fetches user profile."""
@@ -123,7 +155,7 @@ class FetchUserProfile(object):
         return pipe(
             user_id,
             self._make_request,
-            lift(self._parse_json),
+            box(self._parse_json),
         )
 
     @safe
@@ -137,13 +169,19 @@ class FetchUserProfile(object):
         return response.json()
 ```
 
-Now we have a clean and a safe way to express our business need.
+Now we have a clean and a safe and declarative way
+to express our business need.
 We start from making a request, that might fail at any moment.
+Then parsing the response if the request was successful.
+And then return the result.
+It all happens smoothly due to [pipe](https://returns.readthedocs.io/en/latest/pages/pipeline.html#pipe) function.
+
+We also use [box](https://returns.readthedocs.io/en/latest/pages/functions.html#box) for handy composition.
 
 Now, instead of returning a regular value
 it returns a wrapped value inside a special container
 thanks to the
-[@safe](https://returns.readthedocs.io/en/latest/pages/functions.html#returns.functions.safe)
+[@safe](https://returns.readthedocs.io/en/latest/pages/result.html#safe)
 decorator.
 
 It will return [Success[Response] or Failure[Exception]](https://returns.readthedocs.io/en/latest/pages/result.html).
@@ -188,7 +226,7 @@ import requests
 from returns.io import IO, impure
 from returns.result import Result, safe
 from returns.pipeline import pipe
-from returns.functions import lift, lift_io
+from returns.functions import box
 
 class FetchUserProfile(object):
     """Single responsibility callable object that fetches user profile."""
@@ -198,9 +236,9 @@ class FetchUserProfile(object):
         return pipe(
             user_id,
             self._make_request,
-            # lift: def (Result) -> Result
-            # lift_io: def (IO[Result]) -> IO[Result]
-            lift(box(self._parse_json), IO),
+            # after box: def (Result) -> Result
+            # after IO.lift: def (IO[Result]) -> IO[Result]
+            IO.lift(box(self._parse_json)),
         )
 
     @impure
@@ -221,39 +259,6 @@ and these markers cannot be removed.
 Whenever we access `FetchUserProfile` we now know
 that it does `IO` and might fail.
 So, we act accordingly!
-
-
-## Maybe container
-
-`None` is called the [worst mistake in the history of Computer Science](https://www.infoq.com/presentations/Null-References-The-Billion-Dollar-Mistake-Tony-Hoare/).
-
-So, what can we do?
-You can use `Optional` and write a lot of `if some is not None` conditions.
-But, having them here and there makes your code unreadable.
-
-Or you can use
-[Maybe](https://returns.readthedocs.io/en/latest/pages/maybe.html) container!
-It consists of `Some` and `Nothing` types,
-representing existing state and empty (instead of `None`) state respectively.
-
-```python
-from typing import Optional
-from returns.maybe import Maybe, maybe
-
-@maybe
-def bad_function() -> Optional[int]:
-    ...
-
-maybe_result: Maybe[float] = bad_function().map(
-    lambda number: number / 2,
-)
-# => Maybe will return Some[float] only if there's a non-None value
-#    Otherwise, will return Nothing
-```
-
-It follows the same composition rules as the `Result` type.
-You can be sure that `.map()` method won't be called for `Nothing`.
-Forget about `None`-related errors forever!
 
 
 ## More!

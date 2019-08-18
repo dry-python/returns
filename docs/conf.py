@@ -74,6 +74,10 @@ autodoc_default_flags = {
     'exclude-members': '__dict__,__weakref__',
 }
 
+# Set `typing.TYPE_CHECKING` to `True`:
+# https://pypi.org/project/sphinx-autodoc-typehints/
+set_type_checking_flag = False
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 

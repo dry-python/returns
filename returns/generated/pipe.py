@@ -21,8 +21,8 @@ def _pipe(initial, *functions):
        '1.0'
 
     See also:
-        https://stackoverflow.com/a/41585450/4842742
-        https://github.com/gcanti/fp-ts/blob/master/src/pipeable.ts
+        - https://stackoverflow.com/a/41585450/4842742
+        - https://github.com/gcanti/fp-ts/blob/master/src/pipeable.ts
 
     """
     return reduce(compose, functions)(initial)

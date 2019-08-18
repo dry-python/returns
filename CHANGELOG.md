@@ -15,10 +15,10 @@ See (0Ver)[https://0ver.org/].
 - **Breaking**: Now `bind` does not change the type of an error
 - **Breaking**: Now `rescue` does not change the type of a value
 - **Breaking**: Renames `map_failure` to `alt`
-- Adds `lift()` function with the ability
-  to lift function for direct container composition like:
+- Adds `box()` function with the ability
+  to box function for direct container composition like:
   `a -> Container[b]` to `Container[a] -> Container[b]`
-- Adds `lift_io()` function to lift `a -> a` to `IO[a] -> IO[a]`
+- Adds `IO.lift()` function to lift `a -> a` to `IO[a] -> IO[a]`
 - Adds `pipe()` function to `pipeline.py`
 - Adds `__hash__()` magic methods to all containers
 

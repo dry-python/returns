@@ -37,9 +37,9 @@ class Result(
     metaclass=ABCMeta,
 ):
     """
-    Base class for :py:`_Failure` and :py:`_Success`.
+    Base class for :class:`~_Failure` and :class:`~_Success`.
 
-    :py:`Result` does not have
+    :class:`~Result` does not have
     """
 
     _inner_value: Union[_ValueType, _ErrorType]

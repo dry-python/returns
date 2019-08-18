@@ -140,6 +140,27 @@ We can track it, we can fight it, we can design it better.
 By saying that, it is assumed that
 you have a functional core and imperative shell.
 
+Lifting
+~~~~~~~
+
+You can also lift regular function into one
+that works with ``IO`` on both ends. It really helps you with the composition!
+
+.. code:: python
+
+  def regular_function(arg: int) -> float:
+      return arg / 2  # not an `IO` operation
+
+  container: IO[int]
+  # When we need to compose `regular_function` with `IO`,
+  # we have two ways of doing it:
+  container.map(regular_function)
+  # or, it is the same as:
+  IO.lift(regular_function)(container)
+
+The second variant is useful when using :func:`returns.pipeline.pipe`
+and other different declarative tools.
+
 
 impure
 ------
@@ -171,6 +192,42 @@ Limitations
 Typing will only work correctly
 if :ref:`decorator_plugin <type-safety>` is used.
 This happens due to `mypy issue <https://github.com/python/mypy/issues/3157>`_.
+
+
+unsafe_perform_io
+-----------------
+
+Sometimes you really need to get the raw value from ``IO`` container.
+For example:
+
+.. code:: python
+
+  def index_view(request, user_id):
+      user: IO[User] = get_user(user_id)
+      return render('index.html', { user: user })  # ???
+
+In this case your web-framework will not render your user correctly.
+Since it does not expect it to be wrapped inside ``IO`` containers.
+And we obviously cannot ``map`` or ``bind`` this function.
+
+What to do? Use :func:`unsafe_perform_io <returns.unsafe.unsafe_perform_io>`:
+
+.. code::
+
+  from returns.unsafe import unsafe_perform_io
+
+  def index_view(request, user_id):
+      user: IO[User] = get_user(user_id)
+      return render('index.html', { user: unsafe_perform_io(user) })  # Ok
+
+We need it as an escape and compatibility mechanism for our imperative shell.
+
+It is recommended
+to use `import-linter <https://github.com/seddonym/import-linter>`_
+to restrict imports from ``returns.unsafe`` expect the top-level modules.
+
+Inspired by Haskell's
+`unsafePerformIO <https://hackage.haskell.org/package/base-4.12.0.0/docs/System-IO-Unsafe.html#v:unsafePerformIO>`_
 
 
 FAQ
@@ -237,4 +294,7 @@ API Reference
 .. autoclasstree:: returns.io
 
 .. automodule:: returns.io
+   :members:
+
+.. automodule:: returns.unsafe
    :members:
