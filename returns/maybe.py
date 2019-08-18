@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from abc import ABCMeta, abstractmethod
+from abc import ABCMeta
 from functools import wraps
 from inspect import iscoroutinefunction
 from typing import (
@@ -51,15 +51,13 @@ class Maybe(
             return _Nothing(inner_value)
         return _Some(inner_value)
 
-    @abstractmethod  # noqa: A003
-    def map(
+    def map(  # noqa: A003
         self,
         function: Callable[[_ValueType], Optional[_NewValueType]],
     ) -> 'Maybe[_NewValueType]':
         """Abstract method to compose container with a pure function."""
         raise NotImplementedError
 
-    @abstractmethod
     def bind(
         self,
         function: Callable[[_ValueType], 'Maybe[_NewValueType]'],
@@ -67,7 +65,6 @@ class Maybe(
         """Abstract method to compose container with other container."""
         raise NotImplementedError
 
-    @abstractmethod
     def fix(
         self,
         function: Union[
@@ -80,7 +77,6 @@ class Maybe(
         """Abstract method to compose container with a pure function."""
         raise NotImplementedError
 
-    @abstractmethod
     def rescue(
         self,
         function: Union[
@@ -93,7 +89,6 @@ class Maybe(
         """Abstract method to compose container with other container."""
         raise NotImplementedError
 
-    @abstractmethod
     def value_or(
         self,
         default_value: _NewValueType,
@@ -101,7 +96,6 @@ class Maybe(
         """Get value or default value."""
         raise NotImplementedError
 
-    @abstractmethod
     def unwrap(self) -> _ValueType:
         """Get value or raise exception."""
         raise NotImplementedError

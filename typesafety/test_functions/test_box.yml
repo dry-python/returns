@@ -1,0 +1,34 @@
+- case: box_io
+  disable_cache: true
+  main: |
+    from returns.functions import box
+    from returns.io import IO
+
+    def test(arg: float) -> IO[int]:
+        return IO(1)
+
+    reveal_type(box(test))  # N: Revealed type is 'def (returns.io.IO[builtins.float*]) -> returns.io.IO[builtins.int*]'
+
+
+- case: box_maybe
+  disable_cache: true
+  main: |
+    from returns.functions import box
+    from returns.maybe import Maybe, Some
+
+    def test(arg: float) -> Maybe[int]:
+        return Some(int(arg))
+
+    reveal_type(box(test))  # N: Revealed type is 'def (returns.maybe.Maybe[builtins.float*]) -> returns.maybe.Maybe[builtins.int*]'
+
+
+- case: box_result
+  disable_cache: true
+  main: |
+    from returns.functions import box
+    from returns.result import Result, Success
+
+    def test(arg: float) -> Result[int, str]:
+        return Success(int(arg))
+
+    reveal_type(box(test))  # N: Revealed type is 'def (returns.result.Result[builtins.float*, builtins.str*]) -> returns.result.Result[builtins.int*, builtins.str*]'

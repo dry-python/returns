@@ -107,20 +107,24 @@ just to catch the expected exceptions.
 
 Our code will become complex and unreadable with all this mess!
 
-### Pipeline example
+### Pipe example
 
 ```python
 import requests
-from returns.result import Result, pipeline, safe
+from returns.result import Result, safe
+from returns.pipeline import pipe
+from returns.functions import lift
 
 class FetchUserProfile(object):
     """Single responsibility callable object that fetches user profile."""
 
-    @pipeline
     def __call__(self, user_id: int) -> Result['UserProfile', Exception]:
-        """Fetches UserProfile dict from foreign API."""
-        response = self._make_request(user_id).unwrap()
-        return self._parse_json(response)
+        """Fetches `UserProfile` TypedDict from foreign API."""
+        return pipe(
+            user_id,
+            self._make_request,
+            lift(self._parse_json),
+        )
 
     @safe
     def _make_request(self, user_id: int) -> requests.Response:
@@ -145,19 +149,13 @@ decorator.
 It will return [Success[Response] or Failure[Exception]](https://returns.readthedocs.io/en/latest/pages/result.html).
 And will never throw this exception at us.
 
-When we will need raw value, we can use `.unwrap()` method to get it.
-If the result is `Failure[Exception]`
-we will actually raise an exception at this point.
-But it is safe to use `.unwrap()` inside
-[@pipeline](https://returns.readthedocs.io/en/latest/pages/functions.html#returns.functions.pipeline)
-functions.
-Because it will catch this exception
-and wrap it inside a new `Failure[Exception]`!
-
 And we can clearly see all result patterns
 that might happen in this particular case:
 - `Success[UserProfile]`
 - `Failure[Exception]`
+
+For more complex cases there's a [@pipeline](https://returns.readthedocs.io/en/latest/pages/functions.html#returns.functions.pipeline)
+decorator to help you with the composition.
 
 And we can work with each of them precisely.
 It is a good practice to create `Enum` classes or `Union` sum type
@@ -188,16 +186,21 @@ Let's refactor it to make our
 ```python
 import requests
 from returns.io import IO, impure
-from returns.result import Result, pipeline, safe
+from returns.result import Result, safe
+from returns.pipeline import pipe
+from returns.functions import lift, lift_io
 
 class FetchUserProfile(object):
     """Single responsibility callable object that fetches user profile."""
 
-    @pipeline
     def __call__(self, user_id: int) -> IO[Result['UserProfile', Exception]]:
-        """Fetches UserProfile dict from foreign API."""
-        return self._make_request(user_id).map(
-            lambda response: self._parse_json(response.unwrap())
+        """Fetches `UserProfile` TypedDict from foreign API."""
+        return pipe(
+            user_id,
+            self._make_request,
+            # lift: def (Result) -> Result
+            # lift_io: def (IO[Result]) -> IO[Result]
+            lift(box(self._parse_json), IO),
         )
 
     @impure
@@ -208,7 +211,7 @@ class FetchUserProfile(object):
         return response
 
     @safe
-    def _parse_json(self,response: requests.Response) -> 'UserProfile':
+    def _parse_json(self, response: requests.Response) -> 'UserProfile':
         return response.json()
 ```
 

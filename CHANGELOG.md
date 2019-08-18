@@ -1,16 +1,26 @@
 # Version history
 
-We follow Semantic Versions since the `0.1.0` release.
+We follow Semantic Versions since the `1.0.0` release.
+Versions before `1.0.0` are `0Ver`-based:
+incremental in minor, bugfixes only are patches.
+See (0Ver)[https://0ver.org/].
 
 
 ## 0.10.0 WIP
 
 ### Features
 
-- Now `bind` does not change the type of an error
-- Now `rescue` does not change the type of a value
-- Renames `map_failure` to `alt`
-- Adds `__hash__` magic methods to all containers
+- **Breaking**: `python>=3.7,<=3.7.2` are not supported anymore,
+  because of a bug inside `typing` module
+- **Breaking**: Now `bind` does not change the type of an error
+- **Breaking**: Now `rescue` does not change the type of a value
+- **Breaking**: Renames `map_failure` to `alt`
+- Adds `lift()` function with the ability
+  to lift function for direct container composition like:
+  `a -> Container[b]` to `Container[a] -> Container[b]`
+- Adds `lift_io()` function to lift `a -> a` to `IO[a] -> IO[a]`
+- Adds `pipe()` function to `pipeline.py`
+- Adds `__hash__()` magic methods to all containers
 
 ### Bugfixes
 
@@ -19,9 +29,10 @@ We follow Semantic Versions since the `0.1.0` release.
 
 ### Misc
 
+- Massive docs rewrite
 - Updates `mypy` version
 - Updates `wemake-python-styleguide` and introduces `nitpick`
-- Updates `pytest-plugin-mypy`
+- Updates `pytest-plugin-mypy`, all tests now use `yml`
 
 
 ## 0.9.0

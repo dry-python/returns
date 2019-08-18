@@ -60,6 +60,35 @@ class IO(Generic[_ValueType], BaseContainer):
         """
         return function(self._inner_value)
 
+    @classmethod
+    def lift(
+        cls,
+        function: Callable[[_ValueType], _NewValueType],
+    ) -> Callable[['IO[_ValueType]'], 'IO[_NewValueType]']:
+        """
+        Lifts function to be wrapped in ``IO`` for better composition.
+
+        In other words, it modifies the function
+        signature from: ``a -> b`` to: ``IO[a] -> IO[b]``
+
+        This is how it should be used:
+
+        .. code:: python
+
+          >>> from returns.io import IO
+          >>> def example(argument: int) -> float:
+          ...     return argument / 2  # not exactly IO action!
+          ...
+          >>> IO.lift(example)(IO(2)) == IO(1.0)
+          True
+
+        See also:
+            https://wiki.haskell.org/Lifting
+            https://github.com/witchcrafters/witchcraft
+
+        """
+        return lambda container: cls.map(container, function)
+
 
 @overload
 def impure(  # type: ignore

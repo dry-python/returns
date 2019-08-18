@@ -23,7 +23,7 @@ def maybe_to_result(
     """Converts ``Maybe`` container to ``Result`` container."""
     inner_value = maybe_container.value_or(None)
     if inner_value is not None:
-        return Success(inner_value)  # type: ignore
+        return Success(inner_value)
     return Failure(inner_value)
 
 

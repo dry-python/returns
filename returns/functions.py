@@ -2,7 +2,9 @@
 
 from typing import Callable, NoReturn, TypeVar
 
-# Just aliases:
+from returns.generated.box import _box as box  # noqa: F401, WPS436
+
+# Aliases:
 _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')
 _ThirdType = TypeVar('_ThirdType')
@@ -15,7 +17,7 @@ def compose(
     """
     Allows function composition.
 
-    Works as: ``second . first``
+    Works as: ``second . first`` or ``first() |> second()``.
     You can read it as "second after first".
 
     .. code:: python

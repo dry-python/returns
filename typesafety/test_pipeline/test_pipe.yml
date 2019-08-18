@@ -1,0 +1,6 @@
+- case: result_is_successful
+  disable_cache: true
+  main: |
+    from returns.pipeline import pipe
+
+    reveal_type(pipe('1.0', float, int, bool))  # N: Revealed type is 'builtins.bool*'
