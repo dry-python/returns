@@ -9,7 +9,7 @@ style = "https://raw.githubusercontent.com/wemake-services/wemake-python-stylegu
 
 [tool.poetry]
 name = "returns"
-version = "0.9.0"
+version = "0.10.0"
 description = "Make your functions return something meaningful, typed, and safe!"
 license = "BSD-2-Clause"
 
