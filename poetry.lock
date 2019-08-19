@@ -876,7 +876,7 @@ category = "dev"
 description = "YAML parser and emitter for Python"
 name = "pyyaml"
 optional = false
-python-versions = "*"
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "5.1.2"
 
 [[package]]
@@ -992,7 +992,7 @@ description = "Python documentation generator"
 name = "sphinx"
 optional = false
 python-versions = ">=3.5"
-version = "2.1.2"
+version = "2.2.0"
 
 [package.dependencies]
 Jinja2 = ">=2.3"
@@ -1221,7 +1221,7 @@ python-versions = ">=2.7"
 version = "0.5.2"
 
 [metadata]
-content-hash = "13b274664c4390ae0cbb3e9080fa6ae4fb7377a2f3cb0a490fff5bd2924f5b91"
+content-hash = "d7e76217aebe0609f8dbc97a047c0542608cf8fc19a03d5bd6be49eef60cbd7f"
 python-versions = "^3.6"
 
 [metadata.hashes]
@@ -1319,7 +1319,7 @@ six = ["3350809f0555b11f552448330d0b52d5f24c91a322ea4a15ef22629740f3761c", "d16a
 smmap2 = ["0555a7bf4df71d1ef4218e4807bbf9b201f910174e6e08af2e138d4e517b4dde", "29a9ffa0497e7f2be94ca0ed1ca1aa3cd4cf25a1f6b4f5f87f74b46ed91d609a"]
 snowballstemmer = ["9f3b9ffe0809d174f7047e121431acf99c89a7040f0ca84f94ba53a498e6d0c9"]
 sortedcontainers = ["974e9a32f56b17c1bac2aebd9dcf197f3eb9cd30553c5852a3187ad162e1a03a", "d9e96492dd51fae31e60837736b38fe42a187b5404c16606ff7ee7cd582d4c60"]
-sphinx = ["22538e1bbe62b407cf5a8aabe1bb15848aa66bb79559f42f5202bbce6b757a69", "f9a79e746b87921cabc3baa375199c6076d1270cee53915dbd24fdbeaaacc427"]
+sphinx = ["0d586b0f8c2fc3cc6559c5e8fd6124628110514fda0e5d7c82e682d749d2e845", "839a3ed6f6b092bb60f492024489cc9e6991360fb9f52ed6361acd510d261069"]
 sphinx-autodoc-typehints = ["8eb1e2bc248d316a9faeca086c6133623f6d45770e342738158249356989b95c", "cedf37dde99096e3024ffcd498ee917c2ccf667e04e23d868d481eae2cb84910"]
 sphinx-typlog-theme = ["a2a2a3a5f3d1f89b165835762469e386e977251c98b4d76b073d9b04f939571a", "effba0175ca2cadebbb47671ce6471e4095ad563239431e9b6326feed2dec3ee"]
 sphinxcontrib-applehelp = ["edaa0ab2b2bc74403149cb0209d6775c96de797dfd5b5e2a71981309efab3897", "fb8dee85af95e5c30c91f10e7eb3c8967308518e0f7488a2828ef7bc191d0d5d"]
