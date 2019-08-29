@@ -174,9 +174,9 @@ Let's see an example.
       email: str,
   ) -> Result['User', Exception]:
       """Can return a Success(user) or Failure(exception)."""
-      user_schema = self._validate_user(username, email).unwrap()
-      account = self._create_account(user_schema).unwrap()
-      return self._create_user(account)
+      user_schema = _validate_user(username, email).unwrap()
+      account = _create_account(user_schema).unwrap()
+      return _create_user(account)
 
   # Protected functions:
   # ...
