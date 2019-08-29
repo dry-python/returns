@@ -53,7 +53,7 @@ def test_is_compare():
 
     assert Nothing.bind(lambda state: state) is Nothing
     assert some_container.rescue(  # type: ignore
-        lambda: Some('fix'),
+        lambda _: Some('fix'),
     ) is some_container
     assert some_container is not Some(1)
 

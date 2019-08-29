@@ -67,7 +67,7 @@
   main: |
     from returns.maybe import Maybe
 
-    result = Maybe.new({'a': 'b'}).fix(lambda: 'b')
+    result = Maybe.new({'a': 'b'}).fix(lambda _: 'b')
     reveal_type(result)  # N: Revealed type is 'returns.maybe.Maybe[builtins.str*]'
 
 
@@ -87,7 +87,7 @@
     from returns.maybe import Maybe
 
     value: Optional[int]
-    result = Maybe.new({'a': 'b'}).fix(lambda: value)
+    result = Maybe.new({'a': 'b'}).fix(lambda _: value)
     reveal_type(result)  # N: Revealed type is 'returns.maybe.Maybe[builtins.int*]'
 
 
@@ -96,7 +96,7 @@
   main: |
     from returns.maybe import Maybe
 
-    result = Maybe.new({'a': 'b'}).rescue(lambda: Maybe.new('b'))
+    result = Maybe.new({'a': 'b'}).rescue(lambda _: Maybe.new('b'))
     reveal_type(result)  # N: Revealed type is 'returns.maybe.Maybe[builtins.str*]'
 
 
@@ -107,6 +107,13 @@
     from returns.maybe import Maybe
 
     value: Optional[int]
-    result = Maybe.new({'a': 'b'}).rescue(lambda: Maybe.new(value))
+    result = Maybe.new({'a': 'b'}).rescue(lambda _: Maybe.new(value))
     reveal_type(result)  # N: Revealed type is 'returns.maybe.Maybe[builtins.int*]'
 
+
+- case: maybe_unwrap
+  disable_cache: true
+  main: |
+    from returns.maybe import Some
+
+    reveal_type(Some(1).unwrap())  # N: Revealed type is 'builtins.int*'

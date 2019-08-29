@@ -67,24 +67,14 @@ class Maybe(
 
     def fix(
         self,
-        function: Union[
-            # We use this union to make a good balance
-            # between correct and useful typing:
-            Callable[[None], Optional[_NewValueType]],  # correct
-            Callable[[], Optional[_NewValueType]],  # useful
-        ],
+        function: Callable[[None], Optional[_NewValueType]],
     ) -> 'Maybe[_NewValueType]':
         """Abstract method to compose container with a pure function."""
         raise NotImplementedError
 
     def rescue(
         self,
-        function: Union[
-            # We use this union to make a good balance
-            # between correct and useful typing:
-            Callable[[None], 'Maybe[_NewValueType]'],  # correct
-            Callable[[], 'Maybe[_NewValueType]'],  # useful
-        ],
+        function: Callable[[None], 'Maybe[_NewValueType]'],
     ) -> 'Maybe[_NewValueType]':
         """Abstract method to compose container with other container."""
         raise NotImplementedError
@@ -98,6 +88,10 @@ class Maybe(
 
     def unwrap(self) -> _ValueType:
         """Get value or raise exception."""
+        raise NotImplementedError
+
+    def failure(self) -> None:
+        """Get failed value or raise exception."""
         raise NotImplementedError
 
 
@@ -160,17 +154,14 @@ class _Nothing(Maybe[Any]):
 
         .. code:: python
 
-          >>> def fixable() -> str:
+          >>> def fixable(_state) -> str:
           ...      return 'ab'
           ...
           >>> Nothing.fix(fixable) == Some('ab')
           True
 
         """
-        try:
-            return Maybe.new(function())
-        except TypeError:
-            return Maybe.new(function(self._inner_value))
+        return Maybe.new(function(self._inner_value))
 
     def rescue(self, function):
         """
@@ -181,17 +172,14 @@ class _Nothing(Maybe[Any]):
 
         .. code:: python
 
-          >>> def rescuable() -> Maybe[str]:
+          >>> def rescuable(_state) -> Maybe[str]:
           ...      return Some('ab')
           ...
           >>> Nothing.rescue(rescuable) == Some('ab')
           True
 
         """
-        try:
-            return function()
-        except TypeError:
-            return function(self._inner_value)
+        return function(self._inner_value)
 
     def value_or(self, default_value):
         """
@@ -218,6 +206,18 @@ class _Nothing(Maybe[Any]):
 
         """
         raise UnwrapFailedError(self)
+
+    def failure(self) -> None:
+        """
+        Get failed value.
+
+        .. code:: python
+
+          >>> Nothing.failure() is None
+          True
+
+        """
+        return self._inner_value
 
 
 @final
@@ -278,7 +278,7 @@ class _Some(Maybe[_ValueType]):
 
         .. code:: python
 
-          >>> def fixable() -> str:
+          >>> def fixable(_state) -> str:
           ...      return 'ab'
           ...
           >>> Some('a').fix(fixable) == Some('a')
@@ -293,7 +293,7 @@ class _Some(Maybe[_ValueType]):
 
         .. code:: python
 
-          >>> def rescuable() -> Maybe[str]:
+          >>> def rescuable(_state) -> Maybe[str]:
           ...      return Some('ab')
           ...
           >>> Some('a').rescue(rescuable) == Some('a')
@@ -325,6 +325,20 @@ class _Some(Maybe[_ValueType]):
 
         """
         return self._inner_value
+
+    def failure(self):
+        """
+        Raises an exception, since it does not have a failure inside.
+
+        .. code:: python
+
+          >>> Some(1).failure()
+          Traceback (most recent call last):
+            ...
+          returns.primitives.exceptions.UnwrapFailedError
+
+        """
+        raise UnwrapFailedError(self)
 
 
 def Some(inner_value: Optional[_ValueType]) -> Maybe[_ValueType]:  # noqa: N802

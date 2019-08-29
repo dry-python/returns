@@ -154,6 +154,13 @@ class Unwrapable(Protocol[_ValueType]):
         This method is the opposite of :meth:`~failure`.
         """
 
+    def failure(self) -> _ErrorType:
+        """
+        Custom magic method to unwrap inner value from the failed container.
+
+        This method is the opposite of :meth:`~unwrap`.
+        """
+
 
 @runtime
 class UnwrapableFailure(Protocol[_ValueType, _ErrorType]):
@@ -169,11 +176,4 @@ class UnwrapableFailure(Protocol[_ValueType, _ErrorType]):
         And returns a new functor value.
         Works for containers that represent failure.
         Is the opposite of :meth:`~map`.
-        """
-
-    def failure(self) -> _ErrorType:
-        """
-        Custom magic method to unwrap inner value from the failed container.
-
-        This method is the opposite of :meth:`~unwrap`.
         """

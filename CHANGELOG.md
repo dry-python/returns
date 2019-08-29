@@ -12,8 +12,14 @@ See (0Ver)[https://0ver.org/].
 
 - **Breaking**: now `pipe()` does not require argument to be the first value,
   instead it is required to use: `pipe(f1, f2, f3, f4)(value)`
+- **Breaking**: dropped everything from `returns/__init__.py`,
+  because we now have quite a lot of stuff
+- **Breaking**: dropped support of zero argument functions for `Nothing.fix`
+- **Breaking**: dropped support of zero argument functions for `Nothing.rescue`
+- `Maybe` now has `.failure()` to match the same API as `Result`
 - Adds `tap` function
 - Now `pipe` allows to pipe 8 steps
+- Adds `coalesce_conatiner` coverter
 
 ### Misc
 

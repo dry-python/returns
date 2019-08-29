@@ -152,8 +152,8 @@ from returns.functions import box
 def fetch_user_profile(user_id: int) -> Result['UserProfile', Exception]:
     """Fetches `UserProfile` TypedDict from foreign API."""
     return pipe(
-        self._make_request,
-        box(self._parse_json),
+        _make_request,
+        box(_parse_json),
     )(user_id)
 
 @safe
@@ -229,10 +229,10 @@ from returns.functions import box
 def fetch_user_profile(user_id: int) -> Result['UserProfile', Exception]:
     """Fetches `UserProfile` TypedDict from foreign API."""
     return pipe(
-        self._make_request,
+        _make_request,
         # after box: def (Result) -> Result
         # after IO.lift: def (IO[Result]) -> IO[Result]
-        IO.lift(box(self._parse_json)),
+        IO.lift(box(_parse_json)),
     )(user_id)
 
 @impure

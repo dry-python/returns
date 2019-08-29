@@ -21,6 +21,7 @@ def test_maybe_abstract_method(method_name):
 
 @pytest.mark.parametrize('method_name', [
     'unwrap',
+    'failure',
 ])
 def test_maybe_abstract_method_single(method_name):
     """Checks that Maybe itself contains abstract methods."""

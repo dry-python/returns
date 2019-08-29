@@ -28,7 +28,7 @@ def test_bind_nothing():
 
 def test_rescue_some():
     """Ensures that rescue works for Some container."""
-    def factory() -> Maybe[int]:
+    def factory(_) -> Maybe[int]:
         return Some(10)
 
     bound = Some(5).rescue(factory)
@@ -38,7 +38,7 @@ def test_rescue_some():
 
 def test_rescue_nothing():
     """Ensures that rescue works for Nothing container."""
-    def factory() -> Maybe[int]:
+    def factory(arg) -> Maybe[int]:
         return Some(1)
 
     bound = Nothing.rescue(factory)
