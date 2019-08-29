@@ -20,6 +20,7 @@ See (0Ver)[https://0ver.org/].
 - Now all methods have doctests
 - Updates docs about `Success` and `_Success`, `Failure` and `_Failure`
 - Updates docs about `@pipeline`
+- Typechecks async functions and decorators inside `typesafety/` tests
 
 
 ## 0.10.0

@@ -10,6 +10,18 @@
     reveal_type(test)  # N: Revealed type is 'def () -> returns.result.Result[builtins.int*, builtins.Exception]'
 
 
+- case: safe_async_decorator_no_params
+  disable_cache: true
+  main: |
+    from returns.result import safe
+
+    @safe
+    async def test() -> int:
+        return 1
+
+    reveal_type(test)  # N: Revealed type is 'def () -> typing.Coroutine[Any, Any, returns.result.Result[builtins.int*, builtins.Exception]]'
+
+
 - case: safe_composition_no_params
   disable_cache: true
   main: |
