@@ -100,6 +100,40 @@ Otherwise it would raise a ``mypy`` error:
 This happens because ``mypy`` is unable to implicitly
 cast ``NoReturn`` to any other type.
 
+What is the difference between ``Success`` and ``_Success``?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You might wonder why ``Success`` is a function
+and ``_Success`` is internal type, that should not be used directly.
+
+Well, that's a complicated question. Let's find out.
+
+Let's begin with ``haskell`` definition:
+
+.. code:: haskell
+
+  Prelude> :t Left 1
+  Left 1 :: Num a => Either a b
+  Prelude> :t Right 1
+  Right 1 :: Num b => Either a b
+
+As you can see: ``Left`` (``Failure``) and ``Right`` (``Success``)
+are type constructors: that return ``Either a b`` (``Result[b, a]``) value.
+
+It means, that there's no single type ``Left a`` that makes
+sense without ``Right b``. Only their duality makes sence to us.
+
+In ``python`` we have functions that can be used as type constructors.
+That's why we use ``Success`` and ``Failure`` functions.
+But, when we need to implement
+the behaviour of these types - we use real classes inside.
+That's how we know what to do in each particular case.
+In ``haskell`` we use pattern matching for this.
+
+That's why we have public
+type constructor functions: ``Success`` and ``Failure``
+and internal implementation.
+
 
 API Reference
 -------------
