@@ -6,7 +6,7 @@ incremental in minor, bugfixes only are patches.
 See (0Ver)[https://0ver.org/].
 
 
-## 0.11.0 WIP
+## 0.11.0
 
 ### Features
 
@@ -17,9 +17,14 @@ See (0Ver)[https://0ver.org/].
 - **Breaking**: dropped support of zero argument functions for `Nothing.fix`
 - **Breaking**: dropped support of zero argument functions for `Nothing.rescue`
 - `Maybe` now has `.failure()` to match the same API as `Result`
+- Adds `identity` function
 - Adds `tap` function
 - Now `pipe` allows to pipe 8 steps
-- Adds `coalesce_conatiner` coverter
+- Adds `coalesce_result` and `coalesce_maybe` coverters
+
+### Bugfixes
+
+- Fixes that code inside `.fix` and `.rescue` of `Maybe` might be called twice
 
 ### Misc
 

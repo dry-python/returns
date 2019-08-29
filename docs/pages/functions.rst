@@ -23,6 +23,19 @@ functions with one argument and one return to be composed.
 Only works with regular functions (not async).
 
 
+identity
+--------
+
+We also ship :func:`returns.functions.identity` function
+to help you with the composition.
+
+Identity function is a simple concept: it just returns its argument.
+If you wonder why do we need this function, please read below:
+
+- `Practical Usage of Identity Function <https://blog.bigbinary.com/2018/03/20/practical-usage-of-identity-function.html>`_ (JS)
+- `Using Identity Functions <https://emilvarga.com/posts/2016/08/01/using-identity-functions>`_ (Scala)
+
+
 box
 ---
 
