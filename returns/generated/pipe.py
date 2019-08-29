@@ -25,6 +25,4 @@ def _pipe(*functions):
         - https://github.com/gcanti/fp-ts/blob/master/src/pipeable.ts
 
     """
-    def decorator(initial):
-        return reduce(compose, functions)(initial)
-    return decorator
+    return lambda initial: reduce(compose, functions)(initial)

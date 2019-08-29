@@ -149,26 +149,22 @@ from returns.result import Result, safe
 from returns.pipeline import pipe
 from returns.functions import box
 
-class FetchUserProfile(object):
-    """Single responsibility callable object that fetches user profile."""
+def fetch_user_profile(user_id: int) -> Result['UserProfile', Exception]:
+    """Fetches `UserProfile` TypedDict from foreign API."""
+    return pipe(
+        self._make_request,
+        box(self._parse_json),
+    )(user_id)
 
-    def __call__(self, user_id: int) -> Result['UserProfile', Exception]:
-        """Fetches `UserProfile` TypedDict from foreign API."""
-        return pipe(
-            user_id,
-            self._make_request,
-            box(self._parse_json),
-        )
+@safe
+def _make_request(user_id: int) -> requests.Response:
+    response = requests.get('/api/users/{0}'.format(user_id))
+    response.raise_for_status()
+    return response
 
-    @safe
-    def _make_request(self, user_id: int) -> requests.Response:
-        response = requests.get('/api/users/{0}'.format(user_id))
-        response.raise_for_status()
-        return response
-
-    @safe
-    def _parse_json(self, response: requests.Response) -> 'UserProfile':
-        return response.json()
+@safe
+def _parse_json(response: requests.Response) -> 'UserProfile':
+    return response.json()
 ```
 
 Now we have a clean and a safe and declarative way
@@ -230,29 +226,25 @@ from returns.result import Result, safe
 from returns.pipeline import pipe
 from returns.functions import box
 
-class FetchUserProfile(object):
-    """Single responsibility callable object that fetches user profile."""
+def fetch_user_profile(user_id: int) -> Result['UserProfile', Exception]:
+    """Fetches `UserProfile` TypedDict from foreign API."""
+    return pipe(
+        self._make_request,
+        # after box: def (Result) -> Result
+        # after IO.lift: def (IO[Result]) -> IO[Result]
+        IO.lift(box(self._parse_json)),
+    )(user_id)
 
-    def __call__(self, user_id: int) -> IO[Result['UserProfile', Exception]]:
-        """Fetches `UserProfile` TypedDict from foreign API."""
-        return pipe(
-            user_id,
-            self._make_request,
-            # after box: def (Result) -> Result
-            # after IO.lift: def (IO[Result]) -> IO[Result]
-            IO.lift(box(self._parse_json)),
-        )
+@impure
+@safe
+def _make_request(user_id: int) -> requests.Response:
+    response = requests.get('/api/users/{0}'.format(user_id))
+    response.raise_for_status()
+    return response
 
-    @impure
-    @safe
-    def _make_request(self, user_id: int) -> requests.Response:
-        response = requests.get('/api/users/{0}'.format(user_id))
-        response.raise_for_status()
-        return response
-
-    @safe
-    def _parse_json(self, response: requests.Response) -> 'UserProfile':
-        return response.json()
+@safe
+def _parse_json(response: requests.Response) -> 'UserProfile':
+    return response.json()
 ```
 
 Now we have explicit markers where the `IO` did happen

@@ -98,29 +98,39 @@ Here's the code to illustrate the task.
 
 .. code:: python
 
-  from returns.result import Result, Success, Failure, pipeline
+  from returns.result import Result, Success, Failure, safe
+  from returns.pipeline import pipeline
 
-  class CreateAccountAndUser(object):
-      """Creates new Account-User pair."""
+  def create_account_and_user(
+      username: str,
+      email: str,
+  ) -> Result['User', str]:
+      # TODO: we need to create a pipeline of these functions somehow...
 
-      # TODO: we need to create a pipeline of these methods somehow...
+  # Protected functions:
 
-      # Protected methods
+  def _validate_user(
+      username: str, email: str,
+  ) -> Result['UserSchema', Exception]:
+      """Returns an UserSchema for valid input, otherwise a Failure."""
+      if username and '@' in email:
+          return Success({'username': username, 'email': email})
+      return Failure(ValueError('Not valid!'))
 
-      def _validate_user(
-          self, username: str, email: str,
-      ) -> Result['UserSchema', str]:
-          """Returns an UserSchema for valid input, otherwise a Failure."""
+  def _create_account(
+      user_schema: 'UserSchema',
+  ) -> Result['Account', Exception]:
+      """Creates an Account for valid UserSchema's. Or returns a Failure."""
+      return safe(Accounts.save)(user_schema)
 
-      def _create_account(
-          self, user_schema: 'UserSchema',
-      ) -> Result['Account', str]:
-          """Creates an Account for valid UserSchema's. Or returns a Failure."""
-
-      def _create_user(
-          self, account: 'Account',
-      ) -> Result['User', str]:
-          """Create an User instance. If user already exists returns Failure."""
+  def _create_user(
+      account: 'Account',
+  ) -> Result['User', Exception]:
+      """Create an User instance. If user already exists returns Failure."""
+      return safe(User.objects.create)(
+          username=account.username,
+          account=account,
+      )
 
 Using bind technique
 ~~~~~~~~~~~~~~~~~~~~
@@ -129,19 +139,19 @@ We can implement this feature using a traditional ``bind`` method.
 
 .. code:: python
 
-  class CreateAccountAndUser(object):
-      """Creates new Account-User pair."""
+  def create_account_and_user(
+      username: str,
+      email: str,
+  ) -> Result['User', Exception]:
+      """Can return a Success(user) or Failure(exception)."""
+      return _validate_user(username, email).bind(
+          _create_account,
+      ).bind(
+          _create_user,
+      )
 
-      def __call__(self, username: str, email: str) -> Result['User', str]:
-          """Can return a Success(user) or Failure(str_reason)."""
-          return self._validate_user(username, email).bind(
-              self._create_account,
-          ).bind(
-              self._create_user,
-          )
-
-      # Protected methods
-      # ...
+  # Protected functions:
+  # ...
 
 And this will work without any problems.
 But, is it easy to read a code like this? **No**, it is not.
@@ -158,18 +168,18 @@ Let's see an example.
 
 .. code:: python
 
-  class CreateAccountAndUser(object):
-      """Creates new Account-User pair."""
+  @pipeline
+  def create_account_and_user(
+      username: str,
+      email: str,
+  ) -> Result['User', Exception]:
+      """Can return a Success(user) or Failure(exception)."""
+      user_schema = self._validate_user(username, email).unwrap()
+      account = self._create_account(user_schema).unwrap()
+      return self._create_user(account)
 
-      @pipeline
-      def __call__(self, username: str, email: str) -> Result['User', str]:
-          """Can return a Success(user) or Failure(str_reason)."""
-          user_schema = self._validate_user(username, email).unwrap()
-          account = self._create_account(user_schema).unwrap()
-          return self._create_user(account)
-
-      # Protected methods
-      # ...
+  # Protected functions:
+  # ...
 
 Let's see how this new ``.unwrap()`` method works:
 
