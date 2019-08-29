@@ -3,4 +3,9 @@
   main: |
     from returns.pipeline import pipe
 
-    reveal_type(pipe('1.0', float, int, bool))  # N: Revealed type is 'builtins.bool*'
+    def convert(arg: str) -> float:
+        return float(arg)
+
+    predefined = pipe(convert, int, bool)
+    reveal_type(predefined)  # N: Revealed type is 'def (builtins.str*) -> builtins.bool*'
+    reveal_type(predefined('1.0'))  # N: Revealed type is 'builtins.bool*'

@@ -16,10 +16,9 @@ class _UserProfile(object):
     def __call__(self, user_id: int) -> IO[Result[float, Exception]]:
         """Fetches `UserProfile` TypedDict from foreign API."""
         return pipe(
-            user_id,
             self._make_request,
             IO.lift(box(self._parse_json)),
-        )
+        )(user_id)
 
     @impure
     @safe

@@ -10,6 +10,8 @@ See (0Ver)[https://0ver.org/].
 
 ### Features
 
+- **Breaking**: now `pipe()` does not require argument to be the first value,
+  instead it is required to use: `pipe(f1, f2, f3, f4)(value)`
 - Adds `tap` function
 - Now `pipe` allows to pipe 8 steps
 

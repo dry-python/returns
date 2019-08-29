@@ -21,7 +21,7 @@ Let's see an example.
 
   from returns.pipeline import pipe
 
-  pipe(1, str, lambda x: x + 'b', str.upper)
+  pipe(str, lambda x: x + 'b', str.upper)(1)
   # => Will be equal to: `1B`
 
 There's also a way to compose containers together:
@@ -42,14 +42,18 @@ There's also a way to compose containers together:
       ...
 
   pipe(
-      1,  # we provide the initial value itself as a first argument
       regular_function,  # composes easily
       returns_container,  # also composes easily, but returns a container...
       # So we need to `box` the next function to allow it to consume
       # the container from the previous step.
       box(also_returns_container),
-  )
+  )(1)  # we provide the initial value itself as a argument to `pipe(...)`
   # => Will return `Result[str, ValueError]` as declared in the last step
+
+You might consider ``pipe()`` as :func:`returns.functions.compose` on steroids.
+The main difference is that ``compose`` takes strictly two arguments
+(or you might say that it has an arity of two),
+while ``pipe`` has infinite possible arguments.
 
 See also :func:`returns.io.IO.lift` which is also extremely
 helpful for ``IO`` composition.
