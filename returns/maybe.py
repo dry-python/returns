@@ -120,11 +120,33 @@ class _Nothing(Maybe[Any]):
         return '<Nothing>'
 
     def map(self, function):  # noqa: A003
-        """Returns the 'Nothing' instance that was used to call the method."""
+        """
+        Returns the 'Nothing' instance that was used to call the method.
+
+        .. code:: python
+
+          >>> def mappable(string: str) -> str:
+          ...      return string + 'b'
+          ...
+          >>> Nothing.map(mappable) == Nothing
+          True
+
+        """
         return self
 
     def bind(self, function):
-        """Returns the 'Nothing' instance that was used to call the method."""
+        """
+        Returns the 'Nothing' instance that was used to call the method.
+
+        .. code:: python
+
+          >>> def bindable(string: str) -> Maybe[str]:
+          ...      return Some(string + 'b')
+          ...
+          >>> Nothing.bind(bindable) == Nothing
+          True
+
+        """
         return self
 
     def fix(self, function):
@@ -135,6 +157,15 @@ class _Nothing(Maybe[Any]):
         and returns a new 'Some' object containing the result.
         'function' should not accept any arguments
         and return a non-container result.
+
+        .. code:: python
+
+          >>> def fixable() -> str:
+          ...      return 'ab'
+          ...
+          >>> Nothing.fix(fixable) == Some('ab')
+          True
+
         """
         try:
             return Maybe.new(function())
@@ -147,6 +178,15 @@ class _Nothing(Maybe[Any]):
 
         'function' should not accept any arguments
         and return Maybe a 'Nothing' or 'Some' type object.
+
+        .. code:: python
+
+          >>> def rescuable() -> Maybe[str]:
+          ...      return Some('ab')
+          ...
+          >>> Nothing.rescue(rescuable) == Some('ab')
+          True
+
         """
         try:
             return function()
@@ -154,11 +194,29 @@ class _Nothing(Maybe[Any]):
             return function(self._inner_value)
 
     def value_or(self, default_value):
-        """Returns the value if we deal with 'Some' or default if 'Nothing'."""
+        """
+        Returns the value if we deal with 'Some' or default if 'Nothing'.
+
+        .. code:: python
+
+          >>> Nothing.value_or(1)
+          1
+
+        """
         return default_value
 
     def unwrap(self):
-        """Raises an exception, since it does not have a value inside."""
+        """
+        Raises an exception, since it does not have a value inside.
+
+        .. code:: python
+
+          >>> Nothing.unwrap()
+          Traceback (most recent call last):
+            ...
+          returns.primitives.exceptions.UnwrapFailedError
+
+        """
         raise UnwrapFailedError(self)
 
 
@@ -184,6 +242,15 @@ class _Some(Maybe[_ValueType]):
         and returns a new 'Maybe' object containing the result.
         'function' should accept a single "normal" (non-container) argument
         and return a non-container result.
+
+        .. code:: python
+
+          >>> def mappable(string: str) -> str:
+          ...      return string + 'b'
+          ...
+          >>> Some('a').map(mappable) == Some('ab')
+          True
+
         """
         return Maybe.new(function(self._inner_value))
 
@@ -193,23 +260,70 @@ class _Some(Maybe[_ValueType]):
 
         'function' should accept a single "normal" (non-container) argument
         and return 'Nothing' or 'Some' type object.
+
+        .. code:: python
+
+          >>> def bindable(string: str) -> Maybe[str]:
+          ...      return Some(string + 'b')
+          ...
+          >>> Some('a').bind(bindable) == Some('ab')
+          True
+
         """
         return function(self._inner_value)
 
     def fix(self, function):
-        """Returns the 'Some' instance that was used to call the method."""
+        """
+        Returns the 'Some' instance that was used to call the method.
+
+        .. code:: python
+
+          >>> def fixable() -> str:
+          ...      return 'ab'
+          ...
+          >>> Some('a').fix(fixable) == Some('a')
+          True
+
+        """
         return self
 
     def rescue(self, function):
-        """Returns the 'Some' instance that was used to call the method."""
+        """
+        Returns the 'Some' instance that was used to call the method.
+
+        .. code:: python
+
+          >>> def rescuable() -> Maybe[str]:
+          ...      return Some('ab')
+          ...
+          >>> Some('a').rescue(rescuable) == Some('a')
+          True
+
+        """
         return self
 
     def value_or(self, default_value):
-        """Returns the value if we deal with 'Some' or default if 'Nothing'."""
+        """
+        Returns the value if we deal with 'Some' or default if 'Nothing'.
+
+        .. code:: python
+
+          >>> Some(1).value_or(2)
+          1
+
+        """
         return self._inner_value
 
     def unwrap(self):
-        """Returns the unwrapped value from the inside of this container."""
+        """
+        Returns the unwrapped value from the inside of this container.
+
+        .. code:: python
+
+          >>> Some(1).unwrap()
+          1
+
+        """
         return self._inner_value
 
 
@@ -247,6 +361,21 @@ def maybe(function):
     Decorator to covert ``None`` returning function to ``Maybe`` container.
 
     Supports both async and regular functions.
+
+    .. code:: python
+
+      >>> from typing import Optional
+      >>> @maybe
+      ... def might_be_none(arg: int) -> Optional[int]:
+      ...     if arg == 0:
+      ...         return None
+      ...     return 1 / arg
+      ...
+      >>> might_be_none(0) == Nothing
+      True
+      >>> might_be_none(1) == Some(1.0)
+      True
+
     """
     if iscoroutinefunction(function):
         async def decorator(*args, **kwargs):  # noqa: WPS430

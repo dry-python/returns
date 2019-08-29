@@ -14,7 +14,7 @@ def unsafe_perform_io(wrapped_in_io: IO[_ValueType]) -> _ValueType:
     Just unwraps the internal value
     from :py:class:`IO <returns.io.IO>` container.
     Should be used with caution!
-    Since it might be overused by tired developers.
+    Since it might be overused by lazy and ignorant developers.
 
     It is recommended to have only one place (module / file)
     in your program where you allow unsafe operations.
@@ -22,6 +22,12 @@ def unsafe_perform_io(wrapped_in_io: IO[_ValueType]) -> _ValueType:
     We recommend to use ``import-linter`` to enforce this rule:
 
     - https://github.com/seddonym/import-linter
+
+    .. code:: python
+
+      >>> from returns.io import IO
+      >>> unsafe_perform_io(IO(1))
+      1
 
     """
     return wrapped_in_io._inner_value  # noqa: WPS437

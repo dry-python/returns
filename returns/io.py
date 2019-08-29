@@ -46,6 +46,15 @@ class IO(Generic[_ValueType], BaseContainer):
         and returns a new IO object containing the result.
         'function' should accept a single "normal" (non-container) argument
         and return a non-container result.
+
+        .. code:: python
+
+          >>> def mappable(string: str) -> str:
+          ...      return string + 'b'
+          ...
+          >>> IO('a').map(mappable) == IO('ab')
+          True
+
         """
         return IO(function(self._inner_value))
 
@@ -57,6 +66,15 @@ class IO(Generic[_ValueType], BaseContainer):
 
         'function' should accept a single "normal" (non-container) argument
         and return IO type object.
+
+        .. code:: python
+
+          >>> def bindable(string: str) -> IO[str]:
+          ...      return IO(string + 'b')
+          ...
+          >>> IO('a').bind(bindable) == IO('ab')
+          True
+
         """
         return function(self._inner_value)
 
@@ -75,7 +93,6 @@ class IO(Generic[_ValueType], BaseContainer):
 
         .. code:: python
 
-          >>> from returns.io import IO
           >>> def example(argument: int) -> float:
           ...     return argument / 2  # not exactly IO action!
           ...

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from typing import Callable, NoReturn, TypeVar
+from typing import Any, Callable, NoReturn, TypeVar
 
 from returns.generated.box import _box as box  # noqa: F401, WPS436
 
@@ -22,7 +22,6 @@ def compose(
 
     .. code:: python
 
-      >>> from returns.functions import compose
       >>> compose(float, int)('123.5')
       123
 
@@ -30,6 +29,32 @@ def compose(
     Type checked.
     """
     return lambda argument: second(first(argument))
+
+
+def tap(
+    function: Callable[[_FirstType], Any],
+) -> Callable[[_FirstType], _FirstType]:
+    """
+    Allows to apply some function and return an argument, instead of a result.
+
+    Is usefull for side-effects like ``print()``, ``logger.log``, etc.
+
+    .. code:: python
+
+      >>> tap(print)(1)
+      1
+      1
+      >>> tap(lambda _: 1)(2)
+      2
+
+    See also:
+        - https://github.com/dry-python/returns/issues/145
+
+    """
+    def decorator(argument_to_return: _FirstType) -> _FirstType:
+        function(argument_to_return)
+        return argument_to_return
+    return decorator
 
 
 def raise_exception(exception: Exception) -> NoReturn:
@@ -41,7 +66,6 @@ def raise_exception(exception: Exception) -> NoReturn:
 
     .. code:: python
 
-      >>> from returns.functions import raise_exception
       >>> from returns.result import Failure, Result
       >>> # Some operation result:
       >>> user: Result[int, ValueError] = Failure(ValueError('boom'))

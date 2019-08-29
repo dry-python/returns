@@ -13,14 +13,42 @@ _ErrorType = TypeVar('_ErrorType')
 def result_to_maybe(
     result_container: Result[_ValueType, _ErrorType],
 ) -> Maybe[_ValueType]:
-    """Converts ``Result`` container to ``Maybe`` container."""
+    """
+    Converts ``Result`` container to ``Maybe`` container.
+
+    .. code:: python
+
+      >>> from returns.maybe import Some, Nothing
+      >>> from returns.result import Failure, Success
+      >>> result_to_maybe(Success(1)) == Some(1)
+      True
+      >>> result_to_maybe(Failure(1)) == Nothing
+      True
+      >>> result_to_maybe(Success(None)) == Nothing
+      True
+
+    """
     return Maybe.new(result_container.value_or(None))
 
 
 def maybe_to_result(
     maybe_container: Maybe[_ValueType],
 ) -> Result[_ValueType, None]:
-    """Converts ``Maybe`` container to ``Result`` container."""
+    """
+    Converts ``Maybe`` container to ``Result`` container.
+
+    .. code:: python
+
+      >>> from returns.maybe import Some, Nothing
+      >>> from returns.result import Failure, Success
+      >>> maybe_to_result(Nothing) == Failure(None)
+      True
+      >>> maybe_to_result(Some(1)) == Success(1)
+      True
+      >>> maybe_to_result(Some(None)) == Failure(None)
+      True
+
+    """
     inner_value = maybe_container.value_or(None)
     if inner_value is not None:
         return Success(inner_value)
@@ -45,5 +73,20 @@ def join(
 
 
 def join(container):
-    """Joins two nested containers together."""
+    """
+    Joins two nested containers together.
+
+    .. code:: python
+
+      >>> from returns.maybe import Some
+      >>> from returns.result import Success
+      >>> from returns.io import IO
+      >>> join(IO(IO(1))) == IO(1)
+      True
+      >>> join(Some(Some(1))) == Some(1)
+      True
+      >>> join(Success(Success(1))) == Success(1)
+      True
+
+    """
     return container._inner_value  # noqa: WPS437

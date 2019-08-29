@@ -14,8 +14,10 @@ Make your functions return something meaningful, typed, and safe!
 - Provides a bunch of primitives to write declarative business logic
 - Enforces better architecture
 - Fully typed with annotations and checked with `mypy`, [PEP561 compatible](https://www.python.org/dev/peps/pep-0561/)
+- Has a bunch of helpers for better composition
 - Pythonic and pleasant to write and to read (!)
 - Support functions and coroutines, framework agnostic
+- Easy to start: has lots of docs, tests, and tutorials
 
 
 ## Installation

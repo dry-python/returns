@@ -33,6 +33,20 @@ def is_successful(container: _Unwrapable) -> bool:
 
     We treat container that raise ``UnwrapFailedError`` on ``.unwrap()``
     not successful.
+
+    .. code:: python
+
+      >>> from returns.maybe import Some, Nothing
+      >>> from returns.result import Failure, Success
+      >>> is_successful(Some(1))
+      True
+      >>> is_successful(Nothing)
+      False
+      >>> is_successful(Success(1))
+      True
+      >>> is_successful(Failure(1))
+      False
+
     """
     try:
         container.unwrap()

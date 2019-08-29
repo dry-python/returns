@@ -127,11 +127,33 @@ class _Failure(Result[Any, _ErrorType]):
         BaseContainer.__init__(self, inner_value)  # noqa: WPS609
 
     def map(self, function):  # noqa: A003
-        """Returns the '_Failure' instance that was used to call the method."""
+        """
+        Returns the '_Failure' instance that was used to call the method.
+
+        .. code:: python
+
+          >>> def mappable(string: str) -> str:
+          ...      return string + 'b'
+          ...
+          >>> Failure('a').map(mappable) == Failure('a')
+          True
+
+        """
         return self
 
     def bind(self, function):
-        """Returns the '_Failure' instance that was used to call the method."""
+        """
+        Returns the '_Failure' instance that was used to call the method.
+
+        .. code:: python
+
+          >>> def bindable(string: str) -> Result[str, str]:
+          ...      return Success(string + 'b')
+          ...
+          >>> Failure('a').bind(bindable) == Failure('a')
+          True
+
+        """
         return self
 
     def fix(self, function):
@@ -142,6 +164,15 @@ class _Failure(Result[Any, _ErrorType]):
         and returns a new '_Success' object containing the result.
         'function' should accept a single "normal" (non-container) argument
         and return a non-container result.
+
+        .. code:: python
+
+          >>> def fixable(arg: str) -> str:
+          ...      return 'ab'
+          ...
+          >>> Failure('a').fix(fixable) == Success('ab')
+          True
+
         """
         return _Success(function(self._inner_value))
 
@@ -151,6 +182,15 @@ class _Failure(Result[Any, _ErrorType]):
 
         'function' should accept a single "normal" (non-container) argument
         and return Result a '_Failure' or '_Success' type object.
+
+        .. code:: python
+
+          >>> def rescuable(arg: str) -> Result[str, str]:
+          ...      return Success(arg + 'b')
+          ...
+          >>> Failure('a').rescue(rescuable) == Success('ab')
+          True
+
         """
         return function(self._inner_value)
 
@@ -162,21 +202,56 @@ class _Failure(Result[Any, _ErrorType]):
         and returns a new '_Failure' object containing the result.
         'function' should accept a single "normal" (non-container) argument
         and return a non-container result.
+
+        .. code:: python
+
+          >>> def altable(arg: str) -> Result[str, str]:
+          ...      return arg + 'b'
+          ...
+          >>> Failure('a').alt(altable) == Failure('ab')
+          True
+
         """
         return _Failure(function(self._inner_value))
 
     def value_or(self, default_value):
-        """Returns the value if we deal with '_Success' or default otherwise."""
+        """
+        Returns the value if we deal with '_Success' or default otherwise.
+
+        .. code:: python
+
+          >>> Failure(1).value_or(2)
+          2
+
+        """
         return default_value
 
     def unwrap(self):
-        """Raises an exception, since it does not have a value inside."""
+        """
+        Raises an exception, since it does not have a value inside.
+
+        .. code:: python
+
+          >>> Failure(1).unwrap()
+          Traceback (most recent call last):
+            ...
+          returns.primitives.exceptions.UnwrapFailedError
+
+        """
         if isinstance(self._inner_value, Exception):
             raise UnwrapFailedError(self) from self._inner_value
         raise UnwrapFailedError(self)
 
     def failure(self):
-        """Unwraps inner error value from failed container."""
+        """
+        Unwraps inner error value from failed container.
+
+        .. code:: python
+
+          >>> Failure(1).failure()
+          1
+
+        """
         return self._inner_value
 
 
@@ -203,6 +278,15 @@ class _Success(Result[_ValueType, Any]):
         and returns a new '_Success' object containing the result.
         'function' should accept a single "normal" (non-container) argument
         and return a non-container result.
+
+        .. code:: python
+
+          >>> def mappable(string: str) -> str:
+          ...      return string + 'b'
+          ...
+          >>> Success('a').map(mappable) == Success('ab')
+          True
+
         """
         return _Success(function(self._inner_value))
 
@@ -212,31 +296,99 @@ class _Success(Result[_ValueType, Any]):
 
         'function' should accept a single "normal" (non-container) argument
         and return Result a '_Failure' or '_Success' type object.
+
+        .. code:: python
+
+          >>> def bindable(string: str) -> Result[str, str]:
+          ...      return Success(string + 'b')
+          ...
+          >>> Success('a').bind(bindable) == Success('ab')
+          True
+
         """
         return function(self._inner_value)
 
     def fix(self, function):
-        """Returns the '_Success' instance that was used to call the method."""
+        """
+        Returns the '_Success' instance that was used to call the method.
+
+        .. code:: python
+
+          >>> def fixable(arg: str) -> str:
+          ...      return 'ab'
+          ...
+          >>> Success('a').fix(fixable) == Success('a')
+          True
+
+        """
         return self
 
     def rescue(self, function):
-        """Returns the '_Success' instance that was used to call the method."""
+        """
+        Returns the '_Success' instance that was used to call the method.
+
+        .. code:: python
+
+          >>> def rescuable(arg: str) -> Result[str, str]:
+          ...      return Success(arg + 'b')
+          ...
+          >>> Success('a').rescue(rescuable) == Success('a')
+          True
+
+        """
         return self
 
     def alt(self, function):
-        """Returns the '_Success' instance that was used to call the method."""
+        """
+        Returns the '_Success' instance that was used to call the method.
+
+        .. code:: python
+
+          >>> def altable(arg: str) -> Result[str, str]:
+          ...      return Success(arg + 'b')
+          ...
+          >>> Success('a').alt(altable) == Success('a')
+          True
+
+        """
         return self
 
     def value_or(self, default_value):
-        """Returns the value if we deal with '_Success' or default otherwise."""
+        """
+        Returns the value if we deal with '_Success' or default otherwise.
+
+        .. code:: python
+
+          >>> Success(1).value_or(2)
+          1
+
+        """
         return self._inner_value
 
     def unwrap(self):
-        """Returns the unwrapped value from the inside of this container."""
+        """
+        Returns the unwrapped value from the inside of this container.
+
+        .. code:: python
+
+          >>> Success(1).unwrap()
+          1
+
+        """
         return self._inner_value
 
     def failure(self):
-        """Raises an exception, since it does not have an error inside."""
+        """
+        Raises an exception, since it does not have an error inside.
+
+        .. code:: python
+
+          >>> Success(1).failure()
+          Traceback (most recent call last):
+            ...
+          returns.primitives.exceptions.UnwrapFailedError
+
+        """
         raise UnwrapFailedError(self)
 
 
@@ -279,6 +431,16 @@ def safe(function):  # noqa: C901
     It does not catch 'BaseException' subclasses.
 
     Supports both async and regular functions.
+
+    >>> @safe
+    ... def might_raise(arg: int) -> float:
+    ...     return 1 / arg
+    ...
+    >>> might_raise(1) == Success(1.0)
+    True
+    >>> isinstance(might_raise(0), _Failure)
+    True
+
     """
     if iscoroutinefunction(function):
         async def decorator(*args, **kwargs):  # noqa: WPS430

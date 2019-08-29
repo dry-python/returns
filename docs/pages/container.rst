@@ -116,7 +116,7 @@ or we can fix the situation.
        S3 --> S5
        S5 --> S7
 
-       F2 -- Map Failure --> F4
+       F2 -- Alt --> F4
        F4 --> F6
        F6 --> F8
 

@@ -52,6 +52,23 @@ but how can we do it inversevely?
 That's it.
 
 
+tap
+---
+
+We need ``tap()`` function to easily compose values
+with functions that does not return.
+For example you sometimes need to ``print()`` values inside your :ref:`pipe`:
+
+.. code:: python
+
+  from returns.functions import tap
+
+  result = tap(print)(1)  # will print and return 1
+  # => prints 1
+  assert result == 1
+  # => True
+
+
 raise_exception
 ---------------
 

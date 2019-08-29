@@ -6,6 +6,20 @@ incremental in minor, bugfixes only are patches.
 See (0Ver)[https://0ver.org/].
 
 
+## 0.11.0 WIP
+
+### Features
+
+- Adds `tap` function
+- Now `pipe` allows to pipe 8 steps
+
+### Misc
+
+- Now all methods have doctests
+- Updates docs about `Success` and `_Success`, `Failure` and `_Failure`
+- Updates docs about `@pipeline`
+
+
 ## 0.10.0
 
 ### Features
