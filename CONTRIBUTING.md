@@ -47,6 +47,13 @@ flake8 .
 
 These steps are mandatory during the CI.
 
+### Type tests
+
+We also `pytest-mypy-plugins`. Tests cases are located inside `./typesafety`
+If you create new types or typed functions, it is required to test their types.
+Here's [a tutorial](https://sobolevn.me/2019/08/testing-mypy-types) on how to do that.
+
+
 ## Type checks
 
 We use `mypy` to run type checks on our code.
