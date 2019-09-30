@@ -821,12 +821,12 @@ description = "pytest plugin for writing tests for mypy plugins"
 name = "pytest-mypy-plugins"
 optional = false
 python-versions = "*"
-version = "1.0.3"
+version = "1.1.0"
 
 [package.dependencies]
 capturer = "*"
 decorator = "*"
-mypy = "*"
+mypy = ">=0.730"
 pytest = "*"
 pyyaml = "*"
 
@@ -1213,7 +1213,7 @@ version = "0.6.0"
 more-itertools = "*"
 
 [metadata]
-content-hash = "48a74cee2afbdaece28852597048c58067ea0a5f86bc4d165b727f5381210d1f"
+content-hash = "9c55b0308ff93723cc9a835aa4a434c15763cbbc116745d2e143214021306b72"
 python-versions = "^3.6"
 
 [metadata.hashes]
@@ -1295,7 +1295,7 @@ pyreadline = ["4530592fc2e85b25b1a9f79664433da09237c1a270e4d78ea5aa3a2c7229e2d1"
 pytest = ["813b99704b22c7d377bbd756ebe56c35252bb710937b46f207100e843440b3c2", "cc6620b96bc667a0c8d4fa592a8c9c94178a1bd6cc799dbb057dfd9286d31a31"]
 pytest-asyncio = ["9fac5100fd716cbecf6ef89233e8590a4ad61d729d1732e0a96b84182df1daaf", "d734718e25cfc32d2bf78d346e99d33724deeba774cc4afdf491530c6184b63b"]
 pytest-cov = ["2b097cde81a302e1047331b48cadacf23577e431b61e9c6f49a1170bbe3d3da6", "e00ea4fdde970725482f1f35630d12f074e121a23801aabf2ae154ec6bdd343a"]
-pytest-mypy-plugins = ["36af4c45f8083be64982a2bbb78e2735cb805f0c5c8076bc70b5a071fe78b5e9", "90b451ebf8126a8eb919ecdce18eaf50fc063e0f2db99ab843f86bea77f41618"]
+pytest-mypy-plugins = ["2aa73a7081dbb03dadfa3d2e7bc8d06544931799ef0d26d77c76519bcbaabe4b", "fc754203133ab528e66b0feb3466a4a2f6a5ac274e0d9c571d42c1e9c5d24aa4"]
 pytest-randomly = ["5facc2b5ac56e36b9c4bf14f49cc7b4c95427835bbf4a3c739b71a5f5f82d58a", "9256c9ff88466f7bf9794d2eeeea8fbf1cd1bc8df1b3575df59e89b8813bffaa"]
 python-slugify = ["a9f468227cb11e20e251670d78e1b5f6b0b15dd37bbd5c9814a25a904e44ff66"]
 pytz = ["26c0b32e437e54a18161324a2fca3c4b9846b74a8dccddd843113109e1116b32", "c894d57500a4cd2d5c71114aaab77dbab5eabd9022308ce5ac9bb93a60a6f0c7"]
