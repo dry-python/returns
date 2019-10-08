@@ -809,7 +809,7 @@ description = "Pytest plugin for measuring coverage."
 name = "pytest-cov"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-version = "2.7.1"
+version = "2.8.1"
 
 [package.dependencies]
 coverage = ">=4.4"
@@ -1213,7 +1213,7 @@ version = "0.6.0"
 more-itertools = "*"
 
 [metadata]
-content-hash = "dc5789fd748601477069aa7d2d706736db860b1ce2d7be8ae7c44bcd97fbe631"
+content-hash = "077d9451286a5cd16cd808b850b09392902f75db9f661dcebeff368ddc9d0dae"
 python-versions = "^3.6"
 
 [metadata.hashes]
@@ -1294,7 +1294,7 @@ pyparsing = ["6f98a7b9397e206d78cc01df10131398f1c8b8510a2f4d97d9abd82e1aacdd80",
 pyreadline = ["4530592fc2e85b25b1a9f79664433da09237c1a270e4d78ea5aa3a2c7229e2d1", "65540c21bfe14405a3a77e4c085ecfce88724743a4ead47c66b84defcf82c32e", "9ce5fa65b8992dfa373bddc5b6e0864ead8f291c94fbfec05fbd5c836162e67b"]
 pytest = ["7e4800063ccfc306a53c461442526c5571e1462f61583506ce97e4da6a1d88c8", "ca563435f4941d0cb34767301c27bc65c510cb82e90b9ecf9cb52dc2c63caaa0"]
 pytest-asyncio = ["9fac5100fd716cbecf6ef89233e8590a4ad61d729d1732e0a96b84182df1daaf", "d734718e25cfc32d2bf78d346e99d33724deeba774cc4afdf491530c6184b63b"]
-pytest-cov = ["2b097cde81a302e1047331b48cadacf23577e431b61e9c6f49a1170bbe3d3da6", "e00ea4fdde970725482f1f35630d12f074e121a23801aabf2ae154ec6bdd343a"]
+pytest-cov = ["cc6742d8bac45070217169f5f72ceee1e0e55b0221f54bcf24845972d3a47f2b", "cdbdef4f870408ebdbfeb44e63e07eb18bb4619fae852f6e760645fa36172626"]
 pytest-mypy-plugins = ["2aa73a7081dbb03dadfa3d2e7bc8d06544931799ef0d26d77c76519bcbaabe4b", "fc754203133ab528e66b0feb3466a4a2f6a5ac274e0d9c571d42c1e9c5d24aa4"]
 pytest-randomly = ["5facc2b5ac56e36b9c4bf14f49cc7b4c95427835bbf4a3c739b71a5f5f82d58a", "9256c9ff88466f7bf9794d2eeeea8fbf1cd1bc8df1b3575df59e89b8813bffaa"]
 python-slugify = ["a9f468227cb11e20e251670d78e1b5f6b0b15dd37bbd5c9814a25a904e44ff66"]
