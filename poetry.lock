@@ -1020,7 +1020,7 @@ description = "A typlog Sphinx theme"
 name = "sphinx-typlog-theme"
 optional = false
 python-versions = "*"
-version = "0.7.3"
+version = "0.8.0"
 
 [[package]]
 category = "dev"
@@ -1213,7 +1213,7 @@ version = "0.6.0"
 more-itertools = "*"
 
 [metadata]
-content-hash = "ca23b44429684d06b3a5dc65ec1baf944e9293e5f5b57774cb5dabf7fdfd49ef"
+content-hash = "dc5789fd748601477069aa7d2d706736db860b1ce2d7be8ae7c44bcd97fbe631"
 python-versions = "^3.6"
 
 [metadata.hashes]
@@ -1312,7 +1312,7 @@ snowballstemmer = ["9f3b9ffe0809d174f7047e121431acf99c89a7040f0ca84f94ba53a498e6
 sortedcontainers = ["974e9a32f56b17c1bac2aebd9dcf197f3eb9cd30553c5852a3187ad162e1a03a", "d9e96492dd51fae31e60837736b38fe42a187b5404c16606ff7ee7cd582d4c60"]
 sphinx = ["0d586b0f8c2fc3cc6559c5e8fd6124628110514fda0e5d7c82e682d749d2e845", "839a3ed6f6b092bb60f492024489cc9e6991360fb9f52ed6361acd510d261069"]
 sphinx-autodoc-typehints = ["0d968ec3ee4f7fe7695ab6facf5cd2d74d3cea67584277458ad9b2788ebbcc3b", "8edca714fd3de8e43467d7e51dd3812fe999f8874408a639f7c38a9e1a5a4eb3"]
-sphinx-typlog-theme = ["a2a2a3a5f3d1f89b165835762469e386e977251c98b4d76b073d9b04f939571a", "effba0175ca2cadebbb47671ce6471e4095ad563239431e9b6326feed2dec3ee"]
+sphinx-typlog-theme = ["61dbf97b1fde441bd03a5409874571e229898b67fb3080400837b8f4cee46659", "b0ab728ab31d071523af0229bcb6427a13493958b3fc2bb7db381520fab77de4"]
 sphinxcontrib-applehelp = ["edaa0ab2b2bc74403149cb0209d6775c96de797dfd5b5e2a71981309efab3897", "fb8dee85af95e5c30c91f10e7eb3c8967308518e0f7488a2828ef7bc191d0d5d"]
 sphinxcontrib-devhelp = ["6c64b077937330a9128a4da74586e8c2130262f014689b4b89e2d08ee7294a34", "9512ecb00a2b0821a146736b39f7aeb90759834b07e81e8cc23a9c70bacb9981"]
 sphinxcontrib-htmlhelp = ["4670f99f8951bd78cd4ad2ab962f798f5618b17675c35c5ac3b2132a14ea8422", "d4fd39a65a625c9df86d7fa8a2d9f3cd8299a3a4b15db63b50aac9e161d8eff7"]
