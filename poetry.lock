@@ -1009,7 +1009,7 @@ description = "Type hints (PEP 484) support for the Sphinx autodoc extension"
 name = "sphinx-autodoc-typehints"
 optional = false
 python-versions = ">=3.5.2"
-version = "1.8.0"
+version = "1.9.0"
 
 [package.dependencies]
 Sphinx = ">=2.1"
@@ -1213,7 +1213,7 @@ version = "0.6.0"
 more-itertools = "*"
 
 [metadata]
-content-hash = "baee75b111a2de459c5b7f36551e953d76a9bcf507f00d2081eb65b0a0e826bf"
+content-hash = "082e820e8aee81e99b7e79934c515c34a7955cadfec3903568b09fc2648ec6a3"
 python-versions = "^3.6"
 
 [metadata.hashes]
@@ -1311,7 +1311,7 @@ smmap2 = ["0555a7bf4df71d1ef4218e4807bbf9b201f910174e6e08af2e138d4e517b4dde", "2
 snowballstemmer = ["9f3b9ffe0809d174f7047e121431acf99c89a7040f0ca84f94ba53a498e6d0c9"]
 sortedcontainers = ["974e9a32f56b17c1bac2aebd9dcf197f3eb9cd30553c5852a3187ad162e1a03a", "d9e96492dd51fae31e60837736b38fe42a187b5404c16606ff7ee7cd582d4c60"]
 sphinx = ["31088dfb95359384b1005619827eaee3056243798c62724fd3fa4b84ee4d71bd", "52286a0b9d7caa31efee301ec4300dbdab23c3b05da1c9024b4e84896fb73d79"]
-sphinx-autodoc-typehints = ["0d968ec3ee4f7fe7695ab6facf5cd2d74d3cea67584277458ad9b2788ebbcc3b", "8edca714fd3de8e43467d7e51dd3812fe999f8874408a639f7c38a9e1a5a4eb3"]
+sphinx-autodoc-typehints = ["0dfd26be5b81049ce81b644913a06a12795ded2791adc0a4e13420eb9a832852", "81bfdf4fbb9e248f10a6bc3f931bf80e85e95a185530e1a862db9269efd72cf9"]
 sphinx-typlog-theme = ["61dbf97b1fde441bd03a5409874571e229898b67fb3080400837b8f4cee46659", "b0ab728ab31d071523af0229bcb6427a13493958b3fc2bb7db381520fab77de4"]
 sphinxcontrib-applehelp = ["edaa0ab2b2bc74403149cb0209d6775c96de797dfd5b5e2a71981309efab3897", "fb8dee85af95e5c30c91f10e7eb3c8967308518e0f7488a2828ef7bc191d0d5d"]
 sphinxcontrib-devhelp = ["6c64b077937330a9128a4da74586e8c2130262f014689b4b89e2d08ee7294a34", "9512ecb00a2b0821a146736b39f7aeb90759834b07e81e8cc23a9c70bacb9981"]
