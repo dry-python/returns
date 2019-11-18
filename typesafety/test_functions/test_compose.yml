@@ -1,9 +1,40 @@
-- case: compose_two_functions
+- case: compose_two_correct_functions
   disable_cache: true
   main: |
     from returns.functions import compose
 
     def first(num: int) -> float:
+        return float(num)
+
+    def second(num: float) -> str:
+        return str(num)
+
+    reveal_type(compose(first, second))  # N: Revealed type is 'def (builtins.int*) -> builtins.str*'
+
+
+- case: compose_two_wrong_functions
+  main: |
+    from returns.functions import compose
+
+    def first(num: int) -> float:
+        return float(num)
+
+    def second(num: str) -> str:
+        return str(num)
+
+    reveal_type(compose(first, second))
+  out: |
+    main:9: error: Cannot infer type argument 2 of "compose"
+    main:9: note: Revealed type is 'def (Any) -> Any'
+
+
+- case: compose_optional_functions
+  mypy_config:
+    no_implicit_optional = True
+  main: |
+    from returns.functions import compose
+
+    def first(num: int = 1) -> float:
         return float(num)
 
     def second(num: float) -> str:
