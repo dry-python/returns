@@ -28,3 +28,9 @@ def test_maybe_abstract_method_single(method_name):
     method = getattr(Maybe, method_name)
     with pytest.raises(NotImplementedError):
         method(object)
+
+
+def test_maybe_types():
+    """Checks that we have correct types inside Maybe."""
+    assert isinstance(Maybe.success_type, type)
+    assert isinstance(Maybe.failure_type, type)

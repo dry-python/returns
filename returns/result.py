@@ -6,9 +6,11 @@ from inspect import iscoroutinefunction
 from typing import (
     Any,
     Callable,
+    ClassVar,
     Coroutine,
     Generic,
     NoReturn,
+    Type,
     TypeVar,
     Union,
     overload,
@@ -43,6 +45,8 @@ class Result(
     """
 
     _inner_value: Union[_ValueType, _ErrorType]
+    success_type: ClassVar[Type['_Success']]
+    failure_type: ClassVar[Type['_Failure']]
 
     def map(  # noqa: A003
         self,
@@ -390,6 +394,10 @@ class _Success(Result[_ValueType, Any]):
 
         """
         raise UnwrapFailedError(self)
+
+
+Result.success_type = _Success
+Result.failure_type = _Failure
 
 
 def Success(  # noqa: N802

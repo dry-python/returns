@@ -71,3 +71,19 @@
         return Failure(str(inner_value))
 
     reveal_type(factory(1))  # N: Revealed type is 'returns.result.Result[builtins.int, builtins.str]'
+
+
+- case: result_success_type
+  disable_cache: true
+  main: |
+    from returns.result import Result
+
+    reveal_type(Result.success_type)  # N: Revealed type is 'Type[returns.result._Success[Any]]'
+
+
+- case: result_failure_type
+  disable_cache: true
+  main: |
+    from returns.result import Result
+
+    reveal_type(Result.failure_type)  # N: Revealed type is 'Type[returns.result._Failure[Any]]'

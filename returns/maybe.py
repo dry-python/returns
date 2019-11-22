@@ -6,10 +6,12 @@ from inspect import iscoroutinefunction
 from typing import (
     Any,
     Callable,
+    ClassVar,
     Coroutine,
     Generic,
     NoReturn,
     Optional,
+    Type,
     TypeVar,
     Union,
     overload,
@@ -43,6 +45,8 @@ class Maybe(
     """
 
     _inner_value: Optional[_ValueType]
+    success_type: ClassVar[Type['_Some']]
+    failure_type: ClassVar[Type['_Nothing']]
 
     @classmethod
     def new(cls, inner_value: Optional[_ValueType]) -> 'Maybe[_ValueType]':
@@ -149,7 +153,7 @@ class _Nothing(Maybe[Any]):
 
         Applies 'function' to the contents of the 'Some' instance
         and returns a new 'Some' object containing the result.
-        'function' should not accept any arguments
+        'function' should not accept one argument
         and return a non-container result.
 
         .. code:: python
@@ -167,8 +171,8 @@ class _Nothing(Maybe[Any]):
         """
         Applies 'function' to the result of a previous calculation.
 
-        'function' should not accept any arguments
-        and return Maybe a 'Nothing' or 'Some' type object.
+        'function' should accept one argument
+        and return a container result: 'Nothing' or 'Some' type object.
 
         .. code:: python
 
@@ -339,6 +343,10 @@ class _Some(Maybe[_ValueType]):
 
         """
         raise UnwrapFailedError(self)
+
+
+Maybe.success_type = _Some
+Maybe.failure_type = _Nothing
 
 
 def Some(inner_value: Optional[_ValueType]) -> Maybe[_ValueType]:  # noqa: N802

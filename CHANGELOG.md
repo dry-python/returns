@@ -6,6 +6,18 @@ incremental in minor, bugfixes only are patches.
 See (0Ver)[https://0ver.org/].
 
 
+## 0.12.0
+
+### Features
+
+- `Maybe` and `Result` now has `success_type` and `failure_type` aliases
+- We now support `dry-python/classes` as a first-class citizen
+
+### Bugfixes
+
+- Fixes that `Nothing` had incorrect docstrings
+
+
 ## 0.11.0
 
 ### Features

@@ -29,3 +29,9 @@ def test_result_abstract_method_single(method_name):
     method = getattr(Result, method_name)
     with pytest.raises(NotImplementedError):
         method(object)
+
+
+def test_result_types():
+    """Ensures that Result has two types inside a class."""
+    assert isinstance(Result.success_type, type)
+    assert isinstance(Result.failure_type, type)

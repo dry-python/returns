@@ -22,3 +22,20 @@
     from returns.maybe import Nothing
 
     reveal_type(Nothing)  # N: Revealed type is 'returns.maybe.Maybe[<nothing>]'
+
+
+- case: maybe_result_success_type
+  disable_cache: true
+  main: |
+    from returns.maybe import Maybe
+
+    reveal_type(Maybe.success_type)  # N: Revealed type is 'Type[returns.maybe._Some[Any]]'
+
+
+- case: maybe_result_failure_type
+  disable_cache: true
+  main: |
+    from returns.maybe import Maybe
+
+    reveal_type(Maybe.failure_type)  # N: Revealed type is 'Type[returns.maybe._Nothing]'
+
