@@ -27,7 +27,7 @@ class BaseContainer(object, metaclass=ABCMeta):
         """
         object.__setattr__(self, '_inner_value', inner_value)  # noqa: WPS609
 
-    def __setattr__(self, attr_name: str, attr_value) -> NoReturn:
+    def __setattr__(self, attr_name: str, attr_value: Any) -> NoReturn:
         """Makes inner state of the containers immutable."""
         raise ImmutableStateError()
 
@@ -42,7 +42,7 @@ class BaseContainer(object, metaclass=ABCMeta):
             str(self._inner_value),
         )
 
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other: Any) -> bool:
         """Used to compare two 'Container' objects."""
         if not isinstance(self, type(other)):
             return False
@@ -51,6 +51,14 @@ class BaseContainer(object, metaclass=ABCMeta):
     def __hash__(self) -> int:
         """Used to use this value as a key."""
         return hash(self._inner_value)
+
+    def __getstate__(self) -> Any:
+        """That's how this object will be pickled."""
+        return self._inner_value
+
+    def __setstate__(self, state: Any) -> None:
+        """Loading state from pickled data."""
+        object.__setattr__(self, '_inner_value', state)  # noqa: WPS609
 
 
 @runtime

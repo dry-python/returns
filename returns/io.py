@@ -86,7 +86,7 @@ class IO(Generic[_ValueType], BaseContainer):
         """
         Lifts function to be wrapped in ``IO`` for better composition.
 
-        In other words, it modifies the function
+        In other words, it modifies the function's
         signature from: ``a -> b`` to: ``IO[a] -> IO[b]``
 
         This is how it should be used:

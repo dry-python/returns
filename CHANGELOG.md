@@ -6,6 +6,13 @@ incremental in minor, bugfixes only are patches.
 See (0Ver)[https://0ver.org/].
 
 
+## 0.13.0
+
+### Bugfixes
+
+- Fixes that containers were not usable with `multiprocessing`
+
+
 ## 0.12.0
 
 ### Features

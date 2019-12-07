@@ -3,6 +3,7 @@
 from typing import Any, Callable, NoReturn, TypeVar
 
 from returns.generated.box import _box as box  # noqa: F401, WPS436
+from returns.generated.io_context import _context as io_context
 
 # Aliases:
 _FirstType = TypeVar('_FirstType')
@@ -72,7 +73,8 @@ def tap(
     """
     Allows to apply some function and return an argument, instead of a result.
 
-    Is usefull for side-effects like ``print()``, ``logger.log``, etc.
+    Is usefull for composing functions with
+    side-effects like ``print()``, ``logger.log()``, etc.
 
     .. code:: python
 
