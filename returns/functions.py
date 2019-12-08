@@ -3,7 +3,6 @@
 from typing import Any, Callable, NoReturn, TypeVar
 
 from returns.generated.box import _box as box  # noqa: F401, WPS436
-from returns.generated.io_context import _context as io_context
 
 # Aliases:
 _FirstType = TypeVar('_FirstType')
