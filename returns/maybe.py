@@ -32,8 +32,8 @@ _SecondType = TypeVar('_SecondType')
 
 
 class Maybe(
-    Generic[_ValueType],
     BaseContainer,
+    Generic[_ValueType],
     metaclass=ABCMeta,
 ):
     """
@@ -107,11 +107,11 @@ class _Nothing(Maybe[Any]):
 
     def __init__(self, inner_value: None = None) -> None:
         """
-        Wraps the given value in the Container.
+        Wraps the given value in the ``Nothing`` container.
 
         ``inner_value`` can only be ``None``.
         """
-        BaseContainer.__init__(self, inner_value)  # noqa: WPS609
+        super().__init__(None)
 
     def __str__(self):
         """Custom str definition without state inside."""
@@ -236,7 +236,7 @@ class _Some(Maybe[_ValueType]):
 
     def __init__(self, inner_value: _ValueType) -> None:
         """Required for typing."""
-        BaseContainer.__init__(self, inner_value)  # noqa: WPS609
+        super().__init__(inner_value)
 
     def map(self, function):  # noqa: A003
         """

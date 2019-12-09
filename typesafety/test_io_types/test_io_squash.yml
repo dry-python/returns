@@ -1,0 +1,22 @@
+- case: io_squash2
+  disable_cache: true
+  main: |
+    from returns.io import IO, io_squash
+
+    reveal_type(io_squash(IO(1), IO('a')))  # N: Revealed type is 'returns.io.IO[Tuple[builtins.int*, builtins.str*]]'
+
+
+- case: io_squash3
+  disable_cache: true
+  main: |
+    from returns.io import IO, io_squash
+
+    reveal_type(io_squash(IO(1), IO('a'), IO(False)))  # N: Revealed type is 'returns.io.IO[Tuple[builtins.int*, builtins.str*, builtins.bool*]]'
+
+
+- case: io_squash4
+  disable_cache: true
+  main: |
+    from returns.io import IO, io_squash
+
+    reveal_type(io_squash(IO(1), IO('a'), IO(False), IO(2)))  # N: Revealed type is 'returns.io.IO[Tuple[builtins.int*, builtins.str*, builtins.bool*, builtins.int*]]'

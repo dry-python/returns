@@ -40,7 +40,7 @@ def _pipe(
     ...
 
 
-@overload  # noqa: WPS211
+@overload
 def _pipe(
     p1: Callable[[_T1], _T2],
     p2: Callable[[_T2], _T3],
@@ -51,7 +51,7 @@ def _pipe(
     ...
 
 
-@overload  # noqa: WPS211
+@overload
 def _pipe(
     p1: Callable[[_T1], _T2],
     p2: Callable[[_T2], _T3],
@@ -63,7 +63,7 @@ def _pipe(
     ...
 
 
-@overload  # noqa: WPS211
+@overload
 def _pipe(
     p1: Callable[[_T1], _T2],
     p2: Callable[[_T2], _T3],
@@ -76,7 +76,7 @@ def _pipe(
     ...
 
 
-@overload  # noqa: WPS211
+@overload
 def _pipe(
     p1: Callable[[_T1], _T2],
     p2: Callable[[_T2], _T3],

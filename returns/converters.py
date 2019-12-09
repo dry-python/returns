@@ -2,7 +2,7 @@
 
 from typing import TypeVar, overload
 
-from returns.generated import coalesce
+from returns._generated import coalesce  # noqa: WPS436
 from returns.io import IO
 from returns.maybe import Maybe
 from returns.result import Failure, Result, Success

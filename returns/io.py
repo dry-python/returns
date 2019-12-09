@@ -6,6 +6,7 @@ from typing import Callable, Coroutine, Generic, TypeVar, overload
 
 from typing_extensions import final
 
+from returns._generated.squash import _squash as io_squash  # noqa: F401, WPS436
 from returns.primitives.container import BaseContainer
 
 _ValueType = TypeVar('_ValueType', covariant=True)
@@ -17,7 +18,7 @@ _SecondType = TypeVar('_SecondType')
 
 
 @final
-class IO(Generic[_ValueType], BaseContainer):
+class IO(BaseContainer, Generic[_ValueType]):
     """
     Explicit marker for impure function results.
 
@@ -33,7 +34,7 @@ class IO(Generic[_ValueType], BaseContainer):
 
     def __init__(self, inner_value: _ValueType) -> None:
         """Required for typing."""
-        BaseContainer.__init__(self, inner_value)  # noqa: WPS609
+        super().__init__(inner_value)
 
     def map(  # noqa: A003
         self,

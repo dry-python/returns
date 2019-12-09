@@ -34,8 +34,8 @@ _SecondType = TypeVar('_SecondType')
 
 
 class Result(
-    Generic[_ValueType, _ErrorType],
     BaseContainer,
+    Generic[_ValueType, _ErrorType],
     metaclass=ABCMeta,
 ):
     """
@@ -128,7 +128,7 @@ class _Failure(Result[Any, _ErrorType]):
 
     def __init__(self, inner_value: _ErrorType) -> None:
         """Required for typing."""
-        BaseContainer.__init__(self, inner_value)  # noqa: WPS609
+        super().__init__(inner_value)
 
     def map(self, function):  # noqa: A003
         """
@@ -272,7 +272,7 @@ class _Success(Result[_ValueType, Any]):
 
     def __init__(self, inner_value: _ValueType) -> None:
         """Required for typing."""
-        BaseContainer.__init__(self, inner_value)  # noqa: WPS609
+        super().__init__(inner_value)
 
     def map(self, function):  # noqa: A003
         """

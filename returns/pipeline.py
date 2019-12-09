@@ -4,7 +4,7 @@ from functools import wraps
 from inspect import iscoroutinefunction
 from typing import Callable, Coroutine, TypeVar, Union, overload
 
-from returns.generated.pipe import _pipe as pipe  # noqa: F401, WPS436
+from returns._generated.pipe import _pipe as pipe  # noqa: F401, WPS436
 from returns.maybe import Maybe
 from returns.primitives.exceptions import UnwrapFailedError
 from returns.result import Result
