@@ -1017,7 +1017,7 @@ description = "Python documentation generator"
 name = "sphinx"
 optional = false
 python-versions = ">=3.5"
-version = "2.2.2"
+version = "2.3.0"
 
 [package.dependencies]
 Jinja2 = ">=2.3"
@@ -1240,7 +1240,7 @@ version = "0.6.0"
 more-itertools = "*"
 
 [metadata]
-content-hash = "c2bb3a5f02dab9f8d84b2d30266966032e236352ee1b50a82e5df01870a13103"
+content-hash = "772ebe751be9f2263f1fabd53a0fcddcf1a5736b5b6a30647067819ea45287d0"
 python-versions = "^3.6"
 
 [metadata.hashes]
@@ -1340,7 +1340,7 @@ six = ["1f1b7d42e254082a9db6279deae68afb421ceba6158efa6131de7b3003ee93fd", "30f6
 smmap2 = ["0555a7bf4df71d1ef4218e4807bbf9b201f910174e6e08af2e138d4e517b4dde", "29a9ffa0497e7f2be94ca0ed1ca1aa3cd4cf25a1f6b4f5f87f74b46ed91d609a"]
 snowballstemmer = ["209f257d7533fdb3cb73bdbd24f436239ca3b2fa67d56f6ff88e86be08cc5ef0", "df3bac3df4c2c01363f3dd2cfa78cce2840a79b9f1c2d2de9ce8d31683992f52"]
 sortedcontainers = ["974e9a32f56b17c1bac2aebd9dcf197f3eb9cd30553c5852a3187ad162e1a03a", "d9e96492dd51fae31e60837736b38fe42a187b5404c16606ff7ee7cd582d4c60"]
-sphinx = ["3b16e48e791a322d584489ab28d8800652123d1fbfdd173e2965a31d40bf22d7", "559c1a8ed1365a982f77650720b41114414139a635692a23c2990824d0a84cf2"]
+sphinx = ["0a11e2fd31fe5c7e64b4fc53c2c022946512f021d603eb41ac6ae51d5fcbb574", "138e39aa10f28d52aa5759fc6d1cba2be6a4b750010974047fa7d0e31addcf63"]
 sphinx-autodoc-typehints = ["27c9e6ef4f4451766ab8d08b2d8520933b97beb21c913f3df9ab2e59b56e6c6c", "a6b3180167479aca2c4d1ed3b5cb044a70a76cccd6b38662d39288ebd9f0dff0"]
 sphinx-typlog-theme = ["61dbf97b1fde441bd03a5409874571e229898b67fb3080400837b8f4cee46659", "b0ab728ab31d071523af0229bcb6427a13493958b3fc2bb7db381520fab77de4"]
 sphinxcontrib-applehelp = ["edaa0ab2b2bc74403149cb0209d6775c96de797dfd5b5e2a71981309efab3897", "fb8dee85af95e5c30c91f10e7eb3c8967308518e0f7488a2828ef7bc191d0d5d"]
