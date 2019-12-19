@@ -45,7 +45,7 @@ To run linting:
 ```bash
 flake8 .
 ```
-Keep in mind: default virtual environment folder excluded by flake8 is `.venv`.
+Keep in mind: default virtual environment folder excluded by flake8 style checking is `.venv`.
 If you want to customize this parameter, you should do this in `setup.cfg`.
 
 These steps are mandatory during the CI.
