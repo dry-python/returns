@@ -58,7 +58,7 @@ safety = "^1.8"
 
 pytest = "^5.3"
 pytest-cov = "^2.8"
-pytest-randomly = "^3.1"
+pytest-randomly = "^3.2"
 pytest-asyncio = "^0.10.0"
 pytest-mypy-plugins = "^1.2"
 
