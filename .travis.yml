@@ -3,7 +3,7 @@ dist: xenial
 
 python:
   - 3.6
-  - 3.7.6
+  - 3.7.5
 
 
 before_install:

@@ -6,12 +6,14 @@ incremental in minor, bugfixes only are patches.
 See (0Ver)[https://0ver.org/].
 
 
-## 0.13.0 WIP
+## 0.12.0 WIP
 
 ### Features
 
 - **Breaking**: now `@pipeline` requires a container type when created:
   `@pipeline(Result)` or `@pipeline(Maybe)`
+- `Maybe` and `Result` now has `success_type` and `failure_type` aliases
+- We now support `dry-python/classes` as a first-class citizen
 - Adds `io_squash` to squash several `IO` containers into one container
   with a tuple inside, currently works with `9` containers max at a time
 - Adds `untap` function which does convert return type to `None`
@@ -20,22 +22,12 @@ See (0Ver)[https://0ver.org/].
 
 - Fixes that containers were not usable with `multiprocessing`
 - Changes the inheritance order, now `BaseContainer` is the first child
+- Fixes that `Nothing` had incorrect docstrings
 
 ### Misc
 
 - Now `generated` package is protected
-
-
-## 0.12.0
-
-### Features
-
-- `Maybe` and `Result` now has `success_type` and `failure_type` aliases
-- We now support `dry-python/classes` as a first-class citizen
-
-### Bugfixes
-
-- Fixes that `Nothing` had incorrect docstrings
+- Updates `poetry` to `1.0`
 
 
 ## 0.11.0

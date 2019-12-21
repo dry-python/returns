@@ -1,5 +1,5 @@
 [build-system]
-requires = ["poetry>=0.12"]
+requires = ["poetry>=1.0"]
 build-backend = "poetry.masonry.api"
 
 
@@ -11,7 +11,7 @@ style = "https://raw.githubusercontent.com/wemake-services/wemake-python-stylegu
 name = "returns"
 version = "0.11.0"
 description = "Make your functions return something meaningful, typed, and safe!"
-license = "BSD-2-Clause"
+license = "BSD-3-Clause"
 
 authors = [
   "sobolevn <mail@sobolevn.me>"
@@ -43,7 +43,7 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.6"
+python = "~3.6 || ~3.7"
 typing-extensions = "^3.7"
 
 [tool.poetry.dev-dependencies]
