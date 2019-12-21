@@ -7,3 +7,15 @@
         return float(num)
 
     reveal_type(tap(first))  # N: Revealed type is 'def (builtins.int*) -> builtins.int*'
+
+
+- case: untap_single_function
+  disable_cache: true
+  main: |
+    from returns.functions import untap
+
+    def first(num: int) -> float:
+        return float(num)
+
+    reveal_type(untap(first))  # N: Revealed type is 'def (builtins.int*)'
+    reveal_type(untap(first)(1))  # N: Revealed type is 'None'

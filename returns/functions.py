@@ -93,6 +93,35 @@ def tap(
     return decorator
 
 
+def untap(
+    function: Callable[[_FirstType], Any],
+) -> Callable[[_FirstType], None]:
+    """
+    Allows to apply some function and always return ``None`` as a result.
+
+    Is usefull for composing functions that do some side effects
+    and return some nosense.
+
+    Is the kind of a reverse of the ``tap`` function.
+
+    .. code:: python
+
+      >>> def strange_log(arg: int) -> int:
+      ...     print(arg)
+      ...     return arg
+      >>> untap(strange_log)(2)
+      2
+      >>> untap(tap(lambda _: 1))(2)
+
+    See also:
+        - https://github.com/dry-python/returns/issues/145
+
+    """
+    def decorator(argument_to_return: _FirstType) -> None:
+        function(argument_to_return)
+    return decorator
+
+
 def raise_exception(exception: Exception) -> NoReturn:
     """
     Helper function to raise exceptions as a function.

@@ -16,13 +16,13 @@ def _sum(first: int, second: float) -> float:
     return first + second
 
 
-@pipeline
+@pipeline(Result)
 def _result_pipeline(number: int) -> Result[float, Exception]:
     divided = _divide(number).unwrap()
     return _sum(number, divided)
 
 
-@pipeline
+@pipeline(Result)
 async def _result_async_pipeline(number: int) -> Result[float, Exception]:
     divided = _divide(number).unwrap()
     return _sum(number, divided)

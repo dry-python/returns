@@ -6,13 +6,13 @@ from returns.maybe import Maybe, Nothing, Some
 from returns.pipeline import pipeline
 
 
-@pipeline
+@pipeline(Maybe)
 def _maybe_pipeline(number: int) -> Maybe[int]:
     first: int = Some(number).unwrap() if number else Nothing.unwrap()
     return Some(first + number)
 
 
-@pipeline
+@pipeline(Maybe)
 async def _async_maybe_pipeline(number: int) -> Maybe[int]:
     first: int = Some(number).unwrap() if number else Nothing.unwrap()
     return Some(first + number)

@@ -6,11 +6,15 @@ incremental in minor, bugfixes only are patches.
 See (0Ver)[https://0ver.org/].
 
 
-## 0.13.0
+## 0.13.0 WIP
 
 ### Features
 
-- Adds `io_squash` to squash several `IO` containers into one container with a tuple inside, currently works with `9` containers max at a time
+- **Breaking**: now `@pipeline` requires a container type when created:
+  `@pipeline(Result)` or `@pipeline(Maybe)`
+- Adds `io_squash` to squash several `IO` containers into one container
+  with a tuple inside, currently works with `9` containers max at a time
+- Adds `untap` function which does convert return type to `None`
 
 ### Bugfixes
 

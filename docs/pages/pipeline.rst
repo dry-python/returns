@@ -75,9 +75,17 @@ But, composition with ``pipe`` is limited to two things:
 pipeline
 --------
 
-What is a ``pipeline``?
+What is a ``@pipeline``?
 It is a more user-friendly syntax to work with containers
 that support both async and regular functions.
+
+``@pipeline`` decorator allows you to ``.unwrap`` container values
+from containers and work with them
+as with regular values (which they are in this context).
+
+It is something like ``do-notation`` if you wish.
+
+Works with both :ref:`Maybe <maybe>` and :ref:`Result <result>` container.
 
 Consider this task.
 We were asked to create a method
@@ -168,7 +176,7 @@ Let's see an example.
 
 .. code:: python
 
-  @pipeline
+  @pipeline(Result)
   def create_account_and_user(
       username: str,
       email: str,
@@ -223,7 +231,7 @@ And the returning value will be different.
   from returns.result import Result
   from returns.pipeline import pipeline
 
-  @pipeline
+  @pipeline(Result)
   def example() -> Result[int, str]:
       other: Result[int, Exception]
       new_value = other.unwrap() + 1  # hidden boom!

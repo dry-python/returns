@@ -81,6 +81,10 @@ For example you sometimes need to ``print()`` values inside your :ref:`pipe`:
   assert result == 1
   # => True
 
+You can also use ``untap`` function to turn any function
+return type to ``None``.
+This is also sometimes helpful for a typed function composition.
+
 
 raise_exception
 ---------------
@@ -94,7 +98,7 @@ We allow you to do that with ease!
 
   from returns.functions import raise_exception
 
-  @pipeline
+  @pipeline(Result)
   def create_account_and_user(username: str) -> ...:
       """
       Creates new Account-User pair.

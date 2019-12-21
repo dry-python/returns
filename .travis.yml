@@ -1,10 +1,9 @@
 language: python
 dist: xenial
 
-matrix:
-  include:
-    - python: 3.6
-    - python: 3.7.3
+python:
+  - 3.6
+  - 3.7.6
 
 
 before_install:
