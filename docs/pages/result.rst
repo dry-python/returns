@@ -136,6 +136,30 @@ That's why we have public
 type constructor functions: ``Success`` and ``Failure``
 and internal implementation.
 
+How to compose error types?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You might want to sometimes use ``.unify`` instead of ``.bind``
+to compose error types together.
+While ``.bind`` enforces error type to stay the same,
+``.unify`` is designed
+to return a ``Union`` of a revious error type and a new one.
+
+Like so:
+
+.. code:: python
+
+  from returns.result import Result
+
+  def div(number: int) -> Result[float, ZeroDivisionError]:
+      return 1 / number
+
+  container: Result[int, ValueError]
+  container.unify(div)
+  # => Revealed type is: Result[float, Union[ValueError, ZeroDivisionError]]
+
+So, that's a way to go, if you need this composition.
+
 
 API Reference
 -------------

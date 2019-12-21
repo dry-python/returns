@@ -10,6 +10,44 @@
     reveal_type(first.bind(returns_result))  # N: Revealed type is 'returns.result.Result[builtins.str*, builtins.Exception]'
 
 
+- case: success_unify1
+  disable_cache: true
+  main: |
+    from returns.result import Success, Result
+
+    def returns_result(param: int) -> Result[str, TypeError]:
+        ...
+
+    first: Result[int, ValueError] = Success(1)
+    reveal_type(first.unify(returns_result))  # N: Revealed type is 'returns.result.Result[builtins.str*, Union[builtins.ValueError, builtins.TypeError*]]'
+
+
+- case: success_unify2
+  disable_cache: true
+  main: |
+    from typing import Union
+    from returns.result import Success, Result
+
+    def returns_result(param: int) -> Result[str, TypeError]:
+        ...
+
+    first: Result[int, Union[ValueError, KeyError]] = Success(1)
+    reveal_type(first.unify(returns_result))  # N: Revealed type is 'returns.result.Result[builtins.str*, Union[builtins.ValueError, builtins.KeyError, builtins.TypeError*]]'
+
+
+- case: success_unify3
+  disable_cache: true
+  main: |
+    from typing import Union
+    from returns.result import Success, Result
+
+    def returns_result(param: int) -> Result[str, Union[KeyError, TypeError]]:
+        ...
+
+    first: Result[int, ValueError] = Success(1)
+    reveal_type(first.unify(returns_result))  # N: Revealed type is 'returns.result.Result[builtins.str*, Union[builtins.ValueError, builtins.KeyError, builtins.TypeError]]'
+
+
 - case: success_map
   disable_cache: true
   main: |

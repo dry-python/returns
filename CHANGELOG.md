@@ -13,6 +13,7 @@ See (0Ver)[https://0ver.org/].
 - **Breaking**: now `@pipeline` requires a container type when created:
   `@pipeline(Result)` or `@pipeline(Maybe)`
 - `Maybe` and `Result` now has `success_type` and `failure_type` aliases
+- Adds `Result.unify` utility method for better error type composition
 - We now support `dry-python/classes` as a first-class citizen
 - Adds `io_squash` to squash several `IO` containers into one container
   with a tuple inside, currently works with `9` containers max at a time

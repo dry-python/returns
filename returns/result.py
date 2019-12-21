@@ -62,6 +62,22 @@ class Result(
         """Abstract method to compose a container with another container."""
         raise NotImplementedError
 
+    def unify(
+        self,
+        function: Callable[
+            [_ValueType], 'Result[_NewValueType, _NewErrorType]',
+        ],
+    ) -> 'Result[_NewValueType, Union[_ErrorType, _NewErrorType]]':
+        """
+        Abstract method to compose a container with another container.
+
+        Similar to ``.bind``, but unifies the error type into a new type.
+        It is useful when you have several functions to compose
+        and each of them raises their own exceptions.
+        That's a way to collect all of them.
+        """
+        raise NotImplementedError
+
     def fix(
         self,
         function: Callable[[_ErrorType], _NewValueType],
@@ -155,6 +171,21 @@ class _Failure(Result[Any, _ErrorType]):
           ...      return Success(string + 'b')
           ...
           >>> Failure('a').bind(bindable) == Failure('a')
+          True
+
+        """
+        return self
+
+    def unify(self, function):
+        """
+        Returns the '_Failure' instance that was used to call the method.
+
+        .. code:: python
+
+          >>> def bindable(string: str) -> Result[str, str]:
+          ...      return Success(string + 'b')
+          ...
+          >>> Failure('a').unify(bindable) == Failure('a')
           True
 
         """
@@ -311,6 +342,29 @@ class _Success(Result[_ValueType, Any]):
 
         """
         return function(self._inner_value)
+
+    def unify(self, function):
+        """
+        Applies 'function' to the result of a previous calculation.
+
+        It is the same as ``.bind``, but handles type signatures differently.
+        While ``.bind`` forces to respect error type and not changing it,
+        ``.unify`` allows to return a ``Union`` of previous
+        error types and new ones.
+
+        'function' should accept a single "normal" (non-container) argument
+        and return Result a '_Failure' or '_Success' type object.
+
+        .. code:: python
+
+          >>> def bindable(string: str) -> Result[str, str]:
+          ...      return Success(string + 'b')
+          ...
+          >>> Success('a').bind(bindable) == Success('ab')
+          True
+
+        """
+        return self.bind(function)  # type: ignore
 
     def fix(self, function):
         """
