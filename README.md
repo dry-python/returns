@@ -62,6 +62,17 @@ So, what can we do to check for `None` in our programs?
 You can use `Optional` and write a lot of `if some is not None:` conditions.
 But, having them here and there makes your code unreadable.
 
+```python
+if user is not None:
+     balance = user.get_balance()
+     if balance is not None:
+         balance_credit = balance.credit_amount()
+         if balance_credit is not None and balance_credit > 0:
+             can_buy_stuff = True
+else:
+    can_buy_stuff = False
+```
+
 Or you can use
 [Maybe](https://returns.readthedocs.io/en/latest/pages/maybe.html) container!
 It consists of `Some` and `Nothing` types,
@@ -84,6 +95,18 @@ maybe_result: Maybe[float] = bad_function().map(
 
 You can be sure that `.map()` method won't be called for `Nothing`.
 Forget about `None`-related errors forever!
+
+And that's how your initial refactored code will look like:
+
+```python
+can_buy_stuff = Maybe.new(user).map(  # will have type: Maybe[bool]
+    lambda real_user: real_user.get_balance(),
+).map(
+    lambda balance: balance.credit_amount(),
+).map(
+    lambda balance_credit: balance_credit > 0,
+)
+```
 
 
 ## Result container
