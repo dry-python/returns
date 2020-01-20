@@ -6,7 +6,7 @@ python:
   - 3.7.5
 
 env:
-  - POETRY_VERSION=1.0
+  - POETRY_VERSION=1.0.2
 
 
 before_install:
