@@ -45,6 +45,8 @@ class Maybe(
     """
 
     _inner_value: Optional[_ValueType]
+
+    # These two are required for projects like `classes`:
     success_type: ClassVar[Type['_Some']]
     failure_type: ClassVar[Type['_Nothing']]
 

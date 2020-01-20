@@ -5,6 +5,9 @@ python:
   - 3.6
   - 3.7.5
 
+env:
+  - POETRY_VERSION=1.0
+
 
 before_install:
   - pip freeze | xargs pip uninstall -y
