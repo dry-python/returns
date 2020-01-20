@@ -2,6 +2,7 @@
 
 from typing import Callable, TypeVar, overload
 
+from returns.context import RequiresContext
 from returns.io import IO
 from returns.maybe import Maybe
 from returns.result import Result
@@ -9,6 +10,7 @@ from returns.result import Result
 _ValueType = TypeVar('_ValueType')
 _ErrorType = TypeVar('_ErrorType')
 _NewValueType = TypeVar('_NewValueType')
+_EnvType = TypeVar('_EnvType')
 
 
 # Box:
@@ -29,8 +31,19 @@ def _box(
 
 @overload
 def _box(
+    function: Callable[[_ValueType], RequiresContext[_EnvType, _NewValueType]],
+) -> Callable[
+    [RequiresContext[_EnvType, _ValueType]],
+    RequiresContext[_EnvType, _NewValueType],
+]:
+    ...
+
+
+@overload
+def _box(
     function: Callable[[_ValueType], Result[_NewValueType, _ErrorType]],
 ) -> Callable[
-    [Result[_ValueType, _ErrorType]], Result[_NewValueType, _ErrorType],
+    [Result[_ValueType, _ErrorType]],
+    Result[_NewValueType, _ErrorType],
 ]:
     ...

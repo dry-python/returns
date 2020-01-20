@@ -1,0 +1,966 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+ABCMeta	../returns/maybe.py	/^from abc import ABCMeta$/;"	kind:namespace	line:3
+ABCMeta	../returns/primitives/container.py	/^from abc import ABCMeta$/;"	kind:namespace	line:3
+ABCMeta	../returns/result.py	/^from abc import ABCMeta$/;"	kind:namespace	line:3
+Any	../returns/context.py	/^from typing import Any, Callable, ClassVar, Generic, TypeVar$/;"	kind:namespace	line:3
+Any	../returns/functions.py	/^from typing import Any, Callable, NoReturn, TypeVar$/;"	kind:namespace	line:3
+Any	../returns/primitives/container.py	/^from typing import Any, Callable, NoReturn, TypeVar, Union$/;"	kind:namespace	line:4
+BaseContainer	../returns/context.py	/^from returns.primitives.container import BaseContainer$/;"	kind:namespace	line:8
+BaseContainer	../returns/io.py	/^from returns.primitives.container import BaseContainer$/;"	kind:namespace	line:10
+BaseContainer	../returns/maybe.py	/^from returns.primitives.container import BaseContainer$/;"	kind:namespace	line:22
+BaseContainer	../returns/primitives/container.py	/^class BaseContainer(object, metaclass=ABCMeta):$/;"	kind:class	line:16
+BaseContainer	../returns/primitives/exceptions.py	/^    from returns.primitives.container import BaseContainer  # noqa: F401, WPS433$/;"	kind:namespace	line:6
+BaseContainer	../returns/result.py	/^from returns.primitives.container import BaseContainer$/;"	kind:namespace	line:21
+Bindable	../returns/primitives/container.py	/^class Bindable(Protocol[_ValueType]):$/;"	kind:class	line:65
+Bindable	../tests/test_context/test_context.py	/^from returns.primitives.container import Bindable, Mappable$/;"	kind:namespace	line:6
+Bindable	../tests/test_io/test_io.py	/^from returns.primitives.container import Bindable, Mappable$/;"	kind:namespace	line:6
+Callable	../ex.py	/^from typing import TYPE_CHECKING, Callable, Dict, TypeVar$/;"	kind:namespace	line:13
+Callable	../returns/_generated/coalesce.py	/^from typing import Callable, TypeVar$/;"	kind:namespace	line:3
+Callable	../returns/context.py	/^from typing import Any, Callable, ClassVar, Generic, TypeVar$/;"	kind:namespace	line:3
+Callable	../returns/contrib/mypy/decorator_plugin.py	/^from typing import Callable, Optional, Type$/;"	kind:namespace	line:20
+Callable	../returns/functions.py	/^from typing import Any, Callable, NoReturn, TypeVar$/;"	kind:namespace	line:3
+Callable	../returns/io.py	/^from typing import Callable, Coroutine, Generic, TypeVar, overload$/;"	kind:namespace	line:5
+Callable	../returns/pipeline.py	/^from typing import Callable, Coroutine, Type, TypeVar, Union, overload$/;"	kind:namespace	line:5
+Callable	../returns/primitives/container.py	/^from typing import Any, Callable, NoReturn, TypeVar, Union$/;"	kind:namespace	line:4
+Callable	../tests/test_context/test_context_equality.py	/^from typing import Callable$/;"	kind:namespace	line:3
+CallableType	../returns/contrib/mypy/decorator_plugin.py	/^from mypy.types import CallableType$/;"	kind:namespace	line:23
+ClassVar	../returns/context.py	/^from typing import Any, Callable, ClassVar, Generic, TypeVar$/;"	kind:namespace	line:3
+Context	../ex.py	/^from returns.context import Context, RequiresContext$/;"	kind:namespace	line:15
+Context	../returns/context.py	/^class Context(Generic[_EnvType]):$/;"	kind:class	line:140
+Context	../tests/test_context/test_context.py	/^from returns.context import Context, RequiresContext$/;"	kind:namespace	line:5
+Context	../tests/test_context/test_context_equality.py	/^from returns.context import Context, RequiresContext$/;"	kind:namespace	line:5
+Context	../tests/test_context/test_context_utils.py	/^from returns.context import Context$/;"	kind:namespace	line:3
+Coroutine	../returns/io.py	/^from typing import Callable, Coroutine, Generic, TypeVar, overload$/;"	kind:namespace	line:5
+Coroutine	../returns/pipeline.py	/^from typing import Callable, Coroutine, Type, TypeVar, Union, overload$/;"	kind:namespace	line:5
+Dict	../ex.py	/^from typing import TYPE_CHECKING, Callable, Dict, TypeVar$/;"	kind:namespace	line:13
+Dict	../tests/test_maybe/test_maybe_functions/test_maybe_decorator.py	/^from typing import Dict, Optional$/;"	kind:namespace	line:3
+F401	../returns/functions.py	/^from returns._generated.box import _box as box  # noqa: F401, WPS436$/;"	kind:namespace	line:5
+F401	../returns/io.py	/^from returns._generated.squash import _squash as io_squash  # noqa: F401, WPS436$/;"	kind:namespace	line:9
+F401	../returns/pipeline.py	/^from returns._generated.pipe import _pipe as pipe  # noqa: F401, WPS436$/;"	kind:namespace	line:9
+F401	../returns/primitives/exceptions.py	/^    from returns.primitives.container import BaseContainer  # noqa: F401, WPS433$/;"	kind:namespace	line:6
+Failure	../returns/converters.py	/^from returns.result import Failure, Result, Success$/;"	kind:namespace	line:8
+Failure	../returns/result.py	/^def Failure(  # noqa: N802$/;"	kind:function	line:471
+Failure	../tests/test_converters/test_coalesce.py	/^from returns.result import Failure, Success$/;"	kind:namespace	line:5
+Failure	../tests/test_converters/test_join.py	/^from returns.result import Failure, Success$/;"	kind:namespace	line:8
+Failure	../tests/test_converters/test_maybe_to_result.py	/^from returns.result import Failure, Success$/;"	kind:namespace	line:7
+Failure	../tests/test_converters/test_result_to_maybe.py	/^from returns.result import Failure, Success$/;"	kind:namespace	line:7
+Failure	../tests/test_functions/test_box.py	/^from returns.result import Failure, Result, Success$/;"	kind:namespace	line:7
+Failure	../tests/test_functions/test_raise_exception.py	/^from returns.result import Failure, Success$/;"	kind:namespace	line:8
+Failure	../tests/test_pipeline/test_is_successful.py	/^from returns.result import Failure, Success$/;"	kind:namespace	line:7
+Failure	../tests/test_result/test_result_bind.py	/^from returns.result import Failure, Result, Success$/;"	kind:namespace	line:3
+Failure	../tests/test_result/test_result_equality.py	/^from returns.result import Failure, Success$/;"	kind:namespace	line:14
+Failure	../tests/test_result/test_result_failure.py	/^from returns.result import Failure, Success$/;"	kind:namespace	line:6
+Failure	../tests/test_result/test_result_map.py	/^from returns.result import Failure, Success$/;"	kind:namespace	line:3
+Failure	../tests/test_result/test_result_unwrap.py	/^from returns.result import Failure, Success$/;"	kind:namespace	line:6
+Failure	../tests/test_result/test_result_value_or.py	/^from returns.result import Failure, Success$/;"	kind:namespace	line:3
+Fixable	../returns/primitives/container.py	/^class Fixable(Protocol[_ValueType, _ErrorType]):$/;"	kind:class	line:106
+FunctionContext	../returns/contrib/mypy/decorator_plugin.py	/^from mypy.plugin import FunctionContext, Plugin$/;"	kind:namespace	line:22
+Generic	../returns/context.py	/^from typing import Any, Callable, ClassVar, Generic, TypeVar$/;"	kind:namespace	line:3
+Generic	../returns/io.py	/^from typing import Callable, Coroutine, Generic, TypeVar, overload$/;"	kind:namespace	line:5
+IO	../returns/converters.py	/^from returns.io import IO$/;"	kind:namespace	line:6
+IO	../returns/io.py	/^class IO(BaseContainer, Generic[_ValueType]):$/;"	kind:class	line:21
+IO	../returns/unsafe.py	/^from returns.io import IO$/;"	kind:namespace	line:5
+IO	../tests/test_converters/test_join.py	/^from returns.io import IO$/;"	kind:namespace	line:6
+IO	../tests/test_functions/test_box.py	/^from returns.io import IO$/;"	kind:namespace	line:5
+IO	../tests/test_io/test_io.py	/^from returns.io import IO$/;"	kind:namespace	line:5
+IO	../tests/test_io/test_io_equality.py	/^from returns.io import IO$/;"	kind:namespace	line:3
+IO	../tests/test_io/test_io_functions/test_impure.py	/^from returns.io import IO, impure$/;"	kind:namespace	line:5
+IO	../tests/test_io/test_io_pickle.py	/^from returns.io import IO$/;"	kind:namespace	line:3
+IO	../tests/test_io/test_io_squash.py	/^from returns.io import IO, io_squash$/;"	kind:namespace	line:3
+IO	../tests/test_io/test_lift.py	/^from returns.io import IO$/;"	kind:namespace	line:3
+IO	../tests/test_pipeline/test_pipe.py	/^from returns.io import IO, impure$/;"	kind:namespace	line:8
+IO	../tests/test_unsafe/test_unsafe_perform_io.py	/^from returns.io import IO$/;"	kind:namespace	line:3
+ImmutableStateError	../returns/primitives/container.py	/^from returns.primitives.exceptions import ImmutableStateError$/;"	kind:namespace	line:8
+ImmutableStateError	../returns/primitives/exceptions.py	/^class ImmutableStateError(Exception):$/;"	kind:class	line:23
+ImmutableStateError	../tests/test_maybe/test_maybe_equality.py	/^from returns.primitives.exceptions import ImmutableStateError$/;"	kind:namespace	line:13
+ImmutableStateError	../tests/test_result/test_result_equality.py	/^from returns.primitives.exceptions import ImmutableStateError$/;"	kind:namespace	line:13
+Jython	../.venv/bin/rst2html5.py	/^    import locale # module missing in Jython$/;"	kind:namespace	line:24
+Mappable	../returns/primitives/container.py	/^class Mappable(Protocol[_ValueType]):$/;"	kind:class	line:87
+Mappable	../tests/test_context/test_context.py	/^from returns.primitives.container import Bindable, Mappable$/;"	kind:namespace	line:6
+Mappable	../tests/test_io/test_io.py	/^from returns.primitives.container import Bindable, Mappable$/;"	kind:namespace	line:6
+Maybe	../returns/_generated/coalesce.py	/^from returns.maybe import Maybe$/;"	kind:namespace	line:5
+Maybe	../returns/converters.py	/^from returns.maybe import Maybe$/;"	kind:namespace	line:7
+Maybe	../returns/maybe.py	/^):$/;"	kind:class	line:38
+Maybe	../returns/pipeline.py	/^from returns.maybe import Maybe$/;"	kind:namespace	line:10
+Maybe	../tests/test_functions/test_box.py	/^from returns.maybe import Maybe, Nothing, Some$/;"	kind:namespace	line:6
+Maybe	../tests/test_maybe/test_maybe_base.py	/^from returns.maybe import Maybe$/;"	kind:namespace	line:5
+Maybe	../tests/test_maybe/test_maybe_bind.py	/^from returns.maybe import Maybe, Nothing, Some$/;"	kind:namespace	line:3
+Maybe	../tests/test_maybe/test_maybe_new.py	/^from returns.maybe import Maybe, Nothing, Some$/;"	kind:namespace	line:3
+Maybe	../tests/test_pipeline/test_maybe_pipeline.py	/^from returns.maybe import Maybe, Nothing, Some$/;"	kind:namespace	line:5
+NAMESPACES	../.venv/bin/rst2odt_prepstyles.py	/^NAMESPACES = {$/;"	kind:variable	line:23
+NoReturn	../returns/functions.py	/^from typing import Any, Callable, NoReturn, TypeVar$/;"	kind:namespace	line:3
+NoReturn	../returns/primitives/container.py	/^from typing import Any, Callable, NoReturn, TypeVar, Union$/;"	kind:namespace	line:4
+Nothing	../tests/test_converters/test_coalesce.py	/^from returns.maybe import Nothing, Some$/;"	kind:namespace	line:4
+Nothing	../tests/test_converters/test_join.py	/^from returns.maybe import Nothing, Some$/;"	kind:namespace	line:7
+Nothing	../tests/test_converters/test_maybe_to_result.py	/^from returns.maybe import Nothing, Some$/;"	kind:namespace	line:6
+Nothing	../tests/test_converters/test_result_to_maybe.py	/^from returns.maybe import Nothing, Some$/;"	kind:namespace	line:6
+Nothing	../tests/test_functions/test_box.py	/^from returns.maybe import Maybe, Nothing, Some$/;"	kind:namespace	line:6
+Nothing	../tests/test_maybe/test_maybe_bind.py	/^from returns.maybe import Maybe, Nothing, Some$/;"	kind:namespace	line:3
+Nothing	../tests/test_maybe/test_maybe_equality.py	/^from returns.maybe import Nothing, Some, _Nothing$/;"	kind:namespace	line:5
+Nothing	../tests/test_maybe/test_maybe_functions/test_maybe_decorator.py	/^from returns.maybe import Nothing, Some, maybe$/;"	kind:namespace	line:7
+Nothing	../tests/test_maybe/test_maybe_map.py	/^from returns.maybe import Nothing, Some$/;"	kind:namespace	line:3
+Nothing	../tests/test_maybe/test_maybe_new.py	/^from returns.maybe import Maybe, Nothing, Some$/;"	kind:namespace	line:3
+Nothing	../tests/test_maybe/test_maybe_unwrap.py	/^from returns.maybe import Nothing, Some$/;"	kind:namespace	line:5
+Nothing	../tests/test_maybe/test_maybe_value_or.py	/^from returns.maybe import Nothing, Some$/;"	kind:namespace	line:3
+Nothing	../tests/test_pipeline/test_is_successful.py	/^from returns.maybe import Nothing, Some$/;"	kind:namespace	line:5
+Nothing	../tests/test_pipeline/test_maybe_pipeline.py	/^from returns.maybe import Maybe, Nothing, Some$/;"	kind:namespace	line:5
+Optional	../returns/contrib/mypy/decorator_plugin.py	/^from typing import Callable, Optional, Type$/;"	kind:namespace	line:20
+Optional	../tests/test_maybe/test_maybe_functions/test_maybe_decorator.py	/^from typing import Dict, Optional$/;"	kind:namespace	line:3
+Plugin	../returns/contrib/mypy/decorator_plugin.py	/^from mypy.plugin import FunctionContext, Plugin$/;"	kind:namespace	line:22
+Protocol	../returns/pipeline.py	/^from typing_extensions import Protocol$/;"	kind:namespace	line:7
+Protocol	../returns/primitives/container.py	/^from typing_extensions import Protocol, runtime$/;"	kind:namespace	line:6
+Reader	../.venv/bin/rst2odt.py	/^from docutils.writers.odf_odt import Writer, Reader$/;"	kind:namespace	line:19
+RequiresContext	../ex.py	/^from returns.context import Context, RequiresContext$/;"	kind:namespace	line:15
+RequiresContext	../returns/context.py	/^):$/;"	kind:class	line:19
+RequiresContext	../tests/test_context/test_context.py	/^from returns.context import Context, RequiresContext$/;"	kind:namespace	line:5
+RequiresContext	../tests/test_context/test_context_equality.py	/^from returns.context import Context, RequiresContext$/;"	kind:namespace	line:5
+RequiresContext	../tests/test_functions/test_box.py	/^from returns.context import RequiresContext$/;"	kind:namespace	line:3
+Rescueable	../returns/primitives/container.py	/^class Rescueable(Protocol[_NewValueType, _ErrorType]):$/;"	kind:class	line:122
+Result	../returns/_generated/coalesce.py	/^from returns.result import Result$/;"	kind:namespace	line:7
+Result	../returns/converters.py	/^from returns.result import Failure, Result, Success$/;"	kind:namespace	line:8
+Result	../returns/pipeline.py	/^from returns.result import Result$/;"	kind:namespace	line:12
+Result	../returns/result.py	/^):$/;"	kind:class	line:40
+Result	../tests/test_functions/test_box.py	/^from returns.result import Failure, Result, Success$/;"	kind:namespace	line:7
+Result	../tests/test_pipeline/test_pipe.py	/^from returns.result import Result, Success, safe$/;"	kind:namespace	line:10
+Result	../tests/test_pipeline/test_result_pipeline.py	/^from returns.result import Result, Success, safe$/;"	kind:namespace	line:6
+Result	../tests/test_result/test_result_base.py	/^from returns.result import Result$/;"	kind:namespace	line:5
+Result	../tests/test_result/test_result_bind.py	/^from returns.result import Failure, Result, Success$/;"	kind:namespace	line:3
+Some	../returns/maybe.py	/^def Some(inner_value: Optional[_ValueType]) -> Maybe[_ValueType]:  # noqa: N802$/;"	kind:function	line:354
+Some	../tests/test_converters/test_coalesce.py	/^from returns.maybe import Nothing, Some$/;"	kind:namespace	line:4
+Some	../tests/test_converters/test_join.py	/^from returns.maybe import Nothing, Some$/;"	kind:namespace	line:7
+Some	../tests/test_converters/test_maybe_to_result.py	/^from returns.maybe import Nothing, Some$/;"	kind:namespace	line:6
+Some	../tests/test_converters/test_result_to_maybe.py	/^from returns.maybe import Nothing, Some$/;"	kind:namespace	line:6
+Some	../tests/test_functions/test_box.py	/^from returns.maybe import Maybe, Nothing, Some$/;"	kind:namespace	line:6
+Some	../tests/test_maybe/test_maybe_bind.py	/^from returns.maybe import Maybe, Nothing, Some$/;"	kind:namespace	line:3
+Some	../tests/test_maybe/test_maybe_equality.py	/^from returns.maybe import Nothing, Some, _Nothing$/;"	kind:namespace	line:5
+Some	../tests/test_maybe/test_maybe_functions/test_maybe_decorator.py	/^from returns.maybe import Nothing, Some, maybe$/;"	kind:namespace	line:7
+Some	../tests/test_maybe/test_maybe_map.py	/^from returns.maybe import Nothing, Some$/;"	kind:namespace	line:3
+Some	../tests/test_maybe/test_maybe_new.py	/^from returns.maybe import Maybe, Nothing, Some$/;"	kind:namespace	line:3
+Some	../tests/test_maybe/test_maybe_unwrap.py	/^from returns.maybe import Nothing, Some$/;"	kind:namespace	line:5
+Some	../tests/test_maybe/test_maybe_value_or.py	/^from returns.maybe import Nothing, Some$/;"	kind:namespace	line:3
+Some	../tests/test_pipeline/test_is_successful.py	/^from returns.maybe import Nothing, Some$/;"	kind:namespace	line:5
+Some	../tests/test_pipeline/test_maybe_pipeline.py	/^from returns.maybe import Maybe, Nothing, Some$/;"	kind:namespace	line:5
+Success	../returns/converters.py	/^from returns.result import Failure, Result, Success$/;"	kind:namespace	line:8
+Success	../returns/result.py	/^def Success(  # noqa: N802$/;"	kind:function	line:464
+Success	../tests/test_converters/test_coalesce.py	/^from returns.result import Failure, Success$/;"	kind:namespace	line:5
+Success	../tests/test_converters/test_join.py	/^from returns.result import Failure, Success$/;"	kind:namespace	line:8
+Success	../tests/test_converters/test_maybe_to_result.py	/^from returns.result import Failure, Success$/;"	kind:namespace	line:7
+Success	../tests/test_converters/test_result_to_maybe.py	/^from returns.result import Failure, Success$/;"	kind:namespace	line:7
+Success	../tests/test_functions/test_box.py	/^from returns.result import Failure, Result, Success$/;"	kind:namespace	line:7
+Success	../tests/test_functions/test_raise_exception.py	/^from returns.result import Failure, Success$/;"	kind:namespace	line:8
+Success	../tests/test_pipeline/test_is_successful.py	/^from returns.result import Failure, Success$/;"	kind:namespace	line:7
+Success	../tests/test_pipeline/test_pipe.py	/^from returns.result import Result, Success, safe$/;"	kind:namespace	line:10
+Success	../tests/test_pipeline/test_result_pipeline.py	/^from returns.result import Result, Success, safe$/;"	kind:namespace	line:6
+Success	../tests/test_result/test_result_bind.py	/^from returns.result import Failure, Result, Success$/;"	kind:namespace	line:3
+Success	../tests/test_result/test_result_equality.py	/^from returns.result import Failure, Success$/;"	kind:namespace	line:14
+Success	../tests/test_result/test_result_failure.py	/^from returns.result import Failure, Success$/;"	kind:namespace	line:6
+Success	../tests/test_result/test_result_functions/test_safe.py	/^from returns.result import Success, safe$/;"	kind:namespace	line:5
+Success	../tests/test_result/test_result_map.py	/^from returns.result import Failure, Success$/;"	kind:namespace	line:3
+Success	../tests/test_result/test_result_unwrap.py	/^from returns.result import Failure, Success$/;"	kind:namespace	line:6
+Success	../tests/test_result/test_result_value_or.py	/^from returns.result import Failure, Success$/;"	kind:namespace	line:3
+T1	../ex.py	/^T1 = TypeVar('T1')$/;"	kind:variable	line:45
+T2	../ex.py	/^T2 = TypeVar('T2')$/;"	kind:variable	line:46
+T3	../ex.py	/^T3 = TypeVar('T3')$/;"	kind:variable	line:47
+TYPE_CHECKING	../ex.py	/^from typing import TYPE_CHECKING, Callable, Dict, TypeVar$/;"	kind:namespace	line:13
+TYPE_CHECKING	../returns/primitives/exceptions.py	/^from typing import TYPE_CHECKING$/;"	kind:namespace	line:3
+Test	../ex.py	/^class Test:$/;"	kind:class	line:22
+Tuple	../tests/test_pipeline/test_pipe.py	/^from typing import Tuple$/;"	kind:namespace	line:3
+Type	../returns/contrib/mypy/decorator_plugin.py	/^from typing import Callable, Optional, Type$/;"	kind:namespace	line:20
+Type	../returns/pipeline.py	/^from typing import Callable, Coroutine, Type, TypeVar, Union, overload$/;"	kind:namespace	line:5
+Type	../tests/test_functions/test_raise_exception.py	/^from typing import Type$/;"	kind:namespace	line:3
+TypeVar	../ex.py	/^from typing import TYPE_CHECKING, Callable, Dict, TypeVar$/;"	kind:namespace	line:13
+TypeVar	../returns/_generated/coalesce.py	/^from typing import Callable, TypeVar$/;"	kind:namespace	line:3
+TypeVar	../returns/context.py	/^from typing import Any, Callable, ClassVar, Generic, TypeVar$/;"	kind:namespace	line:3
+TypeVar	../returns/converters.py	/^from typing import TypeVar, overload$/;"	kind:namespace	line:3
+TypeVar	../returns/functions.py	/^from typing import Any, Callable, NoReturn, TypeVar$/;"	kind:namespace	line:3
+TypeVar	../returns/io.py	/^from typing import Callable, Coroutine, Generic, TypeVar, overload$/;"	kind:namespace	line:5
+TypeVar	../returns/pipeline.py	/^from typing import Callable, Coroutine, Type, TypeVar, Union, overload$/;"	kind:namespace	line:5
+TypeVar	../returns/primitives/container.py	/^from typing import Any, Callable, NoReturn, TypeVar, Union$/;"	kind:namespace	line:4
+TypeVar	../returns/unsafe.py	/^from typing import TypeVar$/;"	kind:namespace	line:3
+Union	../returns/pipeline.py	/^from typing import Callable, Coroutine, Type, TypeVar, Union, overload$/;"	kind:namespace	line:5
+Union	../returns/primitives/container.py	/^from typing import Any, Callable, NoReturn, TypeVar, Union$/;"	kind:namespace	line:4
+UnwrapFailedError	../returns/maybe.py	/^from returns.primitives.exceptions import UnwrapFailedError$/;"	kind:namespace	line:23
+UnwrapFailedError	../returns/pipeline.py	/^from returns.primitives.exceptions import UnwrapFailedError$/;"	kind:namespace	line:11
+UnwrapFailedError	../returns/primitives/exceptions.py	/^class UnwrapFailedError(Exception):$/;"	kind:class	line:9
+UnwrapFailedError	../returns/result.py	/^from returns.primitives.exceptions import UnwrapFailedError$/;"	kind:namespace	line:22
+UnwrapFailedError	../tests/test_maybe/test_maybe_unwrap.py	/^from returns.primitives.exceptions import UnwrapFailedError$/;"	kind:namespace	line:6
+UnwrapFailedError	../tests/test_result/test_result_failure.py	/^from returns.primitives.exceptions import UnwrapFailedError$/;"	kind:namespace	line:5
+UnwrapFailedError	../tests/test_result/test_result_unwrap.py	/^from returns.primitives.exceptions import UnwrapFailedError$/;"	kind:namespace	line:5
+Unwrapable	../returns/primitives/container.py	/^class Unwrapable(Protocol[_ValueType]):$/;"	kind:class	line:147
+UnwrapableFailure	../returns/primitives/container.py	/^class UnwrapableFailure(Protocol[_ValueType, _ErrorType]):$/;"	kind:class	line:174
+WPS433	../docs/conf.py	/^    import tomlkit  # noqa: WPS433$/;"	kind:namespace	line:24
+WPS433	../returns/primitives/exceptions.py	/^    from returns.primitives.container import BaseContainer  # noqa: F401, WPS433$/;"	kind:namespace	line:6
+WPS436	../returns/converters.py	/^from returns._generated import coalesce  # noqa: WPS436$/;"	kind:namespace	line:5
+WPS436	../returns/functions.py	/^from returns._generated.box import _box as box  # noqa: F401, WPS436$/;"	kind:namespace	line:5
+WPS436	../returns/io.py	/^from returns._generated.squash import _squash as io_squash  # noqa: F401, WPS436$/;"	kind:namespace	line:9
+WPS436	../returns/pipeline.py	/^from returns._generated.pipe import _pipe as pipe  # noqa: F401, WPS436$/;"	kind:namespace	line:9
+Writer	../.venv/bin/rst2odt.py	/^from docutils.writers.odf_odt import Writer, Reader$/;"	kind:namespace	line:19
+_AsyncReturnMaybeType	../returns/pipeline.py	/^_AsyncReturnMaybeType = TypeVar($/;"	kind:variable	line:35
+_AsyncReturnResultType	../returns/pipeline.py	/^_AsyncReturnResultType = TypeVar($/;"	kind:variable	line:26
+_CustomException	../tests/test_functions/test_raise_exception.py	/^class _CustomException(Exception):$/;"	kind:class	line:11
+_DefaultValueType	../returns/result.py	/^_DefaultValueType = TypeVar('_DefaultValueType')$/;"	kind:variable	line:31
+_EnvType	../ex.py	/^_EnvType = TypeVar('_EnvType')$/;"	kind:variable	line:29
+_EnvType	../returns/context.py	/^_EnvType = TypeVar('_EnvType')$/;"	kind:variable	line:10
+_ErrorType	../returns/_generated/coalesce.py	/^_ErrorType = TypeVar('_ErrorType')$/;"	kind:variable	line:11
+_ErrorType	../returns/converters.py	/^_ErrorType = TypeVar('_ErrorType')$/;"	kind:variable	line:12
+_ErrorType	../returns/primitives/container.py	/^_ErrorType = TypeVar('_ErrorType', covariant=True)$/;"	kind:variable	line:12
+_ErrorType	../returns/result.py	/^_ErrorType = TypeVar('_ErrorType', covariant=True)$/;"	kind:variable	line:27
+_Failure	../returns/result.py	/^class _Failure(Result[Any, _ErrorType]):$/;"	kind:class	line:142
+_FirstType	../returns/_generated/coalesce.py	/^_FirstType = TypeVar('_FirstType')$/;"	kind:variable	line:14
+_FirstType	../returns/functions.py	/^_FirstType = TypeVar('_FirstType')$/;"	kind:variable	line:8
+_FirstType	../returns/io.py	/^_FirstType = TypeVar('_FirstType')$/;"	kind:variable	line:16
+_FirstType	../returns/maybe.py	/^_FirstType = TypeVar('_FirstType')$/;"	kind:variable	line:30
+_FirstType	../returns/pipeline.py	/^_FirstType = TypeVar('_FirstType')$/;"	kind:variable	line:18
+_FirstType	../returns/result.py	/^_FirstType = TypeVar('_FirstType')$/;"	kind:variable	line:32
+_NewErrorType	../returns/primitives/container.py	/^_NewErrorType = TypeVar('_NewErrorType')$/;"	kind:variable	line:13
+_NewErrorType	../returns/result.py	/^_NewErrorType = TypeVar('_NewErrorType')$/;"	kind:variable	line:28
+_NewReturnType	../ex.py	/^_NewReturnType = TypeVar('_NewReturnType')$/;"	kind:variable	line:31
+_NewReturnType	../returns/context.py	/^_NewReturnType = TypeVar('_NewReturnType')$/;"	kind:variable	line:12
+_NewValueType	../returns/io.py	/^_NewValueType = TypeVar('_NewValueType')$/;"	kind:variable	line:13
+_NewValueType	../returns/maybe.py	/^_NewValueType = TypeVar('_NewValueType')$/;"	kind:variable	line:27
+_NewValueType	../returns/primitives/container.py	/^_NewValueType = TypeVar('_NewValueType')$/;"	kind:variable	line:11
+_NewValueType	../returns/result.py	/^_NewValueType = TypeVar('_NewValueType')$/;"	kind:variable	line:26
+_Nothing	../returns/maybe.py	/^class _Nothing(Maybe[Any]):$/;"	kind:class	line:105
+_Nothing	../tests/test_maybe/test_maybe_equality.py	/^from returns.maybe import Nothing, Some, _Nothing$/;"	kind:namespace	line:5
+_PipelineMaybeProtocol	../returns/pipeline.py	/^class _PipelineMaybeProtocol(Protocol):$/;"	kind:class	line:82
+_PipelineResultProtocol	../returns/pipeline.py	/^class _PipelineResultProtocol(Protocol):$/;"	kind:class	line:70
+_ReturnMaybeType	../returns/pipeline.py	/^_ReturnMaybeType = TypeVar($/;"	kind:variable	line:31
+_ReturnResultType	../returns/pipeline.py	/^_ReturnResultType = TypeVar($/;"	kind:variable	line:22
+_ReturnType	../ex.py	/^_ReturnType = TypeVar('_ReturnType')$/;"	kind:variable	line:30
+_ReturnType	../returns/context.py	/^_ReturnType = TypeVar('_ReturnType')$/;"	kind:variable	line:11
+_SecondType	../returns/functions.py	/^_SecondType = TypeVar('_SecondType')$/;"	kind:variable	line:9
+_SecondType	../returns/io.py	/^_SecondType = TypeVar('_SecondType')$/;"	kind:variable	line:17
+_SecondType	../returns/maybe.py	/^_SecondType = TypeVar('_SecondType')$/;"	kind:variable	line:31
+_SecondType	../returns/pipeline.py	/^_SecondType = TypeVar('_SecondType')$/;"	kind:variable	line:19
+_SecondType	../returns/result.py	/^_SecondType = TypeVar('_SecondType')$/;"	kind:variable	line:33
+_Some	../returns/maybe.py	/^class _Some(Maybe[_ValueType]):$/;"	kind:class	line:230
+_Success	../returns/result.py	/^class _Success(Result[_ValueType, Any]):$/;"	kind:class	line:301
+_TYPED_DECORATORS	../returns/contrib/mypy/decorator_plugin.py	/^_TYPED_DECORATORS = frozenset(($/;"	kind:variable	line:26
+_ThirdType	../returns/functions.py	/^_ThirdType = TypeVar('_ThirdType')$/;"	kind:variable	line:10
+_TypedDecoratorPlugin	../returns/contrib/mypy/decorator_plugin.py	/^class _TypedDecoratorPlugin(Plugin):$/;"	kind:class	line:59
+_Unwrapable	../returns/pipeline.py	/^_Unwrapable = Union[Result, Maybe]$/;"	kind:variable	line:15
+_UserProfile	../tests/test_pipeline/test_pipe.py	/^class _UserProfile(object):$/;"	kind:class	line:13
+_ValueType	../returns/_generated/coalesce.py	/^_ValueType = TypeVar('_ValueType')$/;"	kind:variable	line:10
+_ValueType	../returns/converters.py	/^_ValueType = TypeVar('_ValueType')$/;"	kind:variable	line:11
+_ValueType	../returns/io.py	/^_ValueType = TypeVar('_ValueType', covariant=True)$/;"	kind:variable	line:12
+_ValueType	../returns/maybe.py	/^_ValueType = TypeVar('_ValueType', covariant=True)$/;"	kind:variable	line:26
+_ValueType	../returns/primitives/container.py	/^_ValueType = TypeVar('_ValueType', covariant=True)$/;"	kind:variable	line:10
+_ValueType	../returns/result.py	/^_ValueType = TypeVar('_ValueType', covariant=True)$/;"	kind:variable	line:25
+_ValueType	../returns/unsafe.py	/^_ValueType = TypeVar('_ValueType')$/;"	kind:variable	line:7
+__call__	../returns/context.py	/^    def __call__(self, deps: _EnvType) -> _ReturnType:$/;"	kind:member	line:118
+__call__	../returns/pipeline.py	/^    def __call__($/;"	kind:member	line:76
+__call__	../returns/pipeline.py	/^    def __call__($/;"	kind:member	line:88
+__call__	../returns/pipeline.py	/^    def __call__(self, function: _ReturnMaybeType) -> _ReturnMaybeType:$/;"	kind:member	line:84
+__call__	../returns/pipeline.py	/^    def __call__(self, function: _ReturnResultType) -> _ReturnResultType:$/;"	kind:member	line:72
+__call__	../tests/test_pipeline/test_pipe.py	/^    def __call__(self, user_id: int) -> IO[Result[float, Exception]]:$/;"	kind:member	line:16
+__delattr__	../returns/primitives/container.py	/^    def __delattr__(self, attr_name: str) -> NoReturn:  # noqa: WPS603$/;"	kind:member	line:34
+__eq__	../returns/primitives/container.py	/^    def __eq__(self, other: Any) -> bool:$/;"	kind:member	line:45
+__getstate__	../returns/primitives/container.py	/^    def __getstate__(self) -> Any:$/;"	kind:member	line:55
+__hash__	../returns/primitives/container.py	/^    def __hash__(self) -> int:$/;"	kind:member	line:51
+__init__	../returns/context.py	/^    def __init__($/;"	kind:member	line:49
+__init__	../returns/io.py	/^    def __init__(self, inner_value: _ValueType) -> None:$/;"	kind:member	line:50
+__init__	../returns/maybe.py	/^    def __init__(self, inner_value: None = None) -> None:$/;"	kind:member	line:110
+__init__	../returns/maybe.py	/^    def __init__(self, inner_value: _ValueType) -> None:$/;"	kind:member	line:239
+__init__	../returns/primitives/container.py	/^    def __init__(self, inner_value) -> None:$/;"	kind:member	line:22
+__init__	../returns/primitives/exceptions.py	/^    def __init__(self, container: 'BaseContainer') -> None:$/;"	kind:member	line:12
+__init__	../returns/result.py	/^    def __init__(self, inner_value: _ErrorType) -> None:$/;"	kind:member	line:152
+__init__	../returns/result.py	/^    def __init__(self, inner_value: _ValueType) -> None:$/;"	kind:member	line:311
+__init__.py	../returns/__init__.py	1;"	kind:file	line:1
+__init__.py	../returns/_generated/__init__.py	1;"	kind:file	line:1
+__init__.py	../returns/contrib/__init__.py	1;"	kind:file	line:1
+__init__.py	../returns/contrib/mypy/__init__.py	1;"	kind:file	line:1
+__init__.py	../returns/primitives/__init__.py	1;"	kind:file	line:1
+__setattr__	../returns/primitives/container.py	/^    def __setattr__(self, attr_name: str, attr_value: Any) -> NoReturn:$/;"	kind:member	line:30
+__setstate__	../returns/primitives/container.py	/^    def __setstate__(self, state: Any) -> None:$/;"	kind:member	line:59
+__slots__	../returns/primitives/container.py	/^    __slots__ = ('_inner_value',)$/;"	kind:variable	line:19
+__str__	../returns/maybe.py	/^    def __str__(self):$/;"	kind:member	line:118
+__str__	../returns/primitives/container.py	/^    def __str__(self) -> str:$/;"	kind:member	line:38
+_analyze_decorator	../returns/contrib/mypy/decorator_plugin.py	/^def _analyze_decorator(function_ctx: FunctionContext):$/;"	kind:function	line:47
+_async_maybe_pipeline	../tests/test_pipeline/test_maybe_pipeline.py	/^async def _async_maybe_pipeline(number: int) -> Maybe[int]:$/;"	kind:function	line:16
+_box	../returns/_generated/box.py	/^def _box(function):$/;"	kind:function	line:4
+_change_decorator_function_type	../returns/contrib/mypy/decorator_plugin.py	/^def _change_decorator_function_type($/;"	kind:function	line:33
+_coalesce	../returns/_generated/coalesce.py	/^def _coalesce(success_handler, failure_handler):$/;"	kind:function	line:27
+_context_function	../tests/test_functions/test_box.py	/^def _context_function(argument: int) -> RequiresContext[int, int]:$/;"	kind:function	line:22
+_coroutine	../tests/test_maybe/test_maybe_functions/test_maybe_decorator.py	/^async def _coroutine(hashmap: Dict[str, str], key: str) -> Optional[str]:$/;"	kind:function	line:16
+_coroutine	../tests/test_result/test_result_functions/test_safe.py	/^async def _coroutine(number: int) -> float:$/;"	kind:function	line:14
+_divide	../tests/test_pipeline/test_result_pipeline.py	/^def _divide(number: int) -> float:$/;"	kind:function	line:10
+_failed_case	../tests/test_converters/test_coalesce.py	/^def _failed_case(_) -> int:$/;"	kind:function	line:12
+_fake_impure_coroutine	../tests/test_io/test_io_functions/test_impure.py	/^async def _fake_impure_coroutine(some_param: int) -> int:$/;"	kind:function	line:12
+_fake_impure_function	../tests/test_io/test_io_functions/test_impure.py	/^def _fake_impure_function(some_param: int) -> int:$/;"	kind:function	line:8
+_first	../tests/test_functions/test_compose.py	/^def _first(argument: int) -> str:$/;"	kind:function	line:6
+_first	../tests/test_io/test_lift.py	/^def _first(argument: int) -> str:$/;"	kind:function	line:6
+_function	../tests/test_maybe/test_maybe_functions/test_maybe_decorator.py	/^def _function(hashmap: Dict[str, str], key: str) -> Optional[str]:$/;"	kind:function	line:11
+_function	../tests/test_result/test_result_functions/test_safe.py	/^def _function(number: int) -> float:$/;"	kind:function	line:9
+_get_project_meta	../docs/conf.py	/^def _get_project_meta():$/;"	kind:function	line:23
+_inner	../ex.py	/^    def _inner(deps: Test) -> RequiresContext[Test, str]:$/;"	kind:function	line:74
+_io_function	../tests/test_functions/test_box.py	/^def _io_function(argument: int) -> IO[str]:$/;"	kind:function	line:10
+_main	../.venv/bin/pycodestyle	/^from pycodestyle import _main$/;"	kind:namespace	line:6
+_make_request	../tests/test_pipeline/test_pipe.py	/^    def _make_request(self, user_id: int) -> Tuple[float, str]:$/;"	kind:member	line:25
+_maybe_converter	../tests/test_converters/test_coalesce.py	/^_maybe_converter = coalesce_maybe(_success_case, _failed_case)$/;"	kind:variable	line:17
+_maybe_function	../tests/test_functions/test_box.py	/^def _maybe_function(argument: int) -> Maybe[str]:$/;"	kind:function	line:14
+_maybe_pipeline	../tests/test_pipeline/test_maybe_pipeline.py	/^def _maybe_pipeline(number: int) -> Maybe[int]:$/;"	kind:function	line:10
+_parse_json	../tests/test_pipeline/test_pipe.py	/^    def _parse_json(self, response: Tuple[float, str]) -> float:$/;"	kind:member	line:29
+_pipe	../returns/_generated/pipe.py	/^def _pipe(*functions):$/;"	kind:function	line:8
+_result_async_pipeline	../tests/test_pipeline/test_result_pipeline.py	/^async def _result_async_pipeline(number: int) -> Result[float, Exception]:$/;"	kind:function	line:26
+_result_converter	../tests/test_converters/test_coalesce.py	/^_result_converter = coalesce_result(_success_case, _failed_case)$/;"	kind:variable	line:16
+_result_function	../tests/test_functions/test_box.py	/^def _result_function(argument: int) -> Result[str, str]:$/;"	kind:function	line:18
+_result_pipeline	../tests/test_pipeline/test_result_pipeline.py	/^def _result_pipeline(number: int) -> Result[float, Exception]:$/;"	kind:function	line:20
+_same_function	../tests/test_context/test_context_equality.py	/^def _same_function(some_arg: int) -> Callable[[float], float]:$/;"	kind:function	line:8
+_second	../tests/test_functions/test_compose.py	/^def _second(argument: str) -> bool:$/;"	kind:function	line:10
+_squash	../returns/_generated/squash.py	/^def _squash(*args):$/;"	kind:function	line:4
+_success_case	../tests/test_converters/test_coalesce.py	/^def _success_case(state: int) -> int:$/;"	kind:function	line:8
+_sum	../tests/test_pipeline/test_result_pipeline.py	/^def _sum(first: int, second: float) -> float:$/;"	kind:function	line:15
+add_module_names	../docs/conf.py	/^add_module_names = False$/;"	kind:variable	line:107
+alt	../returns/primitives/container.py	/^    def alt($/;"	kind:member	line:177
+alt	../returns/result.py	/^    def alt($/;"	kind:member	line:100
+alt	../returns/result.py	/^    def alt(self, function):$/;"	kind:member	line:239
+alt	../returns/result.py	/^    def alt(self, function):$/;"	kind:member	line:406
+argparse	../.venv/bin/jp.py	/^import argparse$/;"	kind:namespace	line:5
+ask	../returns/context.py	/^    def ask(cls) -> RequiresContext[_EnvType, _EnvType]:$/;"	kind:member	line:166
+author	../docs/conf.py	/^author = 'dry-python team'$/;"	kind:variable	line:35
+autoclass_content	../docs/conf.py	/^autoclass_content = 'class'$/;"	kind:variable	line:67
+autodoc_default_flags	../docs/conf.py	/^autodoc_default_flags = {$/;"	kind:variable	line:71
+autodoc_default_options	../docs/conf.py	/^autodoc_default_options = {$/;"	kind:variable	line:109
+autodoc_member_order	../docs/conf.py	/^autodoc_member_order = 'bysource'$/;"	kind:variable	line:68
+autodoc_member_order	../docs/conf.py	/^autodoc_member_order = 'bysource'$/;"	kind:variable	line:70
+bandit	../.venv/bin/bandit	1;"	kind:file	line:1
+bandit-baseline	../.venv/bin/bandit-baseline	1;"	kind:file	line:1
+bandit-config-generator	../.venv/bin/bandit-config-generator	1;"	kind:file	line:1
+base_path	../.venv/bin/mypyc	/^base_path = os.path.join(os.path.dirname(__file__), '..')$/;"	kind:variable	line:21
+bind	../ex.py	/^def bind($/;"	kind:function	line:33
+bind	../returns/context.py	/^    def bind($/;"	kind:member	line:83
+bind	../returns/io.py	/^    def bind($/;"	kind:member	line:77
+bind	../returns/maybe.py	/^    def bind($/;"	kind:member	line:67
+bind	../returns/maybe.py	/^    def bind(self, function):$/;"	kind:member	line:137
+bind	../returns/maybe.py	/^    def bind(self, function):$/;"	kind:member	line:263
+bind	../returns/primitives/container.py	/^    def bind($/;"	kind:member	line:74
+bind	../returns/result.py	/^    def bind($/;"	kind:member	line:65
+bind	../returns/result.py	/^    def bind(self, function):$/;"	kind:member	line:171
+bind	../returns/result.py	/^    def bind(self, function):$/;"	kind:member	line:335
+bound	../returns/pipeline.py	/^    bound=Callable[..., Coroutine[_FirstType, _SecondType, Maybe]],$/;"	kind:variable	line:37
+bound	../returns/pipeline.py	/^    bound=Callable[..., Coroutine[_FirstType, _SecondType, Result]],$/;"	kind:variable	line:28
+bound	../returns/pipeline.py	/^    bound=Callable[..., Maybe],$/;"	kind:variable	line:33
+bound	../returns/pipeline.py	/^    bound=Callable[..., Result],$/;"	kind:variable	line:24
+box	../ex.py	/^from returns.functions import box$/;"	kind:namespace	line:16
+box	../returns/functions.py	/^from returns._generated.box import _box as box  # noqa: F401, WPS436$/;"	kind:namespace	line:5
+box	../tests/test_functions/test_box.py	/^from returns.functions import box$/;"	kind:namespace	line:4
+box	../tests/test_pipeline/test_pipe.py	/^from returns.functions import box, raise_exception$/;"	kind:namespace	line:7
+box.py	../returns/_generated/box.py	1;"	kind:file	line:1
+calc	../ex.py	/^    def calc(self, b: bool) -> str:$/;"	kind:member	line:25
+chardetect	../.venv/bin/chardetect	1;"	kind:file	line:1
+cli	../.venv/bin/safety	/^from safety.cli import cli$/;"	kind:namespace	line:6
+coalesce	../returns/converters.py	/^from returns._generated import coalesce  # noqa: WPS436$/;"	kind:namespace	line:5
+coalesce.py	../returns/_generated/coalesce.py	1;"	kind:file	line:1
+coalesce_maybe	../returns/converters.py	/^coalesce_maybe = coalesce._coalesce_maybe  # noqa: WPS437$/;"	kind:variable	line:15
+coalesce_maybe	../tests/test_converters/test_coalesce.py	/^from returns.converters import coalesce_maybe, coalesce_result$/;"	kind:namespace	line:3
+coalesce_result	../returns/converters.py	/^coalesce_result = coalesce._coalesce_result  # noqa: WPS437$/;"	kind:variable	line:16
+coalesce_result	../tests/test_converters/test_coalesce.py	/^from returns.converters import coalesce_maybe, coalesce_result$/;"	kind:namespace	line:3
+compose	../returns/_generated/pipe.py	/^from returns.functions import compose$/;"	kind:namespace	line:5
+compose	../returns/functions.py	/^def compose($/;"	kind:function	line:48
+compose	../tests/test_functions/test_compose.py	/^from returns.functions import compose$/;"	kind:namespace	line:3
+conf.py	../docs/conf.py	1;"	kind:file	line:1
+console_entry	../.venv/bin/dmypy	/^from mypy.dmypy.client import console_entry$/;"	kind:namespace	line:6
+console_entry	../.venv/bin/mypy	/^from mypy.__main__ import console_entry$/;"	kind:namespace	line:6
+container.py	../returns/primitives/container.py	1;"	kind:file	line:1
+context.py	../returns/context.py	1;"	kind:file	line:1
+converters.py	../returns/converters.py	1;"	kind:file	line:1
+copyright	../docs/conf.py	/^copyright = '2019, dry-python team'  # noqa: A001$/;"	kind:variable	line:34
+coverage	../.venv/bin/coverage	1;"	kind:file	line:1
+coverage-3.7	../.venv/bin/coverage-3.7	1;"	kind:file	line:1
+coverage3	../.venv/bin/coverage3	1;"	kind:file	line:1
+darglint	../.venv/bin/darglint	1;"	kind:file	line:1
+decorator	../returns/_generated/coalesce.py	/^    def decorator(container):$/;"	kind:function	line:50
+decorator	../returns/functions.py	/^    def decorator(argument_to_return: _FirstType) -> None:$/;"	kind:function	line:120
+decorator	../returns/functions.py	/^    def decorator(argument_to_return: _FirstType) -> _FirstType:$/;"	kind:function	line:90
+decorator	../returns/io.py	/^        async def decorator(*args, **kwargs):  # noqa: WPS430$/;"	kind:function	line:151
+decorator	../returns/io.py	/^        def decorator(*args, **kwargs):  # noqa: WPS430$/;"	kind:function	line:154
+decorator	../returns/maybe.py	/^        async def decorator(*args, **kwargs):  # noqa: WPS430$/;"	kind:function	line:405
+decorator	../returns/maybe.py	/^        def decorator(*args, **kwargs):  # noqa: WPS430$/;"	kind:function	line:411
+decorator	../returns/pipeline.py	/^            async def decorator(*args, **kwargs):  # noqa: WPS430$/;"	kind:function	line:137
+decorator	../returns/pipeline.py	/^            def decorator(*args, **kwargs):  # noqa: WPS430$/;"	kind:function	line:143
+decorator	../returns/result.py	/^        async def decorator(*args, **kwargs):  # noqa: WPS430$/;"	kind:function	line:515
+decorator	../returns/result.py	/^        def decorator(*args, **kwargs):  # noqa: WPS430$/;"	kind:function	line:521
+decorator_plugin.py	../returns/contrib/mypy/decorator_plugin.py	1;"	kind:file	line:1
+default_description	../.venv/bin/rst2html.py	/^from docutils.core import publish_cmdline, default_description$/;"	kind:namespace	line:17
+default_description	../.venv/bin/rst2html4.py	/^from docutils.core import publish_cmdline, default_description$/;"	kind:namespace	line:20
+default_description	../.venv/bin/rst2html5.py	/^from docutils.core import publish_cmdline, default_description$/;"	kind:namespace	line:29
+default_description	../.venv/bin/rst2man.py	/^from docutils.core import publish_cmdline, default_description$/;"	kind:namespace	line:21
+default_description	../.venv/bin/rst2odt.py	/^from docutils.core import publish_cmdline_to_binary, default_description$/;"	kind:namespace	line:18
+default_description	../.venv/bin/rst2pseudoxml.py	/^from docutils.core import publish_cmdline, default_description$/;"	kind:namespace	line:17
+default_description	../.venv/bin/rst2s5.py	/^from docutils.core import publish_cmdline, default_description$/;"	kind:namespace	line:18
+default_description	../.venv/bin/rst2xml.py	/^from docutils.core import publish_cmdline, default_description$/;"	kind:namespace	line:17
+default_description	../.venv/bin/rstpep2html.py	/^from docutils.core import publish_cmdline, default_description$/;"	kind:namespace	line:18
+description	../.venv/bin/rst2html.py	/^description = ('Generates (X)HTML documents from standalone reStructuredText '$/;"	kind:variable	line:20
+description	../.venv/bin/rst2html4.py	/^description = ('Generates (X)HTML documents from standalone reStructuredText '$/;"	kind:variable	line:23
+description	../.venv/bin/rst2html5.py	/^description = (u'Generates HTML 5 documents from standalone '$/;"	kind:variable	line:31
+description	../.venv/bin/rst2latex.py	/^description = ('Generates LaTeX documents from standalone reStructuredText '$/;"	kind:variable	line:19
+description	../.venv/bin/rst2man.py	/^description = ("Generates plain unix manual documents.  " + default_description)$/;"	kind:variable	line:24
+description	../.venv/bin/rst2odt.py	/^    description=description)$/;"	kind:variable	line:29
+description	../.venv/bin/rst2odt.py	/^description = ('Generates OpenDocument\/OpenOffice\/ODF documents from '$/;"	kind:variable	line:22
+description	../.venv/bin/rst2pseudoxml.py	/^description = ('Generates pseudo-XML from standalone reStructuredText '$/;"	kind:variable	line:20
+description	../.venv/bin/rst2s5.py	/^description = ('Generates S5 (X)HTML slideshow documents from standalone '$/;"	kind:variable	line:21
+description	../.venv/bin/rst2xetex.py	/^description = ('Generates LaTeX documents from standalone reStructuredText '$/;"	kind:variable	line:19
+description	../.venv/bin/rst2xml.py	/^description = ('Generates Docutils-native XML from standalone '$/;"	kind:variable	line:20
+description	../.venv/bin/rstpep2html.py	/^                description=description)$/;"	kind:variable	line:25
+description	../.venv/bin/rstpep2html.py	/^description = ('Generates (X)HTML from reStructuredText-format PEP files.  '$/;"	kind:variable	line:21
+dmypy	../.venv/bin/dmypy	1;"	kind:file	line:1
+doc8	../.venv/bin/doc8	1;"	kind:file	line:1
+easy_install	../.venv/bin/easy_install	1;"	kind:file	line:1
+easy_install-3.7	../.venv/bin/easy_install-3.7	1;"	kind:file	line:1
+env	../ex.py	/^def env(a: Test) -> int:$/;"	kind:function	line:100
+eradicate	../.venv/bin/eradicate	/^import eradicate$/;"	kind:namespace	line:31
+eradicate	../.venv/bin/eradicate	1;"	kind:file	line:1
+etree	../.venv/bin/rst2odt_prepstyles.py	/^from lxml import etree$/;"	kind:namespace	line:16
+ex.py	../ex.py	1;"	kind:file	line:1
+exceptions	../.venv/bin/jp.py	/^from jmespath import exceptions$/;"	kind:namespace	line:9
+exceptions.py	../returns/primitives/exceptions.py	1;"	kind:file	line:1
+exclude_patterns	../docs/conf.py	/^exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']$/;"	kind:variable	line:102
+extensions	../docs/conf.py	/^extensions = [$/;"	kind:variable	line:48
+f	../ex.py	/^def f(b: bool) -> RequiresContext[Test, str]:$/;"	kind:function	line:64
+factory	../ex.py	/^    def factory($/;"	kind:function	line:39
+factory	../ex.py	/^    def factory(instance: T1) -> T3:$/;"	kind:function	line:53
+factory	../returns/pipeline.py	/^    def factory(function):$/;"	kind:function	line:135
+factory	../tests/test_context/test_context.py	/^    def factory(number: float) -> RequiresContext[int, str]:$/;"	kind:function	line:35
+factory	../tests/test_maybe/test_maybe_bind.py	/^    def factory(_) -> Maybe[int]:$/;"	kind:function	line:31
+factory	../tests/test_maybe/test_maybe_bind.py	/^    def factory(arg) -> Maybe[int]:$/;"	kind:function	line:41
+factory	../tests/test_maybe/test_maybe_bind.py	/^    def factory(inner_value) -> Maybe[int]:$/;"	kind:function	line:20
+factory	../tests/test_maybe/test_maybe_bind.py	/^    def factory(inner_value: int) -> Maybe[int]:$/;"	kind:function	line:8
+factory	../tests/test_result/test_result_bind.py	/^    def factory(inner_value) -> Result[int, str]:$/;"	kind:function	line:63
+factory	../tests/test_result/test_result_bind.py	/^    def factory(inner_value: int) -> Result[int, int]:$/;"	kind:function	line:50
+factory	../tests/test_result/test_result_bind.py	/^    def factory(inner_value: int) -> Result[int, str]:$/;"	kind:function	line:28
+factory	../tests/test_result/test_result_bind.py	/^    def factory(inner_value: int) -> Result[int, str]:$/;"	kind:function	line:39
+factory	../tests/test_result/test_result_bind.py	/^    def factory(inner_value: int) -> Result[int, str]:$/;"	kind:function	line:8
+factory	../tests/test_result/test_result_bind.py	/^    def factory(inner_value: int) -> Result[str, int]:$/;"	kind:function	line:74
+failure	../returns/maybe.py	/^    def failure(self) -> None:$/;"	kind:member	line:216
+failure	../returns/maybe.py	/^    def failure(self) -> None:$/;"	kind:member	line:99
+failure	../returns/maybe.py	/^    def failure(self):$/;"	kind:member	line:335
+failure	../returns/primitives/container.py	/^    def failure(self) -> _ErrorType:$/;"	kind:member	line:165
+failure	../returns/result.py	/^    def failure(self) -> _ErrorType:$/;"	kind:member	line:136
+failure	../returns/result.py	/^    def failure(self):$/;"	kind:member	line:287
+failure	../returns/result.py	/^    def failure(self):$/;"	kind:member	line:445
+final	../returns/context.py	/^from typing_extensions import final$/;"	kind:namespace	line:5
+final	../returns/io.py	/^from typing_extensions import final$/;"	kind:namespace	line:7
+final	../returns/maybe.py	/^from typing_extensions import final$/;"	kind:namespace	line:20
+final	../returns/result.py	/^from typing_extensions import final$/;"	kind:namespace	line:19
+fix	../returns/maybe.py	/^    def fix($/;"	kind:member	line:74
+fix	../returns/maybe.py	/^    def fix(self, function):$/;"	kind:member	line:152
+fix	../returns/maybe.py	/^    def fix(self, function):$/;"	kind:member	line:281
+fix	../returns/primitives/container.py	/^    def fix($/;"	kind:member	line:109
+fix	../returns/result.py	/^    def fix($/;"	kind:member	line:88
+fix	../returns/result.py	/^    def fix(self, function):$/;"	kind:member	line:201
+fix	../returns/result.py	/^    def fix(self, function):$/;"	kind:member	line:376
+flake8	../.venv/bin/flake8	1;"	kind:file	line:1
+functions.py	../returns/functions.py	1;"	kind:file	line:1
+futurize	../.venv/bin/futurize	1;"	kind:file	line:1
+g	../ex.py	/^def g(n: int) -> RequiresContext[Test, str]:$/;"	kind:function	line:69
+get_function_hook	../returns/contrib/mypy/decorator_plugin.py	/^    def get_function_hook(  # type: ignore$/;"	kind:member	line:60
+html_sidebars	../docs/conf.py	/^html_sidebars = {$/;"	kind:variable	line:140
+html_static_path	../docs/conf.py	/^html_static_path = ['_static']$/;"	kind:variable	line:136
+html_theme	../docs/conf.py	/^html_theme = 'sphinx_typlog_theme'$/;"	kind:variable	line:119
+html_theme_options	../docs/conf.py	/^html_theme_options = {$/;"	kind:variable	line:124
+humanfriendly	../.venv/bin/humanfriendly	1;"	kind:file	line:1
+identity	../returns/context.py	/^from returns.functions import identity$/;"	kind:namespace	line:7
+identity	../returns/functions.py	/^def identity(instance: _FirstType) -> _FirstType:$/;"	kind:function	line:13
+impure	../returns/io.py	/^def impure(  # type: ignore$/;"	kind:function	line:128
+impure	../returns/io.py	/^def impure($/;"	kind:function	line:138
+impure	../returns/io.py	/^def impure(function):$/;"	kind:function	line:144
+impure	../tests/test_io/test_io_functions/test_impure.py	/^from returns.io import IO, impure$/;"	kind:namespace	line:5
+impure	../tests/test_pipeline/test_pipe.py	/^from returns.io import IO, impure$/;"	kind:namespace	line:8
+in	../.venv/bin/rst2html5.py	/^    import locale # module missing in Jython$/;"	kind:namespace	line:24
+inner	../ex.py	/^    def inner(deps: Test) -> str:$/;"	kind:function	line:65
+io.py	../returns/io.py	1;"	kind:file	line:1
+io_squash	../returns/io.py	/^from returns._generated.squash import _squash as io_squash  # noqa: F401, WPS436$/;"	kind:namespace	line:9
+io_squash	../tests/test_io/test_io_squash.py	/^from returns.io import IO, io_squash$/;"	kind:namespace	line:3
+is_successful	../returns/_generated/coalesce.py	/^from returns.pipeline import is_successful$/;"	kind:namespace	line:6
+is_successful	../returns/pipeline.py	/^def is_successful(container: _Unwrapable) -> bool:$/;"	kind:function	line:41
+is_successful	../tests/test_pipeline/test_is_successful.py	/^from returns.pipeline import is_successful$/;"	kind:namespace	line:6
+iscoroutinefunction	../returns/io.py	/^from inspect import iscoroutinefunction$/;"	kind:namespace	line:4
+iscoroutinefunction	../returns/maybe.py	/^from inspect import iscoroutinefunction$/;"	kind:namespace	line:5
+iscoroutinefunction	../returns/pipeline.py	/^from inspect import iscoroutinefunction$/;"	kind:namespace	line:4
+iscoroutinefunction	../returns/result.py	/^from inspect import iscoroutinefunction$/;"	kind:namespace	line:5
+isort	../.venv/bin/isort	1;"	kind:file	line:1
+jmespath	../.venv/bin/jp.py	/^import jmespath$/;"	kind:namespace	line:8
+join	../returns/converters.py	/^def join($/;"	kind:function	line:75
+join	../returns/converters.py	/^def join(container):$/;"	kind:function	line:81
+join	../returns/converters.py	/^def join(container: IO[IO[_ValueType]]) -> IO[_ValueType]:$/;"	kind:function	line:65
+join	../returns/converters.py	/^def join(container: Maybe[Maybe[_ValueType]]) -> Maybe[_ValueType]:$/;"	kind:function	line:70
+join	../tests/test_converters/test_join.py	/^from returns.converters import join$/;"	kind:namespace	line:5
+jp.py	../.venv/bin/jp.py	1;"	kind:file	line:1
+json	../.venv/bin/jp.py	/^import json$/;"	kind:namespace	line:4
+language	../docs/conf.py	/^language = None$/;"	kind:variable	line:97
+lift	../returns/io.py	/^    def lift($/;"	kind:member	line:98
+load_entry_point	../.venv/bin/futurize	/^from pkg_resources import load_entry_point$/;"	kind:namespace	line:6
+load_entry_point	../.venv/bin/m2r	/^from pkg_resources import load_entry_point$/;"	kind:namespace	line:6
+load_entry_point	../.venv/bin/pasteurize	/^from pkg_resources import load_entry_point$/;"	kind:namespace	line:6
+load_entry_point	../.venv/bin/slugify	/^from pkg_resources import load_entry_point$/;"	kind:namespace	line:6
+locale	../.venv/bin/rst2html.py	/^    import locale$/;"	kind:namespace	line:12
+locale	../.venv/bin/rst2html4.py	/^    import locale$/;"	kind:namespace	line:15
+locale	../.venv/bin/rst2html5.py	/^    import locale # module missing in Jython$/;"	kind:namespace	line:24
+locale	../.venv/bin/rst2latex.py	/^    import locale$/;"	kind:namespace	line:12
+locale	../.venv/bin/rst2man.py	/^import locale$/;"	kind:namespace	line:15
+locale	../.venv/bin/rst2odt.py	/^    import locale$/;"	kind:namespace	line:13
+locale	../.venv/bin/rst2pseudoxml.py	/^    import locale$/;"	kind:namespace	line:12
+locale	../.venv/bin/rst2s5.py	/^    import locale$/;"	kind:namespace	line:13
+locale	../.venv/bin/rst2xetex.py	/^    import locale$/;"	kind:namespace	line:12
+locale	../.venv/bin/rst2xml.py	/^    import locale$/;"	kind:namespace	line:12
+locale	../.venv/bin/rstpep2html.py	/^    import locale$/;"	kind:namespace	line:13
+m2r	../.venv/bin/m2r	1;"	kind:file	line:1
+main	../.venv/bin/bandit	/^from bandit.cli.main import main$/;"	kind:namespace	line:6
+main	../.venv/bin/bandit-baseline	/^from bandit.cli.baseline import main$/;"	kind:namespace	line:6
+main	../.venv/bin/bandit-config-generator	/^from bandit.cli.config_generator import main$/;"	kind:namespace	line:6
+main	../.venv/bin/chardetect	/^from chardet.cli.chardetect import main$/;"	kind:namespace	line:6
+main	../.venv/bin/coverage	/^from coverage.cmdline import main$/;"	kind:namespace	line:6
+main	../.venv/bin/coverage-3.7	/^from coverage.cmdline import main$/;"	kind:namespace	line:6
+main	../.venv/bin/coverage3	/^from coverage.cmdline import main$/;"	kind:namespace	line:6
+main	../.venv/bin/darglint	/^from darglint.driver import main$/;"	kind:namespace	line:6
+main	../.venv/bin/doc8	/^from doc8.main import main$/;"	kind:namespace	line:6
+main	../.venv/bin/easy_install	/^from setuptools.command.easy_install import main$/;"	kind:namespace	line:6
+main	../.venv/bin/easy_install-3.7	/^from setuptools.command.easy_install import main$/;"	kind:namespace	line:6
+main	../.venv/bin/flake8	/^from flake8.main.cli import main$/;"	kind:namespace	line:6
+main	../.venv/bin/humanfriendly	/^from humanfriendly.cli import main$/;"	kind:namespace	line:6
+main	../.venv/bin/isort	/^from isort.main import main$/;"	kind:namespace	line:6
+main	../.venv/bin/jp.py	/^def main():$/;"	kind:function	line:12
+main	../.venv/bin/mypyc	/^def main() -> None:$/;"	kind:function	line:32
+main	../.venv/bin/pbr	/^from pbr.cmd.main import main$/;"	kind:namespace	line:6
+main	../.venv/bin/pip	/^from pip._internal import main$/;"	kind:namespace	line:6
+main	../.venv/bin/pip3	/^from pip._internal import main$/;"	kind:namespace	line:6
+main	../.venv/bin/pip3.7	/^from pip._internal import main$/;"	kind:namespace	line:6
+main	../.venv/bin/py.test	/^from pytest import main$/;"	kind:namespace	line:6
+main	../.venv/bin/pybabel	/^from babel.messages.frontend import main$/;"	kind:namespace	line:6
+main	../.venv/bin/pydocstyle	/^from pydocstyle.cli import main$/;"	kind:namespace	line:6
+main	../.venv/bin/pyflakes	/^from pyflakes.api import main$/;"	kind:namespace	line:6
+main	../.venv/bin/pygmentize	/^from pygments.cmdline import main$/;"	kind:namespace	line:6
+main	../.venv/bin/pytest	/^from pytest import main$/;"	kind:namespace	line:6
+main	../.venv/bin/radon	/^from radon import main$/;"	kind:namespace	line:6
+main	../.venv/bin/restructuredtext-lint	/^from restructuredtext_lint.cli import main$/;"	kind:namespace	line:6
+main	../.venv/bin/rst-lint	/^from restructuredtext_lint.cli import main$/;"	kind:namespace	line:6
+main	../.venv/bin/rst2odt_prepstyles.py	/^def main():$/;"	kind:function	line:56
+main	../.venv/bin/sphinx-apidoc	/^from sphinx.ext.apidoc import main$/;"	kind:namespace	line:6
+main	../.venv/bin/sphinx-autogen	/^from sphinx.ext.autosummary.generate import main$/;"	kind:namespace	line:6
+main	../.venv/bin/sphinx-build	/^from sphinx.cmd.build import main$/;"	kind:namespace	line:6
+main	../.venv/bin/sphinx-quickstart	/^from sphinx.cmd.quickstart import main$/;"	kind:namespace	line:6
+main	../.venv/bin/stubgen	/^from mypy.stubgen import main$/;"	kind:namespace	line:6
+manpage	../.venv/bin/rst2man.py	/^from docutils.writers import manpage$/;"	kind:namespace	line:22
+map	../returns/context.py	/^    def map(  # noqa: A003$/;"	kind:member	line:59
+map	../returns/io.py	/^    def map(  # noqa: A003$/;"	kind:member	line:54
+map	../returns/maybe.py	/^    def map(  # noqa: A003$/;"	kind:member	line:60
+map	../returns/maybe.py	/^    def map(self, function):  # noqa: A003$/;"	kind:member	line:122
+map	../returns/maybe.py	/^    def map(self, function):  # noqa: A003$/;"	kind:member	line:243
+map	../returns/primitives/container.py	/^    def map(  # noqa: A003$/;"	kind:member	line:94
+map	../returns/result.py	/^    def map(  # noqa: A003$/;"	kind:member	line:58
+map	../returns/result.py	/^    def map(self, function):  # noqa: A003$/;"	kind:member	line:156
+map	../returns/result.py	/^    def map(self, function):  # noqa: A003$/;"	kind:member	line:315
+master_doc	../docs/conf.py	/^master_doc = 'index'$/;"	kind:variable	line:90
+maybe	../returns/maybe.py	/^def maybe(  # type: ignore$/;"	kind:function	line:364
+maybe	../returns/maybe.py	/^def maybe($/;"	kind:function	line:377
+maybe	../returns/maybe.py	/^def maybe(function):$/;"	kind:function	line:383
+maybe	../tests/test_maybe/test_maybe_functions/test_maybe_decorator.py	/^from returns.maybe import Nothing, Some, maybe$/;"	kind:namespace	line:7
+maybe.py	../returns/maybe.py	1;"	kind:file	line:1
+maybe_to_result	../returns/converters.py	/^def maybe_to_result($/;"	kind:function	line:40
+maybe_to_result	../tests/test_converters/test_maybe_to_result.py	/^from returns.converters import maybe_to_result$/;"	kind:namespace	line:5
+missing	../.venv/bin/rst2html5.py	/^    import locale # module missing in Jython$/;"	kind:namespace	line:24
+mkstemp	../.venv/bin/rst2odt_prepstyles.py	/^from tempfile import mkstemp$/;"	kind:namespace	line:19
+module	../.venv/bin/rst2html5.py	/^    import locale # module missing in Jython$/;"	kind:namespace	line:24
+my_pipe	../ex.py	/^def my_pipe($/;"	kind:function	line:49
+mypy	../.venv/bin/mypy	1;"	kind:file	line:1
+mypyc	../.venv/bin/mypyc	1;"	kind:file	line:1
+napoleon_numpy_docstring	../docs/conf.py	/^napoleon_numpy_docstring = False$/;"	kind:variable	line:153
+new	../returns/maybe.py	/^    def new(cls, inner_value: Optional[_ValueType]) -> 'Maybe[_ValueType]':$/;"	kind:member	line:54
+noqa	../docs/conf.py	/^    import tomlkit  # noqa: WPS433$/;"	kind:namespace	line:24
+noqa	../returns/converters.py	/^from returns._generated import coalesce  # noqa: WPS436$/;"	kind:namespace	line:5
+noqa	../returns/functions.py	/^from returns._generated.box import _box as box  # noqa: F401, WPS436$/;"	kind:namespace	line:5
+noqa	../returns/io.py	/^from returns._generated.squash import _squash as io_squash  # noqa: F401, WPS436$/;"	kind:namespace	line:9
+noqa	../returns/pipeline.py	/^from returns._generated.pipe import _pipe as pipe  # noqa: F401, WPS436$/;"	kind:namespace	line:9
+noqa	../returns/primitives/exceptions.py	/^    from returns.primitives.container import BaseContainer  # noqa: F401, WPS433$/;"	kind:namespace	line:6
+os	../.venv/bin/mypyc	/^import os$/;"	kind:namespace	line:14
+os	../.venv/bin/mypyc	/^import os.path$/;"	kind:namespace	line:15
+os	../.venv/bin/rst2odt_prepstyles.py	/^import os$/;"	kind:namespace	line:21
+os	../docs/conf.py	/^import os$/;"	kind:namespace	line:15
+output	../.venv/bin/rst2odt.py	/^output = publish_cmdline_to_binary(reader=reader, writer=writer,$/;"	kind:variable	line:28
+overload	../returns/converters.py	/^from typing import TypeVar, overload$/;"	kind:namespace	line:3
+overload	../returns/io.py	/^from typing import Callable, Coroutine, Generic, TypeVar, overload$/;"	kind:namespace	line:5
+overload	../returns/pipeline.py	/^from typing import Callable, Coroutine, Type, TypeVar, Union, overload$/;"	kind:namespace	line:5
+pasteurize	../.venv/bin/pasteurize	1;"	kind:file	line:1
+path	../.venv/bin/mypyc	/^import os.path$/;"	kind:namespace	line:15
+pbr	../.venv/bin/pbr	1;"	kind:file	line:1
+pformat	../.venv/bin/jp.py	/^from pprint import pformat$/;"	kind:namespace	line:6
+pip	../.venv/bin/pip	1;"	kind:file	line:1
+pip3	../.venv/bin/pip3	1;"	kind:file	line:1
+pip3.7	../.venv/bin/pip3.7	1;"	kind:file	line:1
+pipe	../ex.py	/^from returns.pipeline import pipe$/;"	kind:namespace	line:17
+pipe	../returns/pipeline.py	/^from returns._generated.pipe import _pipe as pipe  # noqa: F401, WPS436$/;"	kind:namespace	line:9
+pipe	../tests/test_pipeline/test_pipe.py	/^from returns.pipeline import pipe$/;"	kind:namespace	line:9
+pipe.py	../returns/_generated/pipe.py	1;"	kind:file	line:1
+pipeline	../returns/pipeline.py	/^def pipeline($/;"	kind:function	line:102
+pipeline	../returns/pipeline.py	/^def pipeline($/;"	kind:function	line:95
+pipeline	../returns/pipeline.py	/^def pipeline(container_type):  # noqa: C901, WPS212$/;"	kind:function	line:108
+pipeline	../tests/test_pipeline/test_maybe_pipeline.py	/^from returns.pipeline import pipeline$/;"	kind:namespace	line:6
+pipeline	../tests/test_pipeline/test_result_pipeline.py	/^from returns.pipeline import pipeline$/;"	kind:namespace	line:5
+pipeline.py	../returns/pipeline.py	1;"	kind:file	line:1
+pkg_meta	../docs/conf.py	/^pkg_meta = _get_project_meta()$/;"	kind:variable	line:32
+plugin	../returns/contrib/mypy/decorator_plugin.py	/^def plugin(version: str) -> Type[Plugin]:$/;"	kind:function	line:77
+prepstyle	../.venv/bin/rst2odt_prepstyles.py	/^def prepstyle(filename):$/;"	kind:function	line:29
+print_function	../.venv/bin/eradicate	/^from __future__ import print_function$/;"	kind:namespace	line:26
+print_function	../.venv/bin/rst2odt_prepstyles.py	/^from __future__ import print_function$/;"	kind:namespace	line:14
+project	../docs/conf.py	/^project = pkg_meta['name']$/;"	kind:variable	line:33
+publish_cmdline	../.venv/bin/rst2html.py	/^from docutils.core import publish_cmdline, default_description$/;"	kind:namespace	line:17
+publish_cmdline	../.venv/bin/rst2html4.py	/^from docutils.core import publish_cmdline, default_description$/;"	kind:namespace	line:20
+publish_cmdline	../.venv/bin/rst2html5.py	/^from docutils.core import publish_cmdline, default_description$/;"	kind:namespace	line:29
+publish_cmdline	../.venv/bin/rst2latex.py	/^from docutils.core import publish_cmdline$/;"	kind:namespace	line:17
+publish_cmdline	../.venv/bin/rst2man.py	/^from docutils.core import publish_cmdline, default_description$/;"	kind:namespace	line:21
+publish_cmdline	../.venv/bin/rst2pseudoxml.py	/^from docutils.core import publish_cmdline, default_description$/;"	kind:namespace	line:17
+publish_cmdline	../.venv/bin/rst2s5.py	/^from docutils.core import publish_cmdline, default_description$/;"	kind:namespace	line:18
+publish_cmdline	../.venv/bin/rst2xetex.py	/^from docutils.core import publish_cmdline$/;"	kind:namespace	line:17
+publish_cmdline	../.venv/bin/rst2xml.py	/^from docutils.core import publish_cmdline, default_description$/;"	kind:namespace	line:17
+publish_cmdline	../.venv/bin/rstpep2html.py	/^from docutils.core import publish_cmdline, default_description$/;"	kind:namespace	line:18
+publish_cmdline_to_binary	../.venv/bin/rst2odt.py	/^from docutils.core import publish_cmdline_to_binary, default_description$/;"	kind:namespace	line:18
+py.test	../.venv/bin/py.test	1;"	kind:file	line:1
+pybabel	../.venv/bin/pybabel	1;"	kind:file	line:1
+pycodestyle	../.venv/bin/pycodestyle	1;"	kind:file	line:1
+pydocstyle	../.venv/bin/pydocstyle	1;"	kind:file	line:1
+pyflakes	../.venv/bin/pyflakes	1;"	kind:file	line:1
+pygmentize	../.venv/bin/pygmentize	1;"	kind:file	line:1
+pygments_style	../docs/conf.py	/^pygments_style = 'sphinx'$/;"	kind:variable	line:105
+pytest	../.venv/bin/pytest	1;"	kind:file	line:1
+pytest	../tests/test_context/test_context.py	/^import pytest$/;"	kind:namespace	line:3
+pytest	../tests/test_converters/test_join.py	/^import pytest$/;"	kind:namespace	line:3
+pytest	../tests/test_converters/test_maybe_to_result.py	/^import pytest$/;"	kind:namespace	line:3
+pytest	../tests/test_converters/test_result_to_maybe.py	/^import pytest$/;"	kind:namespace	line:3
+pytest	../tests/test_functions/test_raise_exception.py	/^import pytest$/;"	kind:namespace	line:5
+pytest	../tests/test_io/test_io.py	/^import pytest$/;"	kind:namespace	line:3
+pytest	../tests/test_io/test_io_functions/test_impure.py	/^import pytest$/;"	kind:namespace	line:3
+pytest	../tests/test_maybe/test_maybe_base.py	/^import pytest$/;"	kind:namespace	line:3
+pytest	../tests/test_maybe/test_maybe_equality.py	/^import pytest$/;"	kind:namespace	line:3
+pytest	../tests/test_maybe/test_maybe_functions/test_maybe_decorator.py	/^import pytest$/;"	kind:namespace	line:5
+pytest	../tests/test_maybe/test_maybe_unwrap.py	/^import pytest$/;"	kind:namespace	line:3
+pytest	../tests/test_pipeline/test_is_successful.py	/^import pytest$/;"	kind:namespace	line:3
+pytest	../tests/test_pipeline/test_maybe_pipeline.py	/^import pytest$/;"	kind:namespace	line:3
+pytest	../tests/test_pipeline/test_pipe.py	/^import pytest$/;"	kind:namespace	line:5
+pytest	../tests/test_pipeline/test_result_pipeline.py	/^import pytest$/;"	kind:namespace	line:3
+pytest	../tests/test_result/test_result_base.py	/^import pytest$/;"	kind:namespace	line:3
+pytest	../tests/test_result/test_result_equality.py	/^import pytest$/;"	kind:namespace	line:3
+pytest	../tests/test_result/test_result_failure.py	/^import pytest$/;"	kind:namespace	line:3
+pytest	../tests/test_result/test_result_functions/test_safe.py	/^import pytest$/;"	kind:namespace	line:3
+pytest	../tests/test_result/test_result_unwrap.py	/^import pytest$/;"	kind:namespace	line:3
+radon	../.venv/bin/radon	1;"	kind:file	line:1
+raise_exception	../returns/functions.py	/^def raise_exception(exception: Exception) -> NoReturn:$/;"	kind:function	line:125
+raise_exception	../tests/test_functions/test_raise_exception.py	/^from returns.functions import raise_exception$/;"	kind:namespace	line:7
+raise_exception	../tests/test_pipeline/test_pipe.py	/^from returns.functions import box, raise_exception$/;"	kind:namespace	line:7
+re	../.venv/bin/bandit	/^import re$/;"	kind:namespace	line:3
+re	../.venv/bin/bandit-baseline	/^import re$/;"	kind:namespace	line:3
+re	../.venv/bin/bandit-config-generator	/^import re$/;"	kind:namespace	line:3
+re	../.venv/bin/chardetect	/^import re$/;"	kind:namespace	line:3
+re	../.venv/bin/coverage	/^import re$/;"	kind:namespace	line:3
+re	../.venv/bin/coverage-3.7	/^import re$/;"	kind:namespace	line:3
+re	../.venv/bin/coverage3	/^import re$/;"	kind:namespace	line:3
+re	../.venv/bin/darglint	/^import re$/;"	kind:namespace	line:3
+re	../.venv/bin/dmypy	/^import re$/;"	kind:namespace	line:3
+re	../.venv/bin/doc8	/^import re$/;"	kind:namespace	line:3
+re	../.venv/bin/easy_install	/^import re$/;"	kind:namespace	line:3
+re	../.venv/bin/easy_install-3.7	/^import re$/;"	kind:namespace	line:3
+re	../.venv/bin/flake8	/^import re$/;"	kind:namespace	line:3
+re	../.venv/bin/futurize	/^import re$/;"	kind:namespace	line:4
+re	../.venv/bin/humanfriendly	/^import re$/;"	kind:namespace	line:3
+re	../.venv/bin/isort	/^import re$/;"	kind:namespace	line:3
+re	../.venv/bin/m2r	/^import re$/;"	kind:namespace	line:4
+re	../.venv/bin/mypy	/^import re$/;"	kind:namespace	line:3
+re	../.venv/bin/pasteurize	/^import re$/;"	kind:namespace	line:4
+re	../.venv/bin/pbr	/^import re$/;"	kind:namespace	line:3
+re	../.venv/bin/pip	/^import re$/;"	kind:namespace	line:3
+re	../.venv/bin/pip3	/^import re$/;"	kind:namespace	line:3
+re	../.venv/bin/pip3.7	/^import re$/;"	kind:namespace	line:3
+re	../.venv/bin/py.test	/^import re$/;"	kind:namespace	line:3
+re	../.venv/bin/pybabel	/^import re$/;"	kind:namespace	line:3
+re	../.venv/bin/pycodestyle	/^import re$/;"	kind:namespace	line:3
+re	../.venv/bin/pydocstyle	/^import re$/;"	kind:namespace	line:3
+re	../.venv/bin/pyflakes	/^import re$/;"	kind:namespace	line:3
+re	../.venv/bin/pygmentize	/^import re$/;"	kind:namespace	line:3
+re	../.venv/bin/pytest	/^import re$/;"	kind:namespace	line:3
+re	../.venv/bin/radon	/^import re$/;"	kind:namespace	line:3
+re	../.venv/bin/restructuredtext-lint	/^import re$/;"	kind:namespace	line:3
+re	../.venv/bin/rst-lint	/^import re$/;"	kind:namespace	line:3
+re	../.venv/bin/safety	/^import re$/;"	kind:namespace	line:3
+re	../.venv/bin/slugify	/^import re$/;"	kind:namespace	line:4
+re	../.venv/bin/sphinx-apidoc	/^import re$/;"	kind:namespace	line:3
+re	../.venv/bin/sphinx-autogen	/^import re$/;"	kind:namespace	line:3
+re	../.venv/bin/sphinx-build	/^import re$/;"	kind:namespace	line:3
+re	../.venv/bin/sphinx-quickstart	/^import re$/;"	kind:namespace	line:3
+re	../.venv/bin/stubgen	/^import re$/;"	kind:namespace	line:3
+reader	../.venv/bin/rst2odt.py	/^reader = Reader()$/;"	kind:variable	line:27
+reduce	../returns/_generated/pipe.py	/^from functools import reduce$/;"	kind:namespace	line:3
+release	../docs/conf.py	/^release = version$/;"	kind:variable	line:40
+rescue	../returns/maybe.py	/^    def rescue($/;"	kind:member	line:81
+rescue	../returns/maybe.py	/^    def rescue(self, function):$/;"	kind:member	line:172
+rescue	../returns/maybe.py	/^    def rescue(self, function):$/;"	kind:member	line:296
+rescue	../returns/primitives/container.py	/^    def rescue($/;"	kind:member	line:131
+rescue	../returns/result.py	/^    def rescue($/;"	kind:member	line:112
+rescue	../returns/result.py	/^    def rescue(self, function):$/;"	kind:member	line:221
+rescue	../returns/result.py	/^    def rescue(self, function):$/;"	kind:member	line:391
+restructuredtext-lint	../.venv/bin/restructuredtext-lint	1;"	kind:file	line:1
+result.py	../returns/result.py	1;"	kind:file	line:1
+result_to_maybe	../returns/converters.py	/^def result_to_maybe($/;"	kind:function	line:19
+result_to_maybe	../tests/test_converters/test_result_to_maybe.py	/^from returns.converters import result_to_maybe$/;"	kind:namespace	line:5
+reveal_type	../ex.py	/^    reveal_type = print$/;"	kind:variable	line:20
+rst-lint	../.venv/bin/rst-lint	1;"	kind:file	line:1
+rst2html.py	../.venv/bin/rst2html.py	1;"	kind:file	line:1
+rst2html4.py	../.venv/bin/rst2html4.py	1;"	kind:file	line:1
+rst2html5.py	../.venv/bin/rst2html5.py	1;"	kind:file	line:1
+rst2latex.py	../.venv/bin/rst2latex.py	1;"	kind:file	line:1
+rst2man.py	../.venv/bin/rst2man.py	1;"	kind:file	line:1
+rst2odt.py	../.venv/bin/rst2odt.py	1;"	kind:file	line:1
+rst2odt_prepstyles.py	../.venv/bin/rst2odt_prepstyles.py	1;"	kind:file	line:1
+rst2pseudoxml.py	../.venv/bin/rst2pseudoxml.py	1;"	kind:file	line:1
+rst2s5.py	../.venv/bin/rst2s5.py	1;"	kind:file	line:1
+rst2xetex.py	../.venv/bin/rst2xetex.py	1;"	kind:file	line:1
+rst2xml.py	../.venv/bin/rst2xml.py	1;"	kind:file	line:1
+rstpep2html.py	../.venv/bin/rstpep2html.py	1;"	kind:file	line:1
+runtime	../returns/primitives/container.py	/^from typing_extensions import Protocol, runtime$/;"	kind:namespace	line:6
+safe	../returns/result.py	/^def safe(  # type: ignore$/;"	kind:function	line:479
+safe	../returns/result.py	/^def safe($/;"	kind:function	line:489
+safe	../returns/result.py	/^def safe(function):  # noqa: C901$/;"	kind:function	line:495
+safe	../tests/test_pipeline/test_pipe.py	/^from returns.result import Result, Success, safe$/;"	kind:namespace	line:10
+safe	../tests/test_pipeline/test_result_pipeline.py	/^from returns.result import Result, Success, safe$/;"	kind:namespace	line:6
+safe	../tests/test_result/test_result_functions/test_safe.py	/^from returns.result import Success, safe$/;"	kind:namespace	line:5
+safety	../.venv/bin/safety	1;"	kind:file	line:1
+set_type_checking_flag	../docs/conf.py	/^set_type_checking_flag = False$/;"	kind:variable	line:79
+shutil	../.venv/bin/rst2odt_prepstyles.py	/^import shutil$/;"	kind:namespace	line:20
+signal	../.venv/bin/eradicate	/^import signal$/;"	kind:namespace	line:28
+slugify	../.venv/bin/slugify	1;"	kind:file	line:1
+source_suffix	../docs/conf.py	/^source_suffix = ['.rst', '.md']$/;"	kind:variable	line:87
+sphinx-apidoc	../.venv/bin/sphinx-apidoc	1;"	kind:file	line:1
+sphinx-autogen	../.venv/bin/sphinx-autogen	1;"	kind:file	line:1
+sphinx-build	../.venv/bin/sphinx-build	1;"	kind:file	line:1
+sphinx-quickstart	../.venv/bin/sphinx-quickstart	1;"	kind:file	line:1
+squash.py	../returns/_generated/squash.py	1;"	kind:file	line:1
+standard_error	../.venv/bin/eradicate	/^                                standard_error=sys.stderr))$/;"	kind:variable	line:45
+standard_out	../.venv/bin/eradicate	/^                                standard_out=sys.stdout,$/;"	kind:variable	line:44
+stubgen	../.venv/bin/stubgen	1;"	kind:file	line:1
+subprocess	../.venv/bin/mypyc	/^import subprocess$/;"	kind:namespace	line:16
+sys	../.venv/bin/bandit	/^import sys$/;"	kind:namespace	line:4
+sys	../.venv/bin/bandit-baseline	/^import sys$/;"	kind:namespace	line:4
+sys	../.venv/bin/bandit-config-generator	/^import sys$/;"	kind:namespace	line:4
+sys	../.venv/bin/chardetect	/^import sys$/;"	kind:namespace	line:4
+sys	../.venv/bin/coverage	/^import sys$/;"	kind:namespace	line:4
+sys	../.venv/bin/coverage-3.7	/^import sys$/;"	kind:namespace	line:4
+sys	../.venv/bin/coverage3	/^import sys$/;"	kind:namespace	line:4
+sys	../.venv/bin/darglint	/^import sys$/;"	kind:namespace	line:4
+sys	../.venv/bin/dmypy	/^import sys$/;"	kind:namespace	line:4
+sys	../.venv/bin/doc8	/^import sys$/;"	kind:namespace	line:4
+sys	../.venv/bin/easy_install	/^import sys$/;"	kind:namespace	line:4
+sys	../.venv/bin/easy_install-3.7	/^import sys$/;"	kind:namespace	line:4
+sys	../.venv/bin/eradicate	/^import sys$/;"	kind:namespace	line:29
+sys	../.venv/bin/flake8	/^import sys$/;"	kind:namespace	line:4
+sys	../.venv/bin/futurize	/^import sys$/;"	kind:namespace	line:5
+sys	../.venv/bin/humanfriendly	/^import sys$/;"	kind:namespace	line:4
+sys	../.venv/bin/isort	/^import sys$/;"	kind:namespace	line:4
+sys	../.venv/bin/jp.py	/^import sys$/;"	kind:namespace	line:3
+sys	../.venv/bin/m2r	/^import sys$/;"	kind:namespace	line:5
+sys	../.venv/bin/mypy	/^import sys$/;"	kind:namespace	line:4
+sys	../.venv/bin/mypyc	/^import sys$/;"	kind:namespace	line:17
+sys	../.venv/bin/pasteurize	/^import sys$/;"	kind:namespace	line:5
+sys	../.venv/bin/pbr	/^import sys$/;"	kind:namespace	line:4
+sys	../.venv/bin/pip	/^import sys$/;"	kind:namespace	line:4
+sys	../.venv/bin/pip3	/^import sys$/;"	kind:namespace	line:4
+sys	../.venv/bin/pip3.7	/^import sys$/;"	kind:namespace	line:4
+sys	../.venv/bin/py.test	/^import sys$/;"	kind:namespace	line:4
+sys	../.venv/bin/pybabel	/^import sys$/;"	kind:namespace	line:4
+sys	../.venv/bin/pycodestyle	/^import sys$/;"	kind:namespace	line:4
+sys	../.venv/bin/pydocstyle	/^import sys$/;"	kind:namespace	line:4
+sys	../.venv/bin/pyflakes	/^import sys$/;"	kind:namespace	line:4
+sys	../.venv/bin/pygmentize	/^import sys$/;"	kind:namespace	line:4
+sys	../.venv/bin/pytest	/^import sys$/;"	kind:namespace	line:4
+sys	../.venv/bin/radon	/^import sys$/;"	kind:namespace	line:4
+sys	../.venv/bin/restructuredtext-lint	/^import sys$/;"	kind:namespace	line:4
+sys	../.venv/bin/rst-lint	/^import sys$/;"	kind:namespace	line:4
+sys	../.venv/bin/rst2odt.py	/^import sys$/;"	kind:namespace	line:11
+sys	../.venv/bin/rst2odt_prepstyles.py	/^import sys$/;"	kind:namespace	line:17
+sys	../.venv/bin/safety	/^import sys$/;"	kind:namespace	line:4
+sys	../.venv/bin/slugify	/^import sys$/;"	kind:namespace	line:5
+sys	../.venv/bin/sphinx-apidoc	/^import sys$/;"	kind:namespace	line:4
+sys	../.venv/bin/sphinx-autogen	/^import sys$/;"	kind:namespace	line:4
+sys	../.venv/bin/sphinx-build	/^import sys$/;"	kind:namespace	line:4
+sys	../.venv/bin/sphinx-quickstart	/^import sys$/;"	kind:namespace	line:4
+sys	../.venv/bin/stubgen	/^import sys$/;"	kind:namespace	line:4
+sys	../docs/conf.py	/^import sys$/;"	kind:namespace	line:16
+tap	../returns/functions.py	/^def tap($/;"	kind:function	line:69
+tempfile	../.venv/bin/mypyc	/^import tempfile$/;"	kind:namespace	line:18
+templates_path	../docs/conf.py	/^templates_path = ['_templates']$/;"	kind:variable	line:82
+test_alt	../tests/test_result/test_result_map.py	/^def test_alt():$/;"	kind:function	line:11
+test_async_maybe_nothing	../tests/test_maybe/test_maybe_functions/test_maybe_decorator.py	/^async def test_async_maybe_nothing():$/;"	kind:function	line:38
+test_async_maybe_pipeline_some	../tests/test_pipeline/test_maybe_pipeline.py	/^async def test_async_maybe_pipeline_some():$/;"	kind:function	line:28
+test_async_maybe_some	../tests/test_maybe/test_maybe_functions/test_maybe_decorator.py	/^async def test_async_maybe_some():$/;"	kind:function	line:31
+test_async_pipeline	../tests/test_pipeline/test_result_pipeline.py	/^async def test_async_pipeline():$/;"	kind:function	line:39
+test_async_safe_failure	../tests/test_result/test_result_functions/test_safe.py	/^async def test_async_safe_failure():$/;"	kind:function	line:38
+test_async_safe_success	../tests/test_result/test_result_functions/test_safe.py	/^async def test_async_safe_success():$/;"	kind:function	line:30
+test_bind	../tests/test_result/test_result_bind.py	/^def test_bind():$/;"	kind:function	line:6
+test_bind_nothing	../tests/test_maybe/test_maybe_bind.py	/^def test_bind_nothing():$/;"	kind:function	line:18
+test_bind_some	../tests/test_maybe/test_maybe_bind.py	/^def test_bind_some():$/;"	kind:function	line:6
+test_box.py	../tests/test_functions/test_box.py	1;"	kind:file	line:1
+test_box_with_context	../tests/test_functions/test_box.py	/^def test_box_with_context():$/;"	kind:function	line:49
+test_box_with_io	../tests/test_functions/test_box.py	/^def test_box_with_io():$/;"	kind:function	line:26
+test_box_with_maybe	../tests/test_functions/test_box.py	/^def test_box_with_maybe():$/;"	kind:function	line:33
+test_box_with_result	../tests/test_functions/test_box.py	/^def test_box_with_result():$/;"	kind:function	line:41
+test_coalesce.py	../tests/test_converters/test_coalesce.py	1;"	kind:file	line:1
+test_coalesce_failure	../tests/test_converters/test_coalesce.py	/^def test_coalesce_failure():$/;"	kind:function	line:25
+test_coalesce_nothing	../tests/test_converters/test_coalesce.py	/^def test_coalesce_nothing():$/;"	kind:function	line:35
+test_coalesce_some	../tests/test_converters/test_coalesce.py	/^def test_coalesce_some():$/;"	kind:function	line:30
+test_coalesce_success	../tests/test_converters/test_coalesce.py	/^def test_coalesce_success():$/;"	kind:function	line:20
+test_compose.py	../tests/test_functions/test_compose.py	1;"	kind:file	line:1
+test_context.py	../tests/test_context/test_context.py	1;"	kind:file	line:1
+test_context_ask	../tests/test_context/test_context_utils.py	/^def test_context_ask():$/;"	kind:function	line:6
+test_context_bind	../tests/test_context/test_context.py	/^def test_context_bind():$/;"	kind:function	line:33
+test_context_equality.py	../tests/test_context/test_context_equality.py	1;"	kind:file	line:1
+test_context_map	../tests/test_context/test_context.py	/^def test_context_map():$/;"	kind:function	line:23
+test_context_unit	../tests/test_context/test_context_utils.py	/^def test_context_unit():$/;"	kind:function	line:12
+test_context_utils.py	../tests/test_context/test_context_utils.py	1;"	kind:file	line:1
+test_equality	../tests/test_context/test_context_equality.py	/^def test_equality():$/;"	kind:function	line:12
+test_equality	../tests/test_io/test_io_equality.py	/^def test_equality():$/;"	kind:function	line:6
+test_equality	../tests/test_maybe/test_maybe_equality.py	/^def test_equality():$/;"	kind:function	line:32
+test_failure_can_be_fixed	../tests/test_functions/test_raise_exception.py	/^def test_failure_can_be_fixed():$/;"	kind:function	line:26
+test_failure_to_nothing	../tests/test_converters/test_result_to_maybe.py	/^def test_failure_to_nothing(inner_value):$/;"	kind:function	line:30
+test_failure_value	../tests/test_result/test_result_value_or.py	/^def test_failure_value():$/;"	kind:function	line:13
+test_fix_failure	../tests/test_result/test_result_map.py	/^def test_fix_failure():$/;"	kind:function	line:23
+test_fix_nothing	../tests/test_maybe/test_maybe_map.py	/^def test_fix_nothing():$/;"	kind:function	line:22
+test_fix_some	../tests/test_maybe/test_maybe_map.py	/^def test_fix_some():$/;"	kind:function	line:17
+test_fix_success	../tests/test_result/test_result_map.py	/^def test_fix_success():$/;"	kind:function	line:17
+test_function_composition	../tests/test_functions/test_compose.py	/^def test_function_composition():$/;"	kind:function	line:14
+test_immutability_failure	../tests/test_maybe/test_maybe_equality.py	/^def test_immutability_failure():$/;"	kind:function	line:61
+test_immutability_failure	../tests/test_result/test_result_equality.py	/^def test_immutability_failure():$/;"	kind:function	line:55
+test_immutability_success	../tests/test_maybe/test_maybe_equality.py	/^def test_immutability_success():$/;"	kind:function	line:76
+test_immutability_success	../tests/test_result/test_result_equality.py	/^def test_immutability_success():$/;"	kind:function	line:70
+test_impure	../tests/test_io/test_io_functions/test_impure.py	/^def test_impure():$/;"	kind:function	line:16
+test_impure.py	../tests/test_io/test_io_functions/test_impure.py	1;"	kind:file	line:1
+test_impure_async	../tests/test_io/test_io_functions/test_impure.py	/^async def test_impure_async():$/;"	kind:function	line:24
+test_io.py	../tests/test_io/test_io.py	1;"	kind:file	line:1
+test_io_bind	../tests/test_io/test_io.py	/^def test_io_bind():$/;"	kind:function	line:30
+test_io_equality.py	../tests/test_io/test_io_equality.py	1;"	kind:file	line:1
+test_io_map	../tests/test_io/test_io.py	/^def test_io_map():$/;"	kind:function	line:21
+test_io_pickle	../tests/test_io/test_io_pickle.py	/^def test_io_pickle():$/;"	kind:function	line:6
+test_io_pickle.py	../tests/test_io/test_io_pickle.py	1;"	kind:file	line:1
+test_io_pickle_restore	../tests/test_io/test_io_pickle.py	/^def test_io_pickle_restore():$/;"	kind:function	line:11
+test_io_squash	../tests/test_io/test_io_squash.py	/^def test_io_squash():$/;"	kind:function	line:6
+test_io_squash.py	../tests/test_io/test_io_squash.py	1;"	kind:file	line:1
+test_io_str	../tests/test_io/test_io.py	/^def test_io_str():$/;"	kind:function	line:39
+test_is_compare	../tests/test_maybe/test_maybe_equality.py	/^def test_is_compare():$/;"	kind:function	line:50
+test_is_compare	../tests/test_result/test_result_equality.py	/^def test_is_compare():$/;"	kind:function	line:45
+test_is_successful	../tests/test_pipeline/test_is_successful.py	/^def test_is_successful(container, correct_result):$/;"	kind:function	line:17
+test_is_successful.py	../tests/test_pipeline/test_is_successful.py	1;"	kind:file	line:1
+test_join	../tests/test_converters/test_join.py	/^def test_join(container, merged):$/;"	kind:function	line:18
+test_join.py	../tests/test_converters/test_join.py	1;"	kind:file	line:1
+test_left_identity_failure	../tests/test_result/test_result_bind.py	/^def test_left_identity_failure():$/;"	kind:function	line:48
+test_left_identity_success	../tests/test_result/test_result_bind.py	/^def test_left_identity_success():$/;"	kind:function	line:26
+test_lift.py	../tests/test_io/test_lift.py	1;"	kind:file	line:1
+test_lift_io	../tests/test_io/test_lift.py	/^def test_lift_io():$/;"	kind:function	line:10
+test_map_nothing	../tests/test_maybe/test_maybe_map.py	/^def test_map_nothing():$/;"	kind:function	line:12
+test_map_some	../tests/test_maybe/test_maybe_map.py	/^def test_map_some():$/;"	kind:function	line:6
+test_map_success	../tests/test_result/test_result_map.py	/^def test_map_success():$/;"	kind:function	line:6
+test_maybe_abstract_method	../tests/test_maybe/test_maybe_base.py	/^def test_maybe_abstract_method(method_name):$/;"	kind:function	line:15
+test_maybe_abstract_method_single	../tests/test_maybe/test_maybe_base.py	/^def test_maybe_abstract_method_single(method_name):$/;"	kind:function	line:26
+test_maybe_base.py	../tests/test_maybe/test_maybe_base.py	1;"	kind:file	line:1
+test_maybe_bind.py	../tests/test_maybe/test_maybe_bind.py	1;"	kind:file	line:1
+test_maybe_decorator.py	../tests/test_maybe/test_maybe_functions/test_maybe_decorator.py	1;"	kind:file	line:1
+test_maybe_equality.py	../tests/test_maybe/test_maybe_equality.py	1;"	kind:file	line:1
+test_maybe_map.py	../tests/test_maybe/test_maybe_map.py	1;"	kind:file	line:1
+test_maybe_new.py	../tests/test_maybe/test_maybe_new.py	1;"	kind:file	line:1
+test_maybe_new_nothing	../tests/test_maybe/test_maybe_new.py	/^def test_maybe_new_nothing():$/;"	kind:function	line:11
+test_maybe_new_some	../tests/test_maybe/test_maybe_new.py	/^def test_maybe_new_some():$/;"	kind:function	line:6
+test_maybe_nothing	../tests/test_maybe/test_maybe_functions/test_maybe_decorator.py	/^def test_maybe_nothing():$/;"	kind:function	line:25
+test_maybe_pipeline.py	../tests/test_pipeline/test_maybe_pipeline.py	1;"	kind:file	line:1
+test_maybe_pipeline_some	../tests/test_pipeline/test_maybe_pipeline.py	/^def test_maybe_pipeline_some():$/;"	kind:function	line:21
+test_maybe_some	../tests/test_maybe/test_maybe_functions/test_maybe_decorator.py	/^def test_maybe_some():$/;"	kind:function	line:20
+test_maybe_to_result.py	../tests/test_converters/test_maybe_to_result.py	1;"	kind:file	line:1
+test_maybe_types	../tests/test_maybe/test_maybe_base.py	/^def test_maybe_types():$/;"	kind:function	line:33
+test_maybe_unwrap.py	../tests/test_maybe/test_maybe_unwrap.py	1;"	kind:file	line:1
+test_maybe_value_or.py	../tests/test_maybe/test_maybe_value_or.py	1;"	kind:file	line:1
+test_nonequality	../tests/test_context/test_context_equality.py	/^def test_nonequality():$/;"	kind:function	line:20
+test_nonequality	../tests/test_io/test_io_equality.py	/^def test_nonequality():$/;"	kind:function	line:13
+test_nonequality	../tests/test_maybe/test_maybe_equality.py	/^def test_nonequality():$/;"	kind:function	line:41
+test_nonequality	../tests/test_result/test_result_equality.py	/^def test_nonequality():$/;"	kind:function	line:34
+test_nothing_to_failure	../tests/test_converters/test_maybe_to_result.py	/^def test_nothing_to_failure():$/;"	kind:function	line:20
+test_nothing_value	../tests/test_maybe/test_maybe_value_or.py	/^def test_nothing_value():$/;"	kind:function	line:11
+test_pipe.py	../tests/test_pipeline/test_pipe.py	1;"	kind:file	line:1
+test_pipe_user_profile	../tests/test_pipeline/test_pipe.py	/^def test_pipe_user_profile():$/;"	kind:function	line:33
+test_pipe_user_profile_failure	../tests/test_pipeline/test_pipe.py	/^def test_pipe_user_profile_failure():$/;"	kind:function	line:38
+test_pipeline	../tests/test_pipeline/test_result_pipeline.py	/^def test_pipeline():$/;"	kind:function	line:31
+test_protocols	../tests/test_context/test_context.py	/^def test_protocols(container, protocol):$/;"	kind:function	line:18
+test_protocols	../tests/test_io/test_io.py	/^def test_protocols(container, protocol):$/;"	kind:function	line:16
+test_protocols	../tests/test_maybe/test_maybe_equality.py	/^def test_protocols(container, protocol):$/;"	kind:function	line:27
+test_protocols	../tests/test_result/test_result_equality.py	/^def test_protocols(container, protocol):$/;"	kind:function	line:29
+test_raise_exception.py	../tests/test_functions/test_raise_exception.py	1;"	kind:file	line:1
+test_raise_regular_exception	../tests/test_functions/test_raise_exception.py	/^def test_raise_regular_exception(exception_type: Type[Exception]):$/;"	kind:function	line:20
+test_rescue_failure	../tests/test_result/test_result_bind.py	/^def test_rescue_failure():$/;"	kind:function	line:72
+test_rescue_nothing	../tests/test_maybe/test_maybe_bind.py	/^def test_rescue_nothing():$/;"	kind:function	line:39
+test_rescue_some	../tests/test_maybe/test_maybe_bind.py	/^def test_rescue_some():$/;"	kind:function	line:29
+test_rescue_success	../tests/test_result/test_result_bind.py	/^def test_rescue_success():$/;"	kind:function	line:61
+test_result_abstract_method	../tests/test_result/test_result_base.py	/^def test_result_abstract_method(method_name):$/;"	kind:function	line:17
+test_result_abstract_method_single	../tests/test_result/test_result_base.py	/^def test_result_abstract_method_single(method_name):$/;"	kind:function	line:28
+test_result_base.py	../tests/test_result/test_result_base.py	1;"	kind:file	line:1
+test_result_bind.py	../tests/test_result/test_result_bind.py	1;"	kind:file	line:1
+test_result_equality.py	../tests/test_result/test_result_equality.py	1;"	kind:file	line:1
+test_result_failure.py	../tests/test_result/test_result_failure.py	1;"	kind:file	line:1
+test_result_map.py	../tests/test_result/test_result_map.py	1;"	kind:file	line:1
+test_result_pipeline.py	../tests/test_pipeline/test_result_pipeline.py	1;"	kind:file	line:1
+test_result_to_maybe.py	../tests/test_converters/test_result_to_maybe.py	1;"	kind:file	line:1
+test_result_types	../tests/test_result/test_result_base.py	/^def test_result_types():$/;"	kind:function	line:35
+test_result_unwrap.py	../tests/test_result/test_result_unwrap.py	1;"	kind:file	line:1
+test_result_value_or.py	../tests/test_result/test_result_value_or.py	1;"	kind:file	line:1
+test_safe.py	../tests/test_result/test_result_functions/test_safe.py	1;"	kind:file	line:1
+test_safe_failure	../tests/test_result/test_result_functions/test_safe.py	/^def test_safe_failure():$/;"	kind:function	line:23
+test_safe_success	../tests/test_result/test_result_functions/test_safe.py	/^def test_safe_success():$/;"	kind:function	line:18
+test_some_from_none	../tests/test_maybe/test_maybe_new.py	/^def test_some_from_none():$/;"	kind:function	line:16
+test_some_to_success	../tests/test_converters/test_maybe_to_result.py	/^def test_some_to_success(inner_value):$/;"	kind:function	line:15
+test_some_value	../tests/test_maybe/test_maybe_value_or.py	/^def test_some_value():$/;"	kind:function	line:6
+test_success_is_not_touched	../tests/test_functions/test_raise_exception.py	/^def test_success_is_not_touched():$/;"	kind:function	line:33
+test_success_to_nothing	../tests/test_converters/test_result_to_maybe.py	/^def test_success_to_nothing():$/;"	kind:function	line:20
+test_success_to_some	../tests/test_converters/test_result_to_maybe.py	/^def test_success_to_some(inner_value):$/;"	kind:function	line:15
+test_success_value	../tests/test_result/test_result_value_or.py	/^def test_success_value():$/;"	kind:function	line:6
+test_unify_and_bind	../tests/test_result/test_result_bind.py	/^def test_unify_and_bind():$/;"	kind:function	line:37
+test_unsafe_perform_io	../tests/test_unsafe/test_unsafe_perform_io.py	/^def test_unsafe_perform_io():$/;"	kind:function	line:7
+test_unsafe_perform_io.py	../tests/test_unsafe/test_unsafe_perform_io.py	1;"	kind:file	line:1
+test_unwrap_failure	../tests/test_maybe/test_maybe_unwrap.py	/^def test_unwrap_failure():$/;"	kind:function	line:14
+test_unwrap_failure	../tests/test_result/test_result_failure.py	/^def test_unwrap_failure():$/;"	kind:function	line:15
+test_unwrap_failure	../tests/test_result/test_result_unwrap.py	/^def test_unwrap_failure():$/;"	kind:function	line:14
+test_unwrap_failure_from_failure	../tests/test_maybe/test_maybe_unwrap.py	/^def test_unwrap_failure_from_failure():$/;"	kind:function	line:26
+test_unwrap_failure_from_success	../tests/test_maybe/test_maybe_unwrap.py	/^def test_unwrap_failure_from_success():$/;"	kind:function	line:20
+test_unwrap_failure_with_exception	../tests/test_result/test_result_unwrap.py	/^def test_unwrap_failure_with_exception():$/;"	kind:function	line:20
+test_unwrap_success	../tests/test_maybe/test_maybe_unwrap.py	/^def test_unwrap_success():$/;"	kind:function	line:9
+test_unwrap_success	../tests/test_result/test_result_failure.py	/^def test_unwrap_success():$/;"	kind:function	line:9
+test_unwrap_success	../tests/test_result/test_result_unwrap.py	/^def test_unwrap_success():$/;"	kind:function	line:9
+time	../.venv/bin/mypyc	/^import time$/;"	kind:namespace	line:19
+todo_include_todos	../docs/conf.py	/^todo_include_todos = True$/;"	kind:variable	line:158
+tomlkit	../docs/conf.py	/^    import tomlkit  # noqa: WPS433$/;"	kind:namespace	line:24
+unify	../returns/result.py	/^    def unify($/;"	kind:member	line:72
+unify	../returns/result.py	/^    def unify(self, function):$/;"	kind:member	line:186
+unify	../returns/result.py	/^    def unify(self, function):$/;"	kind:member	line:353
+unit	../returns/context.py	/^    def unit($/;"	kind:member	line:233
+unsafe.py	../returns/unsafe.py	1;"	kind:file	line:1
+unsafe_perform_io	../returns/unsafe.py	/^def unsafe_perform_io(wrapped_in_io: IO[_ValueType]) -> _ValueType:$/;"	kind:function	line:10
+unsafe_perform_io	../tests/test_unsafe/test_unsafe_perform_io.py	/^from returns.unsafe import unsafe_perform_io$/;"	kind:namespace	line:4
+untap	../returns/functions.py	/^def untap($/;"	kind:function	line:96
+unwrap	../returns/maybe.py	/^    def unwrap(self) -> _ValueType:$/;"	kind:member	line:95
+unwrap	../returns/maybe.py	/^    def unwrap(self):$/;"	kind:member	line:202
+unwrap	../returns/maybe.py	/^    def unwrap(self):$/;"	kind:member	line:323
+unwrap	../returns/primitives/container.py	/^    def unwrap(self) -> _ValueType:$/;"	kind:member	line:155
+unwrap	../returns/result.py	/^    def unwrap(self) -> _ValueType:$/;"	kind:member	line:132
+unwrap	../returns/result.py	/^    def unwrap(self):$/;"	kind:member	line:271
+unwrap	../returns/result.py	/^    def unwrap(self):$/;"	kind:member	line:433
+value_or	../returns/maybe.py	/^    def value_or($/;"	kind:member	line:88
+value_or	../returns/maybe.py	/^    def value_or(self, default_value):$/;"	kind:member	line:190
+value_or	../returns/maybe.py	/^    def value_or(self, default_value):$/;"	kind:member	line:311
+value_or	../returns/primitives/container.py	/^    def value_or($/;"	kind:member	line:150
+value_or	../returns/result.py	/^    def value_or($/;"	kind:member	line:125
+value_or	../returns/result.py	/^    def value_or(self, default_value):$/;"	kind:member	line:259
+value_or	../returns/result.py	/^    def value_or(self, default_value):$/;"	kind:member	line:421
+version	../docs/conf.py	/^version = pkg_meta['version']$/;"	kind:variable	line:38
+wraps	../returns/io.py	/^from functools import wraps$/;"	kind:namespace	line:3
+wraps	../returns/maybe.py	/^from functools import wraps$/;"	kind:namespace	line:4
+wraps	../returns/pipeline.py	/^from functools import wraps$/;"	kind:namespace	line:3
+wraps	../returns/result.py	/^from functools import wraps$/;"	kind:namespace	line:4
+writer	../.venv/bin/rst2odt.py	/^writer = Writer()$/;"	kind:variable	line:26
+x	../ex.py	/^def x(a: str) -> RequiresContext[Test, str]:$/;"	kind:function	line:93
+zipfile	../.venv/bin/rst2odt_prepstyles.py	/^import zipfile$/;"	kind:namespace	line:18

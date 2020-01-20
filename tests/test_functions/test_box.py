@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from returns.context import RequiresContext
 from returns.functions import box
 from returns.io import IO
 from returns.maybe import Maybe, Nothing, Some
@@ -16,6 +17,10 @@ def _maybe_function(argument: int) -> Maybe[str]:
 
 def _result_function(argument: int) -> Result[str, str]:
     return Success(str(argument + 1))
+
+
+def _context_function(argument: int) -> RequiresContext[int, int]:
+    return RequiresContext(lambda other: argument + other)
 
 
 def test_box_with_io():
@@ -39,3 +44,10 @@ def test_box_with_result():
 
     assert boxed(Success(1)) == Success('2')
     assert boxed(Failure('s')) == Failure('s')
+
+
+def test_box_with_context():
+    """Ensures that functions can be composed and return type is correct."""
+    boxed = box(_context_function)
+
+    assert boxed(RequiresContext(lambda _: 3))(5) == 8

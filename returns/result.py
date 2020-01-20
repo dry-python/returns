@@ -41,10 +41,17 @@ class Result(
     """
     Base class for :class:`~_Failure` and :class:`~_Success`.
 
-    :class:`~Result` does not have
+    :class:`~Result` does not have a public contructor.
+    Use :func:`~Success` and :func:`~Failure` to contruct the needed values.
+
+    See also:
+        https://bit.ly/361qQhi
+
     """
 
     _inner_value: Union[_ValueType, _ErrorType]
+
+    # These two are required for projects like `classes`:
     success_type: ClassVar[Type['_Success']]
     failure_type: ClassVar[Type['_Failure']]
 

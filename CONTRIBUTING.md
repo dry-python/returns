@@ -7,7 +7,7 @@ you will need to get familiar with these concepts:
 
 - http://learnyouahaskell.com/functors-applicative-functors-and-monoids
 - https://github.com/dbrattli/OSlash/wiki/Functors,-Applicatives,-And-Monads-In-Pictures
-- https://gcanti.github.io/fp-ts/
+- https://gcanti.github.io/fp-ts/ and https://dev.to/gcanti
 
 Here are some practical examples of what we are doing here:
 
@@ -18,7 +18,7 @@ Here are some practical examples of what we are doing here:
 
 ## Dependencies
 
-We use [`poetry`](https://github.com/sdispater/poetry) to manage the dependencies.
+We use [`poetry`](https://github.com/python-poetry/poetry) to manage the dependencies.
 
 To install them you would need to run `install` command:
 

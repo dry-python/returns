@@ -25,9 +25,24 @@ class IO(BaseContainer, Generic[_ValueType]):
     We call it "marker" since once it is marked, it cannot be unmarked.
 
     ``IO`` is also a container.
-    But, it is different in a way
-    that it cannot be unwrapped / rescued / fixed.
+    But, it is different in a way that it can't be unwrapped / rescued / fixed.
     There's no way to directly get its internal value.
+
+    Note that IO represents a computation that never fails.
+
+    Examples of such computations are:
+
+    - read / write to localStorage
+    - get the current time
+    - write to the console
+    - get a random number
+
+    Use ``IO[Result[...]]`` for operations that might fail.
+    Like DB access or network operations.
+
+    See also:
+        https://dev.to/gcanti/getting-started-with-fp-ts-io-36p6
+
     """
 
     _inner_value: _ValueType
