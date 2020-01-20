@@ -155,7 +155,14 @@ class Context(Generic[_EnvType]):
 
     Otherwise, your ``.ask()`` method
     will return ``RequiresContext[<nothing>, <nothing>]``,
-    which is unsable.
+    which is unsable:
+
+    .. code:: python
+
+      env = Context.ask()
+      env(Context.Empty)
+
+    And ``mypy`` will warn you: ``error: Need type annotation for 'a'``
 
     """
 
