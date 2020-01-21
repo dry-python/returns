@@ -1,0 +1,87 @@
+- case: requires_context_call_correct
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContext
+
+    first: RequiresContext[int, str]
+
+    reveal_type(first(1))  # N: Revealed type is 'builtins.str*'
+
+
+- case: requires_context_map_correct
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContext
+
+    first: RequiresContext[int, str]
+
+    reveal_type(first.map(lambda char: float(char)))  # N: Revealed type is 'returns.context.RequiresContext[builtins.int, builtins.float*]'
+
+
+- case: requires_context_bind_correct
+  disable_cache: true
+  main: |
+    from returns.context import Context, RequiresContext
+
+    first: RequiresContext[int, str]
+
+    def function(arg: str) -> RequiresContext[int, float]:
+        return Context[int].unit(1.5)
+
+    reveal_type(first.bind(function))  # N: Revealed type is 'returns.context.RequiresContext[builtins.int, builtins.float*]'
+
+
+- case: requires_context_call_wrong
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContext
+
+    first: RequiresContext[int, str]
+    first('a')
+  out: |
+    main:4: error: Argument 1 to "__call__" of "RequiresContext" has incompatible type "str"; expected "int"
+
+
+- case: requires_context_map_wrong
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContext
+
+    first: RequiresContext[int, str]
+
+    def function(arg: int) -> int:
+        return arg + 1
+
+    first.map(function)
+  out: |
+    main:8: error: Argument 1 to "map" of "RequiresContext" has incompatible type "Callable[[int], int]"; expected "Callable[[str], int]"
+
+
+- case: requires_context_bind_wrong1
+  disable_cache: true
+  main: |
+    from returns.context import Context, RequiresContext
+
+    first: RequiresContext[int, str]
+
+    def function(arg: float) -> RequiresContext[int, float]:
+        return Context[int].unit(1.5)
+
+    first.bind(function)
+  out: |
+    main:8: error: Argument 1 to "bind" of "RequiresContext" has incompatible type "Callable[[float], RequiresContext[int, float]]"; expected "Callable[[str], RequiresContext[int, float]]"
+
+
+- case: requires_context_bind_wrong2
+  disable_cache: true
+  main: |
+    from returns.context import Context, RequiresContext
+
+    first: RequiresContext[int, str]
+
+    def function(arg: str) -> RequiresContext[str, float]:
+        return Context[str].unit(1.5)
+
+    first.bind(function)
+  out: |
+    main:8: error: Argument 1 to "bind" of "RequiresContext" has incompatible type "Callable[[str], RequiresContext[str, float]]"; expected "Callable[[str], RequiresContext[int, float]]"

@@ -3,7 +3,7 @@
   main: |
     from returns.maybe import Maybe
 
-    first: Maybe[ValueError]  # we cast both values
+    first: Maybe[ValueError]
     second: Maybe[Exception] = first
     reveal_type(second)  # N: Revealed type is 'returns.maybe.Maybe[builtins.Exception]'
 
