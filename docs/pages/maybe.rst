@@ -31,7 +31,7 @@ It might be very useful for complex operations like the following one:
 
 .. code:: python
 
-  >>> from dataclasses import dataclass
+  >>> from attr import dataclass
   >>> from typing import Optional
   >>> from returns.maybe import Maybe
 
