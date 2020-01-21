@@ -307,7 +307,8 @@ Here's the full table of compositions that make sense:
 - ``IO[Maybe[A]]`` ✅
 - ``IO[IO[A]]`` 🤔, use :func:`join <returns.converters.flatten>`
 - ``Maybe[Maybe[A]]`` 🤔, use :func:`join <returns.converters.flatten>`
-- ``Result[Result[A, B], C]`` 🤔, use :func:`join <returns.converters.flatten>`
+- ``Result[Result[A, B], C]`` 🤔,
+    use :func:`join <returns.converters.flatten>`
 - ``Result[Maybe[A], B]`` 🤔,
     use :func:`maybe_to_result <returns.converters.maybe_to_result>`
 - ``Maybe[Result[A, B]]`` 🤔,
