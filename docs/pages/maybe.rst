@@ -16,13 +16,13 @@ based on just a single value:
 
 .. code:: python
 
-  from returns.maybe import Maybe
+  >>> from returns.maybe import Maybe
 
-  Maybe.new(1)
-  # => Some(1)
+  >>> str(Maybe.new(1))
+  '<Some: 1>'
 
-  Maybe.new(None)
-  # => Nothing
+  >>> str(Maybe.new(None))
+  '<Nothing>'
 
 Usage
 ~~~~~
@@ -31,29 +31,44 @@ It might be very useful for complex operations like the following one:
 
 .. code:: python
 
-  from dataclasses import dataclass
-  from typing import Optional
+  >>> from dataclasses import dataclass
+  >>> from typing import Optional
+  >>> from returns.maybe import Maybe
 
-  @dataclass
-  class Address(object):
-      street: Optional[str]
+  >>> @dataclass
+  ... class Address(object):
+  ...     street: Optional[str]
 
-  @dataclass
-  class User(object):
-      address: Optional[Address]
+  >>> @dataclass
+  ... class User(object):
+  ...     address: Optional[Address]
 
-  @dataclass
-  class Order(object):
-      user: Optional[User]
+  >>> @dataclass
+  ... class Order(object):
+  ...    user: Optional[User]
 
-  order: Order  # some existing Order instance
-  street: Maybe[str] = Maybe.new(order.user).map(
-      lambda user: user.address,
-  ).map(
-      lambda address: address.street,
-  )
-  # => `Some('address street info')` if all fields are not None
-  # => `Nothing` if at least one field is `None`
+  >>> def get_street_adderess(order: Order) -> Maybe[str]:
+  ...     return Maybe.new(order.user).map(
+  ...         lambda user: user.address,
+  ...     ).map(
+  ...         lambda address: address.street,
+  ...     )
+  ...
+
+  >>> with_address = Order(User(Address('Some street')))
+  >>> empty_user = Order(None)
+  >>> empty_address = Order(User(None))
+  >>> empty_street = Order(User(Address(None)))
+
+  >>> str(get_street_adderess(with_address))  # all fields are not None
+  '<Some: Some street>'
+
+  >>> str(get_street_adderess(empty_user))
+  '<Nothing>'
+  >>> str(get_street_adderess(empty_address))
+  '<Nothing>'
+  >>> str(get_street_adderess(empty_street))
+  '<Nothing>'
 
 Optional type
 ~~~~~~~~~~~~~
@@ -90,17 +105,18 @@ and converts it to return ``Maybe`` instead:
 
 .. code:: python
 
-  from typing import Optional
-  from returns.maybe import Maybe, maybe
+  >>> from typing import Optional
+  >>> from returns.maybe import Maybe, maybe
 
-  @maybe
-  def number(num: int) -> Optional[int]:
-      if num > 0:
-          return num
-      return None
+  >>> @maybe
+  ... def number(num: int) -> Optional[int]:
+  ...     if num > 0:
+  ...         return num
+  ...     return None
 
-  result: Maybe[int] = number(1)
-  # => Some(1)
+  >>> result: Maybe[int] = number(1)
+  >>> str(result)
+  '<Some: 1>'
 
 
 API Reference

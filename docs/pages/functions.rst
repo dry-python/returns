@@ -10,11 +10,13 @@ We also ship an utility function to compose two different functions together.
 
 .. code:: python
 
-  from returns.functions import compose
+  >>> from returns.functions import compose
 
-  bool_after_int = compose(int, bool)
-  bool_after_int('1')  # => True
-  bool_after_int('0')  # => False
+  >>> bool_after_int = compose(int, bool)
+  >>> bool_after_int('1')
+  True
+  >>> bool_after_int('0')
+  False
 
 Composition is also type-safe.
 The only limitation is that we only support
@@ -74,15 +76,15 @@ For example you sometimes need to ``print()`` values inside your :ref:`pipe`:
 
 .. code:: python
 
-  from returns.functions import tap
+  >>> from returns.functions import tap
 
-  result = tap(print)(1)  # will print and return 1
-  # => prints 1
-  assert result == 1
-  # => True
+  >>> result = tap(print)(1)  # will print and return 1
+  1
+  >>> result == 1
+  True
 
 You can also use ``untap`` function to turn any function
-return type to ``None``.
+return type to ``None`` and still do its thing.
 This is also sometimes helpful for a typed function composition.
 
 

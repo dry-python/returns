@@ -37,7 +37,7 @@ We also use `wemake_python_styleguide` to enforce the code quality.
 To run all tests:
 
 ```bash
-pytest
+pytest . docs/pages
 ```
 
 To run linting:

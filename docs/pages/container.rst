@@ -69,25 +69,29 @@ to use containers with regular functions.
 
 .. code:: python
 
-  from typing import Any
-  from returns.result import Success, Result
+  >>> from typing import Any
+  >>> from returns.result import Success, Result
 
-  def double(state: int) -> int:
-      return state * 2
+  >>> def double(state: int) -> int:
+  ...     return state * 2
 
-  result: Result[int, Any] = Success(1).map(double)
-  # => Success(2)
-  result: Result[int, Any] = result.map(lambda state: state + 1)
-  # => Success(3)
+  >>> result: Result[int, Any] = Success(1).map(double)
+  >>> str(result)
+  '<Success: 2>'
+
+  >>> result: Result[int, Any] = result.map(lambda state: state + 1)
+  >>> str(result)
+  '<Success: 3>'
 
 The same work with built-in functions as well:
 
 .. code:: python
 
-  from returns.io import IO
+  >>> from returns.io import IO
 
-  IO('bytes').map(list)
-  # => <IO: ['b', 'y', 't', 'e', 's']>
+  >>> io = IO('bytes').map(list)
+  >>> str(io)
+  "<IO: ['b', 'y', 't', 'e', 's']>"
 
 Note::
 
@@ -158,42 +162,45 @@ during the pipeline execution:
 
 .. code:: python
 
-  from returns.result import Failure, Result
+  >>> from returns.result import Failure, Result
 
-  def double(state: int) -> float:
-      return state * 2.0
+  >>> def double(state: int) -> float:
+  ...     return state * 2.0
 
-  result: Result[Any, float] = Failure(1).alt(double)
-  # => Failure(2.0)
+  >>> result: Result[Any, float] = Failure(1).alt(double)
+  >>> str(result)
+  '<Failure: 2.0>'
 
-  result: Result[float, int] = Failure(1).fix(double)
-  # => Success(2.0)
+  >>> result: Result[float, int] = Failure(1).fix(double)
+  >>> str(result)
+  '<Success: 2.0>'
 
 ``rescue`` should return one of ``Success`` or ``Failure`` types.
 It can also rescue your flow and get on the successful track again:
 
 .. code:: python
 
-  from returns.result import Result, Failure, Success
+  >>> from returns.result import Result, Failure, Success
 
-  def tolerate_exception(state: Exception) -> Result[int, Exception]:
-      if isinstance(state, ZeroDivisionError):
-          return Success(0)
-      return Failure(state)
+  >>> def tolerate_exception(state: Exception) -> Result[int, Exception]:
+  ...     if isinstance(state, ZeroDivisionError):
+  ...         return Success(0)
+  ...     return Failure(state)
 
-  value: Result[int, Exception] = Failure(ZeroDivisionError())
-  result: Result[int, Exception] = value.rescue(tolerate_exception)
-  # => Success(0)
+  >>> value: Result[int, Exception] = Failure(ZeroDivisionError())
+  >>> result: Result[int, Exception] = value.rescue(tolerate_exception)
+  >>> str(result)
+  '<Success: 0>'
 
-  value2: Result[int, Exception] = Failure(ValueError())
-  result2: Result[int, Exception] = value2.rescue(tolerate_exception)
-  # => Failure(ValueError())
+  >>> value2: Result[int, Exception] = Failure(ValueError())
+  >>> result2: Result[int, Exception] = value2.rescue(tolerate_exception)
+  >>> # => Failure(ValueError())
 
 
 Note::
 
   Not all containers support these methods.
-  IO cannot be fixed or rescued.
+  ``IO`` and ``RequiresContext`` cannot be fixed, alted, or rescued.
 
 Unwrapping values
 ~~~~~~~~~~~~~~~~~
@@ -208,23 +215,26 @@ inner state of containers into a regular types:
 
 .. code:: python
 
-  from returns.result import Failure, Success
-  from returns.maybe import Some, Nothing
+  >>> from returns.result import Failure, Success
+  >>> from returns.maybe import Some, Nothing
 
-  Success(1).value_or(None)
-  # => 1
+  >>> Success(1).value_or(None)
+  1
+  >>> Some(0).unwrap()
+  0
 
-  Some(0).unwrap()
-  # => 0
+  >>> Failure(1).value_or(100)
+  100
 
-  Failure(1).value_or(default_value=100)
-  # => 100
+  >>> Failure(1).unwrap()
+  Traceback (most recent call last):
+    ...
+  returns.primitives.exceptions.UnwrapFailedError
 
-  Failure(1).unwrap()
-  # => Traceback (most recent call last): UnwrapFailedError
-
-  Nothing.unwrap()
-  # => Traceback (most recent call last): UnwrapFailedError
+  >>> Nothing.unwrap()
+  Traceback (most recent call last):
+    ...
+  returns.primitives.exceptions.UnwrapFailedError
 
 The most user-friendly way to use ``.unwrap()`` method is with :ref:`pipeline`.
 We even discourage using ``.unwrap()`` without a ``@pipeline``.
@@ -235,11 +245,13 @@ to unwrap the failed state:
 
 .. code:: python
 
-  Failure(1).failure()
-  # => 1
+  >>> Failure(1).failure()
+  1
 
-  Success(1).failure()
-  # => Traceback (most recent call last): UnwrapFailedError
+  >>> Success(1).failure()
+  Traceback (most recent call last):
+    ...
+  returns.primitives.exceptions.UnwrapFailedError
 
 Be careful, since this method will raise an exception
 when you try to ``.failure()`` a successful container.
@@ -247,7 +259,7 @@ when you try to ``.failure()`` a successful container.
 Note::
 
   Not all containers support these methods.
-  IO cannot be unwrapped.
+  ``IO`` and ``RequiresContext`` cannot be unwrapped.
 
 
 Immutability
@@ -303,16 +315,29 @@ Composition
 You can and should compose different containers together.
 Here's the full table of compositions that make sense:
 
+Ok
+~~
+
 - ``IO[Result[A, B]]`` ✅
 - ``IO[Maybe[A]]`` ✅
-- ``IO[IO[A]]`` 🤔, use :func:`join <returns.converters.flatten>`
-- ``Maybe[Maybe[A]]`` 🤔, use :func:`join <returns.converters.flatten>`
+
+Needs transformation
+~~~~~~~~~~~~~~~~~~~~
+
+- ``IO[IO[A]]`` 🤔, use :func:`flatten <returns.converters.flatten>`
+- ``Maybe[Maybe[A]]`` 🤔, use :func:`flatten <returns.converters.flatten>`
 - ``Result[Result[A, B], C]`` 🤔,
-    use :func:`join <returns.converters.flatten>`
+    use :func:`flatten <returns.converters.flatten>`
 - ``Result[Maybe[A], B]`` 🤔,
     use :func:`maybe_to_result <returns.converters.maybe_to_result>`
+    and then :func:`flatten <returns.converters.flatten>`
 - ``Maybe[Result[A, B]]`` 🤔,
     use :func:`result_to_maybe <returns.converters.result_to_maybe>`
+    and then :func:`flatten <returns.converters.flatten>`
+
+Nope
+~~~~
+
 - ``Result[IO[A], B]`` 🚫
 - ``Result[A, IO[A]]`` 🚫
 - ``Result[A, Maybe[B]]`` 🚫
@@ -320,9 +345,7 @@ Here's the full table of compositions that make sense:
 - ``Maybe[IO[A]]`` 🚫
 
 You can use :ref:`converters` to convert ``Maybe`` and ``Result`` containers.
-So, you don't have to compose them.
-
-You can also use :func:`join <returns.converters.flatten>`
+You can also use :func:`flatten <returns.converters.flatten>`
 to merge nested containers.
 
 
@@ -352,21 +375,21 @@ That's how they work:
 Take a note, that type changes.
 Also, take a note that ``Success(None)`` will be converted to ``Nothing``.
 
-join
-~~~~
+flatten
+~~~~~~~
 
-You can also use ``join`` to merge nested containers together:
+You can also use ``flatten`` to merge nested containers together:
 
 .. code:: python
 
-  from returns.converters import flatten
-  from returns.maybe import Maybe
-  from returns.result import Success
-  from returns.io import IO
+  >>> from returns.converters import flatten
+  >>> from returns.maybe import Some
+  >>> from returns.result import Success
+  >>> from returns.io import IO
 
-  assert flatten(IO(IO(1))) == IO(1)
-  assert flatten(Maybe(Maybe(1))) == Maybe(1)
-  assert flatten(Success(Success(1))) == Success(1)
+  >>> assert flatten(IO(IO(1))) == IO(1)
+  >>> assert flatten(Some(Some(1))) == Some(1)
+  >>> assert flatten(Success(Success(1))) == Success(1)
 
 coalesce
 ~~~~~~~~
@@ -380,19 +403,19 @@ one for successful case, one for failing case.
 
 .. code:: python
 
-  from returns.converters import coalesce_result
-  from returns.result import Success, Failure
+  >>> from returns.converters import coalesce_result
+  >>> from returns.result import Success, Failure
 
-  def handle_success(state: int) -> float:
-      return state / 2
+  >>> def handle_success(state: int) -> float:
+  ...     return state / 2
 
-  def handle_failure(state: str) -> float:
-      return 0.0
+  >>> def handle_failure(state: str) -> float:
+  ...     return 0.0
 
-  coalesce_result(handle_success, handle_failure)(Success(1))
-  # => returns `0.5`
-  coalesce_result(handle_success, handle_failure)(Failure(1))
-  # => returns `0.0`
+  >>> coalesce_result(handle_success, handle_failure)(Success(1))
+  0.5
+  >>> coalesce_result(handle_success, handle_failure)(Failure(1))
+  0.0
 
 
 API Reference

@@ -52,17 +52,17 @@ Supports both async and regular functions.
 
 .. code:: python
 
-  from returns.result import safe
+  >>> from returns.result import safe
 
-  @safe  # Will convert type to: Callable[[int], Result[float, Exception]]
-  def divide(number: int) -> float:
-      return number / number
+  >>> @safe  # Will convert type to: Callable[[int], Result[float, Exception]]
+  ... def divide(number: int) -> float:
+  ...     return number / number
 
-  divide(1)
-  # => Success(1.0)
+  >>> str(divide(1))
+  '<Success: 1.0>'
 
-  divide(0)
-  # => Failure(ZeroDivisionError)
+  >>> str(divide(0))
+  '<Failure: division by zero>'
 
 Limitations
 ~~~~~~~~~~~
@@ -83,11 +83,14 @@ Python's type system does not allow us to do much, so this is required:
 
 .. code:: python
 
-  def callback(arg: int) -> Result[float, int]:
-      return Success(float(arg))
+  >>> from returns.result import Result, Success
 
-  first: Result[int, int] = Success(1)
-  first.bind(callback)
+  >>> def callback(arg: int) -> Result[float, int]:
+  ...     return Success(float(arg))
+
+  >>> first: Result[int, int] = Success(1)
+  >>> str(first.bind(callback))
+  '<Success: 1.0>'
 
 Otherwise it would raise a ``mypy`` error:
 
@@ -149,14 +152,17 @@ Like so:
 
 .. code:: python
 
-  from returns.result import Result
+  >>> from returns.result import Result, Success
 
-  def div(number: int) -> Result[float, ZeroDivisionError]:
-      return 1 / number
+  >>> def div(number: int) -> Result[float, ZeroDivisionError]:
+  ...     return Success(1 / number)
 
-  container: Result[int, ValueError]
-  container.unify(div)
-  # => Revealed type is: Result[float, Union[ValueError, ZeroDivisionError]]
+  >>> container: Result[int, ValueError] = Success(1)
+  >>> str(container.unify(div))
+  '<Success: 1.0>'
+
+  >>> # => Revealed type is:
+  >>> # Result[float, Union[ValueError, ZeroDivisionError]]
 
 So, that's a way to go, if you need this composition.
 

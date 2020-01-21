@@ -20,7 +20,7 @@ install:
 script:
   - poetry run flake8 .
   - poetry run mypy returns tests/**/*.py
-  - poetry run pytest
+  - poetry run pytest . docs/pages
   - poetry run doc8 -q docs
   - poetry check
   - poetry run pip check
