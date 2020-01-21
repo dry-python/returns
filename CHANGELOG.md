@@ -18,7 +18,6 @@ See (0Ver)[https://0ver.org/].
 - Updates `poetry` version in `travis`
 - Imporves ``pipe`` docs with ``lambda`` problem
 - Improves docs in several places
-- Imporves `pipe` docs about how to handle `lambda`
 
 
 ## 0.12.0

@@ -7,8 +7,10 @@ from typing_extensions import final
 from returns.functions import identity
 from returns.primitives.container import BaseContainer
 
-_EnvType = TypeVar('_EnvType')
-_ReturnType = TypeVar('_ReturnType')
+_EnvType = TypeVar('_EnvType', contravariant=True)
+_ReturnType = TypeVar('_ReturnType', covariant=True)
+
+_ValueType = TypeVar('_ValueType')
 _NewReturnType = TypeVar('_NewReturnType')
 
 
@@ -238,8 +240,8 @@ class Context(Generic[_EnvType]):
 
     @classmethod
     def unit(
-        cls, inner_value: _ReturnType,
-    ) -> RequiresContext[_EnvType, _ReturnType]:
+        cls, inner_value: _ValueType,
+    ) -> RequiresContext[_EnvType, _ValueType]:
         """
         Used to return some specific value from the container.
 

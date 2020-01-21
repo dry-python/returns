@@ -1,0 +1,20 @@
+- case: context_correct_cast
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContext
+
+    first: RequiresContext[int, TypeError]  # we can only return type
+    second: RequiresContext[int, Exception] = first
+
+    reveal_type(second)  # N: Revealed type is 'returns.context.RequiresContext[builtins.int, builtins.Exception]'
+
+
+- case: context_wrong_cast
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContext
+
+    first: RequiresContext[ValueError, TypeError]  # we can only return type
+    second: RequiresContext[Exception, Exception] = first
+  out: |
+    main:4: error: Incompatible types in assignment (expression has type "RequiresContext[ValueError, TypeError]", variable has type "RequiresContext[Exception, Exception]")
