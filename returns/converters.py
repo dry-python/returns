@@ -3,11 +3,14 @@
 from typing import TypeVar, overload
 
 from returns._generated import coalesce  # noqa: WPS436
+from returns.context import RequiresContext
+from returns.functions import identity
 from returns.io import IO
 from returns.maybe import Maybe
 from returns.result import Failure, Result, Success
 
 # Contianer internals:
+_EnvType = TypeVar('_EnvType')
 _ValueType = TypeVar('_ValueType')
 _ErrorType = TypeVar('_ErrorType')
 
@@ -62,37 +65,64 @@ def maybe_to_result(
 
 
 @overload
-def join(container: IO[IO[_ValueType]]) -> IO[_ValueType]:
+def flatten(container: IO[IO[_ValueType]]) -> IO[_ValueType]:
     """Case for ``IO`` container."""
 
 
 @overload
-def join(container: Maybe[Maybe[_ValueType]]) -> Maybe[_ValueType]:
+def flatten(container: Maybe[Maybe[_ValueType]]) -> Maybe[_ValueType]:
     """Case for ``Maybe`` container."""
 
 
 @overload
-def join(
+def flatten(
     container: Result[Result[_ValueType, _ErrorType], _ErrorType],
 ) -> Result[_ValueType, _ErrorType]:
     """Case for ``Result`` container."""
 
 
-def join(container):
+@overload
+def flatten(
+    container: RequiresContext[
+        _EnvType, RequiresContext[_EnvType, _ValueType],
+    ],
+) -> RequiresContext[_EnvType, _ValueType]:
+    """Case for ``RequiresContext`` container."""
+
+
+def flatten(container):
     """
     Joins two nested containers together.
+
+    Please, note that it will not join
+    two ``Failure`` for ``Result`` case
+    or two ``Nothing`` for ``Maybe`` case together.
 
     .. code:: python
 
       >>> from returns.maybe import Some
-      >>> from returns.result import Success
+      >>> from returns.result import Failure, Success
       >>> from returns.io import IO
-      >>> join(IO(IO(1))) == IO(1)
-      True
-      >>> join(Some(Some(1))) == Some(1)
-      True
-      >>> join(Success(Success(1))) == Success(1)
+      >>> from returns.context import Context
+
+      >>> flatten(IO(IO(1))) == IO(1)
       True
 
+      >>> flatten(Some(Some(1))) == Some(1)
+      True
+
+      >>> flatten(Success(Success(1))) == Success(1)
+      True
+      >>> flatten(Failure(Failure(1))) == Failure(Failure(1))
+      True
+
+      >>> flatten(
+      ...     Context.unit(Context.unit(1)),
+      ... )(Context.Empty) == 1
+      True
+
+    See also:
+        https://bit.ly/2sIviUr
+
     """
-    return container._inner_value  # noqa: WPS437
+    return container.bind(identity)

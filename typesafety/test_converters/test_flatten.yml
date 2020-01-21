@@ -1,0 +1,53 @@
+- case: join_io
+  disable_cache: true
+  main: |
+    from returns.converters import flatten
+    from returns.io import IO
+
+    reveal_type(flatten(IO(IO(1))))  # N: Revealed type is 'returns.io.IO[builtins.int*]'
+
+
+- case: join_maybe
+  disable_cache: true
+  main: |
+    from returns.converters import flatten
+    from returns.maybe import Some
+
+    reveal_type(flatten(Some(Some(1))))  # N: Revealed type is 'returns.maybe.Maybe[builtins.int*]'
+
+
+- case: join_result1
+  disable_cache: true
+  main: |
+    from returns.converters import flatten
+    from returns.result import Result
+
+    def returns_result() -> Result[Result[int, str], str]:
+        ...
+
+    reveal_type(flatten(returns_result()))  # N: Revealed type is 'returns.result.Result[builtins.int*, builtins.str*]'
+
+
+- case: join_result2
+  disable_cache: true
+  main: |
+    from returns.converters import flatten
+    from returns.result import Result
+
+    def returns_result() -> Result[int, Result[int, str]]:
+        ...
+
+    flatten(returns_result())
+  out: |
+    main:7: error: Argument 1 to "flatten" has incompatible type "Result[int, Result[int, str]]"; expected "Result[Result[<nothing>, Result[int, str]], Result[int, str]]"
+
+
+- case: join_context
+  disable_cache: true
+  main: |
+    from returns.converters import flatten
+    from returns.context import RequiresContext
+
+    x: RequiresContext[str, RequiresContext[str, int]]
+
+    reveal_type(flatten(x))  # N: Revealed type is 'returns.context.RequiresContext[builtins.str*, builtins.int*]'

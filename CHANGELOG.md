@@ -10,8 +10,13 @@ See (0Ver)[https://0ver.org/].
 
 ### Features
 
+- **Breaking**: renames `join` to `flatten`, sorry!
 - Adds `RequiresContext` container and `Context` helper class
 - Adds `RequiresContext` support for `box` function
+
+### Bugfixes
+
+- Fixes how `flatten` works, also adds more tests and docs about `Failure` case
 
 ### Misc
 
@@ -108,7 +113,7 @@ See (0Ver)[https://0ver.org/].
 
 - Provides a bunch of primitive interfaces to write your own containers
 - Adds `.map_failure()` method
-- Adds `join()` function to join nested containers
+- Adds `flatten()` function to join nested containers
 
 ### Bugfixes
 

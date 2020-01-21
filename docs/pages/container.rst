@@ -305,9 +305,9 @@ Here's the full table of compositions that make sense:
 
 - ``IO[Result[A, B]]`` ✅
 - ``IO[Maybe[A]]`` ✅
-- ``IO[IO[A]]`` 🤔, use :func:`join <returns.converters.join>`
-- ``Maybe[Maybe[A]]`` 🤔, use :func:`join <returns.converters.join>`
-- ``Result[Result[A, B], C]`` 🤔, use :func:`join <returns.converters.join>`
+- ``IO[IO[A]]`` 🤔, use :func:`join <returns.converters.flatten>`
+- ``Maybe[Maybe[A]]`` 🤔, use :func:`join <returns.converters.flatten>`
+- ``Result[Result[A, B], C]`` 🤔, use :func:`join <returns.converters.flatten>`
 - ``Result[Maybe[A], B]`` 🤔,
     use :func:`maybe_to_result <returns.converters.maybe_to_result>`
 - ``Maybe[Result[A, B]]`` 🤔,
@@ -321,7 +321,7 @@ Here's the full table of compositions that make sense:
 You can use :ref:`converters` to convert ``Maybe`` and ``Result`` containers.
 So, you don't have to compose them.
 
-You can also use :func:`join <returns.converters.join>`
+You can also use :func:`join <returns.converters.flatten>`
 to merge nested containers.
 
 
@@ -358,14 +358,14 @@ You can also use ``join`` to merge nested containers together:
 
 .. code:: python
 
-  from returns.converters import join
+  from returns.converters import flatten
   from returns.maybe import Maybe
   from returns.result import Success
   from returns.io import IO
 
-  assert join(IO(IO(1))) == IO(1)
-  assert join(Maybe(Maybe(1))) == Maybe(1)
-  assert join(Success(Success(1))) == Success(1)
+  assert flatten(IO(IO(1))) == IO(1)
+  assert flatten(Maybe(Maybe(1))) == Maybe(1)
+  assert flatten(Success(Success(1))) == Success(1)
 
 coalesce
 ~~~~~~~~
