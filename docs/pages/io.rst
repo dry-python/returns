@@ -203,10 +203,10 @@ That's how it works:
 
 .. code:: python
 
-  from returns.io import IO, io_squash
+  >>> from returns.io import IO, io_squash
 
-  io_squash(IO('first'), IO('second')) == IO(('first', 'second'))
-  # => revealed type of this instance is `IO[Tuple[str, str]]`
+  >>> assert io_squash(IO('first'), IO('second')) == IO(('first', 'second'))
+  >>> # => revealed type of this instance is `IO[Tuple[str, str]]`
 
 It might be helpful if you want
 to work with mutliple ``IO`` instances at the same time.
@@ -216,8 +216,9 @@ You can work with tuples instead like so:
 
 .. code:: python
 
-  io_squash(IO(1), IO(2)).map(lambda args: args[0] + args[1])
-  # => IO(3)
+  >>> plus = io_squash(IO(1), IO(2)).map(lambda args: args[0] + args[1])
+  >>> str(plus)
+  '<IO: 3>'
 
 We support up to 9 typed parameters to this function.
 
@@ -249,6 +250,16 @@ What to do? Use :func:`unsafe_perform_io <returns.unsafe.unsafe_perform_io>`:
       return render('index.html', { user: unsafe_perform_io(user) })  # Ok
 
 We need it as an escape and compatibility mechanism for our imperative shell.
+
+In other words:
+
+.. code::
+
+  >>> from returns.unsafe import unsafe_perform_io
+  >>> from returns.io import IO
+
+  >>> unsafe_perform_io(IO('abc'))
+  'abc'
 
 It is recommended
 to use `import-linter <https://github.com/seddonym/import-linter>`_

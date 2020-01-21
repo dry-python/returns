@@ -19,10 +19,10 @@ Let's see an example.
 
 .. code:: python
 
-  from returns.pipeline import pipe
+  >>> from returns.pipeline import pipe
 
-  pipe(str, lambda x: x + 'b', str.upper)(1)
-  # => Will be equal to: `1B`
+  >>> pipe(str, lambda x: x + 'b', str.upper)(1)
+  '1B'
 
 There's also a way to compose containers together:
 
@@ -260,13 +260,14 @@ basically: :class:`Success <returns.result.Success>`.
 
 .. code:: python
 
-  from returns.result import Success, Failure, is_successful
+  >>> from returns.result import Success, Failure
+  >>> from returns.pipeline import is_successful
 
-  is_successful(Success(1))
-  # => True
+  >>> is_successful(Success(1))
+  True
 
-  is_successful(Failure('text'))
-  # => False
+  >>> is_successful(Failure('text'))
+  False
 
 
 Further reading
