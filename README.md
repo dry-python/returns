@@ -120,7 +120,7 @@ that there's some kind of a container and assembly process.
 
 Functional approach is much simplier!
 
-Imagine that you have a `django` based game, where you award you users with points for each guessed letter in a word (unguessed letters are marked as `'.'`):
+Imagine that you have a `django` based game, where you award users with points for each guessed letter in a word (unguessed letters are marked as `'.'`):
 
 ```python
 from django.http import HttpRequest, HttpResponse
@@ -138,12 +138,13 @@ def calculate_points(word: str) -> int:
     return _award_points_for_letters(guessed_letters_count)
 
 def _award_points_for_letters(guessed: int) -> int:
-    return 0 if guessed < 5 else guessed
+    return 0 if guessed < 5 else guessed  # minimum 6 points possible!
 ```
 
 Awesome! It works, users are happy, your logic is pure and awesome.
 But, later you decide to make the game more fun:
-let's make the minimal letters thresshold configurable for an extra challenge.
+let's make the minimal accoutable letters thresshold
+configurable for an extra challenge.
 
 You can just do it directly:
 

@@ -10,6 +10,7 @@ while maintaining the execution context.
 List of supported containers:
 
 - :class:`Maybe <returns.maybe.Maybe>` to handle ``None`` cases
+- :class:`RequiresContext <returns.context.RequiresContext>` to pass context to your functions
 - :class:`IO <returns.io.IO>` to mark explicit ``IO`` actions
 - :class:`Result <returns.result.Result>` to handle possible exceptions
 
@@ -274,6 +275,7 @@ since we are using ``__slots__`` for better performance and strictness.
 
 Well, nothing is **really** immutable in python, but you were warned.
 
+
 .. _type-safety:
 
 Type safety
@@ -306,6 +308,7 @@ since they increase your developer experience and type-safety:
 You can have a look at the suggested ``mypy``
 `configuration <https://github.com/dry-python/returns/blob/master/setup.cfg>`_
 in our own repository.
+
 
 .. _composition:
 
