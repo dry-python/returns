@@ -34,6 +34,8 @@ We can later use its result to notify users about their booking request:
 
   notify_user_about_booking_result(is_successful)  # works just fine!
 
+At this point we don't have ``IO`` in our program.
+
 Impure functions
 ~~~~~~~~~~~~~~~~
 
@@ -148,15 +150,22 @@ that works with ``IO`` on both ends. It really helps you with the composition!
 
 .. code:: python
 
-  def regular_function(arg: int) -> float:
-      return arg / 2  # not an `IO` operation
+  >>> from returns.io import IO
 
-  container: IO[int]
-  # When we need to compose `regular_function` with `IO`,
-  # we have two ways of doing it:
-  container.map(regular_function)
-  # or, it is the same as:
-  IO.lift(regular_function)(container)
+  >>> def regular_function(arg: int) -> float:
+  ...     return arg / 2  # not an `IO` operation
+
+  >>> container = IO(1)
+  >>> # When we need to compose `regular_function` with `IO`,
+  >>> # we have two ways of doing it:
+  >>> io = container.map(regular_function)
+  >>> str(io)
+  '<IO: 0.5>'
+
+  >>> # or, it is the same as:
+  >>> io = IO.lift(regular_function)(container)
+  >>> str(io)
+  '<IO: 0.5>'
 
 The second variant is useful when using :func:`returns.pipeline.pipe`
 and other different declarative tools.
@@ -184,7 +193,7 @@ with ``@impure`` for better readability and clearness:
 
   @impure
   def get_user() -> 'User':
-      return requests.get('https:...').json()
+      return requests.get('https://...').json()
 
 Limitations
 ~~~~~~~~~~~
@@ -192,6 +201,26 @@ Limitations
 Typing will only work correctly
 if :ref:`decorator_plugin <type-safety>` is used.
 This happens due to `mypy issue <https://github.com/python/mypy/issues/3157>`_.
+
+
+Laziness
+--------
+
+Please, note that our ``IO`` implementation is not lazy.
+This way when you mark something as ``@impure`` it will work as previously.
+The only thing that changes is type.
+
+Instead we offer to use :ref:`unsafe_perform_io`
+to work with ``IO`` and simulate laziness.
+
+But, you can always make your ``IO`` lazy:
+
+.. code:: python
+
+  >>> from returns.io import IO
+  >>> lazy = lambda: IO(1)
+  >>> str(lazy())
+  '<IO: 1>'
 
 
 io_squash
@@ -222,6 +251,8 @@ You can work with tuples instead like so:
 
 We support up to 9 typed parameters to this function.
 
+
+.. _unsafe_perform_io:
 
 unsafe_perform_io
 -----------------
