@@ -18,6 +18,7 @@ Contents
 
   pages/container.rst
   pages/maybe.rst
+  pages/context.rst
   pages/io.rst
   pages/result.rst
   pages/pipeline.rst

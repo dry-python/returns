@@ -50,6 +50,7 @@ Make sure you know how to get started, [check out our docs](https://returns.read
 ## Contents
 
 - [Maybe container](#maybe-container) that allows you to write `None`-free code
+- [RequiresContext container](#requirescontext-container) that allows you to use typed functional dependency injection
 - [Result container](#result-container) that let's you to get rid of exceptions
 - [IO marker](#io-marker) that marks all impure operations and structures them
 
@@ -107,6 +108,92 @@ can_buy_stuff = Maybe.new(user).map(  # will have type: Maybe[bool]
     lambda balance_credit: balance_credit > 0,
 )
 ```
+
+Much better, isn't it?
+
+
+## RequiresContext container
+
+Many developers do use some kind of [dependency injection](https://github.com/dry-python/dependencies) in Python.
+And usually it is based on the idea
+that there's some kind of a container and assembly process.
+
+Functional approach is much simplier!
+
+Imagine that you have a `django` based game, where you award you users with points for each guessed letter in a word (unguessed letters are marked as `'.'`):
+
+```python
+from django.http import HttpRequest, HttpResponse
+from words_app.logic import calculate_points
+
+def view(request: HttpRequest) -> HttpResponse:
+    user_word: str = request.GET['word']  # just an example
+    points = calculate_points(user_word)
+    ...  # later you show the result to user somehow
+
+# Somewhere in your `logic.py`:
+
+def calculate_points(word: str) -> int:
+    guessed_letters_count = len([letter for letter in word if letter != '.'])
+    return _award_points_for_letters(guessed_letters_count)
+
+def _award_points_for_letters(guessed: int) -> int:
+    return 0 if guessed < 5 else guessed
+```
+
+Awesome! It works, users are happy, your logic is pure and awesome.
+But, later you decide to make the game more fun:
+let's make the minimal letters thresshold configurable for an extra challenge.
+
+You can just do it directly:
+
+```python
+def _award_points_for_letters(guessed: int, thresshold: int) -> int:
+    return 0 if guessed < thresshold else guessed
+```
+
+But, then you have to pass `thresshold` through the whole callstack,
+including `calculate_points` and all other functions on the way.
+All of them will have to accept `thresshold` as a parameter!
+This is not useful at all!
+Large code bases will struggle a lot from this change.
+
+Ok, you can directly use `django.settings` (or similar)
+in your `_award_points_for_letters` function.
+And ruin your pretty pure logic with framework specific details. That's ugly!
+
+Or you can use `RequiresContext` container. Let's see how our code changes:
+
+```python
+from typing_extensions import Protocol
+from django.conf import settings
+from django.http import HttpRequest, HttpResponse
+from returns.context import RequiresContext
+from words_app.logic import calculate_points
+
+class _Deps(Protocol):  # we rely on abstractions, not direct types
+    WORD_THRESSHOLD: int
+
+def view(request: HttpRequest) -> HttpResponse:
+    user_word: str = request.GET['word']  # just an example
+    points = calculate_points(user_words)(settings)  # passing the dependencies
+    ...  # later you show the result to user somehow
+
+# Somewhere in your `logic.py`:
+
+def calculate_points(word: str) -> RequiresContext[_Deps, int]:
+    guessed_letters_count = len([letter for letter in word if letter != '.'])
+    return _award_points_for_letters(guessed_letters_count)
+
+def _award_points_for_letters(guessed: int) -> RequiresContext[_Deps, int]:
+    return RequiresContext(
+        lambda deps: 0 if guessed < deps.WORD_THRESSHOLD else guessed,
+    )
+```
+
+And now you can pass your dependencies in a really direct and explicit way.
+And have the type-safety to check what you pass to cover your back.
+Check out [RequiresContext](https://returns.readthedocs.io/en/latest/pages/result.html) docs for more. There you will learn how to make `'.'` also configurable.
 
 
 ## Result container
