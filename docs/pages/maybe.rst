@@ -119,6 +119,13 @@ and converts it to return ``Maybe`` instead:
   '<Some: 1>'
 
 
+Further reading
+---------------
+
+- `Option Monads in Rust <https://hoverbear.org/blog/option-monads-in-rust/>`_
+- `Option overview in TypeScript <https://gcanti.github.io/fp-ts/modules/Option.ts.html>`_
+
+
 API Reference
 -------------
 

@@ -167,6 +167,14 @@ Like so:
 So, that's a way to go, if you need this composition.
 
 
+Further reading
+---------------
+
+- `Railway Oriented Programming <https://fsharpforfunandprofit.com/rop/>`_
+- `Recoverable Errors with Result in Rust <https://doc.rust-lang.org/book/ch09-02-recoverable-errors-with-result.html>`_
+- `Either overview in TypeScript <https://gcanti.github.io/fp-ts/modules/Either.ts.html>`_
+
+
 API Reference
 -------------
 
