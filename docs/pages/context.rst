@@ -40,6 +40,8 @@ for each guessed letter in a word (unguessed letters are marked as ``'.'``):
       points = calculate_points(user_word)
       ...  # later you show the result to user somehow
 
+.. code:: python
+
   # Somewhere in your `words_app/logic.py`:
 
   def calculate_points(word: str) -> int:
@@ -109,6 +111,8 @@ Let's see how our code changes:
       points = calculate_points(user_words)(settings)  # passing the dependencies
       ...  # later you show the result to user somehow
 
+.. code:: python
+
   # Somewhere in your `words_app/logic.py`:
 
   from typing_extensions import Protocol
@@ -133,7 +137,7 @@ RequiresContext container
 -------------------------
 
 The concept behind ``RequiresContext`` container is really simple.
-It is container around ``Callable[[EnvType], ReturnType]`` function.
+It is a container around ``Callable[[EnvType], ReturnType]`` function.
 
 It can be illustrated as a simple nested function:
 
@@ -201,7 +205,7 @@ and try to configure how we mark our unguessed letters
 (previously unguessed letters were marked as ``'.'``).
 Let's say, we want to change this to be ``_``.
 
-How can we do that?
+How can we do that with our existing function?
 
 .. code:: python
 
@@ -209,21 +213,33 @@ How can we do that?
       guessed_letters_count = len([letter for letter in word if letter != '.'])
       return _award_points_for_letters(guessed_letters_count)
 
-We already using ``RequiresContext``, but its dependencies are hidden from us!
+We are already using ``RequiresContext``,
+but its dependencies are just hidden from us!
 We have a special helper for this case: ``Context.ask()``,
 which returns us current dependencies.
 
 The only thing we need to is to properly
 annotate the type for our case: ``Context[_Deps].ask()``
+Sadly, currently ``mypy`` is not able to infer the dependency type
+out of the context and we need to explicitly provide it.
 
 Let's see the final result:
 
 .. code:: python
 
+  from returns.context import Context, RequiresContext
+
+  class _Deps(Protocol):  # we rely on abstractions, not direct values or types
+      WORD_THRESSHOLD: int
+      UNGUESSED_CHAR: str
+
   def calculate_points(word: str) -> RequiresContext[_Deps, int]:
       def factory(deps: _Deps) -> RequiresContext[_Deps, int]:
-          guessed_letters_count = len([letter for letter in word if letter != '.'])
+          guessed_letters_count = len([
+            letter for letter in word if letter != deps.UNGUESSED_CHAR
+          ])
           return _award_points_for_letters(guessed_letters_count)
+
       return Context[_Deps].ask().bind(factory)
 
 And now we access the current context from any place in our callstack.
