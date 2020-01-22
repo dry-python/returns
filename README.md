@@ -196,7 +196,7 @@ def _award_points_for_letters(guessed: int) -> RequiresContext[_Deps, int]:
 
 And now you can pass your dependencies in a really direct and explicit way.
 And have the type-safety to check what you pass to cover your back.
-Check out [RequiresContext](https://returns.readthedocs.io/en/latest/pages/result.html) docs for more. There you will learn how to make `'.'` also configurable.
+Check out [RequiresContext](https://returns.readthedocs.io/en/latest/pages/context.html) docs for more. There you will learn how to make `'.'` also configurable.
 
 
 ## Result container
