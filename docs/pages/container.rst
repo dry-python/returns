@@ -10,7 +10,8 @@ while maintaining the execution context.
 List of supported containers:
 
 - :class:`Maybe <returns.maybe.Maybe>` to handle ``None`` cases
-- :class:`RequiresContext <returns.context.RequiresContext>` to pass context to your functions
+- :class:`RequiresContext <returns.context.RequiresContext>`
+  to pass context to your functions
 - :class:`IO <returns.io.IO>` to mark explicit ``IO`` actions
 - :class:`Result <returns.result.Result>` to handle possible exceptions
 
@@ -227,6 +228,8 @@ inner state of containers into a regular types:
   >>> Failure(1).value_or(100)
   100
 
+.. code::
+
   >>> Failure(1).unwrap()
   Traceback (most recent call last):
     ...
@@ -248,6 +251,8 @@ to unwrap the failed state:
 
   >>> Failure(1).failure()
   1
+
+.. code::
 
   >>> Success(1).failure()
   Traceback (most recent call last):

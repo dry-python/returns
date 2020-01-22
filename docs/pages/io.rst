@@ -272,7 +272,7 @@ And we obviously cannot ``map`` or ``bind`` this function.
 
 What to do? Use :func:`unsafe_perform_io <returns.unsafe.unsafe_perform_io>`:
 
-.. code::
+.. code:: python
 
   from returns.unsafe import unsafe_perform_io
 
@@ -284,7 +284,7 @@ We need it as an escape and compatibility mechanism for our imperative shell.
 
 In other words:
 
-.. code::
+.. code:: python
 
   >>> from returns.unsafe import unsafe_perform_io
   >>> from returns.io import IO

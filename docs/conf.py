@@ -68,7 +68,7 @@ autoclass_content = 'class'
 autodoc_member_order = 'bysource'
 
 autodoc_member_order = 'bysource'
-autodoc_default_flags = {
+autodoc_default_options = {
     'members': '',
     'undoc-members': 'code,error_template',
     'exclude-members': '__dict__,__weakref__',

@@ -131,7 +131,7 @@ def view(request: HttpRequest) -> HttpResponse:
     points = calculate_points(user_word)
     ...  # later you show the result to user somehow
 
-# Somewhere in your `logic.py`:
+# Somewhere in your `words_app/logic.py`:
 
 def calculate_points(word: str) -> int:
     guessed_letters_count = len([letter for letter in word if letter != '.'])
@@ -153,8 +153,9 @@ def _award_points_for_letters(guessed: int, thresshold: int) -> int:
     return 0 if guessed < thresshold else guessed
 ```
 
-But, then you have to pass `thresshold` through the whole callstack,
-including `calculate_points` and all other functions on the way.
+The problem is that `_award_points_for_letters` is deeply nested.
+And then you have to pass `thresshold` through the whole callstack,
+including `calculate_points` and all other functions that might be on the way.
 All of them will have to accept `thresshold` as a parameter!
 This is not useful at all!
 Large code bases will struggle a lot from this change.
@@ -166,21 +167,22 @@ And ruin your pretty pure logic with framework specific details. That's ugly!
 Or you can use `RequiresContext` container. Let's see how our code changes:
 
 ```python
-from typing_extensions import Protocol
 from django.conf import settings
 from django.http import HttpRequest, HttpResponse
-from returns.context import RequiresContext
 from words_app.logic import calculate_points
-
-class _Deps(Protocol):  # we rely on abstractions, not direct types
-    WORD_THRESSHOLD: int
 
 def view(request: HttpRequest) -> HttpResponse:
     user_word: str = request.GET['word']  # just an example
     points = calculate_points(user_words)(settings)  # passing the dependencies
     ...  # later you show the result to user somehow
 
-# Somewhere in your `logic.py`:
+# Somewhere in your `words_app/logic.py`:
+
+from typing_extensions import Protocol
+from returns.context import RequiresContext
+
+class _Deps(Protocol):  # we rely on abstractions, not direct values or types
+    WORD_THRESSHOLD: int
 
 def calculate_points(word: str) -> RequiresContext[_Deps, int]:
     guessed_letters_count = len([letter for letter in word if letter != '.'])
@@ -303,6 +305,7 @@ And will never throw this exception at us.
 
 And we can clearly see all result patterns
 that might happen in this particular case:
+
 - `Success[UserProfile]`
 - `Failure[Exception]`
 
