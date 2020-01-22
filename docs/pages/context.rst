@@ -8,10 +8,16 @@ and can pass different things into your logic instead of hardcoding you stuff.
 And by doing this you are on your way to achieve `Single Responsibility <https://en.wikipedia.org/wiki/Single_responsibility_principle>`_
 for your functions and objects.
 
-Simple app
-~~~~~~~~~~
+Using the context
+-----------------
+
+A lot of programms we write rely on the context implicitly or explicitly.
+We can rely on confugration, env variables, stubs, logical dependencies, etc.
 
 Let's look at the example.
+
+Simple app
+~~~~~~~~~~
 
 One of the most popular errors Python developers do in ``Django``
 is that they overuse ``settings`` object inside the business logic.
