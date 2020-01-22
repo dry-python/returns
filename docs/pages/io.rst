@@ -325,6 +325,7 @@ Further reading
 - `Functional core, imperative shell <https://www.destroyallsoftware.com/screencasts/catalog/functional-core-imperative-shell>`_
 - `Functional architecture is Ports and Adapters <https://blog.ploeh.dk/2016/03/18/functional-architecture-is-ports-and-adapters/>`_
 - `IO effect in Scala <https://typelevel.org/cats-effect/datatypes/io.html>`_
+- `Getting started with fp-ts: IO <https://dev.to/gcanti/getting-started-with-fp-ts-io-36p6>`_
 
 
 API Reference
