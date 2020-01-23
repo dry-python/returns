@@ -151,6 +151,8 @@ class Result(
         In other words, it modifies the function's
         signature from: ``a -> b`` to: ``Result[a, error] -> Result[b, error]``
 
+        Works similar to :meth:`~Result.map`, but has inverse semantics.
+
         This is how it should be used:
 
         .. code:: python

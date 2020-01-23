@@ -152,6 +152,9 @@ class RequiresContext(
         signature from: ``a -> b`` to:
         ``RequiresContext[env, a] -> RequiresContext[env, b]``
 
+        Works similar to :meth:`~RequiresContext.map`,
+        but has inverse semantics.
+
         This is how it should be used:
 
         .. code:: python

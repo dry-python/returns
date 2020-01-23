@@ -105,6 +105,8 @@ class IO(BaseContainer, Generic[_ValueType]):
         In other words, it modifies the function's
         signature from: ``a -> b`` to: ``IO[a] -> IO[b]``
 
+        Works similar to :meth:`~IO.map`, but has inverse semantics.
+
         This is how it should be used:
 
         .. code:: python

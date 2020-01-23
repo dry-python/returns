@@ -111,6 +111,8 @@ class Maybe(
         In other words, it modifies the function's
         signature from: ``a -> b`` to: ``Maybe[a] -> Maybe[b]``
 
+        Works similar to :meth:`~Maybe.map`, but has inverse semantics.
+
         This is how it should be used:
 
         .. code:: python
