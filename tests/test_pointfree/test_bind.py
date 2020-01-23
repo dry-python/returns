@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from returns.context import RequiresContext
-from returns.pointfree import bind
 from returns.io import IO
 from returns.maybe import Maybe, Nothing, Some
+from returns.pointfree import bind
 from returns.result import Failure, Result, Success
 
 

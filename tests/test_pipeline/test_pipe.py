@@ -5,9 +5,9 @@ from typing import Tuple
 import pytest
 
 from returns.functions import raise_exception
-from returns.pointfree import bind
 from returns.io import IO, impure
 from returns.pipeline import pipe
+from returns.pointfree import bind
 from returns.result import Result, Success, safe
 
 
