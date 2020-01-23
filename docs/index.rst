@@ -17,6 +17,7 @@ Contents
   :caption: Userguide
 
   pages/container.rst
+  pages/railway.rst
 
 .. toctree::
   :maxdepth: 2
@@ -32,6 +33,7 @@ Contents
   :caption: Composition helpers
 
   pages/pipeline.rst
+  pages/converters.rst
   pages/pointfree.rst
   pages/functions.rst
 
