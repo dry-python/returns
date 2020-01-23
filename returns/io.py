@@ -121,7 +121,7 @@ class IO(BaseContainer, Generic[_ValueType]):
             - https://en.wikipedia.org/wiki/Natural_transformation
 
         """
-        return lambda container: cls.map(container, function)
+        return lambda container: container.map(function)
 
 
 @overload

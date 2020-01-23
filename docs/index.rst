@@ -17,11 +17,22 @@ Contents
   :caption: Userguide
 
   pages/container.rst
+
+.. toctree::
+  :maxdepth: 2
+  :caption: Containers
+
   pages/maybe.rst
   pages/context.rst
   pages/io.rst
   pages/result.rst
+
+.. toctree::
+  :maxdepth: 2
+  :caption: Composition helpers
+
   pages/pipeline.rst
+  pages/pointfree.rst
   pages/functions.rst
 
 .. toctree::

@@ -4,7 +4,8 @@ from typing import Tuple
 
 import pytest
 
-from returns.functions import box, raise_exception
+from returns.functions import raise_exception
+from returns.pointfree import bind
 from returns.io import IO, impure
 from returns.pipeline import pipe
 from returns.result import Result, Success, safe
@@ -17,7 +18,7 @@ class _UserProfile(object):
         """Fetches `UserProfile` TypedDict from foreign API."""
         return pipe(
             self._make_request,
-            IO.lift(box(self._parse_json)),
+            IO.lift(bind(self._parse_json)),
         )(user_id)
 
     @impure

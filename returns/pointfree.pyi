@@ -16,21 +16,21 @@ _EnvType = TypeVar('_EnvType')
 # Box:
 
 @overload
-def _box(
+def bind(
     function: Callable[[_ValueType], Maybe[_NewValueType]],
 ) -> Callable[[Maybe[_ValueType]], Maybe[_NewValueType]]:
     ...
 
 
 @overload
-def _box(
+def bind(
     function: Callable[[_ValueType], IO[_NewValueType]],
 ) -> Callable[[IO[_ValueType]], IO[_NewValueType]]:
     ...
 
 
 @overload
-def _box(
+def bind(
     function: Callable[[_ValueType], RequiresContext[_EnvType, _NewValueType]],
 ) -> Callable[
     [RequiresContext[_EnvType, _ValueType]],
@@ -40,7 +40,7 @@ def _box(
 
 
 @overload
-def _box(
+def bind(
     function: Callable[[_ValueType], Result[_NewValueType, _ErrorType]],
 ) -> Callable[
     [Result[_ValueType, _ErrorType]],

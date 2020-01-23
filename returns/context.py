@@ -137,6 +137,41 @@ class RequiresContext(
         """
         return self._inner_value(deps)
 
+    @classmethod
+    def lift(
+        cls,
+        function: Callable[[_ReturnType], _NewReturnType],
+    ) -> Callable[
+        ['RequiresContext[_EnvType, _ReturnType]'],
+        'RequiresContext[_EnvType, _NewReturnType]',
+    ]:
+        """
+        Lifts function to be wrapped in ``IO`` for better composition.
+
+        In other words, it modifies the function's
+        signature from: ``a -> b`` to:
+        ``RequiresContext[env, a] -> RequiresContext[env, b]``
+
+        This is how it should be used:
+
+        .. code:: python
+
+          >>> from returns.context import Context, RequiresContext
+          >>> def example(argument: int) -> float:
+          ...     return argument / 2  # not exactly IO action!
+          ...
+          >>> container = RequiresContext.lift(example)(Context[str].unit(2))
+          >>> container(Context.Empty)
+          1.0
+
+        See also:
+            - https://wiki.haskell.org/Lifting
+            - https://github.com/witchcrafters/witchcraft
+            - https://en.wikipedia.org/wiki/Natural_transformation
+
+        """
+        return lambda container: container.map(function)
+
 
 @final
 class Context(Generic[_EnvType]):

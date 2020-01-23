@@ -11,17 +11,22 @@ See (0Ver)[https://0ver.org/].
 ### Features
 
 - **Breaking**: renames `join` to `flatten`, sorry!
+- **Breaking**: renames `box` to `bind` and moves it to `returns.pointfree`
+- Adds `Result.lift`, `Maybe.lift`, and `RequiresContext.lift` functions
+  in addition to `IO.lift`
 - Adds `RequiresContext` container and `Context` helper class
-- Adds `RequiresContext` support for `box` function
+- Adds `RequiresContext` support for `bind` pointfree function
+- Adds `RequiresContext` support for `flatten` function
 
 ### Bugfixes
 
 - Fixes how `flatten` works, also adds more tests and docs about `Failure` case
+- Fixes `Unwrappable` type being parametrized with only one `TypeVar`
 
 ### Misc
 
 - Updates `poetry` version in `travis`
-- Imporves ``pipe`` docs with ``lambda`` problem
+- Imporves ``pipe`` docs with ``lambda`` and `Generic` problem
 - Improves docs in several places
 - Now examples in docs tries to be docstests where possible
 

@@ -162,7 +162,7 @@ Large code bases will struggle a lot from this change.
 
 Ok, you can directly use `django.settings` (or similar)
 in your `_award_points_for_letters` function.
-And ruin your pretty pure logic with framework specific details. That's ugly!
+And ruin your pure logic with framework specific details. That's ugly!
 
 Or you can use `RequiresContext` container. Let's see how our code changes:
 
@@ -265,13 +265,13 @@ Our code will become complex and unreadable with all this mess!
 import requests
 from returns.result import Result, safe
 from returns.pipeline import pipe
-from returns.functions import box
+from returns.pointfree import bind
 
 def fetch_user_profile(user_id: int) -> Result['UserProfile', Exception]:
     """Fetches `UserProfile` TypedDict from foreign API."""
     return pipe(
         _make_request,
-        box(_parse_json),
+        bind(_parse_json),
     )(user_id)
 
 @safe
@@ -343,15 +343,15 @@ import requests
 from returns.io import IO, impure
 from returns.result import Result, safe
 from returns.pipeline import pipe
-from returns.functions import box
+from returns.pointfree import bind
 
 def fetch_user_profile(user_id: int) -> Result['UserProfile', Exception]:
     """Fetches `UserProfile` TypedDict from foreign API."""
     return pipe(
         _make_request,
-        # after box: def (Result) -> Result
+        # after bind: def (Result) -> Result
         # after IO.lift: def (IO[Result]) -> IO[Result]
-        IO.lift(box(_parse_json)),
+        IO.lift(bind(_parse_json)),
     )(user_id)
 
 @impure

@@ -1,0 +1,8 @@
+.globaltoc > p.caption {
+  display: block;
+  font-size: 1.05em;
+  font-weight: 700;
+  text-decoration: none;
+  margin-bottom: 1em;
+  border: 0;
+}

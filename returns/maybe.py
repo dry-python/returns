@@ -100,6 +100,35 @@ class Maybe(
         """Get failed value or raise exception."""
         raise NotImplementedError
 
+    @classmethod
+    def lift(
+        cls,
+        function: Callable[[_ValueType], _NewValueType],
+    ) -> Callable[['Maybe[_ValueType]'], 'Maybe[_NewValueType]']:
+        """
+        Lifts function to be wrapped in ``Maybe`` for better composition.
+
+        In other words, it modifies the function's
+        signature from: ``a -> b`` to: ``Maybe[a] -> Maybe[b]``
+
+        This is how it should be used:
+
+        .. code:: python
+
+          >>> def example(argument: int) -> float:
+          ...     return argument / 2
+          ...
+          >>> Maybe.lift(example)(Maybe.new(2)) == Maybe.new(1.0)
+          True
+
+        See also:
+            - https://wiki.haskell.org/Lifting
+            - https://github.com/witchcrafters/witchcraft
+            - https://en.wikipedia.org/wiki/Natural_transformation
+
+        """
+        return lambda container: container.map(function)
+
 
 @final
 class _Nothing(Maybe[Any]):

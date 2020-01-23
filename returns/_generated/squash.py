@@ -7,15 +7,7 @@ def _squash(*args):
 
     .. code:: python
 
-        >>> from returns.io import IO
-        >>> str(_squash(IO(1), IO(2)))
-        '<IO: (1, 2)>'
-
-    Also available as a class-method of ``IO`` container:
-
-    .. code:: python
-
-        >>> from returns.io import io_squash
+        >>> from returns.io import IO, io_squash
         >>> str(io_squash(IO('a'), IO('b')))
         "<IO: ('a', 'b')>"
 

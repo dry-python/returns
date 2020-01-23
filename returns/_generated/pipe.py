@@ -22,6 +22,8 @@ def _pipe(*functions):
 
     A friendly hint: do not start ``pipe`` definition with ``lambda`` function.
     ``mypy`` will complain: ``error: Cannot infer type argument 1 of "_pipe"``.
+    The same might happen with regular generics.
+    It might be a good idea to start with a function with concrete types.
 
     To fix it there are two options:
 

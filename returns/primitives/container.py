@@ -144,7 +144,7 @@ class Rescueable(Protocol[_NewValueType, _ErrorType]):
 
 
 @runtime
-class Unwrapable(Protocol[_ValueType]):
+class Unwrapable(Protocol[_ValueType, _ErrorType]):
     """Represents containers that can unwrap and return its wrapped value."""
 
     def value_or(

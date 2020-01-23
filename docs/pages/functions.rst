@@ -38,37 +38,8 @@ If you wonder why do we need this function, please read below:
 - `Using Identity Functions <https://emilvarga.com/posts/2016/08/01/using-identity-functions>`_ (Scala)
 
 
-box
----
-
-Without ``box()`` it would be very hard to declaratively compose two entities:
-
-1. Existings container
-2. Existing functions that accepts a regular value and returns a container
-
-We can compose these entities with ``.bind`` when calling it directly,
-but how can we do it inversevely?
-
-.. code:: python
-
-  from returns.functions import box
-  from returns.maybe import Maybe
-
-  def bindable(arg: int) -> Maybe[str]:
-      ...
-
-  container: Maybe[int]
-  # We now have two way of composining these entities.
-  # 1. Via ``.bind``:
-  container.bind(bindable)  # works!
-  # 2. Or via ``box``, the same but in the inverse way:
-  box(bindable)(container)
-
-That's it.
-
-
-tap
----
+tap and untap
+-------------
 
 We need ``tap()`` function to easily compose values
 with functions that does not return.
@@ -124,10 +95,9 @@ We allow you to do that with ease!
 Use this with caution. We try to remove exceptions from our code base.
 Original proposal is `here <https://github.com/dry-python/returns/issues/56>`_.
 
+
 API Reference
 -------------
 
 .. automodule:: returns.functions
    :members:
-
-.. autofunction:: returns.functions.box

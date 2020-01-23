@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-def _box(function):
+def bind(function):
     """
     Boxes function's input parameter from a regular value to a container.
 
@@ -12,12 +12,13 @@ def _box(function):
 
     .. code:: python
 
-      >>> from returns.functions import box
+      >>> from returns.pointfree import bind
       >>> from returns.maybe import Maybe, Some
+
       >>> def example(argument: int) -> Maybe[int]:
       ...     return Some(argument + 1)
       ...
-      >>> box(example)(Some(1)) == Some(2)
+      >>> bind(example)(Some(1)) == Some(2)
       True
 
     """

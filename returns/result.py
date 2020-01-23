@@ -137,6 +137,39 @@ class Result(
         """Get failed value or raise exception."""
         raise NotImplementedError
 
+    @classmethod
+    def lift(
+        cls,
+        function: Callable[[_ValueType], _NewValueType],
+    ) -> Callable[
+        ['Result[_ValueType, _ErrorType]'],
+        'Result[_NewValueType, _ErrorType]',
+    ]:
+        """
+        Lifts function to be wrapped in ``Result`` for better composition.
+
+        In other words, it modifies the function's
+        signature from: ``a -> b`` to: ``Result[a, error] -> Result[b, error]``
+
+        This is how it should be used:
+
+        .. code:: python
+
+          >>> from returns.result import Success, Result
+          >>> def example(argument: int) -> float:
+          ...     return argument / 2  # not exactly IO action!
+          ...
+          >>> Result.lift(example)(Success(2)) == Success(1.0)
+          True
+
+        See also:
+            - https://wiki.haskell.org/Lifting
+            - https://github.com/witchcrafters/witchcraft
+            - https://en.wikipedia.org/wiki/Natural_transformation
+
+        """
+        return lambda container: container.map(function)
+
 
 @final
 class _Failure(Result[Any, _ErrorType]):

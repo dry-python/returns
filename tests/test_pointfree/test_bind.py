@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from returns.context import RequiresContext
-from returns.functions import box
+from returns.pointfree import bind
 from returns.io import IO
 from returns.maybe import Maybe, Nothing, Some
 from returns.result import Failure, Result, Success
@@ -23,31 +23,31 @@ def _context_function(argument: int) -> RequiresContext[int, int]:
     return RequiresContext(lambda other: argument + other)
 
 
-def test_box_with_io():
+def test_bind_with_io():
     """Ensures that functions can be composed and return type is correct."""
-    boxed = box(_io_function)
+    binded = bind(_io_function)
 
-    assert boxed(IO(1)) == IO('2')
+    assert binded(IO(1)) == IO('2')
 
 
-def test_box_with_maybe():
+def test_bind_with_maybe():
     """Ensures that functions can be composed and return type is correct."""
-    boxed = box(_maybe_function)
+    binded = bind(_maybe_function)
 
-    assert boxed(Some(1)) == Some('2')
-    assert boxed(Nothing) == Nothing
+    assert binded(Some(1)) == Some('2')
+    assert binded(Nothing) == Nothing
 
 
-def test_box_with_result():
+def test_bind_with_result():
     """Ensures that functions can be composed and return type is correct."""
-    boxed = box(_result_function)
+    binded = bind(_result_function)
 
-    assert boxed(Success(1)) == Success('2')
-    assert boxed(Failure('s')) == Failure('s')
+    assert binded(Success(1)) == Success('2')
+    assert binded(Failure('s')) == Failure('s')
 
 
-def test_box_with_context():
+def test_bind_with_context():
     """Ensures that functions can be composed and return type is correct."""
-    boxed = box(_context_function)
+    binded = bind(_context_function)
 
-    assert boxed(RequiresContext(lambda _: 3))(5) == 8
+    assert binded(RequiresContext(lambda _: 3))(5) == 8

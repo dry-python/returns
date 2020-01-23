@@ -21,10 +21,11 @@ Simple app
 
 One of the most popular errors Python developers do in ``Django``
 is that they overuse ``settings`` object inside the business logic.
-This makes your logic framework oriented
+This makes your logic framework-oriented
 and hard to reason about in large projects.
 
 Because values just pop out of nowhere in a deeply nested functions.
+And can be changed from the outside, from the context of your app.
 
 Imagine that you have a ``django`` based game,
 where you award users with points
@@ -51,7 +52,7 @@ for each guessed letter in a word (unguessed letters are marked as ``'.'``):
   def _award_points_for_letters(guessed: int) -> int:
       return 0 if guessed < 5 else guessed  # minimum 6 points possible!
 
-Straigh and simple!
+Straight and simple!
 
 Adding configuration
 ~~~~~~~~~~~~~~~~~~~~
@@ -76,17 +77,18 @@ Because that's how our caller looks like:
       guessed_letters_count = len([letter for letter in word if letter != '.'])
       return _award_points_for_letters(guessed_letters_count)
 
-To fix this ``calculate_points`` function (and all other upper functions)
+To fix this ``calculate_points`` function
+(and all other upper caller functions)
 will have to accept ``thresshold: int``
-as a parameter and pass it to `` _award_points_for_letters``.
+as a parameter and pass it to ``_award_points_for_letters``.
 
 Imagine that your large project has multiple
 things to configure in multiple functions.
 What a mess it would be!
 
-Ok, you can directly use `django.settings` (or similar)
-in your `_award_points_for_letters` function.
-And ruin your pretty pure logic with framework specific details. That's ugly!
+Ok, you can directly use ``django.settings`` (or similar)
+in your ``_award_points_for_letters`` function.
+And ruin your pure logic with framework-specific details. That's ugly!
 
 Explicitly reling on context
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -97,6 +99,7 @@ that it is not so easy to rely on implicit app context.
 And instead of passing parameters for all callstack
 or using dirty framework specific magic
 you can use ``RequiresContext`` container.
+That was built just for this case.
 
 Let's see how our code changes:
 
