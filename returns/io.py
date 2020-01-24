@@ -238,7 +238,7 @@ class IOResult(BaseContainer, Generic[_ValueType, _ErrorType]):
         """
         super().__init__(inner_value)
 
-    def map(
+    def map(  # noqa: A003
         self, function: Callable[[_ValueType], _NewValueType],
     ) -> 'IOResult[_NewValueType, _ErrorType]':
         """
@@ -247,8 +247,7 @@ class IOResult(BaseContainer, Generic[_ValueType, _ErrorType]):
         .. code:: python
 
           >>> from returns.io import IOSuccess
-          >>> IOSuccess(1).map(lambda num: num + 1) == IOSuccess(2)
-          True
+          >>> assert IOSuccess(1).map(lambda num: num + 1) == IOSuccess(2)
 
         """
         return IOResult(self._inner_value.map(function))
@@ -265,12 +264,12 @@ class IOResult(BaseContainer, Generic[_ValueType, _ErrorType]):
 
         .. code:: python
 
-          >>> from returns.io import IOResult, IOSuccess
+          >>> from returns.io import IOResult, IOFailure, IOSuccess
           >>> def bindable(string: str) -> IOResult[str, str]:
           ...      return IOSuccess(string + 'b')
           ...
-          >>> IOSuccess('a').bind(bindable) == IOSuccess('ab')
-          True
+          >>> assert IOSuccess('a').bind(bindable) == IOSuccess('ab')
+          >>> assert IOFailure('a').bind(bindable) == IOFailure('a')
 
         """
         if is_successful(self._inner_value):
@@ -313,6 +312,8 @@ class IOResult(BaseContainer, Generic[_ValueType, _ErrorType]):
 
           >>> assert IOFailure('a').rescue(rescuable) == IOFailure('oops')
           >>> assert IOFailure('abc').rescue(rescuable) == IOSuccess(3)
+
+          >>> assert IOSuccess('a').rescue(rescuable) == IOSuccess('a')
 
         """
         if is_successful(self._inner_value):
@@ -436,10 +437,12 @@ class IOResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           >>> assert IOResult.from_typecast(container) == IOSuccess(1)
 
         """
-        return cls(container._inner_value)
+        return cls(container._inner_value)  # noqa: WPS437
 
 
-def IOSuccess(inner_value: _NewValueType) -> IOResult[_NewValueType, NoReturn]:
+def IOSuccess(  # noqa: N802
+    inner_value: _NewValueType,
+) -> IOResult[_NewValueType, NoReturn]:
     """
     Public unit function of succeful :class:`~IOResult` container.
 
@@ -453,7 +456,9 @@ def IOSuccess(inner_value: _NewValueType) -> IOResult[_NewValueType, NoReturn]:
     return IOResult(Success(inner_value))
 
 
-def IOFailure(inner_value: _NewErrorType) -> IOResult[NoReturn, _NewErrorType]:
+def IOFailure(  # noqa: N802
+    inner_value: _NewErrorType,
+) -> IOResult[NoReturn, _NewErrorType]:
     """
     Public unit function of failed :class:`~IOResult` container.
 

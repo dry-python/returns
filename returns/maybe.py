@@ -444,7 +444,7 @@ def maybe(function):
     .. code:: python
 
       >>> from typing import Optional
-      >>> from returns.maybe import Nothing, Maybe, Some, maybe
+      >>> from returns.maybe import Nothing, Some, maybe
 
       >>> @maybe
       ... def might_be_none(arg: int) -> Optional[int]:
