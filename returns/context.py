@@ -34,6 +34,10 @@ class RequiresContext(
 
     It can be used for lazy evaluation and typed dependency injection.
 
+    ``RequiresContext`` is used with functions that never fails.
+    If you want to use ``Result`` together with ``RequiresContext``
+    than consider using ``RequiresResultContext`` instead.
+
     Note:
         This container does not wrap ANY value. It wraps only functions.
         You won't be able to supply arbitarry types!
@@ -52,9 +56,16 @@ class RequiresContext(
         self, inner_value: Callable[[_EnvType], _ReturnType],
     ) -> None:
         """
-        Constructor for this container.
+        Public constructor for this type. Also required for typing.
 
-        Only allows functions of type ``* -> *``.
+        Only allows functions of kind ``* -> *``.
+
+        .. code:: python
+
+          >>> from returns.context import RequiresContext
+          >>> str(RequiresContext(lambda deps: deps + 1))
+          '<RequiresContext: <function <lambda> at ...>>'
+
         """
         super().__init__(inner_value)
 
