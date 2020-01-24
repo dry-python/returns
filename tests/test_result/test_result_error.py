@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import pytest
-
-from returns.result import Result, ResultError, Success, Failure
+from returns.result import Failure, ResultError, Success
 
 
 def test_result_error_success():
