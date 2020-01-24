@@ -1,9 +1,9 @@
 - case: failure_rescue
   disable_cache: true
   main: |
-    from returns.result import ResultError, Success, Failure
+    from returns.result import ResultE, Success, Failure
 
-    def some(arg: int) -> ResultError[int]:
+    def some(arg: int) -> ResultE[int]:
         if arg > 0:
             return Success(arg)
         return Failure(ValueError('test'))

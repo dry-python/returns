@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from returns.result import Failure, ResultError, Success
+from returns.result import Failure, ResultE, Success
 
 
 def test_result_error_success():
-    """Ensures that ResultError can be typecasted to success."""
-    container: ResultError[int] = Success(1)
+    """Ensures that ResultE can be typecasted to success."""
+    container: ResultE[int] = Success(1)
     assert container.unwrap() == 1
 
 
 def test_result_error_failure():
-    """Ensures that ResultError can be typecasted to failure."""
-    container: ResultError[int] = Failure(ValueError('1'))
+    """Ensures that ResultE can be typecasted to failure."""
+    container: ResultE[int] = Failure(ValueError('1'))
     assert str(container.failure()) == '1'

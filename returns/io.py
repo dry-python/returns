@@ -1,16 +1,23 @@
 # -*- coding: utf-8 -*-
 
+from abc import ABCMeta
 from functools import wraps
 from inspect import iscoroutinefunction
-from typing import Callable, Coroutine, Generic, TypeVar, overload
+from typing import Callable, Coroutine, Generic, TypeVar, overload, Union, NoReturn
 
 from typing_extensions import final
 
 from returns._generated.squash import _squash as io_squash  # noqa: F401, WPS436
 from returns.primitives.container import BaseContainer
+from returns.result import Result, Success, Failure
+from returns.pipeline import is_successful
 
 _ValueType = TypeVar('_ValueType', covariant=True)
 _NewValueType = TypeVar('_NewValueType')
+
+# Result related:
+_ErrorType = TypeVar('_ErrorType', covariant=True)
+_NewErrorType = TypeVar('_NewErrorType')
 
 # Helpers:
 _FirstType = TypeVar('_FirstType')
@@ -37,7 +44,7 @@ class IO(BaseContainer, Generic[_ValueType]):
     - write to the console
     - get a random number
 
-    Use ``IO[Result[...]]`` for operations that might fail.
+    Use ``IOResult[...]`` for operations that might fail.
     Like DB access or network operations.
 
     See also:
@@ -124,6 +131,125 @@ class IO(BaseContainer, Generic[_ValueType]):
 
         """
         return lambda container: container.map(function)
+
+
+@final
+class IOResult(BaseContainer, Generic[_ValueType, _ErrorType]):
+
+    _inner_value: Result[_ValueType, _ErrorType]
+
+    def __init__(self, inner_value: Result[_ValueType, _ErrorType]) -> None:
+        """Required for typing."""
+        super().__init__(inner_value)
+
+    def bind(
+        self,
+        function: Callable[
+            [_ValueType],
+            'IOResult[_NewValueType, _ErrorType]',
+        ],
+    ) -> 'IOResult[_NewValueType, _ErrorType]':
+        if is_successful(self._inner_value):
+            return function(self._inner_value.unwrap())
+        return self  # type: ignore
+
+    def map(
+        self, function: Callable[[_ValueType], _NewValueType],
+    ) -> 'IOResult[_NewValueType, _ErrorType]':
+        return IOResult(self._inner_value.map(function))
+
+    def rescue(
+        self,
+        function: Callable[
+            [_ErrorType],
+            'IOResult[_ValueType, _NewErrorType]',
+        ],
+    ) -> 'IOResult[_ValueType, _NewErrorType]':
+        if is_successful(self._inner_value):
+            return self  # type: ignore
+        return function(self._inner_value.failure())
+
+    def fix(
+        self,
+        function: Callable[[_ErrorType], _NewValueType],
+    ) -> 'IOResult[_NewValueType, _ErrorType]':
+        return IOResult(self._inner_value.fix(function))
+
+    def alt(
+        self,
+        function: Callable[[_ErrorType], _NewErrorType],
+    ) -> 'IOResult[_ValueType, _NewErrorType]':
+        return IOResult(self._inner_value.alt(function))
+
+    def value_or(
+        self,
+        default_value: _NewValueType,
+    ) -> IO[Union[_ValueType, _NewValueType]]:
+        """Get value or default value."""
+        return IO(self._inner_value.value_or(default_value))
+
+    def unwrap(self) -> IO[_ValueType]:
+        """Get value or raise exception."""
+        return IO(self._inner_value.unwrap())
+
+    def failure(self) -> IO[_ErrorType]:
+        """Get failed value or raise exception."""
+        return IO(self._inner_value.failure())
+
+    @classmethod
+    def lift(
+        cls,
+        function: Callable[[_ValueType], _NewValueType],
+    ) -> Callable[
+        ['IOResult[_ValueType, _ErrorType]'],
+        'IOResult[_NewValueType, _ErrorType]',
+    ]:
+        """
+        Lifts function to be wrapped in ``IOResult`` for better composition.
+
+        In other words, it modifies the function's
+        signature from: ``a -> b`` to:
+        ``IOResult[a, error] -> IOResult[b, error]``
+
+        Works similar to :meth:`~IOResult.map`, but has inverse semantics.
+
+        This is how it should be used:
+
+        .. code:: python
+
+          >>> from returns.io import IOResult, IOSuccess
+          >>> def example(argument: int) -> float:
+          ...     return argument / 2  # not exactly IO action!
+          ...
+          >>> IOResult.lift(example)(IOSuccess(2)) == IOSuccess(1.0)
+          True
+
+        This one is similar to appling :meth:`~IO.lift`
+        and :meth:`returns.result.Result.lift` in order.
+
+        See also:
+            - https://wiki.haskell.org/Lifting
+            - https://github.com/witchcrafters/witchcraft
+            - https://en.wikipedia.org/wiki/Natural_transformation
+
+        """
+        return lambda container: container.map(function)
+
+    @classmethod
+    def from_typecast(
+        cls, container: IO[Result[_ValueType, _ErrorType]],
+    ) -> IOResult[_ValueType, _ErrorType]:
+        return cls(container._inner_value)
+
+
+def IOSuccess(inner_value: _NewValueType) -> IOResult[_NewValueType, NoReturn]:
+    return IOResult(Success(inner_value))
+
+
+def IOFailure(inner_value: _NewErrorType) -> IOResult[NoReturn, _NewErrorType]:
+    return IOResult(Failure(inner_value))
+
+# TODO: @impure with `IOResult`?
 
 
 @overload

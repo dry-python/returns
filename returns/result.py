@@ -28,7 +28,6 @@ _ErrorType = TypeVar('_ErrorType', covariant=True)
 _NewErrorType = TypeVar('_NewErrorType')
 
 # Aliases:
-_DefaultValueType = TypeVar('_DefaultValueType')
 _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')
 
@@ -124,8 +123,8 @@ class Result(
 
     def value_or(
         self,
-        default_value: _DefaultValueType,
-    ) -> Union[_ValueType, _DefaultValueType]:
+        default_value: _NewValueType,
+    ) -> Union[_ValueType, _NewValueType]:
         """Get value or default value."""
         raise NotImplementedError
 
@@ -514,7 +513,7 @@ def Failure(  # noqa: N802
 
 # Aliases:
 
-ResultError = Result[_ValueType, Exception]
+ResultE = Result[_ValueType, Exception]
 
 
 # Decorators:

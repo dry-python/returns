@@ -49,9 +49,11 @@ Aliases
 
 There are several useful alises for ``Result`` type with some common values:
 
-- ``ResultError`` is an alias for ``Result[... Exception]``,
+- ``ResultE`` is an alias for ``Result[... Exception]``,
   just use it when you want to work with ``Result`` containers
-  that use exceptions as error type
+  that use exceptions as error type.
+  It is named ``ResultE`` because it is ``ResultException``
+  and ``ResultError`` at the same time.
 
 
 safe
@@ -160,6 +162,9 @@ to compose error types together.
 While ``.bind`` enforces error type to stay the same,
 ``.unify`` is designed
 to return a ``Union`` of a revious error type and a new one.
+
+It gives an extra flexibility, but also provokes more thinking
+and can be problematic in some cases.
 
 Like so:
 
