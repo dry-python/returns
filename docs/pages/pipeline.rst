@@ -106,7 +106,7 @@ Here's the code to illustrate the task.
 
 .. code:: python
 
-  from returns.result import Result, Success, Failure, safe
+  from returns.result import Result, ResultError, Success, Failure, safe
   from returns.pipeline import pipeline
 
   def create_account_and_user(
@@ -119,7 +119,7 @@ Here's the code to illustrate the task.
 
   def _validate_user(
       username: str, email: str,
-  ) -> Result['UserSchema', Exception]:
+  ) -> ResultError['UserSchema']:
       """Returns an UserSchema for valid input, otherwise a Failure."""
       if username and '@' in email:
           return Success({'username': username, 'email': email})
@@ -127,13 +127,13 @@ Here's the code to illustrate the task.
 
   def _create_account(
       user_schema: 'UserSchema',
-  ) -> Result['Account', Exception]:
+  ) -> ResultError['Account']:
       """Creates an Account for valid UserSchema's. Or returns a Failure."""
       return safe(Accounts.save)(user_schema)
 
   def _create_user(
       account: 'Account',
-  ) -> Result['User', Exception]:
+  ) -> ResultError['User']:
       """Create an User instance. If user already exists returns Failure."""
       return safe(User.objects.create)(
           username=account.username,
