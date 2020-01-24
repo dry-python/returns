@@ -3,6 +3,8 @@
 Result
 ======
 
+Make sure to get familiar with :ref:`Railway oriented programming <railway>`.
+
 ``Result`` is obviously a result of some series of computations.
 It might succeed with some resulting value.
 Or it might return an error with some extra details.
@@ -33,12 +35,23 @@ Or when you do not want to use ``None`` to represent empty values,
 since it will raise ``TypeError`` somewhere
 and other ``None`` exception-friends.
 
+
 Composition
-~~~~~~~~~~~
+-----------
 
 Make sure to check out how to compose container with
 :ref:`pipe` and :ref:`@pipeline <pipeline>`!
 Read more about them if you want to compose your containers easily.
+
+
+Aliases
+-------
+
+There are several useful alises for ``Result`` type with some common values:
+
+- ``ResultError`` is an alias for ``Result[... Exception]``,
+  just use it when you want to work with ``Result`` containers
+  that use exceptions as error type
 
 
 safe

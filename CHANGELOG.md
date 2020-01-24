@@ -17,6 +17,7 @@ See (0Ver)[https://0ver.org/].
 - Adds `RequiresContext` container and `Context` helper class
 - Adds `RequiresContext` support for `bind` pointfree function
 - Adds `RequiresContext` support for `flatten` function
+- Adds `ResultError` alias for `Result[..., Exception]`
 
 ### Bugfixes
 

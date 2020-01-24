@@ -1,0 +1,11 @@
+- case: failure_rescue
+  disable_cache: true
+  main: |
+    from returns.result import ResultError, Success, Failure
+
+    def some(arg: int) -> ResultError[int]:
+        if arg > 0:
+            return Success(arg)
+        return Failure(ValueError('test'))
+
+    reveal_type(some(1))  # N: Revealed type is 'returns.result.Result[builtins.int, builtins.Exception]'

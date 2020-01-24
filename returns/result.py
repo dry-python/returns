@@ -496,6 +496,8 @@ Result.success_type = _Success
 Result.failure_type = _Failure
 
 
+# Public constructors:
+
 def Success(  # noqa: N802
     inner_value: _ValueType,  # type: ignore
 ) -> Result[_ValueType, NoReturn]:
@@ -509,6 +511,13 @@ def Failure(  # noqa: N802
     """Public unit function of protected `_Failure` type."""
     return _Failure(inner_value)
 
+
+# Aliases:
+
+ResultError = Result[_ValueType, Exception]
+
+
+# Decorators:
 
 @overload
 def safe(  # type: ignore
