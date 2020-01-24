@@ -12,12 +12,13 @@ See (0Ver)[https://0ver.org/].
 
 - **Breaking**: renames `join` to `flatten`, sorry!
 - **Breaking**: renames `box` to `bind` and moves it to `returns.pointfree`
+- **Breaking**: renames `coalesce` to `fold`
 - Adds `Result.lift`, `Maybe.lift`, and `RequiresContext.lift` functions
   in addition to `IO.lift`
 - Adds `RequiresContext` container and `Context` helper class
 - Adds `RequiresContext` support for `bind` pointfree function
 - Adds `RequiresContext` support for `flatten` function
-- Adds `ResultError` alias for `Result[..., Exception]`
+- Adds `ResultE` alias for `Result[..., Exception]`
 
 ### Bugfixes
 
