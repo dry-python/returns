@@ -117,6 +117,7 @@ class Maybe(
 
         .. code:: python
 
+          >>> from returns.maybe import Maybe
           >>> def example(argument: int) -> float:
           ...     return argument / 2
           ...
@@ -147,7 +148,7 @@ class _Nothing(Maybe[Any]):
         super().__init__(None)
 
     def __str__(self):
-        """Custom str definition without state inside."""
+        """Custom ``str`` definition without the state inside."""
         return '<Nothing>'
 
     def map(self, function):  # noqa: A003
@@ -156,6 +157,7 @@ class _Nothing(Maybe[Any]):
 
         .. code:: python
 
+          >>> from returns.maybe import Nothing
           >>> def mappable(string: str) -> str:
           ...      return string + 'b'
           ...
@@ -171,6 +173,7 @@ class _Nothing(Maybe[Any]):
 
         .. code:: python
 
+          >>> from returns.maybe import Nothing, Maybe, Some
           >>> def bindable(string: str) -> Maybe[str]:
           ...      return Some(string + 'b')
           ...
@@ -191,6 +194,7 @@ class _Nothing(Maybe[Any]):
 
         .. code:: python
 
+          >>> from returns.maybe import Nothing, Some
           >>> def fixable(_state) -> str:
           ...      return 'ab'
           ...
@@ -209,6 +213,7 @@ class _Nothing(Maybe[Any]):
 
         .. code:: python
 
+          >>> from returns.maybe import Nothing, Maybe, Some
           >>> def rescuable(_state) -> Maybe[str]:
           ...      return Some('ab')
           ...
@@ -224,6 +229,7 @@ class _Nothing(Maybe[Any]):
 
         .. code:: python
 
+          >>> from returns.maybe import Nothing
           >>> Nothing.value_or(1)
           1
 
@@ -236,6 +242,7 @@ class _Nothing(Maybe[Any]):
 
         .. code:: python
 
+          >>> from returns.maybe import Nothing
           >>> Nothing.unwrap()
           Traceback (most recent call last):
             ...
@@ -250,6 +257,7 @@ class _Nothing(Maybe[Any]):
 
         .. code:: python
 
+          >>> from returns.maybe import Nothing
           >>> Nothing.failure() is None
           True
 
@@ -282,6 +290,7 @@ class _Some(Maybe[_ValueType]):
 
         .. code:: python
 
+          >>> from returns.maybe import Some
           >>> def mappable(string: str) -> str:
           ...      return string + 'b'
           ...
@@ -300,6 +309,7 @@ class _Some(Maybe[_ValueType]):
 
         .. code:: python
 
+          >>> from returns.maybe import Maybe, Some
           >>> def bindable(string: str) -> Maybe[str]:
           ...      return Some(string + 'b')
           ...
@@ -315,6 +325,7 @@ class _Some(Maybe[_ValueType]):
 
         .. code:: python
 
+          >>> from returns.maybe import Some
           >>> def fixable(_state) -> str:
           ...      return 'ab'
           ...
@@ -330,6 +341,7 @@ class _Some(Maybe[_ValueType]):
 
         .. code:: python
 
+          >>> from returns.maybe import Maybe, Some
           >>> def rescuable(_state) -> Maybe[str]:
           ...      return Some('ab')
           ...
@@ -345,6 +357,7 @@ class _Some(Maybe[_ValueType]):
 
         .. code:: python
 
+          >>> from returns.maybe import Some
           >>> Some(1).value_or(2)
           1
 
@@ -357,6 +370,7 @@ class _Some(Maybe[_ValueType]):
 
         .. code:: python
 
+          >>> from returns.maybe import Some
           >>> Some(1).unwrap()
           1
 
@@ -369,6 +383,7 @@ class _Some(Maybe[_ValueType]):
 
         .. code:: python
 
+          >>> from returns.maybe import Some
           >>> Some(1).failure()
           Traceback (most recent call last):
             ...
@@ -383,7 +398,16 @@ Maybe.failure_type = _Nothing
 
 
 def Some(inner_value: Optional[_ValueType]) -> Maybe[_ValueType]:  # noqa: N802
-    """Public unit function of protected `_Some` type."""
+    """
+    Public unit function of protected `_Some` type.
+
+    .. code:: python
+
+      >>> from returns.maybe import Some
+      >>> str(Some(1))
+      '<Some: 1>'
+
+    """
     return Maybe.new(inner_value)
 
 
@@ -420,6 +444,8 @@ def maybe(function):
     .. code:: python
 
       >>> from typing import Optional
+      >>> from returns.maybe import Nothing, Maybe, Some, maybe
+
       >>> @maybe
       ... def might_be_none(arg: int) -> Optional[int]:
       ...     if arg == 0:

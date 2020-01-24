@@ -193,6 +193,7 @@ class _Failure(Result[Any, _ErrorType]):
 
         .. code:: python
 
+          >>> from returns.result import Failure
           >>> def mappable(string: str) -> str:
           ...      return string + 'b'
           ...
@@ -208,6 +209,7 @@ class _Failure(Result[Any, _ErrorType]):
 
         .. code:: python
 
+          >>> from returns.result import Success, Failure
           >>> def bindable(string: str) -> Result[str, str]:
           ...      return Success(string + 'b')
           ...
@@ -223,6 +225,7 @@ class _Failure(Result[Any, _ErrorType]):
 
         .. code:: python
 
+          >>> from returns.result import Success, Failure
           >>> def bindable(string: str) -> Result[str, str]:
           ...      return Success(string + 'b')
           ...
@@ -243,6 +246,7 @@ class _Failure(Result[Any, _ErrorType]):
 
         .. code:: python
 
+          >>> from returns.result import Failure, Success
           >>> def fixable(arg: str) -> str:
           ...      return 'ab'
           ...
@@ -261,6 +265,7 @@ class _Failure(Result[Any, _ErrorType]):
 
         .. code:: python
 
+          >>> from returns.result import Result, Success, Failure
           >>> def rescuable(arg: str) -> Result[str, str]:
           ...      return Success(arg + 'b')
           ...
@@ -281,6 +286,7 @@ class _Failure(Result[Any, _ErrorType]):
 
         .. code:: python
 
+          >>> from returns.result import Result, Failure
           >>> def altable(arg: str) -> Result[str, str]:
           ...      return arg + 'b'
           ...
@@ -296,6 +302,7 @@ class _Failure(Result[Any, _ErrorType]):
 
         .. code:: python
 
+          >>> from returns.result import Failure
           >>> Failure(1).value_or(2)
           2
 
@@ -308,6 +315,7 @@ class _Failure(Result[Any, _ErrorType]):
 
         .. code:: python
 
+          >>> from returns.result import Failure
           >>> Failure(1).unwrap()
           Traceback (most recent call last):
             ...
@@ -324,6 +332,7 @@ class _Failure(Result[Any, _ErrorType]):
 
         .. code:: python
 
+          >>> from returns.result import Failure
           >>> Failure(1).failure()
           1
 
@@ -357,6 +366,7 @@ class _Success(Result[_ValueType, Any]):
 
         .. code:: python
 
+          >>> from returns.result import Success
           >>> def mappable(string: str) -> str:
           ...      return string + 'b'
           ...
@@ -375,6 +385,7 @@ class _Success(Result[_ValueType, Any]):
 
         .. code:: python
 
+          >>> from returns.result import Result, Success
           >>> def bindable(string: str) -> Result[str, str]:
           ...      return Success(string + 'b')
           ...
@@ -398,6 +409,7 @@ class _Success(Result[_ValueType, Any]):
 
         .. code:: python
 
+          >>> from returns.result import Result, Success
           >>> def bindable(string: str) -> Result[str, str]:
           ...      return Success(string + 'b')
           ...
@@ -413,6 +425,7 @@ class _Success(Result[_ValueType, Any]):
 
         .. code:: python
 
+          >>> from returns.result import Success
           >>> def fixable(arg: str) -> str:
           ...      return 'ab'
           ...
@@ -428,6 +441,7 @@ class _Success(Result[_ValueType, Any]):
 
         .. code:: python
 
+          >>> from returns.result import Result, Success
           >>> def rescuable(arg: str) -> Result[str, str]:
           ...      return Success(arg + 'b')
           ...
@@ -443,6 +457,7 @@ class _Success(Result[_ValueType, Any]):
 
         .. code:: python
 
+          >>> from returns.result import Result, Success
           >>> def altable(arg: str) -> Result[str, str]:
           ...      return Success(arg + 'b')
           ...
@@ -458,6 +473,7 @@ class _Success(Result[_ValueType, Any]):
 
         .. code:: python
 
+          >>> from returns.result import Success
           >>> Success(1).value_or(2)
           1
 
@@ -470,6 +486,7 @@ class _Success(Result[_ValueType, Any]):
 
         .. code:: python
 
+          >>> from returns.result import Success
           >>> Success(1).unwrap()
           1
 
@@ -482,6 +499,7 @@ class _Success(Result[_ValueType, Any]):
 
         .. code:: python
 
+          >>> from returns.result import Success
           >>> Success(1).failure()
           Traceback (most recent call last):
             ...
@@ -498,21 +516,40 @@ Result.failure_type = _Failure
 # Public constructors:
 
 def Success(  # noqa: N802
-    inner_value: _ValueType,  # type: ignore
-) -> Result[_ValueType, NoReturn]:
-    """Public unit function of protected `_Success` type."""
+    inner_value: _NewValueType,
+) -> Result[_NewValueType, NoReturn]:
+    """
+    Public unit function of protected :class:`~_Success` type.
+
+    .. code:: python
+
+      >>> from returns.result import Success
+      >>> str(Success(1))
+      '<Success: 1>'
+
+    """
     return _Success(inner_value)
 
 
 def Failure(  # noqa: N802
-    inner_value: _ErrorType,  # type: ignore
-) -> Result[NoReturn, _ErrorType]:
-    """Public unit function of protected `_Failure` type."""
+    inner_value: _NewErrorType,
+) -> Result[NoReturn, _NewErrorType]:
+    """
+    Public unit function of protected :class:`~_Failure` type.
+
+    .. code:: python
+
+      >>> from returns.result import Failure
+      >>> str(Failure(1))
+      '<Failure: 1>'
+
+    """
     return _Failure(inner_value)
 
 
 # Aliases:
 
+#: A popular case for writing `Result` is using `Exception` as the last type.
 ResultE = Result[_ValueType, Exception]
 
 
@@ -544,13 +581,14 @@ def safe(function):  # noqa: C901
 
     Supports both async and regular functions.
 
+    >>> from returns.result import Result, Success, safe
     >>> @safe
     ... def might_raise(arg: int) -> float:
     ...     return 1 / arg
     ...
     >>> might_raise(1) == Success(1.0)
     True
-    >>> isinstance(might_raise(0), _Failure)
+    >>> isinstance(might_raise(0), Result.failure_type)
     True
 
     """

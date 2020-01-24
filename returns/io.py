@@ -1,16 +1,23 @@
 # -*- coding: utf-8 -*-
 
-from abc import ABCMeta
 from functools import wraps
 from inspect import iscoroutinefunction
-from typing import Callable, Coroutine, Generic, TypeVar, overload, Union, NoReturn
+from typing import (
+    Callable,
+    Coroutine,
+    Generic,
+    NoReturn,
+    TypeVar,
+    Union,
+    overload,
+)
 
 from typing_extensions import final
 
 from returns._generated.squash import _squash as io_squash  # noqa: F401, WPS436
-from returns.primitives.container import BaseContainer
-from returns.result import Result, Success, Failure
 from returns.pipeline import is_successful
+from returns.primitives.container import BaseContainer
+from returns.result import Failure, Result, Success
 
 _ValueType = TypeVar('_ValueType', covariant=True)
 _NewValueType = TypeVar('_NewValueType')
@@ -35,7 +42,7 @@ class IO(BaseContainer, Generic[_ValueType]):
     But, it is different in a way that it can't be unwrapped / rescued / fixed.
     There's no way to directly get its internal value.
 
-    Note that IO represents a computation that never fails.
+    Note that ``IO`` represents a computation that never fails.
 
     Examples of such computations are:
 
@@ -55,7 +62,16 @@ class IO(BaseContainer, Generic[_ValueType]):
     _inner_value: _ValueType
 
     def __init__(self, inner_value: _ValueType) -> None:
-        """Required for typing."""
+        """
+        Public constructor for this type. Also required for typing.
+
+        .. code:: python
+
+          >>> from returns.io import IO
+          >>> str(IO(1))
+          '<IO: 1>'
+
+        """
         super().__init__(inner_value)
 
     def map(  # noqa: A003
@@ -118,6 +134,7 @@ class IO(BaseContainer, Generic[_ValueType]):
 
         .. code:: python
 
+          >>> from returns.io import IO
           >>> def example(argument: int) -> float:
           ...     return argument / 2  # not exactly IO action!
           ...
@@ -133,14 +150,108 @@ class IO(BaseContainer, Generic[_ValueType]):
         return lambda container: container.map(function)
 
 
+# Helper functions:
+
+@overload
+def impure(  # type: ignore
+    function: Callable[..., Coroutine[_FirstType, _SecondType, _NewValueType]],
+) -> Callable[
+    ...,
+    Coroutine[_FirstType, _SecondType, IO[_NewValueType]],
+]:
+    """Case for async functions."""
+
+
+@overload
+def impure(
+    function: Callable[..., _NewValueType],
+) -> Callable[..., IO[_NewValueType]]:
+    """Case for regular functions."""
+
+
+def impure(function):
+    """
+    Decorator to mark function that it returns :py:class:`IO` container.
+
+    Supports both async and regular functions. Example:
+
+    .. code:: python
+
+      >>> from returns.io import IO, impure
+      >>> @impure
+      ... def function(arg: int) -> int:
+      ...     return arg + 1
+      ...
+      >>> function(1) == IO(2)
+      True
+
+    """
+    if iscoroutinefunction(function):
+        async def decorator(*args, **kwargs):  # noqa: WPS430
+            return IO(await function(*args, **kwargs))
+    else:
+        def decorator(*args, **kwargs):  # noqa: WPS430
+            return IO(function(*args, **kwargs))
+    return wraps(function)(decorator)
+
+
+# IO and Result:
+
 @final
 class IOResult(BaseContainer, Generic[_ValueType, _ErrorType]):
+    """
+    Explicit marker for impure function results that might fail.
+
+    We call it "marker" since once it is marked, it cannot be unmarked.
+    Note, that even methods like :meth:`~IOResult.unwrap``
+    and :meth:`~IOResult.value_or` return values wrapped in ``IO``.
+
+    This type is similar to :class:`returns.result.Result`.
+    This basically a more useful version of ``IO[Result[a, b]]``.
+    Use this type for ``IO`` computations that might fail.
+    Examples of ``IO`` computations that might fail are:
+
+    - access database
+    - access network
+    - access filesystem
+
+    Use :class:`~IO` for operations that do ``IO`` but do not fail.
+
+    See also:
+        https://github.com/gcanti/fp-ts/blob/master/docs/modules/IOEither.ts.md
+
+    """
 
     _inner_value: Result[_ValueType, _ErrorType]
 
     def __init__(self, inner_value: Result[_ValueType, _ErrorType]) -> None:
-        """Required for typing."""
+        """
+        Public constructor for ``Result`` values. Also required for typing.
+
+        .. code:: python
+
+          >>> from returns.io import IOResult
+          >>> from returns.result import Success
+          >>> str(IOResult(Success(1)))
+          '<IOResult: <Success: 1>>'
+
+        """
         super().__init__(inner_value)
+
+    def map(
+        self, function: Callable[[_ValueType], _NewValueType],
+    ) -> 'IOResult[_NewValueType, _ErrorType]':
+        """
+        Composes successful container with a pure function.
+
+        .. code:: python
+
+          >>> from returns.io import IOSuccess
+          >>> IOSuccess(1).map(lambda num: num + 1) == IOSuccess(2)
+          True
+
+        """
+        return IOResult(self._inner_value.map(function))
 
     def bind(
         self,
@@ -149,14 +260,38 @@ class IOResult(BaseContainer, Generic[_ValueType, _ErrorType]):
             'IOResult[_NewValueType, _ErrorType]',
         ],
     ) -> 'IOResult[_NewValueType, _ErrorType]':
+        """
+        Composes successful container with a function that returns a container.
+
+        .. code:: python
+
+          >>> from returns.io import IOResult, IOSuccess
+          >>> def bindable(string: str) -> IOResult[str, str]:
+          ...      return IOSuccess(string + 'b')
+          ...
+          >>> IOSuccess('a').bind(bindable) == IOSuccess('ab')
+          True
+
+        """
         if is_successful(self._inner_value):
             return function(self._inner_value.unwrap())
         return self  # type: ignore
 
-    def map(
-        self, function: Callable[[_ValueType], _NewValueType],
+    def fix(
+        self,
+        function: Callable[[_ErrorType], _NewValueType],
     ) -> 'IOResult[_NewValueType, _ErrorType]':
-        return IOResult(self._inner_value.map(function))
+        """
+        Composes a failed container with a pure function to fix the failure.
+
+        .. code:: python
+
+          >>> from returns.io import IOFailure, IOSuccess
+          >>> IOFailure('a').fix(lambda char: char + 'b') == IOSuccess('ab')
+          True
+
+        """
+        return IOResult(self._inner_value.fix(function))
 
     def rescue(
         self,
@@ -165,35 +300,86 @@ class IOResult(BaseContainer, Generic[_ValueType, _ErrorType]):
             'IOResult[_ValueType, _NewErrorType]',
         ],
     ) -> 'IOResult[_ValueType, _NewErrorType]':
+        """
+        Composes a failed container with a function that returns a container.
+
+        .. code:: python
+
+          >>> from returns.io import IOFailure, IOSuccess, IOResult
+          >>> def rescuable(state: str) -> IOResult[int, str]:
+          ...     if len(state) > 1:
+          ...         return IOSuccess(len(state))
+          ...     return IOFailure('oops')
+
+          >>> assert IOFailure('a').rescue(rescuable) == IOFailure('oops')
+          >>> assert IOFailure('abc').rescue(rescuable) == IOSuccess(3)
+
+        """
         if is_successful(self._inner_value):
             return self  # type: ignore
         return function(self._inner_value.failure())
-
-    def fix(
-        self,
-        function: Callable[[_ErrorType], _NewValueType],
-    ) -> 'IOResult[_NewValueType, _ErrorType]':
-        return IOResult(self._inner_value.fix(function))
 
     def alt(
         self,
         function: Callable[[_ErrorType], _NewErrorType],
     ) -> 'IOResult[_ValueType, _NewErrorType]':
+        """
+        Composes a failed container with a pure function to modify failure.
+
+        .. code:: python
+
+          >>> from returns.io import IOFailure
+          >>> assert IOFailure(1).alt(float) == IOFailure(1.0)
+
+        """
         return IOResult(self._inner_value.alt(function))
 
     def value_or(
         self,
         default_value: _NewValueType,
     ) -> IO[Union[_ValueType, _NewValueType]]:
-        """Get value or default value."""
+        """
+        Get value or default value.
+
+        .. code:: python
+
+          >>> from returns.io import IO, IOFailure, IOSuccess
+          >>> assert IOSuccess(1).value_or(None) == IO(1)
+          >>> assert IOFailure(1).value_or(None) == IO(None)
+
+        """
         return IO(self._inner_value.value_or(default_value))
 
     def unwrap(self) -> IO[_ValueType]:
-        """Get value or raise exception."""
+        """
+        Get value or raise exception.
+
+        .. code:: python
+
+          >>> from returns.io import IO, IOFailure, IOSuccess
+          >>> assert IOSuccess(1).unwrap() == IO(1)
+          >>> IOFailure(1).unwrap()
+          Traceback (most recent call last):
+            ...
+          returns.primitives.exceptions.UnwrapFailedError
+
+        """
         return IO(self._inner_value.unwrap())
 
     def failure(self) -> IO[_ErrorType]:
-        """Get failed value or raise exception."""
+        """
+        Get failed value or raise exception.
+
+        .. code:: python
+
+          >>> from returns.io import IO, IOFailure, IOSuccess
+          >>> assert IOFailure(1).failure() == IO(1)
+          >>> IOSuccess(1).failure()
+          Traceback (most recent call last):
+            ...
+          returns.primitives.exceptions.UnwrapFailedError
+
+        """
         return IO(self._inner_value.failure())
 
     @classmethod
@@ -238,47 +424,44 @@ class IOResult(BaseContainer, Generic[_ValueType, _ErrorType]):
     @classmethod
     def from_typecast(
         cls, container: IO[Result[_ValueType, _ErrorType]],
-    ) -> IOResult[_ValueType, _ErrorType]:
+    ) -> 'IOResult[_ValueType, _ErrorType]':
+        """
+        Converts ``IO[Result[_ValueType, _ErrorType]]`` to ``IOResult``.
+
+        .. code:: python
+
+          >>> from returns.result import Success
+          >>> from returns.io import IO, IOResult, IOSuccess
+          >>> container = IO(Success(1))
+          >>> assert IOResult.from_typecast(container) == IOSuccess(1)
+
+        """
         return cls(container._inner_value)
 
 
 def IOSuccess(inner_value: _NewValueType) -> IOResult[_NewValueType, NoReturn]:
+    """
+    Public unit function of succeful :class:`~IOResult` container.
+
+    .. code:: python
+
+      >>> from returns.io import IOSuccess
+      >>> str(IOSuccess(1))
+      '<IOResult: <Success: 1>>'
+
+    """
     return IOResult(Success(inner_value))
 
 
 def IOFailure(inner_value: _NewErrorType) -> IOResult[NoReturn, _NewErrorType]:
+    """
+    Public unit function of failed :class:`~IOResult` container.
+
+    .. code:: python
+
+      >>> from returns.io import IOFailure
+      >>> str(IOFailure(1))
+      '<IOResult: <Failure: 1>>'
+
+    """
     return IOResult(Failure(inner_value))
-
-# TODO: @impure with `IOResult`?
-
-
-@overload
-def impure(  # type: ignore
-    function: Callable[..., Coroutine[_FirstType, _SecondType, _NewValueType]],
-) -> Callable[
-    ...,
-    Coroutine[_FirstType, _SecondType, IO[_NewValueType]],
-]:
-    """Case for async functions."""
-
-
-@overload
-def impure(
-    function: Callable[..., _NewValueType],
-) -> Callable[..., IO[_NewValueType]]:
-    """Case for regular functions."""
-
-
-def impure(function):
-    """
-    Decorator to mark function that it returns :py:class:`IO` container.
-
-    Supports both async and regular functions.
-    """
-    if iscoroutinefunction(function):
-        async def decorator(*args, **kwargs):  # noqa: WPS430
-            return IO(await function(*args, **kwargs))
-    else:
-        def decorator(*args, **kwargs):  # noqa: WPS430
-            return IO(function(*args, **kwargs))
-    return wraps(function)(decorator)
