@@ -39,7 +39,33 @@
 
     flatten(returns_result())
   out: |
-    main:7: error: Argument 1 to "flatten" has incompatible type "Result[int, Result[int, str]]"; expected "Result[Result[<nothing>, Result[int, str]], Result[int, str]]"
+    main:7: error: Argument 1 to "_flatten" has incompatible type "Result[int, Result[int, str]]"; expected "Result[Result[<nothing>, Result[int, str]], Result[int, str]]"
+
+
+- case: join_ioresult1
+  disable_cache: true
+  main: |
+    from returns.converters import flatten
+    from returns.io import IOResult
+
+    def returns_ioresult() -> IOResult[IOResult[int, str], str]:
+        ...
+
+    reveal_type(flatten(returns_ioresult()))  # N: Revealed type is 'returns.io.IOResult[builtins.int*, builtins.str*]'
+
+
+- case: join_ioresult2
+  disable_cache: true
+  main: |
+    from returns.converters import flatten
+    from returns.io import IOResult
+
+    def returns_ioresult() -> IOResult[int, IOResult[int, str]]:
+        ...
+
+    flatten(returns_ioresult())
+  out: |
+    main:7: error: Argument 1 to "_flatten" has incompatible type "IOResult[int, IOResult[int, str]]"; expected "IOResult[IOResult[<nothing>, IOResult[int, str]], IOResult[int, str]]"
 
 
 - case: join_context

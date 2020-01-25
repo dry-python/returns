@@ -10,6 +10,18 @@
     reveal_type(is_successful(returns_result()))  # N: Revealed type is 'builtins.bool'
 
 
+- case: ioresult_is_successful
+  disable_cache: true
+  main: |
+    from returns.pipeline import is_successful
+    from returns.io import IOResult
+
+    def returns_ioresult() -> IOResult[int, str]:
+        ...
+
+    reveal_type(is_successful(returns_ioresult()))  # N: Revealed type is 'builtins.bool'
+
+
 - case: maybe_is_successful
   disable_cache: true
   main: |

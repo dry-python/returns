@@ -1,0 +1,41 @@
+- case: result_pipeline
+  disable_cache: true
+  main: |
+    from returns.pipeline import pipeline
+    from returns.io import IOResult
+
+    @pipeline(IOResult)
+    def returns_result(arg: str) -> IOResult[int, str]:
+        ...
+
+    reveal_type(returns_result("a"))  # N: Revealed type is 'returns.io.IOResult[builtins.int, builtins.str]'
+
+
+- case: result_async_pipeline
+  disable_cache: true
+  main: |
+    from returns.pipeline import pipeline
+    from returns.io import IOResult
+
+    @pipeline(IOResult)
+    async def returns_result(arg: str) -> IOResult[int, str]:
+        ...
+
+    reveal_type(returns_result("a"))  # N: Revealed type is 'typing.Coroutine[Any, Any, returns.io.IOResult[builtins.int, builtins.str]]'
+
+
+- case: result_wrong_pipeline
+  disable_cache: true
+  main: |
+    from returns.pipeline import pipeline
+    from returns.io import IOResult
+    from returns.result import Result
+
+    @pipeline(Result)
+    def returns_result(arg: str) -> IOResult[int, str]:
+        ...
+
+    returns_result("a")
+
+  out: |
+    main:5: error: Value of type variable "_ReturnResultType" of "__call__" of "_PipelineResultProtocol" cannot be "Callable[[str], IOResult[int, str]]"

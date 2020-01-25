@@ -17,7 +17,7 @@ async def _coroutine(number: int) -> float:
 
 def test_safe_success():
     """Ensures that safe decorator works correctly for Success case."""
-    assert _function(1) == Success(1)
+    assert _function(1) == Success(1.0)
 
 
 def test_safe_failure():
@@ -30,8 +30,8 @@ def test_safe_failure():
 async def test_async_safe_success():
     """Ensures that safe decorator works correctly for Success case."""
     success = await _coroutine(1)
-    assert success == Success(1)
-    assert success.unwrap() == 1
+    assert success == Success(1.0)
+    assert success.unwrap() == 1.0
 
 
 @pytest.mark.asyncio

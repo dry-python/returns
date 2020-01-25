@@ -160,8 +160,7 @@ class Result(
           >>> def example(argument: int) -> float:
           ...     return argument / 2  # not exactly IO action!
           ...
-          >>> Result.lift(example)(Success(2)) == Success(1.0)
-          True
+          >>> assert Result.lift(example)(Success(2)) == Success(1.0)
 
         See also:
             - https://wiki.haskell.org/Lifting
@@ -197,8 +196,7 @@ class _Failure(Result[Any, _ErrorType]):
           >>> def mappable(string: str) -> str:
           ...      return string + 'b'
           ...
-          >>> Failure('a').map(mappable) == Failure('a')
-          True
+          >>> assert Failure('a').map(mappable) == Failure('a')
 
         """
         return self
@@ -213,8 +211,7 @@ class _Failure(Result[Any, _ErrorType]):
           >>> def bindable(string: str) -> Result[str, str]:
           ...      return Success(string + 'b')
           ...
-          >>> Failure('a').bind(bindable) == Failure('a')
-          True
+          >>> assert Failure('a').bind(bindable) == Failure('a')
 
         """
         return self
@@ -229,8 +226,7 @@ class _Failure(Result[Any, _ErrorType]):
           >>> def bindable(string: str) -> Result[str, str]:
           ...      return Success(string + 'b')
           ...
-          >>> Failure('a').unify(bindable) == Failure('a')
-          True
+          >>> assert Failure('a').unify(bindable) == Failure('a')
 
         """
         return self
@@ -250,8 +246,7 @@ class _Failure(Result[Any, _ErrorType]):
           >>> def fixable(arg: str) -> str:
           ...      return 'ab'
           ...
-          >>> Failure('a').fix(fixable) == Success('ab')
-          True
+          >>> assert Failure('a').fix(fixable) == Success('ab')
 
         """
         return _Success(function(self._inner_value))
@@ -269,8 +264,7 @@ class _Failure(Result[Any, _ErrorType]):
           >>> def rescuable(arg: str) -> Result[str, str]:
           ...      return Success(arg + 'b')
           ...
-          >>> Failure('a').rescue(rescuable) == Success('ab')
-          True
+          >>> assert Failure('a').rescue(rescuable) == Success('ab')
 
         """
         return function(self._inner_value)
@@ -290,8 +284,7 @@ class _Failure(Result[Any, _ErrorType]):
           >>> def altable(arg: str) -> Result[str, str]:
           ...      return arg + 'b'
           ...
-          >>> Failure('a').alt(altable) == Failure('ab')
-          True
+          >>> assert Failure('a').alt(altable) == Failure('ab')
 
         """
         return _Failure(function(self._inner_value))
@@ -370,8 +363,7 @@ class _Success(Result[_ValueType, Any]):
           >>> def mappable(string: str) -> str:
           ...      return string + 'b'
           ...
-          >>> Success('a').map(mappable) == Success('ab')
-          True
+          >>> assert Success('a').map(mappable) == Success('ab')
 
         """
         return _Success(function(self._inner_value))
@@ -389,8 +381,7 @@ class _Success(Result[_ValueType, Any]):
           >>> def bindable(string: str) -> Result[str, str]:
           ...      return Success(string + 'b')
           ...
-          >>> Success('a').bind(bindable) == Success('ab')
-          True
+          >>> assert Success('a').bind(bindable) == Success('ab')
 
         """
         return function(self._inner_value)
@@ -413,8 +404,7 @@ class _Success(Result[_ValueType, Any]):
           >>> def bindable(string: str) -> Result[str, str]:
           ...      return Success(string + 'b')
           ...
-          >>> Success('a').bind(bindable) == Success('ab')
-          True
+          >>> assert Success('a').bind(bindable) == Success('ab')
 
         """
         return self.bind(function)  # type: ignore
@@ -429,8 +419,7 @@ class _Success(Result[_ValueType, Any]):
           >>> def fixable(arg: str) -> str:
           ...      return 'ab'
           ...
-          >>> Success('a').fix(fixable) == Success('a')
-          True
+          >>> assert Success('a').fix(fixable) == Success('a')
 
         """
         return self
@@ -445,8 +434,7 @@ class _Success(Result[_ValueType, Any]):
           >>> def rescuable(arg: str) -> Result[str, str]:
           ...      return Success(arg + 'b')
           ...
-          >>> Success('a').rescue(rescuable) == Success('a')
-          True
+          >>> assert Success('a').rescue(rescuable) == Success('a')
 
         """
         return self
@@ -461,8 +449,7 @@ class _Success(Result[_ValueType, Any]):
           >>> def altable(arg: str) -> Result[str, str]:
           ...      return Success(arg + 'b')
           ...
-          >>> Success('a').alt(altable) == Success('a')
-          True
+          >>> assert Success('a').alt(altable) == Success('a')
 
         """
         return self
@@ -560,7 +547,7 @@ def safe(  # type: ignore
     function: Callable[..., Coroutine[_FirstType, _SecondType, _ValueType]],
 ) -> Callable[
     ...,
-    Coroutine[_FirstType, _SecondType, Result[_ValueType, Exception]],
+    Coroutine[_FirstType, _SecondType, ResultE[_ValueType]],
 ]:
     """Case for async functions."""
 
@@ -568,7 +555,7 @@ def safe(  # type: ignore
 @overload
 def safe(
     function: Callable[..., _ValueType],
-) -> Callable[..., Result[_ValueType, Exception]]:
+) -> Callable[..., ResultE[_ValueType]]:
     """Case for regular functions."""
 
 
@@ -586,10 +573,8 @@ def safe(function):  # noqa: C901
     ... def might_raise(arg: int) -> float:
     ...     return 1 / arg
     ...
-    >>> might_raise(1) == Success(1.0)
-    True
-    >>> isinstance(might_raise(0), Result.failure_type)
-    True
+    >>> assert might_raise(1) == Success(1.0)
+    >>> assert isinstance(might_raise(0), Result.failure_type)
 
     """
     if iscoroutinefunction(function):

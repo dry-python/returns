@@ -14,7 +14,7 @@ from typing import (
 
 from typing_extensions import final
 
-from returns._generated.squash import _squash as io_squash  # noqa: F401, WPS436
+from returns._generated.squash import _squash as io_squash  # noqa: F401
 from returns.pipeline import is_successful
 from returns.primitives.container import BaseContainer
 from returns.result import Failure, Result, Success
@@ -91,8 +91,7 @@ class IO(BaseContainer, Generic[_ValueType]):
           >>> def mappable(string: str) -> str:
           ...      return string + 'b'
           ...
-          >>> IO('a').map(mappable) == IO('ab')
-          True
+          >>> assert IO('a').map(mappable) == IO('ab')
 
         """
         return IO(function(self._inner_value))
@@ -111,8 +110,7 @@ class IO(BaseContainer, Generic[_ValueType]):
           >>> def bindable(string: str) -> IO[str]:
           ...      return IO(string + 'b')
           ...
-          >>> IO('a').bind(bindable) == IO('ab')
-          True
+          >>> assert IO('a').bind(bindable) == IO('ab')
 
         """
         return function(self._inner_value)
@@ -138,8 +136,7 @@ class IO(BaseContainer, Generic[_ValueType]):
           >>> def example(argument: int) -> float:
           ...     return argument / 2  # not exactly IO action!
           ...
-          >>> IO.lift(example)(IO(2)) == IO(1.0)
-          True
+          >>> assert IO.lift(example)(IO(2)) == IO(1.0)
 
         See also:
             - https://wiki.haskell.org/Lifting
@@ -182,8 +179,7 @@ def impure(function):
       ... def function(arg: int) -> int:
       ...     return arg + 1
       ...
-      >>> function(1) == IO(2)
-      True
+      >>> assert function(1) == IO(2)
 
     """
     if iscoroutinefunction(function):
@@ -203,8 +199,6 @@ class IOResult(BaseContainer, Generic[_ValueType, _ErrorType]):
     Explicit marker for impure function results that might fail.
 
     We call it "marker" since once it is marked, it cannot be unmarked.
-    Note, that even methods like :meth:`~IOResult.unwrap``
-    and :meth:`~IOResult.value_or` return values wrapped in ``IO``.
 
     This type is similar to :class:`returns.result.Result`.
     This basically a more useful version of ``IO[Result[a, b]]``.
@@ -216,6 +210,9 @@ class IOResult(BaseContainer, Generic[_ValueType, _ErrorType]):
     - access filesystem
 
     Use :class:`~IO` for operations that do ``IO`` but do not fail.
+
+    Note, that even methods like :meth:`~IOResult.unwrap``
+    and :meth:`~IOResult.value_or` return values wrapped in ``IO``.
 
     See also:
         https://github.com/gcanti/fp-ts/blob/master/docs/modules/IOEither.ts.md
@@ -286,8 +283,9 @@ class IOResult(BaseContainer, Generic[_ValueType, _ErrorType]):
         .. code:: python
 
           >>> from returns.io import IOFailure, IOSuccess
-          >>> IOFailure('a').fix(lambda char: char + 'b') == IOSuccess('ab')
-          True
+          >>> assert IOFailure('a').fix(
+          ...     lambda char: char + 'b',
+          ... ) == IOSuccess('ab')
 
         """
         return IOResult(self._inner_value.fix(function))
@@ -408,8 +406,7 @@ class IOResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           >>> def example(argument: int) -> float:
           ...     return argument / 2  # not exactly IO action!
           ...
-          >>> IOResult.lift(example)(IOSuccess(2)) == IOSuccess(1.0)
-          True
+          >>> assert IOResult.lift(example)(IOSuccess(2)) == IOSuccess(1.0)
 
         This one is similar to appling :meth:`~IO.lift`
         and :meth:`returns.result.Result.lift` in order.
@@ -470,3 +467,61 @@ def IOFailure(  # noqa: N802
 
     """
     return IOResult(Failure(inner_value))
+
+
+
+# Aliases:
+
+#: A popular case for writing `Result` is using `Exception` as the last type.
+IOResultE = IOResult[_ValueType, Exception]
+
+
+# impure_safe decorator:
+
+@overload
+def impure_safe(  # type: ignore
+    function: Callable[..., Coroutine[_FirstType, _SecondType, _NewValueType]],
+) -> Callable[
+    ...,
+    Coroutine[_FirstType, _SecondType, IOResultE[_NewValueType]],
+]:
+    """Case for async functions."""
+
+
+@overload
+def impure_safe(
+    function: Callable[..., _NewValueType],
+) -> Callable[..., IOResultE[_NewValueType]]:
+    """Case for regular functions."""
+
+
+def impure_safe(function):
+    """
+    Decorator to mark function that it returns :py:class:`IO` container.
+
+    Supports both async and regular functions. Example:
+
+    .. code:: python
+
+      >>> from returns.io import IOSuccess, impure_safe
+      >>> @impure_safe
+      ... def function(arg: int) -> float:
+      ...     return 1 / arg
+      ...
+      >>> assert function(1) == IOSuccess(1.0)
+      >>> assert function(0).failure()
+
+    """
+    if iscoroutinefunction(function):
+        async def decorator(*args, **kwargs):  # noqa: WPS430
+            try:
+                return IOSuccess(await function(*args, **kwargs))
+            except Exception as exc:
+                return IOFailure(exc)
+    else:
+        def decorator(*args, **kwargs):  # noqa: WPS430
+            try:
+                return IOSuccess(function(*args, **kwargs))
+            except Exception as exc:
+                return IOFailure(exc)
+    return wraps(function)(decorator)

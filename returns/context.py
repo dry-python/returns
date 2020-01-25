@@ -35,8 +35,8 @@ class RequiresContext(
     It can be used for lazy evaluation and typed dependency injection.
 
     ``RequiresContext`` is used with functions that never fails.
-    If you want to use ``Result`` together with ``RequiresContext``
-    than consider using ``RequiresResultContext`` instead.
+    If you want to use ``RequiresContext`` with returns ``Result``
+    than consider using ``RequiresContextResult`` instead.
 
     Note:
         This container does not wrap ANY value. It wraps only functions.
