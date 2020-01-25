@@ -4,7 +4,7 @@ import pytest
 
 from returns.context import Context
 from returns.converters import flatten
-from returns.io import IO, IOSuccess, IOFailure
+from returns.io import IO, IOFailure, IOSuccess
 from returns.maybe import Nothing, Some
 from returns.result import Failure, Success
 
@@ -21,7 +21,7 @@ from returns.result import Failure, Success
 
     # Nope:
     (Failure(Failure('a')), Failure(Failure('a'))),
-    (IOFailure(IOFailure('a')), IOFailure(IOFailure('a')))
+    (IOFailure(IOFailure('a')), IOFailure(IOFailure('a'))),
 ])
 def test_flatten(container, merged):
     """Ensures that `join` is always returning the correct type."""

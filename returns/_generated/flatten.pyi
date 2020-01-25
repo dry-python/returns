@@ -12,7 +12,6 @@ _ValueType = TypeVar('_ValueType')
 _ErrorType = TypeVar('_ErrorType')
 
 
-
 @overload
 def _flatten(container: IO[IO[_ValueType]]) -> IO[_ValueType]:
     ...
