@@ -26,6 +26,7 @@ from mypy.types import CallableType
 _TYPED_DECORATORS = frozenset((
     'returns.result.safe',
     'returns.io.impure',
+    'returns.io.impure_safe',
     'returns.maybe.maybe',
 ))
 
