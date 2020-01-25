@@ -3,7 +3,7 @@
 from typing import Callable, TypeVar, overload
 
 from returns.context import RequiresContext
-from returns.io import IO
+from returns.io import IO, IOResult
 from returns.maybe import Maybe
 from returns.result import Result
 
@@ -16,21 +16,21 @@ _EnvType = TypeVar('_EnvType')
 # Box:
 
 @overload
-def bind(
+def _bind(
     function: Callable[[_ValueType], Maybe[_NewValueType]],
 ) -> Callable[[Maybe[_ValueType]], Maybe[_NewValueType]]:
     ...
 
 
 @overload
-def bind(
+def _bind(
     function: Callable[[_ValueType], IO[_NewValueType]],
 ) -> Callable[[IO[_ValueType]], IO[_NewValueType]]:
     ...
 
 
 @overload
-def bind(
+def _bind(
     function: Callable[[_ValueType], RequiresContext[_EnvType, _NewValueType]],
 ) -> Callable[
     [RequiresContext[_EnvType, _ValueType]],
@@ -40,10 +40,20 @@ def bind(
 
 
 @overload
-def bind(
+def _bind(
     function: Callable[[_ValueType], Result[_NewValueType, _ErrorType]],
 ) -> Callable[
     [Result[_ValueType, _ErrorType]],
     Result[_NewValueType, _ErrorType],
+]:
+    ...
+
+
+@overload
+def _bind(
+    function: Callable[[_ValueType], IOResult[_NewValueType, _ErrorType]],
+) -> Callable[
+    [IOResult[_ValueType, _ErrorType]],
+    IOResult[_NewValueType, _ErrorType],
 ]:
     ...

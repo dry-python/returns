@@ -19,6 +19,13 @@ See (0Ver)[https://0ver.org/].
 - Adds `RequiresContext` support for `bind` pointfree function
 - Adds `RequiresContext` support for `flatten` function
 - Adds `ResultE` alias for `Result[..., Exception]`
+- Adds `IOResult` helper to work better with `IO[Result[a, b]]`
+- Adds `IOResultE` alias for `IOResult[a, Exception]`
+- Adds `IOResult` support for `bind`
+- Adds `IOResult` support for `flatten`
+- Adds `IOResult` support for `@pipeline`
+- Adds `IOResult` support for `fold`
+- Adds `IOResult` support for `is_successful`
 
 ### Bugfixes
 

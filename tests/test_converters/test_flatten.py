@@ -4,7 +4,7 @@ import pytest
 
 from returns.context import Context
 from returns.converters import flatten
-from returns.io import IO
+from returns.io import IO, IOSuccess, IOFailure
 from returns.maybe import Nothing, Some
 from returns.result import Failure, Success
 
@@ -12,12 +12,16 @@ from returns.result import Failure, Success
 @pytest.mark.parametrize(('container', 'merged'), [
     # Flattens:
     (IO(IO(1)), IO(1)),
+
     (Success(Success({})), Success({})),
+    (IOSuccess(IOSuccess(1)), IOSuccess(1)),
+
     (Some(Some(None)), Nothing),
     (Some(Some([])), Some([])),
 
     # Nope:
     (Failure(Failure('a')), Failure(Failure('a'))),
+    (IOFailure(IOFailure('a')), IOFailure(IOFailure('a')))
 ])
 def test_flatten(container, merged):
     """Ensures that `join` is always returning the correct type."""

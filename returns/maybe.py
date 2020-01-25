@@ -121,8 +121,7 @@ class Maybe(
           >>> def example(argument: int) -> float:
           ...     return argument / 2
           ...
-          >>> Maybe.lift(example)(Maybe.new(2)) == Maybe.new(1.0)
-          True
+          >>> assert Maybe.lift(example)(Maybe.new(2)) == Maybe.new(1.0)
 
         See also:
             - https://wiki.haskell.org/Lifting
@@ -161,8 +160,7 @@ class _Nothing(Maybe[Any]):
           >>> def mappable(string: str) -> str:
           ...      return string + 'b'
           ...
-          >>> Nothing.map(mappable) == Nothing
-          True
+          >>> assert Nothing.map(mappable) == Nothing
 
         """
         return self
@@ -177,8 +175,7 @@ class _Nothing(Maybe[Any]):
           >>> def bindable(string: str) -> Maybe[str]:
           ...      return Some(string + 'b')
           ...
-          >>> Nothing.bind(bindable) == Nothing
-          True
+          >>> assert Nothing.bind(bindable) == Nothing
 
         """
         return self
@@ -198,8 +195,7 @@ class _Nothing(Maybe[Any]):
           >>> def fixable(_state) -> str:
           ...      return 'ab'
           ...
-          >>> Nothing.fix(fixable) == Some('ab')
-          True
+          >>> assert Nothing.fix(fixable) == Some('ab')
 
         """
         return Maybe.new(function(self._inner_value))
@@ -217,8 +213,7 @@ class _Nothing(Maybe[Any]):
           >>> def rescuable(_state) -> Maybe[str]:
           ...      return Some('ab')
           ...
-          >>> Nothing.rescue(rescuable) == Some('ab')
-          True
+          >>> assert Nothing.rescue(rescuable) == Some('ab')
 
         """
         return function(self._inner_value)
@@ -258,8 +253,7 @@ class _Nothing(Maybe[Any]):
         .. code:: python
 
           >>> from returns.maybe import Nothing
-          >>> Nothing.failure() is None
-          True
+          >>> assert Nothing.failure() is None
 
         """
         return self._inner_value
@@ -294,8 +288,7 @@ class _Some(Maybe[_ValueType]):
           >>> def mappable(string: str) -> str:
           ...      return string + 'b'
           ...
-          >>> Some('a').map(mappable) == Some('ab')
-          True
+          >>> assert Some('a').map(mappable) == Some('ab')
 
         """
         return Maybe.new(function(self._inner_value))
@@ -313,8 +306,7 @@ class _Some(Maybe[_ValueType]):
           >>> def bindable(string: str) -> Maybe[str]:
           ...      return Some(string + 'b')
           ...
-          >>> Some('a').bind(bindable) == Some('ab')
-          True
+          >>> assert Some('a').bind(bindable) == Some('ab')
 
         """
         return function(self._inner_value)
@@ -329,8 +321,7 @@ class _Some(Maybe[_ValueType]):
           >>> def fixable(_state) -> str:
           ...      return 'ab'
           ...
-          >>> Some('a').fix(fixable) == Some('a')
-          True
+          >>> assert Some('a').fix(fixable) == Some('a')
 
         """
         return self
@@ -345,8 +336,7 @@ class _Some(Maybe[_ValueType]):
           >>> def rescuable(_state) -> Maybe[str]:
           ...      return Some('ab')
           ...
-          >>> Some('a').rescue(rescuable) == Some('a')
-          True
+          >>> assert Some('a').rescue(rescuable) == Some('a')
 
         """
         return self
@@ -452,10 +442,8 @@ def maybe(function):
       ...         return None
       ...     return 1 / arg
       ...
-      >>> might_be_none(0) == Nothing
-      True
-      >>> might_be_none(1) == Some(1.0)
-      True
+      >>> assert might_be_none(0) == Nothing
+      >>> assert might_be_none(1) == Some(1.0)
 
     """
     if iscoroutinefunction(function):
