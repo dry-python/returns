@@ -340,22 +340,23 @@ Let's refactor it to make our
 
 ```python
 import requests
-from returns.io import IO, impure
-from returns.result import Result, safe
+from returns.io import IO, IOResult, impure_safe
+from returns.result import safe
 from returns.pipeline import pipe
 from returns.pointfree import bind
 
-def fetch_user_profile(user_id: int) -> Result['UserProfile', Exception]:
+def fetch_user_profile(user_id: int) -> IOResult['UserProfile', Exception]:
     """Fetches `UserProfile` TypedDict from foreign API."""
     return pipe(
         _make_request,
-        # after bind: def (Result) -> Result
-        # after IO.lift: def (IO[Result]) -> IO[Result]
-        IO.lift(bind(_parse_json)),
+        # before: def (Response) -> UserProfile
+        # after safe: def (Response) -> ResultE[UserProfile]
+        # after bind: def (ResultE[Response]) -> ResultE[UserProfile]
+        # after lift: def (IOResultE[Response]) -> IOResultE[UserProfile]
+        IOResult.lift_result(bind(_parse_json)),
     )(user_id)
 
-@impure
-@safe
+@impure_safe
 def _make_request(user_id: int) -> requests.Response:
     response = requests.get('/api/users/{0}'.format(user_id))
     response.raise_for_status()

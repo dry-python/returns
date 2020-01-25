@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from typing import TypeVar, overload
+from typing import TypeVar
 
 from returns._generated import fold
 from returns._generated.flatten import _flatten as flatten  # noqa: F401
-from returns.context import RequiresContext
-from returns.functions import identity
-from returns.io import IO
 from returns.maybe import Maybe
 from returns.result import Failure, Result, Success
 

@@ -273,6 +273,36 @@ class IOResult(BaseContainer, Generic[_ValueType, _ErrorType]):
             return function(self._inner_value.unwrap())
         return self  # type: ignore
 
+    def bind_result(
+        self,
+        function: Callable[
+            [_ValueType],
+            'Result[_NewValueType, _ErrorType]',
+        ],
+    ) -> 'IOResult[_NewValueType, _ErrorType]':
+        """
+        Composes successful container with a function that returns a container.
+
+        Similar to :meth:`~IOResult.bind`, but works with containers
+        that return :class:`returns.result.Result`
+        instead of :class:`~IOResult`.
+
+        .. code:: python
+
+          >>> from returns.io import IOResult, IOFailure, IOSuccess
+          >>> from returns.result import Result, Success
+
+          >>> def bindable(string: str) -> Result[str, str]:
+          ...      return Success(string + 'b')
+          ...
+          >>> assert IOSuccess('a').bind_result(bindable) == IOSuccess('ab')
+          >>> assert IOFailure('a').bind_result(bindable) == IOFailure('a')
+
+        """
+        if is_successful(self._inner_value):
+            return IOResult(function(self._inner_value.unwrap()))
+        return self  # type: ignore
+
     def fix(
         self,
         function: Callable[[_ErrorType], _NewValueType],
@@ -420,6 +450,21 @@ class IOResult(BaseContainer, Generic[_ValueType, _ErrorType]):
         return lambda container: container.map(function)
 
     @classmethod
+    def lift_result(
+        cls,
+        function: Callable[[_ValueType], Result[_NewValueType, _ErrorType]],
+    ) -> Callable[
+        ['IOResult[_ValueType, _ErrorType]'],
+        'IOResult[_NewValueType, _ErrorType]',
+    ]:
+        """
+        Lifts function from ``Result`` to ``IOResult`` for better composition.
+
+        >>> assert False
+        """
+        ...
+
+    @classmethod
     def from_typecast(
         cls, container: IO[Result[_ValueType, _ErrorType]],
     ) -> 'IOResult[_ValueType, _ErrorType]':
@@ -469,7 +514,6 @@ def IOFailure(  # noqa: N802
     return IOResult(Failure(inner_value))
 
 
-
 # Aliases:
 
 #: A popular case for writing `Result` is using `Exception` as the last type.
@@ -495,7 +539,7 @@ def impure_safe(
     """Case for regular functions."""
 
 
-def impure_safe(function):
+def impure_safe(function):  # noqa: C901
     """
     Decorator to mark function that it returns :py:class:`IO` container.
 
