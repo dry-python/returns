@@ -45,7 +45,7 @@
     container: IOResult[int, str]
     fold_ioresult(first, second)(container)
   out: |
-    main:11: error: Argument 1 has incompatible type "Callable[[int], float]"; expected "Callable[[int], IO[<nothing>]]" (diff)
+    main:11: error: Argument 1 has incompatible type "Callable[[int], float]"; expected "Callable[[int], IO[<nothing>]]"
     main:11: error: Argument 2 has incompatible type "Callable[[str], float]"; expected "Callable[[str], IO[<nothing>]]"
 
 

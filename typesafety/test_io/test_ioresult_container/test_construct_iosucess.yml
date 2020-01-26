@@ -1,0 +1,47 @@
+- case: iosuccess_bind
+  disable_cache: true
+  main: |
+    from returns.io import IOSuccess, IOResult
+
+    def returns_result(param: int) -> IOResult[str, Exception]:
+        ...
+
+    first: IOResult[int, Exception] = IOSuccess(1)
+    reveal_type(first.bind(returns_result))  # N: Revealed type is 'returns.io.IOResult[builtins.str*, builtins.Exception]'
+
+
+- case: iosuccess_bind_result
+  disable_cache: true
+  main: |
+    from returns.io import IOSuccess, IOResult
+    from returns.result import Result
+
+    def returns_result(param: int) -> Result[str, Exception]:
+        ...
+
+    first: IOResult[int, Exception] = IOSuccess(1)
+    reveal_type(first.bind_result(returns_result))  # N: Revealed type is 'returns.io.IOResult[builtins.str*, builtins.Exception]'
+
+
+- case: iosuccess_map
+  disable_cache: true
+  main: |
+    from returns.io import IOSuccess, IOResult
+
+    reveal_type(IOSuccess(1).map(str))  # N: Revealed type is 'returns.io.IOResult[builtins.str*, <nothing>]'
+
+
+- case: iosuccess_value_or
+  disable_cache: true
+  main: |
+    from returns.io import IOSuccess
+
+    reveal_type(IOSuccess(1).value_or(None))  # N: Revealed type is 'returns.io.IO[Union[builtins.int, None]]'
+
+
+- case: iosuccess_unwrap
+  disable_cache: true
+  main: |
+    from returns.io import IOSuccess
+
+    reveal_type(IOSuccess(1).unwrap())  # N: Revealed type is 'returns.io.IO[builtins.int*]'

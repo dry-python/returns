@@ -1,0 +1,34 @@
+- case: iofailure_rescue
+  disable_cache: true
+  main: |
+    from returns.io import IOFailure, IOResult
+
+    def returns_result(param: int) -> IOResult[str, Exception]:
+        ...
+
+    first: IOResult[str, int] = IOFailure(1)
+    reveal_type(first.rescue(returns_result))  # N: Revealed type is 'returns.io.IOResult[builtins.str, builtins.Exception*]'
+
+
+- case: iofailure_fix
+  disable_cache: true
+  main: |
+    from returns.io import IOFailure
+
+    reveal_type(IOFailure(1).fix(str))  # N: Revealed type is 'returns.io.IOResult[builtins.str*, builtins.int]'
+
+
+- case: iofailure_alt
+  disable_cache: true
+  main: |
+    from returns.io import IOFailure
+
+    reveal_type(IOFailure(1).alt(str))  # N: Revealed type is 'returns.io.IOResult[<nothing>, builtins.str*]'
+
+
+- case: iofailure_iofailure
+  disable_cache: true
+  main: |
+    from returns.io import IOFailure
+
+    reveal_type(IOFailure(1).failure())  # N: Revealed type is 'returns.io.IO[builtins.int*]'

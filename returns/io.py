@@ -214,6 +214,31 @@ class IOResult(BaseContainer, Generic[_ValueType, _ErrorType]):
     Note, that even methods like :meth:`~IOResult.unwrap``
     and :meth:`~IOResult.value_or` return values wrapped in ``IO``.
 
+    ``IOResult`` is a complex compound value that consists of:
+
+    - raw value
+    - ``Result``
+    - ``IO``
+
+    This is why it has so many helper and factory methods:
+
+    - You can construct ``IOResult`` from raw value
+      with :func:`~IOSuccess` and :func:`~IOFailure` public type constructors
+    - You can construct ``IOResult`` from ``IO`` values
+      with :meth:`~IOResult.from_failed_io`
+      and :meth:`IOResult.from_successful_io`
+    - You can construct ``IOResult`` from ``Result`` values
+      with :meth:`~IOResult.__init__`
+
+    We also have a lot of utility methods for better function composition like:
+
+    - :meth:`~IOResult.bind_result` to work
+      with functions which return ``Result``
+    - :meth:`~IOResult.from_typecast` to work with ``IO[Result[...]]`` values
+    - :meth:`~IOResult.lift` and `~IOResult.lift_result` to allow
+      indirect function composition
+      with regular and ``Result`` based functions.
+
     See also:
         https://github.com/gcanti/fp-ts/blob/master/docs/modules/IOEither.ts.md
 
@@ -289,7 +314,7 @@ class IOResult(BaseContainer, Generic[_ValueType, _ErrorType]):
 
         .. code:: python
 
-          >>> from returns.io import IOResult, IOFailure, IOSuccess
+          >>> from returns.io import IOFailure, IOSuccess
           >>> from returns.result import Result, Success
 
           >>> def bindable(string: str) -> Result[str, str]:
@@ -460,9 +485,21 @@ class IOResult(BaseContainer, Generic[_ValueType, _ErrorType]):
         """
         Lifts function from ``Result`` to ``IOResult`` for better composition.
 
-        >>> assert False
+        Similar to :meth:`~IOResult.lift`, but works with other types.
+
+        .. code:: python
+
+          >>> from returns.io import IOResult, IOSuccess
+          >>> from returns.result import Result, Success
+
+          >>> def returns_result(arg: int) -> Result[int, str]:
+          ...     return Success(arg + 1)
+          ...
+          >>> returns_ioresult = IOResult.lift_result(returns_result)
+          >>> assert returns_ioresult(IOSuccess(1)) == IOSuccess(2)
+
         """
-        ...
+        return lambda container: container.bind_result(function)
 
     @classmethod
     def from_typecast(
@@ -480,6 +517,38 @@ class IOResult(BaseContainer, Generic[_ValueType, _ErrorType]):
 
         """
         return cls(container._inner_value)  # noqa: WPS437
+
+    @classmethod
+    def from_failed_io(
+        cls, container: IO[_ErrorType],
+    ) -> 'IOResult[NoReturn, _ErrorType]':
+        """
+        Creates new ``IOResult`` from "failed" ``IO`` container.
+
+        .. code:: python
+
+          >>> from returns.io import IO, IOResult, IOFailure
+          >>> container = IO(1)
+          >>> assert IOResult.from_failed_io(container) == IOFailure(1)
+
+        """
+        return IOFailure(container._inner_value)  # noqa: WPS437
+
+    @classmethod
+    def from_successful_io(
+        cls, container: IO[_ValueType],
+    ) -> 'IOResult[_ValueType, NoReturn]':
+        """
+        Creates new ``IOResult`` from "successful" ``IO`` container.
+
+        .. code:: python
+
+          >>> from returns.io import IO, IOResult, IOSuccess
+          >>> container = IO(1)
+          >>> assert IOResult.from_successful_io(container) == IOSuccess(1)
+
+        """
+        return IOSuccess(container._inner_value)  # noqa: WPS437
 
 
 def IOSuccess(  # noqa: N802

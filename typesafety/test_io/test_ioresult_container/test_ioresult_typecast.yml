@@ -1,0 +1,101 @@
+- case: ioresult_success_cast
+  disable_cache: true
+  main: |
+    from returns.io import IOResult, IOSuccess
+
+    first: IOResult[int, Exception] = IOSuccess(1)
+    reveal_type(first)  # N: Revealed type is 'returns.io.IOResult[builtins.int, builtins.Exception]'
+
+
+- case: ioresult_failure_cast1
+  disable_cache: true
+  main: |
+    from returns.io import IOResult, IOFailure
+
+    first: IOResult[int, Exception] = IOFailure(Exception())
+    reveal_type(first)  # N: Revealed type is 'returns.io.IOResult[builtins.int, builtins.Exception]'
+
+
+- case: ioresult_failure_cast2
+  disable_cache: true
+  main: |
+    from returns.io import IOResult, IOFailure
+
+    first: IOResult[int, Exception] = IOFailure(TypeError())
+    reveal_type(first)  # N: Revealed type is 'returns.io.IOResult[builtins.int, builtins.Exception]'
+
+
+- case: ioresult_covariant_cast
+  disable_cache: true
+  main: |
+    from returns.io import IOResult
+
+    first: IOResult[TypeError, ValueError]  # we cast both values
+    second: IOResult[Exception, Exception] = first
+    reveal_type(second)  # N: Revealed type is 'returns.io.IOResult[builtins.Exception, builtins.Exception]'
+
+
+- case: ioresult_success_bind_contra1
+  disable_cache: true
+  main: |
+    from returns.io import IOResult, IOSuccess
+
+    def test(some: int) -> IOResult[float, str]:
+      ...
+
+    first: IOResult[int, str] = IOSuccess(4)
+    reveal_type(first.bind(test))  # N: Revealed type is 'returns.io.IOResult[builtins.float*, builtins.str]'
+
+
+- case: ioresult_success_bind_contra2
+  disable_cache: true
+  main: |
+    from returns.io import IOResult, IOSuccess
+
+    def test(some: int) -> IOResult[int, ValueError]:
+      ...
+
+    first: IOResult[int, Exception]
+    second = first.bind(test)
+    reveal_type(second)  # N: Revealed type is 'returns.io.IOResult[builtins.int*, builtins.Exception]'
+
+
+- case: ioresult_correct_usage
+  disable_cache: true
+  main: |
+    from returns.io import IOResult, IOSuccess, IOFailure
+
+    def factory(inner_value: int) -> IOResult[int, str]:
+        if inner_value > 0:
+            return IOSuccess(inner_value * 2)
+        return IOFailure(str(inner_value))
+
+    reveal_type(factory(1))  # N: Revealed type is 'returns.io.IOResult[builtins.int, builtins.str]'
+
+
+- case: ioresulte_typecast1
+  disable_cache: true
+  main: |
+    from returns.io import IOResult, IOResultE, IOSuccess, IOFailure
+
+    def function(arg: int) -> IOResultE[int]:
+        if arg > 0:
+            return IOSuccess(arg + 1)
+        return IOFailure(ValueError(arg))
+
+    result: IOResult[int, Exception] = function(1)
+    reveal_type(result)  # N: Revealed type is 'returns.io.IOResult[builtins.int, builtins.Exception]'
+
+
+- case: ioresulte_typecast2
+  disable_cache: true
+  main: |
+    from returns.io import IOResult, IOResultE, IOSuccess, IOFailure
+
+    def function(arg: int) -> IOResult[int, Exception]:
+        if arg > 0:
+            return IOSuccess(arg + 1)
+        return IOFailure(ValueError(arg))
+
+    result: IOResultE[int] = function(1)
+    reveal_type(result)  # N: Revealed type is 'returns.io.IOResult[builtins.int, builtins.Exception]'
