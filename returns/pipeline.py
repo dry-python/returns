@@ -1,18 +1,16 @@
 # -*- coding: utf-8 -*-
 
-from typing import TYPE_CHECKING, Union
+from typing import Union
 
 from returns._generated.pipe import _pipe as pipe  # noqa: F401
 from returns._generated.pipeline import _pipeline as pipeline  # noqa: F401
+from returns.io import IOResult
+from returns.maybe import Maybe
 from returns.primitives.exceptions import UnwrapFailedError
+from returns.result import Result
 
-if TYPE_CHECKING:  # pragma: no cover
-    from returns.maybe import Maybe  # noqa: WPS433
-    from returns.result import Result  # noqa: WPS433
-    from returns.io import IOResult  # noqa: WPS433
-
-    # Logical aliases:
-    _Unwrapable = Union[Result, Maybe, IOResult]
+# Logical aliases:
+_Unwrapable = Union[Result, Maybe, IOResult]
 
 
 def is_successful(container: '_Unwrapable') -> bool:
