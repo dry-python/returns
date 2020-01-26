@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from returns.io import IOFailure, IOResult, IOSuccess
+from returns.result import Failure, Result, Success
 
 
 def test_bind():
@@ -43,6 +44,18 @@ def test_left_identity_failure():
     bound: IOResult[int, int] = IOFailure(input_value)
 
     assert bound.bind(factory) == IOFailure(input_value)
+
+
+def test_bind_regular_result():
+    """Ensures that regular ``Result`` can be bound to ``IOResult``."""
+    def factory(inner_value: int) -> Result[int, str]:
+        if inner_value > 0:
+            return Success(inner_value + 1)
+        return Failure('nope')
+
+    assert IOSuccess(1).bind_result(factory) == IOSuccess(2)
+    assert IOSuccess(0).bind_result(factory) == IOFailure('nope')
+    assert IOFailure('a').bind_result(factory) == IOFailure('a')
 
 
 def test_rescue_success():

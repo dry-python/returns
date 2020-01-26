@@ -1,0 +1,9 @@
+- case: result_lift
+  disable_cache: true
+  main: |
+    from returns.result import Result
+
+    def test(arg: int) -> str:
+        return str(arg)
+
+    reveal_type(Result.lift(test))  # N: Revealed type is 'def (returns.result.Result[builtins.int*, <nothing>]) -> returns.result.Result[builtins.str*, <nothing>]'

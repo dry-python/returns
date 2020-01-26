@@ -60,10 +60,13 @@ Make sure you know how to get started, [check out our docs](https://returns.read
 `None` is called the [worst mistake in the history of Computer Science](https://www.infoq.com/presentations/Null-References-The-Billion-Dollar-Mistake-Tony-Hoare/).
 
 So, what can we do to check for `None` in our programs?
-You can use `Optional` and write a lot of `if some is not None:` conditions.
+You can use builtin [Optional](https://mypy.readthedocs.io/en/stable/kinds_of_types.html#optional-types-and-the-none-type) type
+and write a lot of `if some is not None:` conditions.
 But, having them here and there makes your code unreadable.
 
 ```python
+user: Optional[User]
+
 if user is not None:
      balance = user.get_balance()
      if balance is not None:
@@ -100,7 +103,9 @@ Forget about `None`-related errors forever!
 And that's how your initial refactored code will look like:
 
 ```python
-can_buy_stuff = Maybe.new(user).map(  # will have type: Maybe[bool]
+user: Optional[User]
+
+can_buy_stuff: Maybe[bool] = Maybe.new(user).map(  # type hint is not required
     lambda real_user: real_user.get_balance(),
 ).map(
     lambda balance: balance.credit_amount(),

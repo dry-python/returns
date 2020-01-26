@@ -87,3 +87,31 @@
     from returns.result import Result
 
     reveal_type(Result.failure_type)  # N: Revealed type is 'Type[returns.result._Failure[Any]]'
+
+
+- case: resulte_typecast1
+  disable_cache: true
+  main: |
+    from returns.result import Result, ResultE, Success, Failure
+
+    def function(arg: int) -> ResultE[int]:
+        if arg > 0:
+            return Success(arg + 1)
+        return Failure(ValueError(arg))
+
+    result: Result[int, Exception] = function(1)
+    reveal_type(result)  # N: Revealed type is 'returns.result.Result[builtins.int, builtins.Exception]'
+
+
+- case: resulte_typecast2
+  disable_cache: true
+  main: |
+    from returns.result import Result, ResultE, Success, Failure
+
+    def function(arg: int) -> Result[int, Exception]:
+        if arg > 0:
+            return Success(arg + 1)
+        return Failure(ValueError(arg))
+
+    result: ResultE[int] = function(1)
+    reveal_type(result)  # N: Revealed type is 'returns.result.Result[builtins.int, builtins.Exception]'

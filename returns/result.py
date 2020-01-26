@@ -45,6 +45,7 @@ class Result(
 
     See also:
         https://bit.ly/361qQhi
+        https://hackernoon.com/the-throw-keyword-was-a-mistake-l9e532di
 
     """
 

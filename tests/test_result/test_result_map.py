@@ -8,7 +8,7 @@ def test_map_success():
     assert Success(5).map(str) == Success('5')
 
 
-def test_alt():
+def test_alt_failure():
     """Ensures that Failure is mappable."""
     assert Failure(5).map(str) == Failure(5)
     assert Failure(5).alt(str) == Failure('5')
