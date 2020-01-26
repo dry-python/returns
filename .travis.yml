@@ -18,7 +18,8 @@ install: poetry install
 
 script:
   - flake8 .
-  - mypy returns tests/**/*.py
+  - mypy returns ./tests/**/*.py
+  - mypy tests/test_io/test_ioresult_container/test_ioresult_bind.py
   - pytest . docs/pages
   - doc8 -q docs
   - poetry check
