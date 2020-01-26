@@ -389,7 +389,7 @@ Maybe.failure_type = _Nothing
 
 def Some(inner_value: Optional[_ValueType]) -> Maybe[_ValueType]:  # noqa: N802
     """
-    Public unit function of protected `_Some` type.
+    Public unit function of protected :class:`~_Some` type.
 
     .. code:: python
 
@@ -401,7 +401,7 @@ def Some(inner_value: Optional[_ValueType]) -> Maybe[_ValueType]:  # noqa: N802
     return Maybe.new(inner_value)
 
 
-#: Public unit value of protected `_Nothing` type.
+#: Public unit value of protected :class:`~_Nothing` type.
 Nothing: Maybe[NoReturn] = _Nothing()
 
 

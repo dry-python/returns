@@ -14,6 +14,7 @@ def test_bind():
     bound: Result[int, str] = Success(input_value)
 
     assert bound.bind(factory) == factory(input_value)
+    assert Success(input_value) == factory(input_value)
     assert str(bound.bind(factory)) == '<Success: 10>'
 
     input_value = 0

@@ -29,7 +29,7 @@ def test_unwrap_iofailure_with_exception():
     with pytest.raises(UnwrapFailedError) as excinfo:
         IOFailure(expected_exception).unwrap()
 
-    assert 'ValueError: error' in str(  # type: ignore
+    assert 'ValueError: error' in str(
         excinfo.getrepr(),  # noqa: WPS441
     )
 

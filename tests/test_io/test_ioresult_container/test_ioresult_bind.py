@@ -15,6 +15,7 @@ def test_bind():
     bound: IOResult[int, str] = IOSuccess(input_value)
 
     assert bound.bind(factory) == factory(input_value)
+    assert IOSuccess(input_value).bind(factory) == factory(input_value)
     assert str(bound.bind(factory)) == '<IOResult: <Success: 10>>'
 
     input_value = 0
