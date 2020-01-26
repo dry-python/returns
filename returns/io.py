@@ -588,7 +588,7 @@ class IOResult(
 
     def __str__(self) -> str:
         """Custom ``str`` representation for better readability."""
-        return '<IOResult: {0}'.format(self._inner_value)
+        return '<IOResult: {0}>'.format(self._inner_value)
 
 
 @final
@@ -691,7 +691,7 @@ def IOFailure(  # noqa: N802
 
       >>> from returns.io import IOFailure
       >>> str(IOFailure(1))
-      '<IOResult: <Failure: 1>>'§
+      '<IOResult: <Failure: 1>>'
 
     """
     return _IOFailure(Failure(inner_value))

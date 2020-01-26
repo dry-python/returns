@@ -90,6 +90,8 @@ This happens due to `mypy issue <https://github.com/python/mypy/issues/3157>`_.
 FAQ
 ---
 
+.. _result-units:
+
 How to create unit objects?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

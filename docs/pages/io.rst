@@ -338,6 +338,21 @@ If the value is fetched, input, received, selected, than use ``IO`` container.
 
 Most web applications are just covered with ``IO``.
 
+How to create unit object for IOResult?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+*TLDR*: you need to explicitly annotate values like so:
+
+.. code:: python
+
+  >>> from returns.io import IOResult, IOSuccess, IOFailure
+  >>> first: IOResult[int, str] = IOSuccess(1)
+  >>> second: IOResult[float, int] = IOFailure(1)
+
+Otherwise, ``mypy`` won't be able to typecheck your code.
+
+See :ref:`result-units` for more details.
+
 Why IO should be at the top level of composition?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

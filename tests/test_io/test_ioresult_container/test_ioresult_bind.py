@@ -15,8 +15,6 @@ def test_bind():
     bound: IOResult[int, str] = IOSuccess(input_value)
 
     assert bound.bind(factory) == factory(input_value)
-    assert IOSuccess(input_value).bind(factory) == factory(input_value)
-    assert IOSuccess('a').bind(factory) == factory('a')
     assert str(bound.bind(factory)) == '<IOResult: <Success: 10>>'
 
     input_value = 0
@@ -55,9 +53,13 @@ def test_bind_regular_result():
             return Success(inner_value + 1)
         return Failure('nope')
 
-    assert IOSuccess(1).bind_result(factory) == IOSuccess(2)
-    assert IOSuccess(0).bind_result(factory) == IOFailure('nope')
-    assert IOFailure('a').bind_result(factory) == IOFailure('a')
+    first: IOResult[int, str] = IOSuccess(1)
+    second: IOResult[int, str] = IOSuccess(0)
+    third: IOResult[int, str] = IOFailure('a')
+
+    assert first.bind_result(factory) == IOSuccess(2)
+    assert second.bind_result(factory) == IOFailure('nope')
+    assert third.bind_result(factory) == IOFailure('a')
 
 
 def test_rescue_success():

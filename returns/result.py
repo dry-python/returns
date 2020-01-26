@@ -335,7 +335,7 @@ class _Failure(Result[Any, _ErrorType]):
 
 
 @final
-class _Success(Result[_ValueType, Any]):
+class _Success(Result[_ValueType, _ErrorType]):
     """
     Represents a calculation which has succeeded and contains the result.
 

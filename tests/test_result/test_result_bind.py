@@ -14,7 +14,6 @@ def test_bind():
     bound: Result[int, str] = Success(input_value)
 
     assert bound.bind(factory) == factory(input_value)
-    assert Success(input_value) == factory(input_value)
     assert str(bound.bind(factory)) == '<Success: 10>'
 
     input_value = 0
@@ -55,6 +54,7 @@ def test_left_identity_failure():
     bound: Result[int, int] = Failure(input_value)
 
     assert bound.bind(factory) == Failure(input_value)
+    assert Failure(input_value).bind(factory) == Failure(5)
     assert bound.unify(factory) == Failure(input_value)
     assert str(bound) == '<Failure: 5>'
 
@@ -67,6 +67,7 @@ def test_rescue_success():
     bound = Success(5).rescue(factory)
 
     assert bound == Success(5)
+    assert Success(5).rescue(factory) == Success(5)
     assert str(bound) == '<Success: 5>'
 
 
