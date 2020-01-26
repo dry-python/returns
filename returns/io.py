@@ -293,12 +293,12 @@ class IOResult(
         return self.from_result(self._inner_value.map(function))
 
     def bind(
-        self: 'IOResult[_ValueType, _T]',
+        self: 'IOResult[_ValueType, _ErrorType]',
         function: Callable[
             [_ValueType],
-            'IOResult[_NewValueType, _T]',
+            'IOResult[_NewValueType, _ErrorType]',
         ],
-    ) -> 'IOResult[_NewValueType, _T]':
+    ) -> 'IOResult[_NewValueType, _ErrorType]':
         """
         Composes successful container with a function that returns a container.
 
