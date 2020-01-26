@@ -14,17 +14,16 @@ before_install:
   - curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python
   - source "$HOME/.poetry/env"
 
-install:
-  - poetry install
+install: poetry install
 
 script:
-  - poetry run flake8 .
-  - poetry run mypy returns tests/**/*.py
-  - poetry run pytest . docs/pages
-  - poetry run doc8 -q docs
+  - flake8 .
+  - mypy returns tests/**/*.py
+  - pytest . docs/pages
+  - doc8 -q docs
   - poetry check
-  - poetry run pip check
-  - poetry run safety check --bare --full-report
+  - pip check
+  - safety check --bare --full-report
 
 after_success:
   - pip install coveralls
