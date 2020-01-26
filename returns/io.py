@@ -4,13 +4,12 @@ from abc import ABCMeta
 from functools import wraps
 from inspect import iscoroutinefunction
 from typing import (
-    Any,
     Callable,
-    Coroutine,
     ClassVar,
-    Type,
+    Coroutine,
     Generic,
     NoReturn,
+    Type,
     TypeVar,
     Union,
     overload,
@@ -18,16 +17,12 @@ from typing import (
 
 from typing_extensions import final
 
-from returns.primitives.exceptions import UnwrapFailedError
 from returns._generated.squash import _squash as io_squash  # noqa: F401
-from returns.pipeline import is_successful
 from returns.primitives.container import BaseContainer
 from returns.result import Failure, Result, Success
 
 _ValueType = TypeVar('_ValueType', covariant=True)
 _NewValueType = TypeVar('_NewValueType')
-
-_T = TypeVar('_T', contravariant=True)
 
 # Result related:
 _ErrorType = TypeVar('_ErrorType', covariant=True)
@@ -575,10 +570,25 @@ class IOResult(
     def from_result(
         cls, container: Result[_NewValueType, _NewErrorType],
     ) -> 'IOResult[_NewValueType, _NewErrorType]':
-        """"""
+        """
+        Creates ``IOResult`` from ``Result`` value.
+
+        .. code:: python
+
+          >>> from returns.io import IOResult, IOSuccess, IOFailure
+          >>> from returns.result import Success, Failure
+
+          >>> assert IOResult.from_result(Success(1)) == IOSuccess(1)
+          >>> assert IOResult.from_result(Failure(2)) == IOFailure(2)
+
+        """
         if isinstance(container, container.success_type):
             return _IOSuccess(container)
         return _IOFailure(container)
+
+    def __str__(self) -> str:
+        """Custom ``str`` representation for better readability."""
+        return '<IOResult: {0}'.format(self._inner_value)
 
 
 @final
