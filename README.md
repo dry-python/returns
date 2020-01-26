@@ -52,7 +52,7 @@ Make sure you know how to get started, [check out our docs](https://returns.read
 - [Maybe container](#maybe-container) that allows you to write `None`-free code
 - [RequiresContext container](#requirescontext-container) that allows you to use typed functional dependency injection
 - [Result container](#result-container) that let's you to get rid of exceptions
-- [IO marker](#io-marker) that marks all impure operations and structures them
+- [IO marker](#io-marker) and [IOResult](#troublesome-io) that marks all impure operations and structures them
 
 
 ## Maybe container
@@ -62,7 +62,7 @@ Make sure you know how to get started, [check out our docs](https://returns.read
 So, what can we do to check for `None` in our programs?
 You can use builtin [Optional](https://mypy.readthedocs.io/en/stable/kinds_of_types.html#optional-types-and-the-none-type) type
 and write a lot of `if some is not None:` conditions.
-But, having them here and there makes your code unreadable.
+But, **having `null` checks here and there makes your code unreadable**.
 
 ```python
 user: Optional[User]
@@ -167,7 +167,7 @@ Large code bases will struggle a lot from this change.
 
 Ok, you can directly use `django.settings` (or similar)
 in your `_award_points_for_letters` function.
-And ruin your pure logic with framework specific details. That's ugly!
+And **ruin your pure logic with framework specific details**. That's ugly!
 
 Or you can use `RequiresContext` container. Let's see how our code changes:
 
@@ -281,6 +281,7 @@ def fetch_user_profile(user_id: int) -> Result['UserProfile', Exception]:
 
 @safe
 def _make_request(user_id: int) -> requests.Response:
+    # TODO: we are not yet done with this example, read more about `IO`:
     response = requests.get('/api/users/{0}'.format(user_id))
     response.raise_for_status()
     return response
@@ -291,43 +292,37 @@ def _parse_json(response: requests.Response) -> 'UserProfile':
 ```
 
 Now we have a clean and a safe and declarative way
-to express our business need.
-We start from making a request, that might fail at any moment.
-Then parsing the response if the request was successful.
-And then return the result.
-It all happens smoothly due to [pipe](https://returns.readthedocs.io/en/latest/pages/pipeline.html#pipe) function.
+to express our business needs:
 
-We also use [box](https://returns.readthedocs.io/en/latest/pages/functions.html#box) for handy composition.
+- We start from making a request, that might fail at any moment,
+- Then parsing the response if the request was successful,
+- And then return the result.
 
-Now, instead of returning a regular value
-it returns a wrapped value inside a special container
+Now, instead of returning regular values
+we return values wrapped inside a special container
 thanks to the
 [@safe](https://returns.readthedocs.io/en/latest/pages/result.html#safe)
-decorator.
+decorator. It will return [Success[YourType] or Failure[Exception]](https://returns.readthedocs.io/en/latest/pages/result.html).
+And will never throw exception at us!
 
-It will return [Success[Response] or Failure[Exception]](https://returns.readthedocs.io/en/latest/pages/result.html).
-And will never throw this exception at us.
+We also use [pipe](https://returns.readthedocs.io/en/latest/pages/pipeline.html#pipe)
+and [bind](https://returns.readthedocs.io/en/latest/pages/pointfree.html#bind)
+functions for handy and declarative composition.
 
-And we can clearly see all result patterns
-that might happen in this particular case:
+This way we can be sure that our code won't break in
+random places due to some implicit exception.
+Now we control all parts and are prepared for the explicit errors.
 
-- `Success[UserProfile]`
-- `Failure[Exception]`
-
-For more complex cases there's a [@pipeline](https://returns.readthedocs.io/en/latest/pages/functions.html#returns.functions.pipeline)
-decorator to help you with the composition.
-
-And we can work with each of them precisely.
-It is a good practice to create `Enum` classes or `Union` sum type
-with all the possible errors.
+We are not yet done with this example,
+let's continue to improve it in the next chapter.
 
 
 ## IO marker
 
-But is that all we can improve?
-Let's look at `FetchUserProfile` from another angle.
-All its methods look like regular ones:
-it is impossible to tell whether they are pure or impure from the first sight.
+Let's look at our example from another angle.
+All its functions look like regular ones:
+it is impossible to tell whether they are [pure](https://en.wikipedia.org/wiki/Pure_function)
+or impure from the first sight.
 
 It leads to a very important consequence:
 *we start to mix pure and impure code together*.
@@ -338,10 +333,59 @@ we suffer really bad when testing or reusing it.
 Almost everything should be pure by default.
 And we should explicitly mark impure parts of the program.
 
+That's why we have created `IO` marker
+to mark impure functions that never fail.
+
+These impure functions use `random`, current datetime, environment, or console:
+
+```python
+import random
+import datetime as dt
+
+from returns.io import IO
+
+def get_random_number() -> IO[int]:  # or use `@impure` decorator
+    return IO(random.randint(1, 10))  # isn't pure, because random
+
+now: Callable[[], IO[dt.datetime]] = impure(dt.datetime.now)
+
+@impure
+def return_and_show_next_number(previous: int) -> int:
+    next_number = previous + 1
+    print(next_number)  # isn't pure, because does IO
+    return next_number
+```
+
+Now we can clearly see which functions are pure and which ones are impure.
+This helps us a lot in building large applications, unit testing you code,
+and composing bussiness logic together.
+
+### Troublesome IO
+
+As it was already said, we use `IO` when we handle functions that do not fail.
+
+What if our function can fail and is impure?
+Like `requests.get()` we had earlier in your example.
+
+Then we have to use `IOResult` instead of a regular `Result`.
+Let's find the difference:
+
+- Our `_parse_json` function always return
+  the same result (hopefully) for the same input:
+  you can either parse valid `json` or fail on invalid one.
+  That's why we return pure `Result`
+- Our `_make_request` function is impure and can fail.
+  Try to send two similar requests with and without internet connection.
+  The result will be different for the same input.
+  That's why we must use `IOResult` here
+
+So, in order to fulfill our requirement and separate pure code from impure one,
+we have to refactor our example.
+
 ### Explicit IO
 
-Let's refactor it to make our
-[IO](https://returns.readthedocs.io/en/latest/pages/io.html) explicit!
+Let's make our [IO](https://returns.readthedocs.io/en/latest/pages/io.html)
+explicit!
 
 ```python
 import requests
@@ -372,12 +416,14 @@ def _parse_json(response: requests.Response) -> 'UserProfile':
     return response.json()
 ```
 
-Now we have explicit markers where the `IO` did happen
-and these markers cannot be removed.
+And latter we can [unsafe_perform_io](https://returns.readthedocs.io/en/latest/pages/io.html#unsafe-perform-io)
+somewhere at the top level of our program to get the pure value.
 
-Whenever we access `FetchUserProfile` we now know
-that it does `IO` and might fail.
-So, we act accordingly!
+As a result of this refactoring session, we know everything about our code:
+
+- Which parts can fail,
+- Which parts are impure,
+- How to compose them in a smart manner.
 
 
 ## More!

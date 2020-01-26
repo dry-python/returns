@@ -1,12 +1,34 @@
 IO
 ==
 
-``IO`` is ugly.
+Mathematicians dream in pure functions.
+Each of them only relies on its arguments
+and always produces the same result for the same input.
 
-Why? Let me illustrate it with the example.
+That's not how useful program work.
+We need to rely on the environment and we need to do side effects.
+
+Furthermore, there are several types of ``IO`` in our programs:
+
+- Some ``IO`` never fails, like:
+  getting current date and time, random number, or OS name
+- Some ``IO`` might fail, like:
+  sending network requests, accessing filesystem, or database
+
+There's a solution.
+
 
 IO marker
 ---------
+
+We can use a simple class :class:`returns.io.IO`
+to mark impure parts of the program that do not fail.
+
+
+
+
+IOResult
+--------
 
 Imagine we have this beautiful pure function:
 
@@ -203,26 +225,6 @@ if :ref:`decorator_plugin <type-safety>` is used.
 This happens due to `mypy issue <https://github.com/python/mypy/issues/3157>`_.
 
 
-Laziness
---------
-
-Please, note that our ``IO`` implementation is not lazy.
-This way when you mark something as ``@impure`` it will work as previously.
-The only thing that changes is type.
-
-Instead we offer to use :ref:`unsafe_perform_io`
-to work with ``IO`` and simulate laziness.
-
-But, you can always make your ``IO`` lazy:
-
-.. code:: python
-
-  >>> from returns.io import IO
-  >>> lazy = lambda: IO(1)
-  >>> str(lazy())
-  '<IO: 1>'
-
-
 io_squash
 ---------
 
@@ -302,6 +304,27 @@ Inspired by Haskell's
 
 FAQ
 ---
+
+Why aren't IO lazy?
+~~~~~~~~~~~~~~~~~~~
+
+Please, note that our ``IO`` implementation is not lazy by design.
+This way when you mark something as ``@impure`` it will work as previously.
+The only thing that changes is the return type.
+
+Instead we offer to use :ref:`unsafe_perform_io`
+to work with ``IO`` and simulate laziness.
+
+But, you can always make your ``IO`` lazy:
+
+.. code:: python
+
+  >>> from returns.io import IO
+  >>> lazy = lambda: IO(1)
+  >>> str(lazy())
+  '<IO: 1>'
+
+We have decided that it would be better and more familiar for Python devs.
 
 What is the difference between IO[T] and T?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

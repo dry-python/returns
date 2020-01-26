@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
 
+from abc import ABCMeta
 from functools import wraps
 from inspect import iscoroutinefunction
 from typing import (
+    Any,
     Callable,
     Coroutine,
+    ClassVar,
+    Type,
     Generic,
     NoReturn,
     TypeVar,
@@ -14,6 +18,7 @@ from typing import (
 
 from typing_extensions import final
 
+from returns.primitives.exceptions import UnwrapFailedError
 from returns._generated.squash import _squash as io_squash  # noqa: F401
 from returns.pipeline import is_successful
 from returns.primitives.container import BaseContainer
@@ -21,6 +26,8 @@ from returns.result import Failure, Result, Success
 
 _ValueType = TypeVar('_ValueType', covariant=True)
 _NewValueType = TypeVar('_NewValueType')
+
+_T = TypeVar('_T', contravariant=True)
 
 # Result related:
 _ErrorType = TypeVar('_ErrorType', covariant=True)
@@ -193,10 +200,16 @@ def impure(function):
 
 # IO and Result:
 
-@final
-class IOResult(BaseContainer, Generic[_ValueType, _ErrorType]):
+class IOResult(
+    BaseContainer,
+    Generic[_ValueType, _ErrorType],
+    metaclass=ABCMeta,
+):
     """
     Explicit marker for impure function results that might fail.
+
+    Definition
+    ----------
 
     We call it "marker" since once it is marked, it cannot be unmarked.
 
@@ -242,21 +255,31 @@ class IOResult(BaseContainer, Generic[_ValueType, _ErrorType]):
     See also:
         https://github.com/gcanti/fp-ts/blob/master/docs/modules/IOEither.ts.md
 
+
+    Implementation
+    --------------
+
+    This class contains all the methods that can be delegated to ``Result``.
+    But, some methods have ``raise NotImplementedError`` which means
+    that we have to use special :class:`~_IOSuccess` and :class:`~_IOFailure`
+    implementation details to correctly handle these callbacks.
+
+    Do not rely on them! Use public data.
+
     """
 
     _inner_value: Result[_ValueType, _ErrorType]
 
+    # These two are required for projects like `classes`:
+    success_type: ClassVar[Type['_IOSuccess']]
+    failure_type: ClassVar[Type['_IOFailure']]
+
     def __init__(self, inner_value: Result[_ValueType, _ErrorType]) -> None:
         """
-        Public constructor for ``Result`` values. Also required for typing.
+        Private type constructor.
 
-        .. code:: python
-
-          >>> from returns.io import IOResult
-          >>> from returns.result import Success
-          >>> str(IOResult(Success(1)))
-          '<IOResult: <Success: 1>>'
-
+        Use :func:`~IOSuccess` and :func:`~IOFailure` instead.
+        Or :meth:`~IOResult.from_result` factory.
         """
         super().__init__(inner_value)
 
@@ -272,15 +295,15 @@ class IOResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           >>> assert IOSuccess(1).map(lambda num: num + 1) == IOSuccess(2)
 
         """
-        return IOResult(self._inner_value.map(function))
+        return self.from_result(self._inner_value.map(function))
 
     def bind(
-        self,
+        self: 'IOResult[_ValueType, _T]',
         function: Callable[
             [_ValueType],
-            'IOResult[_NewValueType, _ErrorType]',
+            'IOResult[_NewValueType, _T]',
         ],
-    ) -> 'IOResult[_NewValueType, _ErrorType]':
+    ) -> 'IOResult[_NewValueType, _T]':
         """
         Composes successful container with a function that returns a container.
 
@@ -294,9 +317,7 @@ class IOResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           >>> assert IOFailure('a').bind(bindable) == IOFailure('a')
 
         """
-        if is_successful(self._inner_value):
-            return function(self._inner_value.unwrap())
-        return self  # type: ignore
+        raise NotImplementedError
 
     def bind_result(
         self,
@@ -324,9 +345,7 @@ class IOResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           >>> assert IOFailure('a').bind_result(bindable) == IOFailure('a')
 
         """
-        if is_successful(self._inner_value):
-            return IOResult(function(self._inner_value.unwrap()))
-        return self  # type: ignore
+        raise NotImplementedError
 
     def fix(
         self,
@@ -343,7 +362,7 @@ class IOResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           ... ) == IOSuccess('ab')
 
         """
-        return IOResult(self._inner_value.fix(function))
+        return self.from_result(self._inner_value.fix(function))
 
     def rescue(
         self,
@@ -369,9 +388,7 @@ class IOResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           >>> assert IOSuccess('a').rescue(rescuable) == IOSuccess('a')
 
         """
-        if is_successful(self._inner_value):
-            return self  # type: ignore
-        return function(self._inner_value.failure())
+        raise NotImplementedError
 
     def alt(
         self,
@@ -386,7 +403,7 @@ class IOResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           >>> assert IOFailure(1).alt(float) == IOFailure(1.0)
 
         """
-        return IOResult(self._inner_value.alt(function))
+        return self.from_result(self._inner_value.alt(function))
 
     def value_or(
         self,
@@ -503,10 +520,14 @@ class IOResult(BaseContainer, Generic[_ValueType, _ErrorType]):
 
     @classmethod
     def from_typecast(
-        cls, container: IO[Result[_ValueType, _ErrorType]],
-    ) -> 'IOResult[_ValueType, _ErrorType]':
+        cls, container: IO[Result[_NewValueType, _NewErrorType]],
+    ) -> 'IOResult[_NewValueType, _NewErrorType]':
         """
         Converts ``IO[Result[_ValueType, _ErrorType]]`` to ``IOResult``.
+
+        Also prevails the type of ``Result`` to ``IOResult``, so:
+        ``IO[Result[_ValueType, _ErrorType]]`` would become
+        ``IOResult[_ValueType, _ErrorType]``.
 
         .. code:: python
 
@@ -516,12 +537,12 @@ class IOResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           >>> assert IOResult.from_typecast(container) == IOSuccess(1)
 
         """
-        return cls(container._inner_value)  # noqa: WPS437
+        return cls.from_result(container._inner_value)  # noqa: WPS437
 
     @classmethod
     def from_failed_io(
-        cls, container: IO[_ErrorType],
-    ) -> 'IOResult[NoReturn, _ErrorType]':
+        cls, container: IO[_NewErrorType],
+    ) -> 'IOResult[NoReturn, _NewErrorType]':
         """
         Creates new ``IOResult`` from "failed" ``IO`` container.
 
@@ -536,8 +557,8 @@ class IOResult(BaseContainer, Generic[_ValueType, _ErrorType]):
 
     @classmethod
     def from_successful_io(
-        cls, container: IO[_ValueType],
-    ) -> 'IOResult[_ValueType, NoReturn]':
+        cls, container: IO[_NewValueType],
+    ) -> 'IOResult[_NewValueType, NoReturn]':
         """
         Creates new ``IOResult`` from "successful" ``IO`` container.
 
@@ -550,6 +571,89 @@ class IOResult(BaseContainer, Generic[_ValueType, _ErrorType]):
         """
         return IOSuccess(container._inner_value)  # noqa: WPS437
 
+    @classmethod
+    def from_result(
+        cls, container: Result[_NewValueType, _NewErrorType],
+    ) -> 'IOResult[_NewValueType, _NewErrorType]':
+        """"""
+        if isinstance(container, container.success_type):
+            return _IOSuccess(container)
+        return _IOFailure(container)
+
+
+@final
+class _IOFailure(IOResult):
+    """
+    Internal ``IOFailure`` representation.
+
+    This is an implementation detail, please, do not use it directly.
+    This class only has method that are logically
+    dependent on the current container state: successful or failed.
+
+    Use public data types instead!
+    """
+
+    def __init__(self, inner_value) -> None:
+        """
+        Private type constructor.
+
+        Use :func:`~IOSuccess` and :func:`~IOFailure` instead.
+        Or :meth:`~IOResult.from_result` factory.
+        """
+        super().__init__(inner_value)
+
+    def bind(self, function):
+        """Does nothing for ``IOFailure``."""
+        return self
+
+    def bind_result(self, function):
+        """Does nothing for ``IOFailure``."""
+        return self
+
+    def rescue(self, function):
+        """Composes this container with a function returning ``IOResult``."""
+        return function(self._inner_value.failure())
+
+
+@final
+class _IOSuccess(IOResult):
+    """
+    Internal ``IOSuccess`` representation.
+
+    This is an implementation detail, please, do not use it directly.
+    This class only has method that are logically
+    dependent on the current container state: successful or failed.
+
+    Use public data types instead!
+    """
+
+    def __init__(self, inner_value) -> None:
+        """
+        Private type constructor.
+
+        Use :func:`~IOSuccess` and :func:`~IOFailure` instead.
+        Or :meth:`~IOResult.from_result` factory.
+        """
+        super().__init__(inner_value)
+
+    def bind(self, function):
+        """Composes this container with a function returning ``IOResult``."""
+        return function(self._inner_value.unwrap())
+
+    def bind_result(self, function):
+        """Binds ``Result`` returning function to current container."""
+        return self.from_result(function(self._inner_value.unwrap()))
+
+    def rescue(self, function):
+        """Does nothing for ``IOSuccess``."""
+        return self
+
+
+IOResult.success_type = _IOSuccess
+IOResult.failure_type = _IOFailure
+
+
+# Public type constructors:
 
 def IOSuccess(  # noqa: N802
     inner_value: _NewValueType,
@@ -564,7 +668,7 @@ def IOSuccess(  # noqa: N802
       '<IOResult: <Success: 1>>'
 
     """
-    return IOResult(Success(inner_value))
+    return _IOSuccess(Success(inner_value))
 
 
 def IOFailure(  # noqa: N802
@@ -577,15 +681,15 @@ def IOFailure(  # noqa: N802
 
       >>> from returns.io import IOFailure
       >>> str(IOFailure(1))
-      '<IOResult: <Failure: 1>>'
+      '<IOResult: <Failure: 1>>'§
 
     """
-    return IOResult(Failure(inner_value))
+    return _IOFailure(Failure(inner_value))
 
 
 # Aliases:
 
-#: A popular case for writing `Result` is using `Exception` as the last type.
+#: Alias for a popular case when ``IOResult`` has ``Exception`` as error type.
 IOResultE = IOResult[_ValueType, Exception]
 
 

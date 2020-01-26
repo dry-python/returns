@@ -537,7 +537,7 @@ def Failure(  # noqa: N802
 
 # Aliases:
 
-#: A popular case for writing `Result` is using `Exception` as the last type.
+#: Alias for a popular case when ``Result`` has ``Exception`` as error type.
 ResultE = Result[_ValueType, Exception]
 
 
