@@ -367,6 +367,21 @@ class IOResult(
         """
         return self.from_result(self._inner_value.fix(function))
 
+    def alt(
+        self,
+        function: Callable[[_ErrorType], _NewErrorType],
+    ) -> 'IOResult[_ValueType, _NewErrorType]':
+        """
+        Composes failed container with a pure function to modify failure.
+
+        .. code:: python
+
+          >>> from returns.io import IOFailure
+          >>> assert IOFailure(1).alt(float) == IOFailure(1.0)
+
+        """
+        return self.from_result(self._inner_value.alt(function))
+
     def rescue(
         self,
         function: Callable[
@@ -391,21 +406,6 @@ class IOResult(
 
         """
         raise NotImplementedError
-
-    def alt(
-        self,
-        function: Callable[[_ErrorType], _NewErrorType],
-    ) -> 'IOResult[_ValueType, _NewErrorType]':
-        """
-        Composes failed container with a pure function to modify failure.
-
-        .. code:: python
-
-          >>> from returns.io import IOFailure
-          >>> assert IOFailure(1).alt(float) == IOFailure(1.0)
-
-        """
-        return self.from_result(self._inner_value.alt(function))
 
     def value_or(
         self,

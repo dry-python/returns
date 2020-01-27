@@ -129,6 +129,37 @@ and converts it to return ``Maybe`` instead:
   '<Some: 1>'
 
 
+FAQ
+---
+
+How can I turn Maybe into Optional again?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When working with regular Python,
+you might need regular ``Optional[a]`` values.
+
+You can easily get one from your ``Maybe`` container at any point in time:
+
+.. code:: python
+
+  >>> from returns.maybe import Maybe
+  >>> assert Maybe.new(1).value_or(None) == 1
+  >>> assert Maybe.new(None).value_or(None) is None
+
+As you can see, revealed type of ``.value_or(None)`` is ``Optional[a]``.
+Use it a fallback.
+
+Why there's no IOMaybe?
+~~~~~~~~~~~~~~~~~~~~~~~
+
+We do have ``IOResult``, but we don't have ``IOMaybe``. Why?
+Because when dealing with ``IO`` there are a lot of possible errors.
+And ``Maybe`` represents just ``None`` and the value.
+
+It is not useful for ``IO`` related tasks.
+So, use ``Result`` instead, which can represent what happened to your ``IO``.
+
+
 Further reading
 ---------------
 

@@ -62,15 +62,6 @@
     reveal_type(result)  # N: Revealed type is 'returns.maybe.Maybe[builtins.str*]'
 
 
-- case: maybe_fix_regular
-  disable_cache: true
-  main: |
-    from returns.maybe import Maybe
-
-    result = Maybe.new({'a': 'b'}).fix(lambda _: 'b')
-    reveal_type(result)  # N: Revealed type is 'returns.maybe.Maybe[builtins.str*]'
-
-
 - case: maybe_value_or
   disable_cache: true
   main: |
@@ -78,37 +69,6 @@
 
     result = Maybe.new(1).value_or(None)
     reveal_type(result)  # N: Revealed type is 'Union[builtins.int, None]'
-
-
-- case: maybe_fix_optional
-  disable_cache: true
-  main: |
-    from typing import Optional
-    from returns.maybe import Maybe
-
-    value: Optional[int]
-    result = Maybe.new({'a': 'b'}).fix(lambda _: value)
-    reveal_type(result)  # N: Revealed type is 'returns.maybe.Maybe[builtins.int*]'
-
-
-- case: maybe_rescue_regular
-  disable_cache: true
-  main: |
-    from returns.maybe import Maybe
-
-    result = Maybe.new({'a': 'b'}).rescue(lambda _: Maybe.new('b'))
-    reveal_type(result)  # N: Revealed type is 'returns.maybe.Maybe[builtins.str*]'
-
-
-- case: maybe_rescue_optional
-  disable_cache: true
-  main: |
-    from typing import Optional
-    from returns.maybe import Maybe
-
-    value: Optional[int]
-    result = Maybe.new({'a': 'b'}).rescue(lambda _: Maybe.new(value))
-    reveal_type(result)  # N: Revealed type is 'returns.maybe.Maybe[builtins.int*]'
 
 
 - case: maybe_unwrap

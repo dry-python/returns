@@ -13,6 +13,8 @@ See (0Ver)[https://0ver.org/].
 - **Breaking**: renames `join` to `flatten`, sorry!
 - **Breaking**: renames `box` to `bind` and moves it to `returns.pointfree`
 - **Breaking**: renames `coalesce` to `fold`
+- **Breaking**: removes `Maybe.rescue` and `Maybe.fix` methods
+- Adds `rescue` pointfree method
 - Adds `Result.lift`, `Maybe.lift`, and `RequiresContext.lift` functions
   in addition to `IO.lift`
 - Adds `RequiresContext` container and `Context` helper class

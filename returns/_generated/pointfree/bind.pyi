@@ -13,7 +13,7 @@ _NewValueType = TypeVar('_NewValueType')
 _EnvType = TypeVar('_EnvType')
 
 
-# Box:
+# Bind:
 
 @overload
 def _bind(

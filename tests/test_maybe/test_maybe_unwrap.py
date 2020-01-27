@@ -15,14 +15,3 @@ def test_unwrap_failure():
     """Ensures that unwrap works for Nothing container."""
     with pytest.raises(UnwrapFailedError):
         assert Nothing.unwrap()
-
-
-def test_unwrap_failure_from_success():
-    """Ensures that failure works for Some container."""
-    with pytest.raises(UnwrapFailedError):
-        Some(5).failure()
-
-
-def test_unwrap_failure_from_failure():
-    """Ensures that failure works for Nothing container."""
-    assert Nothing.failure() is None  # type: ignore

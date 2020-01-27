@@ -12,14 +12,3 @@ def test_map_some():
 def test_map_nothing():
     """Ensures that map works for Nothing container."""
     assert Nothing.map(str) == Nothing
-
-
-def test_fix_some():
-    """Ensures that fix works for Some container."""
-    assert Some(5).fix(str) == Some(5)
-
-
-def test_fix_nothing():
-    """Ensures that fix works for Nothing container."""
-    assert Nothing.fix(lambda _: None) == Nothing
-    assert Nothing.fix(lambda _: 1) == Some(1)

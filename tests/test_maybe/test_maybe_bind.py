@@ -24,24 +24,3 @@ def test_bind_nothing():
 
     assert bound == Nothing
     assert str(bound) == '<Nothing>'
-
-
-def test_rescue_some():
-    """Ensures that rescue works for Some container."""
-    def factory(_) -> Maybe[int]:
-        return Some(10)
-
-    bound = Some(5).rescue(factory)
-
-    assert bound == Some(5)
-
-
-def test_rescue_nothing():
-    """Ensures that rescue works for Nothing container."""
-    def factory(arg) -> Maybe[int]:
-        return Some(1)
-
-    bound = Nothing.rescue(factory)
-    bound2 = Nothing.rescue(lambda _: Some(1))
-
-    assert bound == bound2

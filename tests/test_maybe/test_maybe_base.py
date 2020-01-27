@@ -8,8 +8,6 @@ from returns.maybe import Maybe
 @pytest.mark.parametrize('method_name', [
     'bind',
     'map',
-    'rescue',
-    'fix',
     'value_or',
 ])
 def test_maybe_abstract_method(method_name):

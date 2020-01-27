@@ -20,10 +20,10 @@
     from returns.converters import fold_ioresult
     from returns.io import IO, IOResult
 
-    def first(arg: int) -> IO[float]:
+    def first(arg: IO[int]) -> IO[float]:
         ...
 
-    def second(arg: str) -> IO[float]:
+    def second(arg: IO[str]) -> IO[float]:
         ...
 
     container: IOResult[int, str]
@@ -45,8 +45,9 @@
     container: IOResult[int, str]
     fold_ioresult(first, second)(container)
   out: |
-    main:11: error: Argument 1 has incompatible type "Callable[[int], float]"; expected "Callable[[int], IO[<nothing>]]"
-    main:11: error: Argument 2 has incompatible type "Callable[[str], float]"; expected "Callable[[str], IO[<nothing>]]"
+    main:11: error: Argument 1 has incompatible type "Callable[[int], float]"; expected "Callable[[IO[<nothing>]], IO[<nothing>]]"
+    main:11: error: Argument 1 has incompatible type "IOResult[int, str]"; expected "IOResult[<nothing>, <nothing>]"
+    main:11: error: Argument 2 has incompatible type "Callable[[str], float]"; expected "Callable[[IO[<nothing>]], IO[<nothing>]]"
 
 
 - case: fold_maybe

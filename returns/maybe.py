@@ -108,44 +108,6 @@ class Maybe(
         """
         raise NotImplementedError
 
-    def fix(
-        self,
-        function: Callable[[None], Optional[_NewValueType]],
-    ) -> 'Maybe[_NewValueType]':
-        """
-        Composes failed container with a pure function to fix the failure.
-
-        .. code:: python
-
-          >>> from returns.maybe import Nothing, Some
-          >>> def fixable(_state) -> str:
-          ...      return 'ab'
-          ...
-          >>> assert Some('a').fix(fixable) == Some('a')
-          >>> assert Nothing.fix(fixable) == Some('ab')
-
-        """
-        raise NotImplementedError
-
-    def rescue(
-        self,
-        function: Callable[[None], 'Maybe[_NewValueType]'],
-    ) -> 'Maybe[_NewValueType]':
-        """
-        Composes failed container with a function that returns a container.
-
-        .. code:: python
-
-          >>> from returns.maybe import Nothing, Maybe, Some
-          >>> def rescuable(_state) -> Maybe[str]:
-          ...      return Some('ab')
-          ...
-          >>> assert Some('a').rescue(rescuable) == Some('a')
-          >>> assert Nothing.rescue(rescuable) == Some('ab')
-
-        """
-        raise NotImplementedError
-
     def value_or(
         self,
         default_value: _NewValueType,
@@ -262,14 +224,6 @@ class _Nothing(Maybe[Any]):
         """Does nothing for ``Nothing``."""
         return self
 
-    def fix(self, function):
-        """Composes pure function with a failed container."""
-        return Maybe.new(function(self._inner_value))
-
-    def rescue(self, function):
-        """Composes failed container with a function that returns container."""
-        return function(self._inner_value)
-
     def value_or(self, default_value):
         """Returns default value."""
         return default_value
@@ -309,14 +263,6 @@ class _Some(Maybe[_ValueType]):
     def bind(self, function):
         """Binds current container to a function that returns container."""
         return function(self._inner_value)
-
-    def fix(self, function):
-        """Does nothing."""
-        return self
-
-    def rescue(self, function):
-        """Does nothing."""
-        return self
 
     def value_or(self, default_value):
         """Returns inner value for successful container."""

@@ -8,18 +8,23 @@ def _bind(function):
     In other words, it modifies the function
     signature from: ``a -> Container[b]`` to: ``Container[a] -> Container[b]``
 
+    Similar to :func:`returns.pointfree.rescue`,
+    but works for successful containers.
+
     This is how it should be used:
 
     .. code:: python
 
       >>> from returns.pointfree import bind
-      >>> from returns.maybe import Maybe, Some
+      >>> from returns.maybe import Maybe, Some, Nothing
 
       >>> def example(argument: int) -> Maybe[int]:
       ...     return Some(argument + 1)
       ...
-      >>> bind(example)(Some(1)) == Some(2)
-      True
+      >>> assert bind(example)(Some(1)) == Some(2)
+      >>> assert bind(example)(Nothing) == Nothing
+
+    Note, that this function works for all containers with ``.bind`` method.
 
     """
     return lambda container: container.bind(function)

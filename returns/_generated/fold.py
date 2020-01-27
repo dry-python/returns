@@ -77,8 +77,8 @@ _fold_result.__doc__ = __doc__
 
 _fold_ioresult: Callable[
     [
-        Callable[[_ValueType], IO[_FirstType]],
-        Callable[[_ErrorType], IO[_FirstType]],
+        Callable[[IO[_ValueType]], IO[_FirstType]],
+        Callable[[IO[_ErrorType]], IO[_FirstType]],
     ],
     Callable[[IOResult[_ValueType, _ErrorType]], IO[_FirstType]],
 ] = _fold

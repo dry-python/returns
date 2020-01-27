@@ -60,6 +60,8 @@ class Result(
         function: Callable[[_ValueType], _NewValueType],
     ) -> 'Result[_NewValueType, _ErrorType]':
         """
+        Composes successful container with a pure function.
+
         .. code:: python
 
           >>> from returns.result import Failure, Success
@@ -77,6 +79,7 @@ class Result(
         function: Callable[[_ValueType], 'Result[_NewValueType, _ErrorType]'],
     ) -> 'Result[_NewValueType, _ErrorType]':
         """
+        Composes successful container with a function that returns a container.
 
         .. code:: python
 
@@ -100,6 +103,14 @@ class Result(
         ],
     ) -> 'Result[_NewValueType, Union[_ErrorType, _NewErrorType]]':
         """
+        Composes successful container with a function that returns a container.
+
+        Similar to :meth:`~Result.bind` but has different type.
+        It returns ``Result[ValueType, Union[OldErrorType, NewErrorType]]``
+        instead of ``Result[ValueType, OldErrorType]``.
+
+        So, it can be more useful in some situations.
+        Probably with specific exceptions.
 
         .. code:: python
 
@@ -121,6 +132,7 @@ class Result(
         function: Callable[[_ErrorType], _NewValueType],
     ) -> 'Result[_NewValueType, _ErrorType]':
         """
+        Composes failed container with a pure function to fix the failure.
 
         .. code:: python
 
@@ -139,6 +151,7 @@ class Result(
         function: Callable[[_ErrorType], _NewErrorType],
     ) -> 'Result[_ValueType, _NewErrorType]':
         """
+        Composes failed container with a pure function to modify failure.
 
         .. code:: python
 
@@ -159,6 +172,7 @@ class Result(
         ],
     ) -> 'Result[_ValueType, _NewErrorType]':
         """
+        Composes failed container with a function that returns a container.
 
         .. code:: python
 
