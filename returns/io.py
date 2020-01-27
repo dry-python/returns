@@ -4,6 +4,7 @@ from abc import ABCMeta
 from functools import wraps
 from inspect import iscoroutinefunction
 from typing import (
+    Any,
     Callable,
     ClassVar,
     Coroutine,
@@ -27,6 +28,7 @@ _NewValueType = TypeVar('_NewValueType')
 # Result related:
 _ErrorType = TypeVar('_ErrorType', covariant=True)
 _NewErrorType = TypeVar('_NewErrorType')
+_ContraErrorType = TypeVar('_ContraErrorType', contravariant=True)
 
 # Helpers:
 _FirstType = TypeVar('_FirstType')
@@ -170,7 +172,7 @@ def impure(
 
 def impure(function):
     """
-    Decorator to mark function that it returns :py:class:`IO` container.
+    Decorator to mark function that it returns :class:`~IO` container.
 
     Supports both async and regular functions. Example:
 
@@ -453,8 +455,8 @@ class IOResult(
         cls,
         function: Callable[[_ValueType], _NewValueType],
     ) -> Callable[
-        ['IOResult[_ValueType, _ErrorType]'],
-        'IOResult[_NewValueType, _ErrorType]',
+        ['IOResult[_ValueType, _ContraErrorType]'],
+        'IOResult[_NewValueType, _ContraErrorType]',
     ]:
         """
         Lifts function to be wrapped in ``IOResult`` for better composition.
@@ -667,7 +669,7 @@ IOResult.failure_type = _IOFailure
 
 def IOSuccess(  # noqa: N802
     inner_value: _NewValueType,
-) -> IOResult[_NewValueType, NoReturn]:
+) -> IOResult[_NewValueType, Any]:
     """
     Public unit function of succeful :class:`~IOResult` container.
 
@@ -683,7 +685,7 @@ def IOSuccess(  # noqa: N802
 
 def IOFailure(  # noqa: N802
     inner_value: _NewErrorType,
-) -> IOResult[NoReturn, _NewErrorType]:
+) -> IOResult[Any, _NewErrorType]:
     """
     Public unit function of failed :class:`~IOResult` container.
 
@@ -724,7 +726,7 @@ def impure_safe(
 
 def impure_safe(function):  # noqa: C901
     """
-    Decorator to mark function that it returns :py:class:`IO` container.
+    Decorator to mark function that it returns :class:`~IO` container.
 
     Supports both async and regular functions. Example:
 

@@ -23,6 +23,6 @@ def test_unwrap_failure_with_exception():
     with pytest.raises(UnwrapFailedError) as excinfo:
         Failure(expected_exception).unwrap()
 
-    assert 'ValueError: error' in str(  # type: ignore
+    assert 'ValueError: error' in str(
         excinfo.getrepr(),  # noqa: WPS441
     )

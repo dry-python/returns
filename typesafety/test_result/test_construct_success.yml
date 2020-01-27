@@ -53,7 +53,7 @@
   main: |
     from returns.result import Success, Result
 
-    reveal_type(Success(1).map(str))  # N: Revealed type is 'returns.result.Result[builtins.str*, <nothing>]'
+    reveal_type(Success(1).map(str))  # N: Revealed type is 'returns.result.Result[builtins.str*, Any]'
 
 
 - case: success_value_or

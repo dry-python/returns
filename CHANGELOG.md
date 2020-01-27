@@ -29,6 +29,7 @@ See (0Ver)[https://0ver.org/].
 
 ### Bugfixes
 
+- Now `Success` and `Failure` (both `io` and pure) return `Any` and not `NoReturn`
 - Fixes how `flatten` works, also adds more tests and docs about `Failure` case
 - Fixes `Unwrappable` type being parametrized with only one `TypeVar`
 

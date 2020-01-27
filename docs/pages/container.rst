@@ -24,7 +24,7 @@ Basics
 
 The main idea behind a container is that it wraps some internal state.
 That's what
-:py:attr:`._inner_value <returns.primitives.container.Container._inner_value>`
+:attr:`._inner_value <returns.primitives.container.Container._inner_value>`
 is used for.
 
 And we have several functions
@@ -153,27 +153,27 @@ Composition
 -----------
 
 You can and should compose different containers together.
-Here's the full table of compositions that make sense:
-
-Ok
-~~
-
-- ``IO[Result[A, B]]`` ✅
-- ``IO[Maybe[A]]`` ✅
+Here's a table of some compositions that do not make sense:
 
 Needs transformation
 ~~~~~~~~~~~~~~~~~~~~
 
+- ``IO[Result[A, B]]`` 🤔,
+  use :meth:`returns.io.IOResult.from_typecast` and ``IOResult``
+- ``IO[Maybe[A]]`` 🤔,
+  use :func:`maybe_to_result <returns.converters.maybe_to_result>`
+  and then :meth:`returns.io.IOResult.from_typecast`
+  to convert it to ``IOResult``
 - ``IO[IO[A]]`` 🤔, use :func:`flatten <returns.converters.flatten>`
 - ``Maybe[Maybe[A]]`` 🤔, use :func:`flatten <returns.converters.flatten>`
 - ``Result[Result[A, B], C]`` 🤔,
-    use :func:`flatten <returns.converters.flatten>`
+  use :func:`flatten <returns.converters.flatten>`
 - ``Result[Maybe[A], B]`` 🤔,
-    use :func:`maybe_to_result <returns.converters.maybe_to_result>`
-    and then :func:`flatten <returns.converters.flatten>`
+  use :func:`maybe_to_result <returns.converters.maybe_to_result>`
+  and then :func:`flatten <returns.converters.flatten>`
 - ``Maybe[Result[A, B]]`` 🤔,
-    use :func:`result_to_maybe <returns.converters.result_to_maybe>`
-    and then :func:`flatten <returns.converters.flatten>`
+  use :func:`result_to_maybe <returns.converters.result_to_maybe>`
+  and then :func:`flatten <returns.converters.flatten>`
 
 Nope
 ~~~~
@@ -183,6 +183,7 @@ Nope
 - ``Result[A, Maybe[B]]`` 🚫
 - ``Result[A, Result[B, C]]`` 🚫
 - ``Maybe[IO[A]]`` 🚫
+- ``RequiresContext[IO[A], B]`` 🚫
 
 You can use :ref:`converters` to convert ``Maybe`` and ``Result`` containers.
 You can also use :func:`flatten <returns.converters.flatten>`

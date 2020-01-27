@@ -14,6 +14,7 @@ def test_bind():
     bound: Result[int, str] = Success(input_value)
 
     assert bound.bind(factory) == factory(input_value)
+    assert Success(input_value).bind(factory) == factory(input_value)
     assert str(bound.bind(factory)) == '<Success: 10>'
 
     input_value = 0
@@ -80,4 +81,5 @@ def test_rescue_failure():
     bound: Result[str, int] = Failure(5)
 
     assert bound.rescue(factory) == Failure(expected)
+    assert Failure(5).rescue(factory) == Failure(expected)
     assert str(bound.rescue(factory)) == '<Failure: 6>'
