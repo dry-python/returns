@@ -133,6 +133,9 @@ def raise_exception(exception: Exception) -> NoReturn:
       >>> # Some operation result:
       >>> user: Result[int, ValueError] = Failure(ValueError('boom'))
       >>> # Here we unwrap internal exception and raise it:
+
+    ..code::
+
       >>> user.fix(raise_exception)
       Traceback (most recent call last):
         ...

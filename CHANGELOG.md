@@ -32,6 +32,7 @@ See (0Ver)[https://0ver.org/].
 - Now `Success` and `Failure` (both `io` and pure) return `Any` and not `NoReturn`
 - Fixes how `flatten` works, also adds more tests and docs about `Failure` case
 - Fixes `Unwrappable` type being parametrized with only one `TypeVar`
+- Changes `Success` and `Failure` to return `Any` instead of `NoReturn`
 
 ### Misc
 
@@ -39,6 +40,7 @@ See (0Ver)[https://0ver.org/].
 - Imporves ``pipe`` docs with ``lambda`` and `Generic` problem
 - Improves docs in several places
 - Now examples in docs tries to be docstests where possible
+- Changes how tests are checked with `mypy` in CI
 
 
 ## 0.12.0

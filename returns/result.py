@@ -59,14 +59,38 @@ class Result(
         self,
         function: Callable[[_ValueType], _NewValueType],
     ) -> 'Result[_NewValueType, _ErrorType]':
-        """Abstract method to compose container with a pure function."""
+        """
+        .. code:: python
+
+          >>> from returns.result import Failure, Success
+          >>> def mappable(string: str) -> str:
+          ...      return string + 'b'
+          ...
+          >>> assert Success('a').map(mappable) == Success('ab')
+          >>> assert Failure('a').map(mappable) == Failure('a')
+
+        """
         raise NotImplementedError
 
     def bind(
         self,
         function: Callable[[_ValueType], 'Result[_NewValueType, _ErrorType]'],
     ) -> 'Result[_NewValueType, _ErrorType]':
-        """Abstract method to compose a container with another container."""
+        """
+
+        .. code:: python
+
+          >>> from returns.result import Result, Success, Failure
+          >>> def bindable(arg: str) -> Result[str, str]:
+          ...      if len(arg) > 1:
+          ...          return Success(arg + 'b')
+          ...      return Failure(arg + 'c')
+          ...
+          >>> assert Success('aa').bind(bindable) == Success('aab')
+          >>> assert Success('a').bind(bindable) == Failure('ac')
+          >>> assert Failure('a').bind(bindable) == Failure('a')
+
+        """
         raise NotImplementedError
 
     def unify(
@@ -76,12 +100,19 @@ class Result(
         ],
     ) -> 'Result[_NewValueType, Union[_ErrorType, _NewErrorType]]':
         """
-        Abstract method to compose a container with another container.
 
-        Similar to ``.bind``, but unifies the error type into a new type.
-        It is useful when you have several functions to compose
-        and each of them raises their own exceptions.
-        That's a way to collect all of them.
+        .. code:: python
+
+          >>> from returns.result import Result, Success, Failure
+          >>> def bindable(arg: str) -> Result[str, str]:
+          ...      if len(arg) > 1:
+          ...          return Success(arg + 'b')
+          ...      return Failure(arg + 'c')
+          ...
+          >>> assert Success('aa').unify(bindable) == Success('aab')
+          >>> assert Success('a').unify(bindable) == Failure('ac')
+          >>> assert Failure('a').unify(bindable) == Failure('a')
+
         """
         raise NotImplementedError
 
@@ -90,10 +121,16 @@ class Result(
         function: Callable[[_ErrorType], _NewValueType],
     ) -> 'Result[_NewValueType, _ErrorType]':
         """
-        Abstract method to compose failed container and a pure function.
 
-        This pure function should return a new state
-        for a successful container.
+        .. code:: python
+
+          >>> from returns.result import Failure, Success
+          >>> def fixable(arg: str) -> str:
+          ...      return 'ab'
+          ...
+          >>> assert Success('a').fix(fixable) == Success('a')
+          >>> assert Failure('a').fix(fixable) == Success('ab')
+
         """
         raise NotImplementedError
 
@@ -102,10 +139,16 @@ class Result(
         function: Callable[[_ErrorType], _NewErrorType],
     ) -> 'Result[_ValueType, _NewErrorType]':
         """
-        Abstract method to compose failed container and a pure function.
 
-        This pure function should return a new state
-        for a new failed container.
+        .. code:: python
+
+          >>> from returns.result import Result, Failure, Success
+          >>> def altable(arg: str) -> Result[str, str]:
+          ...      return arg + 'b'
+          ...
+          >>> assert Success('a').alt(altable) == Success('a')
+          >>> assert Failure('a').alt(altable) == Failure('ab')
+
         """
         raise NotImplementedError
 
@@ -116,9 +159,19 @@ class Result(
         ],
     ) -> 'Result[_ValueType, _NewErrorType]':
         """
-        Abstract method to compose a failed container with another container.
 
-        This method is the oposite of ``.bind()``.
+        .. code:: python
+
+          >>> from returns.result import Result, Success, Failure
+          >>> def rescuable(arg: str) -> Result[str, str]:
+          ...      if len(arg) > 1:
+          ...          return Success(arg + 'b')
+          ...      return Failure(arg + 'c')
+          ...
+          >>> assert Success('a').rescue(rescuable) == Success('a')
+          >>> assert Failure('a').rescue(rescuable) == Failure('ac')
+          >>> assert Failure('aa').rescue(rescuable) == Success('aab')
+
         """
         raise NotImplementedError
 
@@ -126,15 +179,54 @@ class Result(
         self,
         default_value: _NewValueType,
     ) -> Union[_ValueType, _NewValueType]:
-        """Get value or default value."""
+        """
+        Get value or default value.
+
+        .. code:: python
+
+          >>> from returns.result import Failure, Success
+          >>> assert Success(1).value_or(2) == 1
+          >>> assert Failure(1).value_or(2) == 2
+
+        """
         raise NotImplementedError
 
     def unwrap(self) -> _ValueType:
-        """Get value or raise exception."""
+        """
+        Get value or raise exception.
+
+        .. code:: python
+
+          >>> from returns.result import Failure, Success
+          >>> assert Success(1).unwrap() == 1
+
+        .. code::
+
+          >>> Failure(1).unwrap()
+          Traceback (most recent call last):
+            ...
+          returns.primitives.exceptions.UnwrapFailedError
+
+        """
         raise NotImplementedError
 
     def failure(self) -> _ErrorType:
-        """Get failed value or raise exception."""
+        """
+        Get failed value or raise exception.
+
+        .. code:: python
+
+          >>> from returns.result import Failure, Success
+          >>> assert Failure(1).failure() == 1
+
+        .. code::
+
+          >>> Success(1).failure()
+          Traceback (most recent call last):
+            ...
+          returns.primitives.exceptions.UnwrapFailedError
+
+        """
         raise NotImplementedError
 
     @classmethod
@@ -157,11 +249,12 @@ class Result(
 
         .. code:: python
 
-          >>> from returns.result import Success, Result
+          >>> from returns.result import Success, Result, Failure
           >>> def example(argument: int) -> float:
-          ...     return argument / 2  # not exactly IO action!
+          ...     return argument / 2
           ...
           >>> assert Result.lift(example)(Success(2)) == Success(1.0)
+          >>> assert Result.lift(example)(Failure(2)) == Failure(2)
 
         See also:
             - https://wiki.haskell.org/Lifting
@@ -179,158 +272,61 @@ class _Failure(Result[Any, _ErrorType]):
 
     It should contain an error code or message.
     Should not be used directly.
+
+    This is an implementation detail, please, do not use it directly.
+    This class only has method that are logically
+    dependent on the current container state: successful or failed.
+
+    Use public data types instead!
     """
 
     _inner_value: _ErrorType
 
     def __init__(self, inner_value: _ErrorType) -> None:
-        """Required for typing."""
+        """
+        Private type constructor.
+
+        Use :func:`~Success` and :func:`~Failure` instead.
+        Required for typing.
+        """
         super().__init__(inner_value)
 
     def map(self, function):  # noqa: A003
-        """
-        Returns the '_Failure' instance that was used to call the method.
-
-        .. code:: python
-
-          >>> from returns.result import Failure
-          >>> def mappable(string: str) -> str:
-          ...      return string + 'b'
-          ...
-          >>> assert Failure('a').map(mappable) == Failure('a')
-
-        """
+        """Does nothing for ``Failure``."""
         return self
 
     def bind(self, function):
-        """
-        Returns the '_Failure' instance that was used to call the method.
-
-        .. code:: python
-
-          >>> from returns.result import Success, Failure
-          >>> def bindable(string: str) -> Result[str, str]:
-          ...      return Success(string + 'b')
-          ...
-          >>> assert Failure('a').bind(bindable) == Failure('a')
-
-        """
+        """Does nothing for ``Failure``."""
         return self
 
     def unify(self, function):
-        """
-        Returns the '_Failure' instance that was used to call the method.
-
-        .. code:: python
-
-          >>> from returns.result import Success, Failure
-          >>> def bindable(string: str) -> Result[str, str]:
-          ...      return Success(string + 'b')
-          ...
-          >>> assert Failure('a').unify(bindable) == Failure('a')
-
-        """
+        """Does nothing for ``Failure``."""
         return self
 
     def fix(self, function):
-        """
-        Applies function to the inner value.
-
-        Applies 'function' to the contents of the '_Success' instance
-        and returns a new '_Success' object containing the result.
-        'function' should accept a single "normal" (non-container) argument
-        and return a non-container result.
-
-        .. code:: python
-
-          >>> from returns.result import Failure, Success
-          >>> def fixable(arg: str) -> str:
-          ...      return 'ab'
-          ...
-          >>> assert Failure('a').fix(fixable) == Success('ab')
-
-        """
+        """Composes pure function with a failed container."""
         return _Success(function(self._inner_value))
 
     def rescue(self, function):
-        """
-        Applies 'function' to the result of a previous calculation.
-
-        'function' should accept a single "normal" (non-container) argument
-        and return Result a '_Failure' or '_Success' type object.
-
-        .. code:: python
-
-          >>> from returns.result import Result, Success, Failure
-          >>> def rescuable(arg: str) -> Result[str, str]:
-          ...      return Success(arg + 'b')
-          ...
-          >>> assert Failure('a').rescue(rescuable) == Success('ab')
-
-        """
+        """Composes this container with a function returning container."""
         return function(self._inner_value)
 
     def alt(self, function):
-        """
-        Applies function to the error value.
-
-        Applies 'function' to the contents of the '_Failure' instance
-        and returns a new '_Failure' object containing the result.
-        'function' should accept a single "normal" (non-container) argument
-        and return a non-container result.
-
-        .. code:: python
-
-          >>> from returns.result import Result, Failure
-          >>> def altable(arg: str) -> Result[str, str]:
-          ...      return arg + 'b'
-          ...
-          >>> assert Failure('a').alt(altable) == Failure('ab')
-
-        """
+        """Composes failed container with a pure function to modify failure."""
         return _Failure(function(self._inner_value))
 
     def value_or(self, default_value):
-        """
-        Returns the value if we deal with '_Success' or default otherwise.
-
-        .. code:: python
-
-          >>> from returns.result import Failure
-          >>> Failure(1).value_or(2)
-          2
-
-        """
+        """Returns default value for failed container."""
         return default_value
 
     def unwrap(self):
-        """
-        Raises an exception, since it does not have a value inside.
-
-        .. code:: python
-
-          >>> from returns.result import Failure
-          >>> Failure(1).unwrap()
-          Traceback (most recent call last):
-            ...
-          returns.primitives.exceptions.UnwrapFailedError
-
-        """
+        """Raises an exception, since it does not have a value inside."""
         if isinstance(self._inner_value, Exception):
             raise UnwrapFailedError(self) from self._inner_value
         raise UnwrapFailedError(self)
 
     def failure(self):
-        """
-        Unwraps inner error value from failed container.
-
-        .. code:: python
-
-          >>> from returns.result import Failure
-          >>> Failure(1).failure()
-          1
-
-        """
+        """Returns failed value."""
         return self._inner_value
 
 
@@ -341,159 +337,64 @@ class _Success(Result[_ValueType, Any]):
 
     Contains the computation value.
     Should not be used directly.
+
+    This is an implementation detail, please, do not use it directly.
+    This class only has method that are logically
+    dependent on the current container state: successful or failed.
+
+    Use public data types instead!
     """
 
     _inner_value: _ValueType
 
     def __init__(self, inner_value: _ValueType) -> None:
-        """Required for typing."""
+        """
+        Private type constructor.
+
+        Use :func:`~Success` and :func:`~Failure` instead.
+        Required for typing.
+        """
         super().__init__(inner_value)
 
     def map(self, function):  # noqa: A003
-        """
-        Applies function to the inner value.
-
-        Applies 'function' to the contents of the '_Success' instance
-        and returns a new '_Success' object containing the result.
-        'function' should accept a single "normal" (non-container) argument
-        and return a non-container result.
-
-        .. code:: python
-
-          >>> from returns.result import Success
-          >>> def mappable(string: str) -> str:
-          ...      return string + 'b'
-          ...
-          >>> assert Success('a').map(mappable) == Success('ab')
-
-        """
+        """Composes current container with a pure function."""
         return _Success(function(self._inner_value))
 
     def bind(self, function):
-        """
-        Applies 'function' to the result of a previous calculation.
-
-        'function' should accept a single "normal" (non-container) argument
-        and return Result a '_Failure' or '_Success' type object.
-
-        .. code:: python
-
-          >>> from returns.result import Result, Success
-          >>> def bindable(string: str) -> Result[str, str]:
-          ...      return Success(string + 'b')
-          ...
-          >>> assert Success('a').bind(bindable) == Success('ab')
-
-        """
+        """Binds current container to a function that returns container."""
         return function(self._inner_value)
 
     def unify(self, function):
         """
-        Applies 'function' to the result of a previous calculation.
+        Binds current container to a function that returns container.
 
-        It is the same as ``.bind``, but handles type signatures differently.
-        While ``.bind`` forces to respect error type and not changing it,
-        ``.unify`` allows to return a ``Union`` of previous
-        error types and new ones.
-
-        'function' should accept a single "normal" (non-container) argument
-        and return Result a '_Failure' or '_Success' type object.
-
-        .. code:: python
-
-          >>> from returns.result import Result, Success
-          >>> def bindable(string: str) -> Result[str, str]:
-          ...      return Success(string + 'b')
-          ...
-          >>> assert Success('a').bind(bindable) == Success('ab')
-
+        Similar as :meth:`~_Success.bind`
+        but modifies the return type to unify error types.
         """
         return self.bind(function)  # type: ignore
 
     def fix(self, function):
-        """
-        Returns the '_Success' instance that was used to call the method.
-
-        .. code:: python
-
-          >>> from returns.result import Success
-          >>> def fixable(arg: str) -> str:
-          ...      return 'ab'
-          ...
-          >>> assert Success('a').fix(fixable) == Success('a')
-
-        """
+        """Does nothing for ``Success``."""
         return self
 
     def rescue(self, function):
-        """
-        Returns the '_Success' instance that was used to call the method.
-
-        .. code:: python
-
-          >>> from returns.result import Result, Success
-          >>> def rescuable(arg: str) -> Result[str, str]:
-          ...      return Success(arg + 'b')
-          ...
-          >>> assert Success('a').rescue(rescuable) == Success('a')
-
-        """
+        """Does nothing for ``Success``."""
         return self
 
     def alt(self, function):
-        """
-        Returns the '_Success' instance that was used to call the method.
-
-        .. code:: python
-
-          >>> from returns.result import Result, Success
-          >>> def altable(arg: str) -> Result[str, str]:
-          ...      return Success(arg + 'b')
-          ...
-          >>> assert Success('a').alt(altable) == Success('a')
-
-        """
+        """Does nothing for ``Success``."""
         return self
 
     def value_or(self, default_value):
-        """
-        Returns the value if we deal with '_Success' or default otherwise.
-
-        .. code:: python
-
-          >>> from returns.result import Success
-          >>> Success(1).value_or(2)
-          1
-
-        """
+        """Returns the value for successful container."""
         return self._inner_value
 
     def unwrap(self):
-        """
-        Returns the unwrapped value from the inside of this container.
-
-        .. code:: python
-
-          >>> from returns.result import Success
-          >>> Success(1).unwrap()
-          1
-
-        """
+        """Returns the unwrapped value from successful container."""
         return self._inner_value
 
     def failure(self):
-        """
-        Raises an exception, since it does not have an error inside.
-
-        .. code:: python
-
-          >>> from returns.result import Success
-          >>> Success(1).failure()
-          Traceback (most recent call last):
-            ...
-          returns.primitives.exceptions.UnwrapFailedError
-
-        """
+        """Raises an exception for succesful container."""
         raise UnwrapFailedError(self)
 
 

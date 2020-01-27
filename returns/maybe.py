@@ -42,6 +42,10 @@ class Maybe(
     An alternative to using exceptions or constant ``is None`` checks.
     ``Maybe`` is an abstract type and should not be instantiated directly.
     Instead use ``Some`` and ``Nothing``.
+
+    See also:
+        https://github.com/gcanti/fp-ts/blob/master/docs/modules/Option.ts.md
+
     """
 
     _inner_value: Optional[_ValueType]
@@ -52,7 +56,16 @@ class Maybe(
 
     @classmethod
     def new(cls, inner_value: Optional[_ValueType]) -> 'Maybe[_ValueType]':
-        """Creates new instance of Maybe container based on a value."""
+        """
+        Creates new instance of ``Maybe`` container based on a value.
+
+        .. code:: python
+
+          >>> from returns.maybe import Maybe, Some, Nothing
+          >>> assert Maybe.new(1) == Some(1)
+          >>> assert Maybe.new(None) == Nothing
+
+        """
         if inner_value is None:
             return _Nothing(inner_value)
         return _Some(inner_value)
@@ -61,43 +74,130 @@ class Maybe(
         self,
         function: Callable[[_ValueType], Optional[_NewValueType]],
     ) -> 'Maybe[_NewValueType]':
-        """Abstract method to compose container with a pure function."""
+        """
+        Composes successful container with a pure function.
+
+        .. code:: python
+
+          >>> from returns.maybe import Some, Nothing
+          >>> def mappable(string: str) -> str:
+          ...      return string + 'b'
+          ...
+          >>> assert Some('a').map(mappable) == Some('ab')
+          >>> assert Nothing.map(mappable) == Nothing
+
+        """
         raise NotImplementedError
 
     def bind(
         self,
         function: Callable[[_ValueType], 'Maybe[_NewValueType]'],
     ) -> 'Maybe[_NewValueType]':
-        """Abstract method to compose container with other container."""
+        """
+        Composes successful container with a function that returns a container.
+
+        .. code:: python
+
+          >>> from returns.maybe import Nothing, Maybe, Some
+          >>> def bindable(string: str) -> Maybe[str]:
+          ...      return Some(string + 'b')
+          ...
+          >>> assert Some('a').bind(bindable) == Some('ab')
+          >>> assert Nothing.bind(bindable) == Nothing
+
+        """
         raise NotImplementedError
 
     def fix(
         self,
         function: Callable[[None], Optional[_NewValueType]],
     ) -> 'Maybe[_NewValueType]':
-        """Abstract method to compose container with a pure function."""
+        """
+        Composes failed container with a pure function to fix the failure.
+
+        .. code:: python
+
+          >>> from returns.maybe import Nothing, Some
+          >>> def fixable(_state) -> str:
+          ...      return 'ab'
+          ...
+          >>> assert Some('a').fix(fixable) == Some('a')
+          >>> assert Nothing.fix(fixable) == Some('ab')
+
+        """
         raise NotImplementedError
 
     def rescue(
         self,
         function: Callable[[None], 'Maybe[_NewValueType]'],
     ) -> 'Maybe[_NewValueType]':
-        """Abstract method to compose container with other container."""
+        """
+        Composes failed container with a function that returns a container.
+
+        .. code:: python
+
+          >>> from returns.maybe import Nothing, Maybe, Some
+          >>> def rescuable(_state) -> Maybe[str]:
+          ...      return Some('ab')
+          ...
+          >>> assert Some('a').rescue(rescuable) == Some('a')
+          >>> assert Nothing.rescue(rescuable) == Some('ab')
+
+        """
         raise NotImplementedError
 
     def value_or(
         self,
         default_value: _NewValueType,
     ) -> Union[_ValueType, _NewValueType]:
-        """Get value or default value."""
+        """
+        Get value from succesful container or default value from failed one.
+
+        .. code:: python
+
+          >>> from returns.maybe import Nothing, Some
+          >>> assert Some(0).value_or(1) == 0
+          >>> assert Nothing.value_or(1) == 1
+
+        """
         raise NotImplementedError
 
     def unwrap(self) -> _ValueType:
-        """Get value or raise exception."""
+        """
+        Get value from successful container or raise exception for failed one.
+
+        .. code:: python
+
+          >>> from returns.maybe import Nothing, Some
+          >>> assert Some(1).unwrap() == 1
+
+        .. code::
+
+          >>> Nothing.unwrap()
+          Traceback (most recent call last):
+            ...
+          returns.primitives.exceptions.UnwrapFailedError
+
+        """
         raise NotImplementedError
 
     def failure(self) -> None:
-        """Get failed value or raise exception."""
+        """
+        Get failed value from failed container or raise exception from success.
+
+        .. code:: python
+
+          >>> from returns.maybe import Nothing, Some
+          >>> assert Nothing.failure() is None
+
+        .. code::
+
+          >>> Some(1).failure()
+          Traceback (most recent call last):
+            ...
+          returns.primitives.exceptions.UnwrapFailedError
+
+        """
         raise NotImplementedError
 
     @classmethod
@@ -117,11 +217,12 @@ class Maybe(
 
         .. code:: python
 
-          >>> from returns.maybe import Maybe
+          >>> from returns.maybe import Maybe, Nothing, Some
           >>> def example(argument: int) -> float:
           ...     return argument / 2
           ...
-          >>> assert Maybe.lift(example)(Maybe.new(2)) == Maybe.new(1.0)
+          >>> assert Maybe.lift(example)(Some(2)) == Some(1.0)
+          >>> assert Maybe.lift(example)(Nothing) == Nothing
 
         See also:
             - https://wiki.haskell.org/Lifting
@@ -140,7 +241,10 @@ class _Nothing(Maybe[Any]):
 
     def __init__(self, inner_value: None = None) -> None:
         """
-        Wraps the given value in the ``Nothing`` container.
+        Private contructor for ``_Nothing`` type.
+
+        Use :attr:`~Nothing` instead.
+        Wraps the given value in the ``_Nothing`` container.
 
         ``inner_value`` can only be ``None``.
         """
@@ -151,111 +255,31 @@ class _Nothing(Maybe[Any]):
         return '<Nothing>'
 
     def map(self, function):  # noqa: A003
-        """
-        Returns the 'Nothing' instance that was used to call the method.
-
-        .. code:: python
-
-          >>> from returns.maybe import Nothing
-          >>> def mappable(string: str) -> str:
-          ...      return string + 'b'
-          ...
-          >>> assert Nothing.map(mappable) == Nothing
-
-        """
+        """Does nothing for ``Nothing``."""
         return self
 
     def bind(self, function):
-        """
-        Returns the 'Nothing' instance that was used to call the method.
-
-        .. code:: python
-
-          >>> from returns.maybe import Nothing, Maybe, Some
-          >>> def bindable(string: str) -> Maybe[str]:
-          ...      return Some(string + 'b')
-          ...
-          >>> assert Nothing.bind(bindable) == Nothing
-
-        """
+        """Does nothing for ``Nothing``."""
         return self
 
     def fix(self, function):
-        """
-        Applies function to the inner value.
-
-        Applies 'function' to the contents of the 'Some' instance
-        and returns a new 'Some' object containing the result.
-        'function' should not accept one argument
-        and return a non-container result.
-
-        .. code:: python
-
-          >>> from returns.maybe import Nothing, Some
-          >>> def fixable(_state) -> str:
-          ...      return 'ab'
-          ...
-          >>> assert Nothing.fix(fixable) == Some('ab')
-
-        """
+        """Composes pure function with a failed container."""
         return Maybe.new(function(self._inner_value))
 
     def rescue(self, function):
-        """
-        Applies 'function' to the result of a previous calculation.
-
-        'function' should accept one argument
-        and return a container result: 'Nothing' or 'Some' type object.
-
-        .. code:: python
-
-          >>> from returns.maybe import Nothing, Maybe, Some
-          >>> def rescuable(_state) -> Maybe[str]:
-          ...      return Some('ab')
-          ...
-          >>> assert Nothing.rescue(rescuable) == Some('ab')
-
-        """
+        """Composes failed container with a function that returns container."""
         return function(self._inner_value)
 
     def value_or(self, default_value):
-        """
-        Returns the value if we deal with 'Some' or default if 'Nothing'.
-
-        .. code:: python
-
-          >>> from returns.maybe import Nothing
-          >>> Nothing.value_or(1)
-          1
-
-        """
+        """Returns default value."""
         return default_value
 
     def unwrap(self):
-        """
-        Raises an exception, since it does not have a value inside.
-
-        .. code:: python
-
-          >>> from returns.maybe import Nothing
-          >>> Nothing.unwrap()
-          Traceback (most recent call last):
-            ...
-          returns.primitives.exceptions.UnwrapFailedError
-
-        """
+        """Raises an exception, since it does not have a value inside."""
         raise UnwrapFailedError(self)
 
     def failure(self) -> None:
-        """
-        Get failed value.
-
-        .. code:: python
-
-          >>> from returns.maybe import Nothing
-          >>> assert Nothing.failure() is None
-
-        """
+        """Returns failed value."""
         return self._inner_value
 
 
@@ -270,116 +294,40 @@ class _Some(Maybe[_ValueType]):
     _inner_value: _ValueType
 
     def __init__(self, inner_value: _ValueType) -> None:
-        """Required for typing."""
+        """
+        Private type constructor.
+
+        Please, use :func:`~Some` instead.
+        Required for typing.
+        """
         super().__init__(inner_value)
 
     def map(self, function):  # noqa: A003
-        """
-        Applies function to the inner value.
-
-        Applies 'function' to the contents of the 'Some' instance
-        and returns a new 'Maybe' object containing the result.
-        'function' should accept a single "normal" (non-container) argument
-        and return a non-container result.
-
-        .. code:: python
-
-          >>> from returns.maybe import Some
-          >>> def mappable(string: str) -> str:
-          ...      return string + 'b'
-          ...
-          >>> assert Some('a').map(mappable) == Some('ab')
-
-        """
+        """Composes current container with a pure function."""
         return Maybe.new(function(self._inner_value))
 
     def bind(self, function):
-        """
-        Applies 'function' to the result of a previous calculation.
-
-        'function' should accept a single "normal" (non-container) argument
-        and return 'Nothing' or 'Some' type object.
-
-        .. code:: python
-
-          >>> from returns.maybe import Maybe, Some
-          >>> def bindable(string: str) -> Maybe[str]:
-          ...      return Some(string + 'b')
-          ...
-          >>> assert Some('a').bind(bindable) == Some('ab')
-
-        """
+        """Binds current container to a function that returns container."""
         return function(self._inner_value)
 
     def fix(self, function):
-        """
-        Returns the 'Some' instance that was used to call the method.
-
-        .. code:: python
-
-          >>> from returns.maybe import Some
-          >>> def fixable(_state) -> str:
-          ...      return 'ab'
-          ...
-          >>> assert Some('a').fix(fixable) == Some('a')
-
-        """
+        """Does nothing."""
         return self
 
     def rescue(self, function):
-        """
-        Returns the 'Some' instance that was used to call the method.
-
-        .. code:: python
-
-          >>> from returns.maybe import Maybe, Some
-          >>> def rescuable(_state) -> Maybe[str]:
-          ...      return Some('ab')
-          ...
-          >>> assert Some('a').rescue(rescuable) == Some('a')
-
-        """
+        """Does nothing."""
         return self
 
     def value_or(self, default_value):
-        """
-        Returns the value if we deal with 'Some' or default if 'Nothing'.
-
-        .. code:: python
-
-          >>> from returns.maybe import Some
-          >>> Some(1).value_or(2)
-          1
-
-        """
+        """Returns inner value for successful container."""
         return self._inner_value
 
     def unwrap(self):
-        """
-        Returns the unwrapped value from the inside of this container.
-
-        .. code:: python
-
-          >>> from returns.maybe import Some
-          >>> Some(1).unwrap()
-          1
-
-        """
+        """Returns inner value for successful container."""
         return self._inner_value
 
     def failure(self):
-        """
-        Raises an exception, since it does not have a failure inside.
-
-        .. code:: python
-
-          >>> from returns.maybe import Some
-          >>> Some(1).failure()
-          Traceback (most recent call last):
-            ...
-          returns.primitives.exceptions.UnwrapFailedError
-
-        """
+        """Raises exception for succesful container."""
         raise UnwrapFailedError(self)
 
 
@@ -393,9 +341,10 @@ def Some(inner_value: Optional[_ValueType]) -> Maybe[_ValueType]:  # noqa: N802
 
     .. code:: python
 
-      >>> from returns.maybe import Some
+      >>> from returns.maybe import Some, Nothing
       >>> str(Some(1))
       '<Some: 1>'
+      >>> assert Some(None) == Nothing
 
     """
     return Maybe.new(inner_value)

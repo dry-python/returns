@@ -308,9 +308,12 @@ class IOResult(
 
           >>> from returns.io import IOResult, IOFailure, IOSuccess
           >>> def bindable(string: str) -> IOResult[str, str]:
-          ...      return IOSuccess(string + 'b')
+          ...      if len(string) > 1:
+          ...          return IOSuccess(string + 'b')
+          ...      return IOFailure(string + 'c')
           ...
-          >>> assert IOSuccess('a').bind(bindable) == IOSuccess('ab')
+          >>> assert IOSuccess('aa').bind(bindable) == IOSuccess('aab')
+          >>> assert IOSuccess('a').bind(bindable) == IOFailure('ac')
           >>> assert IOFailure('a').bind(bindable) == IOFailure('a')
 
         """
@@ -336,9 +339,12 @@ class IOResult(
           >>> from returns.result import Result, Success
 
           >>> def bindable(string: str) -> Result[str, str]:
-          ...      return Success(string + 'b')
+          ...      if len(string) > 1:
+          ...          return Success(string + 'b')
+          ...      return Failure(string + 'c')
           ...
-          >>> assert IOSuccess('a').bind_result(bindable) == IOSuccess('ab')
+          >>> assert IOSuccess('aa').bind_result(bindable) == IOSuccess('aab')
+          >>> assert IOSuccess('a').bind_result(bindable) == IOFailure('ac')
           >>> assert IOFailure('a').bind_result(bindable) == IOFailure('a')
 
         """
@@ -349,7 +355,7 @@ class IOResult(
         function: Callable[[_ErrorType], _NewValueType],
     ) -> 'IOResult[_NewValueType, _ErrorType]':
         """
-        Composes a failed container with a pure function to fix the failure.
+        Composes failed container with a pure function to fix the failure.
 
         .. code:: python
 
@@ -369,7 +375,7 @@ class IOResult(
         ],
     ) -> 'IOResult[_ValueType, _NewErrorType]':
         """
-        Composes a failed container with a function that returns a container.
+        Composes failed container with a function that returns a container.
 
         .. code:: python
 
@@ -381,7 +387,6 @@ class IOResult(
 
           >>> assert IOFailure('a').rescue(rescuable) == IOFailure('oops')
           >>> assert IOFailure('abc').rescue(rescuable) == IOSuccess(3)
-
           >>> assert IOSuccess('a').rescue(rescuable) == IOSuccess('a')
 
         """
@@ -392,7 +397,7 @@ class IOResult(
         function: Callable[[_ErrorType], _NewErrorType],
     ) -> 'IOResult[_ValueType, _NewErrorType]':
         """
-        Composes a failed container with a pure function to modify failure.
+        Composes failed container with a pure function to modify failure.
 
         .. code:: python
 
@@ -407,7 +412,7 @@ class IOResult(
         default_value: _NewValueType,
     ) -> IO[Union[_ValueType, _NewValueType]]:
         """
-        Get value or default value.
+        Get value from succesful container or default value from failed one.
 
         .. code:: python
 
@@ -420,12 +425,15 @@ class IOResult(
 
     def unwrap(self) -> IO[_ValueType]:
         """
-        Get value or raise exception.
+        Get value from successful container or raise exception for failed one.
 
         .. code:: python
 
           >>> from returns.io import IO, IOFailure, IOSuccess
           >>> assert IOSuccess(1).unwrap() == IO(1)
+
+        .. code::
+
           >>> IOFailure(1).unwrap()
           Traceback (most recent call last):
             ...
@@ -436,12 +444,15 @@ class IOResult(
 
     def failure(self) -> IO[_ErrorType]:
         """
-        Get failed value or raise exception.
+        Get failed value from failed container or raise exception from success.
 
         .. code:: python
 
           >>> from returns.io import IO, IOFailure, IOSuccess
           >>> assert IOFailure(1).failure() == IO(1)
+
+        .. code::
+
           >>> IOSuccess(1).failure()
           Traceback (most recent call last):
             ...
@@ -471,11 +482,12 @@ class IOResult(
 
         .. code:: python
 
-          >>> from returns.io import IOResult, IOSuccess
+          >>> from returns.io import IOResult, IOSuccess, IOFailure
           >>> def example(argument: int) -> float:
           ...     return argument / 2  # not exactly IO action!
           ...
           >>> assert IOResult.lift(example)(IOSuccess(2)) == IOSuccess(1.0)
+          >>> assert IOResult.lift(example)(IOFailure(2)) == IOFailure(2)
 
         This one is similar to appling :meth:`~IO.lift`
         and :meth:`returns.result.Result.lift` in order.
