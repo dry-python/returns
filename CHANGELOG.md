@@ -3,7 +3,7 @@
 We follow Semantic Versions since the `1.0.0` release.
 Versions before `1.0.0` are `0Ver`-based:
 incremental in minor, bugfixes only are patches.
-See (0Ver)[https://0ver.org/].
+See [0Ver](https://0ver.org/).
 
 
 ## 0.13.0 WIP
@@ -14,13 +14,22 @@ See (0Ver)[https://0ver.org/].
 - **Breaking**: renames `box` to `bind` and moves it to `returns.pointfree`
 - **Breaking**: renames `coalesce` to `fold`
 - **Breaking**: removes `Maybe.rescue` and `Maybe.fix` methods
-- Adds `rescue` pointfree method
-- Adds `Result.lift`, `Maybe.lift`, and `RequiresContext.lift` functions
-  in addition to `IO.lift`
+
+- Adds `rescue` pointfree function
+- Adds `ResultE` alias for `Result[..., Exception]`
+
 - Adds `RequiresContext` container and `Context` helper class
 - Adds `RequiresContext` support for `bind` pointfree function
 - Adds `RequiresContext` support for `flatten` function
-- Adds `ResultE` alias for `Result[..., Exception]`
+
+- Adds `RequiresContextResult` container
+- Adds `RequiresContextResultE` alias
+  for `RequiresContextResult[..., ..., Exception]`
+- Adds `RequiresContextResult` support for `bind`
+- Adds `RequiresContextResult` support for `flatten`
+- Adds `RequiresContextResult` support for `fold`
+- Adds `RequiresContextResult` support for `is_successful`
+
 - Adds `IOResult` helper to work better with `IO[Result[a, b]]`
 - Adds `IOResultE` alias for `IOResult[a, Exception]`
 - Adds `IOResult` support for `bind`
@@ -28,6 +37,10 @@ See (0Ver)[https://0ver.org/].
 - Adds `IOResult` support for `@pipeline`
 - Adds `IOResult` support for `fold`
 - Adds `IOResult` support for `is_successful`
+
+- Adds `Result.lift`, `Maybe.lift`, `RequiresContext.lift`,
+  and `RequiresContextResult.lift` functions in addition to `IO.lift`
+
 
 ### Bugfixes
 
