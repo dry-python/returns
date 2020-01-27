@@ -30,7 +30,7 @@ to mark impure parts of the program that do not fail.
   >>> import random
   >>> from returns.io import IO
   >>> def get_random_number() -> IO[int]:
-  ...     return IO(random.randint(0, 10))
+  ...     return IO(random.randint(1, 10))
   ...
   >>> assert isinstance(get_random_number(), IO)
 
