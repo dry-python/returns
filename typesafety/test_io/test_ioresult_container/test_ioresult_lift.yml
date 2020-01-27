@@ -6,7 +6,8 @@
     def test(arg: int) -> str:
         return str(arg)
 
-    reveal_type(IOResult.lift(test))  # N: Revealed type is 'def (returns.io.IOResult[builtins.int*, <nothing>]) -> returns.io.IOResult[builtins.str*, <nothing>]'
+    r: IOResult[int, str]
+    reveal_type(IOResult.lift(test)(r))  # N: Revealed type is 'returns.io.IOResult[builtins.str, builtins.str*]'
 
 
 - case: ioresult_lift_result

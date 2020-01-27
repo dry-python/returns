@@ -23,7 +23,7 @@
   main: |
     from returns.result import Failure
 
-    reveal_type(Failure(1).alt(str))  # N: Revealed type is 'returns.result.Result[<nothing>, builtins.str*]'
+    reveal_type(Failure(1).alt(str))  # N: Revealed type is 'returns.result.Result[Any, builtins.str*]'
 
 
 - case: failure_failure

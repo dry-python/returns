@@ -21,14 +21,43 @@ There's a solution.
 IO marker
 ---------
 
+Once you have an ``IO`` operation you can mark it appropriately.
 We can use a simple class :class:`returns.io.IO`
 to mark impure parts of the program that do not fail.
 
+.. code:: python
 
+  >>> import random
+  >>> from returns.io import IO
+  >>> def get_random_number() -> IO[int]:
+  ...     return IO(random.randint(0, 10))
+  ...
+  >>> assert isinstance(get_random_number(), IO)
+
+And later we can work inside this ``IO`` context
+and do not break into our pure part of the program:
+
+.. code:: python
+
+  >>> assert get_random_number().map(lambda number: number / number) == IO(1.0)
+
+And it infects all other functions that call it.
+
+.. code:: python
+
+  >>> def modify_number(number: int) -> IO[float]:
+  ...      return get_random_number().map(lambda rnd: number / rnd)
+  ...
+  >>> assert isinstance(modify_number(1), IO)
+
+It is good enough to indicate
+that you are aware of side effects of the function.
 
 
 IOResult
 --------
+
+On the other hand, we can have ``IO`` parts of the program that do fail.
 
 Imagine we have this beautiful pure function:
 
@@ -47,14 +76,14 @@ will be enough.
 
 This code is **beautiful**, because it is **simple**.
 
-We can later use its result to notify users about their booking request:
+We can later use its result to process the result of the booking request:
 
 .. code:: python
 
-  def notify_user_about_booking_result(is_successful: bool) -> 'MessageID':
+  def process_booking_result(is_successful: bool) -> 'ProcessID':
       ...
 
-  notify_user_about_booking_result(is_successful)  # works just fine!
+  process_booking_result(is_successful)  # works just fine!
 
 At this point we don't have ``IO`` in our program.
 
@@ -63,7 +92,7 @@ Impure functions
 
 But, imagine that our requirements had changed.
 And now we have to grab the number of already booked tickets
-from some other provider and fetch the maximum capacity from the database:
+from some other microservice and fetch the maximum capacity from the database:
 
 .. code:: python
 
@@ -92,72 +121,67 @@ that call ``can_book_seats`` now also have to do the same setup.
 It seams like ``IO`` is indelible mark (some people also call it "effect").
 
 And at some point it time we will start to mix pure and impure code together.
+Let's not forget that all of these operations can fail too!
 
 Separating two worlds
 ~~~~~~~~~~~~~~~~~~~~~
 
-Well, our :py:class:`IO <returns.io.IO>`
-mark is indeed indelible and should be respected.
+Well, ``IO`` mark is indeed indelible and should be respected.
 
-Once you have an ``IO`` operation you can mark it appropriately.
-And it infects all other functions that call it.
-And impurity becomes explicit:
+And then impurity becomes explicit:
 
 .. code:: python
 
   import requests
   import db
-  from returns.io import IO
+  from returns.io import IOResultE
 
   def can_book_seats(
       number_of_seats: int,
       place_id: int,
-  ) -> IO[bool]:
-      capacity = db.get_place_capacity(place_id)  # sql query
-      booked = requests('https://partner.com/api').json()['booked']
-      return IO(capacity >= number_of_seats + booked)
+  ) -> IOResultE[bool]:
+      ...
 
-Now this function returns ``IO[bool]`` instead of a regular ``bool``.
+Now this function returns ``IOResultE[bool]`` instead of a regular ``bool``.
 It means, that it cannot be used where regular ``bool`` can be:
 
 .. code:: python
 
-  def notify_user_about_booking_result(is_successful: bool) -> 'MessageID':
+  def process_booking_result(is_successful: bool) -> 'ProcessID':
       ...
 
-  is_successful: IO[bool] = can_book_seats(number_of_seats, place_id)
-  notify_user_about_booking_result(is_successful)  # Boom!
-  # => Argument 1 has incompatible type "IO[bool]"; expected "bool"
+  is_successful: IOResultE[bool] = can_book_seats(number_of_seats, place_id)
+  process_booking_result(is_successful)  # Boom!
+  # => Argument 1 has incompatible type "IOResultE[bool]"; expected "bool"
 
-See? It is now impossible for a pure function to use ``IO[bool]``.
-It is impossible to unwrap or get a value from this container.
+See? It is now impossible for a pure function to use ``IOResultE[bool]``.
+It is impossible to unwrap or get a raw value from this container.
 Once it is marked as ``IO`` it will never return to the pure state
 (well, there's a hack actually:
-:py:func:`unsafe_perform_io <returns.unsafe.unsafe_perform_io>`).
+:func:`unsafe_perform_io <returns.unsafe.unsafe_perform_io>`).
 
-``IO`` container also needs to be explicitly
-mapped to produce new ``IO`` result:
+Now we have to work inside the ``IO`` context:
 
 .. code:: python
 
-  message_id: IO['MessageID'] = can_book_seats(
+  message_id: IOResultE['ProcessID'] = can_book_seats(
       number_of_seats,
       place_id,
   ).map(
-      notify_user_about_booking_result,
+      process_booking_result,
   )
 
 Or it can be annotated to work with impure results:
 
 .. code:: python
 
-  def notify_user_about_booking_result(
-      is_successful: IO[bool],
-  ) -> IO['MessageID']:
+  def process_booking_result(
+      is_successful: IOResultE[bool],
+  ) -> IOResultE['ProcessID']:
       ...
 
-  is_successful: IO[bool] = can_book_seats(number_of_seats, place_id)
-  notify_user_about_booking_result(is_successful)  # Works!
+  is_successful: IOResult[bool] = can_book_seats(number_of_seats, place_id)
+  process_booking_result(is_successful)  # Works!
 
 Now, all our impurity is explicit.
 We can track it, we can fight it, we can design it better.
@@ -167,8 +191,9 @@ you have a functional core and imperative shell.
 Lifting
 ~~~~~~~
 
-You can also lift regular function into one
-that works with ``IO`` on both ends. It really helps you with the composition!
+You can also lift regular functions into one
+that works with ``IO`` or ``IOResult`` on both ends.
+It really helps you with the composition!
 
 .. code:: python
 
@@ -181,20 +206,76 @@ that works with ``IO`` on both ends. It really helps you with the composition!
   >>> # When we need to compose `regular_function` with `IO`,
   >>> # we have two ways of doing it:
   >>> io = container.map(regular_function)
-  >>> str(io)
-  '<IO: 0.5>'
+  >>> assert io == IO(0.5)
 
   >>> # or, it is the same as:
   >>> io = IO.lift(regular_function)(container)
-  >>> str(io)
-  '<IO: 0.5>'
+  >>> assert io == IO(0.5)
 
-The second variant is useful when using :func:`returns.pipeline.pipe`
+``IOResult`` can lift both regular functions and ones that return ``Result``:
+
+.. code:: python
+
+  >>> from returns.io import IOResult, IOSuccess
+
+  >>> def regular_function(arg: int) -> float:
+  ...     return arg / 2  # not an `IO` operation
+
+  >>> container: IOResult[int, str] = IOSuccess(1)
+  >>> # When we need to compose `regular_function` with `IOResult`,
+  >>> # we have two ways of doing it:
+  >>> io = container.map(regular_function)
+  >>> assert io == IOSuccess(0.5)
+
+  >>> # or, it is the same as:
+  >>> io = IOResult.lift(regular_function)(container)
+  >>> assert io == IOSuccess(0.5)
+
+And ``Result`` based functions:
+
+.. code:: python
+
+  >>> from returns.io import IOResult, IOSuccess
+  >>> from returns.result import Result, Success, Failure
+
+  >>> def regular_function(arg: int) -> Result[float, str]:
+  ...     if arg > 0:
+  ...         return Success(arg / 2)
+  ...     return Failure('zero')
+  ...
+
+  >>> assert IOResult.lift_result(regular_function)(
+  ...     IOSuccess(1),
+  ... ) == IOResult.from_result(regular_function(1))
+
+Lifting is useful when using :func:`returns.pipeline.pipe`
 and other different declarative tools.
 
 
+Aliases
+-------
+
+There are several useful alises for ``IOResult`` type with some common values:
+
+- :attr:`returns.io.IOResultE` is an alias for ``IOResult[... Exception]``,
+  just use it when you want to work with ``IOResult`` containers
+  that use exceptions as error type.
+  It is named ``IOResultE`` because it is ``IOResultException``
+  and ``IOResultError`` at the same time.
+
+
+Decorators
+----------
+
+Limitations
+~~~~~~~~~~~
+
+Typing will only work correctly
+if :ref:`decorator_plugin <type-safety>` is used.
+This happens due to `mypy issue <https://github.com/python/mypy/issues/3157>`_.
+
 impure
-------
+~~~~~~
 
 We also have this handy decorator to help
 you with the existing impure things in Python:
@@ -210,19 +291,30 @@ with ``@impure`` for better readability and clearness:
 
 .. code:: python
 
-  import requests
+  import random
   from returns.io import impure
 
   @impure
   def get_user() -> 'User':
-      return requests.get('https://...').json()
+      return random.randint(1, 5)
 
-Limitations
+impure_safe
 ~~~~~~~~~~~
 
-Typing will only work correctly
-if :ref:`decorator_plugin <type-safety>` is used.
-This happens due to `mypy issue <https://github.com/python/mypy/issues/3157>`_.
+Similar to ``impure`` and ``safe`` decorators.
+Once applied, it transforms the return type to be ``IOResultE``:
+
+.. code:: python
+
+  from returns.io import IOResultE, impure_safe
+
+  @impure_safe
+  def http_get(path: str) -> 'Response':
+      return requests.get(path)
+
+  container: IOResultE['Response'] = http_get('/home')
+
+Use for impure operations that might fail.
 
 
 io_squash
@@ -248,8 +340,7 @@ You can work with tuples instead like so:
 .. code:: python
 
   >>> plus = io_squash(IO(1), IO(2)).map(lambda args: args[0] + args[1])
-  >>> str(plus)
-  '<IO: 3>'
+  >>> assert plus == IO(3)
 
 We support up to 9 typed parameters to this function.
 
@@ -266,7 +357,7 @@ For example:
 
   def index_view(request, user_id):
       user: IO[User] = get_user(user_id)
-      return render('index.html', { user: user })  # ???
+      return render('index.html', {'user': user})  # ???
 
 In this case your web-framework will not render your user correctly.
 Since it does not expect it to be wrapped inside ``IO`` containers.
@@ -280,7 +371,7 @@ What to do? Use :func:`unsafe_perform_io <returns.unsafe.unsafe_perform_io>`:
 
   def index_view(request, user_id):
       user: IO[User] = get_user(user_id)
-      return render('index.html', { user: unsafe_perform_io(user) })  # Ok
+      return render('index.html', {'user': unsafe_perform_io(user)})  # Ok
 
 We need it as an escape and compatibility mechanism for our imperative shell.
 
@@ -334,9 +425,31 @@ my function accept ``IO[T]`` or simple ``T``?
 
 It really depends on your domain / context.
 If the value is pure, than use raw unwrapped values.
-If the value is fetched, input, received, selected, than use ``IO`` container.
+If the value is fetched, input, received, selected,
+than use ``IO`` or ``IOResult`` container:
+first one for operations that never fail,
+second one for operations that might fail.
 
-Most web applications are just covered with ``IO``.
+Most web applications are just fully covered with ``IO``.
+
+Why can't we use IO[Result] instead of IOResult?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We actually can! But, it is harder to write.
+And ``IOResult`` is actually the very same thing as ``IO[Result]``,
+but has nicer API:
+
+.. code:: python
+
+  x: IO[Result[int, str]]
+  x.map(lambda io: io.map(lambda number: number + 1))
+
+  # Is the same as:
+
+  y: IOResult[int, str]
+  y.map(lambda number: number + 1)
+
+The second one looks better, doesn't it?
 
 How to create unit object for IOResult?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -349,25 +462,10 @@ How to create unit object for IOResult?
   >>> first: IOResult[int, str] = IOSuccess(1)
   >>> second: IOResult[float, int] = IOFailure(1)
 
-Otherwise, ``mypy`` won't be able to typecheck your code.
+Otherwise, ``mypy`` will treat ``IOSuccess(1)`` as ``IOSuccess[int, Any]``.
+You need to narrow the type.
 
 See :ref:`result-units` for more details.
-
-Why IO should be at the top level of composition?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-As we state in :ref:`Composition docs <composition>`
-we allow to compose different containers together.
-
-We prefer ``IO[Result[A, B]]``
-and sticking to the single version allows better composition.
-The same rule is applied to ``Maybe`` and all other containers we have.
-
-Composing ``IO`` at the top level is easier
-because you can ``join`` things easily.
-
-And other containers not always make sense.
-If some operation performs ``IO`` it should mark all internals.
 
 Why can't we unwrap values or use @pipeline with IO?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -379,10 +477,15 @@ Otherwise, people might hack the system
 in some dirty (from our point of view)
 but valid (from the python's point of view) ways.
 
+Even ``IOResult`` can't be unwrapped.
+When used together with ``@pipeline``
+we will still receive ``IO`` values
+from :meth:`returns.io.IOResult.unwrap` calls.
+
 Warning::
 
   Of course, you can directly access
-  the internal state of the IO with `._internal_state`,
+  the internal state of the IO with ``._internal_state``,
   but your are considered to be a grown-up!
 
   Use wemake-python-styleguide to restrict `._` access in your code.
@@ -395,6 +498,7 @@ Further reading
 - `Functional architecture is Ports and Adapters <https://blog.ploeh.dk/2016/03/18/functional-architecture-is-ports-and-adapters/>`_
 - `IO effect in Scala <https://typelevel.org/cats-effect/datatypes/io.html>`_
 - `Getting started with fp-ts: IO <https://dev.to/gcanti/getting-started-with-fp-ts-io-36p6>`_
+- `IOEither <https://github.com/gcanti/fp-ts/blob/master/docs/modules/IOEither.ts.md>`_
 
 
 API Reference

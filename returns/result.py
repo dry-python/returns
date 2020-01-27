@@ -9,7 +9,6 @@ from typing import (
     ClassVar,
     Coroutine,
     Generic,
-    NoReturn,
     Type,
     TypeVar,
     Union,
@@ -26,6 +25,7 @@ _ValueType = TypeVar('_ValueType', covariant=True)
 _NewValueType = TypeVar('_NewValueType')
 _ErrorType = TypeVar('_ErrorType', covariant=True)
 _NewErrorType = TypeVar('_NewErrorType')
+_ContraErrorType = TypeVar('_ContraErrorType', contravariant=True)
 
 # Aliases:
 _FirstType = TypeVar('_FirstType')
@@ -142,8 +142,8 @@ class Result(
         cls,
         function: Callable[[_ValueType], _NewValueType],
     ) -> Callable[
-        ['Result[_ValueType, _ErrorType]'],
-        'Result[_NewValueType, _ErrorType]',
+        ['Result[_ValueType, _ContraErrorType]'],
+        'Result[_NewValueType, _ContraErrorType]',
     ]:
         """
         Lifts function to be wrapped in ``Result`` for better composition.
@@ -335,7 +335,7 @@ class _Failure(Result[Any, _ErrorType]):
 
 
 @final
-class _Success(Result[_ValueType, _ErrorType]):
+class _Success(Result[_ValueType, Any]):
     """
     Represents a calculation which has succeeded and contains the result.
 
@@ -505,7 +505,7 @@ Result.failure_type = _Failure
 
 def Success(  # noqa: N802
     inner_value: _NewValueType,
-) -> Result[_NewValueType, NoReturn]:
+) -> Result[_NewValueType, Any]:
     """
     Public unit function of protected :class:`~_Success` type.
 
@@ -521,7 +521,7 @@ def Success(  # noqa: N802
 
 def Failure(  # noqa: N802
     inner_value: _NewErrorType,
-) -> Result[NoReturn, _NewErrorType]:
+) -> Result[Any, _NewErrorType]:
     """
     Public unit function of protected :class:`~_Failure` type.
 

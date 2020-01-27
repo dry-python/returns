@@ -49,7 +49,7 @@ Aliases
 
 There are several useful alises for ``Result`` type with some common values:
 
-- ``ResultE`` is an alias for ``Result[... Exception]``,
+- :attr:`returns.result.ResultE` is an alias for ``Result[... Exception]``,
   just use it when you want to work with ``Result`` containers
   that use exceptions as error type.
   It is named ``ResultE`` because it is ``ResultException``
@@ -143,7 +143,7 @@ As you can see: ``Left`` (``Failure``) and ``Right`` (``Success``)
 are type constructors: that return ``Either a b`` (``Result[b, a]``) value.
 
 It means, that there's no single type ``Left a`` that makes
-sense without ``Right b``. Only their duality makes sence to us.
+sense without ``Right b``. Only their duality makes sense to us.
 
 In ``python`` we have functions that can be used as type constructors.
 That's why we use ``Success`` and ``Failure`` functions.

@@ -24,9 +24,9 @@ Contents
   :caption: Containers
 
   pages/maybe.rst
+  pages/result.rst
   pages/context.rst
   pages/io.rst
-  pages/result.rst
 
 .. toctree::
   :maxdepth: 2

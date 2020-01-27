@@ -12,7 +12,7 @@ def unsafe_perform_io(wrapped_in_io: IO[_ValueType]) -> _ValueType:
     Compatibility utility and escape mechanism from ``IO`` world.
 
     Just unwraps the internal value
-    from :py:class:`IO <returns.io.IO>` container.
+    from :class:`returns.io.IO` container.
     Should be used with caution!
     Since it might be overused by lazy and ignorant developers.
 
