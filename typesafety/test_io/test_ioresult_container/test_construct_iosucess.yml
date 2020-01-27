@@ -28,7 +28,7 @@
   main: |
     from returns.io import IOSuccess, IOResult
 
-    reveal_type(IOSuccess(1).map(str))  # N: Revealed type is 'returns.io.IOResult[builtins.str*, <nothing>]'
+    reveal_type(IOSuccess(1).map(str))  # N: Revealed type is 'returns.io.IOResult[builtins.str*, Any]'
 
 
 - case: iosuccess_value_or
