@@ -159,6 +159,9 @@ And ``Maybe`` represents just ``None`` and the value.
 It is not useful for ``IO`` related tasks.
 So, use ``Result`` instead, which can represent what happened to your ``IO``.
 
+You can convert ``Maybe`` to ``Result``
+and back again with special :ref:`converters`.
+
 
 Further reading
 ---------------
