@@ -206,7 +206,7 @@ class IOResult(
     Explicit marker for impure function results that might fail.
 
     Definition
-    ----------
+    ~~~~~~~~~~
 
     We call it "marker" since once it is marked, it cannot be unmarked.
 
@@ -238,14 +238,14 @@ class IOResult(
       with :meth:`~IOResult.from_failed_io`
       and :meth:`IOResult.from_successful_io`
     - You can construct ``IOResult`` from ``Result`` values
-      with :meth:`~IOResult.__init__`
+      with :meth:`~IOResult.from_result`
 
     We also have a lot of utility methods for better function composition like:
 
     - :meth:`~IOResult.bind_result` to work
       with functions which return ``Result``
     - :meth:`~IOResult.from_typecast` to work with ``IO[Result[...]]`` values
-    - :meth:`~IOResult.lift` and `~IOResult.lift_result` to allow
+    - :meth:`~IOResult.lift` and :meth:`~IOResult.lift_result` to allow
       indirect function composition
       with regular and ``Result`` based functions.
 
@@ -254,7 +254,7 @@ class IOResult(
 
 
     Implementation
-    --------------
+    ~~~~~~~~~~~~~~
 
     This class contains all the methods that can be delegated to ``Result``.
     But, some methods have ``raise NotImplementedError`` which means

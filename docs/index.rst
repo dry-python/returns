@@ -25,8 +25,8 @@ Contents
 
   pages/maybe.rst
   pages/result.rst
-  pages/context.rst
   pages/io.rst
+  pages/context.rst
 
 .. toctree::
   :maxdepth: 2

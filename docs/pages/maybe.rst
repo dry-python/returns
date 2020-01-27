@@ -91,8 +91,18 @@ It looks way uglier and can grow even more uglier and complex
 when new logic will be introduced.
 
 
-@maybe decorator
-----------------
+Decorators
+----------
+
+Limitations
+~~~~~~~~~~~
+
+Typing will only work correctly
+if :ref:`decorator_plugin <type-safety>` is used.
+This happens due to `mypy issue <https://github.com/python/mypy/issues/3157>`_.
+
+maybe
+~~~~~
 
 Sometimes we have to deal with functions
 that dears to return ``Optional`` values!

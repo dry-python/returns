@@ -56,8 +56,18 @@ There are several useful alises for ``Result`` type with some common values:
   and ``ResultError`` at the same time.
 
 
+Decorators
+----------
+
+Limitations
+~~~~~~~~~~~
+
+Typing will only work correctly
+if :ref:`decorator_plugin <type-safety>` is used.
+This happens due to `mypy issue <https://github.com/python/mypy/issues/3157>`_.
+
 safe
-----
+~~~~
 
 :func:`safe <returns.functions.safe>` is used to convert
 regular functions that can throw exceptions to functions
@@ -78,13 +88,6 @@ Supports both async and regular functions.
 
   >>> str(divide(0))
   '<Failure: division by zero>'
-
-Limitations
-~~~~~~~~~~~
-
-Typing will only work correctly
-if :ref:`decorator_plugin <type-safety>` is used.
-This happens due to `mypy issue <https://github.com/python/mypy/issues/3157>`_.
 
 
 FAQ
