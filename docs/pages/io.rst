@@ -317,8 +317,11 @@ Once applied, it transforms the return type to be ``IOResultE``:
 Use for impure operations that might fail.
 
 
+Helpers
+-------
+
 io_squash
----------
+~~~~~~~~~
 
 This function allows to squash several ``IO`` containers together.
 
@@ -348,7 +351,7 @@ We support up to 9 typed parameters to this function.
 .. _unsafe_perform_io:
 
 unsafe_perform_io
------------------
+~~~~~~~~~~~~~~~~~
 
 Sometimes you really need to get the raw value from ``IO`` container.
 For example:
