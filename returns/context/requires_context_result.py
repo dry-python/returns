@@ -1,27 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from abc import ABCMeta
-from typing import (
-    Any,
-    Callable,
-    ClassVar,
-    Generic,
-    NoReturn,
-    Type,
-    TypeVar,
-    Union,
-)
+from typing import Any, Callable, ClassVar, Generic, TypeVar, Union
 
 from typing_extensions import final
 
-from returns.functions import identity
+from returns.context.requires_context import RequiresContext
 from returns.primitives.container import BaseContainer
 from returns.result import Failure, Result, Success
 
 # Context:
 _EnvType = TypeVar('_EnvType', contravariant=True)
-_ReturnType = TypeVar('_ReturnType', covariant=True)
-_NewReturnType = TypeVar('_NewReturnType')
 
 # Result:
 _ValueType = TypeVar('_ValueType', covariant=True)
@@ -33,322 +21,56 @@ _NewErrorType = TypeVar('_NewErrorType')
 _FirstType = TypeVar('_FirstType')
 
 
-@final
-class RequiresContext(
-    BaseContainer,
-    Generic[_EnvType, _ReturnType],
-):
-    """
-    The ``RequiresContext`` container.
-
-    It's main purpose is to wrap some specific function
-    and give tools to compose other functions around it
-    without the actual calling it.
-
-    The ``RequiresContext`` container pass the state
-    you want to share between functions.
-    Functions may read that state, but can't change it.
-    The ``RequiresContext`` container
-    lets us access shared immutable state within a specific context.
-
-    It can be used for lazy evaluation and typed dependency injection.
-
-    ``RequiresContext`` is used with functions that never fails.
-    If you want to use ``RequiresContext`` with returns ``Result``
-    than consider using ``RequiresContextResult`` instead.
-
-    Note:
-        This container does not wrap ANY value. It wraps only functions.
-        You won't be able to supply arbitarry types!
-
-    See also:
-        https://dev.to/gcanti/getting-started-with-fp-ts-reader-1ie5
-        https://en.wikipedia.org/wiki/Lazy_evaluation
-        https://bit.ly/2R8l4WK
-
-    """
-
-    #: This field has an extra 'RequiresContext' just because `mypy` needs it.
-    _inner_value: Callable[['RequiresContext', _EnvType], _ReturnType]
-
-    #: A convinient placeholder to call methods created by `.from_value()`:
-    empty: ClassVar[Any] = object()
-
-    def __init__(
-        self, inner_value: Callable[[_EnvType], _ReturnType],
-    ) -> None:
-        """
-        Public constructor for this type. Also required for typing.
-
-        Only allows functions of kind ``* -> *``.
-
-        .. code:: python
-
-          >>> from returns.context import RequiresContext
-          >>> str(RequiresContext(lambda deps: deps + 1))
-          '<RequiresContext: <function <lambda> at ...>>'
-
-        """
-        super().__init__(inner_value)
-
-    def __call__(self, deps: _EnvType) -> _ReturnType:
-        """
-        Evaluates the wrapped function.
-
-        .. code:: python
-
-          >>> from returns.context import RequiresContext
-          >>> def first(lg: bool) -> RequiresContext[float, int]:
-          ...     # `deps` has `float` type here:
-          ...     return RequiresContext(
-          ...         lambda deps: deps if lg else -deps,
-          ...     )
-          ...
-          >>> instance = first(False)  # creating `RequiresContext` instance
-          >>> instance(3.5)  # calling it with `__call__`
-          -3.5
-
-        In other things, it is a regular python magic method.
-        """
-        return self._inner_value(deps)
-
-    def map(  # noqa: A003
-        self, function: Callable[[_ReturnType], _NewReturnType],
-    ) -> 'RequiresContext[_EnvType, _NewReturnType]':
-        """
-        Allows to compose functions inside the wrapped container.
-
-        Here's how it works:
-
-        .. code:: python
-
-          >>> from returns.context import RequiresContext
-          >>> def first(lg: bool) -> RequiresContext[float, int]:
-          ...     # `deps` has `float` type here:
-          ...     return RequiresContext(
-          ...         lambda deps: deps if lg else -deps,
-          ...     )
-          ...
-          >>> first(True).map(lambda number: number * 10)(2.5)
-          25.0
-          >>> first(False).map(lambda number: number * 10)(0.1)
-          -1.0
-
-        """
-        return RequiresContext(lambda deps: function(self(deps)))
-
-    def bind(
-        self,
-        function: Callable[
-            [_ReturnType],
-            'RequiresContext[_EnvType, _NewReturnType]',
-        ],
-    ) -> 'RequiresContext[_EnvType, _NewReturnType]':
-        """
-        Composes a container with a function returning another container.
-
-        This is useful when you do several computations
-        that relies on the same context.
-
-        .. code:: python
-
-          >>> from returns.context import RequiresContext
-
-          >>> def first(lg: bool) -> RequiresContext[float, int]:
-          ...     # `deps` has `float` type here:
-          ...     return RequiresContext(
-          ...         lambda deps: deps if lg else -deps,
-          ...     )
-          ...
-
-          >>> def second(number: int) -> RequiresContext[float, str]:
-          ...     # `deps` has `float` type here:
-          ...     return RequiresContext(
-          ...         lambda deps: '>=' if number >= deps else '<',
-          ...     )
-          ...
-
-          >>> first(True).bind(second)(1)
-          '>='
-          >>> first(False).bind(second)(2)
-          '<'
-
-        """
-        return RequiresContext(lambda deps: function(self(deps))(deps))
-
-    @classmethod
-    def lift(
-        cls,
-        function: Callable[[_ReturnType], _NewReturnType],
-    ) -> Callable[
-        ['RequiresContext[_EnvType, _ReturnType]'],
-        'RequiresContext[_EnvType, _NewReturnType]',
-    ]:
-        """
-        Lifts function to be wrapped in a container for better composition.
-
-        In other words, it modifies the function's
-        signature from: ``a -> b`` to:
-        ``RequiresContext[env, a] -> RequiresContext[env, b]``
-
-        Works similar to :meth:`~RequiresContext.map`,
-        but has inverse semantics.
-
-        This is how it should be used:
-
-        .. code:: python
-
-          >>> from returns.context import RequiresContext
-          >>> def example(argument: int) -> float:
-          ...     return argument / 2
-          ...
-
-          >>> container = RequiresContext.lift(example)(
-          ...     RequiresContext.from_value(2),
-          ... )
-          >>> container(RequiresContext.empty)
-          1.0
-
-        See also:
-            - https://wiki.haskell.org/Lifting
-            - https://github.com/witchcrafters/witchcraft
-            - https://en.wikipedia.org/wiki/Natural_transformation
-
-        """
-        return lambda container: container.map(function)
-
-    @classmethod
-    def from_value(
-        cls, inner_value: _FirstType,
-    ) -> 'RequiresContext[Any, _FirstType]':
-        """
-        Used to return some specific value from the container.
-
-        Consider this method as a some kind of factory.
-        Passed value will be a return type.
-        Make sure to use :attr:`~RequiresContext.empty`
-        for getting the unit value.
-
-        .. code:: python
-
-          >>> from returns.context import RequiresContext
-          >>> unit = RequiresContext.from_value(5)
-          >>> assert unit(RequiresContext.empty) == 5
-
-        Might be used with or without direct type hint.
-
-        """
-        return RequiresContext(lambda _: inner_value)
-
-
-@final
-class Context(Generic[_EnvType]):
-    """
-    Helpers that can be used to work with ``RequiresContext`` container.
-
-    Some of them requires explicit type to be specified.
-
-    This class contains methods that do require
-    to explicitly set type annotations. Why?
-    Because it is impossible to figure out type without them.
-
-    So, here's how you should use them:
-
-    .. code:: python
-
-      Context[Dict[str, str]].ask()
-
-    Otherwise, your ``.ask()`` method
-    will return ``RequiresContext[<nothing>, <nothing>]``,
-    which is unsable:
-
-    .. code:: python
-
-      env = Context.ask()
-      env(some_deps)
-
-    And ``mypy`` will warn you: ``error: Need type annotation for 'a'``
-
-    """
-
-    @classmethod
-    def ask(cls) -> RequiresContext[_EnvType, _EnvType]:
-        """
-        Get current context to use the depedencies.
-
-        It is a common scenarion when you need to use the environment.
-        For example, you want to do some context-related computation,
-        but you don't have the context instance at your disposal.
-        That's where ``.ask()`` becomes useful!
-
-        .. code:: python
-
-          >>> from typing_extensions import TypedDict
-          >>> class Deps(TypedDict):
-          ...     message: str
-          ...
-
-          >>> def first(lg: bool) -> RequiresContext[Deps, int]:
-          ...     # `deps` has `Deps` type here:
-          ...     return RequiresContext(
-          ...         lambda deps: deps['message'] if lg else 'error',
-          ...     )
-          ...
-
-          >>> def second(text: str) -> RequiresContext[int, int]:
-          ...     return first(len(text) > 3)
-          ...
-
-          >>> assert second('abc')({'message': 'ok'}) == 'error'
-          >>> assert second('abcd')({'message': 'ok'}) == 'ok'
-
-        And now imagine that you have to change this ``3`` limit.
-        And you want to be able to set it via environment as well.
-        Ok, let's fix it with the power of ``Context.ask()``!
-
-        .. code:: python
-
-          >>> from typing_extensions import TypedDict
-          >>> class Deps(TypedDict):
-          ...     message: str
-          ...     limit: int   # note this new field!
-          ...
-
-          >>> def new_first(lg: bool) -> RequiresContext[Deps, int]:
-          ...     # `deps` has `Deps` type here:
-          ...     return RequiresContext(
-          ...         lambda deps: deps['message'] if lg else 'error',
-          ...     )
-          ...
-
-          >>> def new_second(text: str) -> RequiresContext[int, int]:
-          ...     return Context[Deps].ask().bind(
-          ...         lambda deps: new_first(len(text) > deps.get('limit', 3)),
-          ...     )
-          ...
-
-          >>> assert new_second('abc')({'message': 'ok', 'limit': 2}) == 'ok'
-          >>> assert new_second('abcd')({'message': 'ok'}) == 'ok'
-          >>> new_second('abcd')({'message': 'ok', 'limit': 5})
-          'error'
-
-        That's how ``ask`` works and can be used.
-
-        See also:
-            https://dev.to/gcanti/getting-started-with-fp-ts-reader-1ie5
-
-        """
-        return RequiresContext(identity)
-
-
 class RequiresContextResult(
     BaseContainer,
     Generic[_EnvType, _ValueType, _ErrorType],
 ):
     """
+    The ``RequiresContextResult`` combinator.
+
+    See :class:`returns.context.RequiresContext` for more docs.
+
+    This is just a handy wrapper around ``RequiresContext[env, Result[a, b]]``
+    which represents a context-dependent pure operation
+    that might fail and return :class:`returns.result.Result`.
+
+    Why do we need this wrapper? That's just for better usability!
+
+    .. code:: python
+
+      >>> from returns.context import RequiresContext
+      >>> from returns.result import Success
+
+      >>> def function(arg: int) -> Result[int, str]:
+      ...      return Success(arg + 1)
+
+      >>> # Without wrapper:
+      >>> assert RequiresContext.from_value(Success(1)).map(
+      ...     lambda result: result.bind(function),
+      ... )(...) == Success(2)
+
+      >>> # With wrapper:
+      >>> assert RequiresContextResult.from_result(
+      ...     Success(1),
+      ... ).bind_result(function)(...) == Success(2)
+
+    This way ``RequiresContextResult`` allows to simply work with:
+
+    - raw values and pure functions
+    - ``RequiresContext`` values and pure functions returning it
+    - ``Result`` and functions returning it
 
     See also:
+        https://dev.to/gcanti/getting-started-with-fp-ts-reader-1ie5
+        https://en.wikipedia.org/wiki/Lazy_evaluation
+        https://bit.ly/2R8l4WK
         https://bit.ly/2RwP4fp
+
+    Imporatant implementation detail:
+    due it is meaning, ``RequiresContextResult``
+    cannot have ``Success`` and ``Failure`` subclasses.
+
+    We only have just one type. That's by design.
 
     """
 
@@ -358,7 +80,7 @@ class RequiresContextResult(
         Result[_ValueType, _ErrorType],
     ]
 
-#: A convinient placeholder to call methods created by `.from_value()`:
+    #: A convinient placeholder to call methods created by `.from_value()`.
     empty: ClassVar[Any] = object()
 
     def __init__(
@@ -398,12 +120,30 @@ class RequiresContextResult(
           >>> assert instance(3.5) == -3.5  # calling it with `__call__`
 
         In other things, it is a regular python magic method.
+
         """
         return self._inner_value(deps)
 
-    def map(
+    def map(  # noqa: A003
         self, function: Callable[[_ValueType], _NewValueType],
     ) -> 'RequiresContextResult[_EnvType, _NewValueType, _ErrorType]':
+        """
+        Composes successful container with a pure function.
+
+        .. code:: python
+
+          >>> from returns.context import RequiresContextResult
+          >>> from returns.result import Success, Failure
+
+          >>> assert RequiresContextResult.from_success(1).map(
+          ...     lambda x: x + 1,
+          ... )(...) == Success(2)
+
+          >>> assert RequiresContextResult.from_failure(1).map(
+          ...     lambda x: x + 1,
+          ... )(...) == Failure(1)
+
+        """
         return RequiresContextResult(lambda deps: self(deps).map(function))
 
     def bind(
@@ -492,7 +232,7 @@ class RequiresContextResult(
         .. code:: python
 
           >>> from returns.context import RequiresContext
-          >>> from returns.result import Success, Failure, Result
+          >>> from returns.result import Success, Failure
           >>> def function(arg: int) -> RequiresContext[str, int]:
           ...     return RequiresContext(lambda deps: len(deps) + arg)
           ...
@@ -516,11 +256,45 @@ class RequiresContextResult(
     def fix(
         self, function: Callable[[_ErrorType], _NewValueType],
     ) -> 'RequiresContextResult[_EnvType, _NewValueType, _ErrorType]':
+        """
+        Composes failed container with a pure function.
+
+        .. code:: python
+
+          >>> from returns.context import RequiresContextResult
+          >>> from returns.result import Success
+
+          >>> assert RequiresContextResult.from_success(1).fix(
+          ...     lambda x: x + 1,
+          ... )(...) == Success(1)
+
+          >>> assert RequiresContextResult.from_failure(1).fix(
+          ...     lambda x: x + 1,
+          ... )(...) == Success(2)
+
+        """
         return RequiresContextResult(lambda deps: self(deps).fix(function))
 
     def alt(
         self, function: Callable[[_ErrorType], _NewErrorType],
     ) -> 'RequiresContextResult[_EnvType, _ValueType, _NewErrorType]':
+        """
+        Composes failed container with a pure function.
+
+        .. code:: python
+
+          >>> from returns.context import RequiresContextResult
+          >>> from returns.result import Success, Failure
+
+          >>> assert RequiresContextResult.from_success(1).alt(
+          ...     lambda x: x + 1,
+          ... )(...) == Success(1)
+
+          >>> assert RequiresContextResult.from_failure(1).alt(
+          ...     lambda x: x + 1,
+          ... )(...) == Failure(2)
+
+        """
         return RequiresContextResult(lambda deps: self(deps).alt(function))
 
     def rescue(
@@ -792,12 +566,12 @@ class RequiresContextResult(
           ... )(RequiresContextResult.empty) == Failure(1)
 
         """
-        return RequiresContextResult(lambda deps: container(deps))
+        return RequiresContextResult(container)
 
     @classmethod
     def from_successful_context(
-        cls, inner_value: RequiresContext[_EnvType, _ReturnType],
-    ) -> 'RequiresContextResult[_EnvType, _ReturnType, Any]':
+        cls, inner_value: RequiresContext[_EnvType, _FirstType],
+    ) -> 'RequiresContextResult[_EnvType, _FirstType, Any]':
         """
         Creates new container from ``RequiresContext`` as a success unit.
 
@@ -814,8 +588,8 @@ class RequiresContextResult(
 
     @classmethod
     def from_failed_context(
-        cls, inner_value: RequiresContext[_EnvType, _ReturnType],
-    ) -> 'RequiresContextResult[_EnvType, Any, _ReturnType]':
+        cls, inner_value: RequiresContext[_EnvType, _FirstType],
+    ) -> 'RequiresContextResult[_EnvType, Any, _FirstType]':
         """
         Creates new container from ``RequiresContext`` as a failure unit.
 
@@ -865,8 +639,33 @@ class RequiresContextResult(
 
 @final
 class ContextResult(Generic[_EnvType]):
+    """
+    Helpers that can be used to work with ``RequiresContextResult`` container.
+
+    Related to :class:`returns.context.Context`, refer there for the docs.
+    """
+
     @classmethod
     def ask(cls) -> RequiresContextResult[_EnvType, _EnvType, Any]:
+        """
+        Is used to get the current dependencies inside the call stack.
+
+        Similar to :meth:`returns.context.Context.ask`,
+        but returns ``Result`` instead of a regular value.
+
+        Please, refer to the docs there to know how to use it.
+
+        One important note that is worth doublicating here:
+        you might need to provide ``_EnvType`` explicitly,
+        so ``mypy`` will know about it statically.
+
+        .. code:: python
+
+          >>> from returns.context import ContextResult
+          >>> from returns.result import Success
+          >>> assert ContextResult[int].ask().map(str)(1) == Success('1')
+
+        """
         return RequiresContextResult(Success)
 
 

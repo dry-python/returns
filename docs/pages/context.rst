@@ -8,6 +8,7 @@ and can pass different things into your logic instead of hardcoding you stuff.
 And by doing this you are on your way to achieve `Single Responsibility <https://en.wikipedia.org/wiki/Single_responsibility_principle>`_
 for your functions and objects.
 
+
 Using the context
 -----------------
 
@@ -135,12 +136,61 @@ Let's see how our code changes:
 
 And now you can pass your dependencies in a really direct and explicit way.
 
+ask
+~~~
+
+Let's try to configure how we mark our unguessed letters
+(previously unguessed letters were marked as ``'.'``).
+Let's say, we want to change this to be ``_``.
+
+How can we do that with our existing function?
+
+.. code:: python
+
+  def calculate_points(word: str) -> RequiresContext[_Deps, int]:
+      guessed_letters_count = len([letter for letter in word if letter != '.'])
+      return _award_points_for_letters(guessed_letters_count)
+
+We are already using ``RequiresContext``,
+but its dependencies are just hidden from us!
+We have a special helper for this case: :meth:`returns.context.Context.ask()`,
+which returns us current dependencies.
+
+The only thing we need to is to properly
+annotate the type for our case: ``Context[_Deps].ask()``
+Sadly, currently ``mypy`` is not able to infer the dependency type
+out of the context and we need to explicitly provide it.
+
+Let's see the final result:
+
+.. code:: python
+
+  from returns.context import Context, RequiresContext
+
+  class _Deps(Protocol):  # we rely on abstractions, not direct values or types
+      WORD_THRESSHOLD: int
+      UNGUESSED_CHAR: str
+
+  def calculate_points(word: str) -> RequiresContext[_Deps, int]:
+      def factory(deps: _Deps) -> RequiresContext[_Deps, int]:
+          guessed_letters_count = len([
+            letter for letter in word if letter != deps.UNGUESSED_CHAR
+          ])
+          return _award_points_for_letters(guessed_letters_count)
+
+      return Context[_Deps].ask().bind(factory)
+
+And now we access the current context from any place in our callstack.
+Isn't it convenient?
+
 
 RequiresContext container
 -------------------------
 
 The concept behind ``RequiresContext`` container is really simple.
 It is a container around ``Callable[[EnvType], ReturnType]`` function.
+
+By its definition it works with pure functions that never fails.
 
 It can be illustrated as a simple nested function:
 
@@ -199,54 +249,29 @@ There's how execution flows:
        F4 --> F5
        F5["bool_to_str()"] --> F6["str"]
 
+The rule is: the dependencies are injected at the very last moment in time.
+And then normal logical execution happens.
 
-Context helper
---------------
 
-Let's go back to our ``django`` example
-and try to configure how we mark our unguessed letters
-(previously unguessed letters were marked as ``'.'``).
-Let's say, we want to change this to be ``_``.
+RequiresContextResult container
+-------------------------------
 
-How can we do that with our existing function?
+This container is a combintaion of ``RequiresContext[env, Result[a, b]]``.
+Which means that it is a wrapper around pure function that might fail.
 
-.. code:: python
+We also added a lot of useful methods for this container,
+so you can work easily with it:
 
-  def calculate_points(word: str) -> RequiresContext[_Deps, int]:
-      guessed_letters_count = len([letter for letter in word if letter != '.'])
-      return _award_points_for_letters(guessed_letters_count)
+- :meth:`returns.context.RequiresContextResult.from_typecast` turns
+  accidental ``RequiresContext[env, Result[a, b]]`` into
+  full-featured ``RequiresContextResult[env, a, b]``
+- :meth:`returns.context.RequiresContextResult.bind_result` allows to bind
+  functions that return ``Result`` with just one call
+- :meth:returns.context.RequiresContextResult.bind_context` allows to bind
+  functions that return ``RequiresContext`` easily
+- There are also several useful contructors from any possible type
 
-We are already using ``RequiresContext``,
-but its dependencies are just hidden from us!
-We have a special helper for this case: ``Context.ask()``,
-which returns us current dependencies.
-
-The only thing we need to is to properly
-annotate the type for our case: ``Context[_Deps].ask()``
-Sadly, currently ``mypy`` is not able to infer the dependency type
-out of the context and we need to explicitly provide it.
-
-Let's see the final result:
-
-.. code:: python
-
-  from returns.context import Context, RequiresContext
-
-  class _Deps(Protocol):  # we rely on abstractions, not direct values or types
-      WORD_THRESSHOLD: int
-      UNGUESSED_CHAR: str
-
-  def calculate_points(word: str) -> RequiresContext[_Deps, int]:
-      def factory(deps: _Deps) -> RequiresContext[_Deps, int]:
-          guessed_letters_count = len([
-            letter for letter in word if letter != deps.UNGUESSED_CHAR
-          ])
-          return _award_points_for_letters(guessed_letters_count)
-
-      return Context[_Deps].ask().bind(factory)
-
-And now we access the current context from any place in our callstack.
-Isn't it convenient?
+Use it when you work with pure context-related functions that might fail.
 
 
 FAQ
@@ -257,6 +282,9 @@ Why do I have to use explicit type annotation for ask method?
 
 How to create unit objects?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+How can I access dependencies inside the context?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 
@@ -273,7 +301,18 @@ Further reading
 API Reference
 -------------
 
-.. autoclasstree:: returns.context
+RequiresContext
+~~~~~~~~~~~~~~~
 
-.. automodule:: returns.context
+.. autoclasstree:: returns.context.requires_context
+
+.. automodule:: returns.context.requires_context
+   :members:
+
+RequiresContextResult
+~~~~~~~~~~~~~~~~~~~~~
+
+.. autoclasstree:: returns.context.requires_context_result
+
+.. automodule:: returns.context.requires_context_result
    :members:

@@ -28,7 +28,6 @@ See [0Ver](https://0ver.org/).
 - Adds `RequiresContextResult` support for `bind`
 - Adds `RequiresContextResult` support for `flatten`
 - Adds `RequiresContextResult` support for `fold`
-- Adds `RequiresContextResult` support for `is_successful`
 
 - Adds `IOResult` helper to work better with `IO[Result[a, b]]`
 - Adds `IOResultE` alias for `IOResult[a, Exception]`
