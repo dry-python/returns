@@ -20,6 +20,4 @@ def test_equality():
 def test_nonequality():
     """Ensures that containers can be compared."""
     assert RequiresContext(_same_function) != RequiresContext(str)
-    assert Context[int].unit(1) != Context[int].unit(1)
-    assert Context.unit(1) != Context[int].unit(1)
-    assert Context.unit(1) != Context.unit(1)
+    assert RequiresContext.from_value(1) != RequiresContext.from_value(1)

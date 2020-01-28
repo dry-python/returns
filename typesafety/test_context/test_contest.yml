@@ -14,17 +14,9 @@
     reveal_type(Context[str].ask())  # N: Revealed type is 'returns.context.RequiresContext[builtins.str*, builtins.str*]'
 
 
-- case: context_unit1
+- case: requires_context_from_value
   disable_cache: true
   main: |
-    from returns.context import Context
+    from returns.context import RequiresContext
 
-    reveal_type(Context.unit(1))  # N: Revealed type is 'returns.context.RequiresContext[<nothing>, builtins.int*]'
-
-
-- case: context_unit2
-  disable_cache: true
-  main: |
-    from returns.context import Context
-
-    reveal_type(Context[str].unit(1))  # N: Revealed type is 'returns.context.RequiresContext[builtins.str, builtins.int*]'
+    reveal_type(RequiresContext.from_value(1))  # N: Revealed type is 'returns.context.RequiresContext[Any, builtins.int*]'

@@ -511,7 +511,7 @@ class IOResult(
         """
         Lifts function from ``Result`` to ``IOResult`` for better composition.
 
-        Similar to :meth:`~IOResult.lift`, but works with other types.
+        Similar to :meth:`~IOResult.lift`, but works with other type.
 
         .. code:: python
 

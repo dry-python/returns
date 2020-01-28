@@ -2,7 +2,7 @@
 
 import pytest
 
-from returns.context import Context
+from returns.context import RequiresContext
 from returns.converters import flatten
 from returns.io import IO, IOFailure, IOSuccess
 from returns.maybe import Nothing, Some
@@ -31,5 +31,5 @@ def test_flatten(container, merged):
 def test_flatten_context():
     """Ensures that `join` works with Context."""
     assert flatten(
-        Context.unit(Context.unit(1)),
-    )(Context.Empty) == 1
+        RequiresContext.from_value(RequiresContext.from_value(1)),
+    )(RequiresContext.empty) == 1
