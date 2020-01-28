@@ -21,12 +21,12 @@
 - case: requires_context_bind_correct
   disable_cache: true
   main: |
-    from returns.context import Context, RequiresContext
+    from returns.context import RequiresContext
 
     first: RequiresContext[int, str]
 
     def function(arg: str) -> RequiresContext[int, float]:
-        return Context[int].unit(1.5)
+        return RequiresContext.from_value(1.5)
 
     reveal_type(first.bind(function))  # N: Revealed type is 'returns.context.RequiresContext[builtins.int, builtins.float*]'
 
@@ -60,12 +60,12 @@
 - case: requires_context_bind_wrong1
   disable_cache: true
   main: |
-    from returns.context import Context, RequiresContext
+    from returns.context import RequiresContext
 
     first: RequiresContext[int, str]
 
     def function(arg: float) -> RequiresContext[int, float]:
-        return Context[int].unit(1.5)
+        return RequiresContext.from_value(1.5)
 
     first.bind(function)
   out: |
@@ -75,12 +75,12 @@
 - case: requires_context_bind_wrong2
   disable_cache: true
   main: |
-    from returns.context import Context, RequiresContext
+    from returns.context import RequiresContext
 
     first: RequiresContext[int, str]
 
     def function(arg: str) -> RequiresContext[str, float]:
-        return Context[str].unit(1.5)
+        return RequiresContext.from_value(1.5)
 
     first.bind(function)
   out: |

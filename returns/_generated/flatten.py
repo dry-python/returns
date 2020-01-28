@@ -15,7 +15,7 @@ def _flatten(container):
       >>> from returns.maybe import Some
       >>> from returns.result import Failure, Success
       >>> from returns.io import IO, IOSuccess, IOFailure
-      >>> from returns.context import Context
+      >>> from returns.context import RequiresContext
 
       >>> assert flatten(IO(IO(1))) == IO(1)
 
@@ -28,8 +28,8 @@ def _flatten(container):
       >>> assert flatten(IOFailure(IOFailure(1))) == IOFailure(IOFailure(1))
 
       >>> assert flatten(
-      ...     Context.unit(Context.unit(1)),
-      ... )(Context.Empty) == 1
+      ...     RequiresContext.from_value(RequiresContext.from_value(1)),
+      ... )(RequiresContext.empty) == 1
 
     See also:
         https://bit.ly/2sIviUr

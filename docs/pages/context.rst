@@ -249,6 +249,18 @@ And now we access the current context from any place in our callstack.
 Isn't it convenient?
 
 
+FAQ
+---
+
+Why do I have to use explicit type annotation for ask method?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+How to create unit objects?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
 Further reading
 ---------------
 
