@@ -45,7 +45,6 @@ def _flatten(
     ...
 
 
-
 @overload
 def _flatten(
     container: RequiresContextResult[
