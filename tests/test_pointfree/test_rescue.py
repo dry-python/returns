@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
+from returns.context import RequiresContextResult
 from returns.io import IOFailure, IOResult, IOSuccess
 from returns.pointfree import rescue
 from returns.result import Failure, Result, Success
-from returns.context import RequiresContextResult
 
 
 def _result_function(argument: int) -> Result[int, str]:

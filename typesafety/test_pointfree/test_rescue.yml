@@ -31,4 +31,4 @@
     def test(arg: float) -> RequiresContextResult[int, float, str]:
         ...
 
-    reveal_type(rescue(test))  # N: Revealed type is 'def (returns.context.requires_context_result.RequiresContextResult[builtins.int*, builtins.float*, builtins.float*]) -> returns.context.requires_context_result.RequiresContextResult[builtins.int*, builtins.float*, builtins.str*]
+    reveal_type(rescue(test))  # N: Revealed type is 'def (returns.context.requires_context_result.RequiresContextResult[builtins.int*, builtins.float*, builtins.float*]) -> returns.context.requires_context_result.RequiresContextResult[builtins.int*, builtins.float*, builtins.str*]'
