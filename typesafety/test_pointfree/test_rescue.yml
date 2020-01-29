@@ -20,3 +20,15 @@
         ...
 
     reveal_type(rescue(test))  # N: Revealed type is 'def (returns.io.IOResult[builtins.int*, builtins.float*]) -> returns.io.IOResult[builtins.int*, builtins.str*]'
+
+
+- case: rescue_context_result
+  disable_cache: true
+  main: |
+    from returns.pointfree import rescue
+    from returns.context import RequiresContextResult
+
+    def test(arg: float) -> RequiresContextResult[int, float, str]:
+        ...
+
+    reveal_type(rescue(test))  # N: Revealed type is 'def (returns.context.requires_context_result.RequiresContextResult[builtins.int*, builtins.float*, builtins.float*]) -> returns.context.requires_context_result.RequiresContextResult[builtins.int*, builtins.float*, builtins.str*]

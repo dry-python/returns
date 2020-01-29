@@ -76,4 +76,4 @@
 
     x: RequiresContext[str, RequiresContext[str, int]]
 
-    reveal_type(flatten(x))  # N: Revealed type is 'returns.context.RequiresContext[builtins.str*, builtins.int*]'
+    reveal_type(flatten(x))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[builtins.str*, builtins.int*]'

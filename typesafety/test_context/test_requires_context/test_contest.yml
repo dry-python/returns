@@ -1,0 +1,22 @@
+- case: context_ask1
+  disable_cache: true
+  main: |
+    from returns.context import Context
+
+    reveal_type(Context.ask())  # N: Revealed type is 'returns.context.requires_context.RequiresContext[<nothing>, <nothing>]'
+
+
+- case: context_ask2
+  disable_cache: true
+  main: |
+    from returns.context import Context
+
+    reveal_type(Context[str].ask())  # N: Revealed type is 'returns.context.requires_context.RequiresContext[builtins.str*, builtins.str*]'
+
+
+- case: requires_context_from_value
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContext
+
+    reveal_type(RequiresContext.from_value(1))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[Any, builtins.int*]'

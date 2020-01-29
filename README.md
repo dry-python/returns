@@ -203,6 +203,9 @@ And now you can pass your dependencies in a really direct and explicit way.
 And have the type-safety to check what you pass to cover your back.
 Check out [RequiresContext](https://returns.readthedocs.io/en/latest/pages/context.html) docs for more. There you will learn how to make `'.'` also configurable.
 
+We also have [RequiresContextResult](https://returns.readthedocs.io/en/latest/pages/context.html#requirescontextresult-container)
+for context-related operations that might fail.
+
 
 ## Result container
 

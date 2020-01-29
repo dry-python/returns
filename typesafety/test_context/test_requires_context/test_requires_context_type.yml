@@ -15,7 +15,7 @@
 
     first: RequiresContext[int, str]
 
-    reveal_type(first.map(lambda char: float(char)))  # N: Revealed type is 'returns.context.RequiresContext[builtins.int, builtins.float*]'
+    reveal_type(first.map(lambda char: float(char)))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[builtins.int, builtins.float*]'
 
 
 - case: requires_context_bind_correct
@@ -28,7 +28,7 @@
     def function(arg: str) -> RequiresContext[int, float]:
         return RequiresContext.from_value(1.5)
 
-    reveal_type(first.bind(function))  # N: Revealed type is 'returns.context.RequiresContext[builtins.int, builtins.float*]'
+    reveal_type(first.bind(function))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[builtins.int, builtins.float*]'
 
 
 - case: requires_context_call_wrong
