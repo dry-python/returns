@@ -1,0 +1,9 @@
+- case: requirescontext_lift
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContext
+
+    def test(arg: int) -> str:
+        return str(arg)
+
+    reveal_type(RequiresContext.lift(test))  # N: Revealed type is 'def (returns.context.requires_context.RequiresContext[<nothing>, builtins.int*]) -> returns.context.requires_context.RequiresContext[<nothing>, builtins.str*]'

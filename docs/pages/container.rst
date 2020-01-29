@@ -10,7 +10,7 @@ while maintaining the execution context.
 List of supported containers:
 
 - :class:`Maybe <returns.maybe.Maybe>` to handle ``None`` cases
-- :class:`RequiresContext <returns.context.RequiresContext>`
+- :class:`RequiresContext <returns.context.requires_context.RequiresContext>`
   to pass context to your functions
 - :class:`IO <returns.io.IO>` to mark explicit ``IO`` actions
 - :class:`Result <returns.result.Result>` to handle possible exceptions

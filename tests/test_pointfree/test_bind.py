@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from returns.context import RequiresContext
+from returns.context import RequiresContext, RequiresContextResult
 from returns.io import IO, IOFailure, IOResult, IOSuccess
 from returns.maybe import Maybe, Nothing, Some
 from returns.pointfree import bind
@@ -25,6 +25,12 @@ def _ioresult_function(argument: int) -> IOResult[str, str]:
 
 def _context_function(argument: int) -> RequiresContext[int, int]:
     return RequiresContext(lambda other: argument + other)
+
+
+def _context_result_function(
+    argument: int,
+) -> RequiresContextResult[int, int, str]:
+    return RequiresContextResult(lambda other: Success(argument + other))
 
 
 def test_bind_with_io():
@@ -63,3 +69,10 @@ def test_bind_with_context():
     binded = bind(_context_function)
 
     assert binded(RequiresContext(lambda _: 3))(5) == 8
+
+
+def test_bind_with_context_result():
+    """Ensures that functions can be composed and return type is correct."""
+    binded = bind(_context_result_function)
+
+    assert binded(RequiresContextResult.from_success(3))(5) == Success(8)

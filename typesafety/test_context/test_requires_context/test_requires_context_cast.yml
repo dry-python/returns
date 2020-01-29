@@ -6,7 +6,7 @@
     first: RequiresContext[int, TypeError]  # we can only return type
     second: RequiresContext[int, Exception] = first
 
-    reveal_type(second)  # N: Revealed type is 'returns.context.RequiresContext[builtins.int, builtins.Exception]'
+    reveal_type(second)  # N: Revealed type is 'returns.context.requires_context.RequiresContext[builtins.int, builtins.Exception]'
 
 
 - case: context_wrong_cast

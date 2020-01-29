@@ -262,13 +262,13 @@ Which means that it is a wrapper around pure function that might fail.
 We also added a lot of useful methods for this container,
 so you can work easily with it:
 
-- :meth:`returns.context.RequiresContextResult.from_typecast` turns
-  accidental ``RequiresContext[env, Result[a, b]]`` into
+- :meth:`returns.context.requires_context.RequiresContextResult.from_typecast`
+  turns accidental ``RequiresContext[env, Result[a, b]]`` into
   full-featured ``RequiresContextResult[env, a, b]``
-- :meth:`returns.context.RequiresContextResult.bind_result` allows to bind
-  functions that return ``Result`` with just one call
-- :meth:returns.context.RequiresContextResult.bind_context` allows to bind
-  functions that return ``RequiresContext`` easily
+- :meth:`returns.context.requires_context.RequiresContextResult.bind_result`
+  allows to bind functions that return ``Result`` with just one call
+- :meth:returns.context.requires_context.RequiresContextResult.bind_context`
+  allows to bind functions that return ``RequiresContext`` easily
 - There are also several useful contructors from any possible type
 
 Use it when you work with pure context-related functions that might fail.
@@ -285,7 +285,6 @@ How to create unit objects?
 
 How can I access dependencies inside the context?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 
 
 

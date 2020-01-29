@@ -55,4 +55,17 @@
     def test(arg: float) -> RequiresContext[int, str]:
         ...
 
-    reveal_type(bind(test))  # N: Revealed type is 'def (returns.context.RequiresContext[builtins.int*, builtins.float*]) -> returns.context.RequiresContext[builtins.int*, builtins.str*]'
+    reveal_type(bind(test))  # N: Revealed type is 'def (returns.context.requires_context.RequiresContext[builtins.int*, builtins.float*]) -> returns.context.requires_context.RequiresContext[builtins.int*, builtins.str*]'
+
+
+- case: bind_context_result
+  disable_cache: true
+  main: |
+    from returns.pointfree import bind
+    from returns.context import RequiresContextResult
+    from returns.result import Success
+
+    def test(arg: float) -> RequiresContextResult[int, int, str]:
+        ...
+
+    reveal_type(bind(test))  # N: Revealed type is 'def (returns.context.requires_context_result.RequiresContextResult[builtins.int*, builtins.float*, builtins.str*]) -> returns.context.requires_context_result.RequiresContextResult[builtins.int*, builtins.int*, builtins.str*]'

@@ -2,7 +2,7 @@
 
 from typing import Callable, TypeVar, overload
 
-from returns.context import RequiresContext
+from returns.context import RequiresContext, RequiresContextResult
 from returns.io import IO, IOResult
 from returns.maybe import Maybe
 from returns.result import Result
@@ -35,6 +35,19 @@ def _bind(
 ) -> Callable[
     [RequiresContext[_EnvType, _ValueType]],
     RequiresContext[_EnvType, _NewValueType],
+]:
+    ...
+
+
+@overload
+def _bind(
+    function: Callable[
+        [_ValueType],
+        RequiresContextResult[_EnvType, _NewValueType, _ErrorType],
+    ],
+) -> Callable[
+    [RequiresContextResult[_EnvType, _ValueType, _ErrorType]],
+    RequiresContextResult[_EnvType, _NewValueType, _ErrorType],
 ]:
     ...
 

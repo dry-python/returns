@@ -28,11 +28,18 @@ class RequiresContextResult(
     """
     The ``RequiresContextResult`` combinator.
 
-    See :class:`returns.context.RequiresContext` for more docs.
+    See :class:`returns.context.requires_context.RequiresContext` for more docs.
 
     This is just a handy wrapper around ``RequiresContext[env, Result[a, b]]``
     which represents a context-dependent pure operation
     that might fail and return :class:`returns.result.Result`.
+
+    It has several important differences from the regular ``Result`` classes.
+    It does not have ``Success`` and ``Failure`` subclasses.
+    Because, the computation is not yet performed.
+    And we cannot know the type in advance.
+
+    So, this is a thin wrapper, without any changes in logic.
 
     Why do we need this wrapper? That's just for better usability!
 
@@ -60,17 +67,19 @@ class RequiresContextResult(
     - ``RequiresContext`` values and pure functions returning it
     - ``Result`` and functions returning it
 
-    See also:
-        https://dev.to/gcanti/getting-started-with-fp-ts-reader-1ie5
-        https://en.wikipedia.org/wiki/Lazy_evaluation
-        https://bit.ly/2R8l4WK
-        https://bit.ly/2RwP4fp
-
     Imporatant implementation detail:
     due it is meaning, ``RequiresContextResult``
     cannot have ``Success`` and ``Failure`` subclasses.
 
     We only have just one type. That's by design.
+
+    Different converters are also not supported for this type.
+
+    See also:
+        https://dev.to/gcanti/getting-started-with-fp-ts-reader-1ie5
+        https://en.wikipedia.org/wiki/Lazy_evaluation
+        https://bit.ly/2R8l4WK
+        https://bit.ly/2RwP4fp
 
     """
 
