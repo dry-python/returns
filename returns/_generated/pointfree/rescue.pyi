@@ -2,7 +2,7 @@
 
 from typing import Callable, TypeVar, overload
 
-from returns.context import RequiresContextResult
+from returns.context import RequiresContextIOResult, RequiresContextResult
 from returns.io import IOResult
 from returns.result import Result
 
@@ -45,5 +45,18 @@ def _rescue(
 ) -> Callable[
     [RequiresContextResult[_EnvType, _ValueType, _ErrorType]],
     RequiresContextResult[_EnvType, _ValueType, _NewErrorType],
+]:
+    ...
+
+
+@overload
+def _rescue(
+    function: Callable[
+        [_ErrorType],
+        RequiresContextIOResult[_EnvType, _ValueType, _NewErrorType],
+    ],
+) -> Callable[
+    [RequiresContextIOResult[_EnvType, _ValueType, _ErrorType]],
+    RequiresContextIOResult[_EnvType, _ValueType, _NewErrorType],
 ]:
     ...

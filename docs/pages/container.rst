@@ -10,10 +10,12 @@ while maintaining the execution context.
 List of supported containers:
 
 - :class:`Maybe <returns.maybe.Maybe>` to handle ``None`` cases
-- :class:`RequiresContext <returns.context.requires_context.RequiresContext>`
-  to pass context to your functions
-- :class:`IO <returns.io.IO>` to mark explicit ``IO`` actions
 - :class:`Result <returns.result.Result>` to handle possible exceptions
+- :class:`IO <returns.io.IO>` to mark explicit ``IO`` actions
+- :class:`RequiresContext <returns.context.requires_context.RequiresContext>`
+  to pass context to your functions (DI and similar)
+
+There are also some combintations like
 
 We will show you container's simple API of one attribute
 and several simple methods.
@@ -178,11 +180,19 @@ Needs transformation
   use :func:`result_to_maybe <returns.converters.result_to_maybe>`
   and then :func:`flatten <returns.converters.flatten>`
 - ``RequiresContext[env, Result[A, B]]`` 🤔,
-  use :meth:`returns.context.requires_context_result.from_typecast`
+  use
+  :meth:`returns.context.requires_context_result.RequiresContextResult.from_typecast`
   and ``RequiresResultContext``
 - ``RequiresContext[env, RequiresContext[env, A]]`` 🤔,
   use :func:`flatten <returns.converters.flatten>`
 - ``RequiresContextResult[env, RequiresContextResult[env, A, B], B]`` 🤔,
+  use :func:`flatten <returns.converters.flatten>`
+- ``RequiresContext[env, IOResult[A, B]]`` 🤔,
+  use
+  :meth:`returns.context.requires_context_io_result.RequiresContextIOResult.from_typecast`
+  and ``RequiresResultContext``
+  - ``RequiresContextIOResult[env, RequiresContextIOResult[env, A, B], B]``
+  🤔,
   use :func:`flatten <returns.converters.flatten>`
 
 Nope
@@ -194,6 +204,7 @@ Nope
 - ``Result[A, Result[B, C]]`` 🚫
 - ``Maybe[IO[A]]`` 🚫
 - ``RequiresContext[IO[A], B]`` 🚫
+- ``IO[RequiresContext[A, B]`` 🚫
 
 You can use :ref:`converters` to convert ``Maybe`` and ``Result`` containers.
 You can also use :func:`flatten <returns.converters.flatten>`

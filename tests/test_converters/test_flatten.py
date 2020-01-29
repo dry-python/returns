@@ -2,7 +2,11 @@
 
 import pytest
 
-from returns.context import RequiresContext
+from returns.context import (
+    RequiresContext,
+    RequiresContextIOResult,
+    RequiresContextResult,
+)
 from returns.converters import flatten
 from returns.io import IO, IOFailure, IOSuccess
 from returns.maybe import Nothing, Some
@@ -28,8 +32,28 @@ def test_flatten(container, merged):
     assert flatten(container) == merged
 
 
-def test_flatten_context():
-    """Ensures that `join` works with Context."""
-    assert flatten(
+@pytest.mark.parametrize(('container', 'merged'), [
+    (
+        RequiresContextResult.from_success(
+            RequiresContextResult.from_success(1),
+        ),
+
+        RequiresContextResult.from_success(1),
+    ),
+
+    (
+        RequiresContextIOResult.from_success(
+            RequiresContextIOResult.from_success(1),
+        ),
+
+        RequiresContextIOResult.from_success(1),
+    ),
+
+    (
         RequiresContext.from_value(RequiresContext.from_value(1)),
-    )(RequiresContext.empty) == 1
+        RequiresContext.from_value(1),
+    ),
+])
+def test_flatten_context(container, merged):
+    """Ensures that `flatten` is always returning the correct type."""
+    assert flatten(container)(...) == merged(...)

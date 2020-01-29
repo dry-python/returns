@@ -321,6 +321,15 @@ But, think twice: why would you need to do it?
 These classes represent computations that rely on context.
 Maybe, you should not do creat their units?
 
+``RequiresContextIOResult`` requires you to use one of the following methods:
+
+- ``from_success`` when you want to mark some raw value as a ``Success``
+- ``from_failure`` when you want to mark some raw value as a ``Failure``
+- ``from_result`` when you already have ``Result`` container
+- ``from_ioresult`` when you already have ``IOResult`` container
+- ``from_successful_context`` when you have successful ``RequiresContext``
+- ``from_failed_context`` when you have failed ``RequiresContext``
+
 How can I access dependencies inside the context?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -372,4 +381,12 @@ RequiresContextResult
 .. autoclasstree:: returns.context.requires_context_result
 
 .. automodule:: returns.context.requires_context_result
+   :members:
+
+RequiresContextIOResult
+~~~~~~~~~~~~~~~~~~~~~
+
+.. autoclasstree:: returns.context.requires_context_io_result
+
+.. automodule:: returns.context.requires_context_io_result
    :members:

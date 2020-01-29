@@ -15,3 +15,8 @@ from returns.context.requires_context_result import (  # noqa: F401
     RequiresContextResult as RequiresContextResult,
     RequiresContextResultE as RequiresContextResultE,
 )
+from returns.context.requires_context_io_result import (  # noqa: F401
+    ContextIOResult as ContextIOResult,
+    RequiresContextIOResult as RequiresContextIOResult,
+    RequiresContextIOResultE as RequiresContextIOResultE,
+)

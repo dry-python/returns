@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from returns.context import RequiresContextResult
+from returns.context import RequiresContextIOResult, RequiresContextResult
 from returns.io import IOFailure, IOResult, IOSuccess
 from returns.pointfree import rescue
 from returns.result import Failure, Result, Success
@@ -24,6 +24,14 @@ def _context_result_function(
     if argument > 0:
         return RequiresContextResult(lambda deps: Success(argument + deps))
     return RequiresContextResult.from_failure('nope')
+
+
+def _context_io_result_function(
+    argument: int,
+) -> RequiresContextIOResult[int, int, str]:
+    if argument > 0:
+        return RequiresContextIOResult(lambda deps: IOSuccess(argument + deps))
+    return RequiresContextIOResult.from_failure('nope')
 
 
 def test_rescue_with_ioresult():
@@ -57,3 +65,18 @@ def test_rescue_with_context_result():
     assert rescued(
         RequiresContextResult.from_failure(0),
     )(1) == Failure('nope')
+
+
+def test_rescue_with_context_io_result():
+    """Ensures that functions can be composed and return type is correct."""
+    rescued = rescue(_context_io_result_function)
+
+    assert rescued(
+        RequiresContextIOResult.from_success(1),
+    )(1) == IOSuccess(1)
+    assert rescued(
+        RequiresContextIOResult.from_failure(1),
+    )(1) == IOSuccess(2)
+    assert rescued(
+        RequiresContextIOResult.from_failure(0),
+    )(1) == IOFailure('nope')

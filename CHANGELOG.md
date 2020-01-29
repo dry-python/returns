@@ -36,6 +36,12 @@ See [0Ver](https://0ver.org/).
 - Adds `IOResult` support for `fold`
 - Adds `IOResult` support for `is_successful`
 
+- Adds `RequiresContextIOResult` container
+- Adds `RequiresContextIOResultE` alias
+  for `RequiresContextIOResult[..., ..., Exception]`
+- Adds `RequiresContextIOResult` support for `bind` and `rescue`
+- Adds `RequiresContextIOResult` support for `flatten`
+
 - Adds `Result.lift`, `Maybe.lift`, `RequiresContext.lift`,
   and `RequiresContextResult.lift` functions in addition to `IO.lift`
 - Adds `Immutable` primitive type

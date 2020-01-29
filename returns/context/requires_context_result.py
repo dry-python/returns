@@ -47,7 +47,7 @@ class RequiresContextResult(
     .. code:: python
 
       >>> from returns.context import RequiresContext
-      >>> from returns.result import Success
+      >>> from returns.result import Success, Result
 
       >>> def function(arg: int) -> Result[int, str]:
       ...      return Success(arg + 1)
@@ -58,9 +58,9 @@ class RequiresContextResult(
       ... )(...) == Success(2)
 
       >>> # With wrapper:
-      >>> assert RequiresContextResult.from_result(
-      ...     Success(1),
-      ... ).bind_result(function)(...) == Success(2)
+      >>> assert RequiresContextResult.from_success(1).bind_result(
+      ...     function,
+      ... )(...) == Success(2)
 
     This way ``RequiresContextResult`` allows to simply work with:
 
@@ -121,14 +121,15 @@ class RequiresContextResult(
         .. code:: python
 
           >>> from returns.context import RequiresContextResult
+          >>> from returns.result import Success
           >>> def first(lg: bool) -> RequiresContextResult[float, int, str]:
           ...     # `deps` has `float` type here:
-          ...     return RequiresContext(
-          ...         lambda deps: deps if lg else -deps,
+          ...     return RequiresContextResult(
+          ...         lambda deps: Success(deps if lg else -deps),
           ...     )
           ...
-          >>> instance = first(False)  # creating `RequiresContext` instance
-          >>> assert instance(3.5) == -3.5  # calling it with `__call__`
+          >>> instance = first(False)
+          >>> assert instance(3.5) == Success(-3.5)
 
         In other things, it is a regular python magic method.
 
@@ -315,7 +316,35 @@ class RequiresContextResult(
             'RequiresContextResult[_EnvType, _ValueType, _NewErrorType]',
         ],
     ):
-        """Composes this container with a function returning the same type."""
+        """
+        Composes this container with a function returning the same type.
+
+        .. code:: python
+
+          >>> from returns.context import RequiresContextResult
+          >>> from returns.result import Success, Failure
+
+          >>> def rescuable(arg: str) -> RequiresContextResult[str, str, str]:
+          ...      if len(arg) > 1:
+          ...          return RequiresContextResult(
+          ...              lambda deps: Success(deps + arg),
+          ...          )
+          ...      return RequiresContextResult(
+          ...          lambda deps: Failure(arg + deps),
+          ...      )
+          ...
+
+          >>> assert RequiresContextResult.from_success('a').rescue(
+          ...     rescuable,
+          ... )('c') == Success('a')
+          >>> assert RequiresContextResult.from_failure('a').rescue(
+          ...     rescuable,
+          ... )('c') == Failure('ac')
+          >>> assert RequiresContextResult.from_failure('aa').rescue(
+          ...     rescuable,
+          ... )('b') == Success('baa')
+
+        """
         return RequiresContextResult(
             lambda deps: self(deps).rescue(
                 lambda inner: function(inner)(deps),  # type: ignore
@@ -331,15 +360,14 @@ class RequiresContextResult(
         .. code:: python
 
           >>> from returns.context import RequiresContextResult
-          >>> from returns.result import Success, Failure
 
-          >>> assert RequiresContextResult(
-          ...    lambda _: Success(1),
-          ... ).value_or(2)(RequiresContextResult.empty) == 1
+          >>> assert RequiresContextResult.from_success(1).value_or(2)(
+          ...     RequiresContextResult.empty,
+          ... ) == 1
 
-          >>> assert RequiresContextResult(
-          ...    lambda _: Failure(1),
-          ... ).value_or(2)(RequiresContextResult.empty) == 2
+          >>> assert RequiresContextResult.from_failure(1).value_or(2)(
+          ...     RequiresContextResult.empty,
+          ... ) == 2
 
         """
         return lambda deps: self(deps).value_or(default_value)
