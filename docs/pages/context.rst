@@ -264,16 +264,44 @@ Which means that it is a wrapper around pure function that might fail.
 We also added a lot of useful methods for this container,
 so you can work easily with it:
 
-- :meth:`returns.context.requires_context.RequiresContextResult.from_typecast`
+.. currentmodule:: returns.context.requires_context_result
+
+- :meth:`~RequiresContextResult.from_typecast`
   turns accidental ``RequiresContext[env, Result[a, b]]`` into
   full-featured ``RequiresContextResult[env, a, b]``
-- :meth:`returns.context.requires_context.RequiresContextResult.bind_result`
+- :meth:`~RequiresContextResult.bind_result`
   allows to bind functions that return ``Result`` with just one call
-- :meth:returns.context.requires_context.RequiresContextResult.bind_context`
+- :meth:`~RequiresContextResult.bind_context`
   allows to bind functions that return ``RequiresContext`` easily
 - There are also several useful contructors from any possible type
 
 Use it when you work with pure context-related functions that might fail.
+
+
+RequiresContextIOResult container
+---------------------------------
+
+This container is a combintaion of ``RequiresContext[env, IOResult[a, b]]``.
+Which means that it is a wrapper around impure function that might fail.
+
+We also added a lot of useful methods for this container,
+so you can work easily with it:
+
+.. currentmodule:: returns.context.requires_context_io_result
+
+- :meth:`~RequiresContextIOResult.from_typecast`
+  turns accidental ``RequiresContext[env, IOResult[a, b]]`` into
+  full-featured ``RequiresContextIOResult[env, a, b]``
+- :meth:`~RequiresContextIOResult.bind_result`
+  allows to bind functions that return ``Result`` with just one call
+- :meth:`~RequiresContextIOResult.bind_ioresult`
+  allows to bind functions that return ``IOResult`` with just one call
+- :meth:`~RequiresContextIOResult.bind_context`
+  allows to bind functions that return ``RequiresContext`` easily
+- There are also several useful contructors from any possible type
+
+Use it when you work with impure context-related functions that might fail.
+This is basically **the main type** that is going to be used in most apps.
 
 
 FAQ
@@ -384,7 +412,7 @@ RequiresContextResult
    :members:
 
 RequiresContextIOResult
-~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclasstree:: returns.context.requires_context_io_result
 
