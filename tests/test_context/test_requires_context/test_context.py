@@ -24,4 +24,4 @@ def test_protocols(container, protocol):
 def test_context_immutable():
     """Ensures that RequiresContext container supports ``.map()`` method."""
     with pytest.raises(ImmutableStateError):
-        Context().a = 1
+        Context().abc = 1
