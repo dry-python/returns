@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from returns.functions import identity
+
 
 def _flatten(container):
     """
@@ -15,7 +17,7 @@ def _flatten(container):
       >>> from returns.maybe import Some
       >>> from returns.result import Failure, Success
       >>> from returns.io import IO, IOSuccess, IOFailure
-      >>> from returns.context import RequiresContext
+      >>> from returns.context import RequiresContext, RequiresContextResult
 
       >>> assert flatten(IO(IO(1))) == IO(1)
 
@@ -31,8 +33,14 @@ def _flatten(container):
       ...     RequiresContext.from_value(RequiresContext.from_value(1)),
       ... )(RequiresContext.empty) == 1
 
+      >>> assert flatten(
+      ...     RequiresContextResult.from_success(
+      ...         RequiresContextResult.from_success(1),
+      ...     ),
+      ... )(RequiresContext.empty) == Success(1)
+
     See also:
         https://bit.ly/2sIviUr
 
     """
-    return container.bind(lambda identity: identity)  # we cannot import it :(
+    return container.bind(identity)

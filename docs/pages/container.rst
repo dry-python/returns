@@ -100,10 +100,13 @@ Note::
   All containers support these methods.
 
 
+.. _immutability:
+
 Immutability
 ------------
 
-We like to think of ``returns`` as immutable structures.
+We like to think of ``returns``
+as :ref:`immutable <primitive-types>` structures.
 You cannot mutate the inner state of the created container,
 because we redefine ``__setattr__`` and ``__delattr__`` magic methods.
 
@@ -174,6 +177,13 @@ Needs transformation
 - ``Maybe[Result[A, B]]`` 🤔,
   use :func:`result_to_maybe <returns.converters.result_to_maybe>`
   and then :func:`flatten <returns.converters.flatten>`
+- ``RequiresContext[env, Result[A, B]]`` 🤔,
+  use :meth:`returns.context.requires_context_result.from_typecast`
+  and ``RequiresResultContext``
+- ``RequiresContext[env, RequiresContext[env, A]]`` 🤔,
+  use :func:`flatten <returns.converters.flatten>`
+- ``RequiresContextResult[env, RequiresContextResult[env, A, B], B]`` 🤔,
+  use :func:`flatten <returns.converters.flatten>`
 
 Nope
 ~~~~

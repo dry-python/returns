@@ -2,7 +2,7 @@
 
 from typing import TypeVar, overload
 
-from returns.context import RequiresContext
+from returns.context import RequiresContext, RequiresContextResult
 from returns.io import IO, IOResult
 from returns.maybe import Maybe
 from returns.result import Result
@@ -42,4 +42,16 @@ def _flatten(
         _EnvType, RequiresContext[_EnvType, _ValueType],
     ],
 ) -> RequiresContext[_EnvType, _ValueType]:
+    ...
+
+
+
+@overload
+def _flatten(
+    container: RequiresContextResult[
+        _EnvType,
+        RequiresContextResult[_EnvType, _ValueType, _ErrorType],
+        _ErrorType,
+    ],
+) -> RequiresContextResult[_EnvType, _ValueType, _ErrorType]:
     ...

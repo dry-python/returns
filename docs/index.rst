@@ -36,6 +36,7 @@ Contents
   pages/converters.rst
   pages/pointfree.rst
   pages/functions.rst
+  pages/types.rst
 
 .. toctree::
   :maxdepth: 1

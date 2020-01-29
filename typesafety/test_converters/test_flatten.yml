@@ -77,3 +77,14 @@
     x: RequiresContext[str, RequiresContext[str, int]]
 
     reveal_type(flatten(x))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[builtins.str*, builtins.int*]'
+
+
+- case: join_context_result
+  disable_cache: true
+  main: |
+    from returns.converters import flatten
+    from returns.context import RequiresContextResult
+
+    x: RequiresContextResult[str, RequiresContextResult[str, int, float], float]
+
+    reveal_type(flatten(x))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.str*, builtins.int*, builtins.float*]'

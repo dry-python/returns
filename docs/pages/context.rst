@@ -136,6 +136,8 @@ Let's see how our code changes:
 
 And now you can pass your dependencies in a really direct and explicit way.
 
+.. _ask:
+
 ask
 ~~~
 
@@ -277,15 +279,71 @@ Use it when you work with pure context-related functions that might fail.
 FAQ
 ---
 
-Why do I have to use explicit type annotation for ask method?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Why can’t we use RequiresContext[e, Result] instead of RequiresContextResult?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We actually can! But, it is harder to write.
+And ``RequiresContextResult`` is actually
+the very same thing as ``RequiresContext[e, Result]``, but has nicer API:
+
+.. code:: python
+
+  x: RequiresContext[int, Result[int, str]]
+  x.map(lambda result: result.map(lambda number: number + 1))
+
+  # Is the same as:
+
+  y: RequiresContextResult[int, int, str]
+  y.map(lambda number: number + 1)
+
+The second one looks better, doesn't it?
 
 How to create unit objects?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+``RequiresContext`` allows you to create
+unit values with the help of ``.from_value`` method:
+
+.. code:: python
+
+  >>> from returns.context import RequiresContext
+  >>> assert RequiresContext.from_value(1)(...) == 1
+
+``RequiresContextResult`` requires you to use one of the following methods:
+
+- ``from_success`` when you want to mark some raw value as a ``Success``
+- ``from_failure`` when you want to mark some raw value as a ``Failure``
+- ``from_result`` when you already have one
+- ``from_successful_context`` when you have successful ``RequiresContext``
+- ``from_failed_context`` when you have failed ``RequiresContext``
+
+But, think twice: why would you need to do it?
+These classes represent computations that rely on context.
+Maybe, you should not do creat their units?
+
 How can I access dependencies inside the context?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Use ``.ask()`` method!
+
+See :ref:`this guide <ask>`.
+
+Why do I have to use explicit type annotation for ask method?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Because ``mypy`` cannot possibly know the type of current context.
+This is hard even for a plugin.
+
+So, using this technique is better:
+
+.. code:: python
+
+  from returns.context import Context, RequiresContext
+
+  def some_context(*args, **kwargs) -> RequiresContext[int, str]:
+      def factory(deps: int) -> RequiresContext[int, str]:
+          ...
+      return Context[int].ask().bind(factory)
 
 
 Further reading

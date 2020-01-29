@@ -6,7 +6,7 @@ from typing_extensions import final
 
 from returns.functions import identity
 from returns.primitives.container import BaseContainer
-from returns.primitives.types import Immutable, Stateless
+from returns.primitives.types import Immutable
 
 # Context:
 _EnvType = TypeVar('_EnvType', contravariant=True)
@@ -226,11 +226,7 @@ class RequiresContext(
 
 
 @final
-class Context(
-    Immutable,
-    Stateless,
-    Generic[_EnvType],
-):
+class Context(Immutable, Generic[_EnvType]):
     """
     Helpers that can be used to work with ``RequiresContext`` container.
 

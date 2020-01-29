@@ -454,10 +454,10 @@ but has nicer API:
 
 The second one looks better, doesn't it?
 
-How to create unit object for IOResult?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+How to create unit objects for IOResult?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-*TLDR*: you need to explicitly annotate values like so:
+*TLDR*: you need to use ``IOSuccess`` and ``IOFailure``:
 
 .. code:: python
 
@@ -465,8 +465,9 @@ How to create unit object for IOResult?
   >>> first: IOResult[int, str] = IOSuccess(1)
   >>> second: IOResult[float, int] = IOFailure(1)
 
+You can also annotate your variables properly.
 Otherwise, ``mypy`` will treat ``IOSuccess(1)`` as ``IOSuccess[int, Any]``.
-You need to narrow the type.
+You can narrow the type in advance.
 
 See :ref:`result-units` for more details.
 
@@ -491,7 +492,8 @@ Warning::
   the internal state of the IO with ``._internal_state``,
   but your are considered to be a grown-up!
 
-  Use wemake-python-styleguide to restrict `._` access in your code.
+Use `wemake-python-styleguide <https://github.com/wemake-services/wemake-python-styleguide>`_
+to restrict ``._`` access in your code.
 
 
 Further reading

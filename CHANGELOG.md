@@ -26,6 +26,7 @@ See [0Ver](https://0ver.org/).
 - Adds `RequiresContextResultE` alias
   for `RequiresContextResult[..., ..., Exception]`
 - Adds `RequiresContextResult` support for `bind` and `rescue`
+- Adds `RequiresContextResult` support for `flatten`
 
 - Adds `IOResult` helper to work better with `IO[Result[a, b]]`
 - Adds `IOResultE` alias for `IOResult[a, Exception]`
@@ -37,7 +38,7 @@ See [0Ver](https://0ver.org/).
 
 - Adds `Result.lift`, `Maybe.lift`, `RequiresContext.lift`,
   and `RequiresContextResult.lift` functions in addition to `IO.lift`
-- Adds
+- Adds `Immutable` primitive type
 
 
 ### Bugfixes
