@@ -64,7 +64,7 @@ types like ``Failure``:
   transforms error to value (failure became success)
   that works only when container is in failed state,
   is the opposite of ``map`` method
-- :func:`~returns.primitives.container.UnwrapableFailure.alt`
+- :func:`~returns.primitives.container.Altable.alt`
   transforms error to another error
   that works only when container is in failed state,
   is the opposite of ``map`` method

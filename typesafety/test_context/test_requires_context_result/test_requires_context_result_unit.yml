@@ -1,0 +1,56 @@
+- case: requires_context_result_success
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextResult
+
+    reveal_type(RequiresContextResult.from_success(1))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[Any, builtins.int*, Any]'
+
+
+- case: requires_context_result_failure
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextResult
+
+    reveal_type(RequiresContextResult.from_failure(1))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[Any, Any, builtins.int*]'
+
+
+- case: requires_context_result_result
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextResult
+    from returns.result import Result
+
+    r: Result[int, str]
+
+    reveal_type(RequiresContextResult.from_result(r))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[Any, builtins.int*, builtins.str*]'
+
+
+- case: requires_context_result_typecast
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextResult, RequiresContext
+    from returns.result import Result
+
+    r: RequiresContext[float, Result[int, str]]
+
+    reveal_type(RequiresContextResult.from_typecast(r))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.float*, builtins.int*, builtins.str*]'
+
+
+- case: requires_context_result_successful_context
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextResult, RequiresContext
+
+    r: RequiresContext[float, str]
+
+    reveal_type(RequiresContextResult.from_successful_context(r))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.float*, builtins.str*, Any]'
+
+
+- case: requires_context_result_failed_context
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextResult, RequiresContext
+
+    r: RequiresContext[float, str]
+
+    reveal_type(RequiresContextResult.from_failed_context(r))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.float*, Any, builtins.str*]'

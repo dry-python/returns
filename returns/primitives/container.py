@@ -171,7 +171,7 @@ class Unwrapable(Protocol[_ValueType, _ErrorType]):
 
 
 @runtime
-class UnwrapableFailure(Protocol[_ValueType, _ErrorType]):
+class Altable(Protocol[_ValueType, _ErrorType]):
     """Allows to unwrap failures."""
 
     def alt(

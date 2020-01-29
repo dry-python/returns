@@ -74,6 +74,7 @@ class RequiresContextResult(
     We only have just one type. That's by design.
 
     Different converters are also not supported for this type.
+    Use converters inside the ``RequiresContext`` context, not outside.
 
     See also:
         https://dev.to/gcanti/getting-started-with-fp-ts-reader-1ie5
