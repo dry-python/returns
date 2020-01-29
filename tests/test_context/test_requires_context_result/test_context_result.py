@@ -11,6 +11,7 @@ from returns.primitives.container import (
     Rescueable,
     Unwrapable,
 )
+from returns.primitives.exceptions import ImmutableStateError
 from returns.result import Failure, Success
 
 
@@ -34,9 +35,7 @@ def test_protocols(container, protocol):
     assert isinstance(container, protocol)
 
 
-def test_context_map():
+def test_context_result_immutable():
     """Ensures that RequiresContext container supports ``.map()`` method."""
-    context = RequiresContextResult.from_success(1.0).map(str)
-    assert context(...) == RequiresContextResult.from_success(
-        '1.0',
-    )(RequiresContextResult.empty)
+    with pytest.raises(ImmutableStateError):
+        ContextResult().a = 1

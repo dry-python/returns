@@ -4,6 +4,7 @@ import pytest
 
 from returns.context import Context, RequiresContext
 from returns.primitives.container import Bindable, Mappable
+from returns.primitives.exceptions import ImmutableStateError
 
 
 @pytest.mark.parametrize('container', [
@@ -20,28 +21,7 @@ def test_protocols(container, protocol):
     assert isinstance(container, protocol)
 
 
-def test_context_map():
+def test_context_immutable():
     """Ensures that RequiresContext container supports ``.map()`` method."""
-    context: RequiresContext[int, str] = RequiresContext.from_value(
-        1.0,
-    ).map(
-        str,
-    )
-    assert context(3) == RequiresContext.from_value(
-        '1.0',
-    )(RequiresContext.empty)
-
-
-def test_context_bind():
-    """Ensures that RequiresContext container supports ``.bind()`` method."""
-    def factory(number: float) -> RequiresContext[int, str]:
-        return RequiresContext(lambda deps: str(number + deps))
-
-    context: RequiresContext[int, str] = RequiresContext.from_value(
-        1.0,
-    ).bind(
-        factory,
-    )
-    assert context(3) == RequiresContext.from_value(
-        '4.0',
-    )(RequiresContext.empty)
+    with pytest.raises(ImmutableStateError):
+        Context().a = 1

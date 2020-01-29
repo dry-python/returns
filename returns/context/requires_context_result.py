@@ -6,6 +6,7 @@ from typing_extensions import final
 
 from returns.context.requires_context import RequiresContext
 from returns.primitives.container import BaseContainer
+from returns.primitives.types import Immutable, Stateless
 from returns.result import Failure, Result, Success
 
 # Context:
@@ -648,7 +649,11 @@ class RequiresContextResult(
 
 
 @final
-class ContextResult(Generic[_EnvType]):
+class ContextResult(
+    Immutable,
+    Stateless,
+    Generic[_EnvType],
+):
     """
     Helpers that can be used to work with ``RequiresContextResult`` container.
 

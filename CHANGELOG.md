@@ -37,6 +37,7 @@ See [0Ver](https://0ver.org/).
 
 - Adds `Result.lift`, `Maybe.lift`, `RequiresContext.lift`,
   and `RequiresContextResult.lift` functions in addition to `IO.lift`
+- Adds
 
 
 ### Bugfixes

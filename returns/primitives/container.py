@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from abc import ABCMeta
-from typing import Any, Callable, NoReturn, TypeVar, Union
+from typing import Any, Callable, TypeVar, Union
 
 from typing_extensions import Protocol, runtime
 
-from returns.primitives.exceptions import ImmutableStateError
+from returns.primitives.types import Immutable
 
 _ValueType = TypeVar('_ValueType', covariant=True)
 _NewValueType = TypeVar('_NewValueType')
@@ -13,7 +13,7 @@ _ErrorType = TypeVar('_ErrorType', covariant=True)
 _NewErrorType = TypeVar('_NewErrorType')
 
 
-class BaseContainer(object, metaclass=ABCMeta):
+class BaseContainer(Immutable, metaclass=ABCMeta):
     """Utility class to provide all needed magic methods to the context."""
 
     __slots__ = ('_inner_value',)
@@ -26,14 +26,6 @@ class BaseContainer(object, metaclass=ABCMeta):
         'value' is any arbitrary value of any type including functions.
         """
         object.__setattr__(self, '_inner_value', inner_value)  # noqa: WPS609
-
-    def __setattr__(self, attr_name: str, attr_value: Any) -> NoReturn:
-        """Makes inner state of the containers immutable."""
-        raise ImmutableStateError()
-
-    def __delattr__(self, attr_name: str) -> NoReturn:  # noqa: WPS603
-        """Makes inner state of the containers immutable."""
-        raise ImmutableStateError()
 
     def __str__(self) -> str:
         """Converts to string."""
