@@ -2,7 +2,8 @@
 
 import pytest
 
-from returns.context import ContextResult, RequiresContextResult
+from returns.context import ContextIOResult, RequiresContextIOResult
+from returns.io import IOFailure, IOSuccess
 from returns.primitives.container import (
     Altable,
     Bindable,
@@ -16,13 +17,15 @@ from returns.result import Failure, Success
 
 
 @pytest.mark.parametrize('container', [
-    RequiresContextResult(lambda _: Success(1)),
-    RequiresContextResult(lambda _: Failure(1)),
-    RequiresContextResult.from_success(1),
-    RequiresContextResult.from_failure(1),
-    RequiresContextResult.from_result(Success(1)),
-    RequiresContextResult.from_result(Failure(1)),
-    ContextResult.ask(),
+    RequiresContextIOResult(lambda _: IOSuccess(1)),
+    RequiresContextIOResult(lambda _: IOFailure(1)),
+    RequiresContextIOResult.from_success(1),
+    RequiresContextIOResult.from_failure(1),
+    RequiresContextIOResult.from_result(Success(1)),
+    RequiresContextIOResult.from_result(Failure(1)),
+    RequiresContextIOResult.from_ioresult(IOSuccess(1)),
+    RequiresContextIOResult.from_ioresult(IOFailure(1)),
+    ContextIOResult.ask(),
 ])
 @pytest.mark.parametrize('protocol', [
     Bindable,
@@ -37,13 +40,13 @@ def test_protocols(container, protocol):
     assert isinstance(container, protocol)
 
 
-def test_context_result_immutable():
+def test_context_io_result_immutable():
     """Ensures that helper is immutable."""
     with pytest.raises(ImmutableStateError):
-        ContextResult().abc = 1
+        ContextIOResult().abc = 1
 
 
 def test_requires_context_result_immutable():
     """Ensures that container is immutable."""
     with pytest.raises(ImmutableStateError):
-        RequiresContextResult.from_success(1).abc = 1
+        RequiresContextIOResult.from_success(1).abc = 1

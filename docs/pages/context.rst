@@ -298,6 +298,8 @@ so you can work easily with it:
   allows to bind functions that return ``IOResult`` with just one call
 - :meth:`~RequiresContextIOResult.bind_context`
   allows to bind functions that return ``RequiresContext`` easily
+- :meth:`~RequiresContextIOResult.bind_context_result`
+  allows to bind functions that return ``RequiresContextResult`` easily
 - There are also several useful contructors from any possible type
 
 Use it when you work with impure context-related functions that might fail.

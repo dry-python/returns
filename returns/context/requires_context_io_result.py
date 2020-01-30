@@ -5,6 +5,7 @@ from typing import Any, Callable, ClassVar, Generic, TypeVar, Union
 from typing_extensions import final
 
 from returns.context.requires_context import RequiresContext
+from returns.context.requires_context_result import RequiresContextResult
 from returns.io import IO, IOFailure, IOResult, IOSuccess
 from returns.primitives.container import BaseContainer
 from returns.primitives.types import Immutable
@@ -269,6 +270,59 @@ class RequiresContextIOResult(
         """
         return RequiresContextIOResult(
             lambda deps: self(deps).map(
+                lambda inner: function(inner)(deps),  # type: ignore
+            ),
+        )
+
+    def bind_context_result(
+        self,
+        function: Callable[
+            [_ValueType],
+            RequiresContextResult[_EnvType, _NewValueType, _ErrorType],
+        ],
+    ) -> 'RequiresContextIOResult[_EnvType, _NewValueType, _ErrorType]':
+        """
+        Binds ``RequiresContextResult`` returning function to the current one.
+
+        .. code:: python
+
+          >>> from returns.context import RequiresContextResult
+          >>> from returns.io import IOSuccess, IOFailure
+          >>> from returns.result import Success, Failure
+
+          >>> def function(arg: int) -> RequiresContextResult[str, int, int]:
+          ...     if arg > 0:
+          ...         return RequiresContextResult(
+          ...             lambda deps: Success(len(deps) + arg),
+          ...         )
+          ...     return RequiresContextResult(
+          ...         lambda deps: Failure(len(deps) + arg),
+          ...     )
+          ...
+          >>> assert function(2)('abc') == Success(5)
+          >>> assert function(-1)('abc') == Failure(2)
+
+          >>> assert RequiresContextIOResult.from_success(
+          ...    2,
+          ... ).bind_context_result(
+          ...     function,
+          ... )('abc') == IOSuccess(5)
+
+          >>> assert RequiresContextIOResult.from_success(
+          ...    -1,
+          ... ).bind_context_result(
+          ...     function,
+          ... )('abc') == IOFailure(2)
+
+          >>> assert RequiresContextIOResult.from_failure(
+          ...    2,
+          ... ).bind_context_result(
+          ...     function,
+          ... )('abc') == IOFailure(2)
+
+        """
+        return RequiresContextIOResult(
+            lambda deps: self(deps).bind_result(
                 lambda inner: function(inner)(deps),  # type: ignore
             ),
         )
