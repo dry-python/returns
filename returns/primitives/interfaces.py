@@ -28,7 +28,7 @@ class Bindable(Protocol[_ValueType]):
 
         And returns a new container.
         Works for containers that represent success.
-        Is the opposite of :meth:`Rescueable.rescue`.
+        Is the opposite of :meth:`~Rescueable.rescue`.
         """
 
 
@@ -47,7 +47,7 @@ class Mappable(Protocol[_ValueType]):
         Applies 'function' to the contents of the functor.
 
         And returns a new functor value.
-        Is the opposite of :meth:`Fixable.fix`.
+        Is the opposite of :meth:`~Fixable.fix`.
         """
 
 
@@ -63,7 +63,7 @@ class Fixable(Protocol[_ValueType, _ErrorType]):
 
         And returns a new functor value.
         Works for containers that represent failure.
-        Is the opposite of :meth:`Mappable.map`.
+        Is the opposite of :meth:`~Mappable.map`.
         """
 
 
@@ -88,7 +88,7 @@ class Rescueable(Protocol[_NewValueType, _ErrorType]):
 
         And returns a new container.
         Works for containers that represent failure.
-        Is the opposite of :meth:`~bind`.
+        Is the opposite of :meth:`~Bindable.bind`.
         """
 
 
@@ -108,14 +108,14 @@ class Unwrapable(Protocol[_ValueType, _ErrorType]):
         Should be redefined for ones that actually have values.
         And for ones that raise an exception for no values.
 
-        This method is the opposite of :meth:`~failure`.
+        This method is the opposite of :meth:`~Unwrapable.failure`.
         """
 
     def failure(self) -> _ErrorType:
         """
         Custom magic method to unwrap inner value from the failed container.
 
-        This method is the opposite of :meth:`~unwrap`.
+        This method is the opposite of :meth:`~Unwrapable.unwrap`.
         """
 
 
@@ -132,7 +132,7 @@ class Altable(Protocol[_ValueType, _ErrorType]):
 
         And returns a new functor value.
         Works for containers that represent failure.
-        Is the opposite of :meth:`~map`.
+        Is the opposite of :meth:`~Mappable.map`.
         """
 
 

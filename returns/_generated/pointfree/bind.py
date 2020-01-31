@@ -25,6 +25,7 @@ def _bind(function):
       >>> assert bind(example)(Nothing) == Nothing
 
     Note, that this function works for all containers with ``.bind`` method.
+    See :class:`returns.primitives.interfaces.Bindable` for more info.
 
     """
     return lambda container: container.bind(function)
