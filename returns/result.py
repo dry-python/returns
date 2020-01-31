@@ -278,6 +278,48 @@ class Result(
         """
         return lambda container: container.map(function)
 
+    @classmethod
+    def from_success(
+        cls, inner_value: _NewValueType,
+    ) -> 'Result[_NewValueType, Any]':
+        """
+        One more value to create success unit values.
+
+        This is a part of :class:`returns.primitives.interfaces.Unitable`.
+        It is useful as a united way to create a new value from any container.
+
+        .. code:: python
+
+          >>> from returns.result import Result, Success
+          >>> assert Result.from_success(1) == Success(1)
+
+        You can use this method or :func:`~Success`,
+        choose the most convenient for you.
+
+        """
+        return Success(inner_value)
+
+    @classmethod
+    def from_failure(
+        cls, inner_value: _NewErrorType,
+    ) -> 'Result[Any, _NewErrorType]':
+        """
+        One more value to create failred unit values.
+
+        This is a part of :class:`returns.primitives.interfaces.Unitable`.
+        It is useful as a united way to create a new value from any container.
+
+        .. code:: python
+
+          >>> from returns.result import Result, Failure
+          >>> assert Result.from_failure(1) == Failure(1)
+
+        You can use this method or :func:`~Failure`,
+        choose the most convenient for you.
+
+        """
+        return Failure(inner_value)
+
 
 @final
 class _Failure(Result[Any, _ErrorType]):

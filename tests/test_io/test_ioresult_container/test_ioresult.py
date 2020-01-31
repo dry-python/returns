@@ -3,12 +3,13 @@
 import pytest
 
 from returns.io import IOFailure, IOSuccess
-from returns.primitives.container import (
+from returns.primitives.interfaces import (
     Altable,
     Bindable,
     Fixable,
     Mappable,
     Rescueable,
+    Unitable,
     Unwrapable,
 )
 
@@ -24,6 +25,7 @@ from returns.primitives.container import (
     Unwrapable,
     Altable,
     Fixable,
+    Unitable,
 ])
 def test_protocols(container, protocol):
     """Ensures that RequiresContext has all the right protocols."""

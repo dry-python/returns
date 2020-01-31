@@ -3,7 +3,7 @@
 import pytest
 
 from returns.io import IO
-from returns.primitives.container import Bindable, Mappable
+from returns.primitives.interfaces import Bindable, Mappable
 
 
 @pytest.mark.parametrize('container', [

@@ -600,6 +600,48 @@ class IOResult(
             return _IOSuccess(container)
         return _IOFailure(container)
 
+    @classmethod
+    def from_success(
+        cls, inner_value: _NewValueType,
+    ) -> 'IOResult[_NewValueType, Any]':
+        """
+        One more value to create success unit values.
+
+        This is a part of :class:`returns.primitives.interfaces.Unitable`.
+        It is useful as a united way to create a new value from any container.
+
+        .. code:: python
+
+          >>> from returns.io import IOResult, IOSuccess
+          >>> assert IOResult.from_success(1) == IOSuccess(1)
+
+        You can use this method or :func:`~IOSuccess`,
+        choose the most convenient for you.
+
+        """
+        return IOSuccess(inner_value)
+
+    @classmethod
+    def from_failure(
+        cls, inner_value: _NewErrorType,
+    ) -> 'IOResult[Any, _NewErrorType]':
+        """
+        One more value to create failred unit values.
+
+        This is a part of :class:`returns.primitives.interfaces.Unitable`.
+        It is useful as a united way to create a new value from any container.
+
+        .. code:: python
+
+          >>> from returns.io import IOResult, IOFailure
+          >>> assert IOResult.from_failure(1) == IOFailure(1)
+
+        You can use this method or :func:`~IOFailure`,
+        choose the most convenient for you.
+
+        """
+        return IOFailure(inner_value)
+
     def __str__(self) -> str:
         """Custom ``str`` representation for better readability."""
         return '<IOResult: {0}>'.format(self._inner_value)

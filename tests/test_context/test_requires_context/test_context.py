@@ -3,8 +3,8 @@
 import pytest
 
 from returns.context import Context, RequiresContext
-from returns.primitives.container import Bindable, Mappable
 from returns.primitives.exceptions import ImmutableStateError
+from returns.primitives.interfaces import Bindable, Mappable
 
 
 @pytest.mark.parametrize('container', [

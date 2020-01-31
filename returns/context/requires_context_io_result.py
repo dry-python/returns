@@ -70,8 +70,12 @@ class RequiresContextIOResult(
 
     - raw values and pure functions
     - ``RequiresContext`` values and pure functions returning it
-    - ``Result`` and functions returning it
+    - ``RequiresContextResult`` values and pure functions returning it
+    - ``Result`` and pure functions returning it
     - ``IOResult`` and functions returning it
+    - other ``RequiresContextIOResult`` related functions and values
+
+    This is a complex type for complex tasks!
 
     Imporatant implementation detail:
     due it is meaning, ``RequiresContextIOResult``
@@ -866,6 +870,33 @@ class RequiresContextIOResult(
         """
         return RequiresContextIOResult(
             lambda deps: IOFailure(inner_value(deps)),
+        )
+
+    @classmethod
+    def from_result_context(
+        cls, inner_value: RequiresContextResult[
+            _EnvType, _ValueType, _ErrorType,
+        ],
+    ) -> 'RequiresContextIOResult[_EnvType, _ValueType, _ErrorType]':
+        """
+        Creates new container from ``RequiresContextResult`` as a unit value.
+
+        .. code:: python
+
+          >>> from returns.context import RequiresContextResult
+          >>> from returns.io import IOSuccess, IOFailure
+
+          >>> assert RequiresContextIOResult.from_result_context(
+          ...     RequiresContextResult.from_success(1),
+          ... )(...) == IOSuccess(1)
+
+          >>> assert RequiresContextIOResult.from_result_context(
+          ...     RequiresContextResult.from_failure(1),
+          ... )(...) == IOFailure(1)
+
+        """
+        return RequiresContextIOResult(
+            lambda deps: IOResult.from_result(inner_value(deps)),
         )
 
     @classmethod

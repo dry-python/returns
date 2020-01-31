@@ -2,15 +2,16 @@
 
 import pytest
 
-from returns.primitives.container import (
+from returns.primitives.exceptions import ImmutableStateError
+from returns.primitives.interfaces import (
     Altable,
     Bindable,
     Fixable,
     Mappable,
     Rescueable,
+    Unitable,
     Unwrapable,
 )
-from returns.primitives.exceptions import ImmutableStateError
 from returns.result import Failure, Success
 
 
@@ -25,6 +26,7 @@ from returns.result import Failure, Success
     Rescueable,
     Unwrapable,
     Altable,
+    Unitable,
 ])
 def test_protocols(container, protocol):
     """Ensures that Result has all the right protocols."""

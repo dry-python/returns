@@ -3,8 +3,8 @@
 import pytest
 
 from returns.maybe import Nothing, Some, _Nothing
-from returns.primitives.container import Bindable, Mappable, Unwrapable
 from returns.primitives.exceptions import ImmutableStateError
+from returns.primitives.interfaces import Bindable, Mappable, Unwrapable
 
 
 @pytest.mark.parametrize('container', [

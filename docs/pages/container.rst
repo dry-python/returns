@@ -101,6 +101,10 @@ Note::
 
   All containers support these methods.
 
+You can read more about methods
+that some other containers support
+and :ref:`interfaces <base-interfaces>` behind them.
+
 
 .. _immutability:
 
@@ -116,6 +120,9 @@ You cannot also set new attributes to container instances,
 since we are using ``__slots__`` for better performance and strictness.
 
 Well, nothing is **really** immutable in python, but you were warned.
+
+We also provide :class:`returns.primitives.types.Immutable` mixin
+that users can use to quickly make their classes immutable.
 
 
 .. _type-safety:
@@ -217,10 +224,24 @@ Further reading
 - :ref:`Railway oriented programming <railway>`
 
 
+.. _base-interfaces:
+
 API Reference
 -------------
+
+``BaseContainer`` is a base class for all other container.
+It defines some basic things like representation, hashing, pickling, etc.
 
 .. autoclasstree:: returns.primitives.container
 
 .. automodule:: returns.primitives.container
+   :members:
+   :special-members:
+
+Here are our interfaces (or protocols to be more specific)
+that we use inside our app:
+
+.. autoclasstree:: returns.primitives.interfaces
+
+.. automodule:: returns.primitives.interfaces
    :members:

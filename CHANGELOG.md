@@ -12,7 +12,6 @@ See [0Ver](https://0ver.org/).
 
 - **Breaking**: renames `join` to `flatten`, sorry!
 - **Breaking**: renames `box` to `bind` and moves it to `returns.pointfree`
-- **Breaking**: renames `coalesce` to `fold`
 - **Breaking**: removes `Maybe.rescue` and `Maybe.fix` methods
 
 - Adds `rescue` pointfree function
@@ -33,7 +32,7 @@ See [0Ver](https://0ver.org/).
 - Adds `IOResult` support for `bind`
 - Adds `IOResult` support for `flatten`
 - Adds `IOResult` support for `@pipeline`
-- Adds `IOResult` support for `fold`
+- Adds `IOResult` support for `coalesce`
 - Adds `IOResult` support for `is_successful`
 
 - Adds `RequiresContextIOResult` container
@@ -45,6 +44,8 @@ See [0Ver](https://0ver.org/).
 - Adds `Result.lift`, `Maybe.lift`, `RequiresContext.lift`,
   and `RequiresContextResult.lift` functions in addition to `IO.lift`
 - Adds `Immutable` primitive type
+- Adds `Unitable` protocol and `.from_success()` and `.from_failure()`
+  methods for all `Result` realted classes
 
 
 ### Bugfixes

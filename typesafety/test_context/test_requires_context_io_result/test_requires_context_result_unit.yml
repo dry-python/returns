@@ -65,3 +65,13 @@
     r: RequiresContext[float, str]
 
     reveal_type(RequiresContextIOResult.from_failed_context(r))  # N: Revealed type is 'returns.context.requires_context_io_result.RequiresContextIOResult[builtins.float*, Any, builtins.str*]'
+
+
+- case: requires_context_result_from_result_context
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextIOResult, RequiresContextResult
+
+    r: RequiresContextResult[float, int, str]
+
+    reveal_type(RequiresContextIOResult.from_result_context(r))  # N: Revealed type is 'returns.context.requires_context_io_result.RequiresContextIOResult[builtins.float*, builtins.int*, builtins.str*]'

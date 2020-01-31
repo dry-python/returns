@@ -98,7 +98,12 @@ FAQ
 How to create unit objects?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Use ``Success`` or ``Failure`` together with the explicit annotation.
+Use ``Success`` or ``Failure``.
+Alternatively :meth:`retunrs.result.Result.from_success`
+or :meth:`retunrs.result.Result.from_failure`.
+
+It might be a good idea to use unit functions
+together with the explicit annotation.
 Python's type system does not allow us to do much, so this is required:
 
 .. code:: python
@@ -112,18 +117,8 @@ Python's type system does not allow us to do much, so this is required:
   >>> str(first.bind(callback))
   '<Success: 1.0>'
 
-Otherwise it would raise a ``mypy`` error:
-
-.. code:: python
-
-  first = Success(1)
-  first.bind(callback)
-  # Argument 1 to "bind" of "Result" has incompatible type
-  # "Callable[[int], Result[float, int]]";
-  # expected "Callable[[int], Result[float, NoReturn]]"
-
-This happens because ``mypy`` is unable to implicitly
-cast ``NoReturn`` to any other type.
+Otherwise ``first`` will have ``Result[int, Any]`` type.
+Which is okay in some situations.
 
 What is the difference between ``Success`` and ``_Success``?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -3,15 +3,16 @@
 import pytest
 
 from returns.context import ContextResult, RequiresContextResult
-from returns.primitives.container import (
+from returns.primitives.exceptions import ImmutableStateError
+from returns.primitives.interfaces import (
     Altable,
     Bindable,
     Fixable,
     Mappable,
     Rescueable,
+    Unitable,
     Unwrapable,
 )
-from returns.primitives.exceptions import ImmutableStateError
 from returns.result import Failure, Success
 
 
@@ -31,6 +32,7 @@ from returns.result import Failure, Success
     Unwrapable,
     Altable,
     Fixable,
+    Unitable,
 ])
 def test_protocols(container, protocol):
     """Ensures that RequiresContext has all the right protocols."""
