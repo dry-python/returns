@@ -188,7 +188,7 @@ Needs transformation
   and then :func:`flatten <returns.converters.flatten>`
 - ``RequiresContext[env, Result[A, B]]`` 🤔,
   use
-  :meth:`returns.context.requires_context_result.RequiresContextResult.from_typecast`
+  :meth:`RequiresContextResult.from_typecast <returns.context.requires_context_result.RequiresContextResult.from_typecast>`
   and ``RequiresResultContext``
 - ``RequiresContext[env, RequiresContext[env, A]]`` 🤔,
   use :func:`flatten <returns.converters.flatten>`
@@ -196,9 +196,9 @@ Needs transformation
   use :func:`flatten <returns.converters.flatten>`
 - ``RequiresContext[env, IOResult[A, B]]`` 🤔,
   use
-  :meth:`returns.context.requires_context_io_result.RequiresContextIOResult.from_typecast`
+  :meth:`RequiresContextIOResult.from_typecast <returns.context.requires_context_io_result.RequiresContextIOResult.from_typecast>`
   and ``RequiresResultContext``
-  - ``RequiresContextIOResult[env, RequiresContextIOResult[env, A, B], B]``
+- ``RequiresContextIOResult[env, RequiresContextIOResult[env, A, B], B]``
   🤔,
   use :func:`flatten <returns.converters.flatten>`
 
