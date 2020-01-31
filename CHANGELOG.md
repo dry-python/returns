@@ -48,6 +48,7 @@ See [0Ver](https://0ver.org/).
 - Adds `Immutable` primitive type
 - Adds `Unitable` protocol and `.from_success()` and `.from_failure()`
   methods for all `Result` realted classes
+- Adds `flow` function, which is similar to `pipe`
 
 
 ### Bugfixes

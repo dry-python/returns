@@ -9,54 +9,88 @@ composition easy, readable, pythonic, and useful.
 Let's start with the first one.
 
 
+flow
+----
+
+``flow`` allows to easily compose multiple functions together.
+It is useful when you already have an instance to compose functions with.
+
+Let's see an example.
+
+.. code:: python
+
+  >>> from returns.pipeline import flow
+  >>> assert flow(
+  ...     [1, 2, 3],
+  ...     lambda collection: max(collection),
+  ...     lambda max_number: -max_number,
+  ... ) == -3
+
+Use it when you need to compose a lot of functions together.
+
+And now let's get to know ``pipe``, it is very similar,
+but has different usage pattern.
+
+
 .. _pipe:
 
 pipe
 ----
 
 ``pipe`` is an easy way to compose functions together.
+It is useful when you don't have an instance to compose functions with yet.
+
 Let's see an example.
 
 .. code:: python
 
   >>> from returns.pipeline import pipe
 
-  >>> pipe(str, lambda x: x + 'b', str.upper)(1)
-  '1B'
+  >>> pipeline = pipe(str, lambda x: x + 'b', str.upper)
+  >>> assert pipeline(1) == '1B'
 
-There's also a way to compose containers together:
+It might be later used with multiple values:
 
 .. code:: python
 
-  from returns.pipeline import pipe
-  from returns.result import Result
-  from returns.functions import box
+  >>> assert pipeline(2) == '2B'
 
-  def regular_function(arg: int) -> float:
-      ...
+It is also might be useful to compose containers together:
 
-  def returns_container(arg: float) -> Result[complex, ValueError]:
-      ...
+.. code:: python
 
-  def also_returns_container(args: complex) -> Result[str, ValueError]:
-      ...
+  >>> from returns.pipeline import pipe
+  >>> from returns.result import Result, Success, Failure
+  >>> from returns.pointfree import bind
 
-  pipe(
-      regular_function,  # composes easily
-      returns_container,  # also composes easily, but returns a container...
-      # So we need to `box` the next function to allow it to consume
-      # the container from the previous step.
-      box(also_returns_container),
-  )(1)  # we provide the initial value itself as a argument to `pipe(...)`
-  # => Will return `Result[str, ValueError]` as declared in the last step
+  >>> def regular_function(arg: int) -> float:
+  ...     return float(arg)
+  ...
+
+  >>> def returns_container(arg: float) -> Result[str, ValueError]:
+  ...     if arg != 0:
+  ...          return Success(str(arg))
+  ...     return Failure(ValueError())
+  ...
+
+  >>> def also_returns_container(arg: str) -> Result[str, ValueError]:
+  ...     return Success(arg + '!')
+  ...
+
+  >>> transaction = pipe(
+  ...     regular_function,  # composes easily
+  ...     returns_container,  # also composes easily, but returns a container
+  ...     # So we need to `bind` the next function to allow it to consume
+  ...     # the container from the previous step.
+  ...     bind(also_returns_container),
+  ... )
+  >>> result = transaction(1)  # running the pipeline
+  >>> assert result == Success('1.0!')
 
 You might consider ``pipe()`` as :func:`returns.functions.compose` on steroids.
 The main difference is that ``compose`` takes strictly two arguments
 (or you might say that it has an arity of two),
 while ``pipe`` has infinite possible arguments.
-
-See also :func:`returns.io.IO.lift` which is also extremely
-helpful for ``IO`` composition.
 
 Limitations
 ~~~~~~~~~~~
@@ -68,6 +102,8 @@ But, composition with ``pipe`` is limited to two things:
    Python cannot figure things out by itself.
 2. It is flexible. Sometimes you might need more power.
    Use ``@pipeline`` in this case!
+
+In contrast ``flow`` does not have these problems.
 
 
 .. _pipeline:

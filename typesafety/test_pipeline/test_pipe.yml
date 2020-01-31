@@ -1,4 +1,4 @@
-- case: result_is_successful
+- case: pipe_function
   disable_cache: true
   main: |
     from returns.pipeline import pipe

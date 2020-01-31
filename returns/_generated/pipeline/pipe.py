@@ -9,7 +9,7 @@ def _pipe(*functions):
     """
     Allows to compose a value and up to 7 functions that use this value.
 
-    Each next function uses the previos result as an input parameter.
+    Each next function uses the previous result as an input parameter.
     Here's how it should be used:
 
     .. code:: python
@@ -17,8 +17,7 @@ def _pipe(*functions):
        >>> from returns.pipeline import pipe
 
        # => executes: str(float(int('1')))
-       >>> pipe(int, float, str)('1')
-       '1.0'
+       >>> assert pipe(int, float, str)('1') == '1.0'
 
     A friendly hint: do not start ``pipe`` definition with ``lambda`` function.
     ``mypy`` will complain: ``error: Cannot infer type argument 1 of "_pipe"``.
@@ -29,6 +28,7 @@ def _pipe(*functions):
 
     1. Use regular annotated functions
     2. Type the variable itself: ``user: Callable[[int], float] = pipe(...)``
+    3. Use :func:`flow <returns._generated.pipeline.flow._flow>` function
 
     See also:
         - https://stackoverflow.com/a/41585450/4842742

@@ -272,15 +272,16 @@ Our code will become complex and unreadable with all this mess!
 ```python
 import requests
 from returns.result import Result, safe
-from returns.pipeline import pipe
+from returns.pipeline import flow
 from returns.pointfree import bind
 
 def fetch_user_profile(user_id: int) -> Result['UserProfile', Exception]:
     """Fetches `UserProfile` TypedDict from foreign API."""
-    return pipe(
+    return flow(
+        user_id,
         _make_request,
         bind(_parse_json),
-    )(user_id)
+    )
 
 @safe
 def _make_request(user_id: int) -> requests.Response:
@@ -308,7 +309,7 @@ thanks to the
 decorator. It will return [Success[YourType] or Failure[Exception]](https://returns.readthedocs.io/en/latest/pages/result.html).
 And will never throw exception at us!
 
-We also use [pipe](https://returns.readthedocs.io/en/latest/pages/pipeline.html#pipe)
+We also use [flow](https://returns.readthedocs.io/en/latest/pages/pipeline.html#flow)
 and [bind](https://returns.readthedocs.io/en/latest/pages/pointfree.html#bind)
 functions for handy and declarative composition.
 
@@ -394,19 +395,20 @@ explicit!
 import requests
 from returns.io import IO, IOResult, impure_safe
 from returns.result import safe
-from returns.pipeline import pipe
+from returns.pipeline import flow
 from returns.pointfree import bind
 
 def fetch_user_profile(user_id: int) -> IOResult['UserProfile', Exception]:
     """Fetches `UserProfile` TypedDict from foreign API."""
-    return pipe(
+    return flow(
+        user_id,
         _make_request,
         # before: def (Response) -> UserProfile
         # after safe: def (Response) -> ResultE[UserProfile]
         # after bind: def (ResultE[Response]) -> ResultE[UserProfile]
         # after lift: def (IOResultE[Response]) -> IOResultE[UserProfile]
         IOResult.lift_result(bind(_parse_json)),
-    )(user_id)
+    )
 
 @impure_safe
 def _make_request(user_id: int) -> requests.Response:

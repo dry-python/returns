@@ -2,8 +2,9 @@
 
 from typing import Union
 
-from returns._generated.pipe import _pipe as pipe  # noqa: F401
-from returns._generated.pipeline import _pipeline as pipeline  # noqa: F401
+from returns._generated.pipeline.pipe import _pipe as pipe  # noqa: F401
+from returns._generated.pipeline.flow import _flow as flow  # noqa: F401
+from returns._generated.pipeline.pipeline import _pipeline as pipeline  # noqa: F401
 from returns.io import IOResult
 from returns.maybe import Maybe
 from returns.primitives.exceptions import UnwrapFailedError
