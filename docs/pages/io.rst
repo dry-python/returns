@@ -457,13 +457,17 @@ The second one looks better, doesn't it?
 How to create unit objects for IOResult?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-*TLDR*: you need to use ``IOSuccess`` and ``IOFailure``:
+*TLDR*: you need to use ``IOSuccess`` and ``IOFailure`` functions
+or ``IOResult.from_success`` and ``IOResult.from_failure`` methods:
 
 .. code:: python
 
   >>> from returns.io import IOResult, IOSuccess, IOFailure
   >>> first: IOResult[int, str] = IOSuccess(1)
   >>> second: IOResult[float, int] = IOFailure(1)
+
+  >>> assert IOResult.from_success(1) == IOSuccess(1)
+  >>> assert IOResult.from_failure(2) == IOFailure(2)
 
 You can also annotate your variables properly.
 Otherwise, ``mypy`` will treat ``IOSuccess(1)`` as ``IOSuccess[int, Any]``.

@@ -327,6 +327,7 @@ the very same thing as ``RequiresContext[e, Result]``, but has nicer API:
   y.map(lambda number: number + 1)
 
 The second one looks better, doesn't it?
+The same applies for ``RequiresContextIOResult`` as well.
 
 How to create unit objects?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
