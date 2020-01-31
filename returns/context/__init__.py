@@ -14,9 +14,13 @@ from returns.context.requires_context_result import (  # noqa: F401
     ContextResult as ContextResult,
     RequiresContextResult as RequiresContextResult,
     RequiresContextResultE as RequiresContextResultE,
+    ReaderResult as ReaderResult,
+    ReaderResultE as ReaderResultE,
 )
 from returns.context.requires_context_io_result import (  # noqa: F401
     ContextIOResult as ContextIOResult,
     RequiresContextIOResult as RequiresContextIOResult,
     RequiresContextIOResultE as RequiresContextIOResultE,
+    ReaderIOResult as ReaderIOResult,
+    ReaderIOResultE as ReaderIOResultE,
 )

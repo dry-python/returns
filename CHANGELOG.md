@@ -23,6 +23,7 @@ See [0Ver](https://0ver.org/).
 
 - Adds `RequiresContextResult` container
 - Adds `RequiresContextResultE` alias
+- Adds `ReaderResult` and `ReaderResultE` aliases
   for `RequiresContextResult[..., ..., Exception]`
 - Adds `RequiresContextResult` support for `bind` and `rescue`
 - Adds `RequiresContextResult` support for `flatten`
@@ -37,6 +38,7 @@ See [0Ver](https://0ver.org/).
 
 - Adds `RequiresContextIOResult` container
 - Adds `RequiresContextIOResultE` alias
+- Adds `ReaderIOResult` and `ReaderIOResultE` aliases
   for `RequiresContextIOResult[..., ..., Exception]`
 - Adds `RequiresContextIOResult` support for `bind` and `rescue`
 - Adds `RequiresContextIOResult` support for `flatten`

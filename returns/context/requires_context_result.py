@@ -714,3 +714,9 @@ class ContextResult(Immutable, Generic[_EnvType]):
 RequiresContextResultE = RequiresContextResult[
     _EnvType, _ValueType, Exception,
 ]
+
+#: Alias to save you some typing. Uses original name from Haskell.
+ReaderResult = RequiresContextResult[_EnvType, _ValueType, _ErrorType]
+
+#: Alias to save you some typing. Has ``Exception`` as error type.
+ReaderResultE = RequiresContextResult[_EnvType, _ValueType, Exception]
