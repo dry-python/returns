@@ -22,17 +22,17 @@ def identity(instance: _FirstType) -> _FirstType:
     Why do we even need this?
     Identity functions help us with the composition.
 
-    Imagine, that you want to use :func:`returns.converters.fold_result`
+    Imagine, that you want to use :func:`returns.converters.coalesce_result`
     like so:
 
     .. code:: python
 
       from returns.result import Result
-      from returns.converters import fold_result
+      from returns.converters import coalesce_result
 
       numbers: Result[int, float]
-      # Now you want to fold `number` into `int` type:
-      number: int = fold_result(identity, int)(numbers)
+      # Now you want to coalesce `number` into `int` type:
+      number: int = coalesce_result(identity, int)(numbers)
       # Done!
 
     See also:

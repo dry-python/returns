@@ -53,11 +53,11 @@ You can also use ``flatten`` to merge nested containers together:
   >>> assert flatten(Success(Success(1))) == Success(1)
 
 
-fold
-----
+coalesce
+--------
 
-You can use :func:`returns.converters.fold_result`
-and :func:`returns.converters.fold_maybe` converters
+You can use :func:`returns.converters.coalesce_result`
+and :func:`returns.converters.coalesce_maybe` converters
 to covert containers to a regular value.
 
 These functions accept two functions:
@@ -65,7 +65,7 @@ one for successful case, one for failing case.
 
 .. code:: python
 
-  >>> from returns.converters import fold_result
+  >>> from returns.converters import coalesce_result
   >>> from returns.result import Success, Failure
 
   >>> def handle_success(state: int) -> float:
@@ -74,9 +74,9 @@ one for successful case, one for failing case.
   >>> def handle_failure(state: str) -> float:
   ...     return 0.0
 
-  >>> fold_result(handle_success, handle_failure)(Success(1))
+  >>> coalesce_result(handle_success, handle_failure)(Success(1))
   0.5
-  >>> fold_result(handle_success, handle_failure)(Failure(1))
+  >>> coalesce_result(handle_success, handle_failure)(Failure(1))
   0.0
 
 

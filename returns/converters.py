@@ -2,7 +2,7 @@
 
 from typing import TypeVar
 
-from returns._generated import fold
+from returns._generated import coalesce
 from returns._generated.flatten import _flatten as flatten  # noqa: F401
 from returns.maybe import Maybe
 from returns.result import Failure, Result, Success
@@ -12,9 +12,9 @@ _ValueType = TypeVar('_ValueType')
 _ErrorType = TypeVar('_ErrorType')
 
 # Re-export from generated:
-fold_maybe = fold._fold_maybe  # noqa: WPS437
-fold_result = fold._fold_result  # noqa: WPS437
-fold_ioresult = fold._fold_ioresult  # noqa: WPS437
+coalesce_maybe = coalesce._coalesce_maybe  # noqa: WPS437
+coalesce_result = coalesce._coalesce_result  # noqa: WPS437
+coalesce_ioresult = coalesce._coalesce_ioresult  # noqa: WPS437
 
 
 def result_to_maybe(
