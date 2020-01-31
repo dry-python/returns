@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from functools import reduce
-
-from returns._generated.pipeline import pipe
+# We import from the source, becase otherwise we will have a circular import.
+from returns._generated.pipeline.pipe import _pipe
 
 
 def _flow(instance, *functions):
@@ -30,4 +29,4 @@ def _flow(instance, *functions):
         - https://github.com/gcanti/fp-ts/blob/master/src/pipeable.ts
 
     """
-    return pipe._pipe(*functions)(instance)
+    return _pipe(*functions)(instance)

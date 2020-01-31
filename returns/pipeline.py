@@ -2,13 +2,16 @@
 
 from typing import Union
 
-from returns._generated.pipeline.pipe import _pipe as pipe  # noqa: F401
 from returns._generated.pipeline.flow import _flow as flow  # noqa: F401
-from returns._generated.pipeline.pipeline import _pipeline as pipeline  # noqa: F401
+from returns._generated.pipeline.pipe import _pipe as pipe  # noqa: F401
 from returns.io import IOResult
 from returns.maybe import Maybe
 from returns.primitives.exceptions import UnwrapFailedError
 from returns.result import Result
+
+from returns._generated.pipeline.pipeline import (  # isort:skip  # noqa: F401
+    _pipeline as pipeline,
+)
 
 # Logical aliases:
 _Unwrapable = Union[Result, Maybe, IOResult]
@@ -33,6 +36,9 @@ def is_successful(container: '_Unwrapable') -> bool:
       True
       >>> is_successful(Failure(1))
       False
+
+    This function can work with containers that support
+    :class:`returns.primitives.interfaces.Unwrapable` protocol.
 
     """
     try:
