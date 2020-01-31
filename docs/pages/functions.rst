@@ -52,11 +52,19 @@ For example you sometimes need to ``print()`` values inside your :ref:`pipe`:
 
   >>> result = tap(print)(1)  # will print and return 1
   1
-  >>> result == 1
-  True
+  >>> assert result == 1
 
 You can also use ``untap`` function to turn any function
-return type to ``None`` and still do its thing.
+return type to ``None`` and still do its thing"
+
+.. code:: python
+
+  >>> from returns.functions import tap, untap
+
+  >>> result = untap(tap(print))(1)  # will print and return None
+  1
+  >>> assert result is None
+
 This is also sometimes helpful for a typed function composition.
 
 
