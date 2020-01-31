@@ -28,7 +28,7 @@ from returns.result import Failure, Success
     (IOFailure(IOFailure('a')), IOFailure(IOFailure('a'))),
 ])
 def test_flatten(container, merged):
-    """Ensures that `join` is always returning the correct type."""
+    """Ensures that `flatten` is always returning the correct type."""
     assert flatten(container) == merged
 
 

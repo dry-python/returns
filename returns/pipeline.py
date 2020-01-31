@@ -39,6 +39,7 @@ def is_successful(container: '_Unwrapable') -> bool:
 
     This function can work with containers that support
     :class:`returns.primitives.interfaces.Unwrapable` protocol.
+    But only non-lazy containers are supported.
 
     """
     try:

@@ -318,7 +318,11 @@ Further reading
 API Reference
 -------------
 
+.. autofunction:: returns.pipeline.flow
+
 .. autofunction:: returns.pipeline.pipe
+
+.. autofunction:: returns.pipeline.pipeline
 
 .. automodule:: returns.pipeline
    :members:

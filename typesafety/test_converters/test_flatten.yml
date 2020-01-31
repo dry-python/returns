@@ -1,4 +1,4 @@
-- case: join_io
+- case: flatten_io
   disable_cache: true
   main: |
     from returns.converters import flatten
@@ -7,7 +7,7 @@
     reveal_type(flatten(IO(IO(1))))  # N: Revealed type is 'returns.io.IO[builtins.int*]'
 
 
-- case: join_maybe
+- case: flatten_maybe
   disable_cache: true
   main: |
     from returns.converters import flatten
@@ -16,7 +16,7 @@
     reveal_type(flatten(Some(Some(1))))  # N: Revealed type is 'returns.maybe.Maybe[builtins.int*]'
 
 
-- case: join_result1
+- case: flatten_result1
   disable_cache: true
   main: |
     from returns.converters import flatten
@@ -28,7 +28,7 @@
     reveal_type(flatten(returns_result()))  # N: Revealed type is 'returns.result.Result[builtins.int*, builtins.str*]'
 
 
-- case: join_result2
+- case: flatten_result2
   disable_cache: true
   main: |
     from returns.converters import flatten
@@ -42,7 +42,7 @@
     main:7: error: Argument 1 to "_flatten" has incompatible type "Result[int, Result[int, str]]"; expected "Result[Result[<nothing>, Result[int, str]], Result[int, str]]"
 
 
-- case: join_ioresult1
+- case: flatten_ioresult1
   disable_cache: true
   main: |
     from returns.converters import flatten
@@ -54,7 +54,7 @@
     reveal_type(flatten(returns_ioresult()))  # N: Revealed type is 'returns.io.IOResult[builtins.int*, builtins.str*]'
 
 
-- case: join_ioresult2
+- case: flatten_ioresult2
   disable_cache: true
   main: |
     from returns.converters import flatten
@@ -68,7 +68,7 @@
     main:7: error: Argument 1 to "_flatten" has incompatible type "IOResult[int, IOResult[int, str]]"; expected "IOResult[IOResult[<nothing>, IOResult[int, str]], IOResult[int, str]]"
 
 
-- case: join_context
+- case: flatten_context
   disable_cache: true
   main: |
     from returns.converters import flatten
@@ -79,7 +79,7 @@
     reveal_type(flatten(x))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[builtins.str*, builtins.int*]'
 
 
-- case: join_context_result
+- case: flatten_context_result
   disable_cache: true
   main: |
     from returns.converters import flatten
@@ -88,3 +88,14 @@
     x: RequiresContextResult[str, RequiresContextResult[str, int, float], float]
 
     reveal_type(flatten(x))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.str*, builtins.int*, builtins.float*]'
+
+
+- case: flatten_context_io_result
+  disable_cache: true
+  main: |
+    from returns.converters import flatten
+    from returns.context import RequiresContextIOResult
+
+    x: RequiresContextIOResult[str, RequiresContextIOResult[str, int, float], float]
+
+    reveal_type(flatten(x))  # N: Revealed type is 'returns.context.requires_context_io_result.RequiresContextIOResult[builtins.str*, builtins.int*, builtins.float*]'

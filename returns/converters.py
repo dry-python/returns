@@ -2,10 +2,14 @@
 
 from typing import TypeVar
 
-from returns._generated import coalesce
-from returns._generated.flatten import _flatten as flatten  # noqa: F401
+from returns._generated.converters import coalesce
+from returns._generated.converters.swap import _swap as swap  # noqa: F401
 from returns.maybe import Maybe
 from returns.result import Failure, Result, Success
+
+from returns._generated.converters.flatten import (  # isort:skip # noqa: F401
+    _flatten as flatten,
+)
 
 # Contianer internals:
 _ValueType = TypeVar('_ValueType')
