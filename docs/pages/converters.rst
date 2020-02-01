@@ -142,7 +142,7 @@ You can work with tuples instead like so:
 .. code:: python
 
   >>> plus = squash_io(IO(1), IO('a')).map(lambda args: args[0] + len(args[1]))
-  >>> assert plus == IO(3)
+  >>> assert plus == IO(2)
 
 We support up to 9 typed parameters to this function.
 
