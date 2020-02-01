@@ -132,7 +132,7 @@ from django.http import HttpRequest, HttpResponse
 from words_app.logic import calculate_points
 
 def view(request: HttpRequest) -> HttpResponse:
-    user_word: str = request.GET['word']  # just an example
+    user_word: str = request.POST['word']  # just an example
     points = calculate_points(user_word)
     ...  # later you show the result to user somehow
 
@@ -148,20 +148,20 @@ def _award_points_for_letters(guessed: int) -> int:
 
 Awesome! It works, users are happy, your logic is pure and awesome.
 But, later you decide to make the game more fun:
-let's make the minimal accoutable letters thresshold
+let's make the minimal accoutable letters threshold
 configurable for an extra challenge.
 
 You can just do it directly:
 
 ```python
-def _award_points_for_letters(guessed: int, thresshold: int) -> int:
-    return 0 if guessed < thresshold else guessed
+def _award_points_for_letters(guessed: int, threshold: int) -> int:
+    return 0 if guessed < threshold else guessed
 ```
 
 The problem is that `_award_points_for_letters` is deeply nested.
-And then you have to pass `thresshold` through the whole callstack,
+And then you have to pass `threshold` through the whole callstack,
 including `calculate_points` and all other functions that might be on the way.
-All of them will have to accept `thresshold` as a parameter!
+All of them will have to accept `threshold` as a parameter!
 This is not useful at all!
 Large code bases will struggle a lot from this change.
 
@@ -177,7 +177,7 @@ from django.http import HttpRequest, HttpResponse
 from words_app.logic import calculate_points
 
 def view(request: HttpRequest) -> HttpResponse:
-    user_word: str = request.GET['word']  # just an example
+    user_word: str = request.POST['word']  # just an example
     points = calculate_points(user_words)(settings)  # passing the dependencies
     ...  # later you show the result to user somehow
 
@@ -187,7 +187,7 @@ from typing_extensions import Protocol
 from returns.context import RequiresContext
 
 class _Deps(Protocol):  # we rely on abstractions, not direct values or types
-    WORD_THRESSHOLD: int
+    WORD_THRESHOLD: int
 
 def calculate_points(word: str) -> RequiresContext[_Deps, int]:
     guessed_letters_count = len([letter for letter in word if letter != '.'])
@@ -195,7 +195,7 @@ def calculate_points(word: str) -> RequiresContext[_Deps, int]:
 
 def _award_points_for_letters(guessed: int) -> RequiresContext[_Deps, int]:
     return RequiresContext(
-        lambda deps: 0 if guessed < deps.WORD_THRESSHOLD else guessed,
+        lambda deps: 0 if guessed < deps.WORD_THRESHOLD else guessed,
     )
 ```
 

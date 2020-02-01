@@ -38,7 +38,7 @@ for each guessed letter in a word (unguessed letters are marked as ``'.'``):
   from words_app.logic import calculate_points
 
   def view(request: HttpRequest) -> HttpResponse:
-      user_word: str = request.GET['word']  # just an example
+      user_word: str = request.POST['word']  # just an example
       points = calculate_points(user_word)
       ...  # later you show the result to user somehow
 
@@ -59,15 +59,15 @@ Adding configuration
 ~~~~~~~~~~~~~~~~~~~~
 
 But, later you decide to make the game more fun:
-let's make the minimal accoutable letters thresshold
+let's make the minimal accoutable letters threshold
 configurable for an extra challenge.
 
 You can just do it directly:
 
 .. code:: python
 
-  def _award_points_for_letters(guessed: int, thresshold: int) -> int:
-      return 0 if guessed < thresshold else guessed
+  def _award_points_for_letters(guessed: int, threshold: int) -> int:
+      return 0 if guessed < threshold else guessed
 
 And now your code won't simply type-check.
 Because that's how our caller looks like:
@@ -80,7 +80,7 @@ Because that's how our caller looks like:
 
 To fix this ``calculate_points`` function
 (and all other upper caller functions)
-will have to accept ``thresshold: int``
+will have to accept ``threshold: int``
 as a parameter and pass it to ``_award_points_for_letters``.
 
 Imagine that your large project has multiple
@@ -111,7 +111,7 @@ Let's see how our code changes:
   from words_app.logic import calculate_points
 
   def view(request: HttpRequest) -> HttpResponse:
-      user_word: str = request.GET['word']  # just an example
+      user_word: str = request.POST['word']  # just an example
       points = calculate_points(user_words)(settings)  # passing the dependencies
       ...  # later you show the result to user somehow
 
@@ -123,7 +123,7 @@ Let's see how our code changes:
   from returns.context import RequiresContext
 
   class _Deps(Protocol):  # we rely on abstractions, not direct values or types
-      WORD_THRESSHOLD: int
+      WORD_THRESHOLD: int
 
   def calculate_points(word: str) -> RequiresContext[_Deps, int]:
       guessed_letters_count = len([letter for letter in word if letter != '.'])
@@ -131,7 +131,7 @@ Let's see how our code changes:
 
   def _award_points_for_letters(guessed: int) -> RequiresContext[_Deps, int]:
       return RequiresContext(
-          lambda deps: 0 if guessed < deps.WORD_THRESSHOLD else guessed,
+          lambda deps: 0 if guessed < deps.WORD_THRESHOLD else guessed,
       )
 
 And now you can pass your dependencies in a really direct and explicit way.
