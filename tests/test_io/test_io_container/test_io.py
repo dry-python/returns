@@ -3,7 +3,7 @@
 import pytest
 
 from returns.io import IO
-from returns.primitives.interfaces import Bindable, Mappable
+from returns.primitives.interfaces import Bindable, Instanceable, Mappable
 
 
 @pytest.mark.parametrize('container', [
@@ -12,6 +12,7 @@ from returns.primitives.interfaces import Bindable, Mappable
 @pytest.mark.parametrize('protocol', [
     Bindable,
     Mappable,
+    Instanceable,
 ])
 def test_protocols(container, protocol):
     """Ensures that IO has all the right protocols."""

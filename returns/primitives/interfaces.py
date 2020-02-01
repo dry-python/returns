@@ -137,6 +137,22 @@ class Altable(Protocol[_ValueType, _ErrorType]):
 
 
 @runtime
+class Instanceable(Protocol[_ValueType]):
+    """
+    Allows to create unit containers from raw values.
+
+    This is heavily related to classes that do not have conunter-parts.
+    Like ``IO`` and ``RequiresContext``.
+    """
+
+    @classmethod
+    def from_value(
+        cls, inner_value: _NewValueType,
+    ) -> 'Unitable[_NewValueType, Any]':
+        """This method is required to create new containers."""
+
+
+@runtime
 class Unitable(Protocol[_ValueType, _ErrorType]):
     """
     Allows to create unit values from success and failure.

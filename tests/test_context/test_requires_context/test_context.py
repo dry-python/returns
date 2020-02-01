@@ -4,7 +4,7 @@ import pytest
 
 from returns.context import Context, RequiresContext
 from returns.primitives.exceptions import ImmutableStateError
-from returns.primitives.interfaces import Bindable, Mappable
+from returns.primitives.interfaces import Bindable, Instanceable, Mappable
 
 
 @pytest.mark.parametrize('container', [
@@ -15,6 +15,7 @@ from returns.primitives.interfaces import Bindable, Mappable
 @pytest.mark.parametrize('protocol', [
     Bindable,
     Mappable,
+    Instanceable,
 ])
 def test_protocols(container, protocol):
     """Ensures that RequiresContext has all the right protocols."""

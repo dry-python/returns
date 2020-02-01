@@ -15,6 +15,8 @@ See [0Ver](https://0ver.org/).
 - **Breaking**: removes `Maybe.rescue` and `Maybe.fix` methods
 - **Breaking**: renames `io_squash` to `squash_io`
   and moves it to `returns.converters`
+- **Breaking**: moves all interfaces from `returns.primitives.container` to
+  `returns.primitives.interfaces`
 
 - Adds `rescue` pointfree function
 - Adds `ResultE` alias for `Result[..., Exception]`
@@ -47,13 +49,16 @@ See [0Ver](https://0ver.org/).
 
 - Adds `Result.lift`, `Maybe.lift`, `RequiresContext.lift`,
   and `RequiresContextResult.lift` functions in addition to `IO.lift`
+
 - Adds `Immutable` primitive type
 - Adds `Unitable` protocol and `.from_success()` and `.from_failure()`
   methods for all `Result` realted classes
+- Adds `Instanceable` protocol and `.from_value()` method
+  for `IO` and `RequiresContext`
+
 - Adds `flow` function, which is similar to `pipe`
 - Adds `swap` coverter for `Result` and `IOResult`
 - Adds `squash_context` function to squash `RequiresContext` similar to `IO`
-
 
 ### Bugfixes
 

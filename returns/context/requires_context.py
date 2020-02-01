@@ -221,6 +221,8 @@ class RequiresContext(
 
         Might be used with or without direct type hint.
 
+        Part of the :class:`returns.primitives.interfaces.Instanceable`
+        protocol.
         """
         return RequiresContext(lambda _: inner_value)
 

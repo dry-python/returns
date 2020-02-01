@@ -149,6 +149,23 @@ class IO(BaseContainer, Generic[_ValueType]):
         """
         return lambda container: container.map(function)
 
+    @classmethod
+    def from_value(cls, inner_value: _NewValueType) -> 'IO[_NewValueType]':
+        """
+        Unit function to construct new ``IO`` values.
+
+        Is the same as regular constructor:
+
+        .. code:: python
+
+          >>> from returns.io import IO
+          >>> assert IO(1) == IO.from_value(1)
+
+        Part of the :class:`returns.primitives.interfaces.Instanceable`
+        protocol.
+        """
+        return IO(inner_value)
+
 
 # Helper functions:
 

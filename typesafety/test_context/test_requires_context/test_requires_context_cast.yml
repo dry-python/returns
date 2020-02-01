@@ -18,3 +18,34 @@
     second: RequiresContext[Exception, Exception] = first
   out: |
     main:4: error: Incompatible types in assignment (expression has type "RequiresContext[ValueError, TypeError]", variable has type "RequiresContext[Exception, Exception]")
+
+
+- case: context_covariant_cast
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContext
+
+    class A(object):
+        a = 1
+
+    class B(A):
+        b = 2
+
+    class C(A):
+        c = 3
+
+    def func() -> RequiresContext[B, int]:
+        return RequiresContext(lambda deps: deps.a + deps.b)
+
+    def second(a: int) -> RequiresContext[A, int]:
+        return RequiresContext(lambda deps: deps.a + a)
+
+    def third(a: int) -> RequiresContext[C, int]:
+        return RequiresContext(lambda deps: deps.c + a)
+
+    reveal_type(func().bind(second))
+    reveal_type(func().bind(third))
+  out: |
+    main:21: note: Revealed type is 'returns.context.requires_context.RequiresContext[main.B, builtins.int*]'
+    main:22: error: Argument 1 to "bind" of "RequiresContext" has incompatible type "Callable[[int], RequiresContext[C, int]]"; expected "Callable[[int], RequiresContext[B, int]]"
+    main:22: note: Revealed type is 'returns.context.requires_context.RequiresContext[main.B, builtins.int*]'
