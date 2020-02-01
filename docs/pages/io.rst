@@ -320,33 +320,7 @@ Use for impure operations that might fail.
 Helpers
 -------
 
-io_squash
-~~~~~~~~~
-
-This function allows to squash several ``IO`` containers together.
-
-That's how it works:
-
-.. code:: python
-
-  >>> from returns.io import IO, io_squash
-
-  >>> assert io_squash(IO('first'), IO('second')) == IO(('first', 'second'))
-  >>> # => revealed type of this instance is `IO[Tuple[str, str]]`
-
-It might be helpful if you want
-to work with mutliple ``IO`` instances at the same time.
-
-This approach saves you you from multiple nested ``IO.map`` calls.
-You can work with tuples instead like so:
-
-.. code:: python
-
-  >>> plus = io_squash(IO(1), IO(2)).map(lambda args: args[0] + args[1])
-  >>> assert plus == IO(3)
-
-We support up to 9 typed parameters to this function.
-
+Don't forget to check out :ref:`converters`.
 
 .. _unsafe_perform_io:
 

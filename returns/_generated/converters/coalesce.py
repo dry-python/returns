@@ -53,7 +53,7 @@ _ErrorType = TypeVar('_ErrorType')
 _FirstType = TypeVar('_FirstType')
 
 
-def _fold(success_handler, failure_handler):
+def _coalesce(success_handler, failure_handler):
     """
     We need this function, because we cannot use a single typed function.
 
@@ -72,7 +72,7 @@ _coalesce_result: Callable[
         Callable[[_ErrorType], _FirstType],
     ],
     Callable[[Result[_ValueType, _ErrorType]], _FirstType],
-] = _fold
+] = _coalesce
 _coalesce_result.__doc__ = __doc__
 
 _coalesce_ioresult: Callable[
@@ -81,7 +81,7 @@ _coalesce_ioresult: Callable[
         Callable[[IO[_ErrorType]], IO[_FirstType]],
     ],
     Callable[[IOResult[_ValueType, _ErrorType]], IO[_FirstType]],
-] = _fold
+] = _coalesce
 _coalesce_ioresult.__doc__ = __doc__
 
 _coalesce_maybe: Callable[
@@ -90,5 +90,5 @@ _coalesce_maybe: Callable[
         Callable[[None], _FirstType],
     ],
     Callable[[Maybe[_ValueType]], _FirstType],
-] = _fold
+] = _coalesce
 _coalesce_maybe.__doc__ = __doc__

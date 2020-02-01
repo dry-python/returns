@@ -2,7 +2,7 @@
 
 from typing import TypeVar
 
-from returns._generated.converters import coalesce
+from returns._generated.converters import coalesce, squash
 from returns._generated.converters.swap import _swap as swap  # noqa: F401
 from returns.maybe import Maybe
 from returns.result import Failure, Result, Success
@@ -20,6 +20,9 @@ coalesce_maybe = coalesce._coalesce_maybe  # noqa: WPS437
 coalesce_result = coalesce._coalesce_result  # noqa: WPS437
 coalesce_ioresult = coalesce._coalesce_ioresult  # noqa: WPS437
 
+squash_io = squash._squash_io  # noqa: WPS437
+squash_context = squash._squash_context  # noqa: WPS437
+
 
 def result_to_maybe(
     result_container: Result[_ValueType, _ErrorType],
@@ -31,12 +34,10 @@ def result_to_maybe(
 
       >>> from returns.maybe import Some, Nothing
       >>> from returns.result import Failure, Success
-      >>> result_to_maybe(Success(1)) == Some(1)
-      True
-      >>> result_to_maybe(Failure(1)) == Nothing
-      True
-      >>> result_to_maybe(Success(None)) == Nothing
-      True
+
+      >>> assert result_to_maybe(Success(1)) == Some(1)
+      >>> assert result_to_maybe(Failure(1)) == Nothing
+      >>> assert result_to_maybe(Success(None)) == Nothing
 
     """
     return Maybe.new(result_container.value_or(None))
@@ -52,12 +53,10 @@ def maybe_to_result(
 
       >>> from returns.maybe import Some, Nothing
       >>> from returns.result import Failure, Success
-      >>> maybe_to_result(Nothing) == Failure(None)
-      True
-      >>> maybe_to_result(Some(1)) == Success(1)
-      True
-      >>> maybe_to_result(Some(None)) == Failure(None)
-      True
+
+      >>> assert maybe_to_result(Nothing) == Failure(None)
+      >>> assert maybe_to_result(Some(1)) == Success(1)
+      >>> assert maybe_to_result(Some(None)) == Failure(None)
 
     """
     inner_value = maybe_container.value_or(None)

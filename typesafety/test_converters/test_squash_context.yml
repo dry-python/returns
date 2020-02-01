@@ -1,0 +1,25 @@
+- case: squash_context2
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContext
+    from returns.converters import squash_context
+
+    reveal_type(squash_context(RequiresContext.from_value(1), RequiresContext.from_value('a')))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[Any, Tuple[builtins.int*, builtins.str*]]'
+
+
+- case: squash_context3
+  disable_cache: true
+  main: |
+    from returns.converters import squash_context
+    from returns.context import RequiresContext
+
+    reveal_type(squash_context(RequiresContext.from_value(1), RequiresContext.from_value('a'), RequiresContext.from_value(False)))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[Any, Tuple[builtins.int*, builtins.str*, builtins.bool*]]'
+
+
+- case: squash_context4
+  disable_cache: true
+  main: |
+    from returns.converters import squash_context
+    from returns.context import RequiresContext
+
+    reveal_type(squash_context(RequiresContext.from_value(1), RequiresContext.from_value('a'), RequiresContext.from_value(False), RequiresContext.from_value(2)))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[Any, Tuple[builtins.int*, builtins.str*, builtins.bool*, builtins.int*]]'

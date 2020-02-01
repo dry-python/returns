@@ -13,6 +13,8 @@ See [0Ver](https://0ver.org/).
 - **Breaking**: renames `join` to `flatten`, sorry!
 - **Breaking**: renames `box` to `bind` and moves it to `returns.pointfree`
 - **Breaking**: removes `Maybe.rescue` and `Maybe.fix` methods
+- **Breaking**: renames `io_squash` to `squash_io`
+  and moves it to `returns.converters`
 
 - Adds `rescue` pointfree function
 - Adds `ResultE` alias for `Result[..., Exception]`
@@ -50,6 +52,7 @@ See [0Ver](https://0ver.org/).
   methods for all `Result` realted classes
 - Adds `flow` function, which is similar to `pipe`
 - Adds `swap` coverter for `Result` and `IOResult`
+- Adds `squash_context` function to squash `RequiresContext` similar to `IO`
 
 
 ### Bugfixes

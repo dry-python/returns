@@ -18,7 +18,6 @@ from typing import (
 
 from typing_extensions import final
 
-from returns._generated.squash import _squash as io_squash  # noqa: F401
 from returns.primitives.container import BaseContainer
 from returns.result import Failure, Result, Success
 
