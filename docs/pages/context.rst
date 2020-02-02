@@ -176,7 +176,7 @@ Let's see the final result:
   def calculate_points(word: str) -> RequiresContext[_Deps, int]:
       def factory(deps: _Deps) -> RequiresContext[_Deps, int]:
           guessed_letters_count = len([
-            letter for letter in word if letter != deps.UNGUESSED_CHAR
+              letter for letter in word if letter != deps.UNGUESSED_CHAR
           ])
           return _award_points_for_letters(guessed_letters_count)
 
