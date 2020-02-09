@@ -59,7 +59,7 @@ class IO(BaseContainer, Generic[_ValueType]):
 
     See also:
         https://dev.to/gcanti/getting-started-with-fp-ts-io-36p6
-        http://chris-taylor.github.io/blog/2013/02/09/io-is-not-a-side-effect/
+        https://gist.github.com/chris-taylor/4745921
 
     """
 
