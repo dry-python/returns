@@ -416,6 +416,7 @@ Further reading
 ---------------
 
 - `Enforcing Single Responsibility Principle in Python <https://sobolevn.me/2019/03/enforcing-srp>`_
+- `Typed functional Dependency Injection in Python <https://sobolevn.me/2020/02/typed-functional-dependency-injection>`_
 - `Three-Useful-Monads: Reader <https://github.com/dbrattli/OSlash/wiki/Three-Useful-Monads#the-reader-monad>`_
 - `Getting started with fp-ts: Reader <https://dev.to/gcanti/getting-started-with-fp-ts-reader-1ie5>`_
 - `Reader & Constructor-based Dependency Injection in Scala - friend or foe? <https://softwaremill.com/reader-monad-constructor-dependency-injection-friend-or-foe/>`_
