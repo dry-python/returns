@@ -168,6 +168,7 @@ Further reading
 
 - `Option Monads in Rust <https://hoverbear.org/blog/option-monads-in-rust/>`_
 - `Option overview in TypeScript <https://gcanti.github.io/fp-ts/modules/Option.ts.html>`_
+- `Maybe not - Rich Hickey <https://www.youtube.com/watch?v=YR5WdGrpoug>`_
 
 
 API Reference
