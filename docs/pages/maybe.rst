@@ -47,7 +47,7 @@ It might be very useful for complex operations like the following one:
   ... class Order(object):
   ...    user: Optional[User]
 
-  >>> def get_street_adderess(order: Order) -> Maybe[str]:
+  >>> def get_street_address(order: Order) -> Maybe[str]:
   ...     return Maybe.new(order.user).map(
   ...         lambda user: user.address,
   ...     ).map(
@@ -60,14 +60,14 @@ It might be very useful for complex operations like the following one:
   >>> empty_address = Order(User(None))
   >>> empty_street = Order(User(Address(None)))
 
-  >>> str(get_street_adderess(with_address))  # all fields are not None
+  >>> str(get_street_address(with_address))  # all fields are not None
   '<Some: Some street>'
 
-  >>> str(get_street_adderess(empty_user))
+  >>> str(get_street_address(empty_user))
   '<Nothing>'
-  >>> str(get_street_adderess(empty_address))
+  >>> str(get_street_address(empty_address))
   '<Nothing>'
-  >>> str(get_street_adderess(empty_street))
+  >>> str(get_street_address(empty_street))
   '<Nothing>'
 
 Optional type
