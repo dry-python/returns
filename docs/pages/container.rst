@@ -16,6 +16,9 @@ List of supported containers:
   to pass context to your functions (DI and similar)
 
 There are also some combintations like
+:class:`IOResult <returns.io.IOResult>`,
+:class:`RequiresContextResult <.RequiresContextResult>` and
+:class:`RequiresContextIOResult <.RequiresContextIOResult>`.
 
 We will show you container's simple API of one attribute
 and several simple methods.
@@ -87,7 +90,7 @@ to use containers with regular functions.
   >>> str(result)
   '<Success: 3>'
 
-The same work with built-in functions as well:
+The same works with built-in functions as well:
 
 .. code:: python
 
@@ -227,7 +230,7 @@ Further reading
 API Reference
 -------------
 
-``BaseContainer`` is a base class for all other container.
+``BaseContainer`` is a base class for all other containers.
 It defines some basic things like representation, hashing, pickling, etc.
 
 .. autoclasstree:: returns.primitives.container
