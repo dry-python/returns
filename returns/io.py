@@ -429,7 +429,7 @@ class IOResult(
         default_value: _NewValueType,
     ) -> IO[Union[_ValueType, _NewValueType]]:
         """
-        Get value from succesful container or default value from failed one.
+        Get value from successful container or default value from failed one.
 
         .. code:: python
 

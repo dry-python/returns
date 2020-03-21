@@ -70,7 +70,7 @@ def tap(
     """
     Allows to apply some function and return an argument, instead of a result.
 
-    Is usefull for composing functions with
+    Is useful for composing functions with
     side-effects like ``print()``, ``logger.log()``, etc.
 
     .. code:: python
@@ -97,7 +97,7 @@ def untap(
     """
     Allows to apply some function and always return ``None`` as a result.
 
-    Is usefull for composing functions that do some side effects
+    Is useful for composing functions that do some side effects
     and return some nosense.
 
     Is the kind of a reverse of the ``tap`` function.

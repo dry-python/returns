@@ -113,7 +113,7 @@ class Maybe(
         default_value: _NewValueType,
     ) -> Union[_ValueType, _NewValueType]:
         """
-        Get value from succesful container or default value from failed one.
+        Get value from successful container or default value from failed one.
 
         .. code:: python
 
@@ -203,7 +203,7 @@ class _Nothing(Maybe[Any]):
 
     def __init__(self, inner_value: None = None) -> None:
         """
-        Private contructor for ``_Nothing`` type.
+        Private constructor for ``_Nothing`` type.
 
         Use :attr:`~Nothing` instead.
         Wraps the given value in the ``_Nothing`` container.
@@ -273,7 +273,7 @@ class _Some(Maybe[_ValueType]):
         return self._inner_value
 
     def failure(self):
-        """Raises exception for succesful container."""
+        """Raises exception for successful container."""
         raise UnwrapFailedError(self)
 
 
