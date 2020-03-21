@@ -273,7 +273,7 @@ so you can work easily with it:
   allows to bind functions that return ``Result`` with just one call
 - :meth:`~RequiresContextResult.bind_context`
   allows to bind functions that return ``RequiresContext`` easily
-- There are also several useful contructors from any possible type
+- There are also several useful constructors from any possible type
 
 Use it when you work with pure context-related functions that might fail.
 
@@ -300,7 +300,7 @@ so you can work easily with it:
   allows to bind functions that return ``RequiresContext`` easily
 - :meth:`~RequiresContextIOResult.bind_context_result`
   allows to bind functions that return ``RequiresContextResult`` easily
-- There are also several useful contructors from any possible type
+- There are also several useful constructors from any possible type
 
 Use it when you work with impure context-related functions that might fail.
 This is basically **the main type** that is going to be used in most apps.

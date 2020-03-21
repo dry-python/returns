@@ -40,8 +40,8 @@ class Result(
     """
     Base class for :class:`~_Failure` and :class:`~_Success`.
 
-    :class:`~Result` does not have a public contructor.
-    Use :func:`~Success` and :func:`~Failure` to contruct the needed values.
+    :class:`~Result` does not have a public constructor.
+    Use :func:`~Success` and :func:`~Failure` to construct the needed values.
 
     See also:
         https://bit.ly/361qQhi
@@ -450,7 +450,7 @@ class _Success(Result[_ValueType, Any]):
         return self._inner_value
 
     def failure(self):
-        """Raises an exception for succesful container."""
+        """Raises an exception for successful container."""
         raise UnwrapFailedError(self)
 
 
