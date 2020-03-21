@@ -1,7 +1,8 @@
 name: misspell
 
 on:
-  - push
+  schedule:
+    - cron: '0 0 * * *'
 
 jobs:
   build:
@@ -10,7 +11,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - uses: sobolevn/misspell-fixer-action@master
+    - uses: sobolevn/misspell-fixer-action@0.1.0
     - uses: peter-evans/create-pull-request@v2.4.4
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
