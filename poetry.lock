@@ -1025,7 +1025,7 @@ description = "Safety checks your installed dependencies for known security vuln
 name = "safety"
 optional = false
 python-versions = "*"
-version = "1.8.5"
+version = "1.8.7"
 
 [package.dependencies]
 Click = ">=6.0"
@@ -1776,8 +1776,8 @@ restructuredtext-lint = [
     {file = "ruamel.yaml.clib-0.2.0.tar.gz", hash = "sha256:b66832ea8077d9b3f6e311c4a53d06273db5dc2db6e8a908550f3c14d67e718c"},
 ]
 safety = [
-    {file = "safety-1.8.5-py2.py3-none-any.whl", hash = "sha256:0a3a8a178a9c96242b224f033ee8d1d130c0448b0e6622d12deaf37f6c3b4e59"},
-    {file = "safety-1.8.5.tar.gz", hash = "sha256:5059f3ffab3648330548ea9c7403405bbfaf085b11235770825d14c58f24cb78"},
+    {file = "safety-1.8.7-py2.py3-none-any.whl", hash = "sha256:05f77773bbab834502328b29ed013677aa53ed0c22b6e330aef7d2a7e1dfd838"},
+    {file = "safety-1.8.7.tar.gz", hash = "sha256:3016631e0dd17193d6cf12e8ed1af92df399585e8ee0e4b1300d9e7e32b54903"},
 ]
 six = [
     {file = "six-1.14.0-py2.py3-none-any.whl", hash = "sha256:8f3cd2e254d8f793e7f3d6d9df77b92252b52637291d0f0da013c76ea2724b6c"},
