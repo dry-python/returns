@@ -37,7 +37,7 @@ class Maybe(
     metaclass=ABCMeta,
 ):
     """
-    Represents a result of a series of commutation that can return ``None``.
+    Represents a result of a series of computations that can return ``None``.
 
     An alternative to using exceptions or constant ``is None`` checks.
     ``Maybe`` is an abstract type and should not be instantiated directly.
