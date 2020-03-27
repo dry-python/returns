@@ -162,6 +162,32 @@ class Maybe(
         """
         raise NotImplementedError
 
+    def is_some(self) -> bool:
+        """
+        Returns ``True`` only if this ``Maybe`` is a ``Some``.
+
+        .. code:: python
+
+          >>> from returns.maybe import Nothing, Some
+          >>> assert Some(1).is_some()
+          >>> assert not Nothing.is_some()
+
+        """
+        raise NotImplementedError
+
+    def is_nothing(self) -> bool:
+        """
+        Returns ``True`` only if this ``Maybe`` is a ``Nothing``.
+
+        .. code:: python
+
+          >>> from returns.maybe import Nothing, Some
+          >>> assert not Some(1).is_nothing()
+          >>> assert Nothing.is_nothing()
+
+        """
+        raise NotImplementedError
+
     @classmethod
     def lift(
         cls,
@@ -236,6 +262,14 @@ class _Nothing(Maybe[Any]):
         """Returns failed value."""
         return self._inner_value
 
+    def is_some(self) -> bool:
+        """Always returns ``False``."""
+        return False
+
+    def is_nothing(self) -> bool:
+        """Always returns ``True``."""
+        return True
+
 
 @final
 class _Some(Maybe[_ValueType]):
@@ -275,6 +309,14 @@ class _Some(Maybe[_ValueType]):
     def failure(self):
         """Raises exception for successful container."""
         raise UnwrapFailedError(self)
+
+    def is_some(self) -> bool:
+        """Always returns ``True``."""
+        return True
+
+    def is_nothing(self) -> bool:
+        """Always returns ``False``."""
+        return False
 
 
 Maybe.success_type = _Some
