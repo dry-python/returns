@@ -243,6 +243,32 @@ class Result(
         """
         raise NotImplementedError
 
+    def is_success(self) -> bool:
+        """
+        Returns ``True`` only if this ``Result`` is a ``Success``.
+
+        .. code:: python
+
+          >>> from returns.result import Failure, Success
+          >>> assert Success(1).is_success()
+          >>> assert not Failure(1).is_success()
+
+        """
+        raise NotImplementedError
+
+    def is_failure(self) -> bool:
+        """
+        Returns ``True`` only if this ``Result`` is a ``Failure``.
+
+        .. code:: python
+
+          >>> from returns.result import Failure, Success
+          >>> assert not Success(1).is_failure()
+          >>> assert Failure(1).is_failure()
+
+        """
+        raise NotImplementedError
+
     @classmethod
     def lift(
         cls,
@@ -385,6 +411,14 @@ class _Failure(Result[Any, _ErrorType]):
         """Returns failed value."""
         return self._inner_value
 
+    def is_success(self) -> bool:
+        """Always returns ``False``."""
+        return False
+
+    def is_failure(self) -> bool:
+        """Always returns ``True``."""
+        return True
+
 
 @final
 class _Success(Result[_ValueType, Any]):
@@ -452,6 +486,14 @@ class _Success(Result[_ValueType, Any]):
     def failure(self):
         """Raises an exception for successful container."""
         raise UnwrapFailedError(self)
+
+    def is_success(self) -> bool:
+        """Always returns ``True``."""
+        return True
+
+    def is_failure(self) -> bool:
+        """Always returns ``False``."""
+        return False
 
 
 Result.success_type = _Success

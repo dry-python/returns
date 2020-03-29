@@ -24,6 +24,8 @@ def test_result_abstract_method(method_name):
 @pytest.mark.parametrize('method_name', [
     'failure',
     'unwrap',
+    'is_success',
+    'is_failure',
 ])
 def test_result_abstract_method_single(method_name):
     """Checks that Result itself contains abstract methods."""
