@@ -99,8 +99,8 @@ How to create unit objects?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Use ``Success`` or ``Failure``.
-Alternatively :meth:`retunrs.result.Result.from_success`
-or :meth:`retunrs.result.Result.from_failure`.
+Alternatively :meth:`returns.result.Result.from_success`
+or :meth:`returns.result.Result.from_failure`.
 
 It might be a good idea to use unit functions
 together with the explicit annotation.
