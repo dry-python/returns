@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-This module is quite big one, so we have split it.
+This module was quite big one, so we have split it.
 
 isort:skip_file
 """

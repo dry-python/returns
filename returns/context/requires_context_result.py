@@ -68,7 +68,7 @@ class RequiresContextResult(
     - ``RequiresContext`` values and pure functions returning it
     - ``Result`` and functions returning it
 
-    Imporatant implementation detail:
+    Important implementation detail:
     due it is meaning, ``RequiresContextResult``
     cannot have ``Success`` and ``Failure`` subclasses.
 
@@ -131,7 +131,7 @@ class RequiresContextResult(
           >>> instance = first(False)
           >>> assert instance(3.5) == Success(-3.5)
 
-        In other things, it is a regular python magic method.
+        In other things, it is a regular Python magic method.
 
         """
         return self._inner_value(deps)
@@ -431,7 +431,7 @@ class RequiresContextResult(
         'RequiresContextResult[_EnvType, _NewValueType, _ErrorType]',
     ]:
         """
-        Lifts function to be wrapped in a conatiner for better composition.
+        Lifts function to be wrapped in a container for better composition.
 
         In other words, it modifies the function's
         signature from: ``a -> b`` to:
@@ -692,9 +692,9 @@ class ContextResult(Immutable, Generic[_EnvType]):
         Similar to :meth:`returns.context.Context.ask`,
         but returns ``Result`` instead of a regular value.
 
-        Please, refer to the docs there to know how to use it.
+        Please, refer to the docs there to learn how to use it.
 
-        One important note that is worth doublicating here:
+        One important note that is worth duplicating here:
         you might need to provide ``_EnvType`` explicitly,
         so ``mypy`` will know about it statically.
 

@@ -26,10 +26,10 @@ class RequiresContext(
     The ``RequiresContext`` container.
 
     It's main purpose is to wrap some specific function
-    and give tools to compose other functions around it
-    without the actual calling it.
+    and to provide tools to compose other functions around it
+    without actually calling it.
 
-    The ``RequiresContext`` container pass the state
+    The ``RequiresContext`` container passes the state
     you want to share between functions.
     Functions may read that state, but can't change it.
     The ``RequiresContext`` container
@@ -37,13 +37,13 @@ class RequiresContext(
 
     It can be used for lazy evaluation and typed dependency injection.
 
-    ``RequiresContext`` is used with functions that never fails.
+    ``RequiresContext`` is used with functions that never fail.
     If you want to use ``RequiresContext`` with returns ``Result``
-    than consider using ``RequiresContextResult`` instead.
+    then consider using ``RequiresContextResult`` instead.
 
     Note:
         This container does not wrap ANY value. It wraps only functions.
-        You won't be able to supply arbitarry types!
+        You won't be able to supply arbitrary types!
 
     See also:
         https://dev.to/gcanti/getting-started-with-fp-ts-reader-1ie5
@@ -131,8 +131,8 @@ class RequiresContext(
         """
         Composes a container with a function returning another container.
 
-        This is useful when you do several computations
-        that relies on the same context.
+        This is useful when you do several computations that rely on the
+        same context.
 
         .. code:: python
 
@@ -208,7 +208,7 @@ class RequiresContext(
         """
         Used to return some specific value from the container.
 
-        Consider this method as a some kind of factory.
+        Consider this method as some kind of factory.
         Passed value will be a return type.
         Make sure to use :attr:`~RequiresContext.empty`
         for getting the unit value.
@@ -232,11 +232,11 @@ class Context(Immutable, Generic[_EnvType]):
     """
     Helpers that can be used to work with ``RequiresContext`` container.
 
-    Some of them requires explicit type to be specified.
+    Some of them require an explicit type to be specified.
 
-    This class contains methods that do require
+    This class contains methods that require
     to explicitly set type annotations. Why?
-    Because it is impossible to figure out type without them.
+    Because it is impossible to figure out the type without them.
 
     So, here's how you should use them:
 
@@ -246,7 +246,7 @@ class Context(Immutable, Generic[_EnvType]):
 
     Otherwise, your ``.ask()`` method
     will return ``RequiresContext[<nothing>, <nothing>]``,
-    which is unsable:
+    which is unusable:
 
     .. code:: python
 
@@ -260,9 +260,9 @@ class Context(Immutable, Generic[_EnvType]):
     @classmethod
     def ask(cls) -> RequiresContext[_EnvType, _EnvType]:
         """
-        Get current context to use the depedencies.
+        Get current context to use the dependencies.
 
-        It is a common scenarion when you need to use the environment.
+        It is a common scenario when you need to use the environment.
         For example, you want to do some context-related computation,
         but you don't have the context instance at your disposal.
         That's where ``.ask()`` becomes useful!

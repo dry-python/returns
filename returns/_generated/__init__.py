@@ -3,8 +3,8 @@
 """
 This package contains code that was "generated" via metaprogramming.
 
-This happens, because python is not flexible enough to do most common
-tasks in typed functional programming.
+This happens, because Python is not flexible enough to do most tasks
+common in typed functional programming.
 
 Policy:
 

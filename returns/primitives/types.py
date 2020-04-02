@@ -9,7 +9,7 @@ class Immutable(object):
     """
     Helper type for objects that should be immutable.
 
-    When applied, each instance becames immutable.
+    When applied, each instance becomes immutable.
     Nothing can be added or deleted from it.
 
     .. code:: python
