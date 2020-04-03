@@ -77,7 +77,7 @@ class RequiresContextIOResult(
 
     This is a complex type for complex tasks!
 
-    Imporatant implementation detail:
+    Important implementation detail:
     due it is meaning, ``RequiresContextIOResult``
     cannot have ``Success`` and ``Failure`` subclasses.
 
@@ -140,7 +140,7 @@ class RequiresContextIOResult(
           >>> instance = first(False)
           >>> assert instance(3.5) == IOSuccess(-3.5)
 
-        In other things, it is a regular python magic method.
+        In other things, it is a regular Python magic method.
 
         """
         return self._inner_value(deps)
@@ -535,7 +535,7 @@ class RequiresContextIOResult(
         'RequiresContextIOResult[_EnvType, _NewValueType, _ErrorType]',
     ]:
         """
-        Lifts function to be wrapped in a conatiner for better composition.
+        Lifts function to be wrapped in a container for better composition.
 
         In other words, it modifies the function's
         signature from: ``a -> b`` to:
@@ -959,9 +959,9 @@ class ContextIOResult(Immutable, Generic[_EnvType]):
         Similar to :meth:`returns.context.requires_context.Context.ask`,
         but returns ``IOResult`` instead of a regular value.
 
-        Please, refer to the docs there to know how to use it.
+        Please, refer to the docs there to learn how to use it.
 
-        One important note that is worth doublicating here:
+        One important note that is worth duplicating here:
         you might need to provide ``_EnvType`` explicitly,
         so ``mypy`` will know about it statically.
 

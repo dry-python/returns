@@ -249,7 +249,7 @@ class IOResult(
 
     This is why it has so many helper and factory methods:
 
-    - You can construct ``IOResult`` from raw value
+    - You can construct ``IOResult`` from raw values
       with :func:`~IOSuccess` and :func:`~IOFailure` public type constructors
     - You can construct ``IOResult`` from ``IO`` values
       with :meth:`~IOResult.from_failed_io`
@@ -643,7 +643,7 @@ class IOResult(
         cls, inner_value: _NewErrorType,
     ) -> 'IOResult[Any, _NewErrorType]':
         """
-        One more value to create failred unit values.
+        One more value to create failure unit values.
 
         This is a part of :class:`returns.primitives.interfaces.Unitable`.
         It is useful as a united way to create a new value from any container.
@@ -742,7 +742,7 @@ def IOSuccess(  # noqa: N802
     inner_value: _NewValueType,
 ) -> IOResult[_NewValueType, Any]:
     """
-    Public unit function of succeful :class:`~IOResult` container.
+    Public unit function of successful :class:`~IOResult` container.
 
     .. code:: python
 

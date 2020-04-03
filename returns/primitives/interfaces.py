@@ -157,7 +157,7 @@ class Unitable(Protocol[_ValueType, _ErrorType]):
     """
     Allows to create unit values from success and failure.
 
-    This is heavily ``Result`` related class.
+    This is a heavily ``Result``-related class.
     """
 
     @classmethod

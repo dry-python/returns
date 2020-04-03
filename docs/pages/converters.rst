@@ -3,8 +3,8 @@
 Converters
 ==========
 
-We have several helpers
-to convert containers from one type to another and back again.
+We have several helpers to convert containers from one type to another
+and back again.
 
 
 Maybe and Result
@@ -92,7 +92,7 @@ You can use
 :func:`coalesce_result <returns.converters.coalesce_result>`,
 :func:`coalesce_ioresult <returns.converters.coalesce_ioresult>`,
 and :func:`coalesce_maybe <returns.converters.coalesce_maybe>`
-converters to covert containers to a regular value.
+converters to convert containers to a regular value.
 
 These functions accept two functions:
 one for successful case, one for failing case.
@@ -133,8 +133,8 @@ That's how it works:
   >>> assert squash_io(IO('first'), IO('second')) == IO(('first', 'second'))
   >>> # => revealed type of this instance is `IO[Tuple[str, str]]`
 
-It might be helpful if you want
-to work with mutliple ``IO`` instances at the same time.
+It might be helpful if you want to work with mutliple ``IO`` instances at
+the same time.
 
 This approach saves you you from multiple nested ``IO.map`` calls.
 You can work with tuples instead like so:

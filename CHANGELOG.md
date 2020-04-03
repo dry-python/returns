@@ -57,7 +57,7 @@ See [0Ver](https://0ver.org/).
   for `IO` and `RequiresContext`
 
 - Adds `flow` function, which is similar to `pipe`
-- Adds `swap` coverter for `Result` and `IOResult`
+- Adds `swap` converter for `Result` and `IOResult`
 - Adds `squash_context` function to squash `RequiresContext` similar to `IO`
 
 ### Bugfixes
@@ -115,7 +115,7 @@ See [0Ver](https://0ver.org/).
 - Adds `identity` function
 - Adds `tap` function
 - Now `pipe` allows to pipe 8 steps
-- Adds `coalesce_result` and `coalesce_maybe` coverters
+- Adds `coalesce_result` and `coalesce_maybe` converters
 
 ### Bugfixes
 

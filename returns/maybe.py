@@ -322,7 +322,7 @@ def maybe(
 
 def maybe(function):
     """
-    Decorator to covert ``None`` returning function to ``Maybe`` container.
+    Decorator to convert ``None``-returning function to ``Maybe`` container.
 
     Supports both async and regular functions.
 

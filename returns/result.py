@@ -304,7 +304,7 @@ class Result(
         cls, inner_value: _NewErrorType,
     ) -> 'Result[Any, _NewErrorType]':
         """
-        One more value to create failred unit values.
+        One more value to create failure unit values.
 
         This is a part of :class:`returns.primitives.interfaces.Unitable`.
         It is useful as a united way to create a new value from any container.
@@ -330,8 +330,8 @@ class _Failure(Result[Any, _ErrorType]):
     Should not be used directly.
 
     This is an implementation detail, please, do not use it directly.
-    This class only has method that are logically
-    dependent on the current container state: successful or failed.
+    This class only has methods that are logically dependent on the
+    current container state: successful or failed.
 
     Use public data types instead!
     """
@@ -519,7 +519,7 @@ def safe(
 
 def safe(function):  # noqa: C901
     """
-    Decorator to covert exception throwing function to 'Result' container.
+    Decorator to convert exception-throwing function to 'Result' container.
 
     Should be used with care, since it only catches 'Exception' subclasses.
     It does not catch 'BaseException' subclasses.
