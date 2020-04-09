@@ -897,7 +897,7 @@ description = "pytest plugin for writing tests for mypy plugins"
 name = "pytest-mypy-plugins"
 optional = false
 python-versions = "*"
-version = "1.2.0"
+version = "1.2.1"
 
 [package.dependencies]
 decorator = "*"
@@ -1713,8 +1713,8 @@ pytest-cov = [
     {file = "pytest_cov-2.8.1-py2.py3-none-any.whl", hash = "sha256:cdbdef4f870408ebdbfeb44e63e07eb18bb4619fae852f6e760645fa36172626"},
 ]
 pytest-mypy-plugins = [
-    {file = "pytest-mypy-plugins-1.2.0.tar.gz", hash = "sha256:9012dddb48b27652b432a5b8102b3046d7da36a7a15a9cffa5b0d123484afe68"},
-    {file = "pytest_mypy_plugins-1.2.0-py3-none-any.whl", hash = "sha256:ca562a5e49ccbc8e46a6281050eae9ad6f10512b9000d36571c0fe78334b8ea3"},
+    {file = "pytest-mypy-plugins-1.2.1.tar.gz", hash = "sha256:ba2527e0f1ebc0c149ebb800281cc32643ca849b76080fc6a0438ec344f71a8d"},
+    {file = "pytest_mypy_plugins-1.2.1-py3-none-any.whl", hash = "sha256:af9c040214fa14b1ee09eb03bd94bd4ef5602e92ef2c8eb325a51931bf69a5e0"},
 ]
 pytest-randomly = [
     {file = "pytest-randomly-3.2.1.tar.gz", hash = "sha256:d9273db715bc7f8945cdb3efb994a9d15596a6087fb71a2e87030c5f2677317e"},
