@@ -96,7 +96,7 @@ class RequiresContext(
         """
         return self._inner_value(deps)
 
-    def map(  # noqa: A003
+    def map(  # noqa: WPS125
         self, function: Callable[[_ReturnType], _NewReturnType],
     ) -> 'RequiresContext[_EnvType, _NewReturnType]':
         """

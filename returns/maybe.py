@@ -3,7 +3,7 @@
 from abc import ABCMeta
 from functools import wraps
 from inspect import iscoroutinefunction
-from typing import (
+from typing import (  # noqa: WPS235
     Any,
     Callable,
     ClassVar,
@@ -70,7 +70,7 @@ class Maybe(
             return _Nothing(inner_value)
         return _Some(inner_value)
 
-    def map(  # noqa: A003
+    def map(  # noqa: WPS125
         self,
         function: Callable[[_ValueType], Optional[_NewValueType]],
     ) -> 'Maybe[_NewValueType]':
@@ -201,7 +201,7 @@ class _Nothing(Maybe[Any]):
 
     _inner_value: None
 
-    def __init__(self, inner_value: None = None) -> None:
+    def __init__(self, inner_value: None = None) -> None:  # noqa: WPS632
         """
         Private constructor for ``_Nothing`` type.
 
@@ -216,7 +216,7 @@ class _Nothing(Maybe[Any]):
         """Custom ``str`` definition without the state inside."""
         return '<Nothing>'
 
-    def map(self, function):  # noqa: A003
+    def map(self, function):  # noqa: WPS125
         """Does nothing for ``Nothing``."""
         return self
 
@@ -256,7 +256,7 @@ class _Some(Maybe[_ValueType]):
         """
         super().__init__(inner_value)
 
-    def map(self, function):  # noqa: A003
+    def map(self, function):  # noqa: WPS125
         """Composes current container with a pure function."""
         return Maybe.new(function(self._inner_value))
 

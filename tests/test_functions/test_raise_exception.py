@@ -26,7 +26,7 @@ def test_raise_regular_exception(exception_type: Type[Exception]):
 def test_failure_can_be_fixed():
     """Ensures that exceptions can work with Failures."""
     failure = Failure(ValueError('Message'))
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match='Message'):
         failure.fix(raise_exception)
 
 

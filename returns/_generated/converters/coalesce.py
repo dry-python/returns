@@ -73,7 +73,7 @@ _coalesce_result: Callable[
     ],
     Callable[[Result[_ValueType, _ErrorType]], _FirstType],
 ] = _coalesce
-_coalesce_result.__doc__ = __doc__
+_coalesce_result.__doc__ = __doc__  # noqa: WPS125
 
 _coalesce_ioresult: Callable[
     [
@@ -82,7 +82,7 @@ _coalesce_ioresult: Callable[
     ],
     Callable[[IOResult[_ValueType, _ErrorType]], IO[_FirstType]],
 ] = _coalesce
-_coalesce_ioresult.__doc__ = __doc__
+_coalesce_ioresult.__doc__ = __doc__  # noqa: WPS125
 
 _coalesce_maybe: Callable[
     [
@@ -91,4 +91,4 @@ _coalesce_maybe: Callable[
     ],
     Callable[[Maybe[_ValueType]], _FirstType],
 ] = _coalesce
-_coalesce_maybe.__doc__ = __doc__
+_coalesce_maybe.__doc__ = __doc__  # noqa: WPS125

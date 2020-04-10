@@ -3,7 +3,7 @@
 from abc import ABCMeta
 from functools import wraps
 from inspect import iscoroutinefunction
-from typing import (
+from typing import (  # noqa: WPS235
     Any,
     Callable,
     ClassVar,
@@ -78,7 +78,7 @@ class IO(BaseContainer, Generic[_ValueType]):
         """
         super().__init__(inner_value)
 
-    def map(  # noqa: A003
+    def map(  # noqa: WPS125
         self,
         function: Callable[[_ValueType], _NewValueType],
     ) -> 'IO[_NewValueType]':
@@ -297,7 +297,7 @@ class IOResult(
         """
         super().__init__(inner_value)
 
-    def map(  # noqa: A003
+    def map(  # noqa: WPS125
         self, function: Callable[[_ValueType], _NewValueType],
     ) -> 'IOResult[_NewValueType, _ErrorType]':
         """

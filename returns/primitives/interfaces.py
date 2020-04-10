@@ -40,7 +40,7 @@ class Mappable(Protocol[_ValueType]):
     Behaves like functor.
     """
 
-    def map(  # noqa: A003
+    def map(  # noqa: WPS125
         self, function: Callable[[_ValueType], _NewValueType],
     ) -> 'Mappable[_NewValueType]':
         """

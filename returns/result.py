@@ -3,7 +3,7 @@
 from abc import ABCMeta
 from functools import wraps
 from inspect import iscoroutinefunction
-from typing import (
+from typing import (  # noqa: WPS235
     Any,
     Callable,
     ClassVar,
@@ -55,7 +55,7 @@ class Result(
     success_type: ClassVar[Type['_Success']]
     failure_type: ClassVar[Type['_Failure']]
 
-    def map(  # noqa: A003
+    def map(  # noqa: WPS125
         self,
         function: Callable[[_ValueType], _NewValueType],
     ) -> 'Result[_NewValueType, _ErrorType]':
@@ -347,7 +347,7 @@ class _Failure(Result[Any, _ErrorType]):
         """
         super().__init__(inner_value)
 
-    def map(self, function):  # noqa: A003
+    def map(self, function):  # noqa: WPS125
         """Does nothing for ``Failure``."""
         return self
 
@@ -412,7 +412,7 @@ class _Success(Result[_ValueType, Any]):
         """
         super().__init__(inner_value)
 
-    def map(self, function):  # noqa: A003
+    def map(self, function):  # noqa: WPS125
         """Composes current container with a pure function."""
         return _Success(function(self._inner_value))
 
