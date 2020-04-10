@@ -441,3 +441,7 @@ Or read these articles:
 - [Typed functional Dependency Injection in Python](https://sobolevn.me/2020/02/typed-functional-dependency-injection)
 
 Do you have an article to submit? Feel free to open a pull request!
+
+<p align="center">&mdash; ⭐️ &mdash;</p>
+<p align="center"><i>Drylabs maintains dry-python and helps those who want to use it inside their organizations.</i></p>
+<p align="center"><i>Read more at <a href="https://drylabs.io">drylabs.io</a></i></p>
