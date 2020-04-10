@@ -47,7 +47,7 @@ class _PipelineMaybeProtocol(Protocol):
         ...
 
     @overload  # noqa: F811
-    def __call__(
+    def __call__(  # noqa: F811
         self, function: _AsyncReturnMaybeType,
     ) -> _AsyncReturnMaybeType:
         ...
@@ -59,7 +59,7 @@ class _PipelineResultProtocol(Protocol):
         ...
 
     @overload  # noqa: F811
-    def __call__(
+    def __call__(  # noqa: F811
         self, function: _AsyncReturnResultType,
     ) -> _AsyncReturnResultType:
         ...
@@ -71,7 +71,7 @@ class _PipelineIOResultProtocol(Protocol):
         ...
 
     @overload  # noqa: F811
-    def __call__(
+    def __call__(  # noqa: F811
         self, function: _AsyncReturnIOResultType,
     ) -> _AsyncReturnIOResultType:
         ...
