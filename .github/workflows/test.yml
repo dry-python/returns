@@ -1,0 +1,51 @@
+name: test
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.6, 3.7]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install poetry
+      run: |
+        curl -sSL \
+          "https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py" | python
+
+    - name: Set up cache
+      uses: actions/cache@v1
+      with:
+        path: .venv
+        key: venv-${{ matrix.python-version }}-${{ hashFiles('poetry.lock') }}
+    - name: Install dependencies
+      run: |
+        source "$HOME/.poetry/env"
+
+        poetry config virtualenvs.in-project true
+        poetry install
+
+    - name: Run tests
+      run: |
+        source "$HOME/.poetry/env"
+
+        poetry run flake8 .
+        poetry run mypy returns ./tests/**/*.py
+        poetry run pytest . docs/pages
+        poetry run doc8 -q docs
+        poetry run poetry check
+        poetry run pip check
+        poetry run safety check --bare --full-report
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1
+      with:
+        file: ./coverage.xml

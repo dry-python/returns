@@ -63,7 +63,7 @@ pytest-randomly = "^3.2"
 pytest-asyncio = "^0.10"
 pytest-mypy-plugins = "^1.2"
 
-sphinx = "^3.0"
+sphinx = "^2.4"
 sphinx-autodoc-typehints = "^1.10"
 sphinxcontrib-mermaid = "^0.4"
 sphinx-typlog-theme = "^0.8"

@@ -2,8 +2,8 @@
 
 -----
 
-[![Build Status](https://travis-ci.com/dry-python/returns.svg?branch=master)](https://travis-ci.com/dry-python/returns)
-[![Coverage Status](https://coveralls.io/repos/github/dry-python/returns/badge.svg?branch=master)](https://coveralls.io/github/dry-python/returns?branch=master)
+[![Build Status](https://github.com/dry-python/returns/workflows/test/badge.svg?branch=master&event=push)](https://github.com/dry-python/returns/actions?query=workflow%3Atest)
+[![codecov](https://codecov.io/gh/dry-python/returns/branch/master/graph/badge.svg)](https://codecov.io/gh/dry-python/returns)
 [![Documentation Status](https://readthedocs.org/projects/returns/badge/?version=latest)](https://returns.readthedocs.io/en/latest/?badge=latest)
 [![Python Version](https://img.shields.io/pypi/pyversions/returns.svg)](https://pypi.org/project/returns/)
 [![wemake-python-styleguide](https://img.shields.io/badge/style-wemake-000000.svg)](https://github.com/wemake-services/wemake-python-styleguide)
