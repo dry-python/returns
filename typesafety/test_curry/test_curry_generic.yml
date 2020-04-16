@@ -62,15 +62,15 @@
     from returns.curry import curry
     from typing import List, TypeVar, Union
 
-    T = TypeVar('T')
-    X = TypeVar('X')
+    A = TypeVar('A')
+    B = TypeVar('B')
 
     def multiple(
         a: int,
         *,
-        b: List[T],
-        c: List[X],
-    ) -> Union[T, X]:
+        b: List[A],
+        c: List[B],
+    ) -> Union[A, B]:
         ...
 
     x: List[int]
@@ -87,12 +87,12 @@
     reveal_type(curry(multiple, 1, b=x)(c=y))
     reveal_type(curry(multiple, 1, c=x)(b=y))
   out: |
-    main:18: note: Revealed type is 'def [X, T] (a: builtins.int, *, b: builtins.list[T`-1], c: builtins.list[X`-2]) -> Union[T`-1, X`-2]'
-    main:19: note: Revealed type is 'def [X, T] (*, b: builtins.list[T`-1], c: builtins.list[X`-2]) -> Union[T`-1, X`-2]'
-    main:20: note: Revealed type is 'def [X] (*, c: builtins.list[X`-2]) -> Union[builtins.int*, X`-2]'
-    main:21: note: Revealed type is 'def [T] (*, b: builtins.list[T`-1]) -> Union[T`-1, builtins.int*]'
-    main:22: note: Revealed type is 'def [X] (*, c: builtins.list[X`-2]) -> Union[builtins.str*, X`-2]'
-    main:23: note: Revealed type is 'def [T] (*, b: builtins.list[T`-1]) -> Union[T`-1, builtins.str*]'
+    main:18: note: Revealed type is 'def [B, A] (a: builtins.int, *, b: builtins.list[A`-1], c: builtins.list[B`-2]) -> Union[A`-1, B`-2]'
+    main:19: note: Revealed type is 'def [B, A] (*, b: builtins.list[A`-1], c: builtins.list[B`-2]) -> Union[A`-1, B`-2]'
+    main:20: note: Revealed type is 'def [B] (*, c: builtins.list[B`-2]) -> Union[builtins.int*, B`-2]'
+    main:21: note: Revealed type is 'def [A] (*, b: builtins.list[A`-1]) -> Union[A`-1, builtins.int*]'
+    main:22: note: Revealed type is 'def [B] (*, c: builtins.list[B`-2]) -> Union[builtins.str*, B`-2]'
+    main:23: note: Revealed type is 'def [A] (*, b: builtins.list[A`-1]) -> Union[A`-1, builtins.str*]'
     main:24: note: Revealed type is 'def () -> Union[builtins.int*, builtins.str*]'
     main:26: note: Revealed type is 'Union[builtins.int, builtins.str*]'
     main:27: note: Revealed type is 'Union[builtins.str*, builtins.int]'
