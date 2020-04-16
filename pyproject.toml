@@ -51,7 +51,7 @@ typing-extensions = "^3.7"
 [tool.poetry.dev-dependencies]
 mypy = "^0.770"
 wemake-python-styleguide = "^0.14"
-flake8-pytest-style = "^1.0"
+flake8-pytest-style = "^1.1"
 flake8-pyi = "^19.3"
 nitpick = "^0.22"
 
