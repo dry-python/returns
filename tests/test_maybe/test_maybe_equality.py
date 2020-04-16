@@ -34,9 +34,9 @@ def test_nonequality():
     """Ensures that containers are not compared to regular values."""
     assert Nothing is not None
     assert Nothing != None  # noqa: E711
-    assert _Nothing(None) is not None
     assert _Nothing(None) != None  # noqa: E711
-    assert Some(5) != 5 and Some(3) is not Some(3)
+    assert Some(5) != 5
+    assert Some(3) is not Some(3)
 
 
 def test_is_compare():

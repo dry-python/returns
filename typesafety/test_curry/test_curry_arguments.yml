@@ -1,0 +1,36 @@
+- case: curry_zero_args
+  disable_cache: true
+  main: |
+    from returns.curry import curry
+
+    def multiple(
+        a: int, 
+        b: int, 
+        c: int = 0, 
+        *args: float, 
+        d: str, 
+        e: bool = True, 
+        **kwargs: str,
+    ) -> str:
+        ...
+
+    reveal_type(curry(multiple))
+    reveal_type(curry(multiple, 1))
+    reveal_type(curry(multiple, 1, 2))
+    reveal_type(curry(multiple, 1, 2, c=3))
+    reveal_type(curry(multiple, 1, 2, c=3, d='a'))
+    reveal_type(curry(multiple, 1, 2, c=3, e=False))
+    reveal_type(curry(multiple, 1, 2, d='a'))
+    reveal_type(curry(multiple, 1, 2, e=False))
+
+    # Currently ignoring this case, seems like a bug in mypy:
+    # reveal_type(curry(multiple, 1, 2, 3, 4.0, 5.0))
+  out: |
+    main:14: note: Revealed type is 'def (a: builtins.int, b: builtins.int, c: builtins.int =, *args: builtins.float, *, d: builtins.str, e: builtins.bool =, **kwargs: builtins.str) -> builtins.str*'
+    main:15: note: Revealed type is 'def (b: builtins.int, c: builtins.int =, *args: builtins.float, *, d: builtins.str, e: builtins.bool =, **kwargs: builtins.str) -> builtins.str*'
+    main:16: note: Revealed type is 'def (c: builtins.int =, *args: builtins.float, *, d: builtins.str, e: builtins.bool =, **kwargs: builtins.str) -> builtins.str*'
+    main:17: note: Revealed type is 'def (*args: builtins.float, *, d: builtins.str, e: builtins.bool =, **kwargs: builtins.str) -> builtins.str*'
+    main:18: note: Revealed type is 'def (*args: builtins.float, *, e: builtins.bool =, **kwargs: builtins.str) -> builtins.str*'
+    main:19: note: Revealed type is 'def (*args: builtins.float, *, d: builtins.str, **kwargs: builtins.str) -> builtins.str*'
+    main:20: note: Revealed type is 'def (c: builtins.int =, *args: builtins.float, *, e: builtins.bool =, **kwargs: builtins.str) -> builtins.str*'
+    main:21: note: Revealed type is 'def (c: builtins.int =, *args: builtins.float, *, d: builtins.str, **kwargs: builtins.str) -> builtins.str*'

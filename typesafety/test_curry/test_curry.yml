@@ -1,0 +1,125 @@
+- case: curry_zero_args
+  disable_cache: true
+  main: |
+    from returns.curry import curry
+
+    def two_args(first: int, second: float) -> str:
+        ...
+
+    reveal_type(curry(two_args))  # N: Revealed type is 'def (first: builtins.int, second: builtins.float) -> builtins.str*'
+
+
+- case: curry_single_arg
+  disable_cache: true
+  main: |
+    from returns.curry import curry
+
+    def two_args(first: int, second: float) -> str:
+        ...
+
+    reveal_type(curry(two_args, 1))  # N: Revealed type is 'def (second: builtins.float) -> builtins.str*'
+
+
+- case: curry_all_args
+  disable_cache: true
+  main: |
+    from returns.curry import curry
+
+    def two_args(first: int, second: float) -> str:
+        ...
+
+    reveal_type(curry(two_args, 1, second=0.5))  # N: Revealed type is 'def () -> builtins.str*'
+
+
+- case: curry_single_named_arg
+  disable_cache: true
+  main: |
+    from returns.curry import curry
+
+    def two_args(first: int, second: float) -> str:
+        ...
+
+    reveal_type(curry(two_args, second=1.0))  # N: Revealed type is 'def (first: builtins.int) -> builtins.str*'
+
+
+- case: curry_multiple_args
+  disable_cache: true
+  main: |
+    from returns.curry import curry
+
+    def multiple(
+        first: int, 
+        second: float, 
+        third: str, 
+        flag1: bool, 
+        flag2: bool, 
+        flag3: type,
+    ) -> str:
+        ...
+
+    reveal_type(curry(multiple, 1, 0.4, flag3=int, flag2=True))  # N: Revealed type is 'def (third: builtins.str, flag1: builtins.bool) -> builtins.str*'
+
+
+- case: curry_not_callable_type
+  disable_cache: true
+  main: |
+    from returns.curry import curry
+
+    curried_int = curry(int, base=2)
+
+    reveal_type(curried_int)  # N: Revealed type is 'def (*Any, **Any) -> builtins.int*'
+
+
+- case: curry_wrong_argument_types
+  disable_cache: true
+  main: |
+    from returns.curry import curry
+    from typing_extensions import Literal
+
+    def multiple(
+        first: int, 
+        second: float,
+        flag: Literal[True],
+    ) -> str:
+        ...
+
+    curry(multiple, 'a', flag=False)
+  out: |
+    main:11: error: Argument 1 to "multiple" has incompatible type "str"; expected "int"
+    main:11: error: Argument 2 to "multiple" has incompatible type "bool"; expected "Literal[True]"
+
+
+- case: curry_too_many_positional_args
+  disable_cache: true
+  main: |
+    from returns.curry import curry
+    from typing_extensions import Literal
+
+    def multiple(
+        first: int, 
+        second: float,
+    ) -> str:
+        ...
+
+    curry(multiple, 1, 2.0, 3)
+  out: |
+    main:10: error: Too many arguments for "multiple"
+
+
+- case: curry_invalid_named_arg
+  disable_cache: true
+  main: |
+    from returns.curry import curry
+    from typing_extensions import Literal
+
+    def multiple(
+        first: int, 
+        second: float,
+    ) -> str:
+        ...
+
+    curry(multiple, missing=1)
+  out: |
+    main:4: note: "multiple" defined here
+    main:10: error: Unexpected keyword argument "missing" for "multiple"
+

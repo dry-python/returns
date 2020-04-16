@@ -22,6 +22,8 @@ from typing import Callable, Optional, Type
 from mypy.plugin import FunctionContext, Plugin
 from mypy.types import CallableType
 
+from returns.contrib.mypy._curry import CurryFunctionReducer, make_reduced_args
+
 #: Set of full names of our decorators.
 _TYPED_DECORATORS = frozenset((
     'returns.result.safe',
@@ -29,6 +31,9 @@ _TYPED_DECORATORS = frozenset((
     'returns.io.impure_safe',
     'returns.maybe.maybe',
 ))
+
+#: Used for typed curring.
+_TYPED_CURRY_FUNCTION = 'returns.curry.curry'
 
 
 def _change_decorator_function_type(
@@ -57,6 +62,26 @@ def _analyze_decorator(function_ctx: FunctionContext):
     )
 
 
+def _analyze_curring(function_ctx: FunctionContext):
+    """
+    This hook is used to make typed curring a thing in `returns` project.
+
+    Internally we just reduce the original function's argument count.
+    And drop some of them from function's signature.
+    """
+    if not isinstance(function_ctx.arg_types[0][0], CallableType):
+        return function_ctx.default_return_type
+    if not isinstance(function_ctx.default_return_type, CallableType):
+        return function_ctx.default_return_type
+
+    return CurryFunctionReducer(
+        function_ctx.default_return_type,
+        function_ctx.arg_types[0][0],
+        make_reduced_args(function_ctx),
+        function_ctx,
+    ).new_partial()
+
+
 class _TypedDecoratorPlugin(Plugin):
     def get_function_hook(  # type: ignore
         self, fullname: str,
@@ -70,7 +95,9 @@ class _TypedDecoratorPlugin(Plugin):
 
         Otherwise, we return ``None``.
         """
-        if fullname in _TYPED_DECORATORS:
+        if fullname == _TYPED_CURRY_FUNCTION:
+            return _analyze_curring
+        elif fullname in _TYPED_DECORATORS:
             return _analyze_decorator
         return None
 

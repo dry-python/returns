@@ -6,6 +6,13 @@ incremental in minor, bugfixes only are patches.
 See [0Ver](https://0ver.org/).
 
 
+## 0.14.0
+
+### Features
+
+- Adds typed curry plugin!
+
+
 ## 0.13.0
 
 ### Features
