@@ -68,8 +68,8 @@
     def multiple(
         a: int,
         *,
-        b: List[A],
-        c: List[B],
+        b: List[B],
+        c: List[A],
     ) -> Union[A, B]:
         ...
 
