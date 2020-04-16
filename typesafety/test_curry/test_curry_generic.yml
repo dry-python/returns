@@ -56,8 +56,10 @@
     main:21: note: Revealed type is 'def () -> builtins.int*'
     main:22: note: Revealed type is 'builtins.int*'
 
-- case: curry_double_generic
+
+- case: curry_double_generic_complex37
   disable_cache: true
+  skip: sys.version_info >= (3, 8)
   main: |
     from returns.curry import curry
     from typing import List, TypeVar, Union
@@ -82,17 +84,72 @@
     reveal_type(curry(multiple, 1, c=x))
     reveal_type(curry(multiple, 1, b=y))
     reveal_type(curry(multiple, 1, c=y))
+  out: |
+    main:18: note: Revealed type is 'def [A, B] (a: builtins.int, *, b: builtins.list[B`-1], c: builtins.list[A`-2]) -> Union[A`-2, B`-1]'
+    main:19: note: Revealed type is 'def [A, B] (*, b: builtins.list[B`-1], c: builtins.list[A`-2]) -> Union[A`-2, B`-1]'
+    main:20: note: Revealed type is 'def [A] (*, c: builtins.list[A`-2]) -> Union[A`-2, builtins.int*]'
+    main:21: note: Revealed type is 'def [B] (*, b: builtins.list[B`-1]) -> Union[builtins.int*, B`-1]'
+    main:22: note: Revealed type is 'def [A] (*, c: builtins.list[A`-2]) -> Union[A`-2, builtins.str*]'
+    main:23: note: Revealed type is 'def [B] (*, b: builtins.list[B`-1]) -> Union[builtins.str*, B`-1]'
+
+
+# Python3.8+ sorts generic arguments differently:
+- case: curry_double_generic_complex38
+  disable_cache: true
+  skip: sys.version_info < (3, 8)
+  main: |
+    from returns.curry import curry
+    from typing import List, TypeVar, Union
+
+    A = TypeVar('A')
+    B = TypeVar('B')
+
+    def multiple(
+        a: int,
+        *,
+        b: List[B],
+        c: List[A],
+    ) -> Union[A, B]:
+        ...
+
+    x: List[int]
+    y: List[str]
+
+    reveal_type(curry(multiple))
+    reveal_type(curry(multiple, 1))
+    reveal_type(curry(multiple, 1, b=x))
+    reveal_type(curry(multiple, 1, c=x))
+    reveal_type(curry(multiple, 1, b=y))
+    reveal_type(curry(multiple, 1, c=y))
+  out: |
+    main:18: note: Revealed type is 'def [B, A] (a: builtins.int, *, b: builtins.list[B`-1], c: builtins.list[A`-2]) -> Union[A`-2, B`-1]'
+    main:19: note: Revealed type is 'def [B, A] (*, b: builtins.list[B`-1], c: builtins.list[A`-2]) -> Union[A`-2, B`-1]'
+
+
+- case: curry_double_generic
+  disable_cache: true
+  main: |
+    from returns.curry import curry
+    from typing import List, TypeVar, Union
+
+    A = TypeVar('A')
+    B = TypeVar('B')
+
+    def multiple(
+        a: int,
+        *,
+        b: List[B],
+        c: List[A],
+    ) -> Union[A, B]:
+        ...
+
+    x: List[int]
+    y: List[str]
     reveal_type(curry(multiple, 1, c=y, b=x))
 
     reveal_type(curry(multiple, 1, b=x)(c=y))
     reveal_type(curry(multiple, 1, c=x)(b=y))
   out: |
-    main:18: note: Revealed type is 'def [B, A] (a: builtins.int, *, b: builtins.list[A`-1], c: builtins.list[B`-2]) -> Union[A`-1, B`-2]'
-    main:19: note: Revealed type is 'def [B, A] (*, b: builtins.list[A`-1], c: builtins.list[B`-2]) -> Union[A`-1, B`-2]'
-    main:20: note: Revealed type is 'def [B] (*, c: builtins.list[B`-2]) -> Union[builtins.int*, B`-2]'
-    main:21: note: Revealed type is 'def [A] (*, b: builtins.list[A`-1]) -> Union[A`-1, builtins.int*]'
-    main:22: note: Revealed type is 'def [B] (*, c: builtins.list[B`-2]) -> Union[builtins.str*, B`-2]'
-    main:23: note: Revealed type is 'def [A] (*, b: builtins.list[A`-1]) -> Union[A`-1, builtins.str*]'
-    main:24: note: Revealed type is 'def () -> Union[builtins.int*, builtins.str*]'
-    main:26: note: Revealed type is 'Union[builtins.int, builtins.str*]'
-    main:27: note: Revealed type is 'Union[builtins.str*, builtins.int]'
+    main:17: note: Revealed type is 'def () -> Union[builtins.str*, builtins.int*]'
+    main:19: note: Revealed type is 'Union[builtins.str*, builtins.int]'
+    main:20: note: Revealed type is 'Union[builtins.int, builtins.str*]'
