@@ -220,6 +220,11 @@ class CurryFunctionReducer(object):
             self._default_return_type,
         ).apply_new_args(new_function_args)
         if self._default_return_type.is_generic():
+            # If the resulting function is generic,
+            # we need an extra round of type-checking and type-inference.
+            # We use the combination of passed and declared arguments.
+            # This models the substitution of existing arguments by passed ones
+            # and leaves untouched arguments for us to proper typecheck them.
             self._reduce_return_type(new_function_args)
 
     def _reduce_return_type(self, new_args: List[_FuncArg]) -> None:
