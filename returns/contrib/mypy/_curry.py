@@ -195,8 +195,8 @@ class CurryFunctionReducer(object):
             self._ctx.context,
             [new_arg.name for new_arg in new_args],
         )
-        if checked_function.ret_type != function_def.ret_type:
-            if isinstance(checked_function.ret_type, UninhabitedType):
+        if return_type != function_def.ret_type:
+            if isinstance(return_type, UninhabitedType):
                 # This can happen when generic arguments are not given yet.
                 # By default `mypy` will resolve this ret_type into `NoReturn`
                 # which is not what we want. So, we keep the old return type.

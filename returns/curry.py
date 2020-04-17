@@ -11,6 +11,7 @@ def curry(
     Typed curring helper.
 
     It just ``functools.partial`` wrapper with better typing support.
+
     We use custom ``mypy`` plugin to make types correct.
     Otherwise, it is currently impossible.
 
