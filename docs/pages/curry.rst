@@ -91,7 +91,7 @@ variables like in the example above.
 .. warning::
 
   Python has a very limited support for real curring in a way like
-  (x, y, z) -> t => x -> y -> z -> t
+  ``(x, y, z) -> t`` => ``x -> y -> z -> t``
   works in languages like Haskell.
 
   This is actually a partial application, but that's the best we can do.
