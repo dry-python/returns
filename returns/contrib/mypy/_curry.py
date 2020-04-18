@@ -58,7 +58,7 @@ def get_callable_from_type(function_ctx: FunctionContext) -> MypyType:
     - We can use ``curry`` on real functions
     - We can use ``curry`` on ``@overload`` functions
     - We can use ``curry`` on instances with ``__call__``
-    - We can use ``curry`` on ``Union`` types
+    - We can use ``curry`` on ``Type`` types
 
     This function allows us to unify this process.
     We also need to disable errors, because we explicitly pass empty args.

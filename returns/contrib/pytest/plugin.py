@@ -1,24 +1,9 @@
 from functools import wraps
-from typing import Union
 
 import pytest
 from typing_extensions import Final, final
 
-from returns.context import RequiresContextIOResult, RequiresContextResult
-from returns.io import _IOFailure, _IOSuccess
-from returns.primitives.interfaces import Fixable, Rescueable
-from returns.primitives.types import Immutable
-from returns.result import _Failure, _Success
-
 _ERROR_FIELD: Final = '_error_handled'
-_CONTAINERS_WITH_ERRORS: Final = (
-    _Success,
-    _Failure,
-    _IOSuccess,
-    _IOFailure,
-    RequiresContextResult,
-    RequiresContextIOResult,
-)
 _ERROR_HANDLERS: Final = (
     'rescue',
     'fix',
@@ -30,10 +15,8 @@ _ERRORS_COPIERS: Final = (
 
 
 @final
-class _ReturnsAsserts(Immutable):
-    def is_error_handled(
-        self, container: Union[Rescueable, Fixable],
-    ) -> bool:
+class _ReturnsAsserts(object):
+    def is_error_handled(self, container) -> bool:
         """Ensures that container has its error handled in the end."""
         return getattr(container, _ERROR_FIELD, False)
 
@@ -61,7 +44,7 @@ def returns(_patch_containers) -> _ReturnsAsserts:  # noqa: WPS442
 
 
 def _patch_error_handling(methods, patch_handler) -> None:
-    for container in _CONTAINERS_WITH_ERRORS:
+    for container in _PatchedContainer.containers_to_patch():
         for method in methods:
             original = getattr(container, method, None)
             if original:
@@ -69,6 +52,24 @@ def _patch_error_handling(methods, patch_handler) -> None:
 
 
 class _PatchedContainer(object):
+    @classmethod
+    def containers_to_patch(cls):
+        from returns.context import (
+            RequiresContextIOResult,
+            RequiresContextResult,
+        )
+        from returns.io import _IOFailure, _IOSuccess
+        from returns.result import _Failure, _Success
+
+        return (
+            _Success,
+            _Failure,
+            _IOSuccess,
+            _IOFailure,
+            RequiresContextResult,
+            RequiresContextIOResult,
+        )
+
     @classmethod
     def error_handler(cls, original):
         @wraps(original)
