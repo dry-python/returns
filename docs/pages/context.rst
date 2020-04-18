@@ -170,7 +170,7 @@ Let's see the final result:
   from returns.context import Context, RequiresContext
 
   class _Deps(Protocol):  # we rely on abstractions, not direct values or types
-      WORD_THRESSHOLD: int
+      WORD_THRESHOLD: int
       UNGUESSED_CHAR: str
 
   def calculate_points(word: str) -> RequiresContext[_Deps, int]:
