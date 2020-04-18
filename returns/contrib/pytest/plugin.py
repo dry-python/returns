@@ -53,7 +53,7 @@ def _patch_error_handling(methods, patch_handler) -> None:
 
 class _PatchedContainer(object):
     @classmethod
-    def containers_to_patch(cls):
+    def containers_to_patch(cls) -> tuple:
         """We need this method so coverage will work correctly."""
         from returns.context import (  # noqa: WPS433
             RequiresContextIOResult,
