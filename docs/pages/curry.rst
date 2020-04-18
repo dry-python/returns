@@ -42,7 +42,7 @@ Generics
 --------
 
 One more problem is generics support in ``functools.partial``.
-Here's the comparision:
+Here's the comparison:
 
 .. code:: python
 
