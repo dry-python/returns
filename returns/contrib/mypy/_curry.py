@@ -1,7 +1,9 @@
 from collections import Counter, defaultdict, namedtuple
 from copy import copy
 from types import MappingProxyType
-from typing import ClassVar, DefaultDict, FrozenSet, List, Optional, Tuple
+from typing import ClassVar, DefaultDict, FrozenSet, List, Optional, Tuple, Iterable
+
+from typing_extensions import final
 
 from mypy.checker import detach_callable
 from mypy.nodes import (
@@ -14,9 +16,8 @@ from mypy.nodes import (
     TempNode,
 )
 from mypy.plugin import FunctionContext
-from mypy.types import CallableType
 from mypy.types import Type as MypyType
-from mypy.types import TypeType, UninhabitedType
+from mypy.types import TypeType, UninhabitedType, FunctionLike, CallableType, Overloaded
 
 #: Mapping for better `call || function` argument compatibility.
 _KIND_MAPPING = MappingProxyType({
@@ -29,7 +30,14 @@ _KIND_MAPPING = MappingProxyType({
 #: Basic struct to represent function arguments.
 _FuncArgStruct = namedtuple('_FuncArg', ('name', 'type', 'kind'))
 
+#: We use this struct to store functions to be modified later.
+_FunctionModifierStruct = namedtuple(
+    '_FunctionModifierStruct',
+    ('function_def', ),
+)
 
+
+@final
 class _FuncArg(_FuncArgStruct):
     name: Optional[str]
     type: MypyType  # noqa: WPS125
@@ -40,13 +48,51 @@ class _FuncArg(_FuncArgStruct):
         return TempNode(self.type, context=context)
 
 
-def _func_args(has_args: CallableType) -> List[_FuncArg]:
-    parts = zip(
-        has_args.arg_names,
-        has_args.arg_types,
-        has_args.arg_kinds,
-    )
-    return [_FuncArg(*part) for part in parts]
+@final
+class _FunctionModifier(_FunctionModifierStruct):
+    function_def: FunctionLike
+
+    def func_args(self) -> Iterable[_FuncArg]:
+        func_args = []
+        for function_def in self.function_def.items():
+            parts = zip(
+                function_def.arg_names,
+                function_def.arg_types,
+                function_def.arg_kinds,
+            )
+            func_args.extend([_FuncArg(*part) for part in parts])
+        return set(func_args)
+
+    def modify_args(self, new_args: List[_FuncArg]) -> FunctionLike:
+        arg_names = [arg.name for arg in new_args]
+        arg_types = [arg.type for arg in new_args]
+        arg_kinds = [arg.kind for arg in new_args]
+
+        return self._from_items([
+            detach_callable(function_def.copy_modified(
+                arg_names=arg_names,
+                arg_types=arg_types,
+                arg_kinds=arg_kinds,
+            ))
+            for function_def in self.function_def.items()
+        ])
+
+    def modify_ret_type(self, original_defs: FunctionLike) -> FunctionLike:
+        return self._from_items([
+            function_def.copy_modified(ret_type=original_def.ret_type)
+            for function_def, original_def in zip(
+                self.function_def.items(),
+                original_defs.items(),
+            )
+        ])
+
+    def _from_items(self, functions: List[CallableType]) -> FunctionLike:
+        if self._is_oveloaded():
+            return Overloaded(functions)
+        return functions[0]
+
+    def _is_oveloaded(self) -> bool:
+        return isinstance(self.function_def, Overloaded)
 
 
 def get_callable_from_type(function_ctx: FunctionContext) -> MypyType:
@@ -102,23 +148,20 @@ class _ArgumentReducer(object):
         ARG_STAR,
     ))
 
-    def __init__(self, function_def: CallableType) -> None:
+    def __init__(self, function_def: FunctionLike) -> None:
         self._function_def = function_def
+        self._modifier = _FunctionModifier(self._function_def)
 
     def apply_new_args(
         self,
         new_args: List[_FuncArg],
-    ) -> CallableType:
+    ) -> FunctionLike:
         """Reassignes the default return type with new arguments."""
-        return detach_callable(self._function_def.copy_modified(
-            arg_names=[arg.name for arg in new_args],
-            arg_types=[arg.type for arg in new_args],
-            arg_kinds=[arg.kind for arg in new_args],
-        ))
+        return self._modifier.modify_args(new_args)
 
     def reduce_existing_args(
         self, reduced_args: List[_FuncArg],
-    ) -> Tuple[CallableType, List[_FuncArg]]:
+    ) -> Tuple[FunctionLike, List[_FuncArg]]:
         """
         By calling this method we construct a new callable.
 
@@ -144,7 +187,7 @@ class _ArgumentReducer(object):
         ))
 
         new_function_args = []
-        for index, frg in enumerate(_func_args(self._function_def)):
+        for index, frg in enumerate(self._modifier.func_args()):
             if frg.kind in self._positional_kinds and index < len(callee_args):
                 new_function_args.append(frg)
         return new_function_args, callee_args
@@ -158,7 +201,7 @@ class _ArgumentReducer(object):
         ))
 
         new_function_args = []
-        for frg in _func_args(self._function_def):
+        for frg in self._modifier.func_args():
             has_named_arg_def = any(
                 # Argument can either be used as a named argument
                 # or passed to `**kwrgs` if it exists.
@@ -187,7 +230,7 @@ class CurryFunctionReducer(object):
     This plugin requires several things:
 
     - One should now how ``ExpressionChecker`` from ``mypy`` works
-    - What ``CallableType`` is
+    - What ``FunctionLike`` is
     - How kinds work in type checking
     - What ``map_actuals_to_formals`` is
 
@@ -196,8 +239,8 @@ class CurryFunctionReducer(object):
 
     def __init__(
         self,
-        default_return_type: CallableType,
-        original_function: CallableType,
+        default_return_type: FunctionLike,
+        original_function: FunctionLike,
         reduced_args: List[_FuncArg],
         ctx: FunctionContext,
     ) -> None:
@@ -218,7 +261,7 @@ class CurryFunctionReducer(object):
         self._original_function = original_function
         self._intermediate_callable = copy(self._original_function)
 
-    def new_partial(self) -> CallableType:
+    def new_partial(self) -> FunctionLike:
         """
         Main method that removes provided arguments from the original function.
 
@@ -239,8 +282,8 @@ class CurryFunctionReducer(object):
         )
 
     def _analyze_call(
-        self, function_def: CallableType, new_args: List[_FuncArg],
-    ) -> CallableType:
+        self, function_def: FunctionLike, new_args: List[_FuncArg],
+    ) -> FunctionLike:
         checker = self._ctx.api.expr_checker  # type: ignore
         return_type, checked_function = checker.check_call(
             function_def,
@@ -252,24 +295,27 @@ class CurryFunctionReducer(object):
             self._ctx.context,
             [new_arg.name for new_arg in new_args],
         )
-        if return_type != function_def.ret_type:
+        if any(return_type != func.ret_type for func in function_def.items()):
             if isinstance(return_type, UninhabitedType):
                 # This can happen when generic arguments are not given yet.
                 # By default `mypy` will resolve this ret_type into `NoReturn`
                 # which is not what we want. So, we keep the old return type.
-                checked_function = checked_function.copy_modified(
-                    ret_type=function_def.ret_type,
-                )
+                checked_function = _FunctionModifier(
+                    checked_function,
+                ).modify_ret_type(function_def)
         return checked_function
 
     def _reduce_used_in_intermediate(self) -> None:
         intermediate = Counter(
-            arg.name for arg in _func_args(self._intermediate_callable)
+            arg.name
+            for arg in _FunctionModifier(
+                self._intermediate_callable,
+            ).func_args()
         )
         seen_args: DefaultDict[Optional[str], int] = defaultdict(int)
         new_function_args = []
 
-        for arg in _func_args(self._original_function):
+        for arg in _FunctionModifier(self._original_function).func_args():
             should_be_copied = (
                 arg.kind in {ARG_STAR, ARG_STAR2} or
                 arg.name not in intermediate or
@@ -284,13 +330,14 @@ class CurryFunctionReducer(object):
         self._default_return_type = _ArgumentReducer(
             self._default_return_type,
         ).apply_new_args(new_function_args)
-        if self._default_return_type.is_generic():
+        if any(func.is_generic() for func in self._default_return_type.items()):
             # If the resulting function is generic,
             # we need an extra round of type-checking and type-inference.
             # We use the combination of passed and declared arguments.
             # This models the substitution of existing arguments by passed ones
             # and leaves untouched arguments for us to proper typecheck them.
-            self._reduce_return_type(new_function_args)
+            print('generic')
+            # self._reduce_return_type(new_function_args)
 
     def _reduce_return_type(self, new_args: List[_FuncArg]) -> None:
         compound = self._analyze_call(
@@ -301,7 +348,12 @@ class CurryFunctionReducer(object):
             ret_type=compound.ret_type,
             variables=compound.variables,
         )
-        if not isinstance(self._ctx.arg_types[0][0], TypeType):
+
+        should_detach = (
+            isinstance(self._default_return_type, CallableType) and
+            not isinstance(self._ctx.arg_types[0][0], TypeType)
+        )
+        if should_detach:
             # When we pass `Type[T]` to our `curry` function,
             # we don't need to add type variables back. But!
             # When working with regular callables, we absoultely need to.

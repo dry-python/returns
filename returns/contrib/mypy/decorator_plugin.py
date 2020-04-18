@@ -18,7 +18,7 @@ https://github.com/mkurnikov/pytest-mypy-plugins
 from typing import Callable, Optional, Type
 
 from mypy.plugin import FunctionContext, Plugin
-from mypy.types import CallableType, Instance, TypeType
+from mypy.types import CallableType, Instance, TypeType, Overloaded
 
 from returns.contrib.mypy._curry import (
     CurryFunctionReducer,
@@ -79,7 +79,7 @@ def _analyze_curring(function_ctx: FunctionContext):
         CallableType,
         Instance,
         TypeType,
-        # TODO: Overloaded,
+        Overloaded,
     )
 
     if len(list(filter(len, function_ctx.arg_types))) == 1:
@@ -90,7 +90,7 @@ def _analyze_curring(function_ctx: FunctionContext):
         # We force `Instance` and similar types to coercse to callable:
         function_def = get_callable_from_type(function_ctx)
 
-    if not isinstance(function_def, CallableType):
+    if not isinstance(function_def, (CallableType, Overloaded)):
         return function_ctx.default_return_type
 
     return CurryFunctionReducer(
