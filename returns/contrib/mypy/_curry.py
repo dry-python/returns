@@ -1,7 +1,7 @@
-from collections import namedtuple
+from collections import Counter, defaultdict, namedtuple
 from copy import copy
 from types import MappingProxyType
-from typing import ClassVar, FrozenSet, List, Optional, Tuple
+from typing import ClassVar, DefaultDict, FrozenSet, List, Optional, Tuple
 
 from mypy.checker import detach_callable
 from mypy.nodes import (
@@ -263,19 +263,23 @@ class CurryFunctionReducer(object):
         return checked_function
 
     def _reduce_used_in_intermediate(self) -> None:
-        intermediate = {
-            arg.name
-            for arg in _func_args(self._intermediate_callable)
-        }
-
+        intermediate = Counter(
+            arg.name for arg in _func_args(self._intermediate_callable)
+        )
+        seen_args: DefaultDict[Optional[str], int] = defaultdict(int)
         new_function_args = []
+
         for arg in _func_args(self._original_function):
-            exists_in_intermediate = (
-                arg.name in intermediate and
-                arg.kind not in {ARG_STAR, ARG_STAR2}
+            should_be_copied = (
+                arg.kind in {ARG_STAR, ARG_STAR2} or
+                arg.name not in intermediate or
+                # We need to count seen args, because python3.8
+                # has pos_only_args, all their names are `None`.
+                (not arg.name and seen_args[arg.name] < intermediate[arg.name])
             )
-            if not exists_in_intermediate:
+            if should_be_copied:
                 new_function_args.append(arg)
+                seen_args[arg.name] += 1
 
         self._default_return_type = _ArgumentReducer(
             self._default_return_type,

@@ -65,8 +65,7 @@
     ) -> str:
         ...
 
-    # TODO: fix type later
-    reveal_type(curry(multiple, 1)  # N: Revealed type is 'builtins.str*'
+    reveal_type(curry(multiple, 1))  # N: Revealed type is 'def (builtins.int, c: builtins.int) -> builtins.str*'
 
 
 - case: curry_object
@@ -76,10 +75,10 @@
 
     class Inst(object):
         def __init__(self, arg: int) -> None:
-            self.arg = arg
+            ...
 
         def __call__(self, other: int) -> int:
-            return self.arg + other
+            ...
 
     reveal_type(curry(Inst))
     reveal_type(curry(Inst, 1))
@@ -90,6 +89,29 @@
     main:11: note: Revealed type is 'def () -> main.Inst*'
     main:12: note: Revealed type is 'main.Inst'
     main:13: note: Revealed type is 'def () -> builtins.int*'
+
+
+- case: curry_union
+  disable_cache: true
+  main: |
+    from typing import Union
+    from returns.curry import curry
+
+    class Inst(object):
+        def __call__(self, arg: int) -> None:
+            ...
+
+    class Other(object):
+        def __call__(self, arg: int, other: str) -> None:
+            ...
+
+    x: Union[Inst, Other]
+    reveal_type(curry(x))
+    # This does not work as well:
+    reveal_type(curry(x, 1))
+  out: |
+    main:13: note: Revealed type is 'Union[main.Inst, main.Other]'
+    main:15: note: Revealed type is 'def (*Any, **Any)'
 
 
 - case: curry_type_var
