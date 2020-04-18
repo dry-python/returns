@@ -54,12 +54,13 @@ def _patch_error_handling(methods, patch_handler) -> None:
 class _PatchedContainer(object):
     @classmethod
     def containers_to_patch(cls):
-        from returns.context import (
+        """We need this method so coverage will work correctly."""
+        from returns.context import (  # noqa: WPS433
             RequiresContextIOResult,
             RequiresContextResult,
         )
-        from returns.io import _IOFailure, _IOSuccess
-        from returns.result import _Failure, _Success
+        from returns.io import _IOFailure, _IOSuccess  # noqa: WPS433
+        from returns.result import _Failure, _Success  # noqa: WPS433
 
         return (
             _Success,
