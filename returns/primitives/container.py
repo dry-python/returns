@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from abc import ABCMeta
 from typing import Any, TypeVar
 

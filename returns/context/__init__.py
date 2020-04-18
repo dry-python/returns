@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 This module was quite big one, so we have split it.
 

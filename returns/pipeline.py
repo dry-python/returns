@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from typing import Union
 
 from returns._generated.pipeline.flow import _flow as flow  # noqa: F401

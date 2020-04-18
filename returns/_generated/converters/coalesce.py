@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Accepts two functions that handle different cases of containers.
 

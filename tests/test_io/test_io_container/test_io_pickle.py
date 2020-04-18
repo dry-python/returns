@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from returns.io import IO
 
 

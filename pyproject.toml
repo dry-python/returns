@@ -42,6 +42,10 @@ classifiers = [
   "Topic :: Utilities"
 ]
 
+[tool.poetry.plugins.pytest11]
+returns = "returns.contrib.pytest.plugin"
+
+
 [tool.poetry.dependencies]
 python = "^3.6"
 

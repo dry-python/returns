@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from typing import Callable
 
 from returns.context import Context, RequiresContext

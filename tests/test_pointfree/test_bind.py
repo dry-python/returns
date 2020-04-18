@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from returns.context import (
     RequiresContext,
     RequiresContextIOResult,

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 # We import from the source, becase otherwise we will have a circular import.
 from returns._generated.pipeline.pipe import _pipe
 

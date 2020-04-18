@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from typing import Any, Callable, ClassVar, Generic, TypeVar
 
 from typing_extensions import final

@@ -6,7 +6,7 @@
     def two_args(first: int, second: float) -> str:
         ...
 
-    reveal_type(curry(two_args))  # N: Revealed type is 'def (first: builtins.int, second: builtins.float) -> builtins.str*'
+    reveal_type(curry(two_args))  # N: Revealed type is 'def (first: builtins.int, second: builtins.float) -> builtins.str'
 
 
 - case: curry_single_arg
@@ -134,4 +134,3 @@
   out: |
     main:4: note: "multiple" defined here
     main:10: error: Unexpected keyword argument "missing" for "multiple"
-

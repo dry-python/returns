@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from returns.converters import (
     coalesce_ioresult,
     coalesce_maybe,

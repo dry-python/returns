@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from abc import ABCMeta
 from functools import wraps
 from inspect import iscoroutinefunction
@@ -285,7 +283,9 @@ class IOResult(
     _inner_value: Result[_ValueType, _ErrorType]
 
     # These two are required for projects like `classes`:
+    #: Success type that is used to represent the successful computation.
     success_type: ClassVar[Type['_IOSuccess']]
+    #: Failure type that is used to represent the failed computation.
     failure_type: ClassVar[Type['_IOFailure']]
 
     def __init__(self, inner_value: Result[_ValueType, _ErrorType]) -> None:
@@ -732,10 +732,6 @@ class _IOSuccess(IOResult):
         return self
 
 
-IOResult.success_type = _IOSuccess
-IOResult.failure_type = _IOFailure
-
-
 # Public type constructors:
 
 def IOSuccess(  # noqa: N802
@@ -768,6 +764,10 @@ def IOFailure(  # noqa: N802
 
     """
     return _IOFailure(Failure(inner_value))
+
+
+IOResult.success_type = _IOSuccess
+IOResult.failure_type = _IOFailure
 
 
 # Aliases:

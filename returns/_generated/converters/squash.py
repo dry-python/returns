@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from returns.context import RequiresContext
 from returns.io import IO
 
@@ -14,6 +12,7 @@ def _squash_io(*args):
         >>> from returns.converters import squash_io
         >>> assert squash_io(IO('a'), IO('b')) == IO(('a', 'b'))
 
+    # TODO: reconsider this decision
     Why this only exists for ``IO`` and ``RequiresContext``?
     Because these types represent real values, that do not possibly fail.
 

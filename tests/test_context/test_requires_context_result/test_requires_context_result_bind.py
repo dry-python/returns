@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from returns.context import RequiresContext
 from returns.context import RequiresContextResult as RCR  # noqa: N814
 from returns.result import Failure, Result, Success

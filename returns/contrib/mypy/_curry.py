@@ -1,13 +1,22 @@
 from collections import namedtuple
+from copy import copy
 from types import MappingProxyType
-from typing import List, Optional, Tuple
+from typing import ClassVar, FrozenSet, List, Optional, Tuple
 
 from mypy.checker import detach_callable
-from mypy.nodes import ARG_NAMED, ARG_OPT, Context, TempNode
+from mypy.nodes import (
+    ARG_NAMED,
+    ARG_OPT,
+    ARG_POS,
+    ARG_STAR,
+    ARG_STAR2,
+    Context,
+    TempNode,
+)
 from mypy.plugin import FunctionContext
 from mypy.types import CallableType
 from mypy.types import Type as MypyType
-from mypy.types import UninhabitedType
+from mypy.types import TypeType, UninhabitedType
 
 #: Mapping for better `call || function` argument compatibility.
 _KIND_MAPPING = MappingProxyType({
@@ -27,6 +36,7 @@ class _FuncArg(_FuncArgStruct):
     kind: int
 
     def expression(self, context: Context) -> TempNode:
+        """Hack to pass unexisting `Expression` to typechecker."""
         return TempNode(self.type, context=context)
 
 
@@ -37,6 +47,32 @@ def _func_args(has_args: CallableType) -> List[_FuncArg]:
         has_args.arg_kinds,
     )
     return [_FuncArg(*part) for part in parts]
+
+
+def get_callable_from_type(function_ctx: FunctionContext) -> MypyType:
+    """
+    Returns callable type from the context.
+
+    There's why we need it:
+
+    - We can use ``curry`` on real functions
+    - We can use ``curry`` on ``@overload`` functions
+    - We can use ``curry`` on instances with ``__call__``
+    - We can use ``curry`` on ``Union`` types
+
+    This function allows us to unify this process.
+    We also need to disable errors, because we explicitly pass empty args.
+    """
+    checker = function_ctx.api.expr_checker  # type: ignore
+    function_def = function_ctx.arg_types[0][0]
+
+    checker.msg.disable_errors()
+    _return_type, function_def = checker.check_call(
+        function_def, [], [], function_ctx.context, [],
+    )
+    checker.msg.enable_errors()
+
+    return function_def
 
 
 def make_reduced_args(function_ctx: FunctionContext) -> List[_FuncArg]:
@@ -57,6 +93,15 @@ def make_reduced_args(function_ctx: FunctionContext) -> List[_FuncArg]:
 
 
 class _ArgumentReducer(object):
+    """Helps to tell which callee arguments was already provided in caller."""
+
+    #: Positional arguments can be of this kind.
+    _positional_kinds: ClassVar[FrozenSet[int]] = frozenset((
+        ARG_POS,
+        ARG_OPT,
+        ARG_STAR,
+    ))
+
     def __init__(self, function_def: CallableType) -> None:
         self._function_def = function_def
 
@@ -74,6 +119,12 @@ class _ArgumentReducer(object):
     def reduce_existing_args(
         self, reduced_args: List[_FuncArg],
     ) -> Tuple[CallableType, List[_FuncArg]]:
+        """
+        By calling this method we construct a new callable.
+
+        This allows use to create an intermediate callable
+        alongside with the arguments that were used during the curring.
+        """
         new_pos_args, callee_pos_args = self._reduce_positional_args(
             reduced_args,
         )
@@ -94,7 +145,7 @@ class _ArgumentReducer(object):
 
         new_function_args = []
         for index, frg in enumerate(_func_args(self._function_def)):
-            if index < len(callee_args):
+            if frg.kind in self._positional_kinds and index < len(callee_args):
                 new_function_args.append(frg)
         return new_function_args, callee_args
 
@@ -108,7 +159,13 @@ class _ArgumentReducer(object):
 
         new_function_args = []
         for frg in _func_args(self._function_def):
-            if callee_args and any(frg.name == rdc.name for rdc in callee_args):
+            has_named_arg_def = any(
+                # Argument can either be used as a named argument
+                # or passed to `**kwrgs` if it exists.
+                frg.name == rdc.name or frg.kind == ARG_STAR2
+                for rdc in callee_args
+            )
+            if callee_args and has_named_arg_def:
                 new_function_args.append(frg)
         return new_function_args, callee_args
 
@@ -159,7 +216,7 @@ class CurryFunctionReducer(object):
         self._default_return_type = default_return_type
 
         self._original_function = original_function
-        self._intermediate_callable = self._original_function.copy_modified()
+        self._intermediate_callable = copy(self._original_function)
 
     def new_partial(self) -> CallableType:
         """
@@ -213,7 +270,11 @@ class CurryFunctionReducer(object):
 
         new_function_args = []
         for arg in _func_args(self._original_function):
-            if arg.name not in intermediate:
+            exists_in_intermediate = (
+                arg.name in intermediate and
+                arg.kind not in {ARG_STAR, ARG_STAR2}
+            )
+            if not exists_in_intermediate:
                 new_function_args.append(arg)
 
         self._default_return_type = _ArgumentReducer(
@@ -232,9 +293,14 @@ class CurryFunctionReducer(object):
             self._original_function,
             self._reduced_args + new_args,
         )
-        self._default_return_type = detach_callable(
-            self._default_return_type.copy_modified(
-                ret_type=compound.ret_type,
-                variables=compound.variables,
-            ),
+        self._default_return_type = self._default_return_type.copy_modified(
+            ret_type=compound.ret_type,
+            variables=compound.variables,
         )
+        if not isinstance(self._ctx.arg_types[0][0], TypeType):
+            # When we pass `Type[T]` to our `curry` function,
+            # we don't need to add type variables back. But!
+            # When working with regular callables, we absoultely need to.
+            self._default_return_type = detach_callable(
+                self._default_return_type,
+            )

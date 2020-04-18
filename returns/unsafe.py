@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from typing import TypeVar
 
 from returns.io import IO

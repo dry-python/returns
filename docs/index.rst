@@ -40,6 +40,13 @@ Contents
   pages/types.rst
 
 .. toctree::
+  :maxdepth: 2
+  :caption: Integration
+
+  pages/contrib/mypy_plugins.rst
+  pages/contrib/pytest_plugins.rst
+
+.. toctree::
   :maxdepth: 1
   :caption: Changelog
 

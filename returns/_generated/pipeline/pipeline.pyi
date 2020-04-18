@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from typing import Callable, Coroutine, Type, TypeVar, overload
 
 from typing_extensions import Protocol

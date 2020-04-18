@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from typing import Any, NoReturn
 
 from returns.primitives.exceptions import ImmutableStateError

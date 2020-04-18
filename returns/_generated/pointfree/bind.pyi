@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from typing import Callable, TypeVar, overload
 
 from returns.context import (

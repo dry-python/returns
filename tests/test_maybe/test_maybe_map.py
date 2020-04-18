@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from returns.maybe import Nothing, Some
 
 

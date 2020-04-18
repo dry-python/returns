@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from abc import ABCMeta
 from functools import wraps
 from inspect import iscoroutinefunction

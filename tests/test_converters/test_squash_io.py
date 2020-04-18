@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from returns.converters import squash_io
 from returns.io import IO
 

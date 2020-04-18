@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from returns.io import IOFailure, IOResult, IOSuccess
 from returns.result import Failure, Result, Success
 

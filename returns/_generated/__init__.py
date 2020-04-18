@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 This package contains code that was "generated" via metaprogramming.
 

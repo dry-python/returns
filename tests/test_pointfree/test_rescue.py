@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from returns.context import RequiresContextIOResult, RequiresContextResult
 from returns.io import IOFailure, IOResult, IOSuccess
 from returns.pointfree import rescue

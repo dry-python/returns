@@ -11,6 +11,7 @@ See [0Ver](https://0ver.org/).
 ### Features
 
 - Adds typed curry plugin!
+- Adds `pytest` plugin with the ability to tests error handling
 
 
 ## 0.13.0

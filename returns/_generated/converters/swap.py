@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from typing import TypeVar, overload
 
 from returns.io import IOResult

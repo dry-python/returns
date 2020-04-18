@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
 from returns.maybe import Nothing, Some, _Nothing
