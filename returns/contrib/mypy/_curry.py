@@ -1,7 +1,7 @@
 from collections import Counter, defaultdict, namedtuple
 from copy import copy
 from types import MappingProxyType
-from typing import ClassVar, DefaultDict, FrozenSet, List, Optional, Tuple, Iterable
+from typing import ClassVar, DefaultDict, FrozenSet, List, Optional, Tuple
 
 from typing_extensions import final
 
@@ -33,7 +33,7 @@ _FuncArgStruct = namedtuple('_FuncArg', ('name', 'type', 'kind'))
 #: We use this struct to store functions to be modified later.
 _FunctionModifierStruct = namedtuple(
     '_FunctionModifierStruct',
-    ('function_def', ),
+    ('function_def',),
 )
 
 
@@ -52,7 +52,7 @@ class _FuncArg(_FuncArgStruct):
 class _FunctionModifier(_FunctionModifierStruct):
     function_def: FunctionLike
 
-    def func_args(self) -> Iterable[_FuncArg]:
+    def func_args(self) -> List[_FuncArg]:
         func_args = []
         for function_def in self.function_def.items():
             parts = zip(
@@ -61,7 +61,7 @@ class _FunctionModifier(_FunctionModifierStruct):
                 function_def.arg_kinds,
             )
             func_args.extend([_FuncArg(*part) for part in parts])
-        return set(func_args)
+        return func_args
 
     def modify_args(self, new_args: List[_FuncArg]) -> FunctionLike:
         arg_names = [arg.name for arg in new_args]
@@ -154,33 +154,30 @@ class _ArgumentReducer(object):
 
     def apply_new_args(
         self,
-        new_args: List[_FuncArg],
+        new_args: List[List[_FuncArg]],
     ) -> FunctionLike:
         """Reassignes the default return type with new arguments."""
         return self._modifier.modify_args(new_args)
 
     def reduce_existing_args(
         self, reduced_args: List[_FuncArg],
-    ) -> Tuple[FunctionLike, List[_FuncArg]]:
+    ) -> FunctionLike:
         """
         By calling this method we construct a new callable.
 
         This allows use to create an intermediate callable
         alongside with the arguments that were used during the curring.
         """
-        new_pos_args, callee_pos_args = self._reduce_positional_args(
-            reduced_args,
-        )
-        new_named_args, callee_named_args = self._reduce_named_args(
-            reduced_args,
-        )
-        return self.apply_new_args(
-            new_pos_args + new_named_args,
-        ), callee_pos_args + callee_named_args
+        new_args = []
+        for func_def in self._function_def.items():
+            new_pos_args = self._reduce_positional_args(func_def, reduced_args)
+            new_named_args = self._reduce_named_args(func_def, reduced_args)
+            new_args.append(new_pos_args + new_named_args)
+        return self.apply_new_args(new_args)
 
     def _reduce_positional_args(
-        self, reduced_args: List[_FuncArg],
-    ) -> Tuple[List[_FuncArg], List[_FuncArg]]:
+        self, func_def: CallableType, reduced_args: List[_FuncArg],
+    ) -> List[_FuncArg]:
         callee_args = list(filter(
             lambda name: name[0] is None,
             reduced_args,
@@ -190,11 +187,11 @@ class _ArgumentReducer(object):
         for index, frg in enumerate(self._modifier.func_args()):
             if frg.kind in self._positional_kinds and index < len(callee_args):
                 new_function_args.append(frg)
-        return new_function_args, callee_args
+        return new_function_args
 
     def _reduce_named_args(
-        self, reduced_args: List[_FuncArg],
-    ) -> Tuple[List[_FuncArg], List[_FuncArg]]:
+        self, func_def: CallableType, reduced_args: List[_FuncArg],
+    ) -> List[_FuncArg]:
         callee_args = list(filter(
             lambda name: name[0] is not None,
             reduced_args,
@@ -210,7 +207,7 @@ class _ArgumentReducer(object):
             )
             if callee_args and has_named_arg_def:
                 new_function_args.append(frg)
-        return new_function_args, callee_args
+        return new_function_args
 
 
 class CurryFunctionReducer(object):
@@ -278,7 +275,8 @@ class CurryFunctionReducer(object):
     def _reduce_intemediate_callable(self) -> None:
         arguments = _ArgumentReducer(self._intermediate_callable)
         self._intermediate_callable = self._analyze_call(
-            *arguments.reduce_existing_args(self._reduced_args),
+            arguments.reduce_existing_args(self._reduced_args),
+            self._reduced_args,
         )
 
     def _analyze_call(
