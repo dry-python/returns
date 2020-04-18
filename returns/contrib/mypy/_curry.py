@@ -1,7 +1,7 @@
 from collections import Counter, defaultdict, namedtuple
 from copy import copy
 from types import MappingProxyType
-from typing import ClassVar, DefaultDict, FrozenSet, List, Optional, Tuple
+from typing import ClassVar, DefaultDict, FrozenSet, List, Optional
 
 from mypy.checker import detach_callable
 from mypy.nodes import (
@@ -118,26 +118,20 @@ class _ArgumentReducer(object):
 
     def reduce_existing_args(
         self, reduced_args: List[_FuncArg],
-    ) -> Tuple[CallableType, List[_FuncArg]]:
+    ) -> CallableType:
         """
         By calling this method we construct a new callable.
 
         This allows use to create an intermediate callable
         alongside with the arguments that were used during the curring.
         """
-        new_pos_args, callee_pos_args = self._reduce_positional_args(
-            reduced_args,
-        )
-        new_named_args, callee_named_args = self._reduce_named_args(
-            reduced_args,
-        )
-        return self.apply_new_args(
-            new_pos_args + new_named_args,
-        ), callee_pos_args + callee_named_args
+        new_pos_args = self._reduce_positional_args(reduced_args)
+        new_named_args = self._reduce_named_args(reduced_args)
+        return self.apply_new_args(new_pos_args + new_named_args)
 
     def _reduce_positional_args(
         self, reduced_args: List[_FuncArg],
-    ) -> Tuple[List[_FuncArg], List[_FuncArg]]:
+    ) -> List[_FuncArg]:
         callee_args = list(filter(
             lambda name: name[0] is None,
             reduced_args,
@@ -147,11 +141,11 @@ class _ArgumentReducer(object):
         for index, frg in enumerate(_func_args(self._function_def)):
             if frg.kind in self._positional_kinds and index < len(callee_args):
                 new_function_args.append(frg)
-        return new_function_args, callee_args
+        return new_function_args
 
     def _reduce_named_args(
         self, reduced_args: List[_FuncArg],
-    ) -> Tuple[List[_FuncArg], List[_FuncArg]]:
+    ) -> List[_FuncArg]:
         callee_args = list(filter(
             lambda name: name[0] is not None,
             reduced_args,
@@ -167,7 +161,7 @@ class _ArgumentReducer(object):
             )
             if callee_args and has_named_arg_def:
                 new_function_args.append(frg)
-        return new_function_args, callee_args
+        return new_function_args
 
 
 class CurryFunctionReducer(object):
@@ -211,12 +205,11 @@ class CurryFunctionReducer(object):
             ctx: plugin hook context provided by ``mypy``.
 
         """
-        self._ctx = ctx
-        self._reduced_args = reduced_args
         self._default_return_type = default_return_type
-
         self._original_function = original_function
         self._intermediate_callable = copy(self._original_function)
+        self._reduced_args = reduced_args
+        self._ctx = ctx
 
     def new_partial(self) -> CallableType:
         """
@@ -235,7 +228,8 @@ class CurryFunctionReducer(object):
     def _reduce_intemediate_callable(self) -> None:
         arguments = _ArgumentReducer(self._intermediate_callable)
         self._intermediate_callable = self._analyze_call(
-            *arguments.reduce_existing_args(self._reduced_args),
+            arguments.reduce_existing_args(self._reduced_args),
+            self._reduced_args,
         )
 
     def _analyze_call(
