@@ -146,6 +146,6 @@
 
     I = TypeVar('I', bound=Inst)
 
-    def recieves_type(t: Type[I]) -> I:
+    def receives_type(t: Type[I]) -> I:
         reveal_type(curry(t, 1))  # N: Revealed type is 'def () -> I`-1'
         return t(1)
