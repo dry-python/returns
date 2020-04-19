@@ -17,7 +17,7 @@
     def two_args(first: int, second: float) -> str:
         ...
 
-    reveal_type(curry(two_args, 1))  # N: Revealed type is 'def (second: builtins.float) -> builtins.str*'
+    reveal_type(curry(two_args, 1))  # N: Revealed type is 'def (second: builtins.float) -> builtins.str'
 
 
 - case: curry_all_args
@@ -28,7 +28,7 @@
     def two_args(first: int, second: float) -> str:
         ...
 
-    reveal_type(curry(two_args, 1, second=0.5))  # N: Revealed type is 'def () -> builtins.str*'
+    reveal_type(curry(two_args, 1, second=0.5))  # N: Revealed type is 'def () -> builtins.str'
 
 
 - case: curry_single_named_arg
@@ -39,7 +39,7 @@
     def two_args(first: int, second: float) -> str:
         ...
 
-    reveal_type(curry(two_args, second=1.0))  # N: Revealed type is 'def (first: builtins.int) -> builtins.str*'
+    reveal_type(curry(two_args, second=1.0))  # N: Revealed type is 'def (first: builtins.int) -> builtins.str'
 
 
 - case: curry_multiple_args
@@ -57,7 +57,7 @@
     ) -> str:
         ...
 
-    reveal_type(curry(multiple, 1, 0.4, flag3=int, flag2=True))  # N: Revealed type is 'def (third: builtins.str, flag1: builtins.bool) -> builtins.str*'
+    reveal_type(curry(multiple, 1, 0.4, flag3=int, flag2=True))  # N: Revealed type is 'def (third: builtins.str, flag1: builtins.bool) -> builtins.str'
 
 
 - case: curry_not_callable_type
@@ -65,9 +65,9 @@
   main: |
     from returns.curry import curry
 
-    curried_int = curry(int, base=2)
+    curried_int = curry(int, 10)
 
-    reveal_type(curried_int)  # N: Revealed type is 'def (*Any, **Any) -> builtins.int*'
+    reveal_type(curried_int)  # N: Revealed type is 'def () -> builtins.int'
 
 
 - case: curry_explicit_noreturn
