@@ -93,6 +93,7 @@ def _analyze_curring(function_ctx: FunctionContext):
     if not isinstance(function_def, (CallableType, Overloaded)):
         return function_ctx.default_return_type
 
+    print('curry')
     return CurryFunctionReducer(
         function_ctx.default_return_type,
         function_def,
