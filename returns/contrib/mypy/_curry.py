@@ -1,16 +1,33 @@
-from typing_extensions import final
-from mypy.nodes import Context, TempNode, CallExpr, NameExpr
-from mypy.types import CallableType, FunctionLike, Type as MypyType, Overloaded, ARG_POS, ARG_STAR, ARG_STAR2, ARG_OPT, ARG_NAMED, TypeType, UninhabitedType, UnionType
-from mypy.plugin import FunctionContext
-from mypy.checker import detach_callable
-from typing import List, Optional, ClassVar, FrozenSet, Tuple
-from collections import namedtuple, Counter, defaultdict
+from collections import Counter, defaultdict, namedtuple
 from types import MappingProxyType
-from contextlib import contextmanager
-from mypy.messages import MessageBuilder
-from itertools import zip_longest
-from mypy.stats import is_generic
-from copy import copy
+from typing import (
+    ClassVar,
+    DefaultDict,
+    FrozenSet,
+    List,
+    Mapping,
+    Optional,
+    Tuple,
+    cast,
+)
+
+from mypy.argmap import map_actuals_to_formals
+from mypy.checker import detach_callable
+from mypy.constraints import infer_constraints_for_callable
+from mypy.expandtype import expand_type
+from mypy.nodes import (
+    ARG_NAMED,
+    ARG_OPT,
+    ARG_POS,
+    ARG_STAR,
+    ARG_STAR2,
+    Context,
+    TempNode,
+)
+from mypy.plugin import FunctionContext
+from mypy.types import CallableType, FunctionLike, Overloaded
+from mypy.types import Type as MypyType
+from mypy.types import TypeVarId
 
 #: Mapping for better `call || function` argument compatibility.
 _KIND_MAPPING = MappingProxyType({
@@ -20,11 +37,13 @@ _KIND_MAPPING = MappingProxyType({
     ARG_OPT: ARG_NAMED,
 })
 
+#: Mapping of `typevar` to real type.
+_Constraints = Mapping[TypeVarId, MypyType]
+
 #: Basic struct to represent function arguments.
 _FuncArgStruct = namedtuple('_FuncArg', ('name', 'type', 'kind'))
 
 
-@final
 class _FuncArg(_FuncArgStruct):
     name: Optional[str]
     type: MypyType  # noqa: WPS125
@@ -34,17 +53,16 @@ class _FuncArg(_FuncArgStruct):
         """Hack to pass unexisting `Expression` to typechecker."""
         return TempNode(self.type, context=context)
 
+    @classmethod
+    def from_callable(cls, function_def: CallableType) -> List['_FuncArg']:
+        parts = zip(
+            function_def.arg_names,
+            function_def.arg_types,
+            function_def.arg_kinds,
+        )
+        return [cls(*part) for part in parts]
 
-def _func_args(function_def: CallableType) -> List[_FuncArg]:
-    parts = zip(
-        function_def.arg_names,
-        function_def.arg_types,
-        function_def.arg_kinds,
-    )
-    return [_FuncArg(*part) for part in parts]
 
-
-@final
 class _Intermediate(object):
     """Helps to tell which callee arguments was already provided in caller."""
 
@@ -95,8 +113,8 @@ class _Intermediate(object):
         ))
 
         new_function_args = []
-        for index, frg in enumerate(_func_args(self._case_function)):
-            if frg.kind in self._positional_kinds and index < len(callee_args):
+        for ind, frg in enumerate(_FuncArg.from_callable(self._case_function)):
+            if frg.kind in self._positional_kinds and ind < len(callee_args):
                 new_function_args.append(frg)
         return new_function_args
 
@@ -110,7 +128,7 @@ class _Intermediate(object):
         ))
 
         new_function_args = []
-        for frg in _func_args(self._case_function):
+        for frg in _FuncArg.from_callable(self._case_function):
             has_named_arg_def = any(
                 # Argument can either be used as a named argument
                 # or passed to `**kwrgs` if it exists.
@@ -122,21 +140,24 @@ class _Intermediate(object):
         return new_function_args
 
 
-@final
 class _Functions(object):
-    def __init__(self, original: CallableType, intermediate: CallableType) -> None:
+    def __init__(
+        self,
+        original: CallableType,
+        intermediate: CallableType,
+    ) -> None:
         self._original = original
         self._intermediate = intermediate
 
     def diff(self) -> CallableType:
         intermediate = Counter(
-            arg.name for arg in _func_args(self._intermediate)
+            arg.name for arg in _FuncArg.from_callable(self._intermediate)
         )
 
         seen_args: DefaultDict[Optional[str], int] = defaultdict(int)
         new_function_args = []
 
-        for arg in _func_args(self._original):
+        for arg in _FuncArg.from_callable(self._original):
             should_be_copied = (
                 arg.kind in {ARG_STAR, ARG_STAR2} or
                 arg.name not in intermediate or
@@ -152,27 +173,11 @@ class _Functions(object):
             new_function_args,
         )
 
-    def mix(self) -> CallableType:
-        original_args = _func_args(self._original)
-        intermediate_args = _func_args(self._intermediate)
-
-        if len(original_args) == len(intermediate_args):
-            return self._intermediate
-        return self._original
-        # new_function_args = []
-        # for arg1, arg2 in zip_longest(original_args, intermediate_args):
-        #     new_function_args.append(arg2 if arg2 else arg1)
-
-        # return _Intermediate(self._original).with_signature(
-        #     new_function_args,
-        #     skip_detach=True,
-        # )
-
 
 def _analyze_function_call(
     function: FunctionLike,
     args: List[_FuncArg],
-    ctx: CallableType,
+    ctx: FunctionContext,
     *,
     show_errors: bool,
 ) -> Optional[CallableType]:
@@ -191,7 +196,6 @@ def _analyze_function_call(
     return checked_function
 
 
-@final
 class CurryFunctionReducer(object):
     """
     Helper object to work with curring.
@@ -199,12 +203,13 @@ class CurryFunctionReducer(object):
     Here's a quick overview of things that is going on inside:
 
     1. Firstly we create intermediate callable that represents a subset
-       of argument that are passed with the ``curry`` call.
+       of argument that are passed with the ``curry`` call
     2. Then, we run typechecking on this intermediate function
        and passed arguments to make sure that everything is correct
     3. Then, we substract intermediate arguments from the passed function
-    4. We run typechecking again on newly created final function
-       to copy generic attributes and make sure that everything still works
+    4. Finally we run type substitution on newly created final function
+       to replace generic vars we already know to make sure
+       that everything still works and the number of type vars is reduced
 
     This plugin requires several things:
 
@@ -212,6 +217,7 @@ class CurryFunctionReducer(object):
     - What ``FunctionLike`` is
     - How kinds work in type checking
     - What ``map_actuals_to_formals`` is
+    - How contraints work
 
     That's not an easy plugin to work with.
     """
@@ -238,17 +244,29 @@ class CurryFunctionReducer(object):
         self._applied_args = applied_args
         self._ctx = ctx
 
-    def new_partial(self) -> FunctionLike:
-        case_functions = []
-        fallbacks = []
+        self._case_functions: List[CallableType] = []
+        self._fallbacks: List[CallableType] = []
 
+    def new_partial(self) -> MypyType:
+        """
+        Creates new partial functions.
+
+        Splits passed functions into ``case_function``
+        where each overloaded spec is processed inducidually.
+        Then we combine everything back together removing unfit parts.
+        """
         for case_function in self._original.items():
             fallback, intermediate = self._create_intermediate(case_function)
-            fallbacks.append(fallback)
+            self._fallbacks.append(fallback)
+
             if intermediate:
-                partial = self._create_partial_case(case_function, intermediate)
-                case_functions.append(partial)
-        return self._create_new_partial(case_functions, fallbacks)
+                partial = self._create_partial_case(
+                    case_function,
+                    intermediate,
+                    self._infer_constraints(fallback),
+                )
+                self._case_functions.append(partial)
+        return self._create_new_partial()
 
     def _create_intermediate(
         self,
@@ -264,64 +282,81 @@ class CurryFunctionReducer(object):
             show_errors=False,
         )
 
+    def _infer_constraints(
+        self,
+        fallback: CallableType,
+    ) -> _Constraints:
+        """Creates mapping of ``typevar`` to real type that we already know."""
+        checker = self._ctx.api.expr_checker  # type: ignore
+        kinds = [arg.kind for arg in self._applied_args]
+        exprs = [
+            arg.expression(self._ctx.context)
+            for arg in self._applied_args
+        ]
+
+        formal_to_actual = map_actuals_to_formals(
+            kinds,
+            [arg.name for arg in self._applied_args],
+            fallback.arg_kinds,
+            fallback.arg_names,
+            lambda index: checker.accept(exprs[index]),
+        )
+        constraints = infer_constraints_for_callable(
+            fallback,
+            [arg.type for arg in self._applied_args],
+            kinds,
+            formal_to_actual,
+        )
+        return {
+            constraint.type_var: constraint.target
+            for constraint in constraints
+        }
+
     def _create_partial_case(
         self,
         case_function: CallableType,
         intermediate: CallableType,
+        constraints: _Constraints,
     ) -> CallableType:
-        partial = _Functions(
-            case_function,
-            intermediate,
-        ).diff()
-        return self._solve_generics(case_function, intermediate, partial)
+        partial = cast(CallableType, expand_type(
+            _Functions(case_function, intermediate).diff(),
+            constraints,
+        ))
+        if case_function.is_generic():
+            # We can deal with really different `case_function` over here.
+            # The first one is regular `generic` function
+            # that has variables and typevars in its spec.
+            # In this case, we process `partial` the same way.
+            # It should be generic also.
+            #
+            # The second possible type of `case_function` is pseudo-generic.
+            # These are functions that contain typevars in its spec,
+            # but variables are empty.
+            # Probably these functions are already used in a generic context.
+            # So, we ignore them and do not add variables back.
+            #
+            # Regular functions are also untouched by this.
+            return detach_callable(partial)
+        return partial.copy_modified(variables=[])
 
-    def _solve_generics(
-        self,
-        case_function: CallableType,
-        intermediate: CallableType,
-        partial: CallableType,
-    ) -> CallableType:
-        if not partial.is_generic():
-            return partial
+    def _create_new_partial(self) -> MypyType:
+        """
+        Creates a new partial function-like from set of callables.
 
-        compound = _analyze_function_call(
-            _Functions(case_function, intermediate).mix(),
-            self._applied_args + _func_args(partial),
-            self._ctx,
-            show_errors=True,
-        )
-        print()
-        print('origin', case_function)
-        print('intermediate', intermediate)
-        print('mix', _Functions(case_function, intermediate).mix())
-        print('partial', partial)
-        print('compound', compound, self._applied_args + _func_args(partial))
-        print()
-        partial = partial.copy_modified(
-            ret_type=compound.ret_type,
-            variables=compound.variables,
-        )
-        if not isinstance(self._ctx.arg_types[0][0], TypeType):
-            # When we pass `Type[T]` to our `curry` function,
-            # we don't need to add type variables back. But!
-            # When working with regular callables, we absoultely need to.
-            partial = detach_callable(partial)
-        return partial
-
-    def _create_new_partial(
-        self,
-        case_functions: List[CallableType],
-        fallbacks: List[CallableType],
-    ) -> MypyType:
-        if not case_functions:
+        We also need fallbacks here, because sometimes
+        there are no possible ways to create at least a single partial case.
+        In this scenario we analyze the set of fallbacks
+        and tell user what went wrong.
+        """
+        if not self._case_functions:
             _analyze_function_call(
-                self._proper_type(fallbacks),
+                self._proper_type(self._fallbacks),
                 self._applied_args,
                 self._ctx,
                 show_errors=True,
             )
             return self._default_return_type
-        return self._proper_type(case_functions)
+        return self._proper_type(self._case_functions)
 
     def _proper_type(
         self,

@@ -18,7 +18,7 @@ https://github.com/mkurnikov/pytest-mypy-plugins
 from typing import Callable, Optional, Type
 
 from mypy.plugin import FunctionContext, Plugin
-from mypy.types import CallableType, Instance, TypeType, Overloaded
+from mypy.types import CallableType, Instance, Overloaded, TypeType
 
 from returns.contrib.mypy._curry import (
     CurryFunctionReducer,
