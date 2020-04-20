@@ -5,7 +5,6 @@ from returns.result import Result
 
 @pytest.mark.parametrize('method_name', [
     'bind',
-    'unify',
     'map',
     'rescue',
     'fix',

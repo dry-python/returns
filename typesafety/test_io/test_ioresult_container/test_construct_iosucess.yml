@@ -23,6 +23,44 @@
     reveal_type(first.bind_result(returns_result))  # N: Revealed type is 'returns.io.IOResult[builtins.str*, builtins.Exception]'
 
 
+- case: iosuccess_unify1
+  disable_cache: true
+  main: |
+    from returns.io import IOSuccess, IOResult
+
+    def returns_result(param: int) -> IOResult[str, TypeError]:
+        ...
+
+    first: IOResult[int, ValueError] = IOSuccess(1)
+    reveal_type(first.unify(returns_result))  # N: Revealed type is 'returns.io.IOResult[builtins.str*, Union[builtins.ValueError, builtins.TypeError*]]'
+
+
+- case: iosuccess_unify2
+  disable_cache: true
+  main: |
+    from typing import Union
+    from returns.io import IOSuccess, IOResult
+
+    def returns_result(param: int) -> IOResult[str, TypeError]:
+        ...
+
+    first: IOResult[int, Union[ValueError, KeyError]] = IOSuccess(1)
+    reveal_type(first.unify(returns_result))  # N: Revealed type is 'returns.io.IOResult[builtins.str*, Union[builtins.ValueError, builtins.KeyError, builtins.TypeError*]]'
+
+
+- case: iosuccess_unify3
+  disable_cache: true
+  main: |
+    from typing import Union
+    from returns.io import IOSuccess, IOResult
+
+    def returns_result(param: int) -> IOResult[str, Union[KeyError, TypeError]]:
+        ...
+
+    first: IOResult[int, ValueError] = IOSuccess(1)
+    reveal_type(first.unify(returns_result))  # N: Revealed type is 'returns.io.IOResult[builtins.str*, Union[builtins.ValueError, builtins.KeyError, builtins.TypeError]]'
+
+
 - case: iosuccess_map
   disable_cache: true
   main: |

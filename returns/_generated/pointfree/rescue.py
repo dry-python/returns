@@ -1,4 +1,3 @@
-
 def _rescue(function):
     """
     Boxes function's input parameter from a regular value to a container.

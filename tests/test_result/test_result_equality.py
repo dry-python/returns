@@ -7,6 +7,7 @@ from returns.primitives.interfaces import (
     Fixable,
     Mappable,
     Rescueable,
+    Unifiable,
     Unitable,
     Unwrapable,
 )
@@ -25,6 +26,7 @@ from returns.result import Failure, Success
     Unwrapable,
     Altable,
     Unitable,
+    Unifiable,
 ])
 def test_protocols(container, protocol):
     """Ensures that Result has all the right protocols."""

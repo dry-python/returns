@@ -2,7 +2,12 @@ import pytest
 
 from returns.maybe import Nothing, Some, _Nothing
 from returns.primitives.exceptions import ImmutableStateError
-from returns.primitives.interfaces import Bindable, Mappable, Unwrapable
+from returns.primitives.interfaces import (
+    Bindable,
+    Instanceable,
+    Mappable,
+    Unwrapable,
+)
 
 
 @pytest.mark.parametrize('container', [
@@ -13,6 +18,7 @@ from returns.primitives.interfaces import Bindable, Mappable, Unwrapable
     Bindable,
     Mappable,
     Unwrapable,
+    Instanceable,
 ])
 def test_protocols(container, protocol):
     """Ensures that Maybe has all the right protocols."""

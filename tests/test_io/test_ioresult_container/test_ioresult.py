@@ -7,6 +7,7 @@ from returns.primitives.interfaces import (
     Fixable,
     Mappable,
     Rescueable,
+    Unifiable,
     Unitable,
     Unwrapable,
 )
@@ -24,6 +25,7 @@ from returns.primitives.interfaces import (
     Altable,
     Fixable,
     Unitable,
+    Unifiable,
 ])
 def test_protocols(container, protocol):
     """Ensures that RequiresContext has all the right protocols."""

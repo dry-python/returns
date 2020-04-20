@@ -125,7 +125,7 @@ class Result(
           >>> assert Failure('a').unify(bindable) == Failure('a')
 
         """
-        raise NotImplementedError
+        return self.bind(function)  # type: ignore
 
     def fix(
         self,
@@ -355,10 +355,6 @@ class _Failure(Result[Any, _ErrorType]):
         """Does nothing for ``Failure``."""
         return self
 
-    def unify(self, function):
-        """Does nothing for ``Failure``."""
-        return self
-
     def fix(self, function):
         """Composes pure function with a failed container."""
         return _Success(function(self._inner_value))
@@ -419,15 +415,6 @@ class _Success(Result[_ValueType, Any]):
     def bind(self, function):
         """Binds current container to a function that returns container."""
         return function(self._inner_value)
-
-    def unify(self, function):
-        """
-        Binds current container to a function that returns container.
-
-        Similar as :meth:`~_Success.bind`
-        but modifies the return type to unify error types.
-        """
-        return self.bind(function)  # type: ignore
 
     def fix(self, function):
         """Does nothing for ``Success``."""

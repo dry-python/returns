@@ -31,6 +31,37 @@ class Bindable(Protocol[_ValueType]):
 
 
 @runtime
+class Unifiable(Protocol[_ValueType, _ErrorType]):
+    """
+    Represents a "context" in which calculations can be executed.
+
+    ``Unifiable`` allows you to bind together
+    a series of calculations while maintaining
+    the context of that specific container.
+
+    As the name suggests is used to unify error types
+    while binding the value type.
+    """
+
+    def unify(
+        self,
+        function: Callable[
+            [_ValueType],
+            'Unifiable[_NewValueType, _NewErrorType]',
+        ],
+    ) -> 'Unifiable[_NewValueType, Union[_ErrorType, _NewErrorType]]':
+        """
+        Applies 'function' to the result of a previous calculation.
+
+        And returns a new container.
+        Works for containers that represent success.
+        Works the same way as :meth:`~Bindable.bind`,
+        but has different type semantics.
+        Is the opposite of :meth:`~Rescueable.rescue`.
+        """
+
+
+@runtime
 class Mappable(Protocol[_ValueType]):
     """
     Allows to chain wrapped values with regular functions.

@@ -22,6 +22,17 @@ def test_bind():
     assert str(bound2.bind(factory)) == '<IOResult: <Failure: 0>>'
 
 
+def test_unify_and_bind():
+    """Ensures that left identity works for IOSuccess container."""
+    def factory(inner_value: int) -> IOResult[int, str]:
+        return IOSuccess(inner_value * 2)
+
+    bound: IOResult[int, str] = IOSuccess(5)
+
+    assert bound.unify(factory) == bound.bind(factory)
+    assert bound.bind(factory) == bound.unify(factory)
+
+
 def test_left_identity_success():
     """Ensures that left identity works for IOSuccess container."""
     def factory(inner_value: int) -> IOResult[int, str]:

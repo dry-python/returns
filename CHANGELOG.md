@@ -15,6 +15,7 @@ See [0Ver](https://0ver.org/).
   Only `Maybe` was different, sorry for that!
 - Adds typed `partial` plugin!
 - Adds `pytest` plugin with the ability to tests error handling
+- Adds `unify` point free function
 
 ### Bugfixes
 

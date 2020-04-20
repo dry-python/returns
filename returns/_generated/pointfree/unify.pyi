@@ -1,0 +1,31 @@
+from typing import Callable, TypeVar, Union, overload
+
+from returns.io import IOResult
+from returns.result import Result
+
+_ValueType = TypeVar('_ValueType')
+_ErrorType = TypeVar('_ErrorType')
+_NewValueType = TypeVar('_NewValueType')
+_NewErrorType = TypeVar('_NewErrorType')
+
+
+# Bind:
+
+@overload
+def _unify(
+    function: Callable[[_ValueType], Result[_NewValueType, _NewErrorType]],
+) -> Callable[
+    [Result[_ValueType, _ErrorType]],
+    Result[_NewValueType, Union[_ErrorType, _NewErrorType]],
+]:
+    ...
+
+
+@overload
+def _unify(
+    function: Callable[[_ValueType], IOResult[_NewValueType, _NewErrorType]],
+) -> Callable[
+    [IOResult[_ValueType, _ErrorType]],
+    IOResult[_NewValueType, Union[_ErrorType, _NewErrorType]],
+]:
+    ...
