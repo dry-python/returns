@@ -4,6 +4,7 @@ from returns._generated.converters import coalesce, squash
 from returns._generated.converters.swap import _swap as swap  # noqa: F401
 from returns.maybe import Maybe
 from returns.result import Failure, Result, Success
+from returns.pipeline import is_successful
 
 from returns._generated.converters.flatten import (  # isort:skip # noqa: F401
     _flatten as flatten,
@@ -36,9 +37,10 @@ def result_to_maybe(
       >>> assert result_to_maybe(Success(1)) == Some(1)
       >>> assert result_to_maybe(Failure(1)) == Nothing
       >>> assert result_to_maybe(Success(None)) == Nothing
+      >>> assert result_to_maybe(Failure(None)) == Nothing
 
     """
-    return Maybe.new(result_container.value_or(None))
+    return Maybe.from_value(result_container.value_or(None))
 
 
 def maybe_to_result(
@@ -54,10 +56,9 @@ def maybe_to_result(
 
       >>> assert maybe_to_result(Nothing) == Failure(None)
       >>> assert maybe_to_result(Some(1)) == Success(1)
-      >>> assert maybe_to_result(Some(None)) == Failure(None)
+      >>> assert maybe_to_result(Some(None)) == Success(None)
 
     """
-    inner_value = maybe_container.value_or(None)
-    if inner_value is not None:
-        return Success(inner_value)
-    return Failure(inner_value)
+    if is_successful(maybe_container):
+        return Success(maybe_container.unwrap())
+    return Failure(None)

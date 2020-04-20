@@ -50,7 +50,9 @@ class Result(
     _inner_value: Union[_ValueType, _ErrorType]
 
     # These two are required for projects like `classes`:
+    #: Success type that is used to represent the successful computation.
     success_type: ClassVar[Type['_Success']]
+    #: Failure type that is used to represent the failed computation.
     failure_type: ClassVar[Type['_Failure']]
 
     def map(  # noqa: WPS125

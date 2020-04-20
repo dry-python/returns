@@ -18,7 +18,7 @@ from returns.result import Failure, Success
     (Success(Success({})), Success({})),
     (IOSuccess(IOSuccess(1)), IOSuccess(1)),
 
-    (Some(Some(None)), Nothing),
+    (Some(Some(None)), Some(None)),
     (Some(Some([])), Some([])),
 
     # Nope:

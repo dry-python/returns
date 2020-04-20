@@ -4,4 +4,4 @@
     from returns.converters import maybe_to_result
     from returns.maybe import Maybe
 
-    reveal_type(maybe_to_result(Maybe.new(1)))  # N: Revealed type is 'returns.result.Result[builtins.int*, None]'
+    reveal_type(maybe_to_result(Maybe.from_value(1)))  # N: Revealed type is 'returns.result.Result[builtins.int*, None]'

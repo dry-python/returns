@@ -18,10 +18,10 @@ based on just a single value:
 
   >>> from returns.maybe import Maybe
 
-  >>> str(Maybe.new(1))
+  >>> str(Maybe.from_value(1))
   '<Some: 1>'
 
-  >>> str(Maybe.new(None))
+  >>> str(Maybe.from_value(None))
   '<Nothing>'
 
 Usage
@@ -48,7 +48,7 @@ It might be very useful for complex operations like the following one:
   ...    user: Optional[User]
 
   >>> def get_street_address(order: Order) -> Maybe[str]:
-  ...     return Maybe.new(order.user).map(
+  ...     return Maybe.from_value(order.user).map(
   ...         lambda user: user.address,
   ...     ).map(
   ...         lambda address: address.street,
@@ -143,8 +143,8 @@ You can easily get one from your ``Maybe`` container at any point in time:
 .. code:: python
 
   >>> from returns.maybe import Maybe
-  >>> assert Maybe.new(1).value_or(None) == 1
-  >>> assert Maybe.new(None).value_or(None) is None
+  >>> assert Maybe.from_value(1).value_or(None) == 1
+  >>> assert Maybe.from_value(None).value_or(None) is None
 
 As you can see, revealed type of ``.value_or(None)`` is ``Optional[a]``.
 Use it a fallback.

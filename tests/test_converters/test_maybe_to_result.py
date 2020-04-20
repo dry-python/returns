@@ -9,6 +9,7 @@ from returns.result import Failure, Success
     1,
     [],
     '',
+    None,
 ])
 def test_some_to_success(inner_value):
     """Ensures that `Some` is always converted to `Success`."""
@@ -18,4 +19,3 @@ def test_some_to_success(inner_value):
 def test_nothing_to_failure():
     """Ensure that `Nothing` is always converted to `Failure`."""
     assert maybe_to_result(Nothing) == Failure(None)
-    assert maybe_to_result(Some(None)) == Failure(None)

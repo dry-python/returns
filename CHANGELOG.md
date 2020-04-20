@@ -6,12 +6,20 @@ incremental in minor, bugfixes only are patches.
 See [0Ver](https://0ver.org/).
 
 
-## 0.14.0
+## 0.14.0 WIP
 
 ### Features
 
+- **Breaking**: renames `Maybe.from_value` to `Maybe.from_value`.
+  Because all our other containers support this protocol.
+  Only `Maybe` was different, sorry for that!
 - Adds typed `partial` plugin!
 - Adds `pytest` plugin with the ability to tests error handling
+
+### Bugfixes
+
+- **Breaking**: `Some(None)` does no evaluate to `Nothing` anymore,
+  it might break some people's programms. But it was very wrong!
 
 
 ## 0.13.0

@@ -105,7 +105,7 @@ And that's how your initial refactored code will look like:
 ```python
 user: Optional[User]
 
-can_buy_stuff: Maybe[bool] = Maybe.new(user).map(  # type hint is not required
+can_buy_stuff: Maybe[bool] = Maybe.from_value(user).map(  # type hint is not required
     lambda real_user: real_user.get_balance(),
 ).map(
     lambda balance: balance.credit_amount(),

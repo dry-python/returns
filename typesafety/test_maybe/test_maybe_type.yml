@@ -4,7 +4,7 @@
     from returns.maybe import Maybe
 
     value: int
-    reveal_type(Maybe.new(value))  # N: Revealed type is 'returns.maybe.Maybe[builtins.int*]'
+    reveal_type(Maybe.from_value(value))  # N: Revealed type is 'returns.maybe.Maybe[builtins.int*]'
 
 
 - case: maybe_type_regular
@@ -14,7 +14,7 @@
     from returns.maybe import Maybe
 
     value: Optional[int]
-    reveal_type(Maybe.new(value))  # N: Revealed type is 'returns.maybe.Maybe[builtins.int*]'
+    reveal_type(Maybe.from_value(value))  # N: Revealed type is 'returns.maybe.Maybe[builtins.int*]'
 
 
 - case: maybe_map_regular
@@ -22,7 +22,7 @@
   main: |
     from returns.maybe import Maybe
 
-    result = Maybe.new(1).map(lambda i: i / i)
+    result = Maybe.from_value(1).map(lambda i: i / i)
     reveal_type(result)  # N: Revealed type is 'returns.maybe.Maybe[builtins.float*]'
 
 
@@ -31,7 +31,7 @@
   main: |
     from returns.maybe import Maybe
 
-    result = Maybe.new({'a': 'b'}).map(lambda d: d.get('a', None))
+    result = Maybe.from_value({'a': 'b'}).map(lambda d: d.get('a', None))
     reveal_type(result)  # N: Revealed type is 'returns.maybe.Maybe[builtins.str*]'
 
 
@@ -40,7 +40,7 @@
   main: |
     from returns.maybe import Maybe
 
-    result = Maybe.new(1).bind(lambda d: Maybe.new(str(d)))
+    result = Maybe.from_value(1).bind(lambda d: Maybe.from_value(str(d)))
     reveal_type(result)  # N: Revealed type is 'returns.maybe.Maybe[builtins.str*]'
 
 
@@ -49,7 +49,7 @@
   main: |
     from returns.maybe import Maybe
 
-    result = Maybe.new(1).bind(lambda d: Maybe.new(str(d)))
+    result = Maybe.from_value(1).bind(lambda d: Maybe.from_value(str(d)))
     reveal_type(result)  # N: Revealed type is 'returns.maybe.Maybe[builtins.str*]'
 
 
@@ -58,7 +58,7 @@
   main: |
     from returns.maybe import Maybe
 
-    result = Maybe.new({'a': 'b'}).bind(lambda d: Maybe.new(d.get('a', None)))
+    result = Maybe.from_value({'a': 'b'}).bind(lambda d: Maybe.from_value(d.get('a', None)))
     reveal_type(result)  # N: Revealed type is 'returns.maybe.Maybe[builtins.str*]'
 
 
@@ -67,7 +67,7 @@
   main: |
     from returns.maybe import Maybe
 
-    result = Maybe.new(1).value_or(None)
+    result = Maybe.from_value(1).value_or(None)
     reveal_type(result)  # N: Revealed type is 'Union[builtins.int, None]'
 
 

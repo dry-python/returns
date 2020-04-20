@@ -49,19 +49,24 @@ class Maybe(
     _inner_value: Optional[_ValueType]
 
     # These two are required for projects like `classes`:
+
+    #: Success type that is used to represent the successful computation.
     success_type: ClassVar[Type['_Some']]
+    #: Failure type that is used to represent the failed computation.
     failure_type: ClassVar[Type['_Nothing']]
 
     @classmethod
-    def new(cls, inner_value: Optional[_ValueType]) -> 'Maybe[_ValueType]':
+    def from_value(
+        cls, inner_value: Optional[_ValueType],
+    ) -> 'Maybe[_ValueType]':
         """
         Creates new instance of ``Maybe`` container based on a value.
 
         .. code:: python
 
           >>> from returns.maybe import Maybe, Some, Nothing
-          >>> assert Maybe.new(1) == Some(1)
-          >>> assert Maybe.new(None) == Nothing
+          >>> assert Maybe.from_value(1) == Some(1)
+          >>> assert Maybe.from_value(None) == Nothing
 
         """
         if inner_value is None:
@@ -243,9 +248,9 @@ class _Some(Maybe[_ValueType]):
     Quite similar to ``Success`` type.
     """
 
-    _inner_value: _ValueType
+    _inner_value: Optional[_ValueType]
 
-    def __init__(self, inner_value: _ValueType) -> None:
+    def __init__(self, inner_value: Optional[_ValueType]) -> None:
         """
         Private type constructor.
 
@@ -256,7 +261,7 @@ class _Some(Maybe[_ValueType]):
 
     def map(self, function):  # noqa: WPS125
         """Composes current container with a pure function."""
-        return Maybe.new(function(self._inner_value))
+        return Maybe.from_value(function(self._inner_value))
 
     def bind(self, function):
         """Binds current container to a function that returns container."""
@@ -288,10 +293,11 @@ def Some(inner_value: Optional[_ValueType]) -> Maybe[_ValueType]:  # noqa: N802
       >>> from returns.maybe import Some, Nothing
       >>> str(Some(1))
       '<Some: 1>'
-      >>> assert Some(None) == Nothing
+      >>> str(Some(None))
+      '<Some: None>'
 
     """
-    return Maybe.new(inner_value)
+    return _Some(inner_value)
 
 
 #: Public unit value of protected :class:`~_Nothing` type.

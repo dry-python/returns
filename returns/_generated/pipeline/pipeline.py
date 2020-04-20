@@ -22,9 +22,9 @@ def _pipeline(container_type):  # noqa: C901, WPS212
 
         >>> @pipeline(Maybe)
         ... def test(one: Optional[int], two: Optional[int]) -> Maybe[int]:
-        ...      first = Maybe.new(one).unwrap()
-        ...      second = Maybe.new(two).unwrap()
-        ...      return Maybe.new(first + second)
+        ...      first = Maybe.from_value(one).unwrap()
+        ...      second = Maybe.from_value(two).unwrap()
+        ...      return Maybe.from_value(first + second)
         ...
         >>> str(test(1, 2))
         '<Some: 3>'

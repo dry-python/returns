@@ -28,4 +28,4 @@
     from returns.pipeline import is_successful
     from returns.maybe import Maybe
 
-    reveal_type(is_successful(Maybe.new(1)))  # N: Revealed type is 'builtins.bool'
+    reveal_type(is_successful(Maybe.from_value(1)))  # N: Revealed type is 'builtins.bool'
