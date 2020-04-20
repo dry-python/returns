@@ -86,22 +86,12 @@ class _Intermediate(object):
         new_named_args = self._applied_named_args(applied_args)
         return self.with_signature(new_pos_args + new_named_args)
 
-    def with_signature(
-        self,
-        new_args: List[_FuncArg],
-        ret_type: Optional[MypyType] = None,
-        *,
-        skip_detach: bool = False,
-    ) -> CallableType:
-        new_callable = self._case_function.copy_modified(
+    def with_signature(self, new_args: List[_FuncArg]) -> CallableType:
+        return detach_callable(self._case_function.copy_modified(
             arg_names=[arg.name for arg in new_args],
             arg_types=[arg.type for arg in new_args],
             arg_kinds=[arg.kind for arg in new_args],
-            ret_type=ret_type if ret_type else self._case_function.ret_type,
-        )
-        if skip_detach:
-            return new_callable
-        return detach_callable(new_callable)
+        ))
 
     def _applied_positional_args(
         self,
