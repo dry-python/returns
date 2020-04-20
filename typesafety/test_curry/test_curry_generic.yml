@@ -17,8 +17,30 @@
 
     reveal_type(curry(multiple, x)(y))
   out: |
-    main:15: error: Cannot infer type argument 1 of "multiple"
-    main:15: note: Revealed type is 'Any'
+    main:15: error: Argument 1 to "multiple" has incompatible type "List[str]"; expected "List[int]"
+    main:15: note: Revealed type is 'builtins.int*'
+
+
+- case: curry_correct_generic
+  disable_cache: true
+  main: |
+    from returns.curry import curry
+    from typing import List, TypeVar
+
+    T = TypeVar('T')
+
+    def multiple(
+        a: List[T],
+        b: List[T],
+    ) -> T:
+        ...
+
+    x: List[int]
+    y: List[int]
+
+    reveal_type(curry(multiple, x)(y))
+  out: |
+    main:15: note: Revealed type is 'builtins.int*'
 
 
 - case: curry_single_generic
