@@ -98,7 +98,7 @@ version = "7.1.1"
 [[package]]
 category = "dev"
 description = "Cross-platform colored terminal text."
-marker = "platform_system == \"Windows\" or sys_platform == \"win32\""
+marker = "sys_platform == \"win32\" or platform_system == \"Windows\""
 name = "colorama"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
@@ -388,7 +388,7 @@ description = "A flake8 plugin checking common style issues or inconsistencies w
 name = "flake8-pytest-style"
 optional = false
 python-versions = ">=3.6,<4.0"
-version = "1.1.0"
+version = "1.1.1"
 
 [package.dependencies]
 flake8-plugin-utils = ">=1.3.0,<2.0.0"
@@ -1460,8 +1460,8 @@ flake8-pyi = [
     {file = "flake8_pyi-19.3.0-py2.py3-none-any.whl", hash = "sha256:a93a47ac78b6d363545885e9254d0eccac8a88c3806ab8af27e30dd8c058654f"},
 ]
 flake8-pytest-style = [
-    {file = "flake8-pytest-style-1.1.0.tar.gz", hash = "sha256:5fdd7a984a8ef5d07406a66fe3edbfd936f0aa8ff96da9c3241cf2e59f9330af"},
-    {file = "flake8_pytest_style-1.1.0-py3-none-any.whl", hash = "sha256:381d7e6b05313a82dbb90df4660c2414a0d13c20642ea436690a6defd6ea4070"},
+    {file = "flake8-pytest-style-1.1.1.tar.gz", hash = "sha256:d91ffba047964e5bb4491dc71771008fa0438988870d59d4162bdba3674fb7a8"},
+    {file = "flake8_pytest_style-1.1.1-py3-none-any.whl", hash = "sha256:690ef9aece18561b0e674e4e4ee7e80a0d38f27bfb268806fac5e55801396ee4"},
 ]
 flake8-quotes = [
     {file = "flake8-quotes-2.1.2.tar.gz", hash = "sha256:c844c9592940c8926c60f00bc620808912ff2acd34923ab5338f3a5ca618a331"},
