@@ -7,7 +7,7 @@ from returns.context import (
 )
 from returns.converters import flatten
 from returns.io import IO, IOFailure, IOSuccess
-from returns.maybe import Nothing, Some
+from returns.maybe import Some
 from returns.result import Failure, Success
 
 

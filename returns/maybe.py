@@ -290,7 +290,7 @@ def Some(inner_value: Optional[_ValueType]) -> Maybe[_ValueType]:  # noqa: N802
 
     .. code:: python
 
-      >>> from returns.maybe import Some, Nothing
+      >>> from returns.maybe import Some
       >>> str(Some(1))
       '<Some: 1>'
       >>> str(Some(None))
