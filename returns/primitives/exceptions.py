@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-if TYPE_CHECKING:  # pragma: no cover
+if TYPE_CHECKING:
     from returns.primitives.container import BaseContainer  # noqa: F401, WPS433
 
 
