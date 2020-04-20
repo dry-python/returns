@@ -1,11 +1,21 @@
-from typing import Any, Callable, ClassVar, Generic, TypeVar, Union
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Callable,
+    ClassVar,
+    Generic,
+    TypeVar,
+    Union,
+)
 
 from typing_extensions import final
 
-from returns.context.requires_context import RequiresContext
 from returns.primitives.container import BaseContainer
 from returns.primitives.types import Immutable
 from returns.result import Failure, Result, Success
+
+if TYPE_CHECKING:
+    from returns.context.requires_context import RequiresContext
 
 # Context:
 _EnvType = TypeVar('_EnvType', contravariant=True)
@@ -233,7 +243,7 @@ class RequiresContextResult(
         self,
         function: Callable[
             [_ValueType],
-            RequiresContext[_EnvType, _NewValueType],
+            'RequiresContext[_EnvType, _NewValueType]',
         ],
     ) -> 'RequiresContextResult[_EnvType, _NewValueType, _ErrorType]':
         """
@@ -514,7 +524,7 @@ class RequiresContextResult(
         cls,
         function: Callable[
             [_ValueType],
-            RequiresContext[_EnvType, _NewValueType],
+            'RequiresContext[_EnvType, _NewValueType]',
         ],
     ) -> Callable[
         ['RequiresContextResult[_EnvType, _ValueType, _ErrorType]'],
@@ -577,12 +587,12 @@ class RequiresContextResult(
 
     @classmethod
     def from_typecast(
-        cls, container: RequiresContext[
-            _EnvType, Result[_NewValueType, _NewErrorType],
-        ],
+        cls,
+        container:
+            'RequiresContext[_EnvType, Result[_NewValueType, _NewErrorType]]',
     ) -> 'RequiresContextResult[_EnvType, _NewValueType, _NewErrorType]':
         """
-        You might end up with ``RequiresContext[Result]`` as a value.
+        You might end up with ``RequiresContext[Result[...]]`` as a value.
 
         This method is designed to turn it into ``RequiresContextResult``.
         It will save all the typing information.
@@ -607,7 +617,7 @@ class RequiresContextResult(
 
     @classmethod
     def from_successful_context(
-        cls, inner_value: RequiresContext[_EnvType, _FirstType],
+        cls, inner_value: 'RequiresContext[_EnvType, _FirstType]',
     ) -> 'RequiresContextResult[_EnvType, _FirstType, Any]':
         """
         Creates new container from ``RequiresContext`` as a success unit.
@@ -625,7 +635,7 @@ class RequiresContextResult(
 
     @classmethod
     def from_failed_context(
-        cls, inner_value: RequiresContext[_EnvType, _FirstType],
+        cls, inner_value: 'RequiresContext[_EnvType, _FirstType]',
     ) -> 'RequiresContextResult[_EnvType, Any, _FirstType]':
         """
         Creates new container from ``RequiresContext`` as a failure unit.

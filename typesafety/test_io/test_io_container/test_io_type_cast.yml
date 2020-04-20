@@ -6,3 +6,13 @@
     first: IO[ValueError]  # we cast both values
     second: IO[Exception] = first
     reveal_type(second)  # N: Revealed type is 'returns.io.IO[builtins.Exception]'
+
+
+- case: io_from_ioresult
+  disable_cache: true
+  main: |
+    from returns.io import IO, IOResult
+
+    x: IOResult[int, str]
+
+    reveal_type(IO.from_ioresult(x))  # N: Revealed type is 'returns.io.IO[returns.result.Result[builtins.int*, builtins.str*]]'

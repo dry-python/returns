@@ -1,4 +1,4 @@
-from typing import Any, Callable, ClassVar, Generic, TypeVar
+from typing import TYPE_CHECKING, Any, Callable, ClassVar, Generic, TypeVar
 
 from typing_extensions import final
 
@@ -6,10 +6,23 @@ from returns.functions import identity
 from returns.primitives.container import BaseContainer
 from returns.primitives.types import Immutable
 
+if TYPE_CHECKING:
+    # We need this condition to make sure Python can solve cycle imports.
+    # But, since we only use these values in types, it is not important.
+    from returns.context.requires_context_io_result import (
+        RequiresContextIOResult,
+    )
+    from returns.context.requires_context_result import RequiresContextResult
+    from returns.io import IOResult
+    from returns.result import Result
+
 # Context:
 _EnvType = TypeVar('_EnvType', contravariant=True)
 _ReturnType = TypeVar('_ReturnType', covariant=True)
 _NewReturnType = TypeVar('_NewReturnType')
+
+_ValueType = TypeVar('_ValueType')
+_ErrorType = TypeVar('_ErrorType')
 
 # Helpers:
 _FirstType = TypeVar('_FirstType')
@@ -223,6 +236,54 @@ class RequiresContext(
         protocol.
         """
         return RequiresContext(lambda _: inner_value)
+
+    @classmethod
+    def from_requires_context_ioresult(
+        cls,
+        container: 'RequiresContextIOResult[_EnvType, _ValueType, _ErrorType]',
+    ) -> 'RequiresContext[_EnvType, IOResult[_ValueType, _ErrorType]]':
+        """
+        Typecasts ``RequiresContextIOResult`` to ``RequiresContext`` instance.
+
+        Breaks ``RequiresContextIOResult[e, a, b]``
+        into ``RequiresContext[e, IOResult[a, b]]``.
+
+        .. code:: python
+
+          >>> from returns.context import RequiresContext
+          >>> from returns.context import RequiresContextIOResult
+          >>> from returns.io import IOSuccess
+          >>> assert RequiresContext.from_requires_context_ioresult(
+          ...    RequiresContextIOResult.from_success(1),
+          ... )(...) == IOSuccess(1)
+
+        Can be reverted with `RequiresContextIOResult.from_typecast`.
+        """
+        return RequiresContext(container)
+
+    @classmethod
+    def from_requires_context_result(
+        cls,
+        container: 'RequiresContextResult[_EnvType, _ValueType, _ErrorType]',
+    ) -> 'RequiresContext[_EnvType, Result[_ValueType, _ErrorType]]':
+        """
+        Typecasts ``RequiresContextResult`` to ``RequiresContext`` instance.
+
+        Breaks ``RequiresContextResult[e, a, b]``
+        into ``RequiresContext[e, Result[a, b]]``.
+
+        .. code:: python
+
+          >>> from returns.context import RequiresContext
+          >>> from returns.context import RequiresContextResult
+          >>> from returns.result import Success
+          >>> assert RequiresContext.from_requires_context_result(
+          ...    RequiresContextResult.from_success(1),
+          ... )(...) == Success(1)
+
+        Can be reverted with `RequiresContextResult.from_typecast`.
+        """
+        return RequiresContext(container)
 
 
 @final

@@ -165,6 +165,26 @@ class IO(BaseContainer, Generic[_ValueType]):
         """
         return IO(inner_value)
 
+    @classmethod
+    def from_ioresult(
+        cls,
+        container: 'IOResult[_NewValueType, _ErrorType]',
+    ) -> 'IO[Result[_NewValueType, _ErrorType]]':
+        """
+        Converts ``IOResult[a, b]`` back to ``IO[Result[a, b]]``.
+
+        Can be really helpful for composition.
+
+        .. code:: python
+
+            >>> from returns.io import IO, IOSuccess
+            >>> from returns.result import Success
+            >>> assert IO.from_ioresult(IOSuccess(1)) == IO(Success(1))
+
+        Is the reverse of :meth:`returns.io.IOResult.from_typecast`.
+        """
+        return IO(container._inner_value)  # noqa: WPS437
+
 
 # Helper functions:
 
@@ -587,6 +607,7 @@ class IOResult(
           >>> container = IO(Success(1))
           >>> assert IOResult.from_typecast(container) == IOSuccess(1)
 
+        Can be reverted via :meth:`returns.io.IO.from_ioresult` method.
         """
         return cls.from_result(container._inner_value)  # noqa: WPS437
 

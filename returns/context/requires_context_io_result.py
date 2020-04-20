@@ -1,13 +1,23 @@
-from typing import Any, Callable, ClassVar, Generic, TypeVar, Union
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Callable,
+    ClassVar,
+    Generic,
+    TypeVar,
+    Union,
+)
 
 from typing_extensions import final
 
-from returns.context.requires_context import RequiresContext
-from returns.context.requires_context_result import RequiresContextResult
 from returns.io import IO, IOFailure, IOResult, IOSuccess
 from returns.primitives.container import BaseContainer
 from returns.primitives.types import Immutable
-from returns.result import Result
+
+if TYPE_CHECKING:
+    from returns.context.requires_context import RequiresContext
+    from returns.context.requires_context_result import RequiresContextResult
+    from returns.result import Result
 
 # Context:
 _EnvType = TypeVar('_EnvType', contravariant=True)
@@ -128,6 +138,7 @@ class RequiresContextIOResult(
         .. code:: python
 
           >>> from returns.context import RequiresContextIOResult
+          >>> from returns.context import RequiresContext
           >>> from returns.io import IOSuccess
           >>> def first(lg: bool) -> RequiresContextIOResult[float, int, str]:
           ...     # `deps` has `float` type here:
@@ -208,7 +219,7 @@ class RequiresContextIOResult(
 
     def bind_result(
         self,
-        function: Callable[[_ValueType], Result[_NewValueType, _ErrorType]],
+        function: Callable[[_ValueType], 'Result[_NewValueType, _ErrorType]'],
     ) -> 'RequiresContextIOResult[_EnvType, _NewValueType, _ErrorType]':
         """
         Binds ``Result`` returning function to the current container.
@@ -245,7 +256,7 @@ class RequiresContextIOResult(
         self,
         function: Callable[
             [_ValueType],
-            RequiresContext[_EnvType, _NewValueType],
+            'RequiresContext[_EnvType, _NewValueType]',
         ],
     ) -> 'RequiresContextIOResult[_EnvType, _NewValueType, _ErrorType]':
         """
@@ -280,7 +291,7 @@ class RequiresContextIOResult(
         self,
         function: Callable[
             [_ValueType],
-            RequiresContextResult[_EnvType, _NewValueType, _ErrorType],
+            'RequiresContextResult[_EnvType, _NewValueType, _ErrorType]',
         ],
     ) -> 'RequiresContextIOResult[_EnvType, _NewValueType, _ErrorType]':
         """
@@ -570,7 +581,7 @@ class RequiresContextIOResult(
     @classmethod
     def lift_result(
         cls,
-        function: Callable[[_ValueType], Result[_NewValueType, _ErrorType]],
+        function: Callable[[_ValueType], 'Result[_NewValueType, _ErrorType]'],
     ) -> Callable[
         ['RequiresContextIOResult[_EnvType, _ValueType, _ErrorType]'],
         'RequiresContextIOResult[_EnvType, _NewValueType, _ErrorType]',
@@ -665,7 +676,7 @@ class RequiresContextIOResult(
         cls,
         function: Callable[
             [_ValueType],
-            RequiresContext[_EnvType, _NewValueType],
+            'RequiresContext[_EnvType, _NewValueType]',
         ],
     ) -> Callable[
         ['RequiresContextIOResult[_EnvType, _ValueType, _ErrorType]'],
@@ -707,7 +718,7 @@ class RequiresContextIOResult(
         cls,
         function: Callable[
             [_ValueType],
-            RequiresContextResult[_EnvType, _NewValueType, _ErrorType],
+            'RequiresContextResult[_EnvType, _NewValueType, _ErrorType]',
         ],
     ) -> Callable[
         ['RequiresContextIOResult[_EnvType, _ValueType, _ErrorType]'],
@@ -749,7 +760,7 @@ class RequiresContextIOResult(
 
     @classmethod
     def from_result(
-        cls, inner_value: Result[_ValueType, _ErrorType],
+        cls, inner_value: 'Result[_ValueType, _ErrorType]',
     ) -> 'RequiresContextIOResult[Any, _ValueType, _ErrorType]':
         """
         Creates new container with ``Result`` as a unit value.
@@ -800,9 +811,9 @@ class RequiresContextIOResult(
 
     @classmethod
     def from_typecast(
-        cls, container: RequiresContext[
-            _EnvType, IOResult[_NewValueType, _NewErrorType],
-        ],
+        cls,
+        container:
+            'RequiresContext[_EnvType, IOResult[_NewValueType, _NewErrorType]]',
     ) -> 'RequiresContextIOResult[_EnvType, _NewValueType, _NewErrorType]':
         """
         You might end up with ``RequiresContext[IOResult]`` as a value.
@@ -830,7 +841,7 @@ class RequiresContextIOResult(
 
     @classmethod
     def from_successful_context(
-        cls, inner_value: RequiresContext[_EnvType, _FirstType],
+        cls, inner_value: 'RequiresContext[_EnvType, _FirstType]',
     ) -> 'RequiresContextIOResult[_EnvType, _FirstType, Any]':
         """
         Creates new container from ``RequiresContext`` as a success unit.
@@ -851,7 +862,7 @@ class RequiresContextIOResult(
 
     @classmethod
     def from_failed_context(
-        cls, inner_value: RequiresContext[_EnvType, _FirstType],
+        cls, inner_value: 'RequiresContext[_EnvType, _FirstType]',
     ) -> 'RequiresContextIOResult[_EnvType, Any, _FirstType]':
         """
         Creates new container from ``RequiresContext`` as a failure unit.
@@ -872,9 +883,8 @@ class RequiresContextIOResult(
 
     @classmethod
     def from_result_context(
-        cls, inner_value: RequiresContextResult[
-            _EnvType, _ValueType, _ErrorType,
-        ],
+        cls,
+        inner_value: 'RequiresContextResult[_EnvType, _ValueType, _ErrorType]',
     ) -> 'RequiresContextIOResult[_EnvType, _ValueType, _ErrorType]':
         """
         Creates new container from ``RequiresContextResult`` as a unit value.
