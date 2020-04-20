@@ -9,8 +9,16 @@ Python already has a great tool to use partial application:
 The only problem with it is the lack of typing.
 Let's see what problems do we solve with our custom solution.
 
-Typing
-------
+.. warning::
+
+  This module requires :ref:`our mypy plugin <mypy-plugins>` to be present.
+  Without it we will fallback to the original behaviour.
+
+
+.. _partial:
+
+Partial
+-------
 
 Here's how typing works there:
 
@@ -29,17 +37,22 @@ And compare it with out solution:
 
 .. code:: python
 
-  from returns.curry import curry
+  from returns.curry import partial
 
   def some_function(first: int, second: int) -> float:
       return first / second
 
-  reveal_type(curry(some_function, 1))
+  reveal_type(partial(some_function, 1))
   # => def (second: builtins.int) -> builtins.float*
   # => Which is fair!
 
+.. note::
+
+  We still use ``functools.partial`` inside.
+  We just improve the typings.
+
 Generics
---------
+~~~~~~~~
 
 One more problem is generics support in ``functools.partial``.
 Here's the comparison:
@@ -64,9 +77,9 @@ And our solution works fine:
 
 .. code:: python
 
-  from returns.curry import curry
+  from returns.curry import partial
 
-  reveal_type(curry(some_function, x))
+  reveal_type(partial(some_function, x))
   # => def (second: builtins.int) -> builtins.int*
 
 We also work with complex generic
@@ -79,14 +92,68 @@ this type for some reason.
 The reasonable work-around is to pass annotated
 variables like in the example above.
 
-.. note::
+Types and Instances
+~~~~~~~~~~~~~~~~~~~
 
-  We still use ``functools.partial`` inside.
+We can also work with types and instances. Because they are callable too!
 
-.. warning::
+.. code:: python
 
-  This module requires our mypy plugin to be present.
-  Without it we will fallback to the original behaviour.
+  from returns.curry import partial
+
+  class Test(object):
+      def __init__(self, arg: int) -> None:
+          self.arg = arg
+
+      def __call__(self, other: int) -> int:
+          return self.arg + other
+
+  reveal_type(partial(Test, 1))  # N: Revealed type is 'def () -> ex.Test'
+  reveal_type(partial(Test(1), 1))  # N: Revealed type is 'def () -> builtins.int'
+
+No differences with regular callables at all.
+
+Overloads
+~~~~~~~~~
+
+We also support working with ``@overload`` definitions.
+It also looks the same way:
+
+.. code:: python
+
+  from typing import overload
+  from returns.curry import partial
+
+  @overload
+  def test(a: int, b: str) -> str:
+      ...
+
+  @overload
+  def test(a: int) -> int:
+      ...
+
+  @overload
+  def test(a: str) -> None:  # won't match!
+      ...
+
+  def test(a, b=None):
+      ...
+
+  reveal_type(partial(test, 1))  # N: Revealed type is 'Overload(def (b: builtins.str) -> builtins.str, def () -> builtins.int)'
+
+From this return type you can see that we work
+with all matching cases and discriminate unmatching ones.
+
+
+FAQ
+---
+
+What is the difference between curring and partial?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This is a question a lot of Python developers ask.
+
+`Here are some great answers <https://stackoverflow.com/questions/218025/what-is-the-difference-between-currying-and-partial-application>`_.
 
 .. warning::
 

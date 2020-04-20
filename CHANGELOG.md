@@ -10,7 +10,7 @@ See [0Ver](https://0ver.org/).
 
 ### Features
 
-- Adds typed curry plugin!
+- Adds typed `partial` plugin!
 - Adds `pytest` plugin with the ability to tests error handling
 
 

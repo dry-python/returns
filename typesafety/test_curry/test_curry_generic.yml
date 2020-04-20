@@ -1,7 +1,7 @@
 - case: curry_wrong_generic
   disable_cache: true
   main: |
-    from returns.curry import curry
+    from returns.curry import partial
     from typing import List, TypeVar
 
     T = TypeVar('T')
@@ -15,7 +15,7 @@
     x: List[int]
     y: List[str]
 
-    reveal_type(curry(multiple, x)(y))
+    reveal_type(partial(multiple, x)(y))
   out: |
     main:15: error: Argument 1 to "multiple" has incompatible type "List[str]"; expected "List[int]"
     main:15: note: Revealed type is 'builtins.int*'
@@ -24,7 +24,7 @@
 - case: curry_correct_generic
   disable_cache: true
   main: |
-    from returns.curry import curry
+    from returns.curry import partial
     from typing import List, TypeVar
 
     T = TypeVar('T')
@@ -38,7 +38,7 @@
     x: List[int]
     y: List[int]
 
-    reveal_type(curry(multiple, x)(y))
+    reveal_type(partial(multiple, x)(y))
   out: |
     main:15: note: Revealed type is 'builtins.int*'
 
@@ -46,7 +46,7 @@
 - case: curry_single_generic
   disable_cache: true
   main: |
-    from returns.curry import curry
+    from returns.curry import partial
     from typing import List, TypeVar
 
     T = TypeVar('T')
@@ -60,14 +60,14 @@
 
     x: List[int]
 
-    reveal_type(curry(multiple))
-    reveal_type(curry(multiple, 1))
-    reveal_type(curry(multiple, 1)(x, True))
-    reveal_type(curry(multiple, 1)(x))
-    reveal_type(curry(multiple, 1)(x, c=True))
-    reveal_type(curry(multiple, 2, x))
-    reveal_type(curry(multiple, 2, x, True))
-    reveal_type(curry(multiple, 2, x)())
+    reveal_type(partial(multiple))
+    reveal_type(partial(multiple, 1))
+    reveal_type(partial(multiple, 1)(x, True))
+    reveal_type(partial(multiple, 1)(x))
+    reveal_type(partial(multiple, 1)(x, c=True))
+    reveal_type(partial(multiple, 2, x))
+    reveal_type(partial(multiple, 2, x, True))
+    reveal_type(partial(multiple, 2, x)())
   out: |
     main:15: note: Revealed type is 'def [T] (a: builtins.int, b: builtins.list[T`-1], c: builtins.bool =) -> T`-1'
     main:16: note: Revealed type is 'def [T] (b: builtins.list[T`-1], c: builtins.bool =) -> T`-1'
@@ -83,7 +83,7 @@
   disable_cache: true
   skip: sys.version_info >= (3, 8)
   main: |
-    from returns.curry import curry
+    from returns.curry import partial
     from typing import List, TypeVar, Union
 
     A = TypeVar('A')
@@ -100,12 +100,12 @@
     x: List[int]
     y: List[str]
 
-    reveal_type(curry(multiple))
-    reveal_type(curry(multiple, 1))
-    reveal_type(curry(multiple, 1, b=x))
-    reveal_type(curry(multiple, 1, c=x))
-    reveal_type(curry(multiple, 1, b=y))
-    reveal_type(curry(multiple, 1, c=y))
+    reveal_type(partial(multiple))
+    reveal_type(partial(multiple, 1))
+    reveal_type(partial(multiple, 1, b=x))
+    reveal_type(partial(multiple, 1, c=x))
+    reveal_type(partial(multiple, 1, b=y))
+    reveal_type(partial(multiple, 1, c=y))
   out: |
     main:18: note: Revealed type is 'def [B, A] (a: builtins.int, *, b: builtins.list[B`-1], c: builtins.list[A`-2]) -> Union[A`-2, B`-1]'
     main:19: note: Revealed type is 'def [A, B] (*, b: builtins.list[B`-1], c: builtins.list[A`-2]) -> Union[A`-2, B`-1]'
@@ -120,7 +120,7 @@
   disable_cache: true
   skip: sys.version_info < (3, 8)
   main: |
-    from returns.curry import curry
+    from returns.curry import partial
     from typing import List, TypeVar, Union
 
     A = TypeVar('A')
@@ -137,12 +137,12 @@
     x: List[int]
     y: List[str]
 
-    reveal_type(curry(multiple))
-    reveal_type(curry(multiple, 1))
-    reveal_type(curry(multiple, 1, b=x))
-    reveal_type(curry(multiple, 1, c=x))
-    reveal_type(curry(multiple, 1, b=y))
-    reveal_type(curry(multiple, 1, c=y))
+    reveal_type(partial(multiple))
+    reveal_type(partial(multiple, 1))
+    reveal_type(partial(multiple, 1, b=x))
+    reveal_type(partial(multiple, 1, c=x))
+    reveal_type(partial(multiple, 1, b=y))
+    reveal_type(partial(multiple, 1, c=y))
   out: |
     main:18: note: Revealed type is 'def [B, A] (a: builtins.int, *, b: builtins.list[B`-1], c: builtins.list[A`-2]) -> Union[A`-2, B`-1]'
     main:19: note: Revealed type is 'def [B, A] (*, b: builtins.list[B`-1], c: builtins.list[A`-2]) -> Union[A`-2, B`-1]'
@@ -155,7 +155,7 @@
 - case: curry_double_generic
   disable_cache: true
   main: |
-    from returns.curry import curry
+    from returns.curry import partial
     from typing import List, TypeVar, Union
 
     A = TypeVar('A')
@@ -171,10 +171,10 @@
 
     x: List[int]
     y: List[str]
-    reveal_type(curry(multiple, 1, c=y, b=x))
+    reveal_type(partial(multiple, 1, c=y, b=x))
 
-    reveal_type(curry(multiple, 1, b=x)(c=y))
-    reveal_type(curry(multiple, 1, c=x)(b=y))
+    reveal_type(partial(multiple, 1, b=x)(c=y))
+    reveal_type(partial(multiple, 1, c=x)(b=y))
   out: |
     main:17: note: Revealed type is 'def () -> Union[builtins.str*, builtins.int*]'
     main:19: note: Revealed type is 'Union[builtins.str*, builtins.int]'

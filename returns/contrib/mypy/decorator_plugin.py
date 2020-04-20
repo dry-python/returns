@@ -5,8 +5,12 @@ This problem appears when we try to change the return type of the function.
 However, currently it is impossible due to this bug:
 https://github.com/python/mypy/issues/3157
 
+We also add better support for partial functions.
+
 This plugin is a temporary solution to the problem.
 It should be later replaced with the official way of doing things.
+One day functions will have better API and we plan
+to submit this plugin into ``mypy`` core plugins, so it would not be required.
 
 ``mypy`` API docs are here:
 https://mypy.readthedocs.io/en/latest/extending_mypy.html
@@ -35,7 +39,7 @@ _TYPED_DECORATORS = frozenset((
 ))
 
 #: Used for typed curring.
-_TYPED_CURRY_FUNCTION = 'returns.curry.curry'
+_TYPED_CURRY_FUNCTION = 'returns.curry.partial'
 
 
 def _change_decorator_function_type(
@@ -83,7 +87,7 @@ def _analyze_curring(function_ctx: FunctionContext):
     )
 
     if len(list(filter(len, function_ctx.arg_types))) == 1:
-        return function_def  # this means, that `curry(func)` is called
+        return function_def  # this means, that `partial(func)` is called
     elif not isinstance(function_def, supported_types):
         return function_ctx.default_return_type
     elif isinstance(function_def, (Instance, TypeType)):

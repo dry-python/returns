@@ -63,7 +63,7 @@ Limitations
 ~~~~~~~~~~~
 
 Typing will only work correctly
-if :ref:`decorator_plugin <type-safety>` is used.
+if :ref:`our mypy plugin <mypy-plugins>` is used.
 This happens due to `mypy issue <https://github.com/python/mypy/issues/3157>`_.
 
 safe
