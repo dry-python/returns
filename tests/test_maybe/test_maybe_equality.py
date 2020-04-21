@@ -1,3 +1,5 @@
+from copy import copy, deepcopy
+
 import pytest
 
 from returns.maybe import Nothing, Some, _Nothing
@@ -79,3 +81,27 @@ def test_immutability_success():
 
     with pytest.raises(AttributeError):
         Some(1).missing  # type: ignore # noqa: WPS428
+
+
+def test_success_immutable_copy():
+    """Ensures that Success returns it self when passed to copy function."""
+    some = Some(1)  # noqa: WPS110
+    assert some is copy(some)
+
+
+def test_success_immutable_deepcopy():
+    """Ensures that Success returns it self when passed to deepcopy function."""
+    some = Some(1)  # noqa: WPS110
+    assert some is deepcopy(some)
+
+
+def test_failure_immutable_copy():
+    """Ensures that Failure returns it self when passed to copy function."""
+    nothing = _Nothing()
+    assert nothing is copy(nothing)
+
+
+def test_failure_immutable_deepcopy():
+    """Ensures that Failure returns it self when passed to deepcopy function."""
+    nothing = _Nothing()
+    assert nothing is deepcopy(nothing)

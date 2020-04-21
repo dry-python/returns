@@ -1,3 +1,5 @@
+from copy import copy, deepcopy
+
 import pytest
 
 from returns.context import ContextIOResult, RequiresContextIOResult
@@ -50,3 +52,15 @@ def test_requires_context_result_immutable():
     """Ensures that container is immutable."""
     with pytest.raises(ImmutableStateError):
         RequiresContextIOResult.from_success(1).abc = 1
+
+
+def test_requires_context_result_immutable_copy():
+    """Ensures that helper returns it self when passed to copy function."""
+    context_i_o_result: ContextIOResult = ContextIOResult()
+    assert context_i_o_result is copy(context_i_o_result)
+
+
+def test_requires_context_result_immutable_deepcopy():  # noqa: WPS118
+    """Ensures that helper returns it self when passed to deepcopy function."""
+    requires_context = RequiresContextIOResult.from_success(1)
+    assert requires_context is deepcopy(requires_context)
