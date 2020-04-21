@@ -146,7 +146,7 @@
 
     I = TypeVar('I', bound=Inst)
 
-    def recieves_type(a: int, t: Type[I]) -> I:
+    def receives_type(a: int, t: Type[I]) -> I:
         x = partial(t, a)
         reveal_type(x)  # N: Revealed type is 'def () -> I`-1'
         reveal_type(x().arg)  # N: Revealed type is 'builtins.int'
