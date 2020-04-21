@@ -16,6 +16,7 @@ See [0Ver](https://0ver.org/).
 - Adds typed `partial` plugin!
 - Adds `pytest` plugin with the ability to tests error handling
 - Adds `unify` point free function
+- Adds `__copy__` and `__deepcopy__` magic methods to `Immutable` class
 
 ### Bugfixes
 

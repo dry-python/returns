@@ -1,3 +1,5 @@
+from copy import copy, deepcopy
+
 import pytest
 
 from returns.primitives.exceptions import ImmutableStateError
@@ -82,3 +84,27 @@ def test_immutability_success():
 
     with pytest.raises(AttributeError):
         Success(1).missing  # type: ignore # noqa: WPS428
+
+
+def test_success_immutable_copy():
+    """Ensures that Success returns it self when passed to copy function."""
+    success = Success(1)
+    assert success is copy(success)
+
+
+def test_success_immutable_deepcopy():
+    """Ensures that Success returns it self when passed to deepcopy function."""
+    success = Success(1)
+    assert success is deepcopy(success)
+
+
+def test_failure_immutable_copy():
+    """Ensures that Failure returns it self when passed to copy function."""
+    failure = Failure(0)
+    assert failure is copy(failure)
+
+
+def test_failure_immutable_deepcopy():
+    """Ensures that Failure returns it self when passed to deepcopy function."""
+    failure = Failure(0)
+    assert failure is deepcopy(failure)
