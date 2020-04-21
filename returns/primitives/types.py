@@ -1,4 +1,4 @@
-from typing import Any, NoReturn
+from typing import Any, Dict, NoReturn
 
 from returns.primitives.exceptions import ImmutableStateError
 
@@ -28,6 +28,14 @@ class Immutable(object):
     See :class:`returns.primitives.container.BaseContainer` for examples.
 
     """
+
+    def __copy__(self) -> 'Immutable':
+        """Returns it self."""
+        return self
+
+    def __deepcopy__(self, memo: Dict[Any, Any]) -> 'Immutable':
+        """Returns it self."""
+        return self
 
     def __setattr__(self, attr_name: str, attr_value: Any) -> NoReturn:
         """Makes inner state of the containers immutable for modification."""
