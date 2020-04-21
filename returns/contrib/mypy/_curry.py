@@ -207,7 +207,7 @@ class CurryFunctionReducer(object):
     - What ``FunctionLike`` is
     - How kinds work in type checking
     - What ``map_actuals_to_formals`` is
-    - How contraints work
+    - How constraints work
 
     That's not an easy plugin to work with.
     """
