@@ -6,9 +6,6 @@ import pytest
 from returns.curry import eager_curry
 
 
-PartialType = type(partial(lambda x: x))
-
-
 def test_docstring():
     @eager_curry
     def func(a, b):
@@ -32,7 +29,7 @@ def test_one_arg():
     def func(a):
         return a
 
-    assert type(func()) is PartialType
+    assert type(func()) is partial
     assert func(1) == 1
     assert func()(1) == 1
     with pytest.raises(TypeError):
@@ -46,8 +43,8 @@ def test_two_args():
     def func(a, b):
         return a + b
 
-    assert type(func()) is PartialType
-    assert type(func(1)) is PartialType
+    assert type(func()) is partial
+    assert type(func(1)) is partial
     assert func(1)(2) == 3
     assert func(1, 2) == 3
     assert func()(1)(2) == 3
@@ -86,7 +83,7 @@ def test_arg_and_star_args():
     def func(arg, *args):
         return arg + sum(args)
 
-    assert type(func()) is PartialType
+    assert type(func()) is partial
     assert func(1) == 1
     assert func(1, 2) == 3
     assert func(1, 2, 3) == 6
@@ -112,7 +109,7 @@ def test_arg_star_kwargs():
     def func(a, **kwargs):
         return [('a', a)] + sorted(kwargs.items())
 
-    assert type(func()) is PartialType
+    assert type(func()) is partial
     assert func(1) == [('a', 1)]
     assert func()(1) == [('a', 1)]
     assert func(a=1) == [('a', 1)]
