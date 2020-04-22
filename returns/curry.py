@@ -1,8 +1,11 @@
+import re
+
 from functools import partial as _partial
 from inspect import getcallargs
 from typing import Any, Callable, TypeVar
 
 _ReturnType = TypeVar('_ReturnType')
+rex_missing = re.compile(r'.+ missing \d+ required \w+ arguments?\: .+')
 
 
 def partial(
@@ -63,8 +66,13 @@ class EagerCurry:
         """
         try:
             getcallargs(self._func, *args, **kwargs)
-        except TypeError:
-            return False
+        except TypeError as err:
+            # another option is to copy-paste and patch `getcallargs` func
+            # but in this case we get responsibility to maintain it over
+            # python releases.
+            if rex_missing.fullmatch(err.args[0]):
+                return False
+            raise
         return True
 
     def __call__(self, *args, **kwargs):
