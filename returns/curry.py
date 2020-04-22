@@ -1,6 +1,6 @@
 import re
 
-from functools import partial as _partial
+from functools import partial as _partial, update_wrapper
 from inspect import getcallargs
 from typing import Any, Callable, TypeVar
 
@@ -57,6 +57,8 @@ class EagerCurry:
     ``eager_curry`` calls the function immediately when enough arguments passed
     while ``lazy_curry`` wait until the function is explicitly called
     without arguments.
+
+    If wrong arguments passed, ``TypeError`` will be raised immediately.
     """
     def __init__(self, func: Callable):
         self._func = func
@@ -91,5 +93,11 @@ class LazyCurry:
         return self._func(*args, **kwargs)
 
 
-eager_curry = EagerCurry
-lazy_curry = LazyCurry
+def eager_curry(func: Callable) -> EagerCurry:
+    wrapper = EagerCurry(func)
+    return update_wrapper(wrapper=wrapper, wrapped=func)
+
+
+def lazy_curry(func: Callable) -> LazyCurry:
+    wrapper = LazyCurry(func)
+    return update_wrapper(wrapper=wrapper, wrapped=func)

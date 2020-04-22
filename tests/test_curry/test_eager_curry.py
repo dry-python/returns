@@ -1,4 +1,5 @@
 from functools import partial
+from inspect import getdoc
 
 import pytest
 
@@ -6,6 +7,16 @@ from returns.curry import eager_curry
 
 
 PartialType = type(partial(lambda x: x))
+
+
+def test_docstring():
+    @eager_curry
+    def func(a, b):
+        """Papa Emeritus II
+        """
+        return a + b
+
+    assert getdoc(func).strip() == "Papa Emeritus II"
 
 
 def test_no_args():
@@ -94,3 +105,25 @@ def test_star_kwargs():
         func(1)
     with pytest.raises(TypeError):
         func(1, b=2)
+
+
+def test_arg_star_kwargs():
+    @eager_curry
+    def func(a, **kwargs):
+        return [('a', a)] + sorted(kwargs.items())
+
+    assert type(func()) is PartialType
+    assert func(1) == [('a', 1)]
+    assert func()(1) == [('a', 1)]
+    assert func(a=1) == [('a', 1)]
+    assert func()(a=1) == [('a', 1)]
+    assert func(1, b=2) == [('a', 1), ('b', 2)]
+    assert func(a=1, b=2) == [('a', 1), ('b', 2)]
+    assert func(c=3, a=1, b=2) == [('a', 1), ('b', 2), ('c', 3)]
+
+    with pytest.raises(TypeError):
+        func(1, 2)
+    with pytest.raises(TypeError):
+        func(1, a=2)
+    with pytest.raises(TypeError):
+        func(1, 2, c=2)
