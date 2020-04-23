@@ -2,9 +2,10 @@ import re
 
 from functools import partial as _partial, update_wrapper
 from inspect import getcallargs
-from typing import Any, Dict, Callable, TypeVar
+from typing import Any, Dict, Callable, TypeVar, Union
 
 _ReturnType = TypeVar('_ReturnType')
+T = TypeVar('T', bound=Callable)
 rex_missing = re.compile(r'.+ missing \d+ required \w+ arguments?\: .+')
 
 
@@ -57,11 +58,11 @@ class EagerCurry:
 
     def __call__(self, *args, **kwargs):
         if not self._enough(*args, **kwargs):
-            return partial(self, *args, **kwargs)
+            return _partial(self, *args, **kwargs)
         return self._func(*args, **kwargs)
 
 
-def eager_curry(func: Callable) -> EagerCurry:
+def eager_curry(func: T) -> Callable[..., Union[T, _partial]]:
     """Currying that calls the wrapped function when enough arguments are passed.
 
     Currying is a conception from functional languages that does partial
@@ -107,10 +108,10 @@ def eager_curry(func: Callable) -> EagerCurry:
 
 
 def _lazy_curry(
-    func: Callable,
+    func: T,
     old_args: tuple, old_kwargs: Dict[str, Any],
     new_args: tuple, new_kwargs: Dict[str, Any],
-):
+) -> Union[T, _partial]:
     #  if no new arguments are passed, call the function
     if not new_args and not new_kwargs:
         return func(*old_args, **old_kwargs)
@@ -125,10 +126,10 @@ def _lazy_curry(
 
     # EagerCurry returns either partial or the function result.
     # Let's not break expectations here and return partial as well.
-    return partial(wrapper)
+    return _partial(wrapper)
 
 
-def lazy_curry(func: Callable) -> Callable:
+def lazy_curry(func: T) -> Callable[..., Union[T, _partial]]:
     """Currying that calls the wrapped function when called without arguments.
 
     See documentation for ``eager_curry`` to learn about currying.
