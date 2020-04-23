@@ -38,6 +38,30 @@ def partial(
 
 
 class EagerCurry:
+    def __init__(self, func: Callable):
+        self._func = func
+
+    def _enough(self, *args, **kwargs) -> bool:
+        """Returns True if passed arguments are enough to call the function.
+        """
+        try:
+            getcallargs(self._func, *args, **kwargs)
+        except TypeError as err:
+            # another option is to copy-paste and patch `getcallargs` func
+            # but in this case we get responsibility to maintain it over
+            # python releases.
+            if rex_missing.fullmatch(err.args[0]):
+                return False
+            raise
+        return True
+
+    def __call__(self, *args, **kwargs):
+        if not self._enough(*args, **kwargs):
+            return partial(self, *args, **kwargs)
+        return self._func(*args, **kwargs)
+
+
+def eager_curry(func: Callable) -> EagerCurry:
     """Currying that calls the wrapped function when enough arguments are passed.
 
     Currying is a conception from functional languages that does partial
@@ -78,30 +102,6 @@ class EagerCurry:
         0.5
 
     """
-    def __init__(self, func: Callable):
-        self._func = func
-
-    def _enough(self, *args, **kwargs) -> bool:
-        """Returns True if passed arguments are enough to call the function.
-        """
-        try:
-            getcallargs(self._func, *args, **kwargs)
-        except TypeError as err:
-            # another option is to copy-paste and patch `getcallargs` func
-            # but in this case we get responsibility to maintain it over
-            # python releases.
-            if rex_missing.fullmatch(err.args[0]):
-                return False
-            raise
-        return True
-
-    def __call__(self, *args, **kwargs):
-        if not self._enough(*args, **kwargs):
-            return partial(self, *args, **kwargs)
-        return self._func(*args, **kwargs)
-
-
-def eager_curry(func: Callable) -> EagerCurry:
     wrapper = EagerCurry(func)
     return update_wrapper(wrapper=wrapper, wrapped=func)
 
