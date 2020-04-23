@@ -59,6 +59,24 @@ class EagerCurry:
     without arguments.
 
     If wrong arguments passed, ``TypeError`` will be raised immediately.
+
+    .. code:: python
+
+        >>> @eager_curry
+        ... def divide(left: int, right: int) -> float:
+        ...   return left / right
+        ...
+        >>> divide(10)  # doesn't call the func and remembers arguments
+        functools.partial(<returns.curry.EagerCurry object at ...>, 10)
+        >>> divide(10, 5)  # you can call the func like always
+        2.0
+        >>> divide(10)(5)  # the same as above
+        2.0
+        >>> divide(right=10)(5)
+        0.5
+        >>> divide(right=10)(left=5)
+        0.5
+
     """
     def __init__(self, func: Callable):
         self._func = func
@@ -83,40 +101,42 @@ class EagerCurry:
         return self._func(*args, **kwargs)
 
 
-class LazyCurry:
-    def __init__(self, func: Callable):
-        self._func = func
-
-    def _do(
-        self,
-        old_args: tuple, old_kwargs: Dict[str, Any],
-        new_args: tuple, new_kwargs: Dict[str, Any],
-    ):
-        #  if no new arguments are passed, call the function
-        if not new_args and not new_kwargs:
-            return self._func(*old_args, **old_kwargs)
-
-        # if new arguments are passed, remember them for future calls.
-        old_args += new_args
-        old_kwargs = old_kwargs.copy()
-        old_kwargs.update(new_kwargs)
-
-        def wrapper(*args, **kwargs):
-            return self._do(old_args, old_kwargs, args, kwargs)
-
-        # EagerCurry returns either partial or the function result.
-        # Let's not break expectations here and return partial as well.
-        return partial(wrapper)
-
-    def __call__(self, *args, **kwargs):
-        return self._do((), {}, args, kwargs)
-
-
 def eager_curry(func: Callable) -> EagerCurry:
     wrapper = EagerCurry(func)
     return update_wrapper(wrapper=wrapper, wrapped=func)
 
 
-def lazy_curry(func: Callable) -> LazyCurry:
-    wrapper = LazyCurry(func)
+def _lazy_curry(
+    func: Callable,
+    old_args: tuple, old_kwargs: Dict[str, Any],
+    new_args: tuple, new_kwargs: Dict[str, Any],
+):
+    #  if no new arguments are passed, call the function
+    if not new_args and not new_kwargs:
+        return func(*old_args, **old_kwargs)
+
+    # if new arguments are passed, remember them for future calls.
+    old_args += new_args
+    old_kwargs = old_kwargs.copy()
+    old_kwargs.update(new_kwargs)
+
+    def wrapper(*args, **kwargs):
+        return _lazy_curry(func, old_args, old_kwargs, args, kwargs)
+
+    # EagerCurry returns either partial or the function result.
+    # Let's not break expectations here and return partial as well.
+    return partial(wrapper)
+
+
+def lazy_curry(func: Callable) -> Callable:
+    """Currying that calls the wrapped function when called without arguments.
+
+    See documentation for ``eager_curry`` to learn about currying.
+
+    If wrong arguments passed, ``TypeError`` will be raised only
+    wnen called without arguments after that.
+    """
+    def wrapper(*args, **kwargs):
+        return _lazy_curry(func, (), {}, args, kwargs)
+
     return update_wrapper(wrapper=wrapper, wrapped=func)
