@@ -148,6 +148,8 @@ def lazy_curry(func: T) -> Callable[..., Union[T, _partial]]:
         functools.partial(<function _lazy_curry...>)
         >>> divide(by=10)(1, 2)(3)()  # pass no arguments to call the func
         0.6
+        >>> divide(1, 2, 3, by=10)()  # yes, it is required
+        0.6
     """
     def wrapper(*args, **kwargs):
         return _lazy_curry(func, (), {}, args, kwargs)
