@@ -163,6 +163,18 @@ This is a question a lot of Python developers ask.
 
   This is actually a partial application, but that's the best we can do.
 
+Why don't you support `*` and `**` arguments?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When you use ``partial(some, *my_args)`` or ``partial(some, **my_args)``
+or both of them at the same time,
+we fallback to the default return type. Why?
+
+Because ``mypy`` cannot not infer what arguments are there
+inside this ``my_args`` variable.
+
+Our advice is not to use ``*args`` and ``*kwargs`` in ``partial`` call.
+
 
 API Reference
 -------------
