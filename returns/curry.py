@@ -6,7 +6,7 @@ from typing import Any, Dict, Callable, TypeVar, Union
 
 _ReturnType = TypeVar('_ReturnType')
 T = TypeVar('T', bound=Callable)
-rex_missing = re.compile(r'.+ missing \d+ required \w+ arguments?\: .+')
+rex_missing = re.compile(r'.+ missing \d+ required .+ arguments?\: .+')
 
 
 def partial(
@@ -88,19 +88,16 @@ def eager_curry(func: T) -> Callable[..., Union[T, _partial]]:
     .. code:: python
 
         >>> @eager_curry
-        ... def divide(left: int, right: int) -> float:
-        ...   return left / right
+        ... def divide(*numbers, by) -> float:
+        ...   return sum(numbers) / by
         ...
-        >>> divide(10)  # doesn't call the func and remembers arguments
-        functools.partial(<returns.curry.EagerCurry object at ...>, 10)
-        >>> divide(10, 5)  # you can call the func like always
-        2.0
-        >>> divide(10)(5)  # the same as above
-        2.0
-        >>> divide(right=10)(5)
-        0.5
-        >>> divide(right=10)(left=5)
-        0.5
+        >>> divide(1)(2, 3)  # doesn't call the func and remembers arguments
+        functools.partial(<returns.curry.EagerCurry...>, 1, 2, 3)
+        >>> divide(1)(2)(by=10)  # calls the func because enough args collected
+        0.3
+        >>> divide(1, 2, by=10)  # you can call the func like always
+        0.3
+
 
     See also:
         https://stackoverflow.com/questions/218025/
@@ -138,6 +135,19 @@ def lazy_curry(func: T) -> Callable[..., Union[T, _partial]]:
 
     If wrong arguments passed, ``TypeError`` will be raised only
     wnen called without arguments after that.
+
+    .. code:: python
+
+        >>> @lazy_curry
+        ... def divide(*numbers, by) -> float:
+        ...   return sum(numbers) / by
+        ...
+        >>> divide(by=10)
+        functools.partial(<function _lazy_curry...>)
+        >>> divide(by=10)(1, 2)(3)
+        functools.partial(<function _lazy_curry...>)
+        >>> divide(by=10)(1, 2)(3)()  # pass no arguments to call the func
+        0.6
     """
     def wrapper(*args, **kwargs):
         return _lazy_curry(func, (), {}, args, kwargs)
