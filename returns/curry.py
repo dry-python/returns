@@ -102,6 +102,8 @@ def eager_curry(func: T) -> Callable[..., Union[T, _partial]]:
         >>> divide(right=10)(left=5)
         0.5
 
+    See also:
+        https://stackoverflow.com/questions/218025/
     """
     wrapper = EagerCurry(func)
     return update_wrapper(wrapper=wrapper, wrapped=func)

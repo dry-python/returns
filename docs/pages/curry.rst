@@ -144,28 +144,18 @@ It also looks the same way:
 From this return type you can see that we work
 with all matching cases and discriminate unmatching ones.
 
-
-FAQ
----
-
-What is the difference between curring and partial?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-This is a question a lot of Python developers ask.
-
-`Here are some great answers <https://stackoverflow.com/questions/218025/what-is-the-difference-between-currying-and-partial-application>`_.
-
-.. warning::
-
-  Python has a very limited support for real curring in a way like
-  ``(x, y, z) -> t`` => ``x -> y -> z -> t``
-  works in languages like Haskell.
-
-  This is actually a partial application, but that's the best we can do.
-
-
 API Reference
--------------
+~~~~~~~~~~~~~
 
 .. automodule:: returns.curry
-   :members:
+   :members: partial
+
+
+.. _currying:
+
+Currying
+--------
+
+.. autodecorator:: returns.curry.eager_curry
+
+.. autodecorator:: returns.curry.lazy_curry
