@@ -16,6 +16,18 @@ def test_docstring():
     assert getdoc(func).strip() == "Papa Emeritus II"
 
 
+def test_immutable():
+    """Check that arguments from previous calls are immutable
+    """
+    @eager_curry
+    def func(a, b):
+        return (a, b)
+
+    cached = func(a=1)
+    assert cached(a=2, b=3) == (2, 3)
+    assert cached(b=3) == (1, 3)
+
+
 def test_no_args():
     @eager_curry
     def func():
@@ -41,17 +53,25 @@ def test_one_arg():
 def test_two_args():
     @eager_curry
     def func(a, b):
-        return a + b
+        return (a, b)
 
     assert type(func()) is partial
     assert type(func(1)) is partial
-    assert func(1)(2) == 3
-    assert func(1, 2) == 3
-    assert func()(1)(2) == 3
-    assert func()(1, 2) == 3
-    assert func()(1, b=2) == 3
-    assert func()(a=1, b=2) == 3
-    assert func()(b=1, a=2) == 3
+
+    assert func(1)(2) == (1, 2)
+    assert func(1, 2) == (1, 2)
+    assert func()(1)(2) == (1, 2)
+    assert func()(1, 2) == (1, 2)
+
+    assert func()(1, b=2) == (1, 2)
+    assert func()(a=1, b=2) == (1, 2)
+    assert func()(b=1, a=2) == (2, 1)
+
+    assert func(b=1)(a=2) == (2, 1)
+    assert func(a=1)(b=2) == (1, 2)
+    assert func(1)(b=2) == (1, 2)
+    assert func(b=1)(2) == (2, 1)
+
     with pytest.raises(TypeError):
         func(1, 2, 3)
     with pytest.raises(TypeError):

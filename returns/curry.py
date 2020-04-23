@@ -2,7 +2,7 @@ import re
 
 from functools import partial as _partial, update_wrapper
 from inspect import getcallargs
-from typing import Any, Callable, TypeVar
+from typing import Any, Dict, Callable, TypeVar
 
 _ReturnType = TypeVar('_ReturnType')
 rex_missing = re.compile(r'.+ missing \d+ required \w+ arguments?\: .+')
@@ -87,10 +87,29 @@ class LazyCurry:
     def __init__(self, func: Callable):
         self._func = func
 
+    def _do(
+        self,
+        old_args: tuple, old_kwargs: Dict[str, Any],
+        new_args: tuple, new_kwargs: Dict[str, Any],
+    ):
+        #  if no new arguments are passed, call the function
+        if not new_args and not new_kwargs:
+            return self._func(*old_args, **old_kwargs)
+
+        # if new arguments are passed, remember them for future calls.
+        old_args += new_args
+        old_kwargs = old_kwargs.copy()
+        old_kwargs.update(new_kwargs)
+
+        def wrapper(*args, **kwargs):
+            return self._do(old_args, old_kwargs, args, kwargs)
+
+        # EagerCurry returns either partial or the function result.
+        # Let's not break expectations here and return partial as well.
+        return partial(wrapper)
+
     def __call__(self, *args, **kwargs):
-        if args or kwargs:
-            return partial(self, *args, **kwargs)
-        return self._func(*args, **kwargs)
+        return self._do((), {}, args, kwargs)
 
 
 def eager_curry(func: Callable) -> EagerCurry:
