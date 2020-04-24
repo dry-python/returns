@@ -35,8 +35,6 @@ _KIND_MAPPING = MappingProxyType({
     # because `ARG_OPT` is only used in function defs, not calls.
     # And `ARG_NAMED` is the same thing for calls.
     ARG_OPT: ARG_NAMED,
-    ARG_STAR: ARG_POS,
-    # ARG_STAR2: ARG_NAMED,
 })
 
 #: Mapping of `typevar` to real type.
