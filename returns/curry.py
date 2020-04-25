@@ -5,7 +5,7 @@ from inspect import getcallargs
 from typing import Any, Callable, Dict, TypeVar, Union
 
 _ReturnType = TypeVar('_ReturnType')
-T = TypeVar('T', bound=Callable)
+Func = TypeVar('Func', bound=Callable)
 rex_missing = re.compile(r'.+ missing \d+ required .+ arguments?\: .+')
 
 
@@ -38,13 +38,17 @@ def partial(
     return _partial(func, *args, **kwargs)
 
 
-class EagerCurry:
+class EagerCurry(object):
     def __init__(self, func: Callable):
         self._func = func
 
+    def __call__(self, *args, **kwargs):
+        if not self._enough(*args, **kwargs):
+            return _partial(self, *args, **kwargs)
+        return self._func(*args, **kwargs)
+
     def _enough(self, *args, **kwargs) -> bool:
-        """Returns True if passed arguments are enough to call the function.
-        """
+        """Returns True if passed arguments are enough to call the function."""
         try:
             getcallargs(self._func, *args, **kwargs)
         except TypeError as err:
@@ -56,13 +60,8 @@ class EagerCurry:
             raise
         return True
 
-    def __call__(self, *args, **kwargs):
-        if not self._enough(*args, **kwargs):
-            return _partial(self, *args, **kwargs)
-        return self._func(*args, **kwargs)
 
-
-def eager_curry(func: T) -> Callable[..., Union[T, _partial]]:
+def eager_curry(func: Func) -> Callable[..., Union[Func, _partial]]:
     """Currying that calls the wrapped function when enough arguments are passed.
 
     Currying is a conception from functional languages that does partial
@@ -107,10 +106,12 @@ def eager_curry(func: T) -> Callable[..., Union[T, _partial]]:
 
 
 def _lazy_curry(
-    func: T,
-    old_args: tuple, old_kwargs: Dict[str, Any],
-    new_args: tuple, new_kwargs: Dict[str, Any],
-) -> Union[T, _partial]:
+    func: Func,
+    old_args: tuple,
+    old_kwargs: Dict[str, Any],
+    new_args: tuple,
+    new_kwargs: Dict[str, Any],
+) -> Union[Func, _partial]:
     #  if no new arguments are passed, call the function
     if not new_args and not new_kwargs:
         return func(*old_args, **old_kwargs)
@@ -128,7 +129,7 @@ def _lazy_curry(
     return _partial(wrapper)
 
 
-def lazy_curry(func: T) -> Callable[..., Union[T, _partial]]:
+def lazy_curry(func: Func) -> Callable[..., Union[Func, _partial]]:
     """Currying that calls the wrapped function when called without arguments.
 
     See documentation for ``eager_curry`` to learn about currying.
