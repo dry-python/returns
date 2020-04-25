@@ -10,6 +10,7 @@ from typing import (
 
 from typing_extensions import final
 
+from returns.context import NoDeps
 from returns.io import IO, IOFailure, IOResult, IOSuccess
 from returns.primitives.container import BaseContainer
 from returns.primitives.types import Immutable
@@ -109,7 +110,7 @@ class RequiresContextIOResult(
     ]
 
     #: A convinient placeholder to call methods created by `.from_value()`.
-    empty: ClassVar[Any] = object()
+    empty: ClassVar[NoDeps] = object()
 
     def __init__(
         self,
