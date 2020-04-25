@@ -25,9 +25,9 @@ from mypy.plugin import FunctionContext, Plugin
 from mypy.types import CallableType, Instance, Overloaded, TypeType
 
 from returns.contrib.mypy._curry import (
+    AppliedArgs,
     CurryFunctionReducer,
     get_callable_from_type,
-    make_reduced_args,
 )
 
 #: Set of full names of our decorators.
@@ -94,13 +94,15 @@ def _analyze_curring(function_ctx: FunctionContext):
         # We force `Instance` and similar types to coercse to callable:
         function_def = get_callable_from_type(function_ctx)
 
-    if not isinstance(function_def, (CallableType, Overloaded)):
+    is_valid, applied_args = AppliedArgs(function_ctx).build_from_context()
+
+    if not isinstance(function_def, (CallableType, Overloaded)) or not is_valid:
         return function_ctx.default_return_type
 
     return CurryFunctionReducer(
         function_ctx.default_return_type,
         function_def,
-        make_reduced_args(function_ctx),
+        applied_args,
         function_ctx,
     ).new_partial()
 

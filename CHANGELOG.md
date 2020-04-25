@@ -10,7 +10,7 @@ See [0Ver](https://0ver.org/).
 
 ### Features
 
-- **Breaking**: renames `Maybe.from_value` to `Maybe.from_value`.
+- **Breaking**: renames `Maybe.new` to `Maybe.from_value`.
   Because all our other containers support this protocol.
   Only `Maybe` was different, sorry for that!
 - Adds typed `partial` plugin!

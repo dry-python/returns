@@ -60,12 +60,17 @@
     def multiple(
         a: int,
         b: int,
-        /,
         c: int,
+        /,
+        d: int,
     ) -> str:
         ...
 
-    reveal_type(partial(multiple, 1))  # N: Revealed type is 'def (builtins.int, c: builtins.int) -> builtins.str'
+    reveal_type(partial(multiple, 1))  # N: Revealed type is 'def (builtins.int, builtins.int, d: builtins.int) -> builtins.str'
+    reveal_type(partial(multiple, 1, 2))  # N: Revealed type is 'def (builtins.int, d: builtins.int) -> builtins.str'
+    reveal_type(partial(multiple, 1, 2, 3))  # N: Revealed type is 'def (d: builtins.int) -> builtins.str'
+    reveal_type(partial(multiple, 1, 2, d=4))  # N: Revealed type is 'def (builtins.int) -> builtins.str'
+    reveal_type(partial(multiple, 1, 2, 3, d=4))  # N: Revealed type is 'def () -> builtins.str'
 
 
 - case: curry_object
@@ -151,3 +156,33 @@
         reveal_type(x)  # N: Revealed type is 'def () -> I`-1'
         reveal_type(x().arg)  # N: Revealed type is 'builtins.int'
         return t(1)
+
+
+- case: curry_star_arg
+  disable_cache: true
+  main: |
+    from returns.curry import partial
+
+    def multiple(a: int, b: int) -> int:
+        ...
+
+    reveal_type(partial(multiple, *(1, 2)))  # N: Revealed type is 'def (*Any, **Any) -> builtins.int*'
+
+
+- case: curry_star2_arg
+  disable_cache: true
+  main: |
+    from returns.curry import partial
+
+    def multiple(a: int, b: int) -> int:
+        ...
+
+    reveal_type(partial(multiple, **{'a': 1, 'b': 2}))  # N: Revealed type is 'def (*Any, **Any) -> builtins.int*'
+
+
+- case: curry_lambda
+  disable_cache: true
+  main: |
+    from returns.curry import partial
+
+    reveal_type(partial((lambda x, y: str(x + y)), 1))  # N: Revealed type is 'def (Any) -> builtins.str'

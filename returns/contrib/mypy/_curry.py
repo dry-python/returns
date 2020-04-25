@@ -1,9 +1,9 @@
-from collections import Counter, defaultdict, namedtuple
+from collections import namedtuple
 from types import MappingProxyType
 from typing import (
     ClassVar,
-    DefaultDict,
     FrozenSet,
+    Iterator,
     List,
     Mapping,
     Optional,
@@ -98,14 +98,14 @@ class _Intermediate(object):
         applied_args: List[_FuncArg],
     ) -> List[_FuncArg]:
         callee_args = list(filter(
-            lambda name: name[0] is None,
+            lambda name: name.name is None,
             applied_args,
         ))
 
         new_function_args = []
-        for ind, frg in enumerate(_FuncArg.from_callable(self._case_function)):
-            if frg.kind in self._positional_kinds and ind < len(callee_args):
-                new_function_args.append(frg)
+        for ind, arg in enumerate(_FuncArg.from_callable(self._case_function)):
+            if arg.kind in self._positional_kinds and ind < len(callee_args):
+                new_function_args.append(arg)
         return new_function_args
 
     def _applied_named_args(
@@ -113,20 +113,20 @@ class _Intermediate(object):
         applied_args: List[_FuncArg],
     ) -> List[_FuncArg]:
         callee_args = list(filter(
-            lambda name: name[0] is not None,
+            lambda name: name.name is not None,
             applied_args,
         ))
 
         new_function_args = []
-        for frg in _FuncArg.from_callable(self._case_function):
+        for arg in _FuncArg.from_callable(self._case_function):
             has_named_arg_def = any(
                 # Argument can either be used as a named argument
                 # or passed to `**kwrgs` if it exists.
-                frg.name == rdc.name or frg.kind == ARG_STAR2
+                arg.name == rdc.name or arg.kind == ARG_STAR2
                 for rdc in callee_args
             )
             if callee_args and has_named_arg_def:
-                new_function_args.append(frg)
+                new_function_args.append(arg)
         return new_function_args
 
 
@@ -140,24 +140,30 @@ class _Functions(object):
         self._intermediate = intermediate
 
     def diff(self) -> CallableType:
-        intermediate = Counter(
-            arg.name for arg in _FuncArg.from_callable(self._intermediate)
-        )
-
-        seen_args: DefaultDict[Optional[str], int] = defaultdict(int)
+        intermediate_names = [
+            arg.name
+            for arg in _FuncArg.from_callable(self._intermediate)
+        ]
         new_function_args = []
 
-        for arg in _FuncArg.from_callable(self._original):
+        for ind, arg in enumerate(_FuncArg.from_callable(self._original)):
             should_be_copied = (
                 arg.kind in {ARG_STAR, ARG_STAR2} or
-                arg.name not in intermediate or
-                # We need to count seen args, because python3.8
+                arg.name not in intermediate_names or
+                # We need to treat unnamed args differently, because python3.8
                 # has pos_only_args, all their names are `None`.
-                (not arg.name and seen_args[arg.name] < intermediate[arg.name])
+                # This is also true for `lambda` functions where `.name`
+                # might be missing for some reason.
+                (
+                    not arg.name and not (
+                        ind < len(intermediate_names) and
+                        # If this is also unnamed arg, then ignoring it.
+                        not intermediate_names[ind]
+                    )
+                )
             )
             if should_be_copied:
                 new_function_args.append(arg)
-                seen_args[arg.name] += 1
 
         return _Intermediate(self._original).build_callable_type(
             new_function_args,
@@ -262,9 +268,9 @@ class CurryFunctionReducer(object):
         self,
         case_function: CallableType,
     ) -> Tuple[CallableType, Optional[CallableType]]:
-        intermediate = _Intermediate(
-            case_function,
-        ).build_callable_type(self._applied_args)
+        intermediate = _Intermediate(case_function).build_callable_type(
+            self._applied_args,
+        )
         return intermediate, _analyze_function_call(
             intermediate,
             self._applied_args,
@@ -383,18 +389,50 @@ def get_callable_from_type(function_ctx: FunctionContext) -> MypyType:
     return function_def
 
 
-def make_reduced_args(function_ctx: FunctionContext) -> List[_FuncArg]:
-    """Utility to convert passed arguments from function to our format."""
-    parts = zip(
-        function_ctx.arg_names[1:],
-        function_ctx.arg_types[1:],
-        function_ctx.arg_kinds[1:],
-    )
+class AppliedArgs(object):
+    """Builds applied args that were partially applied."""
 
-    reduced_args = []
-    for names, types, kinds in parts:
-        reduced_args.extend([
-            _FuncArg(*part)
-            for part in zip(names, types, kinds)
-        ])
-    return reduced_args
+    def __init__(self, function_ctx: FunctionContext) -> None:
+        """
+        We need the function default context.
+
+        The first arguments of ``partial`` is skipped:
+        it is the applied function itself.
+        """
+        self._function_ctx = function_ctx
+        self._parts = zip(
+            self._function_ctx.arg_names[1:],
+            self._function_ctx.arg_types[1:],
+            self._function_ctx.arg_kinds[1:],
+        )
+
+    def build_from_context(self) -> Tuple[bool, List[_FuncArg]]:
+        """
+        Builds handy arguments structures from the context.
+
+        Some usages might be invalid,
+        because we cannot really infer some arguments.
+
+        .. code:: python
+
+            partial(some, *args)
+            partial(other, **kwargs)
+
+        Here ``*args`` and ``**kwargs`` can be literally anything!
+        In these cases we fallback to the default return type.
+        """
+        applied_args = []
+        for names, types, kinds in self._parts:
+            for arg in self._generate_applied_args(zip(names, types, kinds)):
+                if arg.kind in {ARG_STAR, ARG_STAR2}:
+                    # We cannot really work with `*args`, `**kwargs`.
+                    return False, []
+
+                applied_args.append(arg)
+        return True, applied_args
+
+    def _generate_applied_args(self, arg_parts) -> Iterator[_FuncArg]:
+        yield from (
+            _FuncArg(name, typ, kind)
+            for name, typ, kind in arg_parts
+        )

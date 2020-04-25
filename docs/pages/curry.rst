@@ -144,6 +144,18 @@ It also looks the same way:
 From this return type you can see that we work
 with all matching cases and discriminate unmatching ones.
 
+Why don't you support `*` and `**` arguments?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When you use ``partial(some, *my_args)`` or ``partial(some, **my_args)``
+or both of them at the same time,
+we fallback to the default return type. Why?
+
+Because ``mypy`` cannot not infer what arguments are there
+inside this ``my_args`` variable.
+
+Our advice is not to use ``*args`` and ``*kwargs`` in ``partial`` call.
+
 API Reference
 ~~~~~~~~~~~~~
 
