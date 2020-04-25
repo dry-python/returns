@@ -27,6 +27,9 @@ _ErrorType = TypeVar('_ErrorType')
 # Helpers:
 _FirstType = TypeVar('_FirstType')
 
+# Type Aliases:
+NoDeps = Any
+
 
 @final
 class RequiresContext(
