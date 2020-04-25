@@ -1,8 +1,8 @@
 import re
-
-from functools import partial as _partial, update_wrapper
+from functools import partial as _partial
+from functools import update_wrapper
 from inspect import getcallargs
-from typing import Any, Dict, Callable, TypeVar, Union
+from typing import Any, Callable, Dict, TypeVar, Union
 
 _ReturnType = TypeVar('_ReturnType')
 T = TypeVar('T', bound=Callable)
