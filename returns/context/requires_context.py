@@ -28,6 +28,8 @@ _ErrorType = TypeVar('_ErrorType')
 _FirstType = TypeVar('_FirstType')
 
 # Type Aliases:
+#: Sometimes ``RequiresContext`` and other similar types might be used with
+#: no explicit dependencies so we need to have this type alias for Any.
 NoDeps = Any
 
 
