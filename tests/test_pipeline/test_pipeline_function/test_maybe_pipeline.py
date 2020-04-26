@@ -22,7 +22,7 @@ def test_maybe_pipeline_some():
     assert _maybe_pipeline(0) == Nothing
 
 
-@pytest.mark.asyncio
+@pytest.mark.anyio
 async def test_async_maybe_pipeline_some():
     """Ensures that pipeline works well for Some."""
     assert (await _async_maybe_pipeline(1)) == Some(2)

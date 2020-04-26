@@ -10,7 +10,10 @@ See [0Ver](https://0ver.org/).
 
 ### Features
 
-- **Breaking**: drops `python3.6` support, due to ``asyncio`` enhanced support
+- **Breaking**: changes `@safe`, `@impure`, `impure_safe`, `@maybe` semantics:
+  they do not work with `async` functions anymore;
+  now you are forced to use `Future` and its helpers
+  to work with `async` functions
 - **Breaking**: renames `Maybe.new` to `Maybe.from_value`.
   Because all our other containers support this protocol.
   Only `Maybe` was different, sorry for that!
@@ -24,6 +27,11 @@ See [0Ver](https://0ver.org/).
 
 - **Breaking**: `Some(None)` does no evaluate to `Nothing` anymore,
   it might break some people's programms. But it was very wrong!
+
+### Misc
+
+- Replaces `pytest-asyncio` with `anyio` plugin,
+  now we test compatibility with any IO stack: `asyncio`, `trio`, `curio`
 
 
 ## 0.13.0

@@ -25,14 +25,14 @@ def test_maybe_nothing():
     assert _function({'a': 'b'}, 'c') == Nothing
 
 
-@pytest.mark.asyncio
+@pytest.mark.anyio
 async def test_async_maybe_some():
     """Ensures that maybe decorator works correctly for some case."""
     container = await _coroutine({'a': 'b'}, 'a')
     assert container == Some('b')
 
 
-@pytest.mark.asyncio
+@pytest.mark.anyio
 async def test_async_maybe_nothing():
     """Ensures that maybe decorator works correctly for nothing case."""
     container = await _coroutine({'a': 'b'}, 'c')

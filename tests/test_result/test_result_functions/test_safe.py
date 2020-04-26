@@ -24,7 +24,7 @@ def test_safe_failure():
     assert isinstance(failed.failure(), ZeroDivisionError)
 
 
-@pytest.mark.asyncio
+@pytest.mark.anyio
 async def test_async_safe_success():
     """Ensures that safe decorator works correctly for Success case."""
     success = await _coroutine(1)
@@ -32,7 +32,7 @@ async def test_async_safe_success():
     assert success.unwrap() == 1.0
 
 
-@pytest.mark.asyncio
+@pytest.mark.anyio
 async def test_async_safe_failure():
     """Ensures that safe decorator works correctly for Failure case."""
     failed = await _coroutine(0)

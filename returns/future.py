@@ -34,9 +34,9 @@ async def async_identity(instance: _FirstType) -> _FirstType:
 
     .. code:: python
 
-      >>> import asyncio
+      >>> import anyio
       >>> from returns.future import async_identity
-      >>> assert asyncio.run(async_identity(1)) == 1
+      >>> assert anyio.run(async_identity, 1) == 1
 
     See :func:`returns.functions.identity`
     for sync version of this function and more docs and examples.
@@ -56,7 +56,9 @@ class Future(BaseContainer, Generic[_ValueType]):
     Represents a better abstraction over a simple coroutine.
 
     Is framework, event-loop, and IO-library agnostics.
-    Works with ``asyncio``, ``trio``, or any other tool.
+    Works with ``asyncio``, ``curio``, ``trio``, or any other tool.
+    Internally we use ``anyio`` to test
+    that it works as expected for any io stack.
 
     Note that ``Future[a]`` represents a computation
     that never fails and returns ``IO[a]`` type.
@@ -80,7 +82,7 @@ class Future(BaseContainer, Generic[_ValueType]):
 
         .. code:: python
 
-          >>> import asyncio
+          >>> import anyio
           >>> from returns.future import Future
           >>> from returns.io import IO
 
@@ -88,7 +90,7 @@ class Future(BaseContainer, Generic[_ValueType]):
           ...     return arg + 1
           ...
           >>> container = Future(coro(1))
-          >>> assert asyncio.run(container.awaitable()) == IO(2)
+          >>> assert anyio.run(container.awaitable) == IO(2)
 
         """
         super().__init__(inner_value)
@@ -103,14 +105,14 @@ class Future(BaseContainer, Generic[_ValueType]):
 
           .. code:: python
 
-          >>> import asyncio
+          >>> import anyio
           >>> from returns.future import Future
           >>> from returns.io import IO
 
           >>> async def main() -> IO[int]:
           ...     return await Future.from_value(1)
           ...
-          >>> assert asyncio.run(main()) == IO(1)
+          >>> assert anyio.run(main) == IO(1)
 
         When awaited we returned the value wrapped
         in :class:`returns.io.IO` container
@@ -135,10 +137,10 @@ class Future(BaseContainer, Generic[_ValueType]):
 
         .. code:: python
 
-          >>> import asyncio
+          >>> import anyio
           >>> from returns.future import Future
           >>> from returns.io import IO
-          >>> assert asyncio.run(Future.from_value(1).awaitable()) == IO(1)
+          >>> assert anyio.run(Future.from_value(1).awaitable) == IO(1)
 
         """
         return IO(await self._inner_value)
@@ -157,15 +159,15 @@ class Future(BaseContainer, Generic[_ValueType]):
 
         .. code:: python
 
-          >>> import asyncio
+          >>> import anyio
           >>> from returns.future import Future
           >>> from returns.io import IO
 
           >>> def mappable(x: int) -> int:
           ...    return x + 1
           ...
-          >>> assert asyncio.run(
-          ...     Future.from_value(1).map(mappable).awaitable(),
+          >>> assert anyio.run(
+          ...     Future.from_value(1).map(mappable).awaitable,
           ... ) == IO(2)
 
         """
@@ -183,15 +185,15 @@ class Future(BaseContainer, Generic[_ValueType]):
 
         .. code:: python
 
-          >>> import asyncio
+          >>> import anyio
           >>> from returns.future import Future
           >>> from returns.io import IO
 
           >>> def bindable(x: int) -> Future[int]:
           ...    return Future.from_value(x + 1)
           ...
-          >>> assert asyncio.run(
-          ...     Future.from_value(1).bind(bindable).awaitable(),
+          >>> assert anyio.run(
+          ...     Future.from_value(1).bind(bindable).awaitable,
           ... ) == IO(2)
 
         """
@@ -210,15 +212,15 @@ class Future(BaseContainer, Generic[_ValueType]):
 
         .. code:: python
 
-          >>> import asyncio
+          >>> import anyio
           >>> from returns.future import Future
           >>> from returns.io import IO
 
           >>> async def coroutine(x: int) -> Future[str]:
           ...    return Future.from_value(str(x + 1))
           ...
-          >>> assert asyncio.run(
-          ...     Future.from_value(1).bind_async(coroutine).awaitable(),
+          >>> assert anyio.run(
+          ...     Future.from_value(1).bind_async(coroutine).awaitable,
           ... ) == IO('2')
 
         """
@@ -237,15 +239,15 @@ class Future(BaseContainer, Generic[_ValueType]):
 
         .. code:: python
 
-          >>> import asyncio
+          >>> import anyio
           >>> from returns.future import Future
           >>> from returns.io import IO
 
           >>> async def coroutine(x: int) -> int:
           ...    return x + 1
           ...
-          >>> assert asyncio.run(
-          ...     Future.from_value(1).bind_awaitable(coroutine).awaitable(),
+          >>> assert anyio.run(
+          ...     Future.from_value(1).bind_awaitable(coroutine).awaitable,
           ... ) == IO(2)
 
         """
@@ -268,7 +270,7 @@ class Future(BaseContainer, Generic[_ValueType]):
 
         .. code:: python
 
-          >>> import asyncio
+          >>> import anyio
           >>> from returns.future import Future
           >>> from returns.io import IO
 
@@ -278,7 +280,7 @@ class Future(BaseContainer, Generic[_ValueType]):
           >>> async def main() -> IO[float]:
           ...     return await Future.lift(example)(Future.from_value(1))
           ...
-          >>> assert asyncio.run(main()) == IO(0.5)
+          >>> assert anyio.run(main) == IO(0.5)
 
         See also:
             - https://wiki.haskell.org/Lifting
@@ -298,14 +300,14 @@ class Future(BaseContainer, Generic[_ValueType]):
 
         .. code:: python
 
-          >>> import asyncio
+          >>> import anyio
           >>> from returns.future import Future
           >>> from returns.io import IO
 
           >>> async def main() -> bool:
           ...    return (await Future.from_value(1)) == IO(1)
           ...
-          >>> assert asyncio.run(main()) is True
+          >>> assert anyio.run(main) is True
 
         """
         return Future(async_identity(inner_value))
@@ -324,7 +326,7 @@ def future(
 
     .. code:: python
 
-      >>> import asyncio
+      >>> import anyio
       >>> from returns.io import IO
       >>> from returns.future import future
 
@@ -332,7 +334,7 @@ def future(
       ... async def test(x: int) -> int:
       ...     return x + 1
       ...
-      >>> assert asyncio.run(test(1).awaitable()) == IO(2)
+      >>> assert anyio.run(test(1).awaitable) == IO(2)
 
     """
     @wraps(function)

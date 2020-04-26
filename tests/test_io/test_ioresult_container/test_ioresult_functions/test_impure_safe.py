@@ -26,7 +26,7 @@ def test_safe_iofailure():
     )
 
 
-@pytest.mark.asyncio
+@pytest.mark.anyio
 async def test_async_safe_iosuccess():
     """Ensures that safe decorator works correctly for IOSuccess case."""
     success = await _coroutine(1)
@@ -34,7 +34,7 @@ async def test_async_safe_iosuccess():
     assert success.unwrap() == IO(1.0)
 
 
-@pytest.mark.asyncio
+@pytest.mark.anyio
 async def test_async_safe_iofailure():
     """Ensures that safe decorator works correctly for IOFailure case."""
     failed = await _coroutine(0)
