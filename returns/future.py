@@ -46,7 +46,7 @@ class Future(BaseContainer, Generic[_ValueType]):
 
     Represents a better abstraction over a simple coroutine.
 
-    Is event-loop and IO library agnostics.
+    Is framework, event-loop, and IO-library agnostics.
     Works with ``asyncio``, ``trio``, or any other tool.
 
     Note that ``Future[a]`` represents a computation

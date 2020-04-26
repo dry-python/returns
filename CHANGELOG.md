@@ -10,11 +10,13 @@ See [0Ver](https://0ver.org/).
 
 ### Features
 
+- **Breaking**: drops `python3.6` support, due to ``asyncio`` enhanced support
 - **Breaking**: renames `Maybe.new` to `Maybe.from_value`.
   Because all our other containers support this protocol.
   Only `Maybe` was different, sorry for that!
 - Adds typed `partial` plugin!
 - Adds `pytest` plugin with the ability to tests error handling
+- Adds `Future` container to easily work with `async` functions
 - Adds `unify` point free function
 - Adds `__copy__` and `__deepcopy__` magic methods to `Immutable` class
 
