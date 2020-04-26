@@ -1,4 +1,5 @@
-from typing import Any, Awaitable, Callable, Generator, Generic, TypeVar
+from typing import Any, Awaitable, Callable, Generator, Generic, TypeVar, overload, Coroutine
+from functools import wraps
 
 from typing_extensions import final
 
@@ -74,6 +75,7 @@ class Future(BaseContainer, Generic[_ValueType]):
           >>> import asyncio
           >>> from returns.future import Future
           >>> from returns.io import IO
+
           >>> async def coro(arg: int) -> int:
           ...     return arg + 1
           ...
@@ -96,6 +98,7 @@ class Future(BaseContainer, Generic[_ValueType]):
           >>> import asyncio
           >>> from returns.future import Future
           >>> from returns.io import IO
+
           >>> async def main() -> IO[int]:
           ...     return await Future.from_value(1)
           ...
@@ -103,7 +106,7 @@ class Future(BaseContainer, Generic[_ValueType]):
 
         When awaited we returned the value wrapped
         in :class:`returns.io.IO` container
-        to idicate that the computation was impure.
+        to indicate that the computation was impure.
 
         See also:
             https://docs.python.org/3/library/asyncio-task.html#awaitables
@@ -149,6 +152,7 @@ class Future(BaseContainer, Generic[_ValueType]):
           >>> import asyncio
           >>> from returns.future import Future
           >>> from returns.io import IO
+
           >>> def mappable(x: int) -> int:
           ...    return x + 1
           ...
@@ -174,6 +178,7 @@ class Future(BaseContainer, Generic[_ValueType]):
           >>> import asyncio
           >>> from returns.future import Future
           >>> from returns.io import IO
+
           >>> def bindable(x: int) -> Future[int]:
           ...    return Future.from_value(x + 1)
           ...
@@ -200,6 +205,7 @@ class Future(BaseContainer, Generic[_ValueType]):
           >>> import asyncio
           >>> from returns.future import Future
           >>> from returns.io import IO
+
           >>> async def coroutine(x: int) -> Future[str]:
           ...    return Future.from_value(str(x + 1))
           ...
@@ -226,6 +232,7 @@ class Future(BaseContainer, Generic[_ValueType]):
           >>> import asyncio
           >>> from returns.future import Future
           >>> from returns.io import IO
+
           >>> async def coroutine(x: int) -> int:
           ...    return x + 1
           ...
@@ -256,6 +263,7 @@ class Future(BaseContainer, Generic[_ValueType]):
           >>> import asyncio
           >>> from returns.future import Future
           >>> from returns.io import IO
+
           >>> def example(argument: int) -> float:
           ...     return argument / 2  # not Future!
           ...
@@ -285,6 +293,7 @@ class Future(BaseContainer, Generic[_ValueType]):
           >>> import asyncio
           >>> from returns.future import Future
           >>> from returns.io import IO
+
           >>> async def main() -> bool:
           ...    return (await Future.from_value(1)) == IO(1)
           ...
@@ -292,6 +301,36 @@ class Future(BaseContainer, Generic[_ValueType]):
 
         """
         return Future(async_identity(inner_value))
+
+
+# Decorators:
+
+def future(
+    function: Callable[
+        ...,
+        Coroutine[_FirstType, _SecondType, _ValueType],
+    ],
+) -> Callable[..., Coroutine[_FirstType, _SecondType, Future[_ValueType]]]:
+    """
+    Decorator to turn a coroutine definition into ``Future`` container.
+
+    .. code:: python
+
+      >>> import asyncio
+      >>> from returns.io import IO
+      >>> from returns.future import future
+
+      >>> @future
+      ... async def test(x: int) -> int:
+      ...     return x + 1
+      ...
+      >>> assert asyncio.run(test(1).awaitable()) == IO(2)
+
+    """
+    @wraps(function)
+    def decorator(*args, **kwargs):
+        return Future(function(*args, **kwargs))
+    return decorator
 
 
 # Private composition helpers:
