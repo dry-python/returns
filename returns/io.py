@@ -105,7 +105,7 @@ class IO(BaseContainer, Generic[_ValueType]):
         Applies 'function' to the result of a previous calculation.
 
         'function' should accept a single "normal" (non-container) argument
-        and return IO type object.
+        and return ``IO`` type object.
 
         .. code:: python
 
@@ -191,10 +191,7 @@ class IO(BaseContainer, Generic[_ValueType]):
 @overload
 def impure(  # type: ignore
     function: Callable[..., Coroutine[_FirstType, _SecondType, _NewValueType]],
-) -> Callable[
-    ...,
-    Coroutine[_FirstType, _SecondType, IO[_NewValueType]],
-]:
+) -> Callable[..., Coroutine[_FirstType, _SecondType, IO[_NewValueType]]]:
     """Case for async functions."""
 
 
