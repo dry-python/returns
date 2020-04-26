@@ -10,18 +10,6 @@
     reveal_type(test)  # N: Revealed type is 'def () -> returns.io.IO[builtins.int*]'
 
 
-- case: impure_async_decorator_no_params
-  disable_cache: true
-  main: |
-    from returns.io import impure
-
-    @impure
-    async def test() -> int:
-        return 1
-
-    reveal_type(test)  # N: Revealed type is 'def () -> typing.Coroutine[Any, Any, returns.io.IO[builtins.int*]]'
-
-
 - case: impure_composition_no_params
   disable_cache: true
   main: |
