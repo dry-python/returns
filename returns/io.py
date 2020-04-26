@@ -1,17 +1,14 @@
 from abc import ABCMeta
 from functools import wraps
-from inspect import iscoroutinefunction
-from typing import (  # noqa: WPS235
+from typing import (
     Any,
     Callable,
     ClassVar,
-    Coroutine,
     Generic,
     NoReturn,
     Type,
     TypeVar,
     Union,
-    overload,
 )
 
 from typing_extensions import final
@@ -188,43 +185,32 @@ class IO(BaseContainer, Generic[_ValueType]):
 
 # Helper functions:
 
-@overload
-def impure(  # type: ignore
-    function: Callable[..., Coroutine[_FirstType, _SecondType, _NewValueType]],
-) -> Callable[..., Coroutine[_FirstType, _SecondType, IO[_NewValueType]]]:
-    """Case for async functions."""
-
-
-@overload
 def impure(
     function: Callable[..., _NewValueType],
 ) -> Callable[..., IO[_NewValueType]]:
-    """Case for regular functions."""
-
-
-def impure(function):
     """
     Decorator to mark function that it returns :class:`~IO` container.
 
-    Supports both async and regular functions. Example:
+    If you need to mark ``async`` function as impure,
+    use :func:`returns.future.future` instead.
+    This decorator only works with sync functions. Example:
 
     .. code:: python
 
       >>> from returns.io import IO, impure
+
       >>> @impure
       ... def function(arg: int) -> int:
       ...     return arg + 1
       ...
+
       >>> assert function(1) == IO(2)
 
     """
-    if iscoroutinefunction(function):
-        async def decorator(*args, **kwargs):  # noqa: WPS430
-            return IO(await function(*args, **kwargs))
-    else:
-        def decorator(*args, **kwargs):  # noqa: WPS430
-            return IO(function(*args, **kwargs))
-    return wraps(function)(decorator)
+    @wraps(function)
+    def decorator(*args, **kwargs):
+        return IO(function(*args, **kwargs))
+    return decorator
 
 
 # IO and Result:
@@ -821,50 +807,33 @@ IOResultE = IOResult[_ValueType, Exception]
 
 # impure_safe decorator:
 
-@overload
-def impure_safe(  # type: ignore
-    function: Callable[..., Coroutine[_FirstType, _SecondType, _NewValueType]],
-) -> Callable[
-    ...,
-    Coroutine[_FirstType, _SecondType, IOResultE[_NewValueType]],
-]:
-    """Case for async functions."""
-
-
-@overload
 def impure_safe(
     function: Callable[..., _NewValueType],
 ) -> Callable[..., IOResultE[_NewValueType]]:
-    """Case for regular functions."""
-
-
-def impure_safe(function):  # noqa: C901
     """
     Decorator to mark function that it returns :class:`~IO` container.
 
-    Supports both async and regular functions. Example:
+    If you need to mark ``async`` function as impure,
+    use :func:`returns.future.future_safe` instead.
+    This decorator only works with sync functions. Example:
 
     .. code:: python
 
       >>> from returns.io import IOSuccess, impure_safe
+
       >>> @impure_safe
       ... def function(arg: int) -> float:
       ...     return 1 / arg
       ...
+
       >>> assert function(1) == IOSuccess(1.0)
       >>> assert function(0).failure()
 
     """
-    if iscoroutinefunction(function):
-        async def decorator(*args, **kwargs):  # noqa: WPS430
-            try:
-                return IOSuccess(await function(*args, **kwargs))
-            except Exception as exc:
-                return IOFailure(exc)
-    else:
-        def decorator(*args, **kwargs):  # noqa: WPS430
-            try:
-                return IOSuccess(function(*args, **kwargs))
-            except Exception as exc:
-                return IOFailure(exc)
-    return wraps(function)(decorator)
+    @wraps(function)
+    def decorator(*args, **kwargs):
+        try:
+            return IOSuccess(function(*args, **kwargs))
+        except Exception as exc:
+            return IOFailure(exc)
+    return decorator

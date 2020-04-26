@@ -1,17 +1,6 @@
 from abc import ABCMeta
 from functools import wraps
-from inspect import iscoroutinefunction
-from typing import (  # noqa: WPS235
-    Any,
-    Callable,
-    ClassVar,
-    Coroutine,
-    Generic,
-    Type,
-    TypeVar,
-    Union,
-    overload,
-)
+from typing import Any, Callable, ClassVar, Generic, Type, TypeVar, Union
 
 from typing_extensions import final
 
@@ -487,51 +476,32 @@ ResultE = Result[_ValueType, Exception]
 
 # Decorators:
 
-@overload
-def safe(  # type: ignore
-    function: Callable[..., Coroutine[_FirstType, _SecondType, _ValueType]],
-) -> Callable[
-    ...,
-    Coroutine[_FirstType, _SecondType, ResultE[_ValueType]],
-]:
-    """Case for async functions."""
-
-
-@overload
 def safe(
     function: Callable[..., _ValueType],
 ) -> Callable[..., ResultE[_ValueType]]:
-    """Case for regular functions."""
-
-
-def safe(function):  # noqa: C901
     """
     Decorator to convert exception-throwing function to 'Result' container.
 
     Should be used with care, since it only catches 'Exception' subclasses.
     It does not catch 'BaseException' subclasses.
 
-    Supports both async and regular functions.
+    .. code:: python
 
-    >>> from returns.result import Result, Success, safe
-    >>> @safe
-    ... def might_raise(arg: int) -> float:
-    ...     return 1 / arg
-    ...
-    >>> assert might_raise(1) == Success(1.0)
-    >>> assert isinstance(might_raise(0), Result.failure_type)
+      >>> from returns.result import Result, Success, safe
+
+      >>> @safe
+      ... def might_raise(arg: int) -> float:
+      ...     return 1 / arg
+      ...
+
+      >>> assert might_raise(1) == Success(1.0)
+      >>> assert isinstance(might_raise(0), Result.failure_type)
 
     """
-    if iscoroutinefunction(function):
-        async def decorator(*args, **kwargs):  # noqa: WPS430
-            try:
-                return Success(await function(*args, **kwargs))
-            except Exception as exc:
-                return Failure(exc)
-    else:
-        def decorator(*args, **kwargs):  # noqa: WPS430
-            try:
-                return Success(function(*args, **kwargs))
-            except Exception as exc:
-                return Failure(exc)
-    return wraps(function)(decorator)
+    @wraps(function)
+    def decorator(*args, **kwargs):
+        try:
+            return Success(function(*args, **kwargs))
+        except Exception as exc:
+            return Failure(exc)
+    return decorator

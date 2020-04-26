@@ -27,6 +27,8 @@ See [0Ver](https://0ver.org/).
 
 - **Breaking**: `Some(None)` does no evaluate to `Nothing` anymore,
   it might break some people's programms. But it was very wrong!
+- Fixes that `@safe` decorator was generating incorrect signatures
+  for functions with `Any`
 
 ### Misc
 

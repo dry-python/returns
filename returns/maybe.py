@@ -1,18 +1,15 @@
 from abc import ABCMeta
 from functools import wraps
-from inspect import iscoroutinefunction
 from typing import (  # noqa: WPS235
     Any,
     Callable,
     ClassVar,
-    Coroutine,
     Generic,
     NoReturn,
     Optional,
     Type,
     TypeVar,
     Union,
-    overload,
 )
 
 from typing_extensions import final
@@ -304,31 +301,13 @@ def Some(inner_value: Optional[_ValueType]) -> Maybe[_ValueType]:  # noqa: N802
 Nothing: Maybe[NoReturn] = _Nothing()
 
 
-@overload
-def maybe(  # type: ignore
-    function: Callable[
-        ...,
-        Coroutine[_FirstType, _SecondType, Optional[_ValueType]],
-    ],
-) -> Callable[
-    ...,
-    Coroutine[_FirstType, _SecondType, Maybe[_ValueType]],
-]:
-    """Case for async functions."""
-
-
-@overload
 def maybe(
     function: Callable[..., Optional[_ValueType]],
 ) -> Callable[..., Maybe[_ValueType]]:
-    """Case for regular functions."""
-
-
-def maybe(function):
     """
     Decorator to convert ``None``-returning function to ``Maybe`` container.
 
-    Supports both async and regular functions.
+    This decorator works with sync functions only. Example:
 
     .. code:: python
 
@@ -341,20 +320,12 @@ def maybe(function):
       ...         return None
       ...     return 1 / arg
       ...
+
       >>> assert might_be_none(0) == Nothing
       >>> assert might_be_none(1) == Some(1.0)
 
     """
-    if iscoroutinefunction(function):
-        async def decorator(*args, **kwargs):  # noqa: WPS430
-            regular_result = await function(*args, **kwargs)
-            if regular_result is None:
-                return Nothing
-            return Some(regular_result)
-    else:
-        def decorator(*args, **kwargs):  # noqa: WPS430
-            regular_result = function(*args, **kwargs)
-            if regular_result is None:
-                return Nothing
-            return Some(regular_result)
-    return wraps(function)(decorator)
+    @wraps(function)
+    def decorator(*args, **kwargs):
+        return Maybe.from_value(function(*args, **kwargs))
+    return decorator
