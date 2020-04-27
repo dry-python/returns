@@ -38,27 +38,43 @@ def partial(
     return _partial(func, *args, **kwargs)
 
 
-class EagerCurry(object):
-    def __init__(self, func: Callable):
-        self._func = func
+def _eager_curry_enough(func, args, kwargs) -> bool:
+    """Returns True if passed arguments are enough to call the function."""
+    try:
+        getcallargs(func, *args, **kwargs)
+    except TypeError as err:
+        # another option is to copy-paste and patch `getcallargs` func
+        # but in this case we get responsibility to maintain it over
+        # python releases.
+        if rex_missing.fullmatch(err.args[0]):
+            return False
+        raise
+    return True
 
-    def __call__(self, *args, **kwargs):
-        if not self._enough(*args, **kwargs):
-            return _partial(self, *args, **kwargs)
-        return self._func(*args, **kwargs)
 
-    def _enough(self, *args, **kwargs) -> bool:
-        """Returns True if passed arguments are enough to call the function."""
-        try:
-            getcallargs(self._func, *args, **kwargs)
-        except TypeError as err:
-            # another option is to copy-paste and patch `getcallargs` func
-            # but in this case we get responsibility to maintain it over
-            # python releases.
-            if rex_missing.fullmatch(err.args[0]):
-                return False
-            raise
-        return True
+def _eager_curry(
+    func: Func,
+    old_args: tuple,
+    old_kwargs: Dict[str, Any],
+    new_args: tuple,
+    new_kwargs: Dict[str, Any],
+) -> Union[Func, _partial]:
+    """Internal implementation for ``eager_curry``."""
+    old_args += new_args
+    old_kwargs = old_kwargs.copy()
+    old_kwargs.update(new_kwargs)
+
+    if _eager_curry_enough(func, old_args, old_kwargs):
+        return func(*old_args, **old_kwargs)
+
+    # We use closures to avoid names conflict between
+    # the function args and args of the curry implementation.
+    def wrapper(*args, **kwargs):
+        return _eager_curry(func, old_args, old_kwargs, args, kwargs)
+
+    # Wrap into partial just to get a nice return type
+    # when the function isn't ready to be called.
+    return _partial(wrapper)
 
 
 def eager_curry(func: Func) -> Callable[..., Union[Func, _partial]]:
@@ -101,7 +117,9 @@ def eager_curry(func: Func) -> Callable[..., Union[Func, _partial]]:
     See also:
         https://stackoverflow.com/questions/218025/
     """
-    wrapper = EagerCurry(func)
+    def wrapper(*args, **kwargs):
+        return _eager_curry(func, (), {}, args, kwargs)
+
     return update_wrapper(wrapper=wrapper, wrapped=func)
 
 
@@ -112,6 +130,7 @@ def _lazy_curry(
     new_args: tuple,
     new_kwargs: Dict[str, Any],
 ) -> Union[Func, _partial]:
+    """Internal implementation for ``lazy_curry``."""
     #  if no new arguments are passed, call the function
     if not new_args and not new_kwargs:
         return func(*old_args, **old_kwargs)
@@ -121,11 +140,13 @@ def _lazy_curry(
     old_kwargs = old_kwargs.copy()
     old_kwargs.update(new_kwargs)
 
+    # We use closures to avoid names conflict between
+    # the function args and args of the curry implementation.
     def wrapper(*args, **kwargs):
         return _lazy_curry(func, old_args, old_kwargs, args, kwargs)
 
-    # EagerCurry returns either partial or the function result.
-    # Let's not break expectations here and return partial as well.
+    # Wrap into partial just to get a nice return type
+    # when the function isn't ready to be called.
     return _partial(wrapper)
 
 

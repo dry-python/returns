@@ -134,3 +134,15 @@ def test_arg_star_kwargs():
 
     with pytest.raises(TypeError):
         func()
+
+
+def test_arg_names_conflict():
+    @lazy_curry
+    def func(first, self, args, kwargs):
+        return (first, self, args, kwargs)
+
+    assert type(func(1)) is partial
+    assert type(func(1)(self=2)) is partial
+    assert type(func(1)(self=2)(args=3)) is partial
+    assert type(func(1)(self=2)(args=3)(kwargs=4)) is partial
+    assert func(1)(self=2)(args=3)(kwargs=4)() == (1, 2, 3, 4)
