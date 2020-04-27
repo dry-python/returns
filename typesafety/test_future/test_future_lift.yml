@@ -1,0 +1,10 @@
+- case: future_lift
+  disable_cache: true
+  main: |
+    from returns.future import Future
+
+    def test(arg: float) -> int:
+        return 1
+
+    reveal_type(Future.lift(test))  # N: Revealed type is 'def (returns.future.Future[builtins.float*]) -> returns.future.Future[builtins.int*]'
+    reveal_type(Future.lift(test)(Future.from_value(1.0)))  # N: Revealed type is 'returns.future.Future[builtins.int*]'

@@ -5,7 +5,9 @@
     from returns.future import future
 
     @future
-    async def test(first: int, second: Optional[str] = None, *, kw: bool = True) -> int:
+    async def test(
+         first: int, second: Optional[str] = None, *, kw: bool = True,
+    ) -> int:
         return 1
 
-    reveal_type(test)  # N: Revealed type is 'def (first: builtins.int, second: Union[builtins.str, None] =, *, kw: builtins.bool =) -> typing.Coroutine[Any, Any, returns.future.Future[builtins.int*]]'
+    reveal_type(test)  # N: Revealed type is 'def (first: builtins.int, second: Union[builtins.str, None] =, *, kw: builtins.bool =) -> returns.future.Future[builtins.int*]'

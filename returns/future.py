@@ -320,7 +320,7 @@ def future(
         ...,
         Coroutine[_FirstType, _SecondType, _ValueType],
     ],
-) -> Callable[..., Coroutine[_FirstType, _SecondType, Future[_ValueType]]]:
+) -> Callable[..., Future[_ValueType]]:
     """
     Decorator to turn a coroutine definition into ``Future`` container.
 

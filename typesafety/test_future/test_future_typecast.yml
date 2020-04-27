@@ -1,0 +1,8 @@
+- case: future_correct_cast
+  disable_cache: true
+  main: |
+    from returns.future import Future
+
+    first: Future[ValueError]
+    second: Future[Exception] = first
+    reveal_type(second)  # N: Revealed type is 'returns.future.Future[builtins.Exception]'

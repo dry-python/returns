@@ -7,14 +7,4 @@
         return 1
 
     reveal_type(IO.lift(test))  # N: Revealed type is 'def (returns.io.IO[builtins.float*]) -> returns.io.IO[builtins.int*]'
-
-
-- case: io_lift_apply
-  disable_cache: true
-  main: |
-    from returns.io import IO
-
-    def test(arg: float) -> int:
-        return 1
-
     reveal_type(IO.lift(test)(IO(1.0)))  # N: Revealed type is 'returns.io.IO[builtins.int*]'
