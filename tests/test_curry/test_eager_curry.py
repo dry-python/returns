@@ -17,8 +17,7 @@ def test_docstring():
 
 
 def test_immutable():
-    """Check that arguments from previous calls are immutable
-    """
+    """Check that arguments from previous calls are immutable."""
     @eager_curry
     def func(a, b):
         return (a, b)
@@ -159,6 +158,7 @@ def test_kwonly():
 
 
 def test_arg_names_conflict():
+    """The decorator should use closures to avoid name conflicts."""
     @eager_curry
     def func(first, self, args, kwargs):
         return (first, self, args, kwargs)
@@ -168,3 +168,20 @@ def test_arg_names_conflict():
     assert type(func(1)(self=2)) is partial
     assert type(func(1)(self=2)(args=3)) is partial
     assert func(1)(self=2)(args=3)(kwargs=4) == (1, 2, 3, 4)
+
+
+def test_raises():
+    """TypeError raised from the function must not be intercepted."""
+    @eager_curry
+    def func(a, b):
+        msg = "f() missing 2 required positional arguments: 'a' and 'b'"
+        raise TypeError(msg)
+
+    assert type(func()) is partial
+    assert type(func(1)) is partial
+    with pytest.raises(TypeError):
+        func(1)(2)
+    with pytest.raises(TypeError):
+        func(1, 2)
+    with pytest.raises(TypeError):
+        func(1, 2, 3)
