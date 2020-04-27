@@ -30,7 +30,7 @@ _SecondType = TypeVar('_SecondType')
 
 async def async_identity(instance: _FirstType) -> _FirstType:
     """
-    Async funtion that returns its argument.
+    Async function that returns its argument.
 
     .. code:: python
 
