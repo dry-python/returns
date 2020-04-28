@@ -61,7 +61,7 @@ nitpick = "^0.22"
 
 anyio = "^1.3.0"
 curio = "^1.2"
-trio = "^0.13.0"
+trio = "^0.14.0"
 
 safety = "^1.8"
 
