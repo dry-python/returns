@@ -1,3 +1,4 @@
+from functools import wraps
 from typing import Any, Callable, NoReturn, TypeVar
 
 # Aliases:
@@ -144,3 +145,11 @@ def raise_exception(exception: Exception) -> NoReturn:
 
     """
     raise exception
+
+
+def not_(function: Callable[..., bool]) -> Callable[..., bool]:
+    """Denies the function returns."""
+    @wraps(function)
+    def wrapped_function(*args, **kwargs) -> bool:  # noqa: WPS430
+        return not function(*args, **kwargs)
+    return wrapped_function
