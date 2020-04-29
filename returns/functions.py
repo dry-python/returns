@@ -159,8 +159,8 @@ def not_(function: Callable[..., bool]) -> Callable[..., bool]:
       ...     return isinstance(result_container, Result.success_type)
       ...
 
-      >>> assert not_(is_successful)(Success(1)) is False
-      >>> assert not_(is_successful)(Failure(1.0)) is True
+      >>> assert not_(is_successful)(Success(1.0)) is False
+      >>> assert not_(is_successful)(Failure(1)) is True
 
     """
     @wraps(function)  # noqa: WPS430
