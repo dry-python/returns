@@ -148,7 +148,21 @@ def raise_exception(exception: Exception) -> NoReturn:
 
 
 def not_(function: Callable[..., bool]) -> Callable[..., bool]:
-    """Denies the function returns."""
+    """
+    Denies the function returns.
+
+    .. code:: python
+
+      >>> from returns.result import Result, Success, Failure
+
+      >>> def is_successful(result_container: Result[float, int]) -> bool:
+      ...     return isinstance(result_container, Result.success_type)
+      ...
+
+      >>> assert not_(is_successful)(Success(1)) is False
+      >>> assert not_(is_successful)(Failure(1.0)) is True
+
+    """
     @wraps(function)
     def wrapped_function(*args, **kwargs) -> bool:  # noqa: WPS430
         return not function(*args, **kwargs)
