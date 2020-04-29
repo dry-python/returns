@@ -103,6 +103,8 @@ class RequiresContextIOResult(
 
     """
 
+    #: Inner value of `RequiresContext`
+    #: is just a function that returns `IOResult`.
     #: This field has an extra 'RequiresContext' just because `mypy` needs it.
     _inner_value: Callable[
         ['RequiresContextIOResult', _EnvType],

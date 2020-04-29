@@ -11,8 +11,10 @@ from typing import (
 
 from typing_extensions import final
 
-from returns.io import IO
+from returns._generated.futures import _future, _future_result
+from returns.io import IO, IOResult
 from returns.primitives.container import BaseContainer
+from returns.result import Failure, Result, Success
 
 # Definitions:
 _ValueType = TypeVar('_ValueType', covariant=True)
@@ -67,6 +69,12 @@ class Future(BaseContainer, Generic[_ValueType]):
 
     Is not related to ``asyncio.Future`` in any kind.
 
+    Tradeoffs
+    ---------
+
+    Due to possible performance issues we move all coroutines definitions
+    to a separate module.
+
     See also:
         https://gcanti.github.io/fp-ts/modules/Task.ts.html
         https://zio.dev/docs/overview/overview_basic_concurrency
@@ -103,8 +111,6 @@ class Future(BaseContainer, Generic[_ValueType]):
 
         .. code:: python
 
-          .. code:: python
-
           >>> import anyio
           >>> from returns.future import Future
           >>> from returns.io import IO
@@ -127,7 +133,7 @@ class Future(BaseContainer, Generic[_ValueType]):
 
     async def awaitable(self) -> IO[_ValueType]:
         """
-        Transforms ``Future[a]`` to ``Awaitable[a]``.
+        Transforms ``Future[a]`` to ``Awaitable[IO[a]]``.
 
         Use this method when you need a real coroutine.
         Like for ``asyncio.run`` calls.
@@ -153,7 +159,7 @@ class Future(BaseContainer, Generic[_ValueType]):
         Applies function to the inner value.
 
         Applies 'function' to the contents of the IO instance
-        and returns a new IO object containing the result.
+        and returns a new ``Future`` object containing the result.
         'function' should accept a single "normal" (non-container) argument
         and return a non-container result.
 
@@ -171,7 +177,7 @@ class Future(BaseContainer, Generic[_ValueType]):
           ... ) == IO(2)
 
         """
-        return Future(_async_map(function, self._inner_value))
+        return Future(_future.async_map(function, self._inner_value))
 
     def bind(
         self,
@@ -197,14 +203,14 @@ class Future(BaseContainer, Generic[_ValueType]):
           ... ) == IO(2)
 
         """
-        return Future(_async_bind(function, self._inner_value))
+        return Future(_future.async_bind(function, self._inner_value))
 
     def bind_async(
         self,
         function: Callable[[_ValueType], Awaitable['Future[_NewValueType]']],
     ) -> 'Future[_NewValueType]':
         """
-        Allows to compose a container and ``async`` function.
+        Compose a container and ``async`` function returning a container.
 
         This function should return a container value.
         See :meth:`~Future.bind_awaitable`
@@ -224,14 +230,14 @@ class Future(BaseContainer, Generic[_ValueType]):
           ... ) == IO('2')
 
         """
-        return Future(_async_bind_async(function, self._inner_value))
+        return Future(_future.async_bind_async(function, self._inner_value))
 
     def bind_awaitable(
         self,
         function: Callable[[_ValueType], 'Awaitable[_NewValueType]'],
     ) -> 'Future[_NewValueType]':
         """
-        Allows to compose a container and ``async`` function.
+        Allows to compose a container and a regular ``async`` function.
 
         This function should return plain, non-container value.
         See :meth:`~Future.bind_async`
@@ -251,7 +257,9 @@ class Future(BaseContainer, Generic[_ValueType]):
           ... ) == IO(2)
 
         """
-        return Future(_async_bind_awaitable(function, self._inner_value))
+        return Future(_future.async_bind_awaitable(
+            function, self._inner_value,
+        ))
 
     @classmethod
     def lift(
@@ -312,6 +320,29 @@ class Future(BaseContainer, Generic[_ValueType]):
         """
         return Future(async_identity(inner_value))
 
+    @classmethod
+    def from_futureresult(
+        cls,
+        container: 'FutureResult[_ValueType, _ErrorType]',
+    ) -> 'Future[Result[_ValueType, _ErrorType]]':
+        """
+        Creates ``Future[Result[a, b]]`` instance from ``FutureResult[a, b]``.
+
+        This method is the inverse of :meth:`~FutureResult.from_typecast`.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.future import Future, FutureResult
+          >>> from returns.io import IO
+          >>> from returns.result import Success
+
+          >>> container = Future.from_futureresult(FutureResult.from_success(1))
+          >>> assert anyio.run(container.awaitable) == IO(Success(1))
+
+        """
+        return Future(container._inner_value)
+
 
 # Decorators:
 
@@ -343,32 +374,534 @@ def future(
     return decorator
 
 
-# Private composition helpers:
+# FutureResult
+# ============
 
-async def _async_map(
-    function: Callable[[_ValueType], _NewValueType],
-    inner_value: Awaitable[_ValueType],
-) -> _NewValueType:
-    return function(await inner_value)
+@final
+class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
+    """
+    Container to easily compose ``async`` functions.
+
+    Represents a better abstraction over a simple coroutine.
+
+    Is framework, event-loop, and IO-library agnostics.
+    Works with ``asyncio``, ``curio``, ``trio``, or any other tool.
+    Internally we use ``anyio`` to test
+    that it works as expected for any io stack.
+
+    Note that ``FutureResult[a, b]`` represents a computation
+    that can fail and returns ``IOResult[a, b]`` type.
+    Use ``Future[a]`` for operations that cannot fail.
+
+    This is a ``Future`` that returns ``Result`` type.
+    By providing this utility type we make developers' lifes easier.
+    ``FutureResult`` has a lot of composition helpers
+    to turn complex nested operations into a one function calls.
+
+    Tradeoffs
+    ---------
+
+    Due to possible performance issues we move all coroutines definitions
+    to a separate module.
+
+    See also:
+        https://gcanti.github.io/fp-ts/modules/TaskEither.ts.html
+        https://zio.dev/docs/overview/overview_basic_concurrency
 
 
-async def _async_bind_awaitable(
-    function: Callable[[_ValueType], Awaitable[_NewValueType]],
-    inner_value: Awaitable[_ValueType],
-) -> _NewValueType:
-    return await function(await inner_value)
+    """
 
+    _inner_value: Awaitable[Result[_ValueType, _ErrorType]]
 
-async def _async_bind(
-    function: Callable[[_ValueType], 'Future[_NewValueType]'],
-    inner_value: Awaitable[_ValueType],
-) -> _NewValueType:
-    return (await function(await inner_value))._inner_value  # noqa: WPS437
+    def __init__(
+        self,
+        inner_value: Awaitable[Result[_ValueType, _ErrorType]],
+    ) -> None:
+        """
+        Public constructor for this type. Also required for typing.
 
+        .. code:: python
 
-async def _async_bind_async(
-    function: Callable[[_ValueType], Awaitable['Future[_NewValueType]']],
-    inner_value: Awaitable[_ValueType],
-) -> _NewValueType:
-    inner_io = (await function(await inner_value))._inner_value  # noqa: WPS437
-    return await inner_io
+          >>> import anyio
+          >>> from returns.future import FutureResult
+          >>> from returns.io import IOSuccess
+          >>> from returns.result import Success, Result
+
+          >>> async def coro(arg: int) -> Result[int, str]:
+          ...     return Success(arg + 1)
+          ...
+          >>> container = FutureResult(coro(1))
+          >>> assert anyio.run(container.awaitable) == IOSuccess(2)
+
+        """
+        super().__init__(inner_value)
+
+    def __await__(self) -> Generator[
+        Any, Any, IOResult[_ValueType, _ErrorType],
+    ]:
+        """
+        By defining this magic method we make ``FutureResult`` awaitable.
+
+        This means you can use ``await`` keyword to evaluate this container:
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.future import FutureResult
+          >>> from returns.io import IOSuccess, IOResult
+
+          >>> async def main() -> IOResult[int, str]:
+          ...     return await FutureResult.from_success(1)
+          ...
+          >>> assert anyio.run(main) == IOSuccess(1)
+
+        When awaited we returned the value wrapped
+        in :class:`returns.io.IOResult` container
+        to indicate that the computation was impure and can fail.
+
+        See also:
+            https://docs.python.org/3/library/asyncio-task.html#awaitables
+            https://www.python.org/dev/peps/pep-0492/#new-abstract-base-classes
+
+        """
+        return self.awaitable().__await__()  # noqa: WPS609
+
+    async def awaitable(self) -> IOResult[_ValueType, _ErrorType]:
+        """
+        Transforms ``FutureResult[a, b]`` to ``Awaitable[IOResult[a, b]]``.
+
+        Use this method when you need a real coroutine.
+        Like for ``asyncio.run`` calls.
+
+        Note, that returned value will be wrapped
+        in :class:`returns.io.IOResult` container.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.future import FutureResult
+          >>> from returns.io import IOSuccess
+          >>> assert anyio.run(
+          ...     FutureResult.from_success(1).awaitable,
+          ... ) == IOSuccess(1)
+
+        """
+        return IOResult.from_result(await self._inner_value)
+
+    def map(  # noqa: WPS125
+        self,
+        function: Callable[[_ValueType], _NewValueType],
+    ) -> 'FutureResult[_NewValueType, _ErrorType]':
+        """
+        Applies function to the inner value.
+
+        Applies 'function' to the contents of the IO instance
+        and returns a new ``FutureResult`` object containing the result.
+        'function' should accept a single "normal" (non-container) argument
+        and return a non-container result.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.future import FutureResult
+          >>> from returns.io import IOSuccess, IOFailure
+
+          >>> def mappable(x: int) -> int:
+          ...    return x + 1
+          ...
+          >>> assert anyio.run(
+          ...     FutureResult.from_success(1).map(mappable).awaitable,
+          ... ) == IOSuccess(2)
+          >>> assert anyio.run(
+          ...     FutureResult.from_failure(1).map(mappable).awaitable,
+          ... ) == IOFailure(1)
+
+        """
+        return FutureResult(_future_result.async_map(
+            function, self._inner_value,
+        ))
+
+    def bind(
+        self,
+        function: Callable[
+            [_ValueType],
+            'FutureResult[_NewValueType, _ErrorType]',
+        ],
+    ) -> 'FutureResult[_NewValueType, _ErrorType]':
+        """
+        Applies 'function' to the result of a previous calculation.
+
+        'function' should accept a single "normal" (non-container) argument
+        and return ``Future`` type object.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.future import FutureResult
+          >>> from returns.io import IOSuccess, IOFailure
+
+          >>> def bindable(x: int) -> FutureResult[int, str]:
+          ...    return FutureResult.from_success(x + 1)
+          ...
+          >>> assert anyio.run(
+          ...     FutureResult.from_success(1).bind(bindable).awaitable,
+          ... ) == IOSuccess(2)
+          >>> assert anyio.run(
+          ...     FutureResult.from_failure(1).bind(bindable).awaitable,
+          ... ) == IOFailure(1)
+
+        """
+        return FutureResult(_future_result.async_bind(
+            function, self._inner_value,
+        ))
+
+    def bind_async(
+        self,
+        function: Callable[
+            [_ValueType],
+            Awaitable['FutureResult[_NewValueType, _ErrorType]'],
+        ],
+    ) -> 'FutureResult[_NewValueType, _ErrorType]':
+        """
+        Composes a container and ``async`` function returning container.
+
+        This function should return a container value.
+        See :meth:`~FutureResult.bind_awaitable`
+        to bind ``async`` function that returns a plain value.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.future import FutureResult
+          >>> from returns.io import IOSuccess, IOFailure
+
+          >>> async def coroutine(x: int) -> FutureResult[str, int]:
+          ...    return FutureResult.from_success(str(x + 1))
+          ...
+          >>> assert anyio.run(
+          ...     FutureResult.from_success(1).bind_async(coroutine).awaitable,
+          ... ) == IOSuccess('2')
+          >>> assert anyio.run(
+          ...     FutureResult.from_failure(1).bind_async(coroutine).awaitable,
+          ... ) == IOFailure(1)
+
+        """
+        return FutureResult(_future_result.async_bind_async(
+            function, self._inner_value,
+        ))
+
+    def bind_awaitable(
+        self,
+        function: Callable[[_ValueType], Awaitable[_NewValueType]],
+    ) -> 'FutureResult[_NewValueType, _ErrorType]':
+        """
+        Allows to compose a container and a regular ``async`` function.
+
+        This function should return plain, non-container value.
+        See :meth:`~FutureResult.bind_async`
+        to bind ``async`` function that returns a container.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.future import FutureResult
+          >>> from returns.io import IOSuccess, IOFailure
+
+          >>> async def coro(x: int) -> int:
+          ...    return x + 1
+          ...
+          >>> assert anyio.run(
+          ...     FutureResult.from_success(1).bind_awaitable(coro).awaitable,
+          ... ) == IOSuccess(2)
+          >>> assert anyio.run(
+          ...     FutureResult.from_failure(1).bind_awaitable(coro).awaitable,
+          ... ) == IOFailure(1)
+
+        """
+        return FutureResult(_future_result.async_bind_awaitable(
+            function, self._inner_value,
+        ))
+
+    def bind_result(
+        self,
+        function: Callable[[_ValueType], Result[_NewValueType, _ErrorType]],
+    ) -> 'FutureResult[_NewValueType, _ErrorType]':
+        """
+        Binds a function returning ``Result[a, b]`` container.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.io import IOSuccess, IOFailure
+          >>> from returns.result import Result, Success
+          >>> from returns.future import FutureResult
+
+          >>> def bind(inner_value: int) -> Result[int, str]:
+          ...     return Success(inner_value + 1)
+
+          >>> assert anyio.run(
+          ...     FutureResult.from_success(1).bind_result(bind).awaitable,
+          ... ) == IOSuccess(2)
+          >>> assert anyio.run(
+          ...     FutureResult.from_failure('a').bind_result(bind).awaitable,
+          ... ) == IOFailure('a')
+
+        """
+        return FutureResult(_future_result.async_bind_result(
+            function, self._inner_value,
+        ))
+
+    def bind_ioresult(
+        self,
+        function: Callable[[_ValueType], IOResult[_NewValueType, _ErrorType]],
+    ) -> 'FutureResult[_NewValueType, _ErrorType]':
+        """
+        Binds a function returning ``IOResult[a, b]`` container.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.io import IOResult, IOSuccess, IOFailure
+          >>> from returns.future import FutureResult
+
+          >>> def bind(inner_value: int) -> IOResult[int, str]:
+          ...     return IOSuccess(inner_value + 1)
+
+          >>> assert anyio.run(
+          ...     FutureResult.from_success(1).bind_ioresult(bind).awaitable,
+          ... ) == IOSuccess(2)
+          >>> assert anyio.run(
+          ...     FutureResult.from_failure('a').bind_ioresult(bind).awaitable,
+          ... ) == IOFailure('a')
+
+        """
+        return FutureResult(_future_result.async_bind_ioresult(
+            function, self._inner_value,
+        ))
+
+    @classmethod
+    def from_typecast(
+        cls,
+        container: Future[Result[_NewValueType, _NewErrorType]],
+    ) -> 'FutureResult[_NewValueType, _NewErrorType]':
+        """
+        Creates ``FutureResult[a, b]`` from ``Future[Result[a, b]]``.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.io import IOSuccess, IOFailure
+          >>> from returns.result import Success, Failure
+          >>> from returns.future import Future, FutureResult
+
+          >>> async def main():
+          ...     assert await FutureResult.from_typecast(
+          ...         Future.from_value(Success(1)),
+          ...     ) == IOSuccess(1)
+          ...     assert await FutureResult.from_typecast(
+          ...         Future.from_value(Failure(1)),
+          ...     ) == IOFailure(1)
+
+          >>> anyio.run(main)
+
+        """
+        return FutureResult(container._inner_value)
+
+    @classmethod
+    def from_successful_future(
+        cls,
+        container: Future[_NewValueType],
+    ) -> 'FutureResult[_NewValueType, Any]':
+        """
+        Creates ``FutureResult`` from successful ``Future`` value.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.io import IOSuccess
+          >>> from returns.future import Future, FutureResult
+
+          >>> async def main():
+          ...     assert await FutureResult.from_successful_future(
+          ...         Future.from_value(1),
+          ...     ) == IOSuccess(1)
+
+          >>> anyio.run(main)
+
+        """
+        return FutureResult(_future_result.async_success(container))
+
+    @classmethod
+    def from_failed_future(
+        cls,
+        container: Future[_NewErrorType],
+    ) -> 'FutureResult[Any, _NewErrorType]':
+        """
+        Creates ``FutureResult`` from failed ``Future`` value.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.io import IOFailure
+          >>> from returns.future import Future, FutureResult
+
+          >>> async def main():
+          ...     assert await FutureResult.from_failed_future(
+          ...         Future.from_value(1),
+          ...     ) == IOFailure(1)
+
+          >>> anyio.run(main)
+
+        """
+        return FutureResult(_future_result.async_failure(container))
+
+    @classmethod
+    def from_successful_io(
+        cls,
+        container: IO[_NewValueType],
+    ) -> 'FutureResult[_NewValueType, Any]':
+        """
+        Creates ``FutureResult`` from successful ``IO`` value.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.io import IO, IOSuccess
+          >>> from returns.future import FutureResult
+
+          >>> async def main():
+          ...     assert await FutureResult.from_successful_io(
+          ...         IO(1),
+          ...     ) == IOSuccess(1)
+
+          >>> anyio.run(main)
+
+        """
+        return FutureResult.from_success(container._inner_value)
+
+    @classmethod
+    def from_failed_io(
+        cls,
+        container: IO[_NewErrorType],
+    ) -> 'FutureResult[Any, _NewErrorType]':
+        """
+        Creates ``FutureResult`` from failed ``IO`` value.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.io import IO, IOFailure
+          >>> from returns.future import FutureResult
+
+          >>> async def main():
+          ...     assert await FutureResult.from_failed_io(
+          ...         IO(1),
+          ...     ) == IOFailure(1)
+
+          >>> anyio.run(main)
+
+        """
+        return FutureResult.from_failure(container._inner_value)
+
+    @classmethod
+    def from_ioresult(
+        cls,
+        container: IOResult[_NewValueType, _NewErrorType],
+    ) -> 'FutureResult[_NewValueType, _NewErrorType]':
+        """
+        Creates ``FutureResult`` from ``IOResult`` value.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.io import IOSuccess, IOFailure
+          >>> from returns.future import FutureResult
+
+          >>> async def main():
+          ...     assert await FutureResult.from_ioresult(
+          ...         IOSuccess(1),
+          ...     ) == IOSuccess(1)
+          ...     assert await FutureResult.from_ioresult(
+          ...         IOFailure(1),
+          ...     ) == IOFailure(1)
+
+          >>> anyio.run(main)
+
+        """
+        return FutureResult(async_identity(container._inner_value))
+
+    @classmethod
+    def from_result(
+        cls,
+        container: Result[_NewValueType, _NewErrorType],
+    ) -> 'FutureResult[_NewValueType, _NewErrorType]':
+        """
+        Creates ``FutureResult`` from ``Result`` value.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.io import IOSuccess, IOFailure
+          >>> from returns.result import Success, Failure
+          >>> from returns.future import FutureResult
+
+          >>> async def main():
+          ...     assert await FutureResult.from_result(
+          ...         Success(1),
+          ...     ) == IOSuccess(1)
+          ...     assert await FutureResult.from_result(
+          ...         Failure(1),
+          ...     ) == IOFailure(1)
+
+          >>> anyio.run(main)
+
+        """
+        return FutureResult(async_identity(container))
+
+    @classmethod
+    def from_success(
+        cls,
+        inner_value: _NewValueType,
+    ) -> 'FutureResult[_NewValueType, Any]':
+        """
+        Creates ``FutureResult`` from successful value.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.io import IOSuccess
+          >>> from returns.future import FutureResult
+
+          >>> async def main():
+          ...     assert await FutureResult.from_success(
+          ...         1,
+          ...     ) == IOSuccess(1)
+
+          >>> anyio.run(main)
+
+        """
+        return FutureResult(async_identity(Success(inner_value)))
+
+    @classmethod
+    def from_failure(
+        cls,
+        inner_value: _NewErrorType,
+    ) -> 'FutureResult[Any, _NewErrorType]':
+        """
+        Creates ``FutureResult`` from failed value.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.io import IOFailure
+          >>> from returns.future import FutureResult
+
+          >>> async def main():
+          ...     assert await FutureResult.from_failure(
+          ...         1,
+          ...     ) == IOFailure(1)
+
+          >>> anyio.run(main)
+
+        """
+        return FutureResult(async_identity(Failure(inner_value)))

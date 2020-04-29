@@ -1,6 +1,15 @@
 from abc import ABCMeta
 from functools import wraps
-from typing import Any, Callable, ClassVar, Generic, Type, TypeVar, Union
+from typing import (
+    Any,
+    Callable,
+    ClassVar,
+    Generic,
+    NoReturn,
+    Type,
+    TypeVar,
+    Union,
+)
 
 from typing_extensions import final
 
@@ -356,17 +365,17 @@ class _Failure(Result[Any, _ErrorType]):
         """Composes failed container with a pure function to modify failure."""
         return _Failure(function(self._inner_value))
 
-    def value_or(self, default_value):
+    def value_or(self, default_value: _NewValueType) -> _NewValueType:
         """Returns default value for failed container."""
         return default_value
 
-    def unwrap(self):
+    def unwrap(self) -> NoReturn:
         """Raises an exception, since it does not have a value inside."""
         if isinstance(self._inner_value, Exception):
             raise UnwrapFailedError(self) from self._inner_value
         raise UnwrapFailedError(self)
 
-    def failure(self):
+    def failure(self) -> _ErrorType:
         """Returns failed value."""
         return self._inner_value
 
@@ -417,15 +426,15 @@ class _Success(Result[_ValueType, Any]):
         """Does nothing for ``Success``."""
         return self
 
-    def value_or(self, default_value):
+    def value_or(self, default_value: _NewValueType) -> _ValueType:
         """Returns the value for successful container."""
         return self._inner_value
 
-    def unwrap(self):
+    def unwrap(self) -> _ValueType:
         """Returns the unwrapped value from successful container."""
         return self._inner_value
 
-    def failure(self):
+    def failure(self) -> NoReturn:
         """Raises an exception for successful container."""
         raise UnwrapFailedError(self)
 
