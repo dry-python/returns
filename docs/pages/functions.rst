@@ -115,7 +115,7 @@ It supports functions with one or more arguments.
 
   >>> from typing import List
 
-  >>> from returns.functions import not_
+  >>> from returns.functions import compose, not_
 
   >>> def is_even(number: int) -> bool:
   ...     return number % 2 == 0
