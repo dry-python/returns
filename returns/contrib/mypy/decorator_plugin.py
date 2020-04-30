@@ -37,6 +37,7 @@ _TYPED_DECORATORS = frozenset((
     'returns.io.impure_safe',
     'returns.maybe.maybe',
     'returns.future.future',
+    'returns.functions.not_',
 ))
 
 #: Used for typed curring.
