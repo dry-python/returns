@@ -105,6 +105,34 @@ Use this with caution. We try to remove exceptions from our code base.
 Original proposal is `here <https://github.com/dry-python/returns/issues/56>`_.
 
 
+not\_
+-----
+
+With ``not_`` helper function we can easily deny a function returns.
+It supports functions with one or more arguments.
+
+.. code:: python
+
+  >>> from typing import List
+
+  >>> from returns.functions import compose, not_
+
+  >>> def is_even(number: int) -> bool:
+  ...     return number % 2 == 0
+  ...
+
+  >>> def number_is_in_list(number: int, list_: List[int]) -> bool:
+  ...     return number in list_
+  ...
+
+  >>> not_(is_even)(2)
+  False
+  >>> not_(number_is_in_list)(1, [2, 3, 4])
+  True
+  >>> compose(int, not_(is_even))("1")
+  True
+
+
 API Reference
 -------------
 

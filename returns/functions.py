@@ -1,3 +1,4 @@
+from functools import wraps
 from typing import Any, Callable, NoReturn, TypeVar
 
 # Aliases:
@@ -132,7 +133,7 @@ def raise_exception(exception: Exception) -> NoReturn:
       >>> user: Result[int, ValueError] = Failure(ValueError('boom'))
       >>> # Here we unwrap internal exception and raise it:
 
-    ..code::
+    .. code::
 
       >>> user.fix(raise_exception)
       Traceback (most recent call last):
@@ -144,3 +145,25 @@ def raise_exception(exception: Exception) -> NoReturn:
 
     """
     raise exception
+
+
+def not_(function: Callable[..., bool]) -> Callable[..., bool]:
+    """
+    Denies the function returns.
+
+    .. code:: python
+
+      >>> from returns.result import Result, Success, Failure
+
+      >>> def is_successful(result_container: Result[float, int]) -> bool:
+      ...     return isinstance(result_container, Result.success_type)
+      ...
+
+      >>> assert not_(is_successful)(Success(1.0)) is False
+      >>> assert not_(is_successful)(Failure(1)) is True
+
+    """
+    @wraps(function)  # noqa: WPS430
+    def wrapped_function(*args, **kwargs) -> bool:  # noqa: WPS430
+        return not function(*args, **kwargs)
+    return wrapped_function

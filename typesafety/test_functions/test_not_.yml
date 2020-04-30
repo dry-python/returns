@@ -1,0 +1,20 @@
+- case: function_with_one_argument
+  disable_cache: true
+  main: |
+    from returns.functions import not_
+
+    def is_even(number: int) -> bool:
+        return number % 2 == 0
+
+    reveal_type(not_(is_even))  # N: Revealed type is 'def (number: builtins.int) -> builtins.bool'
+
+
+- case: function_with_two_arguments
+  main: |
+    from returns.functions import not_
+    from typing import List
+
+    def number_is_in_list(number: int, list_: List[int]) -> bool:
+        return number in list_
+
+    reveal_type(not_(number_is_in_list))  # N: Revealed type is 'def (number: builtins.int, list_: builtins.list[builtins.int]) -> builtins.bool'
