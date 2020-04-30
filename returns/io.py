@@ -811,7 +811,10 @@ def impure_safe(
     function: Callable[..., _NewValueType],
 ) -> Callable[..., IOResultE[_NewValueType]]:
     """
-    Decorator to mark function that it returns :class:`~IO` container.
+    Decorator to mark function that it returns :class:`~IOResult` container.
+
+    Should be used with care, since it only catches ``Exception`` subclasses.
+    It does not catch ``BaseException`` subclasses.
 
     If you need to mark ``async`` function as impure,
     use :func:`returns.future.future_safe` instead.
@@ -828,6 +831,9 @@ def impure_safe(
 
       >>> assert function(1) == IOSuccess(1.0)
       >>> assert function(0).failure()
+
+    Similar to :func:`returns.future.future_safe`
+    and :func:`returns.result.safe` decorators.
 
     """
     @wraps(function)

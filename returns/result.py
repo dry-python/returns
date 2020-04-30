@@ -63,9 +63,11 @@ class Result(
         .. code:: python
 
           >>> from returns.result import Failure, Success
+
           >>> def mappable(string: str) -> str:
           ...      return string + 'b'
           ...
+
           >>> assert Success('a').map(mappable) == Success('ab')
           >>> assert Failure('a').map(mappable) == Failure('a')
 
@@ -82,11 +84,13 @@ class Result(
         .. code:: python
 
           >>> from returns.result import Result, Success, Failure
+
           >>> def bindable(arg: str) -> Result[str, str]:
           ...      if len(arg) > 1:
           ...          return Success(arg + 'b')
           ...      return Failure(arg + 'c')
           ...
+
           >>> assert Success('aa').bind(bindable) == Success('aab')
           >>> assert Success('a').bind(bindable) == Failure('ac')
           >>> assert Failure('a').bind(bindable) == Failure('a')
@@ -113,11 +117,13 @@ class Result(
         .. code:: python
 
           >>> from returns.result import Result, Success, Failure
+
           >>> def bindable(arg: str) -> Result[str, str]:
           ...      if len(arg) > 1:
           ...          return Success(arg + 'b')
           ...      return Failure(arg + 'c')
           ...
+
           >>> assert Success('aa').unify(bindable) == Success('aab')
           >>> assert Success('a').unify(bindable) == Failure('ac')
           >>> assert Failure('a').unify(bindable) == Failure('a')
@@ -135,9 +141,11 @@ class Result(
         .. code:: python
 
           >>> from returns.result import Failure, Success
+
           >>> def fixable(arg: str) -> str:
           ...      return 'ab'
           ...
+
           >>> assert Success('a').fix(fixable) == Success('a')
           >>> assert Failure('a').fix(fixable) == Success('ab')
 
@@ -154,9 +162,11 @@ class Result(
         .. code:: python
 
           >>> from returns.result import Result, Failure, Success
+
           >>> def altable(arg: str) -> Result[str, str]:
           ...      return arg + 'b'
           ...
+
           >>> assert Success('a').alt(altable) == Success('a')
           >>> assert Failure('a').alt(altable) == Failure('ab')
 
@@ -175,11 +185,13 @@ class Result(
         .. code:: python
 
           >>> from returns.result import Result, Success, Failure
+
           >>> def rescuable(arg: str) -> Result[str, str]:
           ...      if len(arg) > 1:
           ...          return Success(arg + 'b')
           ...      return Failure(arg + 'c')
           ...
+
           >>> assert Success('a').rescue(rescuable) == Success('a')
           >>> assert Failure('a').rescue(rescuable) == Failure('ac')
           >>> assert Failure('aa').rescue(rescuable) == Success('aab')
@@ -262,9 +274,11 @@ class Result(
         .. code:: python
 
           >>> from returns.result import Success, Result, Failure
+
           >>> def example(argument: int) -> float:
           ...     return argument / 2
           ...
+
           >>> assert Result.lift(example)(Success(2)) == Success(1.0)
           >>> assert Result.lift(example)(Failure(2)) == Failure(2)
 
@@ -489,10 +503,14 @@ def safe(
     function: Callable[..., _ValueType],
 ) -> Callable[..., ResultE[_ValueType]]:
     """
-    Decorator to convert exception-throwing function to 'Result' container.
+    Decorator to convert exception-throwing function to ``Result`` container.
 
-    Should be used with care, since it only catches 'Exception' subclasses.
-    It does not catch 'BaseException' subclasses.
+    Should be used with care, since it only catches ``Exception`` subclasses.
+    It does not catch ``BaseException`` subclasses.
+
+    If you need to mark ``async`` function as ``safe``,
+    use :func:`returns.future.future_safe` instead.
+    This decorator only works with sync functions. Example:
 
     .. code:: python
 
@@ -505,6 +523,9 @@ def safe(
 
       >>> assert might_raise(1) == Success(1.0)
       >>> assert isinstance(might_raise(0), Result.failure_type)
+
+    Similar to :func:`returns.io.impure_safe`
+    and :func:`returns.future.future_safe` decorators.
 
     """
     @wraps(function)

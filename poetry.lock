@@ -128,7 +128,7 @@ version = "7.1.1"
 [[package]]
 category = "dev"
 description = "Cross-platform colored terminal text."
-marker = "sys_platform == \"win32\" or platform_system == \"Windows\""
+marker = "platform_system == \"Windows\" or sys_platform == \"win32\""
 name = "colorama"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
@@ -872,6 +872,17 @@ version = "*"
 
 [[package]]
 category = "dev"
+description = "unittest subTest() support and subtests fixture"
+name = "pytest-subtests"
+optional = false
+python-versions = ">=3.5"
+version = "0.3.0"
+
+[package.dependencies]
+pytest = ">=4.4.0"
+
+[[package]]
+category = "dev"
 description = "A Python Slugify application that handles Unicode"
 name = "python-slugify"
 optional = false
@@ -1305,7 +1316,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "1daf876353224741945077efc7cc8253ef5ab620f4d91f141d5138977bcb04fd"
+content-hash = "8cc8089d37c52d0298bf998920708390bc7321007089a19f2e99b9600c1b5038"
 python-versions = "^3.6"
 
 [metadata.files]
@@ -1711,6 +1722,10 @@ pytest-mypy-plugins = [
 pytest-randomly = [
     {file = "pytest-randomly-3.3.1.tar.gz", hash = "sha256:568b6a3bd251b566e8d99fc7bcb15c3c39561babd07e16412563b7dab1b0290a"},
     {file = "pytest_randomly-3.3.1-py3-none-any.whl", hash = "sha256:9b06429c877b3aab360c7cf698f2a65dbe75db1b1ed0ab02dc3bb47f3487e469"},
+]
+pytest-subtests = [
+    {file = "pytest-subtests-0.3.0.tar.gz", hash = "sha256:a5e837d6395bd3a1b11494ca1e0b41ea15a448e7d9d5d053b9beee7633b580b8"},
+    {file = "pytest_subtests-0.3.0-py3-none-any.whl", hash = "sha256:b82d326d0530f8cd576015a5785a13dcea2eb6e045f7b0d0730a0942baa1a68f"},
 ]
 python-slugify = [
     {file = "python-slugify-4.0.0.tar.gz", hash = "sha256:a8fc3433821140e8f409a9831d13ae5deccd0b033d4744d94b31fea141bdd84c"},

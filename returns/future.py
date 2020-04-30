@@ -7,6 +7,7 @@ from typing import (
     Generator,
     Generic,
     TypeVar,
+    Union,
 )
 
 from typing_extensions import final
@@ -577,7 +578,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
 
           >>> async def coroutine(x: int) -> FutureResult[str, int]:
           ...    return FutureResult.from_success(str(x + 1))
-          ...
+
           >>> assert anyio.run(
           ...     FutureResult.from_success(1).bind_async(coroutine).awaitable,
           ... ) == IOSuccess('2')
@@ -609,7 +610,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
 
           >>> async def coro(x: int) -> int:
           ...    return x + 1
-          ...
+
           >>> assert anyio.run(
           ...     FutureResult.from_success(1).bind_awaitable(coro).awaitable,
           ... ) == IOSuccess(2)
@@ -678,6 +679,193 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
         return FutureResult(_future_result.async_bind_ioresult(
             function, self._inner_value,
         ))
+
+    def unify(
+        self,
+        function: Callable[
+            [_ValueType], 'FutureResult[_NewValueType, _NewErrorType]',
+        ],
+    ) -> 'FutureResult[_NewValueType, Union[_ErrorType, _NewErrorType]]':
+        """
+        Composes successful container with a function that returns a container.
+
+        Similar to :meth:`~FutureResult.bind` but has different type.
+        It returns ``FutureResult[ValueType, Union[ErrorType, NewErrorType]]``
+        instead of ``FutureResult[ValueType, ErrorType]``.
+
+        So, it can be more useful in some situations.
+        Probably with specific exceptions.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.future import FutureResult
+          >>> from returns.io import IOSuccess, IOFailure
+
+          >>> def bindable(x: int) -> FutureResult[int, str]:
+          ...    return FutureResult.from_success(x + 1)
+
+          >>> assert anyio.run(
+          ...     FutureResult.from_success(1).unify(bindable).awaitable,
+          ... ) == IOSuccess(2)
+          >>> assert anyio.run(
+          ...     FutureResult.from_failure(1).unify(bindable).awaitable,
+          ... ) == IOFailure(1)
+
+        """
+        return self.bind(function)  # type: ignore
+
+    def fix(
+        self,
+        function: Callable[[_ErrorType], _NewValueType],
+    ) -> 'FutureResult[_NewValueType, _ErrorType]':
+        """
+        Composes failed container with a pure function to fix the failure.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.future import FutureResult
+          >>> from returns.io import IOSuccess
+
+          >>> def fixable(arg: int) -> int:
+          ...      return arg + 1
+
+          >>> assert anyio.run(
+          ...     FutureResult.from_success(1).fix(fixable).awaitable,
+          ... ) == IOSuccess(1)
+          >>> assert anyio.run(
+          ...     FutureResult.from_failure(1).fix(fixable).awaitable,
+          ... ) == IOSuccess(2)
+
+        """
+        return FutureResult(_future_result.async_fix(
+            function, self._inner_value,
+        ))
+
+    def alt(
+        self,
+        function: Callable[[_ErrorType], _NewErrorType],
+    ) -> 'FutureResult[_ValueType, _NewErrorType]':
+        """
+        Composes failed container with a pure function to modify failure.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.future import FutureResult
+          >>> from returns.io import IOSuccess, IOFailure
+
+          >>> def fixable(arg: int) -> int:
+          ...      return arg + 1
+
+          >>> assert anyio.run(
+          ...     FutureResult.from_success(1).alt(fixable).awaitable,
+          ... ) == IOSuccess(1)
+          >>> assert anyio.run(
+          ...     FutureResult.from_failure(1).alt(fixable).awaitable,
+          ... ) == IOFailure(2)
+
+        """
+        return FutureResult(_future_result.async_alt(
+            function, self._inner_value,
+        ))
+
+    def rescue(
+        self,
+        function: Callable[
+            [_ErrorType],
+            'FutureResult[_ValueType, _NewErrorType]',
+        ],
+    ) -> 'FutureResult[_ValueType, _NewErrorType]':
+        """
+        Composes failed container with a function that returns a container.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.future import FutureResult
+          >>> from returns.io import IOSuccess
+
+          >>> def rescuable(x: int) -> FutureResult[int, str]:
+          ...    return FutureResult.from_success(x + 1)
+
+          >>> assert anyio.run(
+          ...     FutureResult.from_success(1).rescue(rescuable).awaitable,
+          ... ) == IOSuccess(1)
+          >>> assert anyio.run(
+          ...     FutureResult.from_failure(1).rescue(rescuable).awaitable,
+          ... ) == IOSuccess(2)
+
+        """
+        return FutureResult(_future_result.async_rescue(
+            function, self._inner_value,
+        ))
+
+    async def value_or(
+        self,
+        default_value: _NewValueType,
+    ) -> IO[Union[_ValueType, _NewValueType]]:
+        """
+        Get value or default value.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.future import FutureResult
+          >>> from returns.io import IO
+
+          >>> async def main():
+          ...     first = await FutureResult.from_success(1).value_or(2)
+          ...     second = await FutureResult.from_failure(3).value_or(4)
+          ...     return first, second
+
+          >>> assert anyio.run(main) == (IO(1), IO(4))
+
+        """
+        return IO((await self._inner_value).value_or(default_value))
+
+    async def unwrap(self) -> IO[_ValueType]:
+        """
+        Get value or raise exception.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.future import FutureResult
+          >>> from returns.io import IO
+          >>> assert anyio.run(FutureResult.from_success(1).unwrap) == IO(1)
+
+        .. code::
+
+          >>> anyio.run(FutureResult.from_failure(1).unwrap)
+          Traceback (most recent call last):
+            ...
+          returns.primitives.exceptions.UnwrapFailedError
+
+        """
+        return IO((await self._inner_value).unwrap())
+
+    async def failure(self) -> IO[_ErrorType]:
+        """
+        Get failed value or raise exception.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.future import FutureResult
+          >>> from returns.io import IO
+          >>> assert anyio.run(FutureResult.from_failure(1).failure) == IO(1)
+
+        .. code::
+
+          >>> anyio.run(FutureResult.from_success(1).failure)
+          Traceback (most recent call last):
+            ...
+          returns.primitives.exceptions.UnwrapFailedError
+
+        """
+        return IO((await self._inner_value).failure())
 
     @classmethod
     def from_typecast(
@@ -905,3 +1093,57 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
 
         """
         return FutureResult(async_identity(Failure(inner_value)))
+
+
+# Aliases:
+
+#: Alias for a popular case when ``Result`` has ``Exception`` as error type.
+FutureResultE = FutureResult[_ValueType, Exception]
+
+
+# Decorators:
+
+def future_safe(
+    function: Callable[..., Coroutine[_FirstType, _SecondType, _ValueType]],
+) -> Callable[..., FutureResultE[_ValueType]]:
+    """
+    Decorator to convert exception-throwing coroutine to ``FutureResult``.
+
+    Should be used with care, since it only catches ``Exception`` subclasses.
+    It does not catch ``BaseException`` subclasses.
+
+    If you need to mark sync function as ``safe``,
+    use :func:`returns.future.future_safe` instead.
+    This decorator only works with ``async`` functions. Example:
+
+    .. code:: python
+
+      >>> import anyio
+      >>> from returns.future import future_safe
+      >>> from returns.io import IOSuccess, IOResult
+
+      >>> @future_safe
+      ... async def might_raise(arg: int) -> float:
+      ...     return 1 / arg
+      ...
+
+      >>> assert anyio.run(might_raise(2).awaitable) == IOSuccess(0.5)
+      >>> assert isinstance(
+      ...     anyio.run(might_raise(0).awaitable),
+      ...     IOResult.failure_type,
+      ... )
+
+    Similar to :func:`returns.io.impure_safe` and :func:`returns.result.safe`
+    decorators, but works with ``async`` functions.
+
+    """
+    async def factory(*args, **kwargs) -> Result[_ValueType, Exception]:
+        try:
+            return Success(await function(*args, **kwargs))
+        except Exception as exc:
+            return Failure(exc)
+
+    @wraps(function)
+    def decorator(*args, **kwargs):
+        return FutureResult(factory(*args, **kwargs))
+    return decorator
