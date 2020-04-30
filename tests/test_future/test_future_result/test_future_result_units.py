@@ -30,6 +30,5 @@ async def test_inner_value(subtests):
     ]
     for container in containers:
         with subtests.test(container=container):
-            assert (
-                await container  # noqa: WPS437
-            )._inner_value._inner_value == 1
+            result_inst = await container
+            assert result_inst._inner_value._inner_value == 1  # noqa: WPS437
