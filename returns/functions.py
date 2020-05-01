@@ -1,6 +1,9 @@
 from functools import wraps
 from typing import Any, Callable, NoReturn, TypeVar
 
+from returns.io import IO, IOResult
+from returns.primitives.container import BaseContainer
+
 # Aliases:
 _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')
@@ -167,3 +170,20 @@ def not_(function: Callable[..., bool]) -> Callable[..., bool]:
     def wrapped_function(*args, **kwargs) -> bool:  # noqa: WPS430
         return not function(*args, **kwargs)
     return wrapped_function
+
+
+def is_io(container: BaseContainer) -> bool:
+    """
+    Verifies if a container is ``IO`` type.
+
+    .. code:: python
+
+      >>> from returns.io import IO
+      >>> from returns.result import Success
+
+      >>> assert is_io(IO(1.0)) is True
+      >>> assert is_io(Success(1.0)) is False
+
+    """
+    from returns.context import RequiresContextIOResult  # noqa: WPS433
+    return isinstance(container, (IO, IOResult, RequiresContextIOResult))
