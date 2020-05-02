@@ -284,7 +284,6 @@ class Result(
 
         See also:
             - https://wiki.haskell.org/Lifting
-            - https://github.com/witchcrafters/witchcraft
             - https://en.wikipedia.org/wiki/Natural_transformation
 
         """

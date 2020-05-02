@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Any, Awaitable, Callable, TypeVar
 
-from returns.io import IOResult
+from returns.io import IO, IOResult
 from returns.result import Failure, Result, Success
 
 if TYPE_CHECKING:
@@ -76,6 +76,28 @@ async def async_bind_ioresult(
     container = await inner_value
     if isinstance(container, Result.success_type):
         return function(container.unwrap())._inner_value
+    return container  # type: ignore
+
+
+async def async_bind_io(
+    function: Callable[[_ValueType], IO[_NewValueType]],
+    inner_value: Awaitable[Result[_ValueType, _ErrorType]],
+) -> Result[_NewValueType, _ErrorType]:
+    """Async binds a container returning ``IO`` over a value."""
+    container = await inner_value
+    if isinstance(container, Result.success_type):
+        return Success(function(container.unwrap())._inner_value)
+    return container  # type: ignore
+
+
+async def async_bind_future(
+    function: Callable[[_ValueType], 'Future[_NewValueType]'],
+    inner_value: Awaitable[Result[_ValueType, _ErrorType]],
+) -> Result[_NewValueType, _ErrorType]:
+    """Async binds a container returning ``IO`` over a value."""
+    container = await inner_value
+    if isinstance(container, Result.success_type):
+        return await async_success(function(container.unwrap()))
     return container  # type: ignore
 
 

@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING, Awaitable, Callable, TypeVar
 
+from returns.io import IO
+
 if TYPE_CHECKING:
     from returns.future import Future  # noqa: F401
 
@@ -15,6 +17,14 @@ async def async_map(
     return function(await inner_value)
 
 
+async def async_bind(
+    function: Callable[[_ValueType], 'Future[_NewValueType]'],
+    inner_value: Awaitable[_ValueType],
+) -> _NewValueType:
+    """Async binds a container over a value."""
+    return (await function(await inner_value))._inner_value
+
+
 async def async_bind_awaitable(
     function: Callable[[_ValueType], Awaitable[_NewValueType]],
     inner_value: Awaitable[_ValueType],
@@ -23,18 +33,18 @@ async def async_bind_awaitable(
     return await function(await inner_value)
 
 
-async def async_bind(
-    function: Callable[[_ValueType], 'Future[_NewValueType]'],
-    inner_value: Awaitable[_ValueType],
-) -> _NewValueType:
-    """Async binds a container over a value."""
-    return (await function(await inner_value))._inner_value  # noqa: WPS437
-
-
 async def async_bind_async(
     function: Callable[[_ValueType], Awaitable['Future[_NewValueType]']],
     inner_value: Awaitable[_ValueType],
 ) -> _NewValueType:
     """Async binds a coroutine with container over a value."""
-    inner_io = (await function(await inner_value))._inner_value  # noqa: WPS437
+    inner_io = (await function(await inner_value))._inner_value
     return await inner_io
+
+
+async def async_bind_io(
+    function: Callable[[_ValueType], IO[_NewValueType]],
+    inner_value: Awaitable[_ValueType],
+) -> _NewValueType:
+    """Async binds a container over a value."""
+    return function(await inner_value)._inner_value

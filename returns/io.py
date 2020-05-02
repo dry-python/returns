@@ -139,7 +139,6 @@ class IO(BaseContainer, Generic[_ValueType]):
 
         See also:
             - https://wiki.haskell.org/Lifting
-            - https://github.com/witchcrafters/witchcraft
             - https://en.wikipedia.org/wiki/Natural_transformation
 
         """
@@ -370,6 +369,29 @@ class IOResult(
         """
         raise NotImplementedError
 
+    def bind_io(
+        self,
+        function: Callable[[_ValueType], IO[_NewValueType]],
+    ) -> 'IOResult[_NewValueType, _ErrorType]':
+        """
+        Composes successful container with a function that returns a container.
+
+        Similar to :meth:`~IOResult.bind`, but works with containers
+        that return :class:`returns.io.IO` instead of :class:`~IOResult`.
+
+        .. code:: python
+
+          >>> from returns.io import IO, IOFailure, IOSuccess
+
+          >>> def bindable(string: str) -> IO[str]:
+          ...      return IO(string + 'z')
+          ...
+          >>> assert IOSuccess('a').bind_io(bindable) == IOSuccess('az')
+          >>> assert IOFailure('a').bind_io(bindable) == IOFailure('a')
+
+        """
+        raise NotImplementedError
+
     def unify(
         self,
         function: Callable[
@@ -539,7 +561,6 @@ class IOResult(
 
         See also:
             - https://wiki.haskell.org/Lifting
-            - https://github.com/witchcrafters/witchcraft
             - https://en.wikipedia.org/wiki/Natural_transformation
 
         """
@@ -556,7 +577,8 @@ class IOResult(
         """
         Lifts function from ``Result`` to ``IOResult`` for better composition.
 
-        Similar to :meth:`~IOResult.lift`, but works with other type.
+        Similar to :meth:`~IOResult.lift`,
+        but works functions with ``Result`` return type.
 
         .. code:: python
 
@@ -571,6 +593,34 @@ class IOResult(
 
         """
         return lambda container: container.bind_result(function)
+
+    @classmethod
+    def lift_io(
+        cls,
+        function: Callable[[_ValueType], IO[_NewValueType]],
+    ) -> Callable[
+        ['IOResult[_ValueType, _ContraErrorType]'],
+        'IOResult[_NewValueType, _ContraErrorType]',
+    ]:
+        """
+        Lifts function from ``IO`` to ``IOResult`` for better composition.
+
+        Similar to :meth:`~IOResult.lift`,
+        but works functions with ``IO`` return type.
+
+        .. code:: python
+
+          >>> from returns.io import IO, IOSuccess, IOFailure
+
+          >>> def returns_io(arg: int) -> IO[float]:
+          ...     return IO(arg + 0.5)
+          ...
+          >>> returns_ioresult = IOResult.lift_io(returns_io)
+          >>> assert returns_ioresult(IOSuccess(1)) == IOSuccess(1.5)
+          >>> assert returns_ioresult(IOFailure(1)) == IOFailure(1)
+
+        """
+        return lambda container: container.bind_io(function)
 
     @classmethod
     def from_typecast(
@@ -722,6 +772,10 @@ class _IOFailure(IOResult):
         """Does nothing for ``IOFailure``."""
         return self
 
+    def bind_io(self, function):
+        """Does nothing for ``IOFailure``."""
+        return self
+
     def rescue(self, function):
         """Composes this container with a function returning ``IOResult``."""
         return function(self._inner_value.failure())
@@ -755,6 +809,10 @@ class _IOSuccess(IOResult):
     def bind_result(self, function):
         """Binds ``Result`` returning function to current container."""
         return self.from_result(function(self._inner_value.unwrap()))
+
+    def bind_io(self, function):
+        """Binds ``IO`` returning function to current container."""
+        return self.from_successful_io(function(self._inner_value.unwrap()))
 
     def rescue(self, function):
         """Does nothing for ``IOSuccess``."""

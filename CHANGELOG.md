@@ -20,7 +20,12 @@ See [0Ver](https://0ver.org/).
 - Adds typed `partial` plugin!
 - Adds `pytest` plugin with the ability to tests error handling
 - Adds `Future` container to easily work with `async` functions
+- Adds `FutureResult` container to easily work
+  with `async` function that might fail
+- Adds `bind_io` method to `IOResult`
+- Adds `lift_io` method to `IOResult`
 - Adds `unify` point free function
+- Adds `not_` composition helper
 - Adds `__copy__` and `__deepcopy__` magic methods to `Immutable` class
 
 ### Bugfixes
@@ -34,6 +39,7 @@ See [0Ver](https://0ver.org/).
 
 - Replaces `pytest-asyncio` with `anyio` plugin,
   now we test compatibility with any IO stack: `asyncio`, `trio`, `curio`
+- Updates lots of dependencies
 
 
 ## 0.13.0
