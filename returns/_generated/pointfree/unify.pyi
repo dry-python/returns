@@ -1,5 +1,6 @@
 from typing import Callable, TypeVar, Union, overload
 
+from returns.future import FutureResult
 from returns.io import IOResult
 from returns.result import Result
 
@@ -27,5 +28,15 @@ def _unify(
 ) -> Callable[
     [IOResult[_ValueType, _ErrorType]],
     IOResult[_NewValueType, Union[_ErrorType, _NewErrorType]],
+]:
+    ...
+
+
+@overload
+def _unify(
+    function: Callable[[_ValueType], FutureResult[_NewValueType, _NewErrorType]],
+) -> Callable[
+    [FutureResult[_ValueType, _ErrorType]],
+    FutureResult[_NewValueType, Union[_ErrorType, _NewErrorType]],
 ]:
     ...
