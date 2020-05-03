@@ -34,7 +34,10 @@ def _unify(
 
 @overload
 def _unify(
-    function: Callable[[_ValueType], FutureResult[_NewValueType, _NewErrorType]],
+    function: Callable[
+        [_ValueType],
+        FutureResult[_NewValueType, _NewErrorType],
+    ],
 ) -> Callable[
     [FutureResult[_ValueType, _ErrorType]],
     FutureResult[_NewValueType, Union[_ErrorType, _NewErrorType]],
