@@ -1,3 +1,5 @@
+import pytest
+
 from returns.context import (
     RequiresContext,
     RequiresContextIOResult,
@@ -50,6 +52,18 @@ def test_return_false_with_future_container():
     assert is_io(Future.from_value('future')) is False
 
 
+@pytest.mark.anyio  # noqa: WPS118
+async def test_return_true_with_awaited_future_container():  # noqa: WPS118
+    """Ensures `is_io` function will return False for Future."""
+    assert is_io(await Future.from_value('future')) is True
+
+
 def test_return_false_with_future_result_container():  # noqa: WPS118
     """Ensures `is_io` function will return False for FutureResult."""
     assert is_io(FutureResult.from_failure('failure')) is False
+
+
+@pytest.mark.anyio  # noqa: WPS118
+async def test_return_true_with_awaited_future_result_container():  # noqa: E501,WPS118
+    """Ensures `is_io` function will return False for FutureResult."""
+    assert is_io(await FutureResult.from_failure('failure')) is True
