@@ -3,8 +3,8 @@ from returns.context import (
     RequiresContextIOResult,
     RequiresContextResult,
 )
-from returns.functions import is_io
 from returns.future import Future, FutureResult
+from returns.instances import is_io
 from returns.io import IO, IOResult
 from returns.maybe import Maybe
 from returns.result import Result, Success
