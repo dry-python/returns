@@ -1,0 +1,168 @@
+rule infer
+  command = /Users/sobolev/Documents/github/returns/.venv/bin/python -m pytype.single --imports_info $imports --module-name $module -V 3.7 -o $out --no-report-errors --nofail --quick $in
+  description = infer $module
+rule check
+  command = /Users/sobolev/Documents/github/returns/.venv/bin/python -m pytype.single --imports_info $imports --module-name $module -V 3.7 -o $out --analyze-annotated --nofail --quick $in
+  description = check $module
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/contrib/mypy/__init__.pyi: check /Users/sobolev/Documents/github/returns/returns/contrib/mypy/__init__.py
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns.contrib.mypy.__init__.imports
+  module = returns.contrib.mypy.__init__
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/pointfree/bind.pyi: check /Users/sobolev/Documents/github/returns/returns/_generated/pointfree/bind.py
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns._generated.pointfree.bind.imports
+  module = returns._generated.pointfree.bind
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/pointfree/rescue.pyi: check /Users/sobolev/Documents/github/returns/returns/_generated/pointfree/rescue.py
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns._generated.pointfree.rescue.imports
+  module = returns._generated.pointfree.rescue
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/pointfree/unify.pyi: check /Users/sobolev/Documents/github/returns/returns/_generated/pointfree/unify.py
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns._generated.pointfree.unify.imports
+  module = returns._generated.pointfree.unify
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/pointfree.pyi: check /Users/sobolev/Documents/github/returns/returns/pointfree.py | /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/pointfree/bind.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/pointfree/rescue.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/pointfree/unify.pyi
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns.pointfree.imports
+  module = returns.pointfree
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/container.pyi-1: infer /Users/sobolev/Documents/github/returns/returns/primitives/container.py
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns.primitives.container.imports-1
+  module = returns.primitives.container
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/exceptions.pyi-1: infer /Users/sobolev/Documents/github/returns/returns/primitives/exceptions.py
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns.primitives.exceptions.imports-1
+  module = returns.primitives.exceptions
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/types.pyi-1: infer /Users/sobolev/Documents/github/returns/returns/primitives/types.py
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns.primitives.types.imports-1
+  module = returns.primitives.types
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/container.pyi: check /Users/sobolev/Documents/github/returns/returns/primitives/container.py | /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/container.pyi-1 /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/exceptions.pyi-1 /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/types.pyi-1
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns.primitives.container.imports
+  module = returns.primitives.container
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/exceptions.pyi: check /Users/sobolev/Documents/github/returns/returns/primitives/exceptions.py | /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/container.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/exceptions.pyi-1 /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/types.pyi-1
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns.primitives.exceptions.imports
+  module = returns.primitives.exceptions
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/types.pyi: check /Users/sobolev/Documents/github/returns/returns/primitives/types.py | /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/container.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/exceptions.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/types.pyi-1
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns.primitives.types.imports
+  module = returns.primitives.types
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/result.pyi: check /Users/sobolev/Documents/github/returns/returns/result.py | /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/container.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/exceptions.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/types.pyi
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns.result.imports
+  module = returns.result
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/io.pyi: check /Users/sobolev/Documents/github/returns/returns/io.py | /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/result.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/container.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/exceptions.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/types.pyi
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns.io.imports
+  module = returns.io
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/unsafe.pyi: check /Users/sobolev/Documents/github/returns/returns/unsafe.py | /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/io.pyi
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns.unsafe.imports
+  module = returns.unsafe
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/converters/__init__.pyi: check /Users/sobolev/Documents/github/returns/returns/_generated/converters/__init__.py
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns._generated.converters.__init__.imports
+  module = returns._generated.converters.__init__
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/contrib/__init__.pyi: check /Users/sobolev/Documents/github/returns/returns/contrib/__init__.py
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns.contrib.__init__.imports
+  module = returns.contrib.__init__
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/__init__.pyi: check /Users/sobolev/Documents/github/returns/returns/__init__.py
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns.__init__.imports
+  module = returns.__init__
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/pointfree/__init__.pyi: check /Users/sobolev/Documents/github/returns/returns/_generated/pointfree/__init__.py
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns._generated.pointfree.__init__.imports
+  module = returns._generated.pointfree.__init__
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/pipeline/__init__.pyi: check /Users/sobolev/Documents/github/returns/returns/_generated/pipeline/__init__.py
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns._generated.pipeline.__init__.imports
+  module = returns._generated.pipeline.__init__
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/interfaces.pyi: check /Users/sobolev/Documents/github/returns/returns/primitives/interfaces.py
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns.primitives.interfaces.imports
+  module = returns.primitives.interfaces
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/__init__.pyi: check /Users/sobolev/Documents/github/returns/returns/primitives/__init__.py
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns.primitives.__init__.imports
+  module = returns.primitives.__init__
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/contrib/mypy/_curry.pyi: check /Users/sobolev/Documents/github/returns/returns/contrib/mypy/_curry.py
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns.contrib.mypy._curry.imports
+  module = returns.contrib.mypy._curry
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/contrib/mypy/decorator_plugin.pyi: check /Users/sobolev/Documents/github/returns/returns/contrib/mypy/decorator_plugin.py | /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/contrib/mypy/_curry.pyi
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns.contrib.mypy.decorator_plugin.imports
+  module = returns.contrib.mypy.decorator_plugin
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/contrib/pytest/__init__.pyi: check /Users/sobolev/Documents/github/returns/returns/contrib/pytest/__init__.py
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns.contrib.pytest.__init__.imports
+  module = returns.contrib.pytest.__init__
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/futures/__init__.pyi: check /Users/sobolev/Documents/github/returns/returns/_generated/futures/__init__.py
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns._generated.futures.__init__.imports
+  module = returns._generated.futures.__init__
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/__init__.pyi: check /Users/sobolev/Documents/github/returns/returns/_generated/__init__.py
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns._generated.__init__.imports
+  module = returns._generated.__init__
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/functions.pyi: check /Users/sobolev/Documents/github/returns/returns/functions.py
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns.functions.imports
+  module = returns.functions
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/context/__init__.pyi-1: infer /Users/sobolev/Documents/github/returns/returns/context/__init__.py | /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/functions.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/io.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/result.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/container.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/exceptions.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/types.pyi
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns.context.__init__.imports-1
+  module = returns.context.__init__
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/context/requires_context.pyi-1: infer /Users/sobolev/Documents/github/returns/returns/context/requires_context.py | /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/functions.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/io.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/result.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/container.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/exceptions.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/types.pyi
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns.context.requires_context.imports-1
+  module = returns.context.requires_context
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/context/requires_context_io_result.pyi-1: infer /Users/sobolev/Documents/github/returns/returns/context/requires_context_io_result.py | /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/functions.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/io.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/result.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/container.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/exceptions.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/types.pyi
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns.context.requires_context_io_result.imports-1
+  module = returns.context.requires_context_io_result
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/context/requires_context_result.pyi-1: infer /Users/sobolev/Documents/github/returns/returns/context/requires_context_result.py | /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/functions.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/io.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/result.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/container.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/exceptions.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/types.pyi
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns.context.requires_context_result.imports-1
+  module = returns.context.requires_context_result
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/context/__init__.pyi: check /Users/sobolev/Documents/github/returns/returns/context/__init__.py | /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/functions.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/io.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/result.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/container.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/exceptions.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/types.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/context/__init__.pyi-1 /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/context/requires_context.pyi-1 /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/context/requires_context_io_result.pyi-1 /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/context/requires_context_result.pyi-1
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns.context.__init__.imports
+  module = returns.context.__init__
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/context/requires_context.pyi: check /Users/sobolev/Documents/github/returns/returns/context/requires_context.py | /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/functions.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/io.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/result.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/container.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/exceptions.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/types.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/context/__init__.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/context/requires_context.pyi-1 /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/context/requires_context_io_result.pyi-1 /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/context/requires_context_result.pyi-1
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns.context.requires_context.imports
+  module = returns.context.requires_context
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/context/requires_context_io_result.pyi: check /Users/sobolev/Documents/github/returns/returns/context/requires_context_io_result.py | /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/functions.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/io.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/result.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/container.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/exceptions.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/types.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/context/__init__.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/context/requires_context.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/context/requires_context_io_result.pyi-1 /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/context/requires_context_result.pyi-1
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns.context.requires_context_io_result.imports
+  module = returns.context.requires_context_io_result
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/context/requires_context_result.pyi: check /Users/sobolev/Documents/github/returns/returns/context/requires_context_result.py | /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/functions.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/io.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/result.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/container.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/exceptions.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/types.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/context/__init__.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/context/requires_context.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/context/requires_context_io_result.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/context/requires_context_result.pyi-1
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns.context.requires_context_result.imports
+  module = returns.context.requires_context_result
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/instances.pyi: check /Users/sobolev/Documents/github/returns/returns/instances.py | /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/io.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/context/__init__.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/context/requires_context.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/context/requires_context_io_result.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/context/requires_context_result.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/container.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/exceptions.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/types.pyi
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns.instances.imports
+  module = returns.instances
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/pipeline/pipe.pyi: check /Users/sobolev/Documents/github/returns/returns/_generated/pipeline/pipe.py | /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/functions.pyi
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns._generated.pipeline.pipe.imports
+  module = returns._generated.pipeline.pipe
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/pipeline/flow.pyi: check /Users/sobolev/Documents/github/returns/returns/_generated/pipeline/flow.py | /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/pipeline/pipe.pyi
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns._generated.pipeline.flow.imports
+  module = returns._generated.pipeline.flow
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/maybe.pyi: check /Users/sobolev/Documents/github/returns/returns/maybe.py | /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/container.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/exceptions.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/types.pyi
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns.maybe.imports
+  module = returns.maybe
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/pipeline/pipeline.pyi: check /Users/sobolev/Documents/github/returns/returns/_generated/pipeline/pipeline.py | /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/container.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/exceptions.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/types.pyi
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns._generated.pipeline.pipeline.imports
+  module = returns._generated.pipeline.pipeline
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/pipeline.pyi: check /Users/sobolev/Documents/github/returns/returns/pipeline.py | /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/pipeline/flow.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/pipeline/pipe.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/io.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/maybe.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/result.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/pipeline/pipeline.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/container.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/exceptions.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/types.pyi
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns.pipeline.imports
+  module = returns.pipeline
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/converters/coalesce.pyi: check /Users/sobolev/Documents/github/returns/returns/_generated/converters/coalesce.py | /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/io.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/maybe.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/pipeline.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/result.pyi
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns._generated.converters.coalesce.imports
+  module = returns._generated.converters.coalesce
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/converters/squash.pyi: check /Users/sobolev/Documents/github/returns/returns/_generated/converters/squash.py | /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/io.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/context/__init__.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/context/requires_context.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/context/requires_context_io_result.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/context/requires_context_result.pyi
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns._generated.converters.squash.imports
+  module = returns._generated.converters.squash
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/converters/swap.pyi: check /Users/sobolev/Documents/github/returns/returns/_generated/converters/swap.py | /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/io.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/result.pyi
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns._generated.converters.swap.imports
+  module = returns._generated.converters.swap
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/converters/flatten.pyi: check /Users/sobolev/Documents/github/returns/returns/_generated/converters/flatten.py | /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/functions.pyi
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns._generated.converters.flatten.imports
+  module = returns._generated.converters.flatten
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/converters.pyi: check /Users/sobolev/Documents/github/returns/returns/converters.py | /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/converters/coalesce.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/converters/squash.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/converters/swap.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/maybe.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/pipeline.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/result.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/converters/flatten.pyi
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns.converters.imports
+  module = returns.converters
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/futures/_future.pyi-1: infer /Users/sobolev/Documents/github/returns/returns/_generated/futures/_future.py | /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/io.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/result.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/container.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/exceptions.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/types.pyi
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns._generated.futures._future.imports-1
+  module = returns._generated.futures._future
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/futures/_future_result.pyi-1: infer /Users/sobolev/Documents/github/returns/returns/_generated/futures/_future_result.py | /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/io.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/result.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/container.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/exceptions.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/types.pyi
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns._generated.futures._future_result.imports-1
+  module = returns._generated.futures._future_result
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/future.pyi-1: infer /Users/sobolev/Documents/github/returns/returns/future.py | /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/io.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/result.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/container.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/exceptions.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/types.pyi
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns.future.imports-1
+  module = returns.future
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/futures/_future.pyi: check /Users/sobolev/Documents/github/returns/returns/_generated/futures/_future.py | /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/io.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/result.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/container.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/exceptions.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/types.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/futures/_future.pyi-1 /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/futures/_future_result.pyi-1 /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/future.pyi-1
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns._generated.futures._future.imports
+  module = returns._generated.futures._future
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/futures/_future_result.pyi: check /Users/sobolev/Documents/github/returns/returns/_generated/futures/_future_result.py | /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/io.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/result.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/container.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/exceptions.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/types.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/futures/_future.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/futures/_future_result.pyi-1 /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/future.pyi-1
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns._generated.futures._future_result.imports
+  module = returns._generated.futures._future_result
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/future.pyi: check /Users/sobolev/Documents/github/returns/returns/future.py | /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/io.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/result.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/container.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/exceptions.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/types.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/futures/_future.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/futures/_future_result.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/future.pyi-1
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns.future.imports
+  module = returns.future
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/contrib/pytest/plugin.pyi: check /Users/sobolev/Documents/github/returns/returns/contrib/pytest/plugin.py | /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/io.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/result.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/context/__init__.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/context/requires_context.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/context/requires_context_io_result.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/context/requires_context_result.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/futures/_future.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/futures/_future_result.pyi /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/future.pyi
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns.contrib.pytest.plugin.imports
+  module = returns.contrib.pytest.plugin
+build /Users/sobolev/Documents/github/returns/.pytype/pyi/returns/curry.pyi: check /Users/sobolev/Documents/github/returns/returns/curry.py
+  imports = /Users/sobolev/Documents/github/returns/.pytype/imports/returns.curry.imports
+  module = returns.curry
