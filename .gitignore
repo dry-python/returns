@@ -200,3 +200,4 @@ fabric.properties
 ex.py
 .vscode/tags
 .pyre
+.pytype
