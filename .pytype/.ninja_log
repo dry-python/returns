@@ -1,9 +1,0 @@
-# ninja log v5
-1	1059	1588588627275502772	/Users/sobolev/Documents/github/returns/.pytype/pyi/returns/contrib/mypy/__init__.pyi	8e6d22a25ab4ce25
-1059	2092	1588588628300317989	/Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/pointfree/bind.pyi	7f74e899447ac3ff
-2092	3149	1588588629356386411	/Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/pointfree/rescue.pyi	7df0d2a4eb807685
-3150	4188	1588588630394631077	/Users/sobolev/Documents/github/returns/.pytype/pyi/returns/_generated/pointfree/unify.pyi	1760beac77af49e
-4188	5236	1588588631451633319	/Users/sobolev/Documents/github/returns/.pytype/pyi/returns/pointfree.pyi	c97bc140f3d9977a
-5236	6418	1588588632605397458	/Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/container.pyi-1	789e6a34a566159a
-6419	7510	1588588633709040060	/Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/exceptions.pyi-1	ccf118d03213f11a
-7510	8602	1588588634797095129	/Users/sobolev/Documents/github/returns/.pytype/pyi/returns/primitives/types.pyi-1	8cdc857ec4475472
