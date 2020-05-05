@@ -5,6 +5,7 @@ from returns.context import (
     RequiresContextIOResult,
     RequiresContextResult,
 )
+from returns.future import Future, FutureResult
 from returns.io import IO, IOResult
 from returns.maybe import Maybe
 from returns.result import Result
@@ -66,4 +67,16 @@ def _flatten(
         _ErrorType,
     ],
 ) -> RequiresContextIOResult[_EnvType, _ValueType, _ErrorType]:
+    ...
+
+
+@overload
+def _flatten(container: Future[Future[_ValueType]]) -> Future[_ValueType]:
+    ...
+
+
+@overload
+def _flatten(
+    container: FutureResult[FutureResult[_ValueType, _ErrorType], _ErrorType],
+) -> FutureResult[_ValueType, _ErrorType]:
     ...

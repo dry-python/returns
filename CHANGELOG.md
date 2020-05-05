@@ -26,6 +26,7 @@ See [0Ver](https://0ver.org/).
 - Adds `lift_io` method to `IOResult`
 - Adds `unify` point free function
 - Adds `not_` composition helper
+- Adds `flatten` support for `Future` and `FutureResult`
 - Adds `__copy__` and `__deepcopy__` magic methods to `Immutable` class
 
 ### Bugfixes
