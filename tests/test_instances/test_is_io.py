@@ -54,7 +54,7 @@ def test_return_false_with_future_container():
 
 @pytest.mark.anyio  # noqa: WPS118
 async def test_return_true_with_awaited_future_container():  # noqa: WPS118
-    """Ensures `is_io` function will return False for Future."""
+    """Ensures `is_io` function will return True for Future."""
     assert is_io(await Future.from_value('future')) is True
 
 
@@ -65,5 +65,5 @@ def test_return_false_with_future_result_container():  # noqa: WPS118
 
 @pytest.mark.anyio  # noqa: WPS118
 async def test_return_true_with_awaited_future_result_container():  # noqa: E501,WPS118
-    """Ensures `is_io` function will return False for FutureResult."""
+    """Ensures `is_io` function will return True for FutureResult."""
     assert is_io(await FutureResult.from_failure('failure')) is True
