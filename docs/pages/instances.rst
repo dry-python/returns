@@ -8,7 +8,7 @@ is_io
 -----
 
 Using ``is_io`` function it's easy to discovery if a instance is IO type
-or not within ``returns`` ecosystem.
+or not, within ``returns`` ecosystem.
 
 .. code:: python
 
