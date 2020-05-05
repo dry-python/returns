@@ -23,6 +23,24 @@ or not within ``returns`` ecosystem.
   True
 
 
+is_result
+---------
+
+We provide a better way to verify if an instance is Result type or not,
+within ``returns`` ecosystem.
+
+.. code:: python
+
+  >>> from returns.instances import is_result
+  >>> from returns.maybe import Maybe
+  >>> from returns.result import Result
+
+  >>> is_result(Maybe.from_value('maybe'))
+  False
+  >>> is_result(Result.from_failure('failure'))
+  True
+
+
 API Reference
 -------------
 
