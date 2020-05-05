@@ -86,7 +86,7 @@ async def test_non_flatten_future(subtests):
     ]
 
     for cont in futures:
-        with subtests.test(container=container):
+        with subtests.test(container=cont):
             assert isinstance(
                 (await flatten(cont)).failure()._inner_value,  # noqa: WPS437
                 FutureResult,
