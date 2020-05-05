@@ -82,14 +82,11 @@ async def test_non_flatten_future(subtests):
     """Ensures that `flatten` is always returning the correct type."""
     futures = [
         # Not flattens:
-        (
-            FutureResult.from_failure(FutureResult.from_failure(1)),
-            FutureResult.from_failure(FutureResult.from_failure(1)),
-        ),
+        FutureResult.from_failure(FutureResult.from_failure(1)),
     ]
 
-    for container, merged in futures:
-        with subtests.test(container=container, merged=merged):
+    for container in futures:
+        with subtests.test(container=container):
             assert isinstance(
                 (
                     await flatten(container)  # noqa: WPS437
