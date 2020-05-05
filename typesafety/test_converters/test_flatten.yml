@@ -99,3 +99,38 @@
     x: RequiresContextIOResult[str, RequiresContextIOResult[str, int, float], float]
 
     reveal_type(flatten(x))  # N: Revealed type is 'returns.context.requires_context_io_result.RequiresContextIOResult[builtins.str*, builtins.int*, builtins.float*]'
+
+
+- case: flatten_future
+  disable_cache: true
+  main: |
+    from returns.converters import flatten
+    from returns.future import Future
+
+    x: Future[Future[int]]
+
+    reveal_type(flatten(x))  # N: Revealed type is 'returns.future.Future[builtins.int*]'
+
+
+- case: flatten_futureresult1
+  disable_cache: true
+  main: |
+    from returns.converters import flatten
+    from returns.future import FutureResult
+
+    x: FutureResult[FutureResult[int, str], str]
+
+    reveal_type(flatten(x))  # N: Revealed type is 'returns.future.FutureResult[builtins.int*, builtins.str*]'
+
+
+- case: flatten_futureresult2
+  disable_cache: true
+  main: |
+    from returns.converters import flatten
+    from returns.future import FutureResult
+
+    x: FutureResult[int, FutureResult[int, str]]
+
+    flatten(x)
+  out: |
+    main:6: error: Argument 1 to "_flatten" has incompatible type "FutureResult[int, FutureResult[int, str]]"; expected "FutureResult[FutureResult[<nothing>, FutureResult[int, str]], FutureResult[int, str]]"

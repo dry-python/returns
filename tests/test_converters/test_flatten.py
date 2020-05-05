@@ -74,7 +74,7 @@ async def test_flatten_future(subtests):
 
     for container, merged in futures:
         with subtests.test(container=container, merged=merged):
-            assert await flatten(container) == await merged
+            assert await flatten(container) == await merged  # type: ignore
 
 
 @pytest.mark.anyio
