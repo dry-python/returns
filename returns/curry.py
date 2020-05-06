@@ -64,7 +64,7 @@ def curry(function: Callable[..., _ReturnType]) -> Callable[..., _ReturnType]:
       ...     return sum(numbers) / by
 
       >>> divide(1)(2, 3)  # doesn't call the func and remembers arguments
-      ''
+      <function divide at ...>
       >>> assert divide(1)(2)(by=10) == 0.3  # calls the func when possible
       >>> assert divide(1, 2, by=10) == 0.3  # or call the func like always
 
