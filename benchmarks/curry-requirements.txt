@@ -1,3 +1,0 @@
-fn
-typesafe-monads
-unpythonic

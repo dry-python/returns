@@ -1,12 +1,9 @@
-import re
 from functools import partial as _partial
-from functools import update_wrapper
-from inspect import getcallargs
-from typing import Any, Callable, Dict, TypeVar, Union
+from functools import wraps
+from inspect import BoundArguments, Signature
+from typing import Any, Callable, Tuple, TypeVar, Union
 
 _ReturnType = TypeVar('_ReturnType')
-Func = TypeVar('Func', bound=Callable)
-rex_missing = re.compile(r'.+ missing \d+ required .+ arguments?\: .+')
 
 
 def partial(
@@ -17,19 +14,19 @@ def partial(
 
     It just ``functools.partial`` wrapper with better typing support.
 
-    We use custom ``mypy`` plugin to make types correct.
+    We use a custom ``mypy`` plugin to make types correct.
     Otherwise, it is currently impossible.
 
     .. code:: python
 
-        >>> from returns.curry import partial
+      >>> from returns.curry import partial
 
-        >>> def sum_two_numbers(first: int, second: int) -> int:
-        ...     return first + second
-        ...
-        >>> sum_with_ten = partial(sum_two_numbers, 10)
-        >>> assert sum_with_ten(2) == 12
-        >>> assert sum_with_ten(-5) == 5
+      >>> def sum_two_numbers(first: int, second: int) -> int:
+      ...     return first + second
+
+      >>> sum_with_ten = partial(sum_two_numbers, 10)
+      >>> assert sum_with_ten(2) == 12
+      >>> assert sum_with_ten(-5) == 5
 
     See also:
         https://docs.python.org/3/library/functools.html#functools.partial
@@ -38,47 +35,12 @@ def partial(
     return _partial(func, *args, **kwargs)
 
 
-def _eager_curry_enough(func, args, kwargs) -> bool:
-    """Returns True if passed arguments are enough to call the function."""
-    try:
-        getcallargs(func, *args, **kwargs)
-    except TypeError as err:
-        # another option is to copy-paste and patch `getcallargs` func
-        # but in this case we get responsibility to maintain it over
-        # python releases.
-        if rex_missing.fullmatch(err.args[0]):
-            return False
-        raise
-    return True
+def curry(function: Callable[..., _ReturnType]) -> Callable[..., _ReturnType]:
+    """
+    Typed currying decorator.
 
-
-def _eager_curry(
-    func: Func,
-    old_args: tuple,
-    old_kwargs: Dict[str, Any],
-    new_args: tuple,
-    new_kwargs: Dict[str, Any],
-) -> Union[Func, _partial]:
-    """Internal implementation for ``eager_curry``."""
-    old_args += new_args
-    old_kwargs = old_kwargs.copy()
-    old_kwargs.update(new_kwargs)
-
-    if _eager_curry_enough(func, old_args, old_kwargs):
-        return func(*old_args, **old_kwargs)
-
-    # We use closures to avoid names conflict between
-    # the function args and args of the curry implementation.
-    def wrapper(*args, **kwargs):
-        return _eager_curry(func, old_args, old_kwargs, args, kwargs)
-
-    # Wrap into partial just to get a nice return type
-    # when the function isn't ready to be called.
-    return _partial(wrapper)
-
-
-def eager_curry(func: Func) -> Callable[..., Union[Func, _partial]]:
-    """Currying that calls the wrapped function when enough arguments are passed.
+    Calls the wrapped function when there're enough arguments,
+    otherwise returns an intermediate function to
 
     Currying is a conception from functional languages that does partial
     applying. That means that if we pass one argument in a function that
@@ -86,94 +48,104 @@ def eager_curry(func: Func) -> Callable[..., Union[Func, _partial]]:
     previously passed arguments. Then we can pass remaining arguments, and
     the function will be executed.
 
-    ``partial`` sunction does a similar thing but it does partial application
-    exactly once. ``eager_curry`` is a bit smarter and will do parial
+    :func`~partial` sunction does a similar thing,
+    but it does partial application exactly once.
+    ``curry`` is a bit smarter and will do parial
     application until enough arguments passed.
 
-    The reason why we have 2 implementations of currying is that Python
-    is a bit different from classic functional languages. Python has
-    unpacking and default arguments, hence sometimes we can't say if
-    the user will pass more arguments or the function already must be called.
-    ``eager_curry`` calls the function immediately when enough arguments passed
-    while ``lazy_curry`` wait until the function is explicitly called
-    without arguments.
-
-    If wrong arguments passed, ``TypeError`` will be raised immediately.
+    If wrong arguments are passed, ``TypeError`` will be raised immediately.
 
     .. code:: python
 
-        >>> @eager_curry
-        ... def divide(*numbers, by) -> float:
-        ...   return sum(numbers) / by
-        ...
-        >>> divide(1)(2, 3)  # doesn't call the func and remembers arguments
-        functools.partial(<returns.curry.EagerCurry...>, 1, 2, 3)
-        >>> divide(1)(2)(by=10)  # calls the func because enough args collected
-        0.3
-        >>> divide(1, 2, by=10)  # you can call the func like always
-        0.3
+      >>> from returns.curry import curry
 
+      >>> @curry
+      ... def divide(*numbers: int, by: int) -> float:
+      ...     return sum(numbers) / by
+
+      >>> divide(1)(2, 3)  # doesn't call the func and remembers arguments
+      ''
+      >>> assert divide(1)(2)(by=10) == 0.3  # calls the func when possible
+      >>> assert divide(1, 2, by=10) == 0.3  # or call the func like always
+
+    Limitations:
+
+    - It is kinda slow. Like 100 times slower than a regular function call.
+    - It does not work with several builtins like ``str``, ``int``,
+      and possibly other ``C`` defined callables
+    - We use a custom ``mypy`` plugin to make types correct,
+      otherwise, it is currently impossible
+    - Typing returns ``Any`` for callables with ``*args`` and ``**kwargs``
+
+    We expect people to use this tool responsibly
+    when they know that they are doing.
 
     See also:
+        https://en.wikipedia.org/wiki/Currying
         https://stackoverflow.com/questions/218025/
+
     """
-    def wrapper(*args, **kwargs):
-        return _eager_curry(func, (), {}, args, kwargs)
+    argspec = Signature.from_callable(function).bind_partial()
 
-    return update_wrapper(wrapper=wrapper, wrapped=func)
+    def decorator(*args, **kwargs):
+        return _eager_curry(function, argspec, args, kwargs)
+    return wraps(function)(decorator)
 
 
-def _lazy_curry(
-    func: Func,
-    old_args: tuple,
-    old_kwargs: Dict[str, Any],
-    new_args: tuple,
-    new_kwargs: Dict[str, Any],
-) -> Union[Func, _partial]:
-    """Internal implementation for ``lazy_curry``."""
-    #  if no new arguments are passed, call the function
-    if not new_args and not new_kwargs:
-        return func(*old_args, **old_kwargs)
-
-    # if new arguments are passed, remember them for future calls.
-    old_args += new_args
-    old_kwargs = old_kwargs.copy()
-    old_kwargs.update(new_kwargs)
+def _eager_curry(
+    function,
+    argspec,
+    args: tuple,
+    kwargs: dict,
+):
+    """Internal ``curry`` implementation."""
+    intermediate, full_args = _intermediate_argspec(argspec, args, kwargs)
+    if full_args is not None:
+        return function(*full_args[0], **full_args[1])
 
     # We use closures to avoid names conflict between
     # the function args and args of the curry implementation.
-    def wrapper(*args, **kwargs):
-        return _lazy_curry(func, old_args, old_kwargs, args, kwargs)
-
-    # Wrap into partial just to get a nice return type
-    # when the function isn't ready to be called.
-    return _partial(wrapper)
+    def decorator(*inner_args, **inner_kwargs):
+        return _eager_curry(function, intermediate, inner_args, inner_kwargs)
+    return wraps(function)(decorator)
 
 
-def lazy_curry(func: Func) -> Callable[..., Union[Func, _partial]]:
-    """Currying that calls the wrapped function when called without arguments.
+_ArgSpec = Union[
+    # Case when all arguments are bound and function can be called:
+    Tuple[None, Tuple[tuple, dict]],
+    # Case when there are still unbound arguments:
+    Tuple[BoundArguments, None],
+]
 
-    See documentation for ``eager_curry`` to learn about currying.
 
-    If wrong arguments passed, ``TypeError`` will be raised only
-    wnen called without arguments after that.
-
-    .. code:: python
-
-        >>> @lazy_curry
-        ... def divide(*numbers, by) -> float:
-        ...   return sum(numbers) / by
-        ...
-        >>> divide(by=10)
-        functools.partial(<function _lazy_curry...>)
-        >>> divide(by=10)(1, 2)(3)
-        functools.partial(<function _lazy_curry...>)
-        >>> divide(by=10)(1, 2)(3)()  # pass no arguments to call the func
-        0.6
-        >>> divide(1, 2, 3, by=10)()  # yes, it is required
-        0.6
+def _intermediate_argspec(
+    argspec: BoundArguments,
+    args: tuple,
+    kwargs: dict,
+) -> _ArgSpec:
     """
-    def wrapper(*args, **kwargs):
-        return _lazy_curry(func, (), {}, args, kwargs)
+    That's where ``curry`` magic happens.
 
-    return update_wrapper(wrapper=wrapper, wrapped=func)
+    We use ``Signature`` objects from ``inspect`` to bind existing arguments.
+
+    If there's a ``TypeError`` while we ``bind`` the arguments we try again.
+    The second time we try to ``bind_partial`` arguments. It can fail too!
+    It fails when there are invalid arguments
+    or more arguments than we can fit in a function.
+
+    This function is slow. Any optimization ideas are welcome!
+    """
+    full_args = argspec.args + args
+    full_kwargs = {**argspec.kwargs, **kwargs}
+
+    try:
+        argspec.signature.bind(*full_args, **full_kwargs)
+    except TypeError:
+        # Another option is to copy-paste and patch `getcallargs` func
+        # but in this case we get responsibility to maintain it over
+        # python releases.
+        # This place is also responsible for raising ``TypeError`` for cases:
+        # 1. When incorrect argument is provided
+        # 2. When too many arguments are provided
+        return argspec.signature.bind_partial(*full_args, **full_kwargs), None
+    return None, (full_args, full_kwargs)
