@@ -1,4 +1,4 @@
-- case: curry_zero_args
+- case: partial_zero_args
   disable_cache: true
   main: |
     from returns.curry import partial
@@ -9,7 +9,7 @@
     reveal_type(partial(two_args))  # N: Revealed type is 'def (first: builtins.int, second: builtins.float) -> builtins.str'
 
 
-- case: curry_single_arg
+- case: partial_single_arg
   disable_cache: true
   main: |
     from returns.curry import partial
@@ -20,7 +20,7 @@
     reveal_type(partial(two_args, 1))  # N: Revealed type is 'def (second: builtins.float) -> builtins.str'
 
 
-- case: curry_all_args
+- case: partial_all_args
   disable_cache: true
   main: |
     from returns.curry import partial
@@ -31,7 +31,7 @@
     reveal_type(partial(two_args, 1, second=0.5))  # N: Revealed type is 'def () -> builtins.str'
 
 
-- case: curry_single_named_arg
+- case: partial_single_named_arg
   disable_cache: true
   main: |
     from returns.curry import partial
@@ -42,7 +42,7 @@
     reveal_type(partial(two_args, second=1.0))  # N: Revealed type is 'def (first: builtins.int) -> builtins.str'
 
 
-- case: curry_multiple_args
+- case: partial_multiple_args
   disable_cache: true
   main: |
     from returns.curry import partial
@@ -60,7 +60,7 @@
     reveal_type(partial(multiple, 1, 0.4, flag3=int, flag2=True))  # N: Revealed type is 'def (third: builtins.str, flag1: builtins.bool) -> builtins.str'
 
 
-- case: curry_not_callable_type
+- case: partial_not_callable_type
   disable_cache: true
   main: |
     from returns.curry import partial
@@ -70,7 +70,7 @@
     reveal_type(curried_int)  # N: Revealed type is 'def () -> builtins.int'
 
 
-- case: curry_explicit_noreturn
+- case: partial_explicit_noreturn
   disable_cache: true
   main: |
     from returns.curry import partial
@@ -82,7 +82,7 @@
     reveal_type(partial(exit, 1))  # N: Revealed type is 'def () -> <nothing>'
 
 
-- case: curry_wrong_argument_types
+- case: partial_wrong_argument_types
   disable_cache: true
   main: |
     from returns.curry import partial
@@ -101,7 +101,7 @@
     main:11: error: Argument 2 to "multiple" has incompatible type "bool"; expected "Literal[True]"
 
 
-- case: curry_too_many_positional_args
+- case: partial_too_many_positional_args
   disable_cache: true
   main: |
     from returns.curry import partial
@@ -118,7 +118,7 @@
     main:10: error: Too many arguments for "multiple"
 
 
-- case: curry_invalid_named_arg
+- case: partial_invalid_named_arg
   disable_cache: true
   main: |
     from returns.curry import partial

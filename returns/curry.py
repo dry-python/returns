@@ -73,9 +73,20 @@ def curry(function: Callable[..., _ReturnType]) -> Callable[..., _ReturnType]:
     - It is kinda slow. Like 100 times slower than a regular function call.
     - It does not work with several builtins like ``str``, ``int``,
       and possibly other ``C`` defined callables
+    - ``*args`` and ``**kwargs`` are not supported
+      and we use ``Any`` as a fallback
+    - Support of arguments with default values is very limited,
+      because we cannot be totally sure which case we are using:
+      with the default value or without it, be careful
     - We use a custom ``mypy`` plugin to make types correct,
       otherwise, it is currently impossible
-    - Typing returns ``Any`` for callables with ``*args`` and ``**kwargs``
+    - It might not work as expected with curried ``Klass().method``,
+      it might generate invalid method signrature
+      (looks like a bug in ``mypy``)
+    - It is probably a bad idea to ``curry`` a function with lots of arguments,
+      because you will end up with lots of overload functions,
+      that you won't be able to understand.
+      It might be also be slow during the typecheck.
 
     We expect people to use this tool responsibly
     when they know that they are doing.

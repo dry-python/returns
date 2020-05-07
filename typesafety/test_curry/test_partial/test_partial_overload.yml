@@ -1,4 +1,4 @@
-- case: curry_wrong_overload1
+- case: partial_wrong_overload1
   disable_cache: true
   main: |
     from typing import overload
@@ -24,7 +24,7 @@
     main:15: note: Revealed type is 'def (*Any, **Any) -> builtins.int*'
 
 
-- case: curry_wrong_overload2
+- case: partial_wrong_overload2
   disable_cache: true
   main: |
     from typing import overload
@@ -50,7 +50,7 @@
     main:15: note: Revealed type is 'Any'
 
 
-- case: curry_regular_overload
+- case: partial_regular_overload
   disable_cache: true
   main: |
     from typing import overload
@@ -84,7 +84,7 @@
     main:23: note: Revealed type is 'def (b: builtins.str) -> builtins.str'
 
 
-- case: curry_generic_overload_kind1
+- case: partial_generic_overload_kind1
   disable_cache: true
   main: |
     from typing import overload, TypeVar, List, Set
@@ -125,7 +125,7 @@
     main:29: note: Revealed type is 'def () -> builtins.float*'
 
 
-- case: curry_generic_overload_kind2
+- case: partial_generic_overload_kind2
   disable_cache: true
   main: |
     from typing import overload, TypeVar, List, Union

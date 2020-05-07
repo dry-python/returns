@@ -1,4 +1,4 @@
-- case: curry_complex_args
+- case: partial_complex_args
   disable_cache: true
   main: |
     from returns.curry import partial
@@ -37,7 +37,7 @@
     main:23: note: Revealed type is 'def (*args: builtins.float, *, d: builtins.str, e: builtins.bool =, **kwargs: builtins.str) -> builtins.str'
 
 
-- case: curry_args_kwargs
+- case: partial_args_kwargs
   disable_cache: true
   main: |
     from returns.curry import partial
@@ -51,7 +51,7 @@
     reveal_type(partial(multiple, 1, 2, 3, x='x', y='y')(4, 5, z='z'))  # N: Revealed type is 'builtins.str'
 
 
-- case: curry_pos_only_args
+- case: partial_pos_only_args
   disable_cache: true
   skip: sys.version_info < (3, 8)
   main: |
@@ -73,7 +73,7 @@
     reveal_type(partial(multiple, 1, 2, 3, d=4))  # N: Revealed type is 'def () -> builtins.str'
 
 
-- case: curry_object
+- case: partial_object
   disable_cache: true
   main: |
     from returns.curry import partial
@@ -96,7 +96,33 @@
     main:13: note: Revealed type is 'def () -> builtins.int'
 
 
-- case: curry_union
+- case: partial_classmethod
+  disable_cache: true
+  main: |
+    from returns.curry import partial
+
+    class Test(object):
+        @classmethod
+        def some(cls, arg: int, other: str) -> float:
+            ...
+
+    reveal_type(partial(Test.some, 1))  # N: Revealed type is 'def (other: builtins.str) -> builtins.float'
+
+
+- case: partial_staticmethod
+  disable_cache: true
+  main: |
+    from returns.curry import partial
+
+    class Test(object):
+        @staticmethod
+        def some(arg: int, other: str) -> float:
+            ...
+
+    reveal_type(partial(Test.some, 1))  # N: Revealed type is 'def (other: builtins.str) -> builtins.float'
+
+
+- case: partial_union
   disable_cache: true
   main: |
     from typing import Union
@@ -119,7 +145,7 @@
     main:15: note: Revealed type is 'def (*Any, **Any)'
 
 
-- case: curry_type_var
+- case: partial_type_var
   disable_cache: true
   main: |
     from typing import Callable, TypeVar
@@ -139,7 +165,7 @@
     test(first)
 
 
-- case: curry_type_type
+- case: partial_type_type
   disable_cache: true
   main: |
     from typing import Type, TypeVar
@@ -158,7 +184,7 @@
         return t(1)
 
 
-- case: curry_star_arg
+- case: partial_star_arg
   disable_cache: true
   main: |
     from returns.curry import partial
@@ -169,7 +195,7 @@
     reveal_type(partial(multiple, *(1, 2)))  # N: Revealed type is 'def (*Any, **Any) -> builtins.int*'
 
 
-- case: curry_star2_arg
+- case: partial_star2_arg
   disable_cache: true
   main: |
     from returns.curry import partial
@@ -180,7 +206,7 @@
     reveal_type(partial(multiple, **{'a': 1, 'b': 2}))  # N: Revealed type is 'def (*Any, **Any) -> builtins.int*'
 
 
-- case: curry_lambda
+- case: partial_lambda
   disable_cache: true
   main: |
     from returns.curry import partial

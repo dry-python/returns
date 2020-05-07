@@ -1,0 +1,34 @@
+- case: curry_args
+  disable_cache: true
+  main: |
+    from returns.curry import curry
+
+    @curry
+    def zero(*args) -> str:
+        ...
+
+    reveal_type(zero)  # N: Revealed type is 'Any'
+
+
+- case: curry_kwargs
+  disable_cache: true
+  main: |
+    from returns.curry import curry
+
+    @curry
+    def zero(**kwargs) -> str:
+        ...
+
+    reveal_type(zero)  # N: Revealed type is 'Any'
+
+
+- case: curry_args_kwargs
+  disable_cache: true
+  main: |
+    from returns.curry import curry
+
+    @curry
+    def zero(*args, **kwargs) -> str:
+        ...
+
+    reveal_type(zero)  # N: Revealed type is 'Any'
