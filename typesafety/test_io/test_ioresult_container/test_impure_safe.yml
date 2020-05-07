@@ -8,15 +8,3 @@
         return 1
 
     reveal_type(test)  # N: Revealed type is 'def (arg: builtins.str) -> returns.io.IOResult[builtins.int, builtins.Exception]'
-
-
-- case: impure_async_decorator_no_params
-  disable_cache: true
-  main: |
-    from returns.io import impure_safe
-
-    @impure_safe
-    async def test(first: str, second: bool) -> int:
-        return 1
-
-    reveal_type(test)  # N: Revealed type is 'def (first: builtins.str, second: builtins.bool) -> typing.Coroutine[Any, Any, returns.io.IOResult[builtins.int, builtins.Exception]]'

@@ -36,6 +36,9 @@ _TYPED_DECORATORS = frozenset((
     'returns.io.impure',
     'returns.io.impure_safe',
     'returns.maybe.maybe',
+    'returns.future.future',
+    'returns.future.future_safe',
+    'returns.functions.not_',
 ))
 
 #: Used for typed ``partial`` function.

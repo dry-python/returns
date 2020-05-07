@@ -10,6 +10,7 @@ from typing import (
 
 from typing_extensions import final
 
+from returns.context import NoDeps
 from returns.io import IO, IOFailure, IOResult, IOSuccess
 from returns.primitives.container import BaseContainer
 from returns.primitives.types import Immutable
@@ -102,6 +103,8 @@ class RequiresContextIOResult(
 
     """
 
+    #: Inner value of `RequiresContext`
+    #: is just a function that returns `IOResult`.
     #: This field has an extra 'RequiresContext' just because `mypy` needs it.
     _inner_value: Callable[
         ['RequiresContextIOResult', _EnvType],
@@ -109,7 +112,7 @@ class RequiresContextIOResult(
     ]
 
     #: A convinient placeholder to call methods created by `.from_value()`.
-    empty: ClassVar[Any] = object()
+    empty: ClassVar[NoDeps] = object()
 
     def __init__(
         self,
@@ -572,7 +575,6 @@ class RequiresContextIOResult(
 
         See also:
             - https://wiki.haskell.org/Lifting
-            - https://github.com/witchcrafters/witchcraft
             - https://en.wikipedia.org/wiki/Natural_transformation
 
         """

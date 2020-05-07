@@ -27,6 +27,11 @@ _ErrorType = TypeVar('_ErrorType')
 # Helpers:
 _FirstType = TypeVar('_FirstType')
 
+# Type Aliases:
+#: Sometimes ``RequiresContext`` and other similar types might be used with
+#: no explicit dependencies so we need to have this type alias for Any.
+NoDeps = Any
+
 
 @final
 class RequiresContext(
@@ -67,7 +72,7 @@ class RequiresContext(
     _inner_value: Callable[['RequiresContext', _EnvType], _ReturnType]
 
     #: A convinient placeholder to call methods created by `.from_value()`:
-    empty: ClassVar[Any] = object()
+    empty: ClassVar[NoDeps] = object()
 
     def __init__(
         self, inner_value: Callable[[_EnvType], _ReturnType],
@@ -206,7 +211,6 @@ class RequiresContext(
 
         See also:
             - https://wiki.haskell.org/Lifting
-            - https://github.com/witchcrafters/witchcraft
             - https://en.wikipedia.org/wiki/Natural_transformation
 
         """

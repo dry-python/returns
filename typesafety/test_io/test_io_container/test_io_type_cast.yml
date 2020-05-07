@@ -3,7 +3,7 @@
   main: |
     from returns.io import IO
 
-    first: IO[ValueError]  # we cast both values
+    first: IO[ValueError]
     second: IO[Exception] = first
     reveal_type(second)  # N: Revealed type is 'returns.io.IO[builtins.Exception]'
 

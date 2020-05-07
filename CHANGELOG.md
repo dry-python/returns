@@ -10,18 +10,37 @@ See [0Ver](https://0ver.org/).
 
 ### Features
 
+- **Breaking**: changes `@safe`, `@impure`, `impure_safe`, `@maybe` semantics:
+  they do not work with `async` functions anymore;
+  now you are forced to use `Future` and its helpers
+  to work with `async` functions
 - **Breaking**: renames `Maybe.new` to `Maybe.from_value`.
   Because all our other containers support this protocol.
   Only `Maybe` was different, sorry for that!
 - Adds typed `partial` plugin!
 - Adds `pytest` plugin with the ability to tests error handling
+- Adds `Future` container to easily work with `async` functions
+- Adds `FutureResult` container to easily work
+  with `async` function that might fail
+- Adds `bind_io` method to `IOResult`
+- Adds `lift_io` method to `IOResult`
 - Adds `unify` point free function
+- Adds `not_` composition helper
+- Adds `flatten` support for `Future` and `FutureResult`
 - Adds `__copy__` and `__deepcopy__` magic methods to `Immutable` class
 
 ### Bugfixes
 
 - **Breaking**: `Some(None)` does no evaluate to `Nothing` anymore,
   it might break some people's programms. But it was very wrong!
+- Fixes that `@safe` decorator was generating incorrect signatures
+  for functions with `Any`
+
+### Misc
+
+- Replaces `pytest-asyncio` with `anyio` plugin,
+  now we test compatibility with any IO stack: `asyncio`, `trio`, `curio`
+- Updates lots of dependencies
 
 
 ## 0.13.0

@@ -1,4 +1,5 @@
 from functools import wraps
+from inspect import iscoroutinefunction
 
 import pytest
 from typing_extensions import Final, final
@@ -55,12 +56,13 @@ class _PatchedContainer(object):
     @classmethod
     def containers_to_patch(cls) -> tuple:
         """We need this method so coverage will work correctly."""
-        from returns.context import (  # noqa: WPS433
+        from returns.context import (
             RequiresContextIOResult,
             RequiresContextResult,
         )
-        from returns.io import _IOFailure, _IOSuccess  # noqa: WPS433
-        from returns.result import _Failure, _Success  # noqa: WPS433
+        from returns.io import _IOFailure, _IOSuccess
+        from returns.result import _Failure, _Success
+        from returns.future import FutureResult
 
         return (
             _Success,
@@ -69,28 +71,45 @@ class _PatchedContainer(object):
             _IOFailure,
             RequiresContextResult,
             RequiresContextIOResult,
+            FutureResult,
         )
 
     @classmethod
     def error_handler(cls, original):
-        @wraps(original)
-        def factory(self, *args, **kwargs):
-            original_result = original(self, *args, **kwargs)
-            object.__setattr__(  # noqa: WPS609
-                original_result, _ERROR_FIELD, True,  # noqa: WPS425
-            )
-            return original_result
-        return factory
+        if iscoroutinefunction(original):
+            async def factory(self, *args, **kwargs):
+                original_result = await original(self, *args, **kwargs)
+                object.__setattr__(
+                    original_result, _ERROR_FIELD, True,  # noqa: WPS425
+                )
+                return original_result
+        else:
+            def factory(self, *args, **kwargs):
+                original_result = original(self, *args, **kwargs)
+                object.__setattr__(
+                    original_result, _ERROR_FIELD, True,  # noqa: WPS425
+                )
+                return original_result
+        return wraps(original)(factory)
 
     @classmethod
     def copy_handler(cls, original):
-        @wraps(original)
-        def factory(self, *args, **kwargs):
-            original_result = original(self, *args, **kwargs)
-            object.__setattr__(  # noqa: WPS609
-                original_result,
-                _ERROR_FIELD,
-                getattr(self, _ERROR_FIELD, False),
-            )
-            return original_result
-        return factory
+        if iscoroutinefunction(original):
+            async def factory(self, *args, **kwargs):
+                original_result = await original(self, *args, **kwargs)
+                object.__setattr__(
+                    original_result,
+                    _ERROR_FIELD,
+                    getattr(self, _ERROR_FIELD, False),
+                )
+                return original_result
+        else:
+            def factory(self, *args, **kwargs):
+                original_result = original(self, *args, **kwargs)
+                object.__setattr__(
+                    original_result,
+                    _ERROR_FIELD,
+                    getattr(self, _ERROR_FIELD, False),
+                )
+                return original_result
+        return wraps(original)(factory)

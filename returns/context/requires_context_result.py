@@ -10,6 +10,7 @@ from typing import (
 
 from typing_extensions import final
 
+from returns.context import NoDeps
 from returns.primitives.container import BaseContainer
 from returns.primitives.types import Immutable
 from returns.result import Failure, Result, Success
@@ -100,7 +101,7 @@ class RequiresContextResult(
     ]
 
     #: A convinient placeholder to call methods created by `.from_value()`.
-    empty: ClassVar[Any] = object()
+    empty: ClassVar[NoDeps] = object()
 
     def __init__(
         self,
@@ -467,7 +468,6 @@ class RequiresContextResult(
 
         See also:
             - https://wiki.haskell.org/Lifting
-            - https://github.com/witchcrafters/witchcraft
             - https://en.wikipedia.org/wiki/Natural_transformation
 
         """

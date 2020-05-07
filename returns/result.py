@@ -1,16 +1,14 @@
 from abc import ABCMeta
 from functools import wraps
-from inspect import iscoroutinefunction
-from typing import (  # noqa: WPS235
+from typing import (
     Any,
     Callable,
     ClassVar,
-    Coroutine,
     Generic,
+    NoReturn,
     Type,
     TypeVar,
     Union,
-    overload,
 )
 
 from typing_extensions import final
@@ -65,9 +63,11 @@ class Result(
         .. code:: python
 
           >>> from returns.result import Failure, Success
+
           >>> def mappable(string: str) -> str:
           ...      return string + 'b'
           ...
+
           >>> assert Success('a').map(mappable) == Success('ab')
           >>> assert Failure('a').map(mappable) == Failure('a')
 
@@ -84,11 +84,13 @@ class Result(
         .. code:: python
 
           >>> from returns.result import Result, Success, Failure
+
           >>> def bindable(arg: str) -> Result[str, str]:
           ...      if len(arg) > 1:
           ...          return Success(arg + 'b')
           ...      return Failure(arg + 'c')
           ...
+
           >>> assert Success('aa').bind(bindable) == Success('aab')
           >>> assert Success('a').bind(bindable) == Failure('ac')
           >>> assert Failure('a').bind(bindable) == Failure('a')
@@ -115,11 +117,13 @@ class Result(
         .. code:: python
 
           >>> from returns.result import Result, Success, Failure
+
           >>> def bindable(arg: str) -> Result[str, str]:
           ...      if len(arg) > 1:
           ...          return Success(arg + 'b')
           ...      return Failure(arg + 'c')
           ...
+
           >>> assert Success('aa').unify(bindable) == Success('aab')
           >>> assert Success('a').unify(bindable) == Failure('ac')
           >>> assert Failure('a').unify(bindable) == Failure('a')
@@ -137,9 +141,11 @@ class Result(
         .. code:: python
 
           >>> from returns.result import Failure, Success
+
           >>> def fixable(arg: str) -> str:
           ...      return 'ab'
           ...
+
           >>> assert Success('a').fix(fixable) == Success('a')
           >>> assert Failure('a').fix(fixable) == Success('ab')
 
@@ -156,9 +162,11 @@ class Result(
         .. code:: python
 
           >>> from returns.result import Result, Failure, Success
+
           >>> def altable(arg: str) -> Result[str, str]:
           ...      return arg + 'b'
           ...
+
           >>> assert Success('a').alt(altable) == Success('a')
           >>> assert Failure('a').alt(altable) == Failure('ab')
 
@@ -177,11 +185,13 @@ class Result(
         .. code:: python
 
           >>> from returns.result import Result, Success, Failure
+
           >>> def rescuable(arg: str) -> Result[str, str]:
           ...      if len(arg) > 1:
           ...          return Success(arg + 'b')
           ...      return Failure(arg + 'c')
           ...
+
           >>> assert Success('a').rescue(rescuable) == Success('a')
           >>> assert Failure('a').rescue(rescuable) == Failure('ac')
           >>> assert Failure('aa').rescue(rescuable) == Success('aab')
@@ -264,15 +274,16 @@ class Result(
         .. code:: python
 
           >>> from returns.result import Success, Result, Failure
+
           >>> def example(argument: int) -> float:
           ...     return argument / 2
           ...
+
           >>> assert Result.lift(example)(Success(2)) == Success(1.0)
           >>> assert Result.lift(example)(Failure(2)) == Failure(2)
 
         See also:
             - https://wiki.haskell.org/Lifting
-            - https://github.com/witchcrafters/witchcraft
             - https://en.wikipedia.org/wiki/Natural_transformation
 
         """
@@ -367,17 +378,17 @@ class _Failure(Result[Any, _ErrorType]):
         """Composes failed container with a pure function to modify failure."""
         return _Failure(function(self._inner_value))
 
-    def value_or(self, default_value):
+    def value_or(self, default_value: _NewValueType) -> _NewValueType:
         """Returns default value for failed container."""
         return default_value
 
-    def unwrap(self):
+    def unwrap(self) -> NoReturn:
         """Raises an exception, since it does not have a value inside."""
         if isinstance(self._inner_value, Exception):
             raise UnwrapFailedError(self) from self._inner_value
         raise UnwrapFailedError(self)
 
-    def failure(self):
+    def failure(self) -> _ErrorType:
         """Returns failed value."""
         return self._inner_value
 
@@ -428,15 +439,15 @@ class _Success(Result[_ValueType, Any]):
         """Does nothing for ``Success``."""
         return self
 
-    def value_or(self, default_value):
+    def value_or(self, default_value: _NewValueType) -> _ValueType:
         """Returns the value for successful container."""
         return self._inner_value
 
-    def unwrap(self):
+    def unwrap(self) -> _ValueType:
         """Returns the unwrapped value from successful container."""
         return self._inner_value
 
-    def failure(self):
+    def failure(self) -> NoReturn:
         """Raises an exception for successful container."""
         raise UnwrapFailedError(self)
 
@@ -487,51 +498,39 @@ ResultE = Result[_ValueType, Exception]
 
 # Decorators:
 
-@overload
-def safe(  # type: ignore
-    function: Callable[..., Coroutine[_FirstType, _SecondType, _ValueType]],
-) -> Callable[
-    ...,
-    Coroutine[_FirstType, _SecondType, ResultE[_ValueType]],
-]:
-    """Case for async functions."""
-
-
-@overload
 def safe(
     function: Callable[..., _ValueType],
 ) -> Callable[..., ResultE[_ValueType]]:
-    """Case for regular functions."""
-
-
-def safe(function):  # noqa: C901
     """
-    Decorator to convert exception-throwing function to 'Result' container.
+    Decorator to convert exception-throwing function to ``Result`` container.
 
-    Should be used with care, since it only catches 'Exception' subclasses.
-    It does not catch 'BaseException' subclasses.
+    Should be used with care, since it only catches ``Exception`` subclasses.
+    It does not catch ``BaseException`` subclasses.
 
-    Supports both async and regular functions.
+    If you need to mark ``async`` function as ``safe``,
+    use :func:`returns.future.future_safe` instead.
+    This decorator only works with sync functions. Example:
 
-    >>> from returns.result import Result, Success, safe
-    >>> @safe
-    ... def might_raise(arg: int) -> float:
-    ...     return 1 / arg
-    ...
-    >>> assert might_raise(1) == Success(1.0)
-    >>> assert isinstance(might_raise(0), Result.failure_type)
+    .. code:: python
+
+      >>> from returns.result import Result, Success, safe
+
+      >>> @safe
+      ... def might_raise(arg: int) -> float:
+      ...     return 1 / arg
+      ...
+
+      >>> assert might_raise(1) == Success(1.0)
+      >>> assert isinstance(might_raise(0), Result.failure_type)
+
+    Similar to :func:`returns.io.impure_safe`
+    and :func:`returns.future.future_safe` decorators.
 
     """
-    if iscoroutinefunction(function):
-        async def decorator(*args, **kwargs):  # noqa: WPS430
-            try:
-                return Success(await function(*args, **kwargs))
-            except Exception as exc:
-                return Failure(exc)
-    else:
-        def decorator(*args, **kwargs):  # noqa: WPS430
-            try:
-                return Success(function(*args, **kwargs))
-            except Exception as exc:
-                return Failure(exc)
-    return wraps(function)(decorator)
+    @wraps(function)
+    def decorator(*args, **kwargs):
+        try:
+            return Success(function(*args, **kwargs))
+        except Exception as exc:
+            return Failure(exc)
+    return decorator

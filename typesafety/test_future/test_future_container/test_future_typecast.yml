@@ -1,0 +1,17 @@
+- case: future_correct_cast
+  disable_cache: true
+  main: |
+    from returns.future import Future
+
+    first: Future[ValueError]
+    second: Future[Exception] = first
+    reveal_type(second)  # N: Revealed type is 'returns.future.Future[builtins.Exception]'
+
+
+- case: future_from_downcast
+  disable_cache: true
+  main: |
+    from returns.future import Future, FutureResult
+
+    first: FutureResult[int, ValueError]
+    reveal_type(Future.from_futureresult(first))  # N: Revealed type is 'returns.future.Future[returns.result.Result[builtins.int*, builtins.ValueError*]]'

@@ -482,6 +482,7 @@ Further reading
 - `IO effect in Scala <https://typelevel.org/cats-effect/datatypes/io.html>`_
 - `Getting started with fp-ts: IO <https://dev.to/gcanti/getting-started-with-fp-ts-io-36p6>`_
 - `IOEither <https://github.com/gcanti/fp-ts/blob/master/docs/modules/IOEither.ts.md>`_
+- `Effect Tracking Is Commercially Worthless <https://degoes.net/articles/no-effect-tracking>`_
 
 
 API Reference

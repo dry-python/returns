@@ -8,6 +8,7 @@ from returns.context.requires_context import (  # noqa: F401
     Context as Context,
     RequiresContext as RequiresContext,
     Reader as Reader,
+    NoDeps as NoDeps,
 )
 from returns.context.requires_context_result import (  # noqa: F401
     ContextResult as ContextResult,

@@ -96,19 +96,6 @@
     reveal_type(test)  # N: Revealed type is 'def () -> returns.maybe.Maybe[builtins.int*]'
 
 
-- case: maybe_async_decorator_with_optional
-  disable_cache: true
-  main: |
-    from typing import Optional
-    from returns.maybe import maybe
-
-    @maybe
-    async def test() -> Optional[int]:
-        return 1
-
-    reveal_type(test)  # N: Revealed type is 'def () -> typing.Coroutine[Any, Any, returns.maybe.Maybe[builtins.int*]]'
-
-
 - case: maybe_multiple_decorators
   disable_cache: true
   main: |

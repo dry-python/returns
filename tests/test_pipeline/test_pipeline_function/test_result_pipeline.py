@@ -33,7 +33,7 @@ def test_pipeline():
         raise _result_pipeline(0).failure()
 
 
-@pytest.mark.asyncio
+@pytest.mark.anyio
 async def test_async_pipeline():
     """Ensures that async pipeline works well for async functions."""
     assert (await _result_async_pipeline(1)) == Success(2.0)
