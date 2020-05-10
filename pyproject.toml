@@ -42,6 +42,9 @@ classifiers = [
   "Topic :: Utilities"
 ]
 
+[tool.poetry.urls]
+"Funding" = "https://github.com/sponsors/dry-python"
+
 [tool.poetry.plugins.pytest11]
 returns = "returns.contrib.pytest.plugin"
 
