@@ -437,6 +437,34 @@ def future(
     return decorator
 
 
+def asyncize(function: Callable[..., _ValueType]) -> Callable[
+    ...,
+    Coroutine[Any, Any, _ValueType],
+]:
+    """
+    Decorator to turn a common function into an asynchronous function.
+
+    This decorator is useful for composition with ``Future`` and
+    ``FutureResult`` containers.
+
+    .. code:: python
+
+      >>> import anyio
+      >>> from returns.future import asyncize
+
+      >>> @asyncize
+      ... def test(x: int) -> int:
+      ...     return x + 1
+      ...
+      >>> assert anyio.run(test, 1) == 2
+
+    """
+    @wraps(function)
+    async def decorator(*args, **kwargs):
+        return function(*args, **kwargs)
+    return decorator
+
+
 # FutureResult
 # ============
 
