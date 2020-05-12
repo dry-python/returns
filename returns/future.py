@@ -444,8 +444,8 @@ def asyncize(function: Callable[..., _ValueType]) -> Callable[
     """
     Decorator to turn a common function into an asynchronous function.
 
-    This decorator is useful for use with ``Future`` and ``FutureResult``
-    containers.
+    This decorator is useful for composition with ``Future`` and
+    ``FutureResult`` containers.
 
     .. code:: python
 
