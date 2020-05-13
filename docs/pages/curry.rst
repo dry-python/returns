@@ -172,6 +172,20 @@ In contrast to ``partial`` which works on the calling stage,
   >>> assert function(2)('abc') is True
   >>> assert function(2, 'abc') is True
 
+Take a note, that providing invalid arguments will raise ``TypeError``:
+
+.. code::
+
+  >>> function(1, 2, 3)
+  Traceback (most recent call last):
+    ...
+  TypeError: too many positional arguments
+
+  >>> function(a=1)
+  Traceback (most recent call last):
+    ...
+  TypeError: got an unexpected keyword argument 'a'
+
 This is really helpful when working with ``.apply()`` method of containers.
 
 Typing
@@ -186,11 +200,11 @@ Let's see how types do look like for a curried function:
   >>> from returns.curry import curry
 
   >>> @curry
-  >>> def zero(a: int, b: float, *, kw: bool) -> str:
+  ... def zero(a: int, b: float, *, kw: bool) -> str:
   ...      return str(a - b) if kw else ''
 
-  >>> assert zero(1)(0.3)(True) == '0.7'
-  >>> assert zero(1)(0.3, False) == ''
+  >>> assert zero(1)(0.3)(kw=True) == '0.7'
+  >>> assert zero(1)(0.3, kw=False) == ''
 
   # If we will reveal the type it would be quite big:
 

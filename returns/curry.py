@@ -60,13 +60,27 @@ def curry(function: Callable[..., _ReturnType]) -> Callable[..., _ReturnType]:
       >>> from returns.curry import curry
 
       >>> @curry
-      ... def divide(*numbers: int, by: int) -> float:
-      ...     return sum(numbers) / by
+      ... def divide(number: int, by: int) -> float:
+      ...     return number / by
 
-      >>> divide(1)(2, 3)  # doesn't call the func and remembers arguments
+      >>> divide(1)  # doesn't call the func and remembers arguments
       <function divide at ...>
-      >>> assert divide(1)(2)(by=10) == 0.3  # calls the func when possible
-      >>> assert divide(1, 2, by=10) == 0.3  # or call the func like always
+      >>> assert divide(1)(by=10) == 0.1  # calls the func when possible
+      >>> assert divide(1, by=10) == 0.1  # or call the func like always
+
+    Here are several examples with wrong arguments:
+
+    .. code::
+
+      >>> divide(1, 2, 3)
+      Traceback (most recent call last):
+        ...
+      TypeError: too many positional arguments
+
+      >>> divide(a=1)
+      Traceback (most recent call last):
+        ...
+      TypeError: got an unexpected keyword argument 'a'
 
     Limitations:
 
