@@ -411,7 +411,7 @@ description = "A plugin for flake8 to enable linting .pyi files."
 name = "flake8-pyi"
 optional = false
 python-versions = ">=3.6"
-version = "19.3.0"
+version = "20.5.0"
 
 [package.dependencies]
 attrs = "*"
@@ -1316,7 +1316,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "b6ee5ee2155140e6a3035cc034e5ca110d2aa46c104c8c618068a4506de1121f"
+content-hash = "99158a62839ffa5b48dc0d7fa55a4ec44050579934d730df108eee9a07421e1d"
 python-versions = "^3.6"
 
 [metadata.files]
@@ -1515,8 +1515,8 @@ flake8-polyfill = [
     {file = "flake8_polyfill-1.0.2-py2.py3-none-any.whl", hash = "sha256:12be6a34ee3ab795b19ca73505e7b55826d5f6ad7230d31b18e106400169b9e9"},
 ]
 flake8-pyi = [
-    {file = "flake8-pyi-19.3.0.tar.gz", hash = "sha256:3646134dcc5269d3fd017624961de83cc0a0404f620233885ad86faf64265a11"},
-    {file = "flake8_pyi-19.3.0-py2.py3-none-any.whl", hash = "sha256:a93a47ac78b6d363545885e9254d0eccac8a88c3806ab8af27e30dd8c058654f"},
+    {file = "flake8-pyi-20.5.0.tar.gz", hash = "sha256:f3db4d6feaec5343741feb07c75ab4f00be742f71ec2cad82d89a33b9326f8fe"},
+    {file = "flake8_pyi-20.5.0-py36-none-any.whl", hash = "sha256:f22cbadb5e51bd273906d5f94fafa94caefc80d7605a9cafe8f20f95496a7cfe"},
 ]
 flake8-pytest-style = [
     {file = "flake8-pytest-style-1.1.1.tar.gz", hash = "sha256:d91ffba047964e5bb4491dc71771008fa0438988870d59d4162bdba3674fb7a8"},
