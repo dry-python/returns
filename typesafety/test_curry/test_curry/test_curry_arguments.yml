@@ -17,8 +17,11 @@
     reveal_type(multiple)  # N: Revealed type is 'Overload(def (builtins.int) -> Overload(def (builtins.int, builtins.int, d: builtins.int) -> builtins.str, def (builtins.int, builtins.int) -> def (d: builtins.int) -> builtins.str, def (builtins.int) -> Overload(def (builtins.int, d: builtins.int) -> builtins.str, def (builtins.int) -> def (d: builtins.int) -> builtins.str)), def (builtins.int, builtins.int) -> Overload(def (builtins.int, d: builtins.int) -> builtins.str, def (builtins.int) -> def (d: builtins.int) -> builtins.str), def (builtins.int, builtins.int, builtins.int) -> def (d: builtins.int) -> builtins.str, def (builtins.int, builtins.int, builtins.int, d: builtins.int) -> builtins.str)'
 
 
+# TODO: remove skip after this bug in `mypy` is fixed:
+# https://github.com/python/mypy/issues/8801
 - case: curry_init_magic_method
   disable_cache: true
+  skip: true
   main: |
     from returns.curry import curry
 

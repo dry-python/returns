@@ -86,7 +86,9 @@ def curry(function: Callable[..., _ReturnType]) -> Callable[..., _ReturnType]:
     - It is probably a bad idea to ``curry`` a function with lots of arguments,
       because you will end up with lots of overload functions,
       that you won't be able to understand.
-      It might be also be slow during the typecheck.
+      It might be also be slow during the typecheck
+    - Cyrrying of ``__init__`` does not work because of the bug in ``mypy``:
+      https://github.com/python/mypy/issues/8801
 
     We expect people to use this tool responsibly
     when they know that they are doing.

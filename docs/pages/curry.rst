@@ -3,11 +3,16 @@
 Curry
 =====
 
-Python already has a great tool to use partial application:
+This module is dedicated to partial application.
+
+We support two types of partial application: ``@curry`` and ``partial``.
+
+``@curry`` is a new concept for most Python developers,
+but Python already has a great tool to use partial application:
 `functools.partial <https://docs.python.org/3/library/functools.html#functools.partial>`_
 
 The only problem with it is the lack of typing.
-Let's see what problems do we solve with our custom solution.
+Let's see what problems do we solve with this module.
 
 .. warning::
 
@@ -144,30 +149,120 @@ It also looks the same way:
 From this return type you can see that we work
 with all matching cases and discriminate unmatching ones.
 
+
+curry
+-----
+
+``curry`` allows to provide only a subset of arguments to a function.
+And it won't be called untill all the required arguments are provided.
+
+In contrast to ``partial`` which works on the calling stage,
+``@curry`` works best when defining a new function.
+
+.. code:: python
+
+  >>> from returns.curry import curry
+
+  >>> @curry
+  ... def function(first: int, second: str) -> bool:
+  ...     return len(second) > first
+
+  >>> assert function(1)('a') is False
+  >>> assert function(1, 'a') is False
+  >>> assert function(2)('abc') is True
+  >>> assert function(2, 'abc') is True
+
+This is really helpful when working with ``.apply()`` method of containers.
+
+Typing
+~~~~~~
+
+``@curry`` functions are also fully typed with our custom ``mypy`` plugin.
+
+Let's see how types do look like for a curried function:
+
+.. code:: python
+
+  >>> from returns.curry import curry
+
+  >>> @curry
+  >>> def zero(a: int, b: float, *, kw: bool) -> str:
+  ...      return str(a - b) if kw else ''
+
+  >>> assert zero(1)(0.3)(True) == '0.7'
+  >>> assert zero(1)(0.3, False) == ''
+
+  # If we will reveal the type it would be quite big:
+
+  reveal_type(zero)
+
+  # Overload(
+  #   def (a: builtins.int) -> Overload(
+  #     def (b: builtins.float, *, kw: builtins.bool) -> builtins.str,
+  #     def (b: builtins.float) -> def (*, kw: builtins.bool) -> builtins.str
+  #   ),
+  #   def (a: builtins.int, b: builtins.float) -> def (*, kw: builtins.bool)
+  #     -> builtins.str,
+  #   def (a: builtins.int, b: builtins.float, *, kw: builtins.bool)
+  #     -> builtins.str
+  # )
+
+It reaveals to us that there are 4 possible way to call this function.
+And we type all of them with
+`overload <https://mypy.readthedocs.io/en/stable/more_types.html#function-overloading>`_
+type.
+
+When you provide any arguments,
+you discriminate some overloads and choose more specific path:
+
+.. code:: python
+
+  reveal_type(zero(1, 2.0))
+  # By providing this set of arguments we have choosen this path:
+  #
+  #   def (a: builtins.int, b: builtins.float) -> def (*, kw: builtins.bool)
+  #     -> builtins.str,
+  #
+  # And the revealed type would be:
+  #   def (*, kw: builtins.bool) -> builtins.str
+  #
+
+It works with functions, instance, class,
+and static methods, including generics.
+See ``Limitations`` in the API reference.
+
+
+FAQ
+---
+
 Why don't you support `*` and `**` arguments?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When you use ``partial(some, *my_args)`` or ``partial(some, **my_args)``
 or both of them at the same time,
-we fallback to the default return type. Why?
+we fallback to the default return type. The same happens with ``curry``. Why?
 
-Because ``mypy`` cannot not infer what arguments are there
-inside this ``my_args`` variable.
+There are several problems:
 
-Our advice is not to use ``*args`` and ``*kwargs`` in ``partial`` call.
+- Because ``mypy`` cannot not infer what arguments are there
+  inside this ``my_args`` variable
+- Because ``curry`` cannot know when
+  to stop accepting ``*args`` and ``**kwargs``
+- And there are possibly other problems!
+
+Our advice is not to use ``*args`` and ``*kwargs``
+with ``partial`` and ``curry``.
+
+
+Further reading
+---------------
+
+- `functools.partial <https://docs.python.org/3/library/functools.html#functools.partial>`_
+- `Currying <https://en.wikipedia.org/wiki/Currying>`_
+- `@curry decorator <https://stackoverflow.com/questions/9458271/currying-decorator-in-python>`_
+
 
 API Reference
-~~~~~~~~~~~~~
+-------------
 
 .. automodule:: returns.curry
-   :members: partial
-
-
-.. _currying:
-
-Currying
---------
-
-.. autodecorator:: returns.curry.eager_curry
-
-.. autodecorator:: returns.curry.lazy_curry
