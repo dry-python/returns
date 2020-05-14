@@ -22,7 +22,9 @@ https://github.com/mkurnikov/pytest-mypy-plugins
 from typing import Callable, Optional, Type
 
 from mypy.plugin import FunctionContext, Plugin
-from mypy.types import CallableType, Instance, Overloaded, TypeType
+from mypy.types import CallableType, Instance, Overloaded
+from mypy.types import Type as MypyType
+from mypy.types import TypeType
 
 from returns.contrib.mypy._curry import (
     AppliedArgs,
@@ -62,7 +64,7 @@ def _change_decorator_function_type(
     )
 
 
-def _analyze_decorator(function_ctx: FunctionContext):
+def _analyze_decorator(function_ctx: FunctionContext) -> MypyType:
     """Tells us what to do when one of the typed decorators is called."""
     if not isinstance(function_ctx.arg_types[0][0], CallableType):
         return function_ctx.default_return_type
@@ -74,7 +76,7 @@ def _analyze_decorator(function_ctx: FunctionContext):
     )
 
 
-def _analyze_partial(function_ctx: FunctionContext):
+def _analyze_partial(function_ctx: FunctionContext) -> MypyType:
     """
     This hook is used to make typed curring a thing in `returns` project.
 
@@ -113,7 +115,7 @@ def _analyze_partial(function_ctx: FunctionContext):
     ).new_partial()
 
 
-def _analyze_curry(function_ctx: FunctionContext):
+def _analyze_curry(function_ctx: FunctionContext) -> MypyType:
     if not isinstance(function_ctx.arg_types[0][0], CallableType):
         return function_ctx.default_return_type
     if not isinstance(function_ctx.default_return_type, CallableType):
@@ -126,9 +128,9 @@ def _analyze_curry(function_ctx: FunctionContext):
 
 
 class _TypedDecoratorPlugin(Plugin):
-    def get_function_hook(  # type: ignore
+    def get_function_hook(
         self, fullname: str,
-    ) -> Optional[Callable[[FunctionContext], Type]]:
+    ) -> Optional[Callable[[FunctionContext], MypyType]]:
         """
         One of the specified ``mypy`` callbacks.
 
