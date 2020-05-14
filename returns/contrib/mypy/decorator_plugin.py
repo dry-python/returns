@@ -119,12 +119,10 @@ def _analyze_curry(function_ctx: FunctionContext):
     if not isinstance(function_ctx.default_return_type, CallableType):
         return function_ctx.default_return_type
 
-    x = CurryFunctionOverloads(
+    return CurryFunctionOverloads(
         function_ctx.arg_types[0][0],
         function_ctx,
     ).build_overloads()
-    print(x)
-    return x
 
 
 class _TypedDecoratorPlugin(Plugin):
