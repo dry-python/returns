@@ -86,6 +86,7 @@ class Maybe(
           ...      return string + 'b'
 
           >>> assert Some('a').apply(Some(appliable)) == Some('ab')
+          >>> assert Some('a').apply(Nothing) == Nothing
           >>> assert Nothing.apply(Some(appliable)) == Nothing
           >>> assert Nothing.apply(Nothing) == Nothing
 
