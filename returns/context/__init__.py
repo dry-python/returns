@@ -17,6 +17,12 @@ from returns.context.requires_context_result import (  # noqa: F401
     ReaderResult as ReaderResult,
     ReaderResultE as ReaderResultE,
 )
+from returns.context.requires_context_future_result import (  # noqa: F401
+    RequiresContextFutureResult as RequiresContextFutureResult,
+    RequiresContextFutureResultE as RequiresContextFutureResultE,
+    ReaderFutureResult as ReaderFutureResult,
+    ReaderFutureResultE as ReaderFutureResultE,
+)
 from returns.context.requires_context_io_result import (  # noqa: F401
     ContextIOResult as ContextIOResult,
     RequiresContextIOResult as RequiresContextIOResult,

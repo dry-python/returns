@@ -14,10 +14,8 @@ We also ship an utility function to compose two different functions together.
   >>> from returns.functions import compose
 
   >>> bool_after_int = compose(int, bool)
-  >>> bool_after_int('1')
-  True
-  >>> bool_after_int('0')
-  False
+  >>> assert bool_after_int('1') is True
+  >>> assert bool_after_int('0') is False
 
 Composition is also type-safe.
 The only limitation is that we only support
@@ -114,23 +112,17 @@ It supports functions with one or more arguments.
 .. code:: python
 
   >>> from typing import List
-
   >>> from returns.functions import compose, not_
 
   >>> def is_even(number: int) -> bool:
   ...     return number % 2 == 0
-  ...
 
   >>> def number_is_in_list(number: int, list_: List[int]) -> bool:
   ...     return number in list_
-  ...
 
-  >>> not_(is_even)(2)
-  False
-  >>> not_(number_is_in_list)(1, [2, 3, 4])
-  True
-  >>> compose(int, not_(is_even))("1")
-  True
+  >>> assert not_(is_even)(2) is False
+  >>> assert not_(number_is_in_list)(1, [2, 3, 4]) is True
+  >>> assert compose(int, not_(is_even))("1") is True
 
 
 API Reference

@@ -43,6 +43,8 @@ See [0Ver](https://0ver.org/).
   for functions with `Any`
 - Fixes that `.rescue()` of `RequiresContextResult` was returning `Any`
 - Fixes that `.rescue()` of `RequiresContextIOResult` was returning `Any`
+- Fixes that `RequiresContextResult` and `RequiresContextIOResult`
+  were not `final`
 
 ### Misc
 

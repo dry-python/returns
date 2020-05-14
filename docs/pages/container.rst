@@ -58,8 +58,8 @@ to construct a new container from a raw value.
   '<Success: 1>'
 
 
-Working with containers
------------------------
+Working with a container
+------------------------
 
 We use two methods to create a new container from the previous one.
 ``bind`` and ``map``.

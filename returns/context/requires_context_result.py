@@ -31,6 +31,7 @@ _NewErrorType = TypeVar('_NewErrorType')
 _FirstType = TypeVar('_FirstType')
 
 
+@final
 class RequiresContextResult(
     BaseContainer,
     Generic[_EnvType, _ValueType, _ErrorType],
