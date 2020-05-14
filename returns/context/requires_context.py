@@ -137,6 +137,23 @@ class RequiresContext(
         """
         return RequiresContext(lambda deps: function(self(deps)))
 
+    def apply(
+        self,
+        container: 'Reader[_EnvType, Callable[[_ReturnType], _NewReturnType]]',
+    ) -> 'RequiresContext[_EnvType, _NewReturnType]':
+        """
+        Calls a wrapped function in a container on this container.
+
+        .. code:: python
+
+          >>> from returns.context import RequiresContext
+          >>> assert RequiresContext.from_value('a').apply(
+          ...    RequiresContext.from_value(lambda inner: inner + 'b')
+          ... )(...) == 'ab'
+
+        """
+        return RequiresContext(lambda deps: self.map(container(deps))(deps))
+
     def bind(
         self,
         function: Callable[
@@ -236,7 +253,7 @@ class RequiresContext(
 
         Might be used with or without direct type hint.
 
-        Part of the :class:`returns.primitives.interfaces.Instanceable`
+        Part of the :class:`returns.primitives.interfaces.Applicative`
         protocol.
         """
         return RequiresContext(lambda _: inner_value)

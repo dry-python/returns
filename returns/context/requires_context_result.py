@@ -167,6 +167,39 @@ class RequiresContextResult(
         """
         return RequiresContextResult(lambda deps: self(deps).map(function))
 
+    def apply(
+        self,
+        container: 'RequiresContextResult['
+            '_EnvType, Callable[[_ValueType], _NewValueType], _ErrorType]',
+    ) -> 'RequiresContextResult[_EnvType, _NewValueType, _ErrorType]':
+        """
+        Calls a wrapped function in a container on this container.
+
+        .. code:: python
+
+          >>> from returns.context import RequiresContextResult
+          >>> from returns.result import Success, Failure, Result
+
+          >>> def transform(arg: str) -> str:
+          ...     return arg + 'b'
+
+          >>> assert RequiresContextResult.from_value('a').apply(
+          ...    RequiresContextResult.from_value(transform),
+          ... )(...) == Success('ab')
+
+          >>> assert RequiresContextResult.from_failure('a').apply(
+          ...    RequiresContextResult.from_value(transform),
+          ... )(...) == Failure('a')
+
+          >>> assert isinstance(RequiresContextResult.from_value('a').apply(
+          ...    RequiresContextResult.from_failure(transform),
+          ... )(...), Result.failure_type) is True
+
+        """
+        return RequiresContextResult(
+            lambda deps: self(deps).apply(container(deps)),
+        )
+
     def bind(
         self,
         function: Callable[
@@ -196,7 +229,6 @@ class RequiresContextResult(
           ...     return RequiresContextResult(
           ...         lambda deps: Success('>=' if number >= deps else '<'),
           ...     )
-          ...
 
           >>> assert first(True).bind(second)(1) == Success('>=')
           >>> assert first(False).bind(second)(2) == Failure(-2)
@@ -223,7 +255,6 @@ class RequiresContextResult(
           ...     if number > 0:
           ...         return Success(number + 1)
           ...     return Failure('<0')
-          ...
 
           >>> assert RequiresContextResult.from_value(1).bind_result(
           ...     function,
@@ -256,7 +287,7 @@ class RequiresContextResult(
           >>> from returns.result import Success, Failure
           >>> def function(arg: int) -> RequiresContext[str, int]:
           ...     return RequiresContext(lambda deps: len(deps) + arg)
-          ...
+
           >>> assert function(2)('abc') == 5
 
           >>> assert RequiresContextResult.from_value(2).bind_context(
@@ -324,7 +355,7 @@ class RequiresContextResult(
             [_ErrorType],
             'RequiresContextResult[_EnvType, _ValueType, _NewErrorType]',
         ],
-    ):
+    ) -> 'RequiresContextResult[_EnvType, _ValueType, _NewErrorType]':
         """
         Composes this container with a function returning the same type.
 
@@ -341,7 +372,6 @@ class RequiresContextResult(
           ...      return RequiresContextResult(
           ...          lambda deps: Failure(arg + deps),
           ...      )
-          ...
 
           >>> assert RequiresContextResult.from_value('a').rescue(
           ...     rescuable,

@@ -67,6 +67,10 @@ class Mappable(Protocol[_ValueType]):
     Allows to chain wrapped values with regular functions.
 
     Behaves like functor.
+
+    See also:
+        https://en.wikipedia.org/wiki/Functor
+
     """
 
     def map(  # noqa: WPS125
@@ -166,12 +170,16 @@ class Altable(Protocol[_ValueType, _ErrorType]):
 
 
 @runtime
-class Instanceable(Protocol[_ValueType]):
+class Applicative(Protocol[_ValueType]):
     """
     Allows to create unit containers from raw values.
 
-    This is heavily related to classes that do not have conunter-parts.
-    Like ``IO`` and ``RequiresContext``.
+    All containers should support this interface.
+
+    See also:
+        https://en.wikipedia.org/wiki/Applicative_functor
+        http://learnyouahaskell.com/functors-applicative-functors-and-monoids
+
     """
 
     @classmethod
@@ -180,20 +188,20 @@ class Instanceable(Protocol[_ValueType]):
     ) -> 'Unitable[_NewValueType, Any]':
         """This method is required to create new containers."""
 
+    def apply(
+        self,
+        container: 'Applicative[Callable[[_ValueType], _NewValueType]]',
+    ) -> 'Applicative[_NewValueType]':
+        """Calls a wrapped function in a container on this container."""
+
 
 @runtime
-class Unitable(Instanceable[_ValueType], Protocol[_ValueType, _ErrorType]):
+class Unitable(Applicative[_ValueType], Protocol[_ValueType, _ErrorType]):
     """
     Allows to create unit values from success and failure.
 
     This is a heavily ``Result``-related class.
     """
-
-    @classmethod
-    def from_value(
-        cls, inner_value: _NewValueType,
-    ) -> 'Unitable[_NewValueType, Any]':
-        """This method is required to create values that represent success."""
 
     @classmethod
     def from_failure(

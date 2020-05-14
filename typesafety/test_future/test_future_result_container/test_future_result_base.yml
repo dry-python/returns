@@ -87,6 +87,18 @@
     reveal_type(first.map(float))  # N: Revealed type is 'returns.future.FutureResult[builtins.float*, builtins.str]'
 
 
+- case: future_result_apply
+  disable_cache: true
+  main: |
+    from typing import Callable
+    from returns.future import FutureResult
+
+    first: FutureResult[int, str]
+    second: FutureResult[Callable[[int], float], str]
+
+    reveal_type(first.apply(second))  # N: Revealed type is 'returns.future.FutureResult[builtins.float*, builtins.str]'
+
+
 - case: future_result_alt
   disable_cache: true
   main: |

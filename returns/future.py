@@ -180,6 +180,30 @@ class Future(BaseContainer, Generic[_ValueType]):
         """
         return Future(_future.async_map(function, self._inner_value))
 
+    def apply(
+        self,
+        container: 'Future[Callable[[_ValueType], _NewValueType]]',
+    ) -> 'Future[_NewValueType]':
+        """
+        Calls a wrapped function in a container on this container.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.future import Future
+
+          >>> def transform(arg: int) -> str:
+          ...      return str(arg) + 'b'
+
+          >>> assert anyio.run(
+          ...     Future.from_value(1).apply(
+          ...         Future.from_value(transform),
+          ...     ).awaitable,
+          ... ) == IO('1b')
+
+        """
+        return Future(_future.async_apply(container, self._inner_value))
+
     def bind(
         self,
         function: Callable[[_ValueType], 'Future[_NewValueType]'],
@@ -610,6 +634,45 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
         """
         return FutureResult(_future_result.async_map(
             function, self._inner_value,
+        ))
+
+    def apply(
+        self,
+        container:
+            'FutureResult[Callable[[_ValueType], _NewValueType], _ErrorType]',
+    ) -> 'FutureResult[_NewValueType, _ErrorType]':
+        """
+        Calls a wrapped function in a container on this container.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.future import FutureResult
+          >>> from returns.io import IOSuccess, IOFailure
+
+          >>> def appliable(x: int) -> int:
+          ...    return x + 1
+
+          >>> assert anyio.run(
+          ...     FutureResult.from_value(1).apply(
+          ...         FutureResult.from_value(appliable),
+          ...     ).awaitable,
+          ... ) == IOSuccess(2)
+          >>> assert anyio.run(
+          ...     FutureResult.from_failure(1).apply(
+          ...         FutureResult.from_value(appliable),
+          ...     ).awaitable,
+          ... ) == IOFailure(1)
+
+          >>> assert isinstance(anyio.run(
+          ...     FutureResult.from_value(1).apply(
+          ...         FutureResult.from_failure(appliable),
+          ...     ).awaitable,
+          ... ), IOResult.failure_type)
+
+        """
+        return FutureResult(_future_result.async_apply(
+            container, self._inner_value,
         ))
 
     def bind(

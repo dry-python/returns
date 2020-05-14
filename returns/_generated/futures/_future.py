@@ -17,6 +17,14 @@ async def async_map(
     return function(await inner_value)
 
 
+async def async_apply(
+    container: 'Future[Callable[[_ValueType], _NewValueType]]',
+    inner_value: Awaitable[_ValueType],
+) -> _NewValueType:
+    """Async applies a container with function over a value."""
+    return (await container)._inner_value(await inner_value)
+
+
 async def async_bind(
     function: Callable[[_ValueType], 'Future[_NewValueType]'],
     inner_value: Awaitable[_ValueType],

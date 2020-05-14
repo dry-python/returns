@@ -81,6 +81,17 @@
     reveal_type(IOSuccess(1).map(str))  # N: Revealed type is 'returns.io.IOResult[builtins.str*, Any]'
 
 
+- case: iosuccess_apply
+  disable_cache: true
+  main: |
+    from returns.io import IOSuccess, IOResult
+
+    def transform(arg: int) -> str:
+        ...
+
+    reveal_type(IOSuccess(1).apply(IOSuccess(transform)))  # N: Revealed type is 'returns.io.IOResult[builtins.str*, Any]'
+
+
 - case: iosuccess_value_or
   disable_cache: true
   main: |

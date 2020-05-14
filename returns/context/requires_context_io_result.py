@@ -179,6 +179,39 @@ class RequiresContextIOResult(
         """
         return RequiresContextIOResult(lambda deps: self(deps).map(function))
 
+    def apply(
+        self,
+        container: 'RequiresContextIOResult['
+            '_EnvType, Callable[[_ValueType], _NewValueType], _ErrorType]',
+    ) -> 'RequiresContextIOResult[_EnvType, _NewValueType, _ErrorType]':
+        """
+        Calls a wrapped function in a container on this container.
+
+        .. code:: python
+
+          >>> from returns.context import RequiresContextIOResult
+          >>> from returns.io import IOSuccess, IOFailure, IOResult
+
+          >>> def transform(arg: str) -> str:
+          ...     return arg + 'b'
+
+          >>> assert RequiresContextIOResult.from_value('a').apply(
+          ...    RequiresContextIOResult.from_value(transform),
+          ... )(...) == IOSuccess('ab')
+
+          >>> assert RequiresContextIOResult.from_failure('a').apply(
+          ...    RequiresContextIOResult.from_value(transform),
+          ... )(...) == IOFailure('a')
+
+          >>> assert isinstance(RequiresContextIOResult.from_value('a').apply(
+          ...    RequiresContextIOResult.from_failure(transform),
+          ... )(...), IOResult.failure_type) is True
+
+        """
+        return RequiresContextIOResult(
+            lambda deps: self(deps).apply(container(deps)),
+        )
+
     def bind(
         self,
         function: Callable[
@@ -343,6 +376,35 @@ class RequiresContextIOResult(
             ),
         )
 
+    def bind_io(
+        self,
+        function: Callable[[_ValueType], IO[_NewValueType]],
+    ) -> 'RequiresContextIOResult[_EnvType, _NewValueType, _ErrorType]':
+        """
+        Binds ``IO`` returning function to the current container.
+
+        .. code:: python
+
+          >>> from returns.context import RequiresContextIOResult
+          >>> from returns.io import IO, IOSuccess, IOFailure
+
+          >>> def function(number: int) -> IO[str]:
+          ...     return IO(str(number))
+          ...
+
+          >>> assert RequiresContextIOResult.from_value(1).bind_io(
+          ...     function,
+          ... )(RequiresContextIOResult.empty) == IOSuccess('1')
+
+          >>> assert RequiresContextIOResult.from_failure(1).bind_io(
+          ...     function,
+          ... )(RequiresContextIOResult.empty) == IOFailure(1)
+
+        """
+        return RequiresContextIOResult(
+            lambda deps: self(deps).bind_io(function),
+        )
+
     def bind_ioresult(
         self,
         function: Callable[[_ValueType], IOResult[_NewValueType, _ErrorType]],
@@ -428,7 +490,7 @@ class RequiresContextIOResult(
             [_ErrorType],
             'RequiresContextIOResult[_EnvType, _ValueType, _NewErrorType]',
         ],
-    ):
+    ) -> 'RequiresContextIOResult[_EnvType, _ValueType, _NewErrorType]':
         """
         Composes this container with a function returning the same type.
 

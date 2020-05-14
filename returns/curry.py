@@ -124,8 +124,13 @@ def _eager_curry(
     argspec,
     args: tuple,
     kwargs: dict,
-) -> Union[Callable[..., _ReturnType], _ReturnType]:
-    """Internal ``curry`` implementation."""
+) -> Union[_ReturnType, Callable[..., _ReturnType]]:
+    """
+    Internal ``curry`` implementation.
+
+    The interesting part about it is that it return the result
+    or a new callable that will return a result at some point.
+    """
     intermediate, full_args = _intermediate_argspec(argspec, args, kwargs)
     if full_args is not None:
         return function(*full_args[0], **full_args[1])

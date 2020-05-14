@@ -95,6 +95,34 @@ class IO(BaseContainer, Generic[_ValueType]):
         """
         return IO(function(self._inner_value))
 
+    def apply(
+        self,
+        container: 'IO[Callable[[_ValueType], _NewValueType]]',
+    ) -> 'IO[_NewValueType]':
+        """
+        Calls a wrapped function in a container on this container.
+
+        .. code:: python
+
+          >>> from returns.io import IO
+          >>> assert IO('a').apply(IO(lambda inner: inner + 'b')) == IO('ab')
+
+        Or more complex example that shows how we can work
+        with regular functions and multiple ``IO`` arguments:
+
+        .. code:: python
+
+          >>> from returns.curry import curry
+
+          >>> @curry
+          ... def appliable(first: str, second: str) -> str:
+          ...      return first + second
+
+          >>> assert IO('b').apply(IO('a').apply(IO(appliable))) == IO('ab')
+
+        """
+        return self.map(container._inner_value)  # noqa: WPS437
+
     def bind(
         self, function: Callable[[_ValueType], 'IO[_NewValueType]'],
     ) -> 'IO[_NewValueType]':
@@ -156,7 +184,7 @@ class IO(BaseContainer, Generic[_ValueType]):
           >>> from returns.io import IO
           >>> assert IO(1) == IO.from_value(1)
 
-        Part of the :class:`returns.primitives.interfaces.Instanceable`
+        Part of the :class:`returns.primitives.interfaces.Applicative`
         protocol.
         """
         return IO(inner_value)
@@ -312,6 +340,41 @@ class IOResult(
 
         """
         return self.from_result(self._inner_value.map(function))
+
+    def apply(
+        self,
+        container:
+            'IOResult[Callable[[_ValueType], _NewValueType], _ErrorType]',
+    ) -> 'IOResult[_NewValueType, _ErrorType]':
+        """
+        Calls a wrapped function in a container on this container.
+
+        .. code:: python
+
+          >>> from returns.io import IOSuccess, IOFailure, IOResult
+
+          >>> def appliable(first: str) -> str:
+          ...      return first + 'b'
+
+          >>> assert IOSuccess('a').apply(
+          ...     IOSuccess(appliable),
+          ... ) == IOSuccess('ab')
+          >>> assert IOFailure('a').apply(
+          ...     IOSuccess(appliable),
+          ... ) == IOFailure('a')
+
+          >>> assert isinstance(IOSuccess('a').apply(
+          ...     IOFailure(appliable),
+          ... ), IOResult.failure_type)
+
+        """
+        if isinstance(container, self.success_type):
+            return self.from_result(
+                self._inner_value.map(
+                    container.unwrap()._inner_value,  # noqa: WPS437
+                ),
+            )
+        return container  # type: ignore
 
     def bind(
         self,

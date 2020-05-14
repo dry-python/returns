@@ -53,7 +53,6 @@ It might be very useful for complex operations like the following one:
   ...     ).map(
   ...         lambda address: address.street,
   ...     )
-  ...
 
   >>> with_address = Order(User(Address('Some street')))
   >>> empty_user = Order(None)

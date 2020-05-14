@@ -74,6 +74,29 @@ class Result(
         """
         raise NotImplementedError
 
+    def apply(
+        self,
+        container: 'Result[Callable[[_ValueType], _NewValueType], _ErrorType]',
+    ) -> 'Result[_NewValueType, _ErrorType]':
+        """
+        Calls a wrapped function in a container on this container.
+
+        .. code:: python
+
+          >>> from returns.result import Failure, Success
+
+          >>> def appliable(string: str) -> str:
+          ...      return string + 'b'
+
+          >>> assert Success('a').apply(Success(appliable)) == Success('ab')
+          >>> assert Failure('a').apply(Success(appliable)) == Failure('a')
+
+          >>> with_failure = Success('a').apply(Failure(appliable))
+          >>> assert isinstance(with_failure, Result.failure_type)
+
+        """
+        raise NotImplementedError
+
     def bind(
         self,
         function: Callable[[_ValueType], 'Result[_NewValueType, _ErrorType]'],
@@ -362,6 +385,10 @@ class _Failure(Result[Any, _ErrorType]):
         """Does nothing for ``Failure``."""
         return self
 
+    def apply(self, container):
+        """Does nothing for ``Failure``."""
+        return self
+
     def bind(self, function):
         """Does nothing for ``Failure``."""
         return self
@@ -422,6 +449,12 @@ class _Success(Result[_ValueType, Any]):
     def map(self, function):  # noqa: WPS125
         """Composes current container with a pure function."""
         return _Success(function(self._inner_value))
+
+    def apply(self, container):
+        """Calls a wrapped function in a container on this container."""
+        if isinstance(container, self.success_type):
+            return self.map(container.unwrap())  # type: ignore
+        return container
 
     def bind(self, function):
         """Binds current container to a function that returns container."""

@@ -21,6 +21,7 @@ See [0Ver](https://0ver.org/).
   there's no need in two separate methods
 - **Breaking**: since we now support `.apply()` methods,
   there's no more need in `*_squash` converters, they are removed
+- **Breaking**: renamed `Instanceable` to `Applicative`
 - Adds typed `partial` and `curry` plugin!
 - Adds `pytest` plugin with the ability to tests error handling
 - Adds `Future` container to easily work with `async` functions
@@ -28,6 +29,7 @@ See [0Ver](https://0ver.org/).
   with `async` function that might fail
 - Adds `bind_io` method to `IOResult`
 - Adds `lift_io` method to `IOResult`
+- Adds `bind_io` method to `RequiresContextIOResult`
 - Adds `unify` point free function
 - Adds `not_` composition helper
 - Adds `flatten` support for `Future` and `FutureResult`
@@ -39,12 +41,15 @@ See [0Ver](https://0ver.org/).
   it might break some people's programms. But it was very wrong!
 - Fixes that `@safe` decorator was generating incorrect signatures
   for functions with `Any`
+- Fixes that `.rescue()` of `RequiresContextResult` was returning `Any`
+- Fixes that `.rescue()` of `RequiresContextIOResult` was returning `Any`
 
 ### Misc
 
 - Replaces `pytest-asyncio` with `anyio` plugin,
   now we test compatibility with any IO stack: `asyncio`, `trio`, `curio`
 - Updates lots of dependencies
+- Adds lots of new tests
 
 
 ## 0.13.0

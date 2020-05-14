@@ -1,4 +1,4 @@
-- case: maybe_type_regular
+- case: maybe_type_regular1
   disable_cache: true
   main: |
     from returns.maybe import Maybe
@@ -7,7 +7,7 @@
     reveal_type(Maybe.from_value(value))  # N: Revealed type is 'returns.maybe.Maybe[builtins.int*]'
 
 
-- case: maybe_type_regular
+- case: maybe_type_regular2
   disable_cache: true
   main: |
     from typing import Optional
@@ -26,7 +26,7 @@
     reveal_type(result)  # N: Revealed type is 'returns.maybe.Maybe[builtins.float*]'
 
 
-- case: maybe_map_optional
+- case: maybe_map_optional1
   disable_cache: true
   main: |
     from returns.maybe import Maybe
@@ -35,13 +35,22 @@
     reveal_type(result)  # N: Revealed type is 'returns.maybe.Maybe[builtins.str*]'
 
 
-- case: maybe_map_optional
+- case: maybe_map_optional2
   disable_cache: true
   main: |
     from returns.maybe import Maybe
 
     result = Maybe.from_value(1).bind(lambda d: Maybe.from_value(str(d)))
     reveal_type(result)  # N: Revealed type is 'returns.maybe.Maybe[builtins.str*]'
+
+
+- case: maybe_apply
+  disable_cache: true
+  main: |
+    from returns.maybe import Maybe
+
+    result = Maybe.from_value(1).apply(Maybe.from_value(float))
+    reveal_type(result)  # N: Revealed type is 'returns.maybe.Maybe[builtins.float*]'
 
 
 - case: maybe_bind

@@ -59,3 +59,14 @@
     from returns.future import Future
 
     reveal_type(Future.from_value(1).map(str))  # N: Revealed type is 'returns.future.Future[builtins.str*]'
+
+
+- case: future_apply
+  disable_cache: true
+  main: |
+    from returns.future import Future
+
+    def transform(arg: int) -> str:
+        ...
+
+    reveal_type(Future.from_value(1).apply(Future.from_value(transform)))  # N: Revealed type is 'returns.future.Future[builtins.str*]'

@@ -52,24 +52,6 @@ class Maybe(
     #: Failure type that is used to represent the failed computation.
     failure_type: ClassVar[Type['_Nothing']]
 
-    @classmethod
-    def from_value(
-        cls, inner_value: Optional[_ValueType],
-    ) -> 'Maybe[_ValueType]':
-        """
-        Creates new instance of ``Maybe`` container based on a value.
-
-        .. code:: python
-
-          >>> from returns.maybe import Maybe, Some, Nothing
-          >>> assert Maybe.from_value(1) == Some(1)
-          >>> assert Maybe.from_value(None) == Nothing
-
-        """
-        if inner_value is None:
-            return _Nothing(inner_value)
-        return _Some(inner_value)
-
     def map(  # noqa: WPS125
         self,
         function: Callable[[_ValueType], Optional[_NewValueType]],
@@ -85,6 +67,27 @@ class Maybe(
           ...
           >>> assert Some('a').map(mappable) == Some('ab')
           >>> assert Nothing.map(mappable) == Nothing
+
+        """
+        raise NotImplementedError
+
+    def apply(
+        self,
+        function: 'Maybe[Callable[[_ValueType], _NewValueType]]',
+    ) -> 'Maybe[_NewValueType]':
+        """
+        Calls a wrapped function in a container on this container.
+
+        .. code:: python
+
+          >>> from returns.maybe import Some, Nothing
+
+          >>> def appliable(string: str) -> str:
+          ...      return string + 'b'
+
+          >>> assert Some('a').apply(Some(appliable)) == Some('ab')
+          >>> assert Nothing.apply(Some(appliable)) == Nothing
+          >>> assert Nothing.apply(Nothing) == Nothing
 
         """
         raise NotImplementedError
@@ -163,6 +166,24 @@ class Maybe(
         raise NotImplementedError
 
     @classmethod
+    def from_value(
+        cls, inner_value: Optional[_ValueType],
+    ) -> 'Maybe[_ValueType]':
+        """
+        Creates new instance of ``Maybe`` container based on a value.
+
+        .. code:: python
+
+          >>> from returns.maybe import Maybe, Some, Nothing
+          >>> assert Maybe.from_value(1) == Some(1)
+          >>> assert Maybe.from_value(None) == Nothing
+
+        """
+        if inner_value is None:
+            return _Nothing(inner_value)
+        return _Some(inner_value)
+
+    @classmethod
     def lift(
         cls,
         function: Callable[[_ValueType], _NewValueType],
@@ -219,6 +240,10 @@ class _Nothing(Maybe[Any]):
         """Does nothing for ``Nothing``."""
         return self
 
+    def apply(self, container):
+        """Does nothing for ``Nothing``."""
+        return self
+
     def bind(self, function):
         """Does nothing for ``Nothing``."""
         return self
@@ -258,6 +283,12 @@ class _Some(Maybe[_ValueType]):
     def map(self, function):  # noqa: WPS125
         """Composes current container with a pure function."""
         return Maybe.from_value(function(self._inner_value))
+
+    def apply(self, container):
+        """Calls a wrapped function in a container on this container."""
+        if isinstance(container, self.success_type):
+            return self.map(container.unwrap())  # type: ignore
+        return container
 
     def bind(self, function):
         """Binds current container to a function that returns container."""

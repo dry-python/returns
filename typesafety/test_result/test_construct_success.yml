@@ -56,6 +56,27 @@
     reveal_type(Success(1).map(str))  # N: Revealed type is 'returns.result.Result[builtins.str*, Any]'
 
 
+- case: success_apply1
+  disable_cache: true
+  main: |
+    from returns.result import Success, Result
+
+    reveal_type(Success(1).apply(Success(str)))  # N: Revealed type is 'returns.result.Result[builtins.str*, Any]'
+
+
+- case: success_apply2
+  disable_cache: true
+  main: |
+    from returns.result import Success, Result
+    from returns.curry import curry
+
+    @curry
+    def sum_two(first: int, second: float) -> str:
+        ...
+
+    reveal_type(Success(2.0).apply(Success(1).apply(Success(sum_two))))  # N: Revealed type is 'returns.result.Result[builtins.str*, Any]'
+
+
 - case: success_value_or
   disable_cache: true
   main: |
