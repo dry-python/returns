@@ -12,11 +12,13 @@ List of supported containers:
 - :class:`Maybe <returns.maybe.Maybe>` to handle ``None`` cases
 - :class:`Result <returns.result.Result>` to handle possible exceptions
 - :class:`IO <returns.io.IO>` to mark explicit ``IO`` actions
+- :class:`Future <returns.future.Future>` to work with ``async`` code
 - :class:`RequiresContext <returns.context.requires_context.RequiresContext>`
   to pass context to your functions (DI and similar)
 
 There are also some combintations like
 :class:`IOResult <returns.io.IOResult>`,
+:class:`FutureResult <returns.future.FutureResult>`,
 :class:`RequiresContextResult <.RequiresContextResult>` and
 :class:`RequiresContextIOResult <.RequiresContextIOResult>`.
 
@@ -44,6 +46,16 @@ And we can see how this state is evolving during the execution.
        F2                       --> F3["Container(UserAccount(156))"]
        F3                       --> F4["Container(FailedLoginAttempt(1))"]
        F4                       --> F5["Container(SentNotificationId(992))"]
+
+All containers support special ``.from_value`` method
+to construct a new container from a raw value.
+
+.. code:: python
+
+  >>> from returns.result import Result
+
+  >>> str(Result.from_value(1))
+  '<Success: 1>'
 
 
 Working with containers
@@ -107,6 +119,66 @@ Note::
 You can read more about methods
 that some other containers support
 and :ref:`interfaces <base-interfaces>` behind them.
+
+
+Working with multiple containers
+--------------------------------
+
+We have already seen how we can work with one container and functions
+that receive a single argument.
+
+Let's say you have a function of two arguments and two containers:
+
+.. code:: python
+
+  def sum_two_numbers(first: int, second: int) -> int:
+      return first + second
+
+And here are our two containers:
+
+.. code:: python
+
+  from returns.io import IO
+
+  one = IO(1)
+  two = IO(2)
+
+Naive approach to compose two ``IO`` containers and a function
+would be two hard to show here.
+Luckly, we support partial application and ``.apply()`` method.
+
+Here are the required steps:
+
+0. We make ``sum_two_numbers`` to receive :ref:`partial arguments <curry>`
+1. We create a new container that wraps ``sum_two_numbers`` function as a value
+2. We then call ``.apply()`` twice to pass each value
+
+It can be done like so:
+
+.. code:: python
+
+  >>> from returns.curry import curry
+  >>> from returns.io import IO
+
+  >>> @curry
+  ... def sum_two_numbers(first: int, second: int) -> int:
+  ...     return first + second
+
+  >>> one = IO(1)
+  >>> two = IO(2)
+  >>> assert two.apply(one.apply(IO(sum_two_numbers))) == IO(3)
+
+But, there are other ways to make ``sum_two_numbers`` partial. One can use:
+
+.. code:: python
+
+  >>> one = IO(1)
+  >>> two = IO(2)
+  >>> assert two.apply(one.apply(
+  ...     IO(lambda x: lambda y: sum_two_numbers(x, y)),
+  ... )) == IO(3)
+
+It would be faster, but not as elegant (and type-safe).
 
 
 .. _immutability:

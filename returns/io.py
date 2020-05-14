@@ -233,6 +233,8 @@ def impure(
 
       >>> assert function(1) == IO(2)
 
+    Requires our :ref:`mypy plugin <mypy-plugins>`.
+
     """
     @wraps(function)
     def decorator(*args, **kwargs):
@@ -955,6 +957,8 @@ def impure_safe(
 
     Similar to :func:`returns.future.future_safe`
     and :func:`returns.result.safe` decorators.
+
+    Requires our :ref:`mypy plugin <mypy-plugins>`.
 
     """
     @wraps(function)

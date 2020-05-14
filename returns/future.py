@@ -454,6 +454,8 @@ def future(
       ...
       >>> assert anyio.run(test(1).awaitable) == IO(2)
 
+    Requires our :ref:`mypy plugin <mypy-plugins>`.
+
     """
     @wraps(function)
     def decorator(*args, **kwargs):
@@ -481,6 +483,8 @@ def asyncify(function: Callable[..., _ValueType]) -> Callable[
       ...     return x + 1
       ...
       >>> assert anyio.run(test, 1) == 2
+
+    Requires our :ref:`mypy plugin <mypy-plugins>`.
 
     """
     @wraps(function)
@@ -1584,6 +1588,8 @@ def future_safe(
 
     Similar to :func:`returns.io.impure_safe` and :func:`returns.result.safe`
     decorators, but works with ``async`` functions.
+
+    Requires our :ref:`mypy plugin <mypy-plugins>`.
 
     """
     async def factory(*args, **kwargs) -> Result[_ValueType, Exception]:

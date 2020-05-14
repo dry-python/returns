@@ -559,6 +559,8 @@ def safe(
     Similar to :func:`returns.io.impure_safe`
     and :func:`returns.future.future_safe` decorators.
 
+    Requires our :ref:`mypy plugin <mypy-plugins>`.
+
     """
     @wraps(function)
     def decorator(*args, **kwargs):

@@ -355,6 +355,8 @@ def maybe(
       >>> assert might_be_none(0) == Nothing
       >>> assert might_be_none(1) == Some(1.0)
 
+    Requires our :ref:`mypy plugin <mypy-plugins>`.
+
     """
     @wraps(function)
     def decorator(*args, **kwargs):
