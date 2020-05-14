@@ -461,7 +461,7 @@ def future(
     return decorator
 
 
-def asyncize(function: Callable[..., _ValueType]) -> Callable[
+def asyncify(function: Callable[..., _ValueType]) -> Callable[
     ...,
     Coroutine[Any, Any, _ValueType],
 ]:
@@ -474,9 +474,9 @@ def asyncize(function: Callable[..., _ValueType]) -> Callable[
     .. code:: python
 
       >>> import anyio
-      >>> from returns.future import asyncize
+      >>> from returns.future import asyncify
 
-      >>> @asyncize
+      >>> @asyncify
       ... def test(x: int) -> int:
       ...     return x + 1
       ...

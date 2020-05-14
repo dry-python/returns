@@ -1,16 +1,16 @@
 import pytest
 
-from returns.future import asyncize
+from returns.future import asyncify
 
 
-@asyncize
+@asyncify
 def _function(arg: int) -> float:
     return arg / 2
 
 
 @pytest.mark.anyio
-async def test_asyncize_decorator():
-    """Ensure that function marked with ``@asyncize`` is awaitable."""
+async def test_asyncify_decorator():
+    """Ensure that function marked with ``@asyncify`` is awaitable."""
     coro = _function(1)
 
     assert await coro == 0.5

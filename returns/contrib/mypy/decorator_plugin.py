@@ -39,7 +39,7 @@ _TYPED_DECORATORS = frozenset((
     'returns.io.impure_safe',
     'returns.maybe.maybe',
     'returns.future.future',
-    'returns.future.asyncize',
+    'returns.future.asyncify',
     'returns.future.future_safe',
     'returns.functions.not_',
 ))

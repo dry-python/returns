@@ -1,10 +1,10 @@
-- case: asyncize_decorator_with_args
+- case: asyncify_decorator_with_args
   disable_cache: true
   main: |
     from typing import Optional
-    from returns.future import asyncize
+    from returns.future import asyncify
 
-    @asyncize
+    @asyncify
     def test(
          first: int, second: Optional[str] = None, *, kw: bool = True,
     ) -> int:
