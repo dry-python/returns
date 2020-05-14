@@ -4,8 +4,8 @@
     from returns.future import FutureResult
 
     async def main() -> None:
-        reveal_type(await FutureResult.from_success(1))  # N: Revealed type is 'returns.io.IOResult[builtins.int*, Any]'
-        reveal_type(await FutureResult.from_success(1).awaitable())  # N: Revealed type is 'returns.io.IOResult*[builtins.int*, Any]'
+        reveal_type(await FutureResult.from_value(1))  # N: Revealed type is 'returns.io.IOResult[builtins.int*, Any]'
+        reveal_type(await FutureResult.from_value(1).awaitable())  # N: Revealed type is 'returns.io.IOResult*[builtins.int*, Any]'
         reveal_type(await FutureResult.from_failure(1))  # N: Revealed type is 'returns.io.IOResult[Any, builtins.int*]'
         reveal_type(await FutureResult.from_failure(1).awaitable())  # N: Revealed type is 'returns.io.IOResult*[Any, builtins.int*]'
 

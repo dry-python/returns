@@ -14,7 +14,7 @@ from returns.primitives.interfaces import (
 
 
 @pytest.mark.parametrize('container', [
-    FutureResult.from_success(1),
+    FutureResult.from_value(1),
     FutureResult.from_failure(1),
 ])
 @pytest.mark.parametrize('protocol', [

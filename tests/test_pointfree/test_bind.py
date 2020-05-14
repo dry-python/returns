@@ -83,11 +83,11 @@ def test_bind_with_context_result():
     """Ensures that functions can be composed and return type is correct."""
     binded = bind(_context_result_function)
 
-    assert binded(RequiresContextResult.from_success(3))(5) == Success(8)
+    assert binded(RequiresContextResult.from_value(3))(5) == Success(8)
 
 
 def test_bind_with_context_io_result():
     """Ensures that functions can be composed and return type is correct."""
     binded = bind(_context_io_result_function)
 
-    assert binded(RequiresContextIOResult.from_success(3))(5) == IOSuccess(8)
+    assert binded(RequiresContextIOResult.from_value(3))(5) == IOSuccess(8)

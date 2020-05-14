@@ -253,7 +253,7 @@ class IOResult(
       with :func:`~IOSuccess` and :func:`~IOFailure` public type constructors
     - You can construct ``IOResult`` from ``IO`` values
       with :meth:`~IOResult.from_failed_io`
-      and :meth:`IOResult.from_successful_io`
+      and :meth:`IOResult.from_valueful_io`
     - You can construct ``IOResult`` from ``Result`` values
       with :meth:`~IOResult.from_result`
 
@@ -661,7 +661,7 @@ class IOResult(
         return IOFailure(container._inner_value)  # noqa: WPS437
 
     @classmethod
-    def from_successful_io(
+    def from_valueful_io(
         cls, container: IO[_NewValueType],
     ) -> 'IOResult[_NewValueType, NoReturn]':
         """
@@ -671,7 +671,7 @@ class IOResult(
 
           >>> from returns.io import IO, IOResult, IOSuccess
           >>> container = IO(1)
-          >>> assert IOResult.from_successful_io(container) == IOSuccess(1)
+          >>> assert IOResult.from_valueful_io(container) == IOSuccess(1)
 
         """
         return IOSuccess(container._inner_value)  # noqa: WPS437
@@ -697,7 +697,7 @@ class IOResult(
         return _IOFailure(container)
 
     @classmethod
-    def from_success(
+    def from_value(
         cls, inner_value: _NewValueType,
     ) -> 'IOResult[_NewValueType, Any]':
         """
@@ -709,7 +709,7 @@ class IOResult(
         .. code:: python
 
           >>> from returns.io import IOResult, IOSuccess
-          >>> assert IOResult.from_success(1) == IOSuccess(1)
+          >>> assert IOResult.from_value(1) == IOSuccess(1)
 
         You can use this method or :func:`~IOSuccess`,
         choose the most convenient for you.
@@ -812,7 +812,7 @@ class _IOSuccess(IOResult):
 
     def bind_io(self, function):
         """Binds ``IO`` returning function to current container."""
-        return self.from_successful_io(function(self._inner_value.unwrap()))
+        return self.from_valueful_io(function(self._inner_value.unwrap()))
 
     def rescue(self, function):
         """Does nothing for ``IOSuccess``."""

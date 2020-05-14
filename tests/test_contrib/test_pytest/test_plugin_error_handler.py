@@ -17,7 +17,7 @@ def _under_test(
         return container.rescue(lambda inner: container.from_failure(inner))
     if should_fix:
         return container.fix(identity)
-    return container.bind(lambda inner: container.from_success(inner))
+    return container.bind(lambda inner: container.from_value(inner))
 
 
 @pytest.mark.parametrize('container', [
@@ -25,11 +25,11 @@ def _under_test(
     Failure(1),
     IOSuccess(1),
     IOFailure(1),
-    RequiresContextIOResult.from_success(1),
+    RequiresContextIOResult.from_value(1),
     RequiresContextIOResult.from_failure(1),
-    RequiresContextResult.from_success(1),
+    RequiresContextResult.from_value(1),
     RequiresContextResult.from_failure(1),
-    FutureResult.from_success(1),
+    FutureResult.from_value(1),
     FutureResult.from_failure(1),
 ])
 @pytest.mark.parametrize('kwargs', [
@@ -51,9 +51,9 @@ def test_error_handled(container, returns, kwargs):
     Failure(1),
     IOSuccess(1),
     IOFailure(1),
-    RequiresContextIOResult.from_success(1),
+    RequiresContextIOResult.from_value(1),
     RequiresContextIOResult.from_failure(1),
-    RequiresContextResult.from_success(1),
+    RequiresContextResult.from_value(1),
     RequiresContextResult.from_failure(1),
 ])
 def test_error_not_handled(container, returns):
@@ -68,7 +68,7 @@ def test_error_not_handled(container, returns):
 
 @pytest.mark.anyio
 @pytest.mark.parametrize('container', [
-    FutureResult.from_success(1),
+    FutureResult.from_value(1),
     FutureResult.from_failure(1),
 ])
 async def test_error_not_handled_async(container, returns):

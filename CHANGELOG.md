@@ -17,7 +17,9 @@ See [0Ver](https://0ver.org/).
 - **Breaking**: renames `Maybe.new` to `Maybe.from_value`.
   Because all our other containers support this protocol.
   Only `Maybe` was different, sorry for that!
-- Adds typed `partial` plugin!
+- **Breaking**: renames `.from_success` to `.from_value`,
+  there's no need in two separate methods
+- Adds typed `partial` and `curry` plugin!
 - Adds `pytest` plugin with the ability to tests error handling
 - Adds `Future` container to easily work with `async` functions
 - Adds `FutureResult` container to easily work
@@ -89,7 +91,7 @@ See [0Ver](https://0ver.org/).
 
 - Adds `Immutable` primitive type
 - Adds `Unitable` protocol and `.from_success()` and `.from_failure()`
-  methods for all `Result` realted classes
+  methods for all `Result` related classes
 - Adds `Instanceable` protocol and `.from_value()` method
   for `IO` and `RequiresContext`
 

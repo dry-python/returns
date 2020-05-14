@@ -182,7 +182,7 @@ class Instanceable(Protocol[_ValueType]):
 
 
 @runtime
-class Unitable(Protocol[_ValueType, _ErrorType]):
+class Unitable(Instanceable[_ValueType], Protocol[_ValueType, _ErrorType]):
     """
     Allows to create unit values from success and failure.
 
@@ -190,7 +190,7 @@ class Unitable(Protocol[_ValueType, _ErrorType]):
     """
 
     @classmethod
-    def from_success(
+    def from_value(
         cls, inner_value: _NewValueType,
     ) -> 'Unitable[_NewValueType, Any]':
         """This method is required to create values that represent success."""

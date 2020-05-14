@@ -69,4 +69,4 @@ def _swap(container):
     """
     if isinstance(container, container.success_type):
         return container.bind(lambda inner: container.from_failure(inner))
-    return container.rescue(lambda inner: container.from_success(inner))
+    return container.rescue(lambda inner: container.from_value(inner))

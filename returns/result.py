@@ -290,7 +290,7 @@ class Result(
         return lambda container: container.map(function)
 
     @classmethod
-    def from_success(
+    def from_value(
         cls, inner_value: _NewValueType,
     ) -> 'Result[_NewValueType, Any]':
         """
@@ -302,7 +302,7 @@ class Result(
         .. code:: python
 
           >>> from returns.result import Result, Success
-          >>> assert Result.from_success(1) == Success(1)
+          >>> assert Result.from_value(1) == Success(1)
 
         You can use this method or :func:`~Success`,
         choose the most convenient for you.

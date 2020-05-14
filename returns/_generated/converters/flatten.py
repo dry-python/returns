@@ -32,8 +32,8 @@ def _flatten(container):
       ... )(RequiresContext.empty) == 1
 
       >>> assert flatten(
-      ...     RequiresContextResult.from_success(
-      ...         RequiresContextResult.from_success(1),
+      ...     RequiresContextResult.from_value(
+      ...         RequiresContextResult.from_value(1),
       ...     ),
       ... )(RequiresContext.empty) == Success(1)
 

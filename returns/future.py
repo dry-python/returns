@@ -400,7 +400,7 @@ class Future(BaseContainer, Generic[_ValueType]):
           >>> from returns.io import IO
           >>> from returns.result import Success
 
-          >>> container = Future.from_futureresult(FutureResult.from_success(1))
+          >>> container = Future.from_futureresult(FutureResult.from_value(1))
           >>> assert anyio.run(container.awaitable) == IO(Success(1))
 
         """
@@ -542,7 +542,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           >>> from returns.io import IOSuccess, IOResult
 
           >>> async def main() -> IOResult[int, str]:
-          ...     return await FutureResult.from_success(1)
+          ...     return await FutureResult.from_value(1)
           ...
           >>> assert anyio.run(main) == IOSuccess(1)
 
@@ -573,7 +573,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           >>> from returns.future import FutureResult
           >>> from returns.io import IOSuccess
           >>> assert anyio.run(
-          ...     FutureResult.from_success(1).awaitable,
+          ...     FutureResult.from_value(1).awaitable,
           ... ) == IOSuccess(1)
 
         """
@@ -601,7 +601,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           ...    return x + 1
           ...
           >>> assert anyio.run(
-          ...     FutureResult.from_success(1).map(mappable).awaitable,
+          ...     FutureResult.from_value(1).map(mappable).awaitable,
           ... ) == IOSuccess(2)
           >>> assert anyio.run(
           ...     FutureResult.from_failure(1).map(mappable).awaitable,
@@ -632,10 +632,10 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           >>> from returns.io import IOSuccess, IOFailure
 
           >>> def bindable(x: int) -> FutureResult[int, str]:
-          ...    return FutureResult.from_success(x + 1)
+          ...    return FutureResult.from_value(x + 1)
           ...
           >>> assert anyio.run(
-          ...     FutureResult.from_success(1).bind(bindable).awaitable,
+          ...     FutureResult.from_value(1).bind(bindable).awaitable,
           ... ) == IOSuccess(2)
           >>> assert anyio.run(
           ...     FutureResult.from_failure(1).bind(bindable).awaitable,
@@ -667,10 +667,10 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           >>> from returns.io import IOSuccess, IOFailure
 
           >>> async def coroutine(x: int) -> FutureResult[str, int]:
-          ...    return FutureResult.from_success(str(x + 1))
+          ...    return FutureResult.from_value(str(x + 1))
 
           >>> assert anyio.run(
-          ...     FutureResult.from_success(1).bind_async(coroutine).awaitable,
+          ...     FutureResult.from_value(1).bind_async(coroutine).awaitable,
           ... ) == IOSuccess('2')
           >>> assert anyio.run(
           ...     FutureResult.from_failure(1).bind_async(coroutine).awaitable,
@@ -702,7 +702,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           ...    return x + 1
 
           >>> assert anyio.run(
-          ...     FutureResult.from_success(1).bind_awaitable(coro).awaitable,
+          ...     FutureResult.from_value(1).bind_awaitable(coro).awaitable,
           ... ) == IOSuccess(2)
           >>> assert anyio.run(
           ...     FutureResult.from_failure(1).bind_awaitable(coro).awaitable,
@@ -731,7 +731,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           ...     return Success(inner_value + 1)
 
           >>> assert anyio.run(
-          ...     FutureResult.from_success(1).bind_result(bind).awaitable,
+          ...     FutureResult.from_value(1).bind_result(bind).awaitable,
           ... ) == IOSuccess(2)
           >>> assert anyio.run(
           ...     FutureResult.from_failure('a').bind_result(bind).awaitable,
@@ -759,7 +759,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           ...     return IOSuccess(inner_value + 1)
 
           >>> assert anyio.run(
-          ...     FutureResult.from_success(1).bind_ioresult(bind).awaitable,
+          ...     FutureResult.from_value(1).bind_ioresult(bind).awaitable,
           ... ) == IOSuccess(2)
           >>> assert anyio.run(
           ...     FutureResult.from_failure('a').bind_ioresult(bind).awaitable,
@@ -787,7 +787,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           ...     return IO(inner_value + 0.5)
 
           >>> assert anyio.run(
-          ...     FutureResult.from_success(1).bind_io(bind).awaitable,
+          ...     FutureResult.from_value(1).bind_io(bind).awaitable,
           ... ) == IOSuccess(1.5)
           >>> assert anyio.run(
           ...     FutureResult.from_failure(1).bind_io(bind).awaitable,
@@ -815,7 +815,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           ...     return Future.from_value(inner_value + 0.5)
 
           >>> assert anyio.run(
-          ...     FutureResult.from_success(1).bind_future(bind).awaitable,
+          ...     FutureResult.from_value(1).bind_future(bind).awaitable,
           ... ) == IOSuccess(1.5)
           >>> assert anyio.run(
           ...     FutureResult.from_failure(1).bind_future(bind).awaitable,
@@ -849,10 +849,10 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           >>> from returns.io import IOSuccess, IOFailure
 
           >>> def bindable(x: int) -> FutureResult[int, str]:
-          ...    return FutureResult.from_success(x + 1)
+          ...    return FutureResult.from_value(x + 1)
 
           >>> assert anyio.run(
-          ...     FutureResult.from_success(1).unify(bindable).awaitable,
+          ...     FutureResult.from_value(1).unify(bindable).awaitable,
           ... ) == IOSuccess(2)
           >>> assert anyio.run(
           ...     FutureResult.from_failure(1).unify(bindable).awaitable,
@@ -878,7 +878,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           ...      return arg + 1
 
           >>> assert anyio.run(
-          ...     FutureResult.from_success(1).fix(fixable).awaitable,
+          ...     FutureResult.from_value(1).fix(fixable).awaitable,
           ... ) == IOSuccess(1)
           >>> assert anyio.run(
           ...     FutureResult.from_failure(1).fix(fixable).awaitable,
@@ -906,7 +906,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           ...      return arg + 1
 
           >>> assert anyio.run(
-          ...     FutureResult.from_success(1).alt(fixable).awaitable,
+          ...     FutureResult.from_value(1).alt(fixable).awaitable,
           ... ) == IOSuccess(1)
           >>> assert anyio.run(
           ...     FutureResult.from_failure(1).alt(fixable).awaitable,
@@ -934,10 +934,10 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           >>> from returns.io import IOSuccess
 
           >>> def rescuable(x: int) -> FutureResult[int, str]:
-          ...    return FutureResult.from_success(x + 1)
+          ...    return FutureResult.from_value(x + 1)
 
           >>> assert anyio.run(
-          ...     FutureResult.from_success(1).rescue(rescuable).awaitable,
+          ...     FutureResult.from_value(1).rescue(rescuable).awaitable,
           ... ) == IOSuccess(1)
           >>> assert anyio.run(
           ...     FutureResult.from_failure(1).rescue(rescuable).awaitable,
@@ -962,7 +962,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           >>> from returns.io import IO
 
           >>> async def main():
-          ...     first = await FutureResult.from_success(1).value_or(2)
+          ...     first = await FutureResult.from_value(1).value_or(2)
           ...     second = await FutureResult.from_failure(3).value_or(4)
           ...     return first, second
 
@@ -980,7 +980,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           >>> import anyio
           >>> from returns.future import FutureResult
           >>> from returns.io import IO
-          >>> assert anyio.run(FutureResult.from_success(1).unwrap) == IO(1)
+          >>> assert anyio.run(FutureResult.from_value(1).unwrap) == IO(1)
 
         .. code::
 
@@ -1005,7 +1005,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
 
         .. code::
 
-          >>> anyio.run(FutureResult.from_success(1).failure)
+          >>> anyio.run(FutureResult.from_value(1).failure)
           Traceback (most recent call last):
             ...
           returns.primitives.exceptions.UnwrapFailedError
@@ -1042,7 +1042,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           ...     return argument / 2  # not FutureResult!
           ...
           >>> async def success() -> FutureResult[float, int]:
-          ...     container = FutureResult.from_success(1)
+          ...     container = FutureResult.from_value(1)
           ...     return await FutureResult.lift(example)(container)
           ...
           >>> async def failure() -> FutureResult[float, int]:
@@ -1091,7 +1091,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           ...     return Success(argument / 2)
           ...
           >>> async def success() -> FutureResult[float, int]:
-          ...     container = FutureResult.from_success(1)
+          ...     container = FutureResult.from_value(1)
           ...     return await FutureResult.lift_result(example)(container)
           ...
           >>> async def failure() -> FutureResult[float, int]:
@@ -1139,7 +1139,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           ...     return IO(argument / 2)
           ...
           >>> async def success() -> FutureResult[float, int]:
-          ...     container = FutureResult.from_success(1)
+          ...     container = FutureResult.from_value(1)
           ...     return await FutureResult.lift_io(example)(container)
           ...
           >>> async def failure() -> FutureResult[float, int]:
@@ -1187,7 +1187,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           ...     return IOSuccess(argument / 2)
           ...
           >>> async def success() -> FutureResult[float, int]:
-          ...     container = FutureResult.from_success(1)
+          ...     container = FutureResult.from_value(1)
           ...     return await FutureResult.lift_ioresult(example)(container)
           ...
           >>> async def failure() -> FutureResult[float, int]:
@@ -1235,7 +1235,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           ...     return Future.from_value(argument / 2)
           ...
           >>> async def success() -> FutureResult[float, int]:
-          ...     container = FutureResult.from_success(1)
+          ...     container = FutureResult.from_value(1)
           ...     return await FutureResult.lift_future(example)(container)
           ...
           >>> async def failure() -> FutureResult[float, int]:
@@ -1282,7 +1282,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
         return FutureResult(container._inner_value)
 
     @classmethod
-    def from_successful_future(
+    def from_valueful_future(
         cls,
         container: Future[_NewValueType],
     ) -> 'FutureResult[_NewValueType, Any]':
@@ -1296,7 +1296,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           >>> from returns.future import Future, FutureResult
 
           >>> async def main():
-          ...     assert await FutureResult.from_successful_future(
+          ...     assert await FutureResult.from_valueful_future(
           ...         Future.from_value(1),
           ...     ) == IOSuccess(1)
 
@@ -1330,7 +1330,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
         return FutureResult(_future_result.async_failure(container))
 
     @classmethod
-    def from_successful_io(
+    def from_valueful_io(
         cls,
         container: IO[_NewValueType],
     ) -> 'FutureResult[_NewValueType, Any]':
@@ -1344,14 +1344,14 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           >>> from returns.future import FutureResult
 
           >>> async def main():
-          ...     assert await FutureResult.from_successful_io(
+          ...     assert await FutureResult.from_valueful_io(
           ...         IO(1),
           ...     ) == IOSuccess(1)
 
           >>> anyio.run(main)
 
         """
-        return FutureResult.from_success(container._inner_value)
+        return FutureResult.from_value(container._inner_value)
 
     @classmethod
     def from_failed_io(
@@ -1433,7 +1433,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
         return FutureResult(async_identity(container))
 
     @classmethod
-    def from_success(
+    def from_value(
         cls,
         inner_value: _NewValueType,
     ) -> 'FutureResult[_NewValueType, Any]':
@@ -1447,7 +1447,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           >>> from returns.future import FutureResult
 
           >>> async def main():
-          ...     assert await FutureResult.from_success(
+          ...     assert await FutureResult.from_value(
           ...         1,
           ...     ) == IOSuccess(1)
 

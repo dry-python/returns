@@ -35,19 +35,19 @@ def test_flatten(container, merged):
 
 @pytest.mark.parametrize(('container', 'merged'), [
     (
-        RequiresContextResult.from_success(
-            RequiresContextResult.from_success(1),
+        RequiresContextResult.from_value(
+            RequiresContextResult.from_value(1),
         ),
 
-        RequiresContextResult.from_success(1),
+        RequiresContextResult.from_value(1),
     ),
 
     (
-        RequiresContextIOResult.from_success(
-            RequiresContextIOResult.from_success(1),
+        RequiresContextIOResult.from_value(
+            RequiresContextIOResult.from_value(1),
         ),
 
-        RequiresContextIOResult.from_success(1),
+        RequiresContextIOResult.from_value(1),
     ),
 
     (
@@ -67,8 +67,8 @@ async def test_flatten_future(subtests):
         # Flattens:
         (Future.from_value(Future.from_value(1)), Future.from_value(1)),
         (
-            FutureResult.from_success(FutureResult.from_success(1)),
-            FutureResult.from_success(1),
+            FutureResult.from_value(FutureResult.from_value(1)),
+            FutureResult.from_value(1),
         ),
     ]
 

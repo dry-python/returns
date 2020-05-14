@@ -3,7 +3,7 @@
   main: |
     from returns.context import RequiresContextResult
 
-    reveal_type(RequiresContextResult.from_success(1))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[Any, builtins.int*, Any]'
+    reveal_type(RequiresContextResult.from_value(1))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[Any, builtins.int*, Any]'
 
 
 - case: requires_context_result_failure
@@ -43,7 +43,7 @@
 
     r: RequiresContext[float, str]
 
-    reveal_type(RequiresContextResult.from_successful_context(r))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.float*, builtins.str*, Any]'
+    reveal_type(RequiresContextResult.from_valueful_context(r))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.float*, builtins.str*, Any]'
 
 
 - case: requires_context_result_failed_context

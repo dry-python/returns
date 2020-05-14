@@ -42,7 +42,7 @@ async def async_bind_awaitable(
     """Async binds a coroutine over a value."""
     container = await inner_value
     if isinstance(container, Result.success_type):
-        return Result.from_success(await function(container.unwrap()))
+        return Result.from_value(await function(container.unwrap()))
     return container  # type: ignore
 
 

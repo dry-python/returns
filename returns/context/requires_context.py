@@ -258,7 +258,7 @@ class RequiresContext(
           >>> from returns.context import RequiresContextIOResult
           >>> from returns.io import IOSuccess
           >>> assert RequiresContext.from_requires_context_ioresult(
-          ...    RequiresContextIOResult.from_success(1),
+          ...    RequiresContextIOResult.from_value(1),
           ... )(...) == IOSuccess(1)
 
         Can be reverted with `RequiresContextIOResult.from_typecast`.
@@ -282,7 +282,7 @@ class RequiresContext(
           >>> from returns.context import RequiresContextResult
           >>> from returns.result import Success
           >>> assert RequiresContext.from_requires_context_result(
-          ...    RequiresContextResult.from_success(1),
+          ...    RequiresContextResult.from_value(1),
           ... )(...) == Success(1)
 
         Can be reverted with `RequiresContextResult.from_typecast`.

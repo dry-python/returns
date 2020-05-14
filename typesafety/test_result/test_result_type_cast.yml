@@ -25,12 +25,12 @@
     reveal_type(first)  # N: Revealed type is 'returns.result.Result[builtins.int, builtins.Exception]'
 
 
-- case: result_from_success
+- case: result_from_value
   disable_cache: true
   main: |
     from returns.result import Result
 
-    reveal_type(Result.from_success(1))  # N: Revealed type is 'returns.result.Result[builtins.int*, Any]'
+    reveal_type(Result.from_value(1))  # N: Revealed type is 'returns.result.Result[builtins.int*, Any]'
 
 
 - case: result_from_failure

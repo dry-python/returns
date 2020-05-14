@@ -55,7 +55,7 @@ def test_rescue_with_context_result():
     rescued = rescue(_context_result_function)
 
     assert rescued(
-        RequiresContextResult.from_success(1),
+        RequiresContextResult.from_value(1),
     )(1) == Success(1)
     assert rescued(
         RequiresContextResult.from_failure(1),
@@ -70,7 +70,7 @@ def test_rescue_with_context_io_result():
     rescued = rescue(_context_io_result_function)
 
     assert rescued(
-        RequiresContextIOResult.from_success(1),
+        RequiresContextIOResult.from_value(1),
     )(1) == IOSuccess(1)
     assert rescued(
         RequiresContextIOResult.from_failure(1),

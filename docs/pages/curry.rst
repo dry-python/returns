@@ -150,8 +150,8 @@ From this return type you can see that we work
 with all matching cases and discriminate unmatching ones.
 
 
-curry
------
+@curry
+------
 
 ``curry`` allows to provide only a subset of arguments to a function.
 And it won't be called untill all the required arguments are provided.
@@ -238,12 +238,13 @@ you discriminate some overloads and choose more specific path:
   #     -> builtins.str,
   #
   # And the revealed type would be:
+  #
   #   def (*, kw: builtins.bool) -> builtins.str
   #
 
 It works with functions, instance, class,
 and static methods, including generics.
-See ``Limitations`` in the API reference.
+See ``Limitations`` in the API Reference.
 
 
 FAQ
@@ -267,6 +268,8 @@ There are several problems:
 Our advice is not to use ``*args`` and ``*kwargs``
 with ``partial`` and ``curry``.
 
+But, it is still possible, but in this case we will fallback to ``Any``.
+
 
 Further reading
 ---------------
@@ -280,3 +283,4 @@ API Reference
 -------------
 
 .. automodule:: returns.curry
+   :members:

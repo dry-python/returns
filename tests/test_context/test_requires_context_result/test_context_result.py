@@ -19,7 +19,7 @@ from returns.result import Failure, Success
 @pytest.mark.parametrize('container', [
     RequiresContextResult(lambda _: Success(1)),
     RequiresContextResult(lambda _: Failure(1)),
-    RequiresContextResult.from_success(1),
+    RequiresContextResult.from_value(1),
     RequiresContextResult.from_failure(1),
     RequiresContextResult.from_result(Success(1)),
     RequiresContextResult.from_result(Failure(1)),
@@ -60,4 +60,4 @@ def test_context_result_immutable_deepcopy():
 def test_requires_context_result_immutable():
     """Ensures that container is immutable."""
     with pytest.raises(ImmutableStateError):
-        RequiresContextResult.from_success(1).abc = 1
+        RequiresContextResult.from_value(1).abc = 1

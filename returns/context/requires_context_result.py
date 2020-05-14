@@ -67,7 +67,7 @@ class RequiresContextResult(
       ... )(...) == Success(2)
 
       >>> # With wrapper:
-      >>> assert RequiresContextResult.from_success(1).bind_result(
+      >>> assert RequiresContextResult.from_value(1).bind_result(
       ...     function,
       ... )(...) == Success(2)
 
@@ -156,7 +156,7 @@ class RequiresContextResult(
           >>> from returns.context import RequiresContextResult
           >>> from returns.result import Success, Failure
 
-          >>> assert RequiresContextResult.from_success(1).map(
+          >>> assert RequiresContextResult.from_value(1).map(
           ...     lambda x: x + 1,
           ... )(...) == Success(2)
 
@@ -225,11 +225,11 @@ class RequiresContextResult(
           ...     return Failure('<0')
           ...
 
-          >>> assert RequiresContextResult.from_success(1).bind_result(
+          >>> assert RequiresContextResult.from_value(1).bind_result(
           ...     function,
           ... )(RequiresContextResult.empty) == Success(2)
 
-          >>> assert RequiresContextResult.from_success(0).bind_result(
+          >>> assert RequiresContextResult.from_value(0).bind_result(
           ...     function,
           ... )(RequiresContextResult.empty) == Failure('<0')
 
@@ -259,7 +259,7 @@ class RequiresContextResult(
           ...
           >>> assert function(2)('abc') == 5
 
-          >>> assert RequiresContextResult.from_success(2).bind_context(
+          >>> assert RequiresContextResult.from_value(2).bind_context(
           ...     function,
           ... )('abc') == Success(5)
 
@@ -285,7 +285,7 @@ class RequiresContextResult(
           >>> from returns.context import RequiresContextResult
           >>> from returns.result import Success
 
-          >>> assert RequiresContextResult.from_success(1).fix(
+          >>> assert RequiresContextResult.from_value(1).fix(
           ...     lambda x: x + 1,
           ... )(...) == Success(1)
 
@@ -307,7 +307,7 @@ class RequiresContextResult(
           >>> from returns.context import RequiresContextResult
           >>> from returns.result import Success, Failure
 
-          >>> assert RequiresContextResult.from_success(1).alt(
+          >>> assert RequiresContextResult.from_value(1).alt(
           ...     lambda x: x + 1,
           ... )(...) == Success(1)
 
@@ -343,7 +343,7 @@ class RequiresContextResult(
           ...      )
           ...
 
-          >>> assert RequiresContextResult.from_success('a').rescue(
+          >>> assert RequiresContextResult.from_value('a').rescue(
           ...     rescuable,
           ... )('c') == Success('a')
           >>> assert RequiresContextResult.from_failure('a').rescue(
@@ -370,7 +370,7 @@ class RequiresContextResult(
 
           >>> from returns.context import RequiresContextResult
 
-          >>> assert RequiresContextResult.from_success(1).value_or(2)(
+          >>> assert RequiresContextResult.from_value(1).value_or(2)(
           ...     RequiresContextResult.empty,
           ... ) == 1
 
@@ -460,7 +460,7 @@ class RequiresContextResult(
           >>> def function(arg: int) -> str:
           ...     return str(arg) + '!'
           ...
-          >>> unit = RequiresContextResult.from_success(1)
+          >>> unit = RequiresContextResult.from_value(1)
           >>> deps = RequiresContextResult.empty
           >>> assert RequiresContextResult.lift(function)(
           ...     unit,
@@ -505,11 +505,11 @@ class RequiresContextResult(
           >>> deps = RequiresContextResult.empty
 
           >>> assert RequiresContextResult.lift_result(function)(
-          ...     RequiresContextResult.from_success(1),
+          ...     RequiresContextResult.from_value(1),
           ... )(deps) == Success('1!')
 
           >>> assert RequiresContextResult.lift_result(function)(
-          ...     RequiresContextResult.from_success(0),
+          ...     RequiresContextResult.from_value(0),
           ... )(deps) == Failure(0)
 
           >>> assert RequiresContextResult.lift_result(function)(
@@ -551,7 +551,7 @@ class RequiresContextResult(
           ...
 
           >>> assert RequiresContextResult.lift_context(function)(
-          ...     RequiresContextResult.from_success(2),
+          ...     RequiresContextResult.from_value(2),
           ... )('abc') == Success(5)
 
           >>> assert RequiresContextResult.lift_context(function)(
@@ -616,7 +616,7 @@ class RequiresContextResult(
         return RequiresContextResult(container)
 
     @classmethod
-    def from_successful_context(
+    def from_valueful_context(
         cls, inner_value: 'RequiresContext[_EnvType, _FirstType]',
     ) -> 'RequiresContextResult[_EnvType, _FirstType, Any]':
         """
@@ -626,7 +626,7 @@ class RequiresContextResult(
 
           >>> from returns.context import RequiresContext
           >>> from returns.result import Success
-          >>> assert RequiresContextResult.from_successful_context(
+          >>> assert RequiresContextResult.from_valueful_context(
           ...     RequiresContext.from_value(1),
           ... )(...) == Success(1)
 
@@ -652,7 +652,7 @@ class RequiresContextResult(
         return RequiresContextResult(lambda deps: Failure(inner_value(deps)))
 
     @classmethod
-    def from_success(
+    def from_value(
         cls, inner_value: _FirstType,
     ) -> 'RequiresContextResult[Any, _FirstType, Any]':
         """
@@ -662,7 +662,7 @@ class RequiresContextResult(
 
           >>> from returns.context import RequiresContextResult
           >>> from returns.result import Success
-          >>> assert RequiresContextResult.from_success(1)(...) == Success(1)
+          >>> assert RequiresContextResult.from_value(1)(...) == Success(1)
 
         """
         return RequiresContextResult(lambda _: Success(inner_value))

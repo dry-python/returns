@@ -24,7 +24,7 @@ def test_return_true_with_io_result_container():
 
 def test_return_true_with_requires_context_io_result_container():  # noqa: E501,WPS118
     """Ensures `is_io` function will return True for RequiresContextIOResult."""
-    assert is_io(RequiresContextIOResult.from_success(1.5)) is True
+    assert is_io(RequiresContextIOResult.from_value(1.5)) is True
 
 
 def test_return_false_with_maybe_container():
@@ -44,7 +44,7 @@ def test_return_false_with_result_container():
 
 def test_return_false_with_requires_context_result_container():  # noqa: WPS118
     """Ensures `is_io` function will return False for RequiresContextResult."""
-    assert is_io(RequiresContextResult.from_success(Success(True))) is False
+    assert is_io(RequiresContextResult.from_value(Success(True))) is False
 
 
 def test_return_false_with_future_container():

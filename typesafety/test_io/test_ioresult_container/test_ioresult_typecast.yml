@@ -25,12 +25,12 @@
     reveal_type(first)  # N: Revealed type is 'returns.io.IOResult[builtins.int, builtins.Exception]'
 
 
-- case: ioresult_from_success
+- case: ioresult_from_value
   disable_cache: true
   main: |
     from returns.io import IOResult
 
-    reveal_type(IOResult.from_success(1))  # N: Revealed type is 'returns.io.IOResult[builtins.int*, Any]'
+    reveal_type(IOResult.from_value(1))  # N: Revealed type is 'returns.io.IOResult[builtins.int*, Any]'
 
 
 - case: ioresult_from_failure

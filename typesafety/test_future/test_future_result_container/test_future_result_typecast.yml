@@ -45,11 +45,11 @@
         ...
 
     reveal_type(FutureResult(test()))  # N: Revealed type is 'returns.future.FutureResult[builtins.int*, builtins.str*]'
-    reveal_type(FutureResult.from_success(1))  # N: Revealed type is 'returns.future.FutureResult[builtins.int*, Any]'
+    reveal_type(FutureResult.from_value(1))  # N: Revealed type is 'returns.future.FutureResult[builtins.int*, Any]'
     reveal_type(FutureResult.from_failure(1))  # N: Revealed type is 'returns.future.FutureResult[Any, builtins.int*]'
     reveal_type(FutureResult.from_result(Success(1)))  # N: Revealed type is 'returns.future.FutureResult[builtins.int*, Any]'
     reveal_type(FutureResult.from_result(Failure(1)))  # N: Revealed type is 'returns.future.FutureResult[Any, builtins.int*]'
     reveal_type(FutureResult.from_ioresult(IOSuccess(1)))  # N: Revealed type is 'returns.future.FutureResult[builtins.int*, Any]'
     reveal_type(FutureResult.from_ioresult(IOFailure(1)))  # N: Revealed type is 'returns.future.FutureResult[Any, builtins.int*]'
-    reveal_type(FutureResult.from_successful_io(IO(1)))  # N: Revealed type is 'returns.future.FutureResult[builtins.int*, Any]'
+    reveal_type(FutureResult.from_valueful_io(IO(1)))  # N: Revealed type is 'returns.future.FutureResult[builtins.int*, Any]'
     reveal_type(FutureResult.from_failed_io(IO(1)))  # N: Revealed type is 'returns.future.FutureResult[Any, builtins.int*]'
