@@ -19,6 +19,8 @@ See [0Ver](https://0ver.org/).
   Only `Maybe` was different, sorry for that!
 - **Breaking**: renames `.from_success` to `.from_value`,
   there's no need in two separate methods
+- **Breaking**: since we now support `.apply()` methods,
+  there's no more need in `*_squash` converters, they are removed
 - Adds typed `partial` and `curry` plugin!
 - Adds `pytest` plugin with the ability to tests error handling
 - Adds `Future` container to easily work with `async` functions

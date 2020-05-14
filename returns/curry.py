@@ -10,12 +10,12 @@ def partial(
     func: Callable[..., _ReturnType], *args: Any, **kwargs: Any,
 ) -> Callable[..., _ReturnType]:
     """
-    Typed partial application helper.
+    Typed partial application.
 
-    It just ``functools.partial`` wrapper with better typing support.
+    It is just a ``functools.partial`` wrapper with better typing support.
 
-    We use a custom ``mypy`` plugin to make types correct.
-    Otherwise, it is currently impossible.
+    We use a custom ``mypy`` plugin to make sure types are correct.
+    Otherwise, it is currently impossible to properly type this function.
 
     .. code:: python
 
@@ -120,11 +120,11 @@ def curry(function: Callable[..., _ReturnType]) -> Callable[..., _ReturnType]:
 
 
 def _eager_curry(
-    function,
+    function: Callable,
     argspec,
     args: tuple,
     kwargs: dict,
-):
+) -> Union[Callable[..., _ReturnType], _ReturnType]:
     """Internal ``curry`` implementation."""
     intermediate, full_args = _intermediate_argspec(argspec, args, kwargs)
     if full_args is not None:

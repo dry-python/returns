@@ -114,56 +114,6 @@ one for successful case, one for failing case.
   >>> assert coalesce_result(handle_success, handle_failure)(Failure(1)) == 0.0
 
 
-squash
-------
-
-squash_io
-~~~~~~~~~
-
-:func:`returns.converters.squash_io` function
-allows to squash several ``IO`` containers together.
-
-That's how it works:
-
-.. code:: python
-
-  >>> from returns.io import IO
-  >>> from returns.converters import squash_io
-
-  >>> assert squash_io(IO('first'), IO('second')) == IO(('first', 'second'))
-  >>> # => revealed type of this instance is `IO[Tuple[str, str]]`
-
-It might be helpful if you want to work with mutliple ``IO`` instances at
-the same time.
-
-This approach saves you you from multiple nested ``IO.map`` calls.
-You can work with tuples instead like so:
-
-.. code:: python
-
-  >>> plus = squash_io(IO(1), IO('a')).map(lambda args: args[0] + len(args[1]))
-  >>> assert plus == IO(2)
-
-We support up to 9 typed parameters to this function.
-
-squash_context
-~~~~~~~~~~~~~~
-
-:func:`returns.converters.squash_context` is similar to ``squash_io``,
-but works with ``RequiresContext`` container.
-
-.. code:: python
-
-  >>> from returns.context import RequiresContext
-  >>> from returns.converters import squash_context
-
-  >>> assert squash_context(
-  ...     RequiresContext.from_value(1),
-  ...     RequiresContext.from_value('a'),
-  ... )(...) == RequiresContext.from_value((1, 'a'))(...)
-  >>> # revealed type is: RequiresContext[Any, Tuple[int, str]]
-
-
 
 API Reference
 -------------
@@ -171,10 +121,6 @@ API Reference
 .. autofunction:: returns.converters.swap
 
 .. autofunction:: returns.converters.flatten
-
-.. autofunction:: returns.converters.squash_io
-
-.. autofunction:: returns.converters.squash_context
 
 .. automodule:: returns.converters
    :members:

@@ -1,6 +1,6 @@
 from typing import TypeVar
 
-from returns._generated.converters import coalesce, squash
+from returns._generated.converters import coalesce
 from returns._generated.converters.swap import _swap as swap  # noqa: F401
 from returns.maybe import Maybe
 from returns.pipeline import is_successful
@@ -18,9 +18,6 @@ _ErrorType = TypeVar('_ErrorType')
 coalesce_maybe = coalesce._coalesce_maybe  # noqa: WPS437
 coalesce_result = coalesce._coalesce_result  # noqa: WPS437
 coalesce_ioresult = coalesce._coalesce_ioresult  # noqa: WPS437
-
-squash_io = squash._squash_io  # noqa: WPS437
-squash_context = squash._squash_context  # noqa: WPS437
 
 
 def result_to_maybe(
