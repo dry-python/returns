@@ -36,7 +36,6 @@ Contents
   pages/converters.rst
   pages/pointfree.rst
   pages/functions.rst
-  pages/instances.rst
   pages/curry.rst
   pages/types.rst
 
