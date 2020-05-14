@@ -1,4 +1,4 @@
-- case: curry_wrong_generic
+- case: partial_wrong_generic
   disable_cache: true
   main: |
     from returns.curry import partial
@@ -21,7 +21,7 @@
     main:15: note: Revealed type is 'builtins.int*'
 
 
-- case: curry_correct_generic
+- case: partial_correct_generic
   disable_cache: true
   main: |
     from returns.curry import partial
@@ -43,7 +43,7 @@
     main:15: note: Revealed type is 'builtins.int*'
 
 
-- case: curry_single_generic
+- case: partial_single_generic
   disable_cache: true
   main: |
     from returns.curry import partial
@@ -79,7 +79,7 @@
     main:22: note: Revealed type is 'builtins.int*'
 
 
-- case: curry_double_generic_complex37
+- case: partial_double_generic_complex37
   disable_cache: true
   skip: sys.version_info >= (3, 8)
   main: |
@@ -116,7 +116,7 @@
 
 
 # Python3.8+ sorts generic arguments differently:
-- case: curry_double_generic_complex38
+- case: partial_double_generic_complex38
   disable_cache: true
   skip: sys.version_info < (3, 8)
   main: |
@@ -152,7 +152,7 @@
     main:23: note: Revealed type is 'def [B] (*, b: builtins.list[B`-1]) -> Union[builtins.str*, B`-1]'
 
 
-- case: curry_double_generic
+- case: partial_double_generic
   disable_cache: true
   main: |
     from returns.curry import partial

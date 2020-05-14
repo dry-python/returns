@@ -22,12 +22,14 @@ https://github.com/mkurnikov/pytest-mypy-plugins
 from typing import Callable, Optional, Type
 
 from mypy.plugin import FunctionContext, Plugin
-from mypy.types import CallableType, Instance, Overloaded, TypeType
+from mypy.types import CallableType, Instance, Overloaded
+from mypy.types import Type as MypyType
+from mypy.types import TypeType
 
 from returns.contrib.mypy._curry import (
     AppliedArgs,
-    CurryFunctionReducer,
-    get_callable_from_type,
+    CurryFunctionOverloads,
+    PartialFunctionReducer,
 )
 
 #: Set of full names of our decorators.
@@ -42,8 +44,11 @@ _TYPED_DECORATORS = frozenset((
     'returns.functions.not_',
 ))
 
-#: Used for typed curring.
-_TYPED_CURRY_FUNCTION = 'returns.curry.partial'
+#: Used for typed ``partial`` function.
+_TYPED_PARTIAL_FUNCTION = 'returns.curry.partial'
+
+#: Used for typed ``curry`` decorator.
+_TYPED_CURRY_FUNCTION = 'returns.curry.curry'
 
 
 def _change_decorator_function_type(
@@ -60,7 +65,7 @@ def _change_decorator_function_type(
     )
 
 
-def _analyze_decorator(function_ctx: FunctionContext):
+def _analyze_decorator(function_ctx: FunctionContext) -> MypyType:
     """Tells us what to do when one of the typed decorators is called."""
     if not isinstance(function_ctx.arg_types[0][0], CallableType):
         return function_ctx.default_return_type
@@ -72,7 +77,7 @@ def _analyze_decorator(function_ctx: FunctionContext):
     )
 
 
-def _analyze_curring(function_ctx: FunctionContext):
+def _analyze_partial(function_ctx: FunctionContext) -> MypyType:
     """
     This hook is used to make typed curring a thing in `returns` project.
 
@@ -90,20 +95,20 @@ def _analyze_curring(function_ctx: FunctionContext):
         Overloaded,
     )
 
+    func_args = AppliedArgs(function_ctx)
     if len(list(filter(len, function_ctx.arg_types))) == 1:
         return function_def  # this means, that `partial(func)` is called
     elif not isinstance(function_def, supported_types):
         return function_ctx.default_return_type
     elif isinstance(function_def, (Instance, TypeType)):
         # We force `Instance` and similar types to coercse to callable:
-        function_def = get_callable_from_type(function_ctx)
+        function_def = func_args.get_callable_from_context()
 
-    is_valid, applied_args = AppliedArgs(function_ctx).build_from_context()
-
+    is_valid, applied_args = func_args.build_from_context()
     if not isinstance(function_def, (CallableType, Overloaded)) or not is_valid:
         return function_ctx.default_return_type
 
-    return CurryFunctionReducer(
+    return PartialFunctionReducer(
         function_ctx.default_return_type,
         function_def,
         applied_args,
@@ -111,10 +116,22 @@ def _analyze_curring(function_ctx: FunctionContext):
     ).new_partial()
 
 
+def _analyze_curry(function_ctx: FunctionContext) -> MypyType:
+    if not isinstance(function_ctx.arg_types[0][0], CallableType):
+        return function_ctx.default_return_type
+    if not isinstance(function_ctx.default_return_type, CallableType):
+        return function_ctx.default_return_type
+
+    return CurryFunctionOverloads(
+        function_ctx.arg_types[0][0],
+        function_ctx,
+    ).build_overloads()
+
+
 class _TypedDecoratorPlugin(Plugin):
-    def get_function_hook(  # type: ignore
+    def get_function_hook(
         self, fullname: str,
-    ) -> Optional[Callable[[FunctionContext], Type]]:
+    ) -> Optional[Callable[[FunctionContext], MypyType]]:
         """
         One of the specified ``mypy`` callbacks.
 
@@ -124,8 +141,10 @@ class _TypedDecoratorPlugin(Plugin):
 
         Otherwise, we return ``None``.
         """
-        if fullname == _TYPED_CURRY_FUNCTION:
-            return _analyze_curring
+        if fullname == _TYPED_PARTIAL_FUNCTION:
+            return _analyze_partial
+        elif fullname == _TYPED_CURRY_FUNCTION:
+            return _analyze_curry
         elif fullname in _TYPED_DECORATORS:
             return _analyze_decorator
         return None

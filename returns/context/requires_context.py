@@ -388,3 +388,9 @@ class Context(Immutable, Generic[_EnvType]):
 
         """
         return RequiresContext(identity)
+
+
+# Aliases
+
+#: Sometimes `RequiresContext` is too long to type.
+Reader = RequiresContext
