@@ -232,7 +232,7 @@ you discriminate some overloads and choose more specific path:
 .. code:: python
 
   reveal_type(zero(1, 2.0))
-  # By providing this set of arguments we have choosen this path:
+  # By providing this set of arguments we have chosen this path:
   #
   #   def (a: builtins.int, b: builtins.float) -> def (*, kw: builtins.bool)
   #     -> builtins.str,
