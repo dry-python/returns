@@ -6,7 +6,7 @@ mypy plugin
 We provide several ``mypy`` plugins to fix existing issues
 and improve type-safety of things developers commonly use:
 
-- ``decorator_plugin`` to solve untyped `decorator issue <https://github.com/python/mypy/issues/3157>`_ and add better :ref:`curry` support
+- ``returns_plugin`` to solve untyped `decorator issue <https://github.com/python/mypy/issues/3157>`_ and add better :ref:`curry` support
 
 
 Installation
@@ -19,7 +19,7 @@ to the ``plugins`` section of the config file.
 
   [mypy]
   plugins =
-    returns.contrib.mypy.decorator_plugin
+    returns.contrib.mypy.returns_plugin
 
 We recommend to always add our plugin as the first one in chain.
 
@@ -56,7 +56,34 @@ Further reading
 API Reference
 -------------
 
-.. autoclasstree:: returns.contrib.mypy.decorator_plugin
+Plugin defenition
+~~~~~~~~~~~~~~~~~
 
-.. automodule:: returns.contrib.mypy.decorator_plugin
+.. autoclasstree:: returns.contrib.mypy.returns_plugin
+
+.. automodule:: returns.contrib.mypy.returns_plugin
+   :members:
+
+Curry
+~~~~~
+
+.. autoclasstree:: returns.contrib.mypy._features.curry
+
+.. automodule:: returns.contrib.mypy._features.curry
+   :members:
+
+Partial
+~~~~~~~
+
+.. autoclasstree:: returns.contrib.mypy._features.partial
+
+.. automodule:: returns.contrib.mypy._features.partial
+   :members:
+
+Decorators
+~~~~~~~~~~
+
+.. autoclasstree:: returns.contrib.mypy._features.decorators
+
+.. automodule:: returns.contrib.mypy._features.decorators
    :members:

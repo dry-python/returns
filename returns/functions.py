@@ -13,10 +13,8 @@ def identity(instance: _FirstType) -> _FirstType:
 
     .. code:: python
 
-      >>> identity(1)
-      1
-      >>> identity([1, 2, 3])
-      [1, 2, 3]
+      >>> assert identity(1) == 1
+      >>> assert identity([1, 2, 3]) == [1, 2, 3]
 
     Why do we even need this?
     Identity functions help us with the composition.
@@ -54,8 +52,7 @@ def compose(
 
     .. code:: python
 
-      >>> compose(float, int)('123.5')
-      123
+      >>> assert compose(float, int)('123.5') == 123
 
     We can only compose functions with one argument and one return.
     Type checked.
@@ -74,11 +71,9 @@ def tap(
 
     .. code:: python
 
-      >>> tap(print)(1)
+      >>> assert tap(print)(1) == 1
       1
-      1
-      >>> tap(lambda _: 1)(2)
-      2
+      >>> assert tap(lambda _: 1)(2) == 2
 
     See also:
         - https://github.com/dry-python/returns/issues/145
@@ -106,9 +101,10 @@ def untap(
       >>> def strange_log(arg: int) -> int:
       ...     print(arg)
       ...     return arg
-      >>> untap(strange_log)(2)
+
+      >>> assert untap(strange_log)(2) is None
       2
-      >>> untap(tap(lambda _: 1))(2)
+      >>> assert untap(tap(lambda _: 1))(2) is None
 
     See also:
         - https://github.com/dry-python/returns/issues/145
@@ -157,7 +153,6 @@ def not_(function: Callable[..., bool]) -> Callable[..., bool]:
 
       >>> def is_successful(result_container: Result[float, int]) -> bool:
       ...     return isinstance(result_container, Result.success_type)
-      ...
 
       >>> assert not_(is_successful)(Success(1.0)) is False
       >>> assert not_(is_successful)(Failure(1)) is True

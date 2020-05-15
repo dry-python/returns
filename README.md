@@ -39,7 +39,7 @@ to fix [this existing issue](https://github.com/python/mypy/issues/3157):
 # In setup.cfg or mypy.ini:
 [mypy]
 plugins =
-  returns.contrib.mypy.decorator_plugin
+  returns.contrib.mypy.returns_plugin
 ```
 
 We also recommend to use the same `mypy` settings [we use](https://github.com/wemake-services/wemake-python-styleguide/blob/master/styles/mypy.toml).

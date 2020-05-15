@@ -10,6 +10,8 @@ See [0Ver](https://0ver.org/).
 
 ### Features
 
+- **Breaking**: renames mypy plugin from `decorator_plugin` to `returns_plugin`
+  because of a complete rewrite and lots of new features
 - **Breaking**: changes `@safe`, `@impure`, `impure_safe`, `@maybe` semantics:
   they do not work with `async` functions anymore;
   now you are forced to use `Future` and its helpers
