@@ -1,6 +1,6 @@
 def _unify(function):
     """
-    Boxes function's input parameter from a regular value to a container.
+    Turns function's input parameter from a regular value to a container.
 
     In other words, it modifies the function
     signature from: ``a -> Container[b]`` to: ``Container[a] -> Container[b]``
@@ -21,7 +21,7 @@ def _unify(function):
 
       >>> def example(argument: int) -> Result[int, str]:
       ...     return Success(argument + 1)
-      ...
+
       >>> assert unify(example)(Success(1)) == Success(2)
       >>> assert unify(example)(Failure('a')) == Failure('a')
 

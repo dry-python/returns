@@ -1,11 +1,14 @@
+import pytest
+
 from returns.context import (
     RequiresContext,
     RequiresContextIOResult,
     RequiresContextResult,
 )
+from returns.future import Future, FutureResult
 from returns.io import IO, IOFailure, IOResult, IOSuccess
 from returns.maybe import Maybe, Nothing, Some
-from returns.pointfree import bind
+from returns.pointfree import bind, unify
 from returns.result import Failure, Result, Success
 
 
@@ -41,53 +44,80 @@ def _context_io_result_function(
     return RequiresContextIOResult(lambda other: IOSuccess(argument + other))
 
 
+def _future_function(argument: int) -> Future[str]:
+    return Future.from_value(str(argument + 1))
+
+
+def _future_result_function(argument: int) -> FutureResult[str, float]:
+    return FutureResult.from_value(str(argument + 1))
+
+
 def test_bind_with_io():
     """Ensures that functions can be composed and return type is correct."""
-    binded = bind(_io_function)
+    bound = bind(_io_function)
 
-    assert binded(IO(1)) == IO('2')
+    assert bound(IO(1)) == IO('2')
 
 
 def test_bind_with_ioresult():
     """Ensures that functions can be composed and return type is correct."""
-    binded = bind(_ioresult_function)
+    bound = bind(_ioresult_function)
 
-    assert binded(IOSuccess(1)) == IOSuccess('2')
-    assert binded(IOFailure('a')) == IOFailure('a')
+    assert bound(IOSuccess(1)) == IOSuccess('2')
+    assert bound(IOFailure('a')) == IOFailure('a')
+    assert bound(IOSuccess(1)) == unify(_ioresult_function)(IOSuccess(1))
 
 
 def test_bind_with_maybe():
     """Ensures that functions can be composed and return type is correct."""
-    binded = bind(_maybe_function)
+    bound = bind(_maybe_function)
 
-    assert binded(Some(1)) == Some('2')
-    assert binded(Nothing) == Nothing
+    assert bound(Some(1)) == Some('2')
+    assert bound(Nothing) == Nothing
 
 
 def test_bind_with_result():
     """Ensures that functions can be composed and return type is correct."""
-    binded = bind(_result_function)
+    bound = bind(_result_function)
 
-    assert binded(Success(1)) == Success('2')
-    assert binded(Failure('s')) == Failure('s')
+    assert bound(Success(1)) == Success('2')
+    assert bound(Failure('s')) == Failure('s')
+    assert bound(Success(1)) == unify(_result_function)(Success(1))
 
 
 def test_bind_with_context():
     """Ensures that functions can be composed and return type is correct."""
-    binded = bind(_context_function)
+    bound = bind(_context_function)
 
-    assert binded(RequiresContext(lambda _: 3))(5) == 8
+    assert bound(RequiresContext(lambda _: 3))(5) == 8
 
 
 def test_bind_with_context_result():
     """Ensures that functions can be composed and return type is correct."""
-    binded = bind(_context_result_function)
+    bound = bind(_context_result_function)
 
-    assert binded(RequiresContextResult.from_value(3))(5) == Success(8)
+    assert bound(RequiresContextResult.from_value(3))(5) == Success(8)
 
 
 def test_bind_with_context_io_result():
     """Ensures that functions can be composed and return type is correct."""
-    binded = bind(_context_io_result_function)
+    bound = bind(_context_io_result_function)
 
-    assert binded(RequiresContextIOResult.from_value(3))(5) == IOSuccess(8)
+    assert bound(RequiresContextIOResult.from_value(3))(5) == IOSuccess(8)
+
+
+@pytest.mark.anyio
+async def test_bind_future():
+    """Ensures that functions can be composed and return type is correct."""
+    assert await bind(_future_function)(Future.from_value(1)) == IO('2')
+
+
+@pytest.mark.anyio
+async def test_bind_future_result():
+    """Ensures that functions can be composed and return type is correct."""
+    assert await bind(_future_result_function)(
+        FutureResult.from_value(1),
+    ) == IOSuccess('2')
+    assert await bind(_future_result_function)(
+        FutureResult.from_failure(1.0),
+    ) == IOFailure(1.0)

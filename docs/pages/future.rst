@@ -35,6 +35,12 @@ Decorators
 future
 ~~~~~~
 
+This decorator helps to easily transform ``async def`` into ``Future``:
+
+.. code:: python
+
+  
+
 future_safe
 ~~~~~~~~~~~
 

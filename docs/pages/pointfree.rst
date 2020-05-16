@@ -39,10 +39,38 @@ but how can we do it inversevely?
 That's it.
 
 
+unify
+-----
+
+``unify`` is the same as ``bind``, but returns different return type.
+While ``bind`` reveals strictly the same error type,
+``unify`` returns ``Union[_OldReturnType, _NewReturnType]``.
+
+
+apply
+-----
+
+Pointfree ``apply`` function allows
+to use ``.apply()`` container method like a function:
+
+.. code:: python
+
+  >>> from returns.pointfree import apply
+  >>> from returns.maybe import Some, Nothing
+
+  >>> def function(arg: int) -> str:
+  ...     return chr(arg) + '!'
+
+  >>> assert apply(Some(function))(Some(97)) == Some('a!')
+  >>> assert apply(Some(function))(Some(98)) == Some('b!')
+  >>> assert apply(Some(function))(Nothing) == Nothing
+
+
 rescue
 ------
 
-The same applies for ``rescue()`` function.
+Pointfree ``rescue()`` function is an alternative
+to ``.rescue()`` container method.
 It is also required for better declarative programming.
 
 .. code:: python
@@ -72,5 +100,9 @@ API Reference
 -------------
 
 .. autofunction:: returns.pointfree.bind
+
+.. autofunction:: returns.pointfree.unify
+
+.. autofunction:: returns.pointfree.apply
 
 .. autofunction:: returns.pointfree.rescue

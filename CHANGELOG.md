@@ -24,7 +24,7 @@ See [0Ver](https://0ver.org/).
 - **Breaking**: since we now support `.apply()` methods,
   there's no more need in `*_squash` converters, they are removed
 - **Breaking**: renamed `Instanceable` to `Applicative`
-- Adds typed `partial` and `curry` plugin!
+- Adds typed `partial` and `curry` mypy plugins!
 - Adds `pytest` plugin with the ability to tests error handling
 - Adds `Future` container to easily work with `async` functions
 - Adds `FutureResult` container to easily work
@@ -32,7 +32,9 @@ See [0Ver](https://0ver.org/).
 - Adds `bind_io` method to `IOResult`
 - Adds `lift_io` method to `IOResult`
 - Adds `bind_io` method to `RequiresContextIOResult`
-- Adds `unify` point free function
+- Adds `unify` pointfree function
+- Adds `apply` pointfree function
+- Adds `Future` and `FutureResult` support for all existing pointfree functions
 - Adds `not_` composition helper
 - Adds `flatten` support for `Future` and `FutureResult`
 - Adds `__copy__` and `__deepcopy__` magic methods to `Immutable` class
