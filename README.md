@@ -466,7 +466,7 @@ But, if we would try to run `await first()`,
 then we would need to change `second` to be `async`.
 And sometimes it is not possible for various reasons.
 
-However, with `Future` it is possible. Let see how:
+However, with `Future` we can "pretend" to call async code from sync code:
 
 ```python
 from returns.future import Future
@@ -518,7 +518,7 @@ from returns.pipeline import is_successful
 async def raising():
     raise ValueError('Not so fast!')
 
-io_result = anyio.run(raising.awaitable)  # all Future's return IO wrapped vals
+io_result = anyio.run(raising.awaitable)  # all `Future`s return IO containers
 assert not is_successful(io_result)  # True
 assert io_result == IOFailure(ValueError('Not so fast!'))  # Also True
 ```
@@ -542,15 +542,17 @@ async def ensure_allowed(permissions: 'Permissions') -> bool:
     ...
 
 async def main(user_id: int) -> bool:
+    # Also, don't forget to handle all possible errors with `try / except`!
     user = await fetch_user(user_id)  # We will await each time we use a coro!
     permissions = await get_user_permissions(user)
-    # Don't forget to handle all possible errors with `try / except`!
     return await ensure_allowed(permissions)
 ```
 
 Some people are ok with it, but some people don't like this imperative style.
-You can do the same thing in style!
-With the help of `Future` and `FutureResult`:
+The problem is that there was no choice.
+
+But now, you can do the same thing in functional style!
+With the help of `Future` and `FutureResult` containers:
 
 ```python
 import anyio
@@ -570,7 +572,7 @@ async def ensure_allowed(permissions: 'Permissions') -> bool:
     ...
 
 async def main(user_id: int) -> FutureResultE[bool]:
-    # We don't care about exceptions any more, they are alrady handled.
+    # We don't care about exceptions anymore, they are alrady handled.
     return fetch_user(user_id).bind(get_user_permissions).bind(ensure_allowed)
 
 correct_user_id: int  # has required permissions
