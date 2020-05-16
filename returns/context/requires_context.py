@@ -103,10 +103,12 @@ class RequiresContext(
           ...     return RequiresContext(
           ...         lambda deps: deps if lg else -deps,
           ...     )
-          ...
+
           >>> instance = first(False)  # creating `RequiresContext` instance
-          >>> instance(3.5)  # calling it with `__call__`
-          -3.5
+          >>> assert instance(3.5) == -3.5 # calling it with `__call__`
+
+          >>> # Example with another logic:
+          >>> assert first(True)(3.5) == 3.5
 
         In other things, it is a regular python magic method.
         """
@@ -128,11 +130,9 @@ class RequiresContext(
           ...     return RequiresContext(
           ...         lambda deps: deps if lg else -deps,
           ...     )
-          ...
-          >>> first(True).map(lambda number: number * 10)(2.5)
-          25.0
-          >>> first(False).map(lambda number: number * 10)(0.1)
-          -1.0
+
+          >>> assert first(True).map(lambda number: number * 10)(2.5) == 25.0
+          >>> assert first(False).map(lambda number: number * 10)(0.1) -1.0
 
         """
         return RequiresContext(lambda deps: function(self(deps)))
@@ -176,19 +176,15 @@ class RequiresContext(
           ...     return RequiresContext(
           ...         lambda deps: deps if lg else -deps,
           ...     )
-          ...
 
           >>> def second(number: int) -> RequiresContext[float, str]:
           ...     # `deps` has `float` type here:
           ...     return RequiresContext(
           ...         lambda deps: '>=' if number >= deps else '<',
           ...     )
-          ...
 
-          >>> first(True).bind(second)(1)
-          '>='
-          >>> first(False).bind(second)(2)
-          '<'
+          >>> assert first(True).bind(second)(1) == '>='
+          >>> assert first(False).bind(second)(2) == '<'
 
         """
         return RequiresContext(lambda deps: function(self(deps))(deps))
@@ -218,13 +214,11 @@ class RequiresContext(
           >>> from returns.context import RequiresContext
           >>> def example(argument: int) -> float:
           ...     return argument / 2
-          ...
 
           >>> container = RequiresContext.lift(example)(
           ...     RequiresContext.from_value(2),
           ... )
-          >>> container(RequiresContext.empty)
-          1.0
+          >>> assert container(RequiresContext.empty) == 1.0
 
         See also:
             - https://wiki.haskell.org/Lifting
@@ -352,18 +346,15 @@ class Context(Immutable, Generic[_EnvType]):
           >>> from typing_extensions import TypedDict
           >>> class Deps(TypedDict):
           ...     message: str
-          ...
 
           >>> def first(lg: bool) -> RequiresContext[Deps, int]:
           ...     # `deps` has `Deps` type here:
           ...     return RequiresContext(
           ...         lambda deps: deps['message'] if lg else 'error',
           ...     )
-          ...
 
           >>> def second(text: str) -> RequiresContext[int, int]:
           ...     return first(len(text) > 3)
-          ...
 
           >>> assert second('abc')({'message': 'ok'}) == 'error'
           >>> assert second('abcd')({'message': 'ok'}) == 'ok'
@@ -378,27 +369,23 @@ class Context(Immutable, Generic[_EnvType]):
           >>> class Deps(TypedDict):
           ...     message: str
           ...     limit: int   # note this new field!
-          ...
 
           >>> def new_first(lg: bool) -> RequiresContext[Deps, int]:
           ...     # `deps` has `Deps` type here:
           ...     return RequiresContext(
-          ...         lambda deps: deps['message'] if lg else 'error',
+          ...         lambda deps: deps['message'] if lg else 'err',
           ...     )
-          ...
 
           >>> def new_second(text: str) -> RequiresContext[int, int]:
           ...     return Context[Deps].ask().bind(
           ...         lambda deps: new_first(len(text) > deps.get('limit', 3)),
           ...     )
-          ...
 
           >>> assert new_second('abc')({'message': 'ok', 'limit': 2}) == 'ok'
           >>> assert new_second('abcd')({'message': 'ok'}) == 'ok'
-          >>> new_second('abcd')({'message': 'ok', 'limit': 5})
-          'error'
+          >>> assert new_second('abcd')({'message': 'ok', 'limit': 5}) == 'err'
 
-        That's how ``ask`` works and can be used.
+        That's how ``ask`` works.
 
         See also:
             https://dev.to/gcanti/getting-started-with-fp-ts-reader-1ie5

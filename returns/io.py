@@ -89,7 +89,7 @@ class IO(BaseContainer, Generic[_ValueType]):
 
           >>> def mappable(string: str) -> str:
           ...      return string + 'b'
-          ...
+
           >>> assert IO('a').map(mappable) == IO('ab')
 
         """
@@ -136,7 +136,7 @@ class IO(BaseContainer, Generic[_ValueType]):
 
           >>> def bindable(string: str) -> IO[str]:
           ...      return IO(string + 'b')
-          ...
+
           >>> assert IO('a').bind(bindable) == IO('ab')
 
         """
@@ -162,7 +162,7 @@ class IO(BaseContainer, Generic[_ValueType]):
           >>> from returns.io import IO
           >>> def example(argument: int) -> float:
           ...     return argument / 2  # not exactly IO action!
-          ...
+
           >>> assert IO.lift(example)(IO(2)) == IO(1.0)
 
         See also:
@@ -395,7 +395,7 @@ class IOResult(
           ...      if len(string) > 1:
           ...          return IOSuccess(string + 'b')
           ...      return IOFailure(string + 'c')
-          ...
+
           >>> assert IOSuccess('aa').bind(bindable) == IOSuccess('aab')
           >>> assert IOSuccess('a').bind(bindable) == IOFailure('ac')
           >>> assert IOFailure('a').bind(bindable) == IOFailure('a')
@@ -426,7 +426,7 @@ class IOResult(
           ...      if len(string) > 1:
           ...          return Success(string + 'b')
           ...      return Failure(string + 'c')
-          ...
+
           >>> assert IOSuccess('aa').bind_result(bindable) == IOSuccess('aab')
           >>> assert IOSuccess('a').bind_result(bindable) == IOFailure('ac')
           >>> assert IOFailure('a').bind_result(bindable) == IOFailure('a')
@@ -450,7 +450,7 @@ class IOResult(
 
           >>> def bindable(string: str) -> IO[str]:
           ...      return IO(string + 'z')
-          ...
+
           >>> assert IOSuccess('a').bind_io(bindable) == IOSuccess('az')
           >>> assert IOFailure('a').bind_io(bindable) == IOFailure('a')
 
@@ -474,7 +474,7 @@ class IOResult(
           ...      if len(string) > 1:
           ...          return IOSuccess(string + 'b')
           ...      return IOFailure(string + 'c')
-          ...
+
           >>> assert IOSuccess('aa').unify(bindable) == IOSuccess('aab')
           >>> assert IOSuccess('a').unify(bindable) == IOFailure('ac')
           >>> assert IOFailure('a').unify(bindable) == IOFailure('a')
@@ -617,7 +617,7 @@ class IOResult(
           >>> from returns.io import IOResult, IOSuccess, IOFailure
           >>> def example(argument: int) -> float:
           ...     return argument / 2  # not exactly IO action!
-          ...
+
           >>> assert IOResult.lift(example)(IOSuccess(2)) == IOSuccess(1.0)
           >>> assert IOResult.lift(example)(IOFailure(2)) == IOFailure(2)
 
@@ -652,7 +652,7 @@ class IOResult(
 
           >>> def returns_result(arg: int) -> Result[int, str]:
           ...     return Success(arg + 1)
-          ...
+
           >>> returns_ioresult = IOResult.lift_result(returns_result)
           >>> assert returns_ioresult(IOSuccess(1)) == IOSuccess(2)
 
@@ -679,7 +679,7 @@ class IOResult(
 
           >>> def returns_io(arg: int) -> IO[float]:
           ...     return IO(arg + 0.5)
-          ...
+
           >>> returns_ioresult = IOResult.lift_io(returns_io)
           >>> assert returns_ioresult(IOSuccess(1)) == IOSuccess(1.5)
           >>> assert returns_ioresult(IOFailure(1)) == IOFailure(1)

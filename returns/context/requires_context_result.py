@@ -137,7 +137,7 @@ class RequiresContextResult(
           ...     return RequiresContextResult(
           ...         lambda deps: Success(deps if lg else -deps),
           ...     )
-          ...
+
           >>> instance = first(False)
           >>> assert instance(3.5) == Success(-3.5)
 
@@ -221,7 +221,6 @@ class RequiresContextResult(
           ...     return RequiresContextResult(
           ...         lambda deps: Success(deps) if lg else Failure(-deps),
           ...     )
-          ...
 
           >>> def second(
           ...     number: int,
@@ -490,7 +489,7 @@ class RequiresContextResult(
 
           >>> def function(arg: int) -> str:
           ...     return str(arg) + '!'
-          ...
+
           >>> unit = RequiresContextResult.from_value(1)
           >>> deps = RequiresContextResult.empty
           >>> assert RequiresContextResult.lift(function)(
@@ -532,7 +531,7 @@ class RequiresContextResult(
           ...     if arg > 0:
           ...         return Success(str(arg) + '!')
           ...     return Failure(arg)
-          ...
+
           >>> deps = RequiresContextResult.empty
 
           >>> assert RequiresContextResult.lift_result(function)(
@@ -579,7 +578,6 @@ class RequiresContextResult(
 
           >>> def function(arg: int) -> RequiresContext[str, int]:
           ...     return RequiresContext(lambda deps: len(deps) + arg)
-          ...
 
           >>> assert RequiresContextResult.lift_context(function)(
           ...     RequiresContextResult.from_value(2),

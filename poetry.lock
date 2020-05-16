@@ -661,7 +661,7 @@ description = "Flake8 plugin to enforce the same lint configuration (flake8, iso
 name = "nitpick"
 optional = false
 python-versions = ">=3.5,<4.0"
-version = "0.22.1"
+version = "0.22.2"
 
 [package.dependencies]
 attrs = "*"
@@ -675,7 +675,7 @@ python-slugify = "*"
 requests = "*"
 "ruamel.yaml" = "*"
 sortedcontainers = "*"
-toml = "*"
+toml = "<0.10.1"
 
 [[package]]
 category = "dev"
@@ -1311,7 +1311,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "25e8130167a3adf4b5bb21e6a5e6013fdcf19e446d60595c76df878d9202d979"
+content-hash = "9fb9782706d9708657c536e4ada3cde1fe992f6a8ad12cf7ded292ca792cdefc"
 python-versions = "^3.6"
 
 [metadata.files]
@@ -1647,8 +1647,8 @@ mypy-extensions = [
     {file = "mypy_extensions-0.4.3.tar.gz", hash = "sha256:2d82818f5bb3e369420cb3c4060a7970edba416647068eb4c5343488a6c604a8"},
 ]
 nitpick = [
-    {file = "nitpick-0.22.1-py3-none-any.whl", hash = "sha256:f876b4428a61c679865c4e81a794b7d9d7b269685c5b52afbc45acc41280fbfe"},
-    {file = "nitpick-0.22.1.tar.gz", hash = "sha256:9754b0d647538aafce35d4a679bde3025d83ebc5059e68bac4df93f4df0ef192"},
+    {file = "nitpick-0.22.2-py3-none-any.whl", hash = "sha256:3c0808d427078fbd243d458d3a5c500616dc1282445a879da2d546f85e34052b"},
+    {file = "nitpick-0.22.2.tar.gz", hash = "sha256:15103db401fbb0868bdce09288eae44064485a245c94a8db7dc725bf3fc759a9"},
 ]
 outcome = [
     {file = "outcome-1.0.1-py2.py3-none-any.whl", hash = "sha256:ee46c5ce42780cde85d55a61819d0e6b8cb490f1dbd749ba75ff2629771dcd2d"},

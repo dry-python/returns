@@ -66,7 +66,6 @@ class Result(
 
           >>> def mappable(string: str) -> str:
           ...      return string + 'b'
-          ...
 
           >>> assert Success('a').map(mappable) == Success('ab')
           >>> assert Failure('a').map(mappable) == Failure('a')
@@ -112,7 +111,6 @@ class Result(
           ...      if len(arg) > 1:
           ...          return Success(arg + 'b')
           ...      return Failure(arg + 'c')
-          ...
 
           >>> assert Success('aa').bind(bindable) == Success('aab')
           >>> assert Success('a').bind(bindable) == Failure('ac')
@@ -145,7 +143,6 @@ class Result(
           ...      if len(arg) > 1:
           ...          return Success(arg + 'b')
           ...      return Failure(arg + 'c')
-          ...
 
           >>> assert Success('aa').unify(bindable) == Success('aab')
           >>> assert Success('a').unify(bindable) == Failure('ac')
@@ -167,7 +164,6 @@ class Result(
 
           >>> def fixable(arg: str) -> str:
           ...      return 'ab'
-          ...
 
           >>> assert Success('a').fix(fixable) == Success('a')
           >>> assert Failure('a').fix(fixable) == Success('ab')
@@ -188,7 +184,6 @@ class Result(
 
           >>> def altable(arg: str) -> Result[str, str]:
           ...      return arg + 'b'
-          ...
 
           >>> assert Success('a').alt(altable) == Success('a')
           >>> assert Failure('a').alt(altable) == Failure('ab')
@@ -213,7 +208,6 @@ class Result(
           ...      if len(arg) > 1:
           ...          return Success(arg + 'b')
           ...      return Failure(arg + 'c')
-          ...
 
           >>> assert Success('a').rescue(rescuable) == Success('a')
           >>> assert Failure('a').rescue(rescuable) == Failure('ac')
@@ -300,7 +294,6 @@ class Result(
 
           >>> def example(argument: int) -> float:
           ...     return argument / 2
-          ...
 
           >>> assert Result.lift(example)(Success(2)) == Success(1.0)
           >>> assert Result.lift(example)(Failure(2)) == Failure(2)

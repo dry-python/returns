@@ -97,7 +97,7 @@ class Future(BaseContainer, Generic[_ValueType]):
 
           >>> async def coro(arg: int) -> int:
           ...     return arg + 1
-          ...
+
           >>> container = Future(coro(1))
           >>> assert anyio.run(container.awaitable) == IO(2)
 
@@ -118,7 +118,7 @@ class Future(BaseContainer, Generic[_ValueType]):
 
           >>> async def main() -> IO[int]:
           ...     return await Future.from_value(1)
-          ...
+
           >>> assert anyio.run(main) == IO(1)
 
         When awaited we returned the value wrapped
@@ -172,7 +172,7 @@ class Future(BaseContainer, Generic[_ValueType]):
 
           >>> def mappable(x: int) -> int:
           ...    return x + 1
-          ...
+
           >>> assert anyio.run(
           ...     Future.from_value(1).map(mappable).awaitable,
           ... ) == IO(2)
@@ -222,7 +222,7 @@ class Future(BaseContainer, Generic[_ValueType]):
 
           >>> def bindable(x: int) -> Future[int]:
           ...    return Future.from_value(x + 1)
-          ...
+
           >>> assert anyio.run(
           ...     Future.from_value(1).bind(bindable).awaitable,
           ... ) == IO(2)
@@ -249,7 +249,7 @@ class Future(BaseContainer, Generic[_ValueType]):
 
           >>> async def coroutine(x: int) -> Future[str]:
           ...    return Future.from_value(str(x + 1))
-          ...
+
           >>> assert anyio.run(
           ...     Future.from_value(1).bind_async(coroutine).awaitable,
           ... ) == IO('2')
@@ -276,7 +276,7 @@ class Future(BaseContainer, Generic[_ValueType]):
 
           >>> async def coroutine(x: int) -> int:
           ...    return x + 1
-          ...
+
           >>> assert anyio.run(
           ...     Future.from_value(1).bind_awaitable(coroutine).awaitable,
           ... ) == IO(2)
@@ -304,7 +304,7 @@ class Future(BaseContainer, Generic[_ValueType]):
 
           >>> def bindable(x: int) -> IO[int]:
           ...    return IO(x + 1)
-          ...
+
           >>> assert anyio.run(
           ...     Future.from_value(1).bind_io(bindable).awaitable,
           ... ) == IO(2)
@@ -335,10 +335,10 @@ class Future(BaseContainer, Generic[_ValueType]):
 
           >>> def example(argument: int) -> float:
           ...     return argument / 2  # not Future!
-          ...
+
           >>> async def main() -> Future[float]:
           ...     return await Future.lift(example)(Future.from_value(1))
-          ...
+
           >>> assert anyio.run(main) == IO(0.5)
 
         See also:
@@ -371,11 +371,11 @@ class Future(BaseContainer, Generic[_ValueType]):
 
           >>> def example(argument: int) -> IO[float]:
           ...     return IO(argument / 2)
-          ...
+
           >>> async def main() -> Future[float]:
           ...     container = Future.from_value(1)
           ...     return await Future.lift_io(example)(container)
-          ...
+
           >>> assert anyio.run(main) == IO(0.5)
 
         See also:
@@ -401,7 +401,7 @@ class Future(BaseContainer, Generic[_ValueType]):
 
           >>> async def main() -> bool:
           ...    return (await Future.from_value(1)) == IO(1)
-          ...
+
           >>> assert anyio.run(main) is True
 
         """
@@ -473,6 +473,16 @@ def asyncify(function: Callable[..., _ValueType]) -> Callable[
     This decorator is useful for composition with ``Future`` and
     ``FutureResult`` containers.
 
+    .. warning::
+
+      This function will not your sync function **run** like async one.
+      It will still be a blocking function that looks like async one.
+      We recommend to only use this decorator with functions
+      that do not access network or filesystem.
+      It is only a composition helper, not a transformer.
+
+    Usage example:
+
     .. code:: python
 
       >>> import anyio
@@ -481,10 +491,13 @@ def asyncify(function: Callable[..., _ValueType]) -> Callable[
       >>> @asyncify
       ... def test(x: int) -> int:
       ...     return x + 1
-      ...
+
       >>> assert anyio.run(test, 1) == 2
 
     Requires our :ref:`mypy plugin <mypy-plugins>`.
+
+    Read more about async and sync functions:
+    https://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function/
 
     """
     @wraps(function)
@@ -527,7 +540,6 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
         https://gcanti.github.io/fp-ts/modules/TaskEither.ts.html
         https://zio.dev/docs/overview/overview_basic_concurrency
 
-
     """
 
     _inner_value: Awaitable[Result[_ValueType, _ErrorType]]
@@ -548,7 +560,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
 
           >>> async def coro(arg: int) -> Result[int, str]:
           ...     return Success(arg + 1)
-          ...
+
           >>> container = FutureResult(coro(1))
           >>> assert anyio.run(container.awaitable) == IOSuccess(2)
 
@@ -571,7 +583,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
 
           >>> async def main() -> IOResult[int, str]:
           ...     return await FutureResult.from_value(1)
-          ...
+
           >>> assert anyio.run(main) == IOSuccess(1)
 
         When awaited we returned the value wrapped
@@ -627,7 +639,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
 
           >>> def mappable(x: int) -> int:
           ...    return x + 1
-          ...
+
           >>> assert anyio.run(
           ...     FutureResult.from_value(1).map(mappable).awaitable,
           ... ) == IOSuccess(2)
@@ -700,7 +712,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
 
           >>> def bindable(x: int) -> FutureResult[int, str]:
           ...    return FutureResult.from_value(x + 1)
-          ...
+
           >>> assert anyio.run(
           ...     FutureResult.from_value(1).bind(bindable).awaitable,
           ... ) == IOSuccess(2)
@@ -1107,15 +1119,14 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
 
           >>> def example(argument: int) -> float:
           ...     return argument / 2  # not FutureResult!
-          ...
+
           >>> async def success() -> FutureResult[float, int]:
           ...     container = FutureResult.from_value(1)
           ...     return await FutureResult.lift(example)(container)
-          ...
+
           >>> async def failure() -> FutureResult[float, int]:
           ...     container = FutureResult.from_failure(1)
           ...     return await FutureResult.lift(example)(container)
-          ...
 
           >>> assert anyio.run(success) == IOSuccess(0.5)
           >>> assert anyio.run(failure) == IOFailure(1)
@@ -1156,15 +1167,14 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
 
           >>> def example(argument: int) -> Result[float, int]:
           ...     return Success(argument / 2)
-          ...
+
           >>> async def success() -> FutureResult[float, int]:
           ...     container = FutureResult.from_value(1)
           ...     return await FutureResult.lift_result(example)(container)
-          ...
+
           >>> async def failure() -> FutureResult[float, int]:
           ...     container = FutureResult.from_failure(1)
           ...     return await FutureResult.lift_result(example)(container)
-          ...
 
           >>> assert anyio.run(success) == IOSuccess(0.5)
           >>> assert anyio.run(failure) == IOFailure(1)
@@ -1204,15 +1214,14 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
 
           >>> def example(argument: int) -> IO[float]:
           ...     return IO(argument / 2)
-          ...
+
           >>> async def success() -> FutureResult[float, int]:
           ...     container = FutureResult.from_value(1)
           ...     return await FutureResult.lift_io(example)(container)
-          ...
+
           >>> async def failure() -> FutureResult[float, int]:
           ...     container = FutureResult.from_failure(1)
           ...     return await FutureResult.lift_io(example)(container)
-          ...
 
           >>> assert anyio.run(success) == IOSuccess(0.5)
           >>> assert anyio.run(failure) == IOFailure(1)
@@ -1252,15 +1261,15 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
 
           >>> def example(argument: int) -> IOResult[float, int]:
           ...     return IOSuccess(argument / 2)
-          ...
+
           >>> async def success() -> FutureResult[float, int]:
           ...     container = FutureResult.from_value(1)
           ...     return await FutureResult.lift_ioresult(example)(container)
-          ...
+
           >>> async def failure() -> FutureResult[float, int]:
           ...     container = FutureResult.from_failure(1)
           ...     return await FutureResult.lift_ioresult(example)(container)
-          ...
+
 
           >>> assert anyio.run(success) == IOSuccess(0.5)
           >>> assert anyio.run(failure) == IOFailure(1)
@@ -1300,15 +1309,15 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
 
           >>> def example(argument: int) -> Future[float]:
           ...     return Future.from_value(argument / 2)
-          ...
+
           >>> async def success() -> FutureResult[float, int]:
           ...     container = FutureResult.from_value(1)
           ...     return await FutureResult.lift_future(example)(container)
-          ...
+
           >>> async def failure() -> FutureResult[float, int]:
           ...     container = FutureResult.from_failure(1)
           ...     return await FutureResult.lift_future(example)(container)
-          ...
+
 
           >>> assert anyio.run(success) == IOSuccess(0.5)
           >>> assert anyio.run(failure) == IOFailure(1)

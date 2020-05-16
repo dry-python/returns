@@ -61,6 +61,13 @@ Helper decorator to transform regular sync function into ``async`` ones.
   >>> assert anyio.run(your_function, 1) == 2
 
 
+Further reading
+---------------
+
+- `What Color is Your Function? <https://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function/>`_
+- `From Promises to Futures <https://dev.to/nadeesha/from-promises-to-futures-in-javascript-2m6g>`_
+
+
 API Reference
 -------------
 

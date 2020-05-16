@@ -53,6 +53,7 @@ Make sure you know how to get started, [check out our docs](https://returns.read
 - [RequiresContext container](#requirescontext-container) that allows you to use typed functional dependency injection
 - [Result container](#result-container) that let's you to get rid of exceptions
 - [IO marker](#io-marker) and [IOResult](#troublesome-io) that marks all impure operations and structures them
+- [Future](#future-container) and [FutureResult](#async-code-without-exceptions) containers to work with `async` code
 
 
 ## Maybe container
@@ -429,6 +430,160 @@ As a result of this refactoring session, we know everything about our code:
 - Which parts can fail,
 - Which parts are impure,
 - How to compose them in a smart manner.
+
+
+## Future container
+
+There are several issues with `async` code in Python:
+
+1. You cannot call `async` function from a sync one
+2. Any unexpectedly thrown exception can ruin your whole event loop
+3. Ugly composition with lots of `await` statements
+
+`Future` and `FutureResult` containers solve these issues!
+
+### Mixing sync and async code
+
+The main feature of `Future` is that it allows to run async code
+while maintaining sync context. Let's see an example.
+
+Let's say we have two functions,
+the `first` one returns a number and the `second` one increments it:
+
+```python
+async def first() -> int:
+    return 1
+
+def second():
+    # How can we call `first()` from here?
+    return first() + 1  # Boom! Don't do this, this is wrong. Just an example.
+```
+
+If we try to run `first()` - we will have unawaited coroutine.
+But, if we would try to run `await first()`,
+then we would need to change `second` to be `async`.
+And sometimes it is not possible.
+
+And now with `Future`:
+
+```python
+from returns.future import Future
+
+def second() -> Future[int]:
+    return Future(first()).map(lambda num: num + 1)
+```
+
+Without touching the `first` function
+or making `second` async we achieved our goal.
+Now our async value is incremented inside a sync function.
+
+However, `Future` still requires to be run inside a proper event loop:
+
+```python
+import anyio  # or asyncio, or any other lib
+
+# We can then pass our `Future` to any library: asyncio, trio, curio.
+# And any event loop: rergular, uvloop, custom, etc
+assert anyio.run(second().awaitable) == 2
+```
+
+Use raw `Future` for operations that cannot raise exceptions.
+
+### Async code without exceptions
+
+We have already covered how [`Result` works](#result-container).
+The main idea is: we don't raise exceptions, we return them.
+It is **especially** critical in async code,
+because a single exception can ruin
+all our coroutines running in a single eventloop.
+
+We have a handy combination of `Future` and `Result` containers: `FutureResult`.
+Use it when your `Future` might have problems:
+like HTTP requests or filesystem oprations.
+
+You can easily turn any throwing coroutine into a calm `FutureResult`:
+
+```python
+import anyio
+from returns.future import future_safe
+from returns.pipeline import is_successful
+
+@future_safe
+async def raising():
+    raise ValueError('Not so fast!')
+
+io_result = anyio.run(raising.awaitable)  # all Future's return IO wrapped vals
+assert not is_successful(io_result)
+```
+
+### Better async composition
+
+Previously, you had to do quite a lot of `await`ing while writting `async` code:
+
+```python
+async def fetch_user(user_id: int) -> 'User':
+    ...
+
+async def get_user_permissions(user: 'User') -> 'Permissions':
+    ...
+
+async def ensure_allowed(permissions: 'Permissions') -> bool:
+    ...
+
+async def main(user_id: int) -> bool:
+    user = await fetch_user(user_id)
+    permissions = await get_user_permissions(user)
+    # Don't forget to handle all possible errors with `try / except`!
+    return ensure_allowed(permissions)
+```
+
+You can do this with style with the help of `Future` and `FutureResult`!
+
+```python
+from returns.future import FutureResultE, future_safe
+
+@future_safe
+async def fetch_user(user_id: int) -> 'User':
+    ...
+
+@future_safe
+async def get_user_permissions(user: 'User') -> 'Permissions':
+    ...
+
+@future_safe
+async def ensure_allowed(permissions: 'Permissions') -> bool:
+    ...
+
+async def main(user_id: int) -> FutureResultE[bool]:
+    return fetch_user(user_id).bind(get_user_permissions).bind(ensure_allowed)
+```
+
+Or even something really fancy:
+
+```python
+from returns.pointfree import bind
+from returns.pipeline import flow
+
+async def main(user_id: int) -> FutureResultE[bool]:
+    return flow(
+        fetch_user(user_id),
+        bind(get_user_permissions),
+        bind(ensure_allowed),
+    )
+```
+
+You can always `await` `Future` objects to get `IO`:
+
+```python
+async def main(user_id: int) -> IOResultE[bool]:
+    return await flow(
+        fetch_user(user_id),
+        bind(get_user_permissions),
+        bind(ensure_allowed),
+    )
+```
+
+Lovely, isn't it?
 
 
 ## More!

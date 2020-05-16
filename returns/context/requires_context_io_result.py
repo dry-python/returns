@@ -149,7 +149,7 @@ class RequiresContextIOResult(
           ...     return RequiresContext(
           ...         lambda deps: IOSuccess(deps if lg else -deps),
           ...     )
-          ...
+
           >>> instance = first(False)
           >>> assert instance(3.5) == IOSuccess(-3.5)
 
@@ -233,7 +233,6 @@ class RequiresContextIOResult(
           ...     return RequiresContextIOResult(
           ...         lambda deps: IOSuccess(deps) if lg else IOFailure(-deps),
           ...     )
-          ...
 
           >>> def second(
           ...     number: int,
@@ -242,7 +241,6 @@ class RequiresContextIOResult(
           ...     return RequiresContextIOResult(
           ...         lambda deps: IOSuccess('>=' if number >= deps else '<'),
           ...     )
-          ...
 
           >>> assert first(True).bind(second)(1) == IOSuccess('>=')
           >>> assert first(False).bind(second)(2) == IOFailure(-2)
@@ -270,7 +268,6 @@ class RequiresContextIOResult(
           ...     if number > 0:
           ...         return Success(number + 1)
           ...     return Failure('<0')
-          ...
 
           >>> assert RequiresContextIOResult.from_value(1).bind_result(
           ...     function,
@@ -306,7 +303,7 @@ class RequiresContextIOResult(
 
           >>> def function(arg: int) -> RequiresContext[str, int]:
           ...     return RequiresContext(lambda deps: len(deps) + arg)
-          ...
+
           >>> assert function(2)('abc') == 5
 
           >>> assert RequiresContextIOResult.from_value(2).bind_context(
@@ -348,7 +345,7 @@ class RequiresContextIOResult(
           ...     return RequiresContextResult(
           ...         lambda deps: Failure(len(deps) + arg),
           ...     )
-          ...
+
           >>> assert function(2)('abc') == Success(5)
           >>> assert function(-1)('abc') == Failure(2)
 
@@ -391,7 +388,6 @@ class RequiresContextIOResult(
 
           >>> def function(number: int) -> IO[str]:
           ...     return IO(str(number))
-          ...
 
           >>> assert RequiresContextIOResult.from_value(1).bind_io(
           ...     function,
@@ -422,7 +418,6 @@ class RequiresContextIOResult(
           ...     if number > 0:
           ...         return IOSuccess(number + 1)
           ...     return IOFailure('<0')
-          ...
 
           >>> assert RequiresContextIOResult.from_value(1).bind_ioresult(
           ...     function,
@@ -510,7 +505,6 @@ class RequiresContextIOResult(
           ...      return RequiresContextIOResult(
           ...          lambda deps: IOFailure(arg + deps),
           ...      )
-          ...
 
           >>> assert RequiresContextIOResult.from_value('a').rescue(
           ...     rescuable,
@@ -629,7 +623,7 @@ class RequiresContextIOResult(
 
           >>> def function(arg: int) -> str:
           ...     return str(arg) + '!'
-          ...
+
           >>> unit = RequiresContextIOResult.from_value(1)
           >>> deps = RequiresContextIOResult.empty
           >>> assert RequiresContextIOResult.lift(function)(
@@ -672,7 +666,7 @@ class RequiresContextIOResult(
           ...     if arg > 0:
           ...         return Success(str(arg) + '!')
           ...     return Failure(arg)
-          ...
+
           >>> deps = RequiresContextIOResult.empty
 
           >>> assert RequiresContextIOResult.lift_result(function)(
@@ -718,7 +712,7 @@ class RequiresContextIOResult(
           ...     if arg > 0:
           ...         return IOSuccess(str(arg) + '!')
           ...     return IOFailure(arg)
-          ...
+
           >>> deps = RequiresContextIOResult.empty
 
           >>> assert RequiresContextIOResult.lift_ioresult(function)(
@@ -765,7 +759,6 @@ class RequiresContextIOResult(
 
           >>> def function(arg: int) -> RequiresContext[str, int]:
           ...     return RequiresContext(lambda deps: len(deps) + arg)
-          ...
 
           >>> assert RequiresContextIOResult.lift_context(function)(
           ...     RequiresContextIOResult.from_value(2),
@@ -810,7 +803,6 @@ class RequiresContextIOResult(
           ...     return RequiresContextResult(
           ...         lambda deps: Success(len(deps) + arg),
           ...     )
-          ...
 
           >>> assert RequiresContextIOResult.lift_context_result(function)(
           ...     RequiresContextIOResult.from_value(2),

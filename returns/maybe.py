@@ -64,7 +64,7 @@ class Maybe(
           >>> from returns.maybe import Some, Nothing
           >>> def mappable(string: str) -> str:
           ...      return string + 'b'
-          ...
+
           >>> assert Some('a').map(mappable) == Some('ab')
           >>> assert Nothing.map(mappable) == Nothing
 
@@ -105,7 +105,7 @@ class Maybe(
           >>> from returns.maybe import Nothing, Maybe, Some
           >>> def bindable(string: str) -> Maybe[str]:
           ...      return Some(string + 'b')
-          ...
+
           >>> assert Some('a').bind(bindable) == Some('ab')
           >>> assert Nothing.bind(bindable) == Nothing
 
@@ -204,7 +204,7 @@ class Maybe(
           >>> from returns.maybe import Maybe, Nothing, Some
           >>> def example(argument: int) -> float:
           ...     return argument / 2
-          ...
+
           >>> assert Maybe.lift(example)(Some(2)) == Some(1.0)
           >>> assert Maybe.lift(example)(Nothing) == Nothing
 
