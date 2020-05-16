@@ -11,8 +11,8 @@ async def test_inner_value(subtests):
         # We have to define these values inside the test, because
         # otherwise `anyio` will `await` reused coroutines.
         # And they have to be fresh. That's why we use subtests for it.
-        Future.from_futureresult(FutureResult.from_value(1)),
-        Future.from_futureresult(FutureResult.from_failure(1)),
+        Future.from_future_result(FutureResult.from_value(1)),
+        Future.from_future_result(FutureResult.from_failure(1)),
     ]
     for container in containers:
         with subtests.test(container=container):

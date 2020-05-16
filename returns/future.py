@@ -408,7 +408,7 @@ class Future(BaseContainer, Generic[_ValueType]):
         return Future(async_identity(inner_value))
 
     @classmethod
-    def from_futureresult(
+    def from_future_result(
         cls,
         container: 'FutureResult[_ValueType, _ErrorType]',
     ) -> 'Future[Result[_ValueType, _ErrorType]]':
@@ -424,7 +424,7 @@ class Future(BaseContainer, Generic[_ValueType]):
           >>> from returns.io import IO
           >>> from returns.result import Success
 
-          >>> container = Future.from_futureresult(FutureResult.from_value(1))
+          >>> container = Future.from_future_result(FutureResult.from_value(1))
           >>> assert anyio.run(container.awaitable) == IO(Success(1))
 
         """

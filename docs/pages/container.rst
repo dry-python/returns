@@ -235,6 +235,10 @@ Here's a table of some compositions that do not make sense:
 Needs transformation
 ~~~~~~~~~~~~~~~~~~~~
 
+You can use :ref:`converters` to convert ``Maybe`` and ``Result`` containers.
+You can also use :func:`flatten <returns.converters.flatten>`
+to merge nested containers.
+
 - ``IO[Result[A, B]]`` 🤔,
   use :meth:`returns.io.IOResult.from_typecast` and ``IOResult``
 - ``IO[Maybe[A]]`` 🤔,
@@ -270,15 +274,6 @@ Nope
 
 - ``Result[IO[A], B]`` 🚫
 - ``Result[A, IO[A]]`` 🚫
-- ``Result[A, Maybe[B]]`` 🚫
-- ``Result[A, Result[B, C]]`` 🚫
-- ``Maybe[IO[A]]`` 🚫
-- ``RequiresContext[IO[A], B]`` 🚫
-- ``IO[RequiresContext[A, B]`` 🚫
-
-You can use :ref:`converters` to convert ``Maybe`` and ``Result`` containers.
-You can also use :func:`flatten <returns.converters.flatten>`
-to merge nested containers.
 
 
 Further reading
