@@ -534,10 +534,10 @@ async def main(user_id: int) -> bool:
     user = await fetch_user(user_id)
     permissions = await get_user_permissions(user)
     # Don't forget to handle all possible errors with `try / except`!
-    return ensure_allowed(permissions)
+    return await ensure_allowed(permissions)
 ```
 
-You can do this with style with the help of `Future` and `FutureResult`!
+You can do this in style with the help of `Future` and `FutureResult`!
 
 ```python
 from returns.future import FutureResultE, future_safe
