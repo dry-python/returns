@@ -6,7 +6,7 @@ A set of primitives to work with ``async`` functions.
 Can be used with ``asyncio``, ``trio``, and ``curio``.
 And any event-loop!
 
-Tested with ``anyio``.
+Tested with `anyio <https://github.com/agronholm/anyio>`_.
 
 
 Future
@@ -53,6 +53,8 @@ This decorator helps to easily transform ``async def`` into ``Future``:
   >>> assert isinstance(future_instance, Future)
   >>> assert anyio.run(future_instance.awaitable) == IO(0.5)
 
+Make sure that you decorate with ``@future`` only coroutines
+that do not throw exceptions. For ones that do, use ``future_safe``.
 
 future_safe
 ~~~~~~~~~~~
@@ -82,6 +84,8 @@ Let's dig into it:
   >>> str(anyio.run(test(0).awaitable))  # this will fail
   '<IOResult: <Failure: division by zero>>'
 
+Never miss exceptions ever again!
+
 asyncify
 ~~~~~~~~
 
@@ -99,6 +103,23 @@ Helper decorator to transform regular sync function into ``async`` ones.
 
   >>> assert iscoroutinefunction(your_function) is True
   >>> assert anyio.run(your_function, 1) == 2
+
+Very important node: making your function ``async`` does not mean
+it will work asynchronously. It can still block if it uses blocking calls.
+Here's an example of how you **must not** do:
+
+.. code:: python
+
+  import requests
+  from returns.future import asyncify
+
+  @asyncify
+  def please_do_not_do_that():
+      return requests.get('...')  # this will still block!
+
+Do not overuse this decorator.
+It is only useful for some basic composition
+with ``Future`` and ``FutureResult``.
 
 
 FAQ

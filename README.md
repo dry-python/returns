@@ -444,7 +444,8 @@ There are several issues with `async` code in Python:
 
 ### Mixing sync and async code
 
-The main feature of `Future` is that it allows to run async code
+The main feature of [Future](https://returns.readthedocs.io/en/latest/pages/future.html)
+is that it allows to run async code
 while maintaining sync context. Let's see an example.
 
 Let's say we have two functions,
@@ -454,17 +455,18 @@ the `first` one returns a number and the `second` one increments it:
 async def first() -> int:
     return 1
 
-def second():
-    # How can we call `first()` from here?
+def second():  # How can we call `first()` from here?
     return first() + 1  # Boom! Don't do this, this is wrong. Just an example.
 ```
 
-If we try to run `first()` - we will have unawaited coroutine.
+If we try to just run `first()`, we will just create an unawaited coroutine.
+It won't return the value we want.
+
 But, if we would try to run `await first()`,
 then we would need to change `second` to be `async`.
-And sometimes it is not possible.
+And sometimes it is not possible for various reasons.
 
-And now with `Future`:
+However, with `Future` it is possible. Let see how:
 
 ```python
 from returns.future import Future
@@ -473,7 +475,7 @@ def second() -> Future[int]:
     return Future(first()).map(lambda num: num + 1)
 ```
 
-Without touching the `first` function
+Without touching our `first` async function
 or making `second` async we have achieved our goal.
 Now, our async value is incremented inside a sync function.
 
@@ -483,10 +485,13 @@ However, `Future` still requires to be executed inside a proper eventloop:
 import anyio  # or asyncio, or any other lib
 
 # We can then pass our `Future` to any library: asyncio, trio, curio.
-# And any event loop: rergular, uvloop, custom, etc
+# And use any event loop: regular, uvloop, even a custom one, etc
 assert anyio.run(second().awaitable) == 2
 ```
 
+As you can see `Future` allows you
+to work with async functions from a sync context.
+And to mix these two realms together.
 Use raw `Future` for operations that cannot raise exceptions.
 
 ### Async code without exceptions
@@ -501,11 +506,12 @@ We have a handy combination of `Future` and `Result` containers: `FutureResult`.
 Use it when your `Future` might have problems:
 like HTTP requests or filesystem oprations.
 
-You can easily turn any throwing coroutine into a calm `FutureResult`:
+You can easily turn any wild throwing coroutine into a calm `FutureResult`:
 
 ```python
 import anyio
 from returns.future import future_safe
+from returns.io import IOFailure
 from returns.pipeline import is_successful
 
 @future_safe
@@ -513,8 +519,13 @@ async def raising():
     raise ValueError('Not so fast!')
 
 io_result = anyio.run(raising.awaitable)  # all Future's return IO wrapped vals
-assert not is_successful(io_result)
+assert not is_successful(io_result)  # True
+assert io_result == IOFailure(ValueError('Not so fast!'))  # Also True
 ```
+
+Using `FutureResult` will keep your code safe from exceptions.
+You can always `await` or execute inside an eventloop any `FutureResult`
+to get sync `IOResult` instance to work with it in a sync manner.
 
 ### Better async composition
 
@@ -531,16 +542,20 @@ async def ensure_allowed(permissions: 'Permissions') -> bool:
     ...
 
 async def main(user_id: int) -> bool:
-    user = await fetch_user(user_id)
+    user = await fetch_user(user_id)  # We will await each time we use a coro!
     permissions = await get_user_permissions(user)
     # Don't forget to handle all possible errors with `try / except`!
     return await ensure_allowed(permissions)
 ```
 
-You can do this in style with the help of `Future` and `FutureResult`!
+Some people are ok with it, but some people don't like this imperative style.
+You can do the same thing in style!
+With the help of `Future` and `FutureResult`:
 
 ```python
+import anyio
 from returns.future import FutureResultE, future_safe
+from returns.io import IOSuccess, IOFailure
 
 @future_safe
 async def fetch_user(user_id: int) -> 'User':
@@ -555,7 +570,19 @@ async def ensure_allowed(permissions: 'Permissions') -> bool:
     ...
 
 async def main(user_id: int) -> FutureResultE[bool]:
+    # We don't care about exceptions any more, they are alrady handled.
     return fetch_user(user_id).bind(get_user_permissions).bind(ensure_allowed)
+
+correct_user_id: int  # has required permissions
+banned_user_id: int  # does not have required permissions
+wrong_user_id: int  # does not exist
+
+# We can have correct business results:
+assert anyio.run(main, correct_user_id) == IOSuccess(True)
+assert anyio.run(main, banned_user_id) == IOSuccess(False)
+
+# Or we can have errors along the way:
+assert anyio.run(main, wrong_user_id) == IOFailure(UserDoesNotExistError(...))
 ```
 
 Or even something really fancy:
@@ -566,17 +593,6 @@ from returns.pipeline import flow
 
 async def main(user_id: int) -> FutureResultE[bool]:
     return flow(
-        fetch_user(user_id),
-        bind(get_user_permissions),
-        bind(ensure_allowed),
-    )
-```
-
-You can always `await` all `Future` objects to get underlying `IO`:
-
-```python
-async def main(user_id: int) -> IOResultE[bool]:
-    return await flow(
         fetch_user(user_id),
         bind(get_user_permissions),
         bind(ensure_allowed),
