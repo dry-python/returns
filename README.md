@@ -474,10 +474,10 @@ def second() -> Future[int]:
 ```
 
 Without touching the `first` function
-or making `second` async we achieved our goal.
-Now our async value is incremented inside a sync function.
+or making `second` async we have achieved our goal.
+Now, our async value is incremented inside a sync function.
 
-However, `Future` still requires to be run inside a proper event loop:
+However, `Future` still requires to be executed inside a proper eventloop:
 
 ```python
 import anyio  # or asyncio, or any other lib
@@ -572,7 +572,7 @@ async def main(user_id: int) -> FutureResultE[bool]:
     )
 ```
 
-You can always `await` `Future` objects to get `IO`:
+You can always `await` all `Future` objects to get underlying `IO`:
 
 ```python
 async def main(user_id: int) -> IOResultE[bool]:
