@@ -2,11 +2,20 @@ from typing import ClassVar, FrozenSet, List
 
 from mypy.checker import detach_callable
 from mypy.nodes import ARG_OPT, ARG_POS, ARG_STAR, ARG_STAR2
-from mypy.types import CallableType
+from mypy.types import CallableType, FunctionLike, Overloaded
 from mypy.types import Type as MypyType
 from typing_extensions import final
 
 from returns.contrib.mypy._structures.args import FuncArg
+
+
+def proper_type(
+    case_functions: List[CallableType],
+) -> FunctionLike:
+    """Returns a ``CallableType`` or ``Overloaded`` based on case functions."""
+    if len(case_functions) == 1:
+        return case_functions[0]
+    return Overloaded(case_functions)
 
 
 @final

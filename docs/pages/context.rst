@@ -294,6 +294,8 @@ so you can work easily with it:
   full-featured ``RequiresContextIOResult[env, a, b]``
 - :meth:`~RequiresContextIOResult.bind_result`
   allows to bind functions that return ``Result`` with just one call
+- :meth:`~RequiresContextIOResult.bind_io`
+  allows to bind functions that return ``IO`` with just one call
 - :meth:`~RequiresContextIOResult.bind_ioresult`
   allows to bind functions that return ``IOResult`` with just one call
 - :meth:`~RequiresContextIOResult.bind_context`
@@ -356,25 +358,20 @@ FAQ
 How to create unit objects?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-``RequiresContext`` allows you to create
-unit values with the help of ``.from_value`` method:
+``RequiresContext`` requires you to use one of the following methods:
 
-.. code:: python
-
-  >>> from returns.context import RequiresContext
-  >>> assert RequiresContext.from_value(1)(...) == 1
+- ``from_value`` when you have a raw value
+- ``from_requires_context_result`` when you have ``RequiresContextResult``
+- ``from_requires_context_ioresult``  when you have ``RequiresContextIOResult``
 
 ``RequiresContextResult`` requires you to use one of the following methods:
 
 - ``from_value`` when you want to mark some raw value as a ``Success``
 - ``from_failure`` when you want to mark some raw value as a ``Failure``
-- ``from_result`` when you already have one
-- ``from_valueful_context`` when you have successful ``RequiresContext``
+- ``from_result`` when you already have ``Result`` container
+- ``from_successful_context`` when you have successful ``RequiresContext``
 - ``from_failed_context`` when you have failed ``RequiresContext``
-
-But, think twice: why would you need to do it?
-These classes represent computations that rely on context.
-Maybe, you should not do creat their units?
+- ``from_typecast`` when you have ``RequiresContext[..., Result]``
 
 ``RequiresContextIOResult`` requires you to use one of the following methods:
 
@@ -382,8 +379,9 @@ Maybe, you should not do creat their units?
 - ``from_failure`` when you want to mark some raw value as a ``Failure``
 - ``from_result`` when you already have ``Result`` container
 - ``from_ioresult`` when you already have ``IOResult`` container
-- ``from_valueful_context`` when you have successful ``RequiresContext``
+- ``from_successful_context`` when you have successful ``RequiresContext``
 - ``from_failed_context`` when you have failed ``RequiresContext``
+- ``from_typecast`` when you have ``RequiresContext[..., IOResult]``
 
 How can I access dependencies inside the context?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

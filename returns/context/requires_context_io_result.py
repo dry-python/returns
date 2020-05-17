@@ -897,7 +897,7 @@ class RequiresContextIOResult(
         return RequiresContextIOResult(container)
 
     @classmethod
-    def from_valueful_context(
+    def from_successful_context(
         cls, inner_value: 'RequiresContext[_EnvType, _FirstType]',
     ) -> 'RequiresContextIOResult[_EnvType, _FirstType, Any]':
         """
@@ -908,7 +908,7 @@ class RequiresContextIOResult(
           >>> from returns.context import RequiresContext
           >>> from returns.io import IOSuccess
 
-          >>> assert RequiresContextIOResult.from_valueful_context(
+          >>> assert RequiresContextIOResult.from_successful_context(
           ...     RequiresContext.from_value(1),
           ... )(...) == IOSuccess(1)
 

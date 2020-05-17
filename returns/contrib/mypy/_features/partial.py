@@ -6,7 +6,7 @@ from mypy.plugin import FunctionContext
 from mypy.types import CallableType, FunctionLike, Instance, Overloaded
 from mypy.types import Type as MypyType
 from mypy.types import TypeType
-from typing_extensions import final
+from typing_extensions import Final, final
 
 from returns.contrib.mypy._structures.args import FuncArg
 from returns.contrib.mypy._typeops.analtype import analyze_function_call
@@ -14,7 +14,48 @@ from returns.contrib.mypy._typeops.inference import CallableInference
 from returns.contrib.mypy._typeops.transform_callable import (
     Functions,
     Intermediate,
+    proper_type,
 )
+
+_SUPPORTED_TYPES: Final = (
+    CallableType,
+    Instance,
+    TypeType,
+    Overloaded,
+)
+
+
+def analyze(ctx: FunctionContext) -> MypyType:
+    """
+    This hook is used to make typed curring a thing in `returns` project.
+
+    Internally we just reduce the original function's argument count.
+    And drop some of them from function's signature.
+    """
+    if not isinstance(ctx.default_return_type, CallableType):
+        return ctx.default_return_type
+
+    function_def = ctx.arg_types[0][0]
+    func_args = _AppliedArgs(ctx)
+
+    if len(list(filter(len, ctx.arg_types))) == 1:
+        return function_def  # this means, that `partial(func)` is called
+    elif not isinstance(function_def, _SUPPORTED_TYPES):
+        return ctx.default_return_type
+    elif isinstance(function_def, (Instance, TypeType)):
+        # We force `Instance` and similar types to coercse to callable:
+        function_def = func_args.get_callable_from_context()
+
+    is_valid, applied_args = func_args.build_from_context()
+    if not isinstance(function_def, (CallableType, Overloaded)) or not is_valid:
+        return ctx.default_return_type
+
+    return _PartialFunctionReducer(
+        ctx.default_return_type,
+        function_def,
+        applied_args,
+        ctx,
+    ).new_partial()
 
 
 @final
@@ -144,21 +185,13 @@ class _PartialFunctionReducer(object):
         """
         if not self._case_functions:
             analyze_function_call(
-                self._proper_type(self._fallbacks),
+                proper_type(self._fallbacks),
                 self._applied_args,
                 self._ctx,
                 show_errors=True,
             )
             return self._default_return_type
-        return self._proper_type(self._case_functions)
-
-    def _proper_type(
-        self,
-        case_functions: List[CallableType],
-    ) -> FunctionLike:
-        if len(case_functions) == 1:
-            return case_functions[0]
-        return Overloaded(case_functions)
+        return proper_type(self._case_functions)
 
 
 @final
@@ -234,42 +267,3 @@ class _AppliedArgs(object):
             FuncArg(name, typ, kind)
             for name, typ, kind in arg_parts
         )
-
-
-def analyze_partial(function_ctx: FunctionContext) -> MypyType:
-    """
-    This hook is used to make typed curring a thing in `returns` project.
-
-    Internally we just reduce the original function's argument count.
-    And drop some of them from function's signature.
-    """
-    if not isinstance(function_ctx.default_return_type, CallableType):
-        return function_ctx.default_return_type
-
-    function_def = function_ctx.arg_types[0][0]
-    supported_types = (
-        CallableType,
-        Instance,
-        TypeType,
-        Overloaded,
-    )
-
-    func_args = _AppliedArgs(function_ctx)
-    if len(list(filter(len, function_ctx.arg_types))) == 1:
-        return function_def  # this means, that `partial(func)` is called
-    elif not isinstance(function_def, supported_types):
-        return function_ctx.default_return_type
-    elif isinstance(function_def, (Instance, TypeType)):
-        # We force `Instance` and similar types to coercse to callable:
-        function_def = func_args.get_callable_from_context()
-
-    is_valid, applied_args = func_args.build_from_context()
-    if not isinstance(function_def, (CallableType, Overloaded)) or not is_valid:
-        return function_ctx.default_return_type
-
-    return _PartialFunctionReducer(
-        function_ctx.default_return_type,
-        function_def,
-        applied_args,
-        function_ctx,
-    ).new_partial()

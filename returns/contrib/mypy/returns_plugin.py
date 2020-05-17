@@ -19,7 +19,7 @@ We use ``pytest-mypy-plugins`` to test that it works correctly, see:
 https://github.com/mkurnikov/pytest-mypy-plugins
 """
 
-from typing import Callable, Optional, Type
+from typing import Callable, Mapping, Optional, Type
 
 from mypy.plugin import FunctionContext, Plugin
 from mypy.types import Type as MypyType
@@ -45,12 +45,19 @@ _TYPED_PARTIAL_FUNCTION = 'returns.curry.partial'
 #: Used for typed ``curry`` decorator.
 _TYPED_CURRY_FUNCTION = 'returns.curry.curry'
 
+#: Type for a function hook.
+_FunctionCallback = Callable[[FunctionContext], MypyType]
+
 
 @final
-class _TypedDecoratorPlugin(Plugin):
-    def get_function_hook(
-        self, fullname: str,
-    ) -> Optional[Callable[[FunctionContext], MypyType]]:
+class _ReturnsPlugin(Plugin):
+    _function_hook_plugins: Mapping[str, _FunctionCallback] = {
+        _TYPED_PARTIAL_FUNCTION: partial.analyze,
+        _TYPED_CURRY_FUNCTION: curry.analyze,
+        **dict.fromkeys(_TYPED_DECORATORS, decorators.analyze),
+    }
+
+    def get_function_hook(self, fullname: str) -> Optional[_FunctionCallback]:
         """
         One of the specified ``mypy`` callbacks.
 
@@ -60,15 +67,9 @@ class _TypedDecoratorPlugin(Plugin):
 
         Otherwise, we return ``None``.
         """
-        if fullname == _TYPED_PARTIAL_FUNCTION:
-            return partial.analyze_partial
-        elif fullname == _TYPED_CURRY_FUNCTION:
-            return curry.analyze_curry
-        elif fullname in _TYPED_DECORATORS:
-            return decorators.analyze_decorator
-        return None
+        return self._function_hook_plugins.get(fullname)
 
 
 def plugin(version: str) -> Type[Plugin]:
     """Plugin's public API and entrypoint."""
-    return _TypedDecoratorPlugin
+    return _ReturnsPlugin

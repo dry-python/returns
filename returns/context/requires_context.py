@@ -253,30 +253,6 @@ class RequiresContext(
         return RequiresContext(lambda _: inner_value)
 
     @classmethod
-    def from_requires_context_ioresult(
-        cls,
-        container: 'RequiresContextIOResult[_EnvType, _ValueType, _ErrorType]',
-    ) -> 'RequiresContext[_EnvType, IOResult[_ValueType, _ErrorType]]':
-        """
-        Typecasts ``RequiresContextIOResult`` to ``RequiresContext`` instance.
-
-        Breaks ``RequiresContextIOResult[e, a, b]``
-        into ``RequiresContext[e, IOResult[a, b]]``.
-
-        .. code:: python
-
-          >>> from returns.context import RequiresContext
-          >>> from returns.context import RequiresContextIOResult
-          >>> from returns.io import IOSuccess
-          >>> assert RequiresContext.from_requires_context_ioresult(
-          ...    RequiresContextIOResult.from_value(1),
-          ... )(...) == IOSuccess(1)
-
-        Can be reverted with `RequiresContextIOResult.from_typecast`.
-        """
-        return RequiresContext(container)
-
-    @classmethod
     def from_requires_context_result(
         cls,
         container: 'RequiresContextResult[_EnvType, _ValueType, _ErrorType]',
@@ -296,7 +272,33 @@ class RequiresContext(
           ...    RequiresContextResult.from_value(1),
           ... )(...) == Success(1)
 
-        Can be reverted with `RequiresContextResult.from_typecast`.
+        Can be reverted with ``RequiresContextResult.from_typecast``.
+
+        """
+        return RequiresContext(container)
+
+    @classmethod
+    def from_requires_context_ioresult(
+        cls,
+        container: 'RequiresContextIOResult[_EnvType, _ValueType, _ErrorType]',
+    ) -> 'RequiresContext[_EnvType, IOResult[_ValueType, _ErrorType]]':
+        """
+        Typecasts ``RequiresContextIOResult`` to ``RequiresContext`` instance.
+
+        Breaks ``RequiresContextIOResult[e, a, b]``
+        into ``RequiresContext[e, IOResult[a, b]]``.
+
+        .. code:: python
+
+          >>> from returns.context import RequiresContext
+          >>> from returns.context import RequiresContextIOResult
+          >>> from returns.io import IOSuccess
+          >>> assert RequiresContext.from_requires_context_ioresult(
+          ...    RequiresContextIOResult.from_value(1),
+          ... )(...) == IOSuccess(1)
+
+        Can be reverted with ``RequiresContextIOResult.from_typecast``.
+
         """
         return RequiresContext(container)
 

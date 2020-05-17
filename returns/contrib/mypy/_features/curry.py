@@ -10,10 +10,25 @@ from mypy.types import TypeOfAny
 from typing_extensions import final
 
 from returns.contrib.mypy._structures.args import FuncArg
-from returns.contrib.mypy._typeops.transform_callable import Intermediate
+from returns.contrib.mypy._typeops.transform_callable import (
+    Intermediate,
+    proper_type,
+)
 
 #: Raw material to build `_ArgTree`.
 _RawArgTree = List[List[List[FuncArg]]]
+
+
+def analyze(ctx: FunctionContext) -> MypyType:
+    """Returns proper type for curried functions."""
+    if not isinstance(ctx.arg_types[0][0], CallableType):
+        return ctx.default_return_type
+    if not isinstance(ctx.default_return_type, CallableType):
+        return ctx.default_return_type
+
+    return _CurryFunctionOverloads(
+        ctx.arg_types[0][0], ctx,
+    ).build_overloads()
 
 
 @final
@@ -80,7 +95,7 @@ class _CurryFunctionOverloads(object):
             list(self._slices(self._args)),
         )
         self._build_overloads_from_argtree(argtree)
-        return self._proper_type(self._overloads)
+        return proper_type(self._overloads)
 
     def _build_argtree(
         self,
@@ -171,24 +186,3 @@ class _CurryFunctionOverloads(object):
                     start = index
             slices.append(source[start:])
             yield slices
-
-    def _proper_type(
-        self,
-        case_functions: List[CallableType],
-    ) -> FunctionLike:
-        if len(case_functions) == 1:
-            return case_functions[0]
-        return Overloaded(case_functions)
-
-
-def analyze_curry(function_ctx: FunctionContext) -> MypyType:
-    """Returns proper type for curried functions."""
-    if not isinstance(function_ctx.arg_types[0][0], CallableType):
-        return function_ctx.default_return_type
-    if not isinstance(function_ctx.default_return_type, CallableType):
-        return function_ctx.default_return_type
-
-    return _CurryFunctionOverloads(
-        function_ctx.arg_types[0][0],
-        function_ctx,
-    ).build_overloads()

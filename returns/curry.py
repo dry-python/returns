@@ -3,6 +3,8 @@ from functools import wraps
 from inspect import BoundArguments, Signature
 from typing import Any, Callable, Tuple, TypeVar, Union
 
+_FirstType = TypeVar('_FirstType')
+_SecondType = TypeVar('_SecondType')
 _ReturnType = TypeVar('_ReturnType')
 
 
@@ -39,9 +41,6 @@ def curry(function: Callable[..., _ReturnType]) -> Callable[..., _ReturnType]:
     """
     Typed currying decorator.
 
-    Calls the wrapped function when there're enough arguments,
-    otherwise returns an intermediate function to
-
     Currying is a conception from functional languages that does partial
     applying. That means that if we pass one argument in a function that
     get 2 or more arguments, we'll get a new function that remembers all
@@ -54,6 +53,9 @@ def curry(function: Callable[..., _ReturnType]) -> Callable[..., _ReturnType]:
     application until enough arguments passed.
 
     If wrong arguments are passed, ``TypeError`` will be raised immediately.
+
+    We use a custom ``mypy`` plugin to make sure types are correct.
+    Otherwise, it is currently impossible to properly type this function.
 
     .. code:: python
 

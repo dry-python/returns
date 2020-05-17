@@ -43,7 +43,7 @@
 
     r: RequiresContext[float, str]
 
-    reveal_type(RequiresContextResult.from_valueful_context(r))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.float*, builtins.str*, Any]'
+    reveal_type(RequiresContextResult.from_successful_context(r))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.float*, builtins.str*, Any]'
 
 
 - case: requires_context_result_failed_context

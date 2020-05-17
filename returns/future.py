@@ -1358,7 +1358,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
         return FutureResult(container._inner_value)
 
     @classmethod
-    def from_valueful_future(
+    def from_successful_future(
         cls,
         container: Future[_NewValueType],
     ) -> 'FutureResult[_NewValueType, Any]':
@@ -1372,7 +1372,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           >>> from returns.future import Future, FutureResult
 
           >>> async def main():
-          ...     assert await FutureResult.from_valueful_future(
+          ...     assert await FutureResult.from_successful_future(
           ...         Future.from_value(1),
           ...     ) == IOSuccess(1)
 
@@ -1406,7 +1406,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
         return FutureResult(_future_result.async_failure(container))
 
     @classmethod
-    def from_valueful_io(
+    def from_successful_io(
         cls,
         container: IO[_NewValueType],
     ) -> 'FutureResult[_NewValueType, Any]':
@@ -1420,7 +1420,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           >>> from returns.future import FutureResult
 
           >>> async def main():
-          ...     assert await FutureResult.from_valueful_io(
+          ...     assert await FutureResult.from_successful_io(
           ...         IO(1),
           ...     ) == IOSuccess(1)
 

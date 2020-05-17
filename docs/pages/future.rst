@@ -9,8 +9,8 @@ And any event-loop!
 Tested with `anyio <https://github.com/agronholm/anyio>`_.
 
 
-Future
-------
+Future container
+----------------
 
 
 FutureResult
@@ -127,6 +127,20 @@ FAQ
 
 How to create unit objects?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+For ``Future`` container:
+
+- ``from_value``
+- ``from_future_result`` when you have existing ``FutureResult``
+
+For ``FutureResult`` container:
+
+- ``from_value`` when you want to mark some raw value as a ``Success``
+- ``from_failure`` when you want to mark some raw value as a ``Failure``
+- ``from_result`` when you already have ``Result`` container
+- ``from_successful_future`` when you have successful ``Future``
+- ``from_failed_future`` when you have failed ``Future``
+- ``from_typecast`` when you have existing ``Future[Result]``
 
 What is the difference between Future[Result[a, b]] and FutureResult[a, b]?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
