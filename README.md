@@ -53,7 +53,7 @@ Make sure you know how to get started, [check out our docs](https://returns.read
 - [RequiresContext container](#requirescontext-container) that allows you to use typed functional dependency injection
 - [Result container](#result-container) that let's you to get rid of exceptions
 - [IO marker](#io-marker) and [IOResult](#troublesome-io) that marks all impure operations and structures them
-- [Future](#future-container) and [FutureResult](#async-code-without-exceptions) containers to work with `async` code
+- [Future container](#future-container) and [FutureResult](#async-code-without-exceptions) to work with `async` code
 
 
 ## Maybe container

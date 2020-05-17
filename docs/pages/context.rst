@@ -312,24 +312,42 @@ Aliases
 There are several useful alises for ``RequiresContext``
 and friends with some common values:
 
-- :attr:`returns.context.requires_context_result.ReaderResult`
-  is an alias for ``RequiresContextResult[...]`` to save you some typing.
+.. currentmodule:: returns.context.requires_context
+
+- :attr:`~Reader`
+  is an alias for ``RequiresContext[...]`` to save you some typing.
   Uses ``Reader`` because it is a native name for this concept from Haskell.
-- :attr:`returns.result.requires_context.ReaderResultE`
+
+.. currentmodule:: returns.context.requires_context_result
+
+- :attr:`~RequiresContextResultE`
   is an alias for ``RequiresContextResult[..., Exception]``,
   just use it when you want to work with ``RequiresContextResult`` containers
   that use exceptions as error type.
   It is named ``ResultE`` because it is ``ResultException``
   and ``ResultError`` at the same time.
-- :attr:`returns.context.requires_context_io_result.ReaderIOResult`
+- :attr:`~ReaderResult`
+  is an alias for ``RequiresContextResult[...]`` to save you some typing.
+- :attr:`~ReaderResultE`
+  is an alias for ``RequiresContextResult[..., Exception]``
+
+.. currentmodule:: returns.context.requires_context_io_result
+
+- :attr:`~RequiresContextIOResultE`
+  is an alias for ``RequiresContextIOResult[..., Exception]``
+- :attr:`~ReaderIOResult`
   is an alias for ``RequiresContextIOResult[...]`` to save you some typing.
-  Uses ``Reader`` because it is a native name for this concept from Haskell.
-- :attr:`returns.result.requires_context.ReaderIOResultE`
-  is an alias for ``RequiresContextIOResult[..., Exception]``,
-  just use it when you want to work with ``RequiresContextIOResult`` containers
-  that use exceptions as error type.
-  It is named ``ResultE`` because it is ``ResultException``
-  and ``ResultError`` at the same time.
+- :attr:`~ReaderIOResultE`
+  is an alias for ``RequiresContextIOResult[..., Exception]``
+
+.. currentmodule:: returns.context.requires_context_future_result
+
+- :attr:`~RequiresContextFutureResultE`
+  is an alias for ``RequiresContextFutureResult[..., Exception]``
+- :attr:`~ReaderFutureResult`
+  is an alias for ``RequiresContextFutureResult[...]`` to save you some typing.
+- :attr:`~ReaderFutureResultE`
+  is an alias for ``RequiresContextFutureResult[..., Exception]``
 
 
 FAQ
@@ -444,7 +462,8 @@ the very same thing as ``RequiresContext[e, Result]``, but has nicer API:
   y.map(lambda number: number + 1)
 
 The second one looks better, doesn't it?
-The same applies for ``RequiresContextIOResult`` as well.
+The same applies for ``RequiresContextIOResult``
+and ``RequiresContextFutureResult`` as well.
 
 Why do I have to use explicit type annotation for ask method?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -466,8 +485,7 @@ So, using this technique is better:
 What is the difference between DI and RequiresContext?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-`Dependency Injection <https://en.wikipedia.org/wiki/Dependency_injection>`_
-pattern and
+Dependency Injection pattern and
 `Inversion of Control <https://en.wikipedia.org/wiki/Inversion_of_control>`_
 principle forms a lot of ideas and tooling
 that do pretty much the same as ``RequiresContext`` container.
