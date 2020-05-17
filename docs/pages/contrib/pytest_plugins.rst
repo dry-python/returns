@@ -41,7 +41,7 @@ It tests that containers do handle error track.
 
 We recommed to unit test big chunks of code this way.
 This is helpful for big pipelines where
-you need at least one error handling in the very end.
+you need at least one error handling at the very end.
 
 This is how it works internally:
 

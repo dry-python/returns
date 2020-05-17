@@ -463,6 +463,93 @@ So, using this technique is better:
           ...
       return Context[int].ask().bind(factory)
 
+What is the difference between DI and RequiresContext?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+`Dependency Injection <https://en.wikipedia.org/wiki/Dependency_injection>`_
+pattern and
+`Inversion of Control <https://en.wikipedia.org/wiki/Inversion_of_control>`_
+principle forms a lot of ideas and tooling
+that do pretty much the same as ``RequiresContext`` container.
+
+What is the difference? Why do we need each of them?
+
+Let's find out!
+Tools like `dependencies <https://github.com/dry-python/dependencies>`_
+or `punq <https://github.com/bobthemighty/punq>`_
+tries to:
+
+1. inspect (by name or type respectively)
+   function or class that needs dependencies
+2. build the required dependency tree from the source
+   defined in the service container
+
+There are other tools like ``inject`` that also invades
+your code with ``@inject`` decorator.
+
+``RequiresContext`` works completely different.
+It respects your code and does not try to inspect in any manner.
+It also does not care about building dependencies at all.
+
+All it does is: provides simple API to compose functions
+that need additional context (or dependencies) to run.
+
+You can even use them together: ``RequiresContext`` will pass depedencies
+built by ``dry-python/dependencies`` (or any other tool of your choice)
+as a ``deps`` parameter to ``RequiresContext`` instance.
+
+When to use which?
+
+1. Use ``RequiresContext`` when you write code in a functional manner,
+   when you respect function composition, typing, and explicitness.
+   ``RequiresContext`` fits very well when you need
+   to provide your users a single callable that does the job
+2. Use traditional invasive DI in other cases
+
+Here's an example that might give you a better understanding of how
+``RequiresContext`` is used on real and rather big projects:
+
+.. code:: python
+
+  from typing import Callable, Dict, Protocol, final
+  from returns.io import IOResultE
+  from returns.context import ReaderIOResultE
+
+  @final
+  class _SyncPermissionsDeps(Protocol):
+      fetch_metadata: Callable[[], IOResultE['Metadata']]
+      get_user_permissions: Callable[['Metadata'], Dict[int, str]]
+      update_bi_permissions: Callable[[Dict[int, str]], IOResultE['Payload']]
+
+  def sync_permissions() -> ReaderIOResultE[_SyncPermissionsDeps, 'Payload']:
+      """
+      This functions runs a scheduled task once a day.
+
+      It syncs permissions from the metadata storage to our BI system.
+      """
+      def factory(deps: _SyncPermissionsDeps) -> IOResultE['Payload']:
+          return deps.fetch_metadata().map(
+              deps.get_user_permissions,
+          ).bind_ioresult(
+              deps.update_bi_permissions,
+          )
+      return ReaderIOResult(factory)
+
+And then it is called like so:
+
+.. code:: python
+
+  # tasks.py
+  from celery import shared_task
+
+  from logic.usecases.sync_permissions import sync_permissions
+  from infrastructure.implemented import container
+
+  @shared_task(autoretry_for=(ConnectionError,), max_retries=3)
+  def queue_sync_permissions():
+      # `container.build()` mimics some real DI framework here
+      # and returns the prepared class with all things you need
+      return sync_permissions()(container.build())
 
 Further reading
 ---------------
