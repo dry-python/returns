@@ -350,7 +350,6 @@ def maybe(
       ...     if arg == 0:
       ...         return None
       ...     return 1 / arg
-      ...
 
       >>> assert might_be_none(0) == Nothing
       >>> assert might_be_none(1) == Some(1.0)

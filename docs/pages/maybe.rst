@@ -148,6 +148,50 @@ You can easily get one from your ``Maybe`` container at any point in time:
 As you can see, revealed type of ``.value_or(None)`` is ``Optional[a]``.
 Use it a fallback.
 
+What is the difference between Some(None) and Nothing?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Some people might be confused when they would see
+that it is possible to create ``Some(None)`` value:
+
+.. code:: python
+
+  >>> from returns.maybe import Some, Maybe
+  >>> assert isinstance(Some(None), Maybe.success_type)
+
+We need it to model this real-life situation:
+
+.. code:: python
+
+  >>> from returns.maybe import Some, Nothing, Maybe, maybe
+
+  >>> source = {'a': 1, 'b': None}
+  >>> def md(key: str) -> Maybe[int]:
+  ...     try:
+  ...          return Some(source[key])
+  ...     except KeyError:
+  ...          return Nothing
+
+  >>> assert md('a') == Some(1)
+  >>> assert md('b') == Some(None)
+  >>> assert md('c') == Nothing
+
+As you can see, without ``Some(None)``
+we would not be able to tell the difference
+between missing key ``'c'`` and nullish key ``'b'``.
+It might be useful to model complex cases.
+
+However, ``Maybe.from_value`` and ``@maybe`` work differently.
+And by default turn ``None`` to ``Nothing``:
+
+.. code:: python
+
+  >>> from returns.maybe import Maybe, Nothing
+  >>> assert Maybe.from_value(None) == Nothing
+
+See the `original issue <https://github.com/dry-python/returns/issues/314>`_
+for more details and the full history.
+
 Why there's no IOMaybe?
 ~~~~~~~~~~~~~~~~~~~~~~~
 
