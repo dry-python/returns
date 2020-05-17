@@ -541,6 +541,7 @@ And then it is called like so:
 
   # tasks.py
   from celery import shared_task
+  from returns.functions import raise_exception
 
   from logic.usecases.sync_permissions import sync_permissions
   from infrastructure.implemented import container
@@ -549,7 +550,9 @@ And then it is called like so:
   def queue_sync_permissions():
       # `container.build()` mimics some real DI framework here
       # and returns the prepared class with all things you need
-      return sync_permissions()(container.build())
+      # We also make sure that we don't forget to raise internal exceptions
+      # and trigger celery retries.
+      return sync_permissions().fix(raise_exception)(container.build())
 
 Further reading
 ---------------
