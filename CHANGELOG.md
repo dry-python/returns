@@ -21,7 +21,7 @@ See [0Ver](https://0ver.org/).
   Only `Maybe` was different, sorry for that!
 - **Breaking**: renames `.from_success` to `.from_value`,
   there's no need in two separate methods
-- **Breaking**: since we now support `.apply()` methods,
+- **Breaking**: since we now support `.apply()` method,
   there's no more need in `*_squash` converters, they are removed
 - **Breaking**: renamed `Instanceable` to `Applicative`
 - Adds typed `partial` and `curry` mypy plugins!
@@ -29,14 +29,19 @@ See [0Ver](https://0ver.org/).
 - Adds `Future` container to easily work with `async` functions
 - Adds `FutureResult` container to easily work
   with `async` function that might fail
+- Adds `RequiresContextFutureResult` container
+- Adds `ReaderFutureResult` alias for `RequiresContextFutureResult`
+- Adds `RequiresContextFutureResultE` and `ReaderFutureResultE` aliases
 - Adds `bind_io` method to `IOResult`
 - Adds `lift_io` method to `IOResult`
 - Adds `bind_io` method to `RequiresContextIOResult`
 - Adds `unify` pointfree function
 - Adds `apply` pointfree function
-- Adds `Future` and `FutureResult` support for all existing pointfree functions
+- Adds `Future`, `FutureResult` and `RequiresContextFutureResult`
+  support for all existing pointfree functions
 - Adds `not_` composition helper
-- Adds `flatten` support for `Future` and `FutureResult`
+- Adds `flatten` support for `Future`,
+  `FutureResult` and `RequiresContextFutureResult`
 - Adds `__copy__` and `__deepcopy__` magic methods to `Immutable` class
 
 ### Bugfixes
@@ -56,6 +61,7 @@ See [0Ver](https://0ver.org/).
   now we test compatibility with any IO stack: `asyncio`, `trio`, `curio`
 - Updates lots of dependencies
 - Adds lots of new tests
+- Updates lots of docs
 
 
 ## 0.13.0

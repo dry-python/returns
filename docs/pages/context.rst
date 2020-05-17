@@ -335,26 +335,6 @@ and friends with some common values:
 FAQ
 ---
 
-Why can’t we use RequiresContext[e, Result] instead of RequiresContextResult?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-We actually can! But, it is harder to write.
-And ``RequiresContextResult`` is actually
-the very same thing as ``RequiresContext[e, Result]``, but has nicer API:
-
-.. code:: python
-
-  x: RequiresContext[int, Result[int, str]]
-  x.map(lambda result: result.map(lambda number: number + 1))
-
-  # Is the same as:
-
-  y: RequiresContextResult[int, int, str]
-  y.map(lambda number: number + 1)
-
-The second one looks better, doesn't it?
-The same applies for ``RequiresContextIOResult`` as well.
-
 How to create unit objects?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -393,6 +373,78 @@ How can I access dependencies inside the context?
 Use ``.ask()`` method!
 
 See :ref:`this guide <ask>`.
+
+RequiresContext looks like a decorator with arguments
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Yes, this container might remind a traditional decorator with arguments,
+let see an example:
+
+.. code:: python
+
+  >>> def example(print_result: bool):
+  ...     def decorator(function):
+  ...         def factory(*args, **kwargs):
+  ...             original = function(*args, **kwargs)
+  ...             if print_result:
+  ...                  print(original)
+  ...             return original
+  ...         return factory
+  ...     return decorator
+
+And it can be used like so:
+
+.. code:: python
+
+  >>> @example(print_result=True)
+  ... def my_function(first: int, second: int) -> int:
+  ...     return first + second
+
+  >>> assert my_function(2, 3) == 5
+  5
+
+We can model the similar idea with ``RequiresContext``:
+
+.. code:: python
+
+  >>> from returns.context import RequiresContext
+
+  >>> def my_function(first: int, second: int) -> RequiresContext[bool, int]:
+  ...     def factory(print_result: bool) -> int:
+  ...         original = first + second
+  ...         if print_result:
+  ...             print(original)
+  ...         return original
+  ...     return RequiresContext(factory)
+
+  >>> assert my_function(2, 3)(False) == 5
+  >>> assert my_function(2, 3)(True) == 5
+  5
+
+As you can see,
+it is easier to change the behaviour of a function with ``RequiresContext``.
+While decorator with arguments glues values to a function forever.
+Decide when you need which behaviour carefully.
+
+Why can’t we use RequiresContext[e, Result] instead of RequiresContextResult?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We actually can! But, it is harder to write.
+And ``RequiresContextResult`` is actually
+the very same thing as ``RequiresContext[e, Result]``, but has nicer API:
+
+.. code:: python
+
+  x: RequiresContext[int, Result[int, str]]
+  x.map(lambda result: result.map(lambda number: number + 1))
+
+  # Is the same as:
+
+  y: RequiresContextResult[int, int, str]
+  y.map(lambda number: number + 1)
+
+The second one looks better, doesn't it?
+The same applies for ``RequiresContextIOResult`` as well.
 
 Why do I have to use explicit type annotation for ask method?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -447,4 +499,12 @@ RequiresContextIOResult
 .. autoclasstree:: returns.context.requires_context_io_result
 
 .. automodule:: returns.context.requires_context_io_result
+   :members:
+
+RequiresContextFutureResult
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autoclasstree:: returns.context.requires_context_future_result
+
+.. automodule:: returns.context.requires_context_future_result
    :members:

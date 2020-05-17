@@ -125,6 +125,9 @@ with ``Future`` and ``FutureResult``.
 FAQ
 ---
 
+How to create unit objects?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 What is the difference between Future[Result[a, b]] and FutureResult[a, b]?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
