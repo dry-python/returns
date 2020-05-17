@@ -179,7 +179,15 @@ We need it to model this real-life situation:
 As you can see, without ``Some(None)``
 we would not be able to tell the difference
 between missing key ``'c'`` and nullish key ``'b'``.
-It might be useful to model complex cases.
+It might be useful to model complex cases:
+
+- ``Nothing`` - absence of value
+- ``None`` - actual value with zero bits of information, but still existing one
+
+And the problematic keys:
+
+- ``md('b')`` == ``Some(None)`` means "value exists but stores no information"
+- ``md('c')`` == ``Nothing`` means "there is no value for this key"
 
 However, ``Maybe.from_value`` and ``@maybe`` work differently.
 And by default turn ``None`` to ``Nothing``:
