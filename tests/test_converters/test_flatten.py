@@ -8,7 +8,7 @@ from returns.context import (
 from returns.converters import flatten
 from returns.future import Future, FutureResult
 from returns.io import IO, IOFailure, IOSuccess
-from returns.maybe import Some
+from returns.maybe import Nothing, Some
 from returns.result import Failure, Success
 
 
@@ -19,7 +19,7 @@ from returns.result import Failure, Success
     (Success(Success({})), Success({})),
     (IOSuccess(IOSuccess(1)), IOSuccess(1)),
 
-    (Some(Some(None)), Some(None)),
+    (Some(Some(None)), Nothing),
     (Some(Some([])), Some([])),
 
     # Nope:

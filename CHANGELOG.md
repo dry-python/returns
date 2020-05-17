@@ -46,8 +46,6 @@ See [0Ver](https://0ver.org/).
 
 ### Bugfixes
 
-- **Breaking**: `Some(None)` does no evaluate to `Nothing` anymore,
-  it might break some people's programms. But it was very wrong!
 - Fixes that `@safe` decorator was generating incorrect signatures
   for functions with `Any`
 - Fixes that `.rescue()` of `RequiresContextResult` was returning `Any`

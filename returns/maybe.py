@@ -270,9 +270,9 @@ class _Some(Maybe[_ValueType]):
     Quite similar to ``Success`` type.
     """
 
-    _inner_value: Optional[_ValueType]
+    _inner_value: _ValueType
 
-    def __init__(self, inner_value: Optional[_ValueType]) -> None:
+    def __init__(self, inner_value: _ValueType) -> None:
         """
         Private type constructor.
 
@@ -316,16 +316,19 @@ def Some(inner_value: Optional[_ValueType]) -> Maybe[_ValueType]:  # noqa: N802
     """
     Public unit function of protected :class:`~_Some` type.
 
+    Can return ``Nothing`` for passed ``None`` argument.
+    Because ``Some(None)`` does not make sence.
+
     .. code:: python
 
       >>> from returns.maybe import Some
       >>> str(Some(1))
       '<Some: 1>'
       >>> str(Some(None))
-      '<Some: None>'
+      '<Nothing>'
 
     """
-    return _Some(inner_value)
+    return Maybe.from_value(inner_value)
 
 
 #: Public unit value of protected :class:`~_Nothing` type.

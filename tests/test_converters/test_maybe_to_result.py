@@ -9,7 +9,6 @@ from returns.result import Failure, Success
     1,
     [],
     '',
-    None,
 ])
 def test_some_to_success(inner_value):
     """Ensures that `Some` is always converted to `Success`."""

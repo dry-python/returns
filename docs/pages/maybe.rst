@@ -148,56 +148,41 @@ You can easily get one from your ``Maybe`` container at any point in time:
 As you can see, revealed type of ``.value_or(None)`` is ``Optional[a]``.
 Use it a fallback.
 
-What is the difference between Some(None) and Nothing?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+How to model absence of value vs presence of None value?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Some people might be confused when they would see
-that it is possible to create ``Some(None)`` value:
+Let's say you have this ``dict``: ``{'a': 1, 'b': None}``
+And you want to get ``Maybe[int]`` values by string keys from there.
+When trying both existing key ``'b'`` and missing key ``'c'``
+you will end up with ``Nothing`` for both values.
+
+But, they are different!
+You might need to know exactly which case you are dealing with.
+
+In this case, it is better to switch to ``Result`` type.
+Let's see how to model this real-life situation:
 
 .. code:: python
 
-  >>> from returns.maybe import Some, Maybe
-  >>> assert isinstance(Some(None), Maybe.success_type)
-
-We need it to model this real-life situation:
-
-.. code:: python
-
-  >>> from returns.maybe import Some, Nothing, Maybe, maybe
+  >>> from returns.result import Success, Failure, safe
 
   >>> source = {'a': 1, 'b': None}
-  >>> def md(key: str) -> Maybe[int]:
-  ...     try:
-  ...          return Some(source[key])
-  ...     except KeyError:
-  ...          return Nothing
+  >>> md = safe(lambda key: source[key])
 
-  >>> assert md('a') == Some(1)
-  >>> assert md('b') == Some(None)
-  >>> assert md('c') == Nothing
+  >>> assert md('a') == Success(1)
+  >>> assert md('b') == Success(None)
 
-As you can see, without ``Some(None)``
-we would not be able to tell the difference
-between missing key ``'c'`` and nullish key ``'b'``.
-It might be useful to model complex cases:
+  >>> # Is: Failure(KeyError('c'))
+  >>> assert md('c').failure().args == ('c',)
 
-- ``Nothing`` - absence of value
-- ``None`` - actual value with zero bits of information, but still existing one
+This way you can tell the difference
+between empty values (``None``) and missing keys.
 
-And the problematic keys:
+You can always use :func:`returns.converters.result_to_maybe`
+to convert ``Result`` to ``Maybe``.
 
-- ``md('b')`` == ``Some(None)`` means "value exists but stores no information"
-- ``md('c')`` == ``Nothing`` means "there is no value for this key"
-
-However, ``Maybe.from_value`` and ``@maybe`` work differently.
-And by default turn ``None`` to ``Nothing``:
-
-.. code:: python
-
-  >>> from returns.maybe import Maybe, Nothing
-  >>> assert Maybe.from_value(None) == Nothing
-
-See the `original issue <https://github.com/dry-python/returns/issues/314>`_
+See the
+`original issue about Some(None) <https://github.com/dry-python/returns/issues/314>`_
 for more details and the full history.
 
 Why there's no IOMaybe?

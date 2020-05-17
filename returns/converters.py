@@ -51,9 +51,9 @@ def maybe_to_result(
       >>> from returns.maybe import Some, Nothing
       >>> from returns.result import Failure, Success
 
-      >>> assert maybe_to_result(Nothing) == Failure(None)
       >>> assert maybe_to_result(Some(1)) == Success(1)
-      >>> assert maybe_to_result(Some(None)) == Success(None)
+      >>> assert maybe_to_result(Nothing) == Failure(None)
+      >>> assert maybe_to_result(Some(None)) == Failure(None)
 
     """
     if is_successful(maybe_container):
