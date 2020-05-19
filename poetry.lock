@@ -100,7 +100,7 @@ version = "2020.4.5.1"
 [[package]]
 category = "dev"
 description = "Foreign Function Interface for Python calling C code."
-marker = "os_name == \"nt\""
+marker = "os_name == \"nt\" and implementation_name != \"pypy\""
 name = "cffi"
 optional = false
 python-versions = "*"
@@ -128,7 +128,7 @@ version = "7.1.2"
 [[package]]
 category = "dev"
 description = "Cross-platform colored terminal text."
-marker = "platform_system == \"Windows\" or sys_platform == \"win32\""
+marker = "sys_platform == \"win32\" or platform_system == \"Windows\""
 name = "colorama"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
@@ -754,7 +754,7 @@ version = "2.6.0"
 [[package]]
 category = "dev"
 description = "C parser in Python"
-marker = "os_name == \"nt\""
+marker = "os_name == \"nt\" and implementation_name != \"pypy\""
 name = "pycparser"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
@@ -1211,8 +1211,8 @@ category = "dev"
 description = "A friendly Python library for async concurrency and I/O"
 name = "trio"
 optional = false
-python-versions = ">=3.5"
-version = "0.14.0"
+python-versions = ">=3.6"
+version = "0.15.0"
 
 [package.dependencies]
 async-generator = ">=1.9"
@@ -1311,7 +1311,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "9fb9782706d9708657c536e4ada3cde1fe992f6a8ad12cf7ded292ca792cdefc"
+content-hash = "8fa7f0aa10bd704a357229cc76839f2636fcd555c6a608a1465075cc227602c7"
 python-versions = "^3.6"
 
 [metadata.files]
@@ -1856,8 +1856,8 @@ tomlkit = [
     {file = "tomlkit-0.6.0.tar.gz", hash = "sha256:74f976908030ff164c0aa1edabe3bf83ea004b3daa5b0940b9c86a060c004e9a"},
 ]
 trio = [
-    {file = "trio-0.14.0-py3-none-any.whl", hash = "sha256:0ce26b0b9abcbd99e16883b71f884578e96850214106db299fb223753b5bb95e"},
-    {file = "trio-0.14.0.tar.gz", hash = "sha256:1945ca68bad54abbacc74d535d8195ab9a056e5809bfb156ac7cfa8a11b9482f"},
+    {file = "trio-0.15.0-py3-none-any.whl", hash = "sha256:894d6e9a517299f354cb8d520748fec53ae1f34b7355445b3451c48cb665d367"},
+    {file = "trio-0.15.0.tar.gz", hash = "sha256:23b8e3b8e27202792c03ec716079b6b517e53ad68ee9864aa911378842f22e95"},
 ]
 typed-ast = [
     {file = "typed_ast-1.4.1-cp35-cp35m-manylinux1_i686.whl", hash = "sha256:73d785a950fc82dd2a25897d525d003f6378d1cb23ab305578394694202a58c3"},
