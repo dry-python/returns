@@ -15,7 +15,7 @@ async def test_inner_value(subtests):
         FutureResult.from_value(1),
         FutureResult.from_failure(1),
 
-        FutureResult.from_successful_io(IO(1)),
+        FutureResult.from_io(IO(1)),
         FutureResult.from_failed_io(IO(1)),
 
         FutureResult.from_ioresult(IOSuccess(1)),
@@ -24,7 +24,7 @@ async def test_inner_value(subtests):
         FutureResult.from_result(Success(1)),
         FutureResult.from_result(Failure(1)),
 
-        FutureResult.from_successful_future(Future.from_value(1)),
+        FutureResult.from_future(Future.from_value(1)),
         FutureResult.from_failed_future(Future.from_value(1)),
         FutureResult.from_typecast(Future.from_value(Success(1))),
     ]

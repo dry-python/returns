@@ -8,6 +8,23 @@
     reveal_type(second)  # N: Revealed type is 'returns.future.Future[builtins.Exception]'
 
 
+- case: future_from_value
+  disable_cache: true
+  main: |
+    from returns.future import Future
+
+    reveal_type(Future.from_value(1))  # N: Revealed type is 'returns.future.Future[builtins.int*]'
+
+
+- case: future_from_io
+  disable_cache: true
+  main: |
+    from returns.future import Future
+    from returns.io import IO
+
+    reveal_type(Future.from_io(IO(1)))  # N: Revealed type is 'returns.future.Future[builtins.int*]'
+
+
 - case: future_from_downcast
   disable_cache: true
   main: |

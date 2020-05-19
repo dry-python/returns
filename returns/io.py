@@ -1,15 +1,6 @@
 from abc import ABCMeta
 from functools import wraps
-from typing import (
-    Any,
-    Callable,
-    ClassVar,
-    Generic,
-    NoReturn,
-    Type,
-    TypeVar,
-    Union,
-)
+from typing import Any, Callable, ClassVar, Generic, Type, TypeVar, Union
 
 from typing_extensions import final
 
@@ -32,12 +23,10 @@ _SecondType = TypeVar('_SecondType')
 @final
 class IO(BaseContainer, Generic[_ValueType]):
     """
-    Explicit marker for impure function results.
+    Explicit container for impure function results.
 
-    We call it "marker" since once it is marked, it cannot be unmarked.
-
-    ``IO`` is also a container.
-    But, it is different in a way that it can't be unwrapped / rescued / fixed.
+    We also sometimes call it "marker" since once it is marked,
+    it cannot be ever unmarked.
     There's no way to directly get its internal value.
 
     Note that ``IO`` represents a computation that never fails.
@@ -250,12 +239,10 @@ class IOResult(
     metaclass=ABCMeta,
 ):
     """
-    Explicit marker for impure function results that might fail.
+    Explicit container for impure function results that might fail.
 
     Definition
     ~~~~~~~~~~
-
-    We call it "marker" since once it is marked, it cannot be unmarked.
 
     This type is similar to :class:`returns.result.Result`.
     This basically a more useful version of ``IO[Result[a, b]]``.
@@ -283,7 +270,7 @@ class IOResult(
       with :func:`~IOSuccess` and :func:`~IOFailure` public type constructors
     - You can construct ``IOResult`` from ``IO`` values
       with :meth:`~IOResult.from_failed_io`
-      and :meth:`IOResult.from_successful_io`
+      and :meth:`IOResult.from_io`
     - You can construct ``IOResult`` from ``Result`` values
       with :meth:`~IOResult.from_result`
 
@@ -712,7 +699,7 @@ class IOResult(
     @classmethod
     def from_failed_io(
         cls, container: IO[_NewErrorType],
-    ) -> 'IOResult[NoReturn, _NewErrorType]':
+    ) -> 'IOResult[Any, _NewErrorType]':
         """
         Creates new ``IOResult`` from "failed" ``IO`` container.
 
@@ -726,9 +713,9 @@ class IOResult(
         return IOFailure(container._inner_value)  # noqa: WPS437
 
     @classmethod
-    def from_successful_io(
+    def from_io(
         cls, container: IO[_NewValueType],
-    ) -> 'IOResult[_NewValueType, NoReturn]':
+    ) -> 'IOResult[_NewValueType, Any]':
         """
         Creates new ``IOResult`` from "successful" ``IO`` container.
 
@@ -736,7 +723,7 @@ class IOResult(
 
           >>> from returns.io import IO, IOResult, IOSuccess
           >>> container = IO(1)
-          >>> assert IOResult.from_successful_io(container) == IOSuccess(1)
+          >>> assert IOResult.from_io(container) == IOSuccess(1)
 
         """
         return IOSuccess(container._inner_value)  # noqa: WPS437
@@ -877,7 +864,7 @@ class _IOSuccess(IOResult):
 
     def bind_io(self, function):
         """Binds ``IO`` returning function to current container."""
-        return self.from_successful_io(function(self._inner_value.unwrap()))
+        return self.from_io(function(self._inner_value.unwrap()))
 
     def rescue(self, function):
         """Does nothing for ``IOSuccess``."""

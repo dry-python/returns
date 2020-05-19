@@ -19,11 +19,17 @@ See [0Ver](https://0ver.org/).
 - **Breaking**: renames `Maybe.new` to `Maybe.from_value`.
   Because all our other containers support this protocol.
   Only `Maybe` was different, sorry for that!
-- **Breaking**: renames `.from_success` to `.from_value`,
+- **Breaking**: renames `.from_success()` to `.from_value()`,
+  there's no need in two separate methods
+- **Breaking**: renames `.from_successful_io()` to `.from_io()`,
+  there's no need in two separate methods
+- **Breaking**: renames `.from_successful_context()` to `.from_context()`,
   there's no need in two separate methods
 - **Breaking**: since we now support `.apply()` method,
   there's no more need in `*_squash` converters, they are removed
 - **Breaking**: renamed `Instanceable` to `Applicative`
+- **Breaking**: changes `.from_io` and `.from_failed_io` of `IOResult`
+  to return `Any` instead of `NoReturn` unfilled type
 - Adds typed `partial` and `curry` mypy plugins!
 - Adds `pytest` plugin with the ability to tests error handling
 - Adds `Future` container to easily work with `async` functions
@@ -60,6 +66,8 @@ See [0Ver](https://0ver.org/).
 - Updates lots of dependencies
 - Adds lots of new tests
 - Updates lots of docs
+- Remove "IO marker" name from docs in favor for "IO container",
+  it is not special at all
 
 
 ## 0.13.0
@@ -259,7 +267,7 @@ See [0Ver](https://0ver.org/).
 
 ### Features
 
-- Adds `IO` marker
+- Adds `IO` container
 - Adds `unsafe` module with unsafe functions
 - Changes how functions are located inside the project
 

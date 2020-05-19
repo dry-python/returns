@@ -408,6 +408,25 @@ class Future(BaseContainer, Generic[_ValueType]):
         return Future(async_identity(inner_value))
 
     @classmethod
+    def from_io(cls, inner_value: IO[_NewValueType]) -> 'Future[_NewValueType]':
+        """
+        Allows to create a ``Future`` from ``IO`` container.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.future import Future
+          >>> from returns.io import IO
+
+          >>> async def main() -> bool:
+          ...    return (await Future.from_io(IO(1))) == IO(1)
+
+          >>> assert anyio.run(main) is True
+
+        """
+        return Future(async_identity(inner_value._inner_value))
+
+    @classmethod
     def from_future_result(
         cls,
         container: 'FutureResult[_ValueType, _ErrorType]',
@@ -1358,7 +1377,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
         return FutureResult(container._inner_value)
 
     @classmethod
-    def from_successful_future(
+    def from_future(
         cls,
         container: Future[_NewValueType],
     ) -> 'FutureResult[_NewValueType, Any]':
@@ -1372,7 +1391,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           >>> from returns.future import Future, FutureResult
 
           >>> async def main():
-          ...     assert await FutureResult.from_successful_future(
+          ...     assert await FutureResult.from_future(
           ...         Future.from_value(1),
           ...     ) == IOSuccess(1)
 
@@ -1406,7 +1425,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
         return FutureResult(_future_result.async_failure(container))
 
     @classmethod
-    def from_successful_io(
+    def from_io(
         cls,
         container: IO[_NewValueType],
     ) -> 'FutureResult[_NewValueType, Any]':
@@ -1420,7 +1439,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           >>> from returns.future import FutureResult
 
           >>> async def main():
-          ...     assert await FutureResult.from_successful_io(
+          ...     assert await FutureResult.from_io(
           ...         IO(1),
           ...     ) == IOSuccess(1)
 

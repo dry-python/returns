@@ -4,7 +4,12 @@ from mypy.types import Type as MypyType
 
 
 def analyze(ctx: FunctionContext) -> MypyType:
-    """Tells us what to do when one of the typed decorators is called."""
+    """
+    Changes a type of a decorator.
+
+    It uses the passed function to copy its type.
+    We only copy arguments and return type is defined by type annotations.
+    """
     if not isinstance(ctx.arg_types[0][0], CallableType):
         return ctx.default_return_type
     if not isinstance(ctx.default_return_type, CallableType):

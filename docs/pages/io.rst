@@ -18,8 +18,8 @@ Furthermore, there are several types of ``IO`` in our programs:
 There's a solution.
 
 
-IO marker
----------
+IO container
+------------
 
 Once you have an ``IO`` operation you can mark it appropriately.
 We can use a simple class :class:`returns.io.IO`

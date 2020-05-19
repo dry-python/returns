@@ -52,7 +52,7 @@ Make sure you know how to get started, [check out our docs](https://returns.read
 - [Maybe container](#maybe-container) that allows you to write `None`-free code
 - [RequiresContext container](#requirescontext-container) that allows you to use typed functional dependency injection
 - [Result container](#result-container) that let's you to get rid of exceptions
-- [IO marker](#io-marker) and [IOResult](#troublesome-io) that marks all impure operations and structures them
+- [IO container](#io-container) and [IOResult](#troublesome-io) that marks all impure operations and structures them
 - [Future container](#future-container) and [FutureResult](#async-code-without-exceptions) to work with `async` code
 
 
@@ -322,7 +322,7 @@ We are not yet done with this example,
 let's continue to improve it in the next chapter.
 
 
-## IO marker
+## IO container
 
 Let's look at our example from another angle.
 All its functions look like regular ones:
@@ -338,7 +338,7 @@ we suffer really bad when testing or reusing it.
 Almost everything should be pure by default.
 And we should explicitly mark impure parts of the program.
 
-That's why we have created `IO` marker
+That's why we have created `IO` container
 to mark impure functions that never fail.
 
 These impure functions use `random`, current datetime, environment, or console:

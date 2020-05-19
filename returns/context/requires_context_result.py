@@ -645,7 +645,7 @@ class RequiresContextResult(
         return RequiresContextResult(container)
 
     @classmethod
-    def from_successful_context(
+    def from_context(
         cls, inner_value: 'RequiresContext[_EnvType, _FirstType]',
     ) -> 'RequiresContextResult[_EnvType, _FirstType, Any]':
         """
@@ -655,7 +655,7 @@ class RequiresContextResult(
 
           >>> from returns.context import RequiresContext
           >>> from returns.result import Success
-          >>> assert RequiresContextResult.from_successful_context(
+          >>> assert RequiresContextResult.from_context(
           ...     RequiresContext.from_value(1),
           ... )(...) == Success(1)
 
