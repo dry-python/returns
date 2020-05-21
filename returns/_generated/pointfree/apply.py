@@ -51,6 +51,7 @@ def _apply_by(container):
       >>> assert apply_by(Some(1))(Some(example)) == Some(2)
       >>> assert apply_by(Nothing)(Some(example)) == Nothing
       >>> assert apply_by(Nothing)(Some(example)) == Nothing
+      >>> assert apply_by(Nothing)(Some(example)) == Nothing
       >>> assert apply_by(Nothing)(Nothing) == Nothing
 
     Note, that this function works for all containers with ``.apply`` method.

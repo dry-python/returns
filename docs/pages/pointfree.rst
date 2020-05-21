@@ -70,25 +70,6 @@ While ``bind`` reveals strictly the same error type,
 ``unify`` returns ``Union[_OldReturnType, _NewReturnType]``.
 
 
-apply
------
-
-Pointfree ``apply`` function allows
-to use ``.apply()`` container method like a function:
-
-.. code:: python
-
-  >>> from returns.pointfree import apply
-  >>> from returns.maybe import Some, Nothing
-
-  >>> def function(arg: int) -> str:
-  ...     return chr(arg) + '!'
-
-  >>> assert apply(Some(function))(Some(97)) == Some('a!')
-  >>> assert apply(Some(function))(Some(98)) == Some('b!')
-  >>> assert apply(Some(function))(Nothing) == Nothing
-
-
 rescue
 ------
 
@@ -112,6 +93,49 @@ It is also required for better declarative programming.
   >>> assert rescue(function)(container) == Success(1)
 
 
+apply
+-----
+
+Pointfree ``apply`` function allows
+to use ``.apply()`` container method like a function:
+
+.. code:: python
+
+  >>> from returns.pointfree import apply
+  >>> from returns.maybe import Some, Nothing
+
+  >>> def function(arg: int) -> str:
+  ...     return chr(arg) + '!'
+
+  >>> assert apply(Some(function))(Some(97)) == Some('a!')
+  >>> assert apply(Some(function))(Some(98)) == Some('b!')
+  >>> assert apply(Some(function))(Nothing) == Nothing
+  >>> assert apply(Nothing)(Nothing) == Nothing
+
+
+apply_by
+--------
+
+Pointfree ``apply_by`` function allows
+to use ``.apply()`` container method like a function.
+
+Is similar to ``apply()`` but has the inverse arguments order:
+
+.. code:: python
+
+  >>> from returns.pointfree import apply_by
+  >>> from returns.maybe import Some, Nothing
+
+  >>> def function(arg: int) -> str:
+  ...     return chr(arg) + '!'
+
+  >>> assert apply_by(Some(97))(Some(function)) == Some('a!')
+  >>> assert apply_by(Some(98))(Some(function)) == Some('b!')
+  >>> assert apply_by(Some(98))(Nothing) == Nothing
+  >>> assert apply_by(Nothing)(Some(function)) == Nothing
+  >>> assert apply_by(Nothing)(Nothing) == Nothing
+
+
 Further reading
 ---------------
 
@@ -128,6 +152,8 @@ API Reference
 
 .. autofunction:: returns.pointfree.unify
 
+.. autofunction:: returns.pointfree.rescue
+
 .. autofunction:: returns.pointfree.apply
 
-.. autofunction:: returns.pointfree.rescue
+.. autofunction:: returns.pointfree.apply_by
