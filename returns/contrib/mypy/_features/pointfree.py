@@ -1,6 +1,5 @@
 from mypy.checkmember import analyze_member_access
 from mypy.plugin import FunctionContext
-from mypy.types import Instance
 from mypy.types import Type as MypyType
 
 
