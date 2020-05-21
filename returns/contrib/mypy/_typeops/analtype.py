@@ -1,9 +1,10 @@
 from types import MappingProxyType
-from typing import List, Optional
+from typing import List, Optional, overload
 
 from mypy.nodes import ARG_NAMED, ARG_OPT
 from mypy.plugin import FunctionContext
 from mypy.types import CallableType, FunctionLike
+from typing_extensions import Literal
 
 from returns.contrib.mypy._structures.args import FuncArg
 
@@ -16,13 +17,29 @@ _KIND_MAPPING = MappingProxyType({
 })
 
 
-def analyze_function_call(
+@overload
+def analyze_call(
+    function: FunctionLike,
+    args: List[FuncArg],
+    ctx: FunctionContext,
+    *,
+    show_errors: Literal[True],
+) -> CallableType:
+    """Case when errors are reported and we cannot get ``None``."""
+
+
+@overload
+def analyze_call(
     function: FunctionLike,
     args: List[FuncArg],
     ctx: FunctionContext,
     *,
     show_errors: bool,
 ) -> Optional[CallableType]:
+    """Errors are not reported, we can get ``None`` when errors happen."""
+
+
+def analyze_call(function, args, ctx, *, show_errors):
     """
     Analyzes function call based on passed argumets.
 
@@ -32,7 +49,7 @@ def analyze_function_call(
     We also allow to return ``None`` instead of showing errors.
     This might be helpful for cases when we run intermediate analysis.
     """
-    checker = ctx.api.expr_checker  # type: ignore
+    checker = ctx.api.expr_checker
     messages = checker.msg if show_errors else checker.msg.clean_copy()
     return_type, checked_function = checker.check_call(
         function,

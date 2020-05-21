@@ -1,0 +1,26 @@
+- case: flow_function_error
+  disable_cache: true
+  main: |
+    from returns.pipeline import flow
+
+    def convert(arg: str) -> float:
+        ...
+
+    reveal_type(flow('1', int, convert))
+  out: |
+    main:6: error: Argument 1 to "convert" has incompatible type "int"; expected "str"
+    main:6: note: Revealed type is 'builtins.float'
+
+
+- case: flow_function_first_arg_error
+  disable_cache: true
+  main: |
+    from returns.pipeline import flow
+
+    def convert(arg: str) -> float:
+        ...
+
+    reveal_type(flow(1, convert))
+  out: |
+    main:6: error: Argument 1 to "convert" has incompatible type "int"; expected "str"
+    main:6: note: Revealed type is 'builtins.float'

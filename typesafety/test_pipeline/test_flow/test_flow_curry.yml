@@ -1,0 +1,26 @@
+- case: flow_function_with_curried1
+  disable_cache: true
+  main: |
+    from returns.pipeline import flow
+    from returns.curry import curry
+    from returns.functions import identity
+
+    @curry
+    def curried(a: int, b: int, c: str) -> float:
+        ...
+
+    reveal_type(flow(1, curried, identity)(2)('a'))  # N: Revealed type is 'builtins.float'
+
+
+- case: flow_function_with_curried2
+  disable_cache: true
+  main: |
+    from returns.pipeline import flow
+    from returns.curry import curry
+    from returns.functions import identity
+
+    @curry
+    def curried(a: int, b: int) -> float:
+        ...
+
+    reveal_type(flow(1, curried, identity)(1))  # N: Revealed type is 'builtins.float'

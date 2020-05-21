@@ -46,6 +46,16 @@ defined in the setup matches yours.
 This will allow to keep them in sync with the upstream.
 
 
+Supported features
+------------------
+
+- ``curry`` feature allows to write typed curried functions
+- ``partial`` feature allows to write typed partial application
+- ``flow`` feature allows to write better typed functional pipelines
+- ``decorators`` allows to infer types of functions that are decorated
+  with ``@safe``, ``@maybe``, ``@impure``, etc
+
+
 Further reading
 ---------------
 
@@ -78,6 +88,14 @@ Partial
 .. autoclasstree:: returns.contrib.mypy._features.partial
 
 .. automodule:: returns.contrib.mypy._features.partial
+   :members:
+
+Flow
+~~~~
+
+.. autoclasstree:: returns.contrib.mypy._features.flow
+
+.. automodule:: returns.contrib.mypy._features.flow
    :members:
 
 Decorators

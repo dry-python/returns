@@ -9,7 +9,7 @@ from mypy.types import TypeType
 from typing_extensions import Final, final
 
 from returns.contrib.mypy._structures.args import FuncArg
-from returns.contrib.mypy._typeops.analtype import analyze_function_call
+from returns.contrib.mypy._typeops.analtype import analyze_call
 from returns.contrib.mypy._typeops.inference import CallableInference
 from returns.contrib.mypy._typeops.transform_callable import (
     Functions,
@@ -138,7 +138,7 @@ class _PartialFunctionReducer(object):
         intermediate = Intermediate(case_function).with_applied_args(
             self._applied_args,
         )
-        return intermediate, analyze_function_call(
+        return intermediate, analyze_call(
             intermediate,
             self._applied_args,
             self._ctx,
@@ -184,7 +184,7 @@ class _PartialFunctionReducer(object):
         and tell user what went wrong.
         """
         if not self._case_functions:
-            analyze_function_call(
+            analyze_call(
                 proper_type(self._fallbacks),
                 self._applied_args,
                 self._ctx,

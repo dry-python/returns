@@ -1,0 +1,28 @@
+- case: flow_generic_function
+  disable_cache: true
+  main: |
+    from returns.pipeline import flow
+    from returns.functions import identity
+    from typing import TypeVar
+
+    _NewValueType = TypeVar('_NewValueType')
+
+    def test(arg: _NewValueType) -> _NewValueType:
+        x = flow(arg, identity)
+        reveal_type(x)  # N: Revealed type is '_NewValueType`-1'
+        return x
+
+
+- case: flow_generic_argument
+  disable_cache: true
+  main: |
+    from returns.pipeline import flow
+    from returns.functions import identity
+    from typing import TypeVar
+
+    _NewValueType = TypeVar('_NewValueType')
+
+    def test(arg: _NewValueType) -> str:
+        x = flow(arg, str)
+        reveal_type(x)  # N: Revealed type is 'builtins.str'
+        return x

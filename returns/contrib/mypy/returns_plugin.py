@@ -23,12 +23,12 @@ from typing import Callable, Mapping, Optional, Type
 
 from mypy.plugin import FunctionContext, Plugin
 from mypy.types import Type as MypyType
-from typing_extensions import final
+from typing_extensions import Final, final
 
-from returns.contrib.mypy._features import curry, decorators, partial
+from returns.contrib.mypy._features import curry, decorators, flow, partial
 
 #: Set of full names of our decorators.
-_TYPED_DECORATORS = frozenset((
+_TYPED_DECORATORS: Final = frozenset((
     'returns.result.safe',
     'returns.io.impure',
     'returns.io.impure_safe',
@@ -40,10 +40,13 @@ _TYPED_DECORATORS = frozenset((
 ))
 
 #: Used for typed ``partial`` function.
-_TYPED_PARTIAL_FUNCTION = 'returns.curry.partial'
+_TYPED_PARTIAL_FUNCTION: Final = 'returns.curry.partial'
 
 #: Used for typed ``curry`` decorator.
-_TYPED_CURRY_FUNCTION = 'returns.curry.curry'
+_TYPED_CURRY_FUNCTION: Final = 'returns.curry.curry'
+
+#: Used for typed ``flow`` call.
+_TYPED_FLOW_FUNCTION: Final = 'returns._generated.pipeline.flow._flow'
 
 #: Type for a function hook.
 _FunctionCallback = Callable[[FunctionContext], MypyType]
@@ -54,6 +57,7 @@ class _ReturnsPlugin(Plugin):
     _function_hook_plugins: Mapping[str, _FunctionCallback] = {
         _TYPED_PARTIAL_FUNCTION: partial.analyze,
         _TYPED_CURRY_FUNCTION: curry.analyze,
+        _TYPED_FLOW_FUNCTION: flow.analyze,
         **dict.fromkeys(_TYPED_DECORATORS, decorators.analyze),
     }
 

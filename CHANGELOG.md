@@ -31,6 +31,8 @@ See [0Ver](https://0ver.org/).
 - **Breaking**: changes `.from_io` and `.from_failed_io` of `IOResult`
   to return `Any` instead of `NoReturn` unfilled type
 - Adds typed `partial` and `curry` mypy plugins!
+- Adds typed `flow` plugin, now it can accept any number of arguments,
+  it now also has excelent type inference
 - Adds `pytest` plugin with the ability to tests error handling
 - Adds `Future` container to easily work with `async` functions
 - Adds `FutureResult` container to easily work

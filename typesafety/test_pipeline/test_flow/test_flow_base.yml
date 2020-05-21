@@ -1,0 +1,86 @@
+- case: flow_function
+  disable_cache: true
+  main: |
+    from returns.pipeline import flow
+
+    def inc(arg: int) -> int:
+        ...
+
+    reveal_type(flow(1, inc, inc, inc, inc, inc))  # N: Revealed type is 'builtins.int'
+
+
+- case: flow_function_with_overloads1
+  disable_cache: true
+  main: |
+    from returns.pipeline import flow
+
+    def convert(arg: str) -> float:
+        ...
+
+    reveal_type(flow('1.0', convert, int, bool))  # N: Revealed type is 'builtins.bool'
+
+
+- case: flow_function_with_overloads2
+  disable_cache: true
+  main: |
+    from returns.pipeline import flow
+    from returns.functions import identity
+
+    def convert(arg: str) -> float:
+        ...
+
+    reveal_type(flow('1.0', identity, convert, identity, int, identity, bool, identity))  # N: Revealed type is 'builtins.bool*'
+
+
+- case: flow_with_object1
+  disable_cache: true
+  main: |
+    from returns.pipeline import flow
+
+    class Test(object):
+        def __call__(self, arg: int) -> float:
+            ...
+
+    reveal_type(flow(1, Test()))  # N: Revealed type is 'builtins.float'
+
+
+- case: flow_with_object2
+  disable_cache: true
+  main: |
+    from returns.pipeline import flow
+
+    class Test(object):
+        def __init__(self, arg: int) -> None:
+            ...
+
+    reveal_type(flow(1, Test))  # N: Revealed type is 'main.Test'
+
+
+- case: flow_with_lambdas
+  disable_cache: true
+  main: |
+    from returns.pipeline import flow
+
+    reveal_type(
+        flow(  # N: Revealed type is 'builtins.float'
+            1,
+            lambda x: x,
+            str,
+            lambda y: y.split(' '),
+            lambda z: ''.join(z),
+            lambda x: x,
+            lambda f: float(f),
+        )
+    )
+
+
+- case: flow_with_any
+  disable_cache: true
+  main: |
+    from returns.pipeline import flow
+    from typing import Any
+
+    def test(arg: int) -> Any:
+        ...
+
+    reveal_type(flow(1, test))  # N: Revealed type is 'Any'
