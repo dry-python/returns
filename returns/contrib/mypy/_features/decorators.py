@@ -7,6 +7,10 @@ def analyze(ctx: FunctionContext) -> MypyType:
     """
     Changes a type of a decorator.
 
+    This problem appears when we try to change the return type of the function.
+    However, currently it is impossible due to this bug:
+    https://github.com/python/mypy/issues/3157
+
     It uses the passed function to copy its type.
     We only copy arguments and return type is defined by type annotations.
     """

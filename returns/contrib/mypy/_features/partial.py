@@ -29,6 +29,12 @@ def analyze(ctx: FunctionContext) -> MypyType:
     """
     This hook is used to make typed curring a thing in `returns` project.
 
+    This plugin is a temporary solution to the problem.
+    It should be later replaced with the official way of doing things.
+    One day functions will have better API and we plan
+    to submit this plugin into ``mypy`` core plugins,
+    so it would not be required.
+
     Internally we just reduce the original function's argument count.
     And drop some of them from function's signature.
     """

@@ -71,6 +71,19 @@
     reveal_type(flow(r, map_(test), map_(stringify), identity))  # N: Revealed type is 'returns.result.Result*[builtins.str, builtins.str*]'
 
 
+- case: map_and_bind
+  disable_cache: True
+  main: |
+    from returns.io import IO
+    from returns.pointfree import map_, bind
+    from returns.result import Result, Success
+
+    def test(arg: int) -> Result[float, str]:
+        ...
+
+    reveal_type(map_(bind(test))(IO(Success(1))))  # N: Revealed type is 'returns.io.IO[returns.result.Result*[builtins.float*, builtins.str*]]'
+
+
 - case: map_io
   disable_cache: true
   main: |

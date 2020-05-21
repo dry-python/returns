@@ -1,16 +1,8 @@
 """
-Custom mypy plugin to solve the temporary problem with untyped decorators.
+Custom mypy plugin to solve the temporary problem with python typing.
 
-This problem appears when we try to change the return type of the function.
-However, currently it is impossible due to this bug:
-https://github.com/python/mypy/issues/3157
-
-We also add better support for partial functions.
-
-This plugin is a temporary solution to the problem.
-It should be later replaced with the official way of doing things.
-One day functions will have better API and we plan
-to submit this plugin into ``mypy`` core plugins, so it would not be required.
+Important: we don't do anything ugly here.
+We only solve problems of the current typing implementation.
 
 ``mypy`` API docs are here:
 https://mypy.readthedocs.io/en/latest/extending_mypy.html
