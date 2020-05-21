@@ -1,5 +1,6 @@
 - case: map_overloads
   disable_cache: true
+  skip: sys.version_info < (3, 8)
   main: |
     from returns.pointfree import map_
 
@@ -8,7 +9,7 @@
 
     reveal_type(map_(test))
   out: |
-    main:6: note: Revealed type is 'Overload(def (function: returns.maybe.Maybe[builtins.float*]) -> returns.maybe.Maybe[builtins.int*], def (function: returns.io.IO[builtins.float*]) -> returns.io.IO[builtins.int*], def [_EnvType] (function: returns.context.requires_context.RequiresContext[_EnvType`665, builtins.float*]) -> returns.context.requires_context.RequiresContext[_EnvType`665, builtins.int*], def [_EnvType, _ErrorType] (function: returns.context.requires_context_result.RequiresContextResult[_EnvType`666, builtins.float*, _ErrorType`667]) -> returns.context.requires_context_result.RequiresContextResult[_EnvType`666, builtins.int*, _ErrorType`667], def [_EnvType, _ErrorType] (function: returns.context.requires_context_ioresult.RequiresContextIOResult[_EnvType`668, builtins.float*, _ErrorType`669]) -> returns.context.requires_context_ioresult.RequiresContextIOResult[_EnvType`668, builtins.int*, _ErrorType`669], def [_ErrorType] (function: returns.result.Result[builtins.float*, _ErrorType`670]) -> returns.result.Result[builtins.int*, _ErrorType`670], def [_ErrorType] (function: returns.io.IOResult[builtins.float*, _ErrorType`671]) -> returns.io.IOResult[builtins.int*, _ErrorType`671], def (function: returns.future.Future[builtins.float*]) -> returns.future.Future[builtins.int*], def [_ErrorType] (function: returns.future.FutureResult[builtins.float*, _ErrorType`672]) -> returns.future.FutureResult[builtins.int*, _ErrorType`672])'
+    note: Revealed type is 'Overload(def (function: returns.maybe.Maybe[builtins.float*]) -> returns.maybe.Maybe[builtins.int*], def (function: returns.io.IO[builtins.float*]) -> returns.io.IO[builtins.int*], def [_EnvType] (function: returns.context.requires_context.RequiresContext[_EnvType`666, builtins.float*]) -> returns.context.requires_context.RequiresContext[_EnvType`666, builtins.int*], def [_EnvType, _ErrorType] (function: returns.context.requires_context_result.RequiresContextResult[_EnvType`667, builtins.float*, _ErrorType`668]) -> returns.context.requires_context_result.RequiresContextResult[_EnvType`667, builtins.int*, _ErrorType`668], def [_EnvType, _ErrorType] (function: returns.context.requires_context_ioresult.RequiresContextIOResult[_EnvType`669, builtins.float*, _ErrorType`670]) -> returns.context.requires_context_ioresult.RequiresContextIOResult[_EnvType`669, builtins.int*, _ErrorType`670], def [_ErrorType] (function: returns.result.Result[builtins.float*, _ErrorType`671]) -> returns.result.Result[builtins.int*, _ErrorType`671], def [_ErrorType] (function: returns.io.IOResult[builtins.float*, _ErrorType`672]) -> returns.io.IOResult[builtins.int*, _ErrorType`672], def (function: returns.future.Future[builtins.float*]) -> returns.future.Future[builtins.int*], def [_ErrorType] (function: returns.future.FutureResult[builtins.float*, _ErrorType`673]) -> returns.future.FutureResult[builtins.int*, _ErrorType`673])'
 
 
 - case: map_variance
