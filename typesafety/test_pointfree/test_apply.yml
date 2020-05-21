@@ -79,7 +79,7 @@
 
     test: RequiresContextIOResult[bool, Callable[[float], int], str]
 
-    reveal_type(apply(test))  # N: Revealed type is 'def (returns.context.requires_context_io_result.RequiresContextIOResult[builtins.bool*, builtins.float*, builtins.str*]) -> returns.context.requires_context_io_result.RequiresContextIOResult[builtins.bool*, builtins.int*, builtins.str*]'
+    reveal_type(apply(test))  # N: Revealed type is 'def (returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.bool*, builtins.float*, builtins.str*]) -> returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.bool*, builtins.int*, builtins.str*]'
 
 
 - case: apply_future

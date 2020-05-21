@@ -271,41 +271,6 @@ class Result(
         raise NotImplementedError
 
     @classmethod
-    def lift(
-        cls,
-        function: Callable[[_ValueType], _NewValueType],
-    ) -> Callable[
-        ['Result[_ValueType, _ContraErrorType]'],
-        'Result[_NewValueType, _ContraErrorType]',
-    ]:
-        """
-        Lifts function to be wrapped in ``Result`` for better composition.
-
-        In other words, it modifies the function's
-        signature from: ``a -> b`` to: ``Result[a, error] -> Result[b, error]``
-
-        Works similar to :meth:`~Result.map`, but has inverse semantics.
-
-        This is how it should be used:
-
-        .. code:: python
-
-          >>> from returns.result import Success, Result, Failure
-
-          >>> def example(argument: int) -> float:
-          ...     return argument / 2
-
-          >>> assert Result.lift(example)(Success(2)) == Success(1.0)
-          >>> assert Result.lift(example)(Failure(2)) == Failure(2)
-
-        See also:
-            - https://wiki.haskell.org/Lifting
-            - https://en.wikipedia.org/wiki/Natural_transformation
-
-        """
-        return lambda container: container.map(function)
-
-    @classmethod
     def from_value(
         cls, inner_value: _NewValueType,
     ) -> 'Result[_NewValueType, Any]':

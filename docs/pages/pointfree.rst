@@ -9,6 +9,27 @@ Instead we can use functions that has the reverse semantics,
 but the same result.
 
 
+map_
+----
+
+Allows to compose cointainers and functions, but in a reverse manner.
+
+.. code:: python
+
+  >>> from returns.pointfree import map_
+  >>> from returns.maybe import Maybe, Some
+
+  >>> def mappable(arg: str) -> int:
+  ...     return ord(arg)
+
+  >>> container: Maybe[str] = Some('a')
+  >>> # We now have two way of composining these entities.
+  >>> # 1. Via ``.map``:
+  >>> assert container.map(mappable) == Some(97)
+  >>> # 2. Or via ``bind`` function, the same but in the inverse way:
+  >>> assert map_(mappable)(container) == Some(97)
+
+
 bind
 ----
 
@@ -98,6 +119,8 @@ Further reading
 
 API Reference
 -------------
+
+.. autofunction:: returns.pointfree.map_
 
 .. autofunction:: returns.pointfree.bind
 

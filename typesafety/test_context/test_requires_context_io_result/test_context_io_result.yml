@@ -3,7 +3,7 @@
   main: |
     from returns.context import ContextIOResult
 
-    reveal_type(ContextIOResult.ask())  # N: Revealed type is 'returns.context.requires_context_io_result.RequiresContextIOResult[<nothing>, <nothing>, Any]'
+    reveal_type(ContextIOResult.ask())  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[<nothing>, <nothing>, Any]'
 
 
 - case: context_result_io_ask2
@@ -11,4 +11,4 @@
   main: |
     from returns.context import ContextIOResult
 
-    reveal_type(ContextIOResult[str].ask())  # N: Revealed type is 'returns.context.requires_context_io_result.RequiresContextIOResult[builtins.str*, builtins.str*, Any]'
+    reveal_type(ContextIOResult[str].ask())  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.str*, builtins.str*, Any]'

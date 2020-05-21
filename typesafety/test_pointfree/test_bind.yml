@@ -13,7 +13,7 @@
     def test(a: A) -> Maybe[C]:
         ...
 
-    reveal_type(bind(test)(x))  # N: Revealed type is 'returns.maybe.Maybe[pipe.C*]'
+    reveal_type(bind(test)(x))  # N: Revealed type is 'returns.maybe.Maybe[main.C*]'
 
 
 - case: bind_io
@@ -81,7 +81,6 @@
   main: |
     from returns.pointfree import bind
     from returns.context import RequiresContextResult
-    from returns.result import Success
 
     def test(arg: float) -> RequiresContextResult[bool, int, str]:
         ...
@@ -94,12 +93,11 @@
   main: |
     from returns.pointfree import bind
     from returns.context import RequiresContextIOResult
-    from returns.result import Success
 
     def test(arg: float) -> RequiresContextIOResult[bool, int, str]:
         ...
 
-    reveal_type(bind(test))  # N: Revealed type is 'def (returns.context.requires_context_io_result.RequiresContextIOResult[builtins.bool*, builtins.float*, builtins.str*]) -> returns.context.requires_context_io_result.RequiresContextIOResult[builtins.bool*, builtins.int*, builtins.str*]'
+    reveal_type(bind(test))  # N: Revealed type is 'def (returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.bool*, builtins.float*, builtins.str*]) -> returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.bool*, builtins.int*, builtins.str*]'
 
 
 - case: bind_future

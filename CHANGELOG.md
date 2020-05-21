@@ -30,9 +30,12 @@ See [0Ver](https://0ver.org/).
 - **Breaking**: renamed `Instanceable` to `Applicative`
 - **Breaking**: changes `.from_io` and `.from_failed_io` of `IOResult`
   to return `Any` instead of `NoReturn` unfilled type
+- **Breaking**: removes `.lift` and `.lift_*` methods from all containers,
+  use `map_` pointfree helper instead
 - Adds typed `partial` and `curry` mypy plugins!
 - Adds typed `flow` plugin, now it can accept any number of arguments,
   it now also has excelent type inference
+- Adds typed `map_` pointfree helper
 - Adds `pytest` plugin with the ability to tests error handling
 - Adds `Future` container to easily work with `async` functions
 - Adds `FutureResult` container to easily work
@@ -41,7 +44,6 @@ See [0Ver](https://0ver.org/).
 - Adds `ReaderFutureResult` alias for `RequiresContextFutureResult`
 - Adds `RequiresContextFutureResultE` and `ReaderFutureResultE` aliases
 - Adds `bind_io` method to `IOResult`
-- Adds `lift_io` method to `IOResult`
 - Adds `bind_io` method to `RequiresContextIOResult`
 - Adds `unify` pointfree function
 - Adds `apply` pointfree function

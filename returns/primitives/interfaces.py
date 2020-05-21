@@ -66,7 +66,7 @@ class Mappable(Protocol[_ValueType]):
     """
     Allows to chain wrapped values with regular functions.
 
-    Behaves like functor.
+    Behaves like a functor.
 
     See also:
         https://en.wikipedia.org/wiki/Functor
@@ -81,6 +81,8 @@ class Mappable(Protocol[_ValueType]):
 
         And returns a new functor value.
         Is the opposite of :meth:`~Fixable.fix`.
+
+        Has :func:`returns.pointfree.map` helper with the inverse semantic.
         """
 
 

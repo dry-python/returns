@@ -14,7 +14,7 @@ def _function(arg: int) -> RequiresContextIOResultE[int, float]:
     return RequiresContextIOResult.from_value(10 / arg)
 
 
-def test_requires_context_io_resulte():
+def test_requires_context_ioresulte():
     """Ensures that RequiresContextIOResultE correctly typecast."""
     container: RequiresContextIOResult[int, float, Exception] = _function(1)
     assert container(0) == RequiresContextIOResult.from_value(10.0)(0)

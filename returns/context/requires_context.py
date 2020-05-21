@@ -9,7 +9,7 @@ from returns.primitives.types import Immutable
 if TYPE_CHECKING:
     # We need this condition to make sure Python can solve cycle imports.
     # But, since we only use these values in types, it is not important.
-    from returns.context.requires_context_io_result import (
+    from returns.context.requires_context_ioresult import (
         RequiresContextIOResult,
     )
     from returns.context.requires_context_result import RequiresContextResult
@@ -188,44 +188,6 @@ class RequiresContext(
 
         """
         return RequiresContext(lambda deps: function(self(deps))(deps))
-
-    @classmethod
-    def lift(
-        cls,
-        function: Callable[[_ReturnType], _NewReturnType],
-    ) -> Callable[
-        ['RequiresContext[_EnvType, _ReturnType]'],
-        'RequiresContext[_EnvType, _NewReturnType]',
-    ]:
-        """
-        Lifts function to be wrapped in a container for better composition.
-
-        In other words, it modifies the function's
-        signature from: ``a -> b`` to:
-        ``RequiresContext[env, a] -> RequiresContext[env, b]``
-
-        Works similar to :meth:`~RequiresContext.map`,
-        but has inverse semantics.
-
-        This is how it should be used:
-
-        .. code:: python
-
-          >>> from returns.context import RequiresContext
-          >>> def example(argument: int) -> float:
-          ...     return argument / 2
-
-          >>> container = RequiresContext.lift(example)(
-          ...     RequiresContext.from_value(2),
-          ... )
-          >>> assert container(RequiresContext.empty) == 1.0
-
-        See also:
-            - https://wiki.haskell.org/Lifting
-            - https://en.wikipedia.org/wiki/Natural_transformation
-
-        """
-        return lambda container: container.map(function)
 
     @classmethod
     def from_value(

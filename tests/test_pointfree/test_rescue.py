@@ -24,7 +24,7 @@ def _context_result_function(
     return RequiresContextResult.from_failure('nope')
 
 
-def _context_io_result_function(
+def _context_ioresult_function(
     argument: int,
 ) -> RequiresContextIOResult[int, int, str]:
     if argument > 0:
@@ -65,9 +65,9 @@ def test_rescue_with_context_result():
     )(1) == Failure('nope')
 
 
-def test_rescue_with_context_io_result():
+def test_rescue_with_context_ioresult():
     """Ensures that functions can be composed and return type is correct."""
-    rescued = rescue(_context_io_result_function)
+    rescued = rescue(_context_ioresult_function)
 
     assert rescued(
         RequiresContextIOResult.from_value(1),

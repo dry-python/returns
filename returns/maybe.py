@@ -184,37 +184,6 @@ class Maybe(
             return _Nothing(inner_value)
         return _Some(inner_value)
 
-    @classmethod
-    def lift(
-        cls,
-        function: Callable[[_ValueType], _NewValueType],
-    ) -> Callable[['Maybe[_ValueType]'], 'Maybe[_NewValueType]']:
-        """
-        Lifts function to be wrapped in ``Maybe`` for better composition.
-
-        In other words, it modifies the function's
-        signature from: ``a -> b`` to: ``Maybe[a] -> Maybe[b]``
-
-        Works similar to :meth:`~Maybe.map`, but has inverse semantics.
-
-        This is how it should be used:
-
-        .. code:: python
-
-          >>> from returns.maybe import Maybe, Nothing, Some
-          >>> def example(argument: int) -> float:
-          ...     return argument / 2
-
-          >>> assert Maybe.lift(example)(Some(2)) == Some(1.0)
-          >>> assert Maybe.lift(example)(Nothing) == Nothing
-
-        See also:
-            - https://wiki.haskell.org/Lifting
-            - https://en.wikipedia.org/wiki/Natural_transformation
-
-        """
-        return lambda container: container.map(function)
-
 
 @final
 class _Nothing(Maybe[Any]):

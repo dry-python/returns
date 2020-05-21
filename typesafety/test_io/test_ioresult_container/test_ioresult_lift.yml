@@ -1,15 +1,3 @@
-- case: ioresult_lift
-  disable_cache: true
-  main: |
-    from returns.io import IOResult
-
-    def test(arg: int) -> str:
-        return str(arg)
-
-    r: IOResult[int, str]
-    reveal_type(IOResult.lift(test)(r))  # N: Revealed type is 'returns.io.IOResult[builtins.str, builtins.str*]'
-
-
 - case: ioresult_lift_result
   disable_cache: true
   main: |

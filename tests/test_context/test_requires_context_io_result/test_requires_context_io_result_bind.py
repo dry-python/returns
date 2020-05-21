@@ -39,7 +39,7 @@ def test_bind_regular_result():
     assert third.bind_result(factory)(RCR.empty) == IOFailure('a')
 
 
-def test_bind_io_result():
+def test_bind_ioresult():
     """Ensures that io ``Result`` can be bound."""
     def factory(inner_value: int) -> IOResult[int, str]:
         if inner_value > 0:

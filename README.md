@@ -518,9 +518,9 @@ from returns.pipeline import is_successful
 async def raising():
     raise ValueError('Not so fast!')
 
-io_result = anyio.run(raising.awaitable)  # all `Future`s return IO containers
-assert not is_successful(io_result)  # True
-assert io_result == IOFailure(ValueError('Not so fast!'))  # Also True
+ioresult = anyio.run(raising.awaitable)  # all `Future`s return IO containers
+assert not is_successful(ioresult)  # True
+assert ioresult == IOFailure(ValueError('Not so fast!'))  # Also True
 ```
 
 Using `FutureResult` will keep your code safe from exceptions.

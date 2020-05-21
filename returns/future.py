@@ -313,42 +313,6 @@ class Future(BaseContainer, Generic[_ValueType]):
         return Future(_future.async_bind_io(function, self._inner_value))
 
     @classmethod
-    def lift(
-        cls,
-        function: Callable[[_ValueType], _NewValueType],
-    ) -> Callable[['Future[_ValueType]'], 'Future[_NewValueType]']:
-        """
-        Lifts function to be wrapped in ``Future`` for better composition.
-
-        In other words, it modifies the function's
-        signature from: ``a -> b`` to: ``Future[a] -> Future[b]``
-
-        Works similar to :meth:`~Future.map`, but has inverse semantics.
-
-        This is how it should be used:
-
-        .. code:: python
-
-          >>> import anyio
-          >>> from returns.future import Future
-          >>> from returns.io import IO
-
-          >>> def example(argument: int) -> float:
-          ...     return argument / 2  # not Future!
-
-          >>> async def main() -> Future[float]:
-          ...     return await Future.lift(example)(Future.from_value(1))
-
-          >>> assert anyio.run(main) == IO(0.5)
-
-        See also:
-            - https://wiki.haskell.org/Lifting
-            - https://en.wikipedia.org/wiki/Natural_transformation
-
-        """
-        return lambda container: container.map(function)
-
-    @classmethod
     def lift_io(
         cls,
         function: Callable[[_ValueType], IO[_NewValueType]],
@@ -1110,52 +1074,6 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
 
         """
         return IO((await self._inner_value).failure())
-
-    @classmethod
-    def lift(
-        cls,
-        function: Callable[[_ValueType], _NewValueType],
-    ) -> Callable[
-        ['FutureResult[_ValueType, _ContraErrorType]'],
-        'FutureResult[_NewValueType, _ContraErrorType]',
-    ]:
-        """
-        Lifts function to be wrapped in ``FutureResult`` for better composition.
-
-        In other words, it modifies the function's
-        signature from: ``a -> b``
-        to: ``FutureResult[a, x] -> FutureResult[b, x]``
-
-        Works similar to :meth:`~FutureResult.map`, but has inverse semantics.
-
-        This is how it should be used:
-
-        .. code:: python
-
-          >>> import anyio
-          >>> from returns.future import FutureResult
-          >>> from returns.io import IOSuccess, IOFailure
-
-          >>> def example(argument: int) -> float:
-          ...     return argument / 2  # not FutureResult!
-
-          >>> async def success() -> FutureResult[float, int]:
-          ...     container = FutureResult.from_value(1)
-          ...     return await FutureResult.lift(example)(container)
-
-          >>> async def failure() -> FutureResult[float, int]:
-          ...     container = FutureResult.from_failure(1)
-          ...     return await FutureResult.lift(example)(container)
-
-          >>> assert anyio.run(success) == IOSuccess(0.5)
-          >>> assert anyio.run(failure) == IOFailure(1)
-
-        See also:
-            - https://wiki.haskell.org/Lifting
-            - https://en.wikipedia.org/wiki/Natural_transformation
-
-        """
-        return lambda container: container.map(function)
 
     @classmethod
     def lift_result(

@@ -23,7 +23,7 @@ from returns.context.requires_context_future_result import (  # noqa: F401
     ReaderFutureResult as ReaderFutureResult,
     ReaderFutureResultE as ReaderFutureResultE,
 )
-from returns.context.requires_context_io_result import (  # noqa: F401
+from returns.context.requires_context_ioresult import (  # noqa: F401
     ContextIOResult as ContextIOResult,
     RequiresContextIOResult as RequiresContextIOResult,
     RequiresContextIOResultE as RequiresContextIOResultE,

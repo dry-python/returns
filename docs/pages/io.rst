@@ -198,6 +198,7 @@ It really helps you with the composition!
 .. code:: python
 
   >>> from returns.io import IO
+  >>> from returns.pointfree import map_
 
   >>> def regular_function(arg: int) -> float:
   ...     return arg / 2  # not an `IO` operation
@@ -209,7 +210,7 @@ It really helps you with the composition!
   >>> assert io == IO(0.5)
 
   >>> # or, it is the same as:
-  >>> io = IO.lift(regular_function)(container)
+  >>> io = map_(regular_function)(container)
   >>> assert io == IO(0.5)
 
 ``IOResult`` can lift both regular functions and ones that return ``Result``:
@@ -217,6 +218,7 @@ It really helps you with the composition!
 .. code:: python
 
   >>> from returns.io import IOResult, IOSuccess
+  >>> from returns.pointfree import map_
 
   >>> def regular_function(arg: int) -> float:
   ...     return arg / 2  # not an `IO` operation
@@ -228,7 +230,7 @@ It really helps you with the composition!
   >>> assert io == IOSuccess(0.5)
 
   >>> # or, it is the same as:
-  >>> io = IOResult.lift(regular_function)(container)
+  >>> io = map_(regular_function)(container)
   >>> assert io == IOSuccess(0.5)
 
 And ``Result`` based functions:
@@ -242,7 +244,6 @@ And ``Result`` based functions:
   ...     if arg > 0:
   ...         return Success(arg / 2)
   ...     return Failure('zero')
-  ...
 
   >>> assert IOResult.lift_result(regular_function)(
   ...     IOSuccess(1),

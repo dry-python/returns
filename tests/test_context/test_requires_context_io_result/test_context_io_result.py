@@ -42,7 +42,7 @@ def test_protocols(container, protocol):
     assert isinstance(container, protocol)
 
 
-def test_context_io_result_immutable():
+def test_context_ioresult_immutable():
     """Ensures that helper is immutable."""
     with pytest.raises(ImmutableStateError):
         ContextIOResult().abc = 1

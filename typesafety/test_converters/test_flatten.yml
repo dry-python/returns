@@ -90,7 +90,7 @@
     reveal_type(flatten(x))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.str*, builtins.int*, builtins.float*]'
 
 
-- case: flatten_context_io_result
+- case: flatten_context_ioresult
   disable_cache: true
   main: |
     from returns.converters import flatten
@@ -98,7 +98,7 @@
 
     x: RequiresContextIOResult[str, RequiresContextIOResult[str, int, float], float]
 
-    reveal_type(flatten(x))  # N: Revealed type is 'returns.context.requires_context_io_result.RequiresContextIOResult[builtins.str*, builtins.int*, builtins.float*]'
+    reveal_type(flatten(x))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.str*, builtins.int*, builtins.float*]'
 
 
 - case: flatten_future

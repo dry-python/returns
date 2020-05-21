@@ -132,36 +132,6 @@ class IO(BaseContainer, Generic[_ValueType]):
         return function(self._inner_value)
 
     @classmethod
-    def lift(
-        cls,
-        function: Callable[[_ValueType], _NewValueType],
-    ) -> Callable[['IO[_ValueType]'], 'IO[_NewValueType]']:
-        """
-        Lifts function to be wrapped in ``IO`` for better composition.
-
-        In other words, it modifies the function's
-        signature from: ``a -> b`` to: ``IO[a] -> IO[b]``
-
-        Works similar to :meth:`~IO.map`, but has inverse semantics.
-
-        This is how it should be used:
-
-        .. code:: python
-
-          >>> from returns.io import IO
-          >>> def example(argument: int) -> float:
-          ...     return argument / 2  # not exactly IO action!
-
-          >>> assert IO.lift(example)(IO(2)) == IO(1.0)
-
-        See also:
-            - https://wiki.haskell.org/Lifting
-            - https://en.wikipedia.org/wiki/Natural_transformation
-
-        """
-        return lambda container: container.map(function)
-
-    @classmethod
     def from_value(cls, inner_value: _NewValueType) -> 'IO[_NewValueType]':
         """
         Unit function to construct new ``IO`` values.
@@ -579,44 +549,6 @@ class IOResult(
 
         """
         return IO(self._inner_value.failure())
-
-    @classmethod
-    def lift(
-        cls,
-        function: Callable[[_ValueType], _NewValueType],
-    ) -> Callable[
-        ['IOResult[_ValueType, _ContraErrorType]'],
-        'IOResult[_NewValueType, _ContraErrorType]',
-    ]:
-        """
-        Lifts function to be wrapped in ``IOResult`` for better composition.
-
-        In other words, it modifies the function's
-        signature from: ``a -> b`` to:
-        ``IOResult[a, error] -> IOResult[b, error]``
-
-        Works similar to :meth:`~IOResult.map`, but has inverse semantics.
-
-        This is how it should be used:
-
-        .. code:: python
-
-          >>> from returns.io import IOResult, IOSuccess, IOFailure
-          >>> def example(argument: int) -> float:
-          ...     return argument / 2  # not exactly IO action!
-
-          >>> assert IOResult.lift(example)(IOSuccess(2)) == IOSuccess(1.0)
-          >>> assert IOResult.lift(example)(IOFailure(2)) == IOFailure(2)
-
-        This one is similar to appling :meth:`~IO.lift`
-        and :meth:`returns.result.Result.lift` in order.
-
-        See also:
-            - https://wiki.haskell.org/Lifting
-            - https://en.wikipedia.org/wiki/Natural_transformation
-
-        """
-        return lambda container: container.map(function)
 
     @classmethod
     def lift_result(

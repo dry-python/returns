@@ -287,7 +287,7 @@ Which means that it is a wrapper around impure function that might fail.
 We also added a lot of useful methods for this container,
 so you can work easily with it:
 
-.. currentmodule:: returns.context.requires_context_io_result
+.. currentmodule:: returns.context.requires_context_ioresult
 
 - :meth:`~RequiresContextIOResult.from_typecast`
   turns accidental ``RequiresContext[env, IOResult[a, b]]`` into
@@ -333,7 +333,7 @@ and friends with some common values:
 - :attr:`~ReaderResultE`
   is an alias for ``RequiresContextResult[..., Exception]``
 
-.. currentmodule:: returns.context.requires_context_io_result
+.. currentmodule:: returns.context.requires_context_ioresult
 
 - :attr:`~RequiresContextIOResultE`
   is an alias for ``RequiresContextIOResult[..., Exception]``
@@ -602,9 +602,9 @@ RequiresContextResult
 RequiresContextIOResult
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-.. autoclasstree:: returns.context.requires_context_io_result
+.. autoclasstree:: returns.context.requires_context_ioresult
 
-.. automodule:: returns.context.requires_context_io_result
+.. automodule:: returns.context.requires_context_ioresult
    :members:
 
 RequiresContextFutureResult

@@ -462,48 +462,6 @@ class RequiresContextResult(
         return lambda deps: self(deps).failure()
 
     @classmethod
-    def lift(
-        cls,
-        function: Callable[[_ValueType], _NewValueType],
-    ) -> Callable[
-        ['RequiresContextResult[_EnvType, _ValueType, _ErrorType]'],
-        'RequiresContextResult[_EnvType, _NewValueType, _ErrorType]',
-    ]:
-        """
-        Lifts function to be wrapped in a container for better composition.
-
-        In other words, it modifies the function's
-        signature from: ``a -> b`` to:
-        ``RequiresContextResult[env, a, err]``
-        -> ``RequiresContextResult[env, b, err]``
-
-        Works similar to :meth:`~RequiresContextResult.map`,
-        but has inverse semantics.
-
-        This is how it should be used:
-
-        .. code:: python
-
-          >>> from returns.context import RequiresContextResult
-          >>> from returns.result import Success
-
-          >>> def function(arg: int) -> str:
-          ...     return str(arg) + '!'
-
-          >>> unit = RequiresContextResult.from_value(1)
-          >>> deps = RequiresContextResult.empty
-          >>> assert RequiresContextResult.lift(function)(
-          ...     unit,
-          ... )(deps) == Success('1!')
-
-        See also:
-            - https://wiki.haskell.org/Lifting
-            - https://en.wikipedia.org/wiki/Natural_transformation
-
-        """
-        return lambda container: container.map(function)
-
-    @classmethod
     def lift_result(
         cls,
         function: Callable[[_ValueType], Result[_NewValueType, _ErrorType]],

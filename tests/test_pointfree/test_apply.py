@@ -61,7 +61,7 @@ def test_apply_with_context_result():
     )(...) == Success('2')
 
 
-def test_apply_with_context_io_result():
+def test_apply_with_context_ioresult():
     """Ensures that functions can be composed and return type is correct."""
     applied = apply(RequiresContextIOResult.from_value(_function))
 

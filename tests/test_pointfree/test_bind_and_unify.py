@@ -38,7 +38,7 @@ def _context_result_function(
     return RequiresContextResult(lambda other: Success(argument + other))
 
 
-def _context_io_result_function(
+def _context_ioresult_function(
     argument: int,
 ) -> RequiresContextIOResult[int, int, str]:
     return RequiresContextIOResult(lambda other: IOSuccess(argument + other))
@@ -99,9 +99,9 @@ def test_bind_with_context_result():
     assert bound(RequiresContextResult.from_value(3))(5) == Success(8)
 
 
-def test_bind_with_context_io_result():
+def test_bind_with_context_ioresult():
     """Ensures that functions can be composed and return type is correct."""
-    bound = bind(_context_io_result_function)
+    bound = bind(_context_ioresult_function)
 
     assert bound(RequiresContextIOResult.from_value(3))(5) == IOSuccess(8)
 
