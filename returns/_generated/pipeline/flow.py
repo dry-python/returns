@@ -37,5 +37,7 @@ def _flow(
         - https://stackoverflow.com/a/41585450/4842742
         - https://github.com/gcanti/fp-ts/blob/master/src/pipeable.ts
 
+    Requires our :ref:`mypy plugin <mypy-plugins>`.
+
     """
     return _pipe(*functions)(instance)  # type: ignore
