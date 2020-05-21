@@ -1,18 +1,6 @@
 - case: requires_context_result_lift_context
   disable_cache: true
   main: |
-    from returns.context import RequiresContextResult
-    from returns.result import Result, Success
-
-    def test(arg: int) -> Result[str, int]:
-        return Success(str(arg))
-
-    reveal_type(RequiresContextResult.lift_result(test))  # N: Revealed type is 'def (returns.context.requires_context_result.RequiresContextResult[<nothing>, builtins.int*, builtins.int*]) -> returns.context.requires_context_result.RequiresContextResult[<nothing>, builtins.str*, builtins.int*]'
-
-
-- case: requires_context_result_lift_result
-  disable_cache: true
-  main: |
     from returns.context import RequiresContextResult, RequiresContext
 
     def test(arg: int) -> RequiresContext[int, str]:

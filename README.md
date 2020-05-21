@@ -397,7 +397,7 @@ import requests
 from returns.io import IO, IOResult, impure_safe
 from returns.result import safe
 from returns.pipeline import flow
-from returns.pointfree import bind
+from returns.pointfree import bind_result
 
 def fetch_user_profile(user_id: int) -> IOResult['UserProfile', Exception]:
     """Fetches `UserProfile` TypedDict from foreign API."""
@@ -406,9 +406,8 @@ def fetch_user_profile(user_id: int) -> IOResult['UserProfile', Exception]:
         _make_request,
         # before: def (Response) -> UserProfile
         # after safe: def (Response) -> ResultE[UserProfile]
-        # after bind: def (ResultE[Response]) -> ResultE[UserProfile]
-        # after lift: def (IOResultE[Response]) -> IOResultE[UserProfile]
-        IOResult.lift_result(bind(_parse_json)),
+        # after bind_result: def (IOResultE[Response]) -> IOResultE[UserProfile]
+        bind_result(_parse_json),
     )
 
 @impure_safe

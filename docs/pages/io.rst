@@ -239,13 +239,14 @@ And ``Result`` based functions:
 
   >>> from returns.io import IOResult, IOSuccess
   >>> from returns.result import Result, Success, Failure
+  >>> from returns.pointfree import bind_result
 
   >>> def regular_function(arg: int) -> Result[float, str]:
   ...     if arg > 0:
   ...         return Success(arg / 2)
   ...     return Failure('zero')
 
-  >>> assert IOResult.lift_result(regular_function)(
+  >>> assert bind_result(regular_function)(
   ...     IOSuccess(1),
   ... ) == IOResult.from_result(regular_function(1))
 

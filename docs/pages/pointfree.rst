@@ -8,7 +8,27 @@ This module provides a bunch of primitives to work with containers.
 It is centered around the composition idea.
 Sometimes using methods on containers is not very helpful.
 Instead we can use functions that has the reverse semantics,
-but the same result.
+but the same end result.
+
+Why would anyone need these functions when you can use methods?
+To create pipelines!
+
+.. code:: python
+
+  pipe(
+      returns_result(),
+      works_with_result(),
+      notifies_user(),
+  )
+
+In a normal situation you would probably write:
+
+.. code::
+
+  returns_result().bind(works_with_result).bind(notifies_user)
+
+And you need a way to somehow do this in the pipeline.
+That's where pointfree functions become really useful.
 
 
 map_

@@ -249,9 +249,6 @@ class IOResult(
     - :meth:`~IOResult.bind_result` to work
       with functions which return ``Result``
     - :meth:`~IOResult.from_typecast` to work with ``IO[Result[...]]`` values
-    - :meth:`~IOResult.lift` and :meth:`~IOResult.lift_result` to allow
-      indirect function composition
-      with regular and ``Result`` based functions.
 
     See also:
         https://github.com/gcanti/fp-ts/blob/master/docs/modules/IOEither.ts.md
@@ -549,34 +546,6 @@ class IOResult(
 
         """
         return IO(self._inner_value.failure())
-
-    @classmethod
-    def lift_result(
-        cls,
-        function: Callable[[_ValueType], Result[_NewValueType, _ErrorType]],
-    ) -> Callable[
-        ['IOResult[_ValueType, _ErrorType]'],
-        'IOResult[_NewValueType, _ErrorType]',
-    ]:
-        """
-        Lifts function from ``Result`` to ``IOResult`` for better composition.
-
-        Similar to :meth:`~IOResult.lift`,
-        but works functions with ``Result`` return type.
-
-        .. code:: python
-
-          >>> from returns.io import IOResult, IOSuccess
-          >>> from returns.result import Result, Success
-
-          >>> def returns_result(arg: int) -> Result[int, str]:
-          ...     return Success(arg + 1)
-
-          >>> returns_ioresult = IOResult.lift_result(returns_result)
-          >>> assert returns_ioresult(IOSuccess(1)) == IOSuccess(2)
-
-        """
-        return lambda container: container.bind_result(function)
 
     @classmethod
     def lift_io(

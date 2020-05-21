@@ -462,52 +462,6 @@ class RequiresContextResult(
         return lambda deps: self(deps).failure()
 
     @classmethod
-    def lift_result(
-        cls,
-        function: Callable[[_ValueType], Result[_NewValueType, _ErrorType]],
-    ) -> Callable[
-        ['RequiresContextResult[_EnvType, _ValueType, _ErrorType]'],
-        'RequiresContextResult[_EnvType, _NewValueType, _ErrorType]',
-    ]:
-        """
-        Lifts function from ``Result`` for better composition.
-
-        In other words, it modifies the function's
-        signature from: ``a -> Result[b, c]`` to:
-        ``RequiresContextResult[env, a, c]``
-        -> ``RequiresContextResult[env, b, c]``
-
-        Similar to :meth:`~RequiresContextResult.lift`,
-        but works with other type.
-
-        .. code:: python
-
-          >>> from returns.context import RequiresContextResult
-          >>> from returns.result import Success, Failure, Result
-
-          >>> def function(arg: int) -> Result[str, int]:
-          ...     if arg > 0:
-          ...         return Success(str(arg) + '!')
-          ...     return Failure(arg)
-
-          >>> deps = RequiresContextResult.empty
-
-          >>> assert RequiresContextResult.lift_result(function)(
-          ...     RequiresContextResult.from_value(1),
-          ... )(deps) == Success('1!')
-
-          >>> assert RequiresContextResult.lift_result(function)(
-          ...     RequiresContextResult.from_value(0),
-          ... )(deps) == Failure(0)
-
-          >>> assert RequiresContextResult.lift_result(function)(
-          ...     RequiresContextResult.from_failure('nope'),
-          ... )(deps) == Failure('nope')
-
-        """
-        return lambda container: container.bind_result(function)
-
-    @classmethod
     def lift_context(
         cls,
         function: Callable[

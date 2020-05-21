@@ -31,22 +31,28 @@ See [0Ver](https://0ver.org/).
 - **Breaking**: changes `.from_io` and `.from_failed_io` of `IOResult`
   to return `Any` instead of `NoReturn` unfilled type
 - **Breaking**: removes `.lift` and `.lift_*` methods from all containers,
-  use `map_` pointfree helper instead
+  use `map_`, `bind_result`, `bind_io`, and other pointfree helpers instead
+
 - Adds typed `partial` and `curry` mypy plugins!
 - Adds typed `flow` plugin, now it can accept any number of arguments,
   it now also has excelent type inference
-- Adds typed `map_` pointfree helper
+
+- Adds typed `map_` pointfree function
+- Adds typed `bind_result` pointfree function
+- Adds typed `unify` pointfree function
+- Adds typed `apply` and `apply_by` pointfree functions
+
 - Adds `pytest` plugin with the ability to tests error handling
+
 - Adds `Future` container to easily work with `async` functions
 - Adds `FutureResult` container to easily work
   with `async` function that might fail
 - Adds `RequiresContextFutureResult` container
 - Adds `ReaderFutureResult` alias for `RequiresContextFutureResult`
 - Adds `RequiresContextFutureResultE` and `ReaderFutureResultE` aliases
+
 - Adds `bind_io` method to `IOResult`
 - Adds `bind_io` method to `RequiresContextIOResult`
-- Adds `unify` pointfree function
-- Adds `apply` pointfree function
 - Adds `Future`, `FutureResult` and `RequiresContextFutureResult`
   support for all existing pointfree functions
 - Adds `not_` composition helper

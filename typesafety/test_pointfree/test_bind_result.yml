@@ -1,0 +1,92 @@
+- case: bind_result_and_flow
+  disable_cache: true
+  main: |
+    from returns.result import Result
+    from returns.io import IOResult
+    from returns.functions import identity
+    from returns.pointfree import bind_result
+    from returns.pipeline import flow
+
+    def test(arg: int) -> Result[float, str]:
+        ...
+
+    def second(arg: float) -> Result[bool, str]:
+        ...
+
+    r: IOResult[int, str]
+    reveal_type(flow(r, bind_result(test), bind_result(second), identity))  # N: Revealed type is 'returns.io.IOResult*[builtins.bool*, builtins.str*]'
+
+
+- case: bind_result_and_bind
+  disable_cache: True
+  main: |
+    from returns.result import Result
+    from returns.io import IOResult
+    from returns.functions import identity
+    from returns.pointfree import bind, bind_result
+    from returns.pipeline import flow
+
+    def test(arg: int) -> Result[float, str]:
+        ...
+
+    def second(arg: float) -> IOResult[bool, str]:
+        ...
+
+    r: IOResult[int, str]
+    reveal_type(flow(r, bind_result(test), bind(second)))  # N: Revealed type is 'returns.io.IOResult[builtins.bool*, builtins.str*]'
+
+
+- case: bind_result_ioresult
+  disable_cache: true
+  main: |
+    from returns.pointfree import bind_result
+    from returns.io import IOResult
+    from returns.result import Result
+
+    def test(arg: float) -> Result[int, str]:
+        ...
+
+    x: IOResult[float, str]
+    reveal_type(bind_result(test)(x))  # N: Revealed type is 'returns.io.IOResult[builtins.int*, builtins.str*]'
+
+
+- case: bind_result_requires_context_result
+  disable_cache: true
+  main: |
+    from returns.pointfree import bind_result
+    from returns.context import RequiresContextResult
+    from returns.result import Result
+
+    def test(arg: float) -> Result[int, str]:
+        ...
+
+    x: RequiresContextResult[bool, float, str]
+    reveal_type(bind_result(test)(x))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.bool*, builtins.int, builtins.str]'
+
+
+- case: bind_result_requires_context_ioresult
+  disable_cache: true
+  main: |
+    from returns.pointfree import bind_result
+    from returns.context import RequiresContextIOResult
+    from returns.result import Result
+
+    def test(arg: float) -> Result[int, str]:
+        ...
+
+    x: RequiresContextIOResult[bool, float, str]
+    reveal_type(bind_result(test)(x))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.bool*, builtins.int, builtins.str]'
+
+
+- case: bind_result_futureresult
+  disable_cache: true
+  main: |
+    from returns.pointfree import bind_result
+    from returns.future import FutureResult
+    from returns.result import Result
+
+    def test(arg: float) -> Result[int, str]:
+        ...
+
+    x: FutureResult[float, str]
+    reveal_type(bind_result(test)(x))  # N: Revealed type is 'returns.future.FutureResult[builtins.int*, builtins.str*]'

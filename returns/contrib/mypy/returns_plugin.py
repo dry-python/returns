@@ -40,6 +40,7 @@ _TYPED_DECORATORS: Final = frozenset((
 #: Typed pointfree functions.
 _TYPED_POINTFREE_FUNCTIONS: Final = frozenset((
     'returns._generated.pointfree.map._map',
+    'returns._generated.pointfree.bind_result._bind_result',
 ))
 
 #: Used for typed ``partial`` function.

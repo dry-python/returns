@@ -1076,54 +1076,6 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
         return IO((await self._inner_value).failure())
 
     @classmethod
-    def lift_result(
-        cls,
-        function: Callable[[_ValueType], Result[_NewValueType, _ErrorType]],
-    ) -> Callable[
-        ['FutureResult[_ValueType, _ErrorType]'],
-        'FutureResult[_NewValueType, _ErrorType]',
-    ]:
-        """
-        Lifts function to be wrapped in ``FutureResult`` for better composition.
-
-        In other words, it modifies the function's
-        signature from: ``a -> Result[b, x]``
-        to: ``FutureResult[a, x] -> FutureResult[b, x]``
-
-        Works similar to :meth:`~FutureResult.bind_result`,
-        but has inverse semantics.
-
-        This is how it should be used:
-
-        .. code:: python
-
-          >>> import anyio
-          >>> from returns.future import FutureResult
-          >>> from returns.io import IOSuccess, IOFailure
-          >>> from returns.result import Result, Success
-
-          >>> def example(argument: int) -> Result[float, int]:
-          ...     return Success(argument / 2)
-
-          >>> async def success() -> FutureResult[float, int]:
-          ...     container = FutureResult.from_value(1)
-          ...     return await FutureResult.lift_result(example)(container)
-
-          >>> async def failure() -> FutureResult[float, int]:
-          ...     container = FutureResult.from_failure(1)
-          ...     return await FutureResult.lift_result(example)(container)
-
-          >>> assert anyio.run(success) == IOSuccess(0.5)
-          >>> assert anyio.run(failure) == IOFailure(1)
-
-        See also:
-            - https://wiki.haskell.org/Lifting
-            - https://en.wikipedia.org/wiki/Natural_transformation
-
-        """
-        return lambda container: container.bind_result(function)
-
-    @classmethod
     def lift_io(
         cls,
         function: Callable[[_ValueType], IO[_NewValueType]],

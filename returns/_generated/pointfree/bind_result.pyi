@@ -2,14 +2,9 @@ from typing import Callable, TypeVar, overload
 
 from typing_extensions import Protocol
 
-from returns.context import (
-    RequiresContext,
-    RequiresContextIOResult,
-    RequiresContextResult,
-)
-from returns.future import Future, FutureResult
-from returns.io import IO, IOResult
-from returns.maybe import Maybe
+from returns.context import RequiresContextIOResult, RequiresContextResult
+from returns.future import FutureResult
+from returns.io import IOResult
 from returns.result import Result
 
 _ValueType = TypeVar('_ValueType', contravariant=True)
@@ -20,36 +15,15 @@ _EnvType = TypeVar('_EnvType', contravariant=True)
 
 # map method:
 
-class _Mappable(Protocol[_ValueType, _NewValueType]):
+class _BindResult(Protocol[_ValueType, _NewValueType, _ErrorType]):
     """
     Helper class to represent type overloads for ret_type based on a value type.
 
     Contains all containers we have.
-    It does not exist in runtime.
 
+    It does not exist in runtime.
     It is completely removed with the help of the mypy plugin.
     """
-
-    @overload
-    def __call__(
-        self,
-        container: Maybe[_ValueType],
-    ) -> Maybe[_NewValueType]:
-        ...
-
-    @overload
-    def __call__(
-        self,
-        container: IO[_ValueType],
-    ) -> IO[_NewValueType]:
-        ...
-
-    @overload
-    def __call__(
-        self,
-        container: RequiresContext[_EnvType, _ValueType],
-    ) -> RequiresContext[_EnvType, _NewValueType]:
-        ...
 
     @overload
     def __call__(
@@ -68,22 +42,8 @@ class _Mappable(Protocol[_ValueType, _NewValueType]):
     @overload
     def __call__(
         self,
-        container: Result[_ValueType, _ErrorType],
-    ) -> Result[_NewValueType, _ErrorType]:
-        ...
-
-    @overload
-    def __call__(
-        self,
         container: IOResult[_ValueType, _ErrorType],
     ) -> IOResult[_NewValueType, _ErrorType]:
-        ...
-
-    @overload
-    def __call__(
-        self,
-        container: Future[_ValueType],
-    ) -> Future[_NewValueType]:
         ...
 
     @overload
@@ -94,7 +54,7 @@ class _Mappable(Protocol[_ValueType, _NewValueType]):
         ...
 
 
-def _map(
-    function: Callable[[_ValueType], _NewValueType],
-) -> _Mappable[_ValueType, _NewValueType]:
+def _bind_result(
+    function: Callable[[_ValueType], Result[_NewValueType, _ErrorType]],
+) -> _BindResult[_ValueType, _NewValueType, _ErrorType]:
     ...
