@@ -871,7 +871,7 @@ description = "unittest subTest() support and subtests fixture"
 name = "pytest-subtests"
 optional = false
 python-versions = ">=3.5"
-version = "0.3.0"
+version = "0.3.1"
 
 [package.dependencies]
 pytest = ">=4.4.0"
@@ -1715,8 +1715,8 @@ pytest-randomly = [
     {file = "pytest_randomly-3.3.1-py3-none-any.whl", hash = "sha256:9b06429c877b3aab360c7cf698f2a65dbe75db1b1ed0ab02dc3bb47f3487e469"},
 ]
 pytest-subtests = [
-    {file = "pytest-subtests-0.3.0.tar.gz", hash = "sha256:a5e837d6395bd3a1b11494ca1e0b41ea15a448e7d9d5d053b9beee7633b580b8"},
-    {file = "pytest_subtests-0.3.0-py3-none-any.whl", hash = "sha256:b82d326d0530f8cd576015a5785a13dcea2eb6e045f7b0d0730a0942baa1a68f"},
+    {file = "pytest-subtests-0.3.1.tar.gz", hash = "sha256:f673d8536eb8a153dd9c871b55c06aa3dea55cbdcf3bb3cdd4c4149a4e81606f"},
+    {file = "pytest_subtests-0.3.1-py3-none-any.whl", hash = "sha256:c3727c22bbbe29268e3552231da51704cc179e63e59d8e857077c19e77e85210"},
 ]
 python-slugify = [
     {file = "python-slugify-4.0.0.tar.gz", hash = "sha256:a8fc3433821140e8f409a9831d13ae5deccd0b033d4744d94b31fea141bdd84c"},
