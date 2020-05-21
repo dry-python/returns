@@ -54,6 +54,8 @@ Supported features
 - ``flow`` feature allows to write better typed functional pipelines
 - ``decorators`` allows to infer types of functions that are decorated
   with ``@safe``, ``@maybe``, ``@impure``, etc
+- ``pointfree`` provides better typing inference
+  for some problematic :ref:`pointfree` helpers
 
 
 Further reading
@@ -104,4 +106,13 @@ Decorators
 .. autoclasstree:: returns.contrib.mypy._features.decorators
 
 .. automodule:: returns.contrib.mypy._features.decorators
+   :members:
+
+
+Pointfree
+~~~~~~~~~
+
+.. autoclasstree:: returns.contrib.mypy._features.pointfree
+
+.. automodule:: returns.contrib.mypy._features.pointfree
    :members:

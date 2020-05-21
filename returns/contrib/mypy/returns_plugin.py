@@ -25,7 +25,13 @@ from mypy.plugin import FunctionContext, Plugin
 from mypy.types import Type as MypyType
 from typing_extensions import Final, final
 
-from returns.contrib.mypy._features import curry, decorators, flow, partial
+from returns.contrib.mypy._features import (
+    curry,
+    decorators,
+    flow,
+    partial,
+    pointfree,
+)
 
 #: Set of full names of our decorators.
 _TYPED_DECORATORS: Final = frozenset((
@@ -37,6 +43,11 @@ _TYPED_DECORATORS: Final = frozenset((
     'returns.future.asyncify',
     'returns.future.future_safe',
     'returns.functions.not_',
+))
+
+#: Typed pointfree functions.
+_TYPED_POINTFREE_FUNCTIONS: Final = frozenset((
+    'returns._generated.pointfree.map._map',
 ))
 
 #: Used for typed ``partial`` function.
@@ -58,6 +69,7 @@ class _ReturnsPlugin(Plugin):
         _TYPED_PARTIAL_FUNCTION: partial.analyze,
         _TYPED_CURRY_FUNCTION: curry.analyze,
         _TYPED_FLOW_FUNCTION: flow.analyze,
+        **dict.fromkeys(_TYPED_POINTFREE_FUNCTIONS, pointfree.analyze),
         **dict.fromkeys(_TYPED_DECORATORS, decorators.analyze),
     }
 

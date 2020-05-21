@@ -27,8 +27,7 @@ class _Mappable(Protocol[_ValueType, _NewValueType]):
     Contains all containers we have.
     It does not exist in runtime.
 
-    TODO: possibly we can remove it in mypy plugin and replace it
-    with a pure callable with overloads.
+    It is completely removed with the help of the mypy plugin.
     """
 
     @overload
