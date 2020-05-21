@@ -1,3 +1,21 @@
+- case: bind_variance
+  disable_cache: true
+  main: |
+    from returns.pointfree import bind
+    from returns.maybe import Maybe
+
+    class A: ...
+    class B(A): ...
+    class C(B): ...
+
+    x: Maybe[B]
+
+    def test(a: A) -> Maybe[C]:
+        ...
+
+    reveal_type(bind(test)(x))  # N: Revealed type is 'returns.maybe.Maybe[pipe.C*]'
+
+
 - case: bind_io
   disable_cache: true
   main: |
