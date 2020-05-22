@@ -19,7 +19,7 @@ class _BindIO(Protocol[_ValueType, _NewValueType]):
     Contains all containers we have.
 
     It does not exist in runtime.
-    It is completely removed with the help of the mypy plugin.
+    It is also completely removed from typing with the help of the mypy plugin.
     """
 
     @overload

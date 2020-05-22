@@ -16,8 +16,6 @@ _NewValueType = TypeVar('_NewValueType')
 _EnvType = TypeVar('_EnvType')
 
 
-# Bind:
-
 @overload
 def _bind(
     function: Callable[[_ValueType], Maybe[_NewValueType]],

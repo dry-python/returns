@@ -1,0 +1,81 @@
+- case: bind_ioresult_and_flow
+  disable_cache: true
+  main: |
+    from returns.io import IOResult
+    from returns.future import FutureResult
+    from returns.functions import identity
+    from returns.pointfree import bind_ioresult
+    from returns.pipeline import flow
+
+    def test(arg: int) -> IOResult[float, str]:
+        ...
+
+    def second(arg: float) -> IOResult[bool, str]:
+        ...
+
+    r: FutureResult[int, str]
+    reveal_type(flow(r, bind_ioresult(test), bind_ioresult(second), identity))  # N: Revealed type is 'returns.future.FutureResult*[builtins.bool*, builtins.str*]'
+
+
+- case: bind_ioresult_and_bind
+  disable_cache: True
+  main: |
+    from returns.io import IOResult
+    from returns.future import FutureResult
+    from returns.functions import identity
+    from returns.pointfree import bind, bind_ioresult
+    from returns.pipeline import flow
+
+    def test(arg: int) -> IOResult[float, str]:
+        ...
+
+    def second(arg: float) -> FutureResult[bool, str]:
+        ...
+
+    r: FutureResult[int, str]
+    reveal_type(flow(r, bind_ioresult(test), bind(second)))  # N: Revealed type is 'returns.future.FutureResult[builtins.bool*, builtins.str*]'
+
+
+- case: bind_ioresult_wrong
+  disable_cache: true
+  main: |
+    from returns.pointfree import bind_ioresult
+    from returns.future import FutureResult
+    from returns.io import IOResult
+
+    def test(arg: float) -> IOResult[int, Exception]:
+        ...
+
+    x: FutureResult[float, str]
+    reveal_type(bind_ioresult(test)(x))
+  out: |
+    main:9: error: Argument 1 to "__call__" of "_BindIOResult" has incompatible type "FutureResult[float, str]"; expected "FutureResult[float, Exception]"
+    main:9: note: Revealed type is 'returns.future.FutureResult[builtins.int*, builtins.Exception*]'
+
+
+- case: bind_ioresult_requires_context_ioresult
+  disable_cache: true
+  main: |
+    from returns.pointfree import bind_ioresult
+    from returns.context import RequiresContextIOResult
+    from returns.io import IOResult
+
+    def test(arg: float) -> IOResult[int, str]:
+        ...
+
+    x: RequiresContextIOResult[bool, float, str]
+    reveal_type(bind_ioresult(test)(x))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.bool*, builtins.int, builtins.str]'
+
+
+- case: bind_ioresult_futureresult
+  disable_cache: true
+  main: |
+    from returns.pointfree import bind_ioresult
+    from returns.future import FutureResult
+    from returns.io import IOResult
+
+    def test(arg: float) -> IOResult[int, str]:
+        ...
+
+    x: FutureResult[float, str]
+    reveal_type(bind_ioresult(test)(x))  # N: Revealed type is 'returns.future.FutureResult[builtins.int*, builtins.str*]'

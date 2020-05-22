@@ -18,16 +18,14 @@ _NewValueType = TypeVar('_NewValueType', covariant=True)
 _EnvType = TypeVar('_EnvType', contravariant=True)
 
 
-# map method:
-
 class _Mappable(Protocol[_ValueType, _NewValueType]):
     """
     Helper class to represent type overloads for ret_type based on a value type.
 
     Contains all containers we have.
-    It does not exist in runtime.
 
-    It is completely removed with the help of the mypy plugin.
+    It does not exist in runtime.
+    It is also completely removed from typing with the help of the mypy plugin.
     """
 
     @overload

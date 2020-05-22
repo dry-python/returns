@@ -87,6 +87,7 @@ We also have a long list of other ``bind_*`` functions, like:
 
 - ``bind_io`` to bind functions returning ``IO`` container
 - ``bind_result`` to bind functions returning ``Result`` container
+- ``bind_ioresult`` to bind functions returning ``IOResult`` container
 
 
 unify
@@ -180,6 +181,8 @@ API Reference
 .. autofunction:: returns.pointfree.bind_result
 
 .. autofunction:: returns.pointfree.bind_io
+
+.. autofunction:: returns.pointfree.bind_ioresult
 
 .. autofunction:: returns.pointfree.unify
 

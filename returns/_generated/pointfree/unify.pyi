@@ -10,8 +10,6 @@ _NewValueType = TypeVar('_NewValueType')
 _NewErrorType = TypeVar('_NewErrorType')
 
 
-# Bind:
-
 @overload
 def _unify(
     function: Callable[[_ValueType], Result[_NewValueType, _NewErrorType]],

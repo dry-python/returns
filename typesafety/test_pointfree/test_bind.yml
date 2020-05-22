@@ -16,6 +16,22 @@
     reveal_type(bind(test)(x))  # N: Revealed type is 'returns.maybe.Maybe[main.C*]'
 
 
+- case: bind_wrong_error_type
+  disable_cache: true
+  main: |
+    from returns.pointfree import bind
+    from returns.result import Result
+
+    def test(arg: float) -> Result[int, Exception]:
+        ...
+
+    x: Result[float, str]
+    reveal_type(bind(test)(x))
+  out: |
+    main:8: error: Argument 1 has incompatible type "Result[float, str]"; expected "Result[float, Exception]"
+    main:8: note: Revealed type is 'returns.result.Result[builtins.int*, builtins.Exception*]'
+
+
 - case: bind_io
   disable_cache: true
   main: |
