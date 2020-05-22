@@ -6,16 +6,19 @@ The main idea behind functional programming is functional composition.
 We provide several tools to make
 composition easy, readable, pythonic, and useful.
 
-Let's start with the first one.
+.. note::
+
+  Make sure you are familiar with our :ref:`pointfree` tools,
+  because pipelines and pointfree functions are best friends!
 
 
 flow
 ----
 
-``flow`` allows to easily compose multiple functions together.
+``flow`` allows to easily compose multiple functions together into a pipeline.
 It is useful when you already have an instance to compose functions with.
 
-Let's see an example.
+Let's see an example:
 
 .. code:: python
 
@@ -26,7 +29,14 @@ Let's see an example.
   ...     lambda max_number: -max_number,
   ... ) == -3
 
-Use it when you need to compose a lot of functions together.
+This allows you to write declarative steps
+that should be performed on an existing value.
+
+.. note::
+
+  Technical note: ``flow`` has the best type inference mechanism
+  among all other tools we provide here.
+  This happens due to our :ref:`mypy plugins <mypy-plugin>`.
 
 And now let's get to know ``pipe``, it is very similar,
 but has different usage pattern.
@@ -65,17 +75,14 @@ It is also might be useful to compose containers together:
 
   >>> def regular_function(arg: int) -> float:
   ...     return float(arg)
-  ...
 
   >>> def returns_container(arg: float) -> Result[str, ValueError]:
   ...     if arg != 0:
   ...          return Success(str(arg))
   ...     return Failure(ValueError())
-  ...
 
   >>> def also_returns_container(arg: str) -> Result[str, ValueError]:
   ...     return Success(arg + '!')
-  ...
 
   >>> transaction = pipe(
   ...     regular_function,  # composes easily
@@ -100,10 +107,8 @@ But, composition with ``pipe`` is limited to two things:
 1. It only allows to pipe up to 7 functions.
    If you need more - send a PR with the type annotations.
    Python cannot figure things out by itself.
-2. It is flexible. Sometimes you might need more power.
+2. It is not flexible. Sometimes you might need more power.
    Use ``@pipeline`` in this case!
-
-In contrast ``flow`` does not have these problems.
 
 
 .. _pipeline:
@@ -301,11 +306,8 @@ and :func:`Some <returns.maybe.Some>`
   >>> from returns.result import Success, Failure
   >>> from returns.pipeline import is_successful
 
-  >>> is_successful(Success(1))
-  True
-
-  >>> is_successful(Failure('text'))
-  False
+  >>> assert is_successful(Success(1)) is True
+  >>> assert is_successful(Failure('text')) is False
 
 
 Further reading

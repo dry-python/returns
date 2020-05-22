@@ -548,34 +548,6 @@ class IOResult(
         return IO(self._inner_value.failure())
 
     @classmethod
-    def lift_io(
-        cls,
-        function: Callable[[_ValueType], IO[_NewValueType]],
-    ) -> Callable[
-        ['IOResult[_ValueType, _ContraErrorType]'],
-        'IOResult[_NewValueType, _ContraErrorType]',
-    ]:
-        """
-        Lifts function from ``IO`` to ``IOResult`` for better composition.
-
-        Similar to :meth:`~IOResult.lift`,
-        but works functions with ``IO`` return type.
-
-        .. code:: python
-
-          >>> from returns.io import IO, IOSuccess, IOFailure
-
-          >>> def returns_io(arg: int) -> IO[float]:
-          ...     return IO(arg + 0.5)
-
-          >>> returns_ioresult = IOResult.lift_io(returns_io)
-          >>> assert returns_ioresult(IOSuccess(1)) == IOSuccess(1.5)
-          >>> assert returns_ioresult(IOFailure(1)) == IOFailure(1)
-
-        """
-        return lambda container: container.bind_io(function)
-
-    @classmethod
     def from_typecast(
         cls, container: IO[Result[_NewValueType, _NewErrorType]],
     ) -> 'IOResult[_NewValueType, _NewErrorType]':

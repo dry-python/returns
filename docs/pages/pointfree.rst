@@ -55,6 +55,8 @@ Allows to compose cointainers and functions, but in a reverse manner.
 bind
 ----
 
+Allows to bind a function that returns a container of the same type.
+
 Without ``bind()`` function
 it would be very hard to declaratively compose two entities:
 
@@ -79,7 +81,12 @@ but how can we do it inversevely?
   >>> # 2. Or via ``bind`` function, the same but in the inverse way:
   >>> assert bind(bindable)(container) == Some(1)
 
-That's it.
+That's it!
+
+We also have a long list of other ``bind_*`` functions, like:
+
+- ``bind_io`` to bind functions returning ``IO`` container
+- ``bind_result`` to bind functions returning ``Result`` container
 
 
 unify
@@ -169,6 +176,10 @@ API Reference
 .. autofunction:: returns.pointfree.map_
 
 .. autofunction:: returns.pointfree.bind
+
+.. autofunction:: returns.pointfree.bind_result
+
+.. autofunction:: returns.pointfree.bind_io
 
 .. autofunction:: returns.pointfree.unify
 
