@@ -40,7 +40,7 @@ See [0Ver](https://0ver.org/).
 - Adds typed `map_` pointfree function
 - Adds typed `bind_result` pointfree function
 - Adds typed `unify` pointfree function
-- Adds typed `apply` and `apply_by` pointfree functions
+- Adds typed `apply` pointfree function
 
 - Adds `pytest` plugin with the ability to tests error handling
 

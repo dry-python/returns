@@ -88,6 +88,7 @@ We also have a long list of other ``bind_*`` functions, like:
 - ``bind_io`` to bind functions returning ``IO`` container
 - ``bind_result`` to bind functions returning ``Result`` container
 - ``bind_ioresult`` to bind functions returning ``IOResult`` container
+- ``bind_future`` to bind functions returning ``Future`` container
 
 
 unify
@@ -140,28 +141,40 @@ to use ``.apply()`` container method like a function:
   >>> assert apply(Some(function))(Nothing) == Nothing
   >>> assert apply(Nothing)(Nothing) == Nothing
 
-
-apply_by
---------
-
-Pointfree ``apply_by`` function allows
-to use ``.apply()`` container method like a function.
-
-Is similar to ``apply()`` but has the inverse arguments order:
+If you wish to use ``apply`` inside a pipeline
+that's how it would probably look like:
 
 .. code:: python
 
-  >>> from returns.pointfree import apply_by
-  >>> from returns.maybe import Some, Nothing
+  >>> from returns.pointfree import apply
+  >>> from returns.pipeline import flow
+  >>> from returns.maybe import Some
 
   >>> def function(arg: int) -> str:
   ...     return chr(arg) + '!'
 
-  >>> assert apply_by(Some(97))(Some(function)) == Some('a!')
-  >>> assert apply_by(Some(98))(Some(function)) == Some('b!')
-  >>> assert apply_by(Some(98))(Nothing) == Nothing
-  >>> assert apply_by(Nothing)(Some(function)) == Nothing
-  >>> assert apply_by(Nothing)(Nothing) == Nothing
+  >>> assert flow(
+  ...     Some(97),
+  ...     apply(Some(function)),
+  ... ) == Some('a!')
+
+Or with function as the first parameter:
+
+.. code:: python
+
+  >>> from returns.pipeline import flow
+  >>> from returns.curry import curry
+  >>> from returns.maybe import Some
+
+  >>> @curry
+  ... def function(first: int, second: int) -> int:
+  ...     return first + second
+
+  >>> assert flow(
+  ...     Some(function),
+  ...     Some(2).apply,
+  ...     Some(3).apply,
+  ... ) == Some(5)
 
 
 Further reading
@@ -184,10 +197,10 @@ API Reference
 
 .. autofunction:: returns.pointfree.bind_ioresult
 
+.. autofunction:: returns.pointfree.bind_future
+
 .. autofunction:: returns.pointfree.unify
 
 .. autofunction:: returns.pointfree.rescue
 
 .. autofunction:: returns.pointfree.apply
-
-.. autofunction:: returns.pointfree.apply_by

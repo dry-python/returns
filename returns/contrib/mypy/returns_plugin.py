@@ -43,6 +43,7 @@ _TYPED_POINTFREE_FUNCTIONS: Final = frozenset((
     'returns._generated.pointfree.bind_result._bind_result',
     'returns._generated.pointfree.bind_io._bind_io',
     'returns._generated.pointfree.bind_ioresult._bind_ioresult',
+    'returns._generated.pointfree.bind_future._bind_future',
 ))
 
 #: Used for typed ``partial`` function.

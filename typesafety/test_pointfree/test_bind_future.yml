@@ -1,0 +1,11 @@
+- case: bind_future_futureresult
+  disable_cache: true
+  main: |
+    from returns.pointfree import bind_future
+    from returns.future import Future, FutureResult
+
+    def test(arg: float) -> Future[int]:
+        ...
+
+    x: FutureResult[float, str]
+    reveal_type(bind_future(test)(x))  # N: Revealed type is 'returns.future.FutureResult[builtins.int, builtins.str*]'

@@ -16,8 +16,6 @@ _NewValueType = TypeVar('_NewValueType')
 _EnvType = TypeVar('_EnvType')
 
 
-# Apply:
-
 @overload
 def _apply(
     container: Maybe[Callable[[_ValueType], _NewValueType]],
@@ -114,118 +112,6 @@ def _apply(
     ],
 ) -> Callable[
     [FutureResult[_ValueType, _ErrorType]],
-    FutureResult[_NewValueType, _ErrorType],
-]:
-    ...
-
-
-# Apply by:
-
-@overload
-def _apply_by(
-    container: Maybe[_ValueType],
-) -> Callable[
-    [Maybe[Callable[[_ValueType], _NewValueType]]],
-    Maybe[_NewValueType],
-]:
-    ...
-
-
-@overload
-def _apply_by(
-    container: IO[_ValueType],
-) -> Callable[
-    [IO[Callable[[_ValueType], _NewValueType]]],
-    IO[_NewValueType],
-]:
-    ...
-
-
-@overload
-def _apply_by(
-    container: RequiresContext[_EnvType, _ValueType],
-) -> Callable[
-    [RequiresContext[_EnvType, Callable[[_ValueType], _NewValueType]]],
-    RequiresContext[_EnvType, _NewValueType],
-]:
-    ...
-
-
-@overload
-def _apply_by(
-    container: RequiresContextResult[
-        _EnvType,
-        _ValueType,
-        _ErrorType,
-    ],
-) -> Callable[
-    [
-        RequiresContextResult[
-            _EnvType,
-            Callable[[_ValueType], _NewValueType],
-            _ErrorType,
-        ],
-    ],
-    RequiresContextResult[_EnvType, _NewValueType, _ErrorType],
-]:
-    ...
-
-
-@overload
-def _apply_by(
-    container: RequiresContextIOResult[
-        _EnvType,
-        _ValueType,
-        _ErrorType,
-    ],
-) -> Callable[
-    [
-        RequiresContextIOResult[
-            _EnvType,
-            Callable[[_ValueType], _NewValueType],
-            _ErrorType,
-        ],
-    ],
-    RequiresContextIOResult[_EnvType, _NewValueType, _ErrorType],
-]:
-    ...
-
-
-@overload
-def _apply_by(
-    container: Result[_ValueType, _ErrorType],
-) -> Callable[
-    [Result[Callable[[_ValueType], _NewValueType], _ErrorType]],
-    Result[_NewValueType, _ErrorType],
-]:
-    ...
-
-
-@overload
-def _apply_by(
-    container: IOResult[_ValueType, _ErrorType],
-) -> Callable[
-    [IOResult[Callable[[_ValueType], _NewValueType], _ErrorType]],
-    IOResult[_NewValueType, _ErrorType],
-]:
-    ...
-
-
-@overload
-def _apply_by(
-    container: Future[_ValueType],
-) -> Callable[
-    [Future[Callable[[_ValueType], _NewValueType]]],
-    Future[_NewValueType],
-]:
-    ...
-
-
-@overload
-def _apply_by(
-    container: FutureResult[_ValueType, _ErrorType],
-) -> Callable[
-    [FutureResult[Callable[[_ValueType], _NewValueType], _ErrorType]],
     FutureResult[_NewValueType, _ErrorType],
 ]:
     ...
