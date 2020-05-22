@@ -10,18 +10,3 @@
 
     reveal_type(FutureResult.lift_future(test))  # N: Revealed type is 'def [_ContraErrorType] (returns.future.FutureResult[builtins.float*, _ContraErrorType`-2]) -> returns.future.FutureResult[builtins.int*, _ContraErrorType`-2]'
     reveal_type(FutureResult.lift_future(test)(r))  # N: Revealed type is 'returns.future.FutureResult[builtins.int, builtins.str*]'
-
-
-- case: future_result_lift_ioresult
-  disable_cache: true
-  main: |
-    from returns.future import FutureResult
-    from returns.io import IOResult
-
-    def test(arg: float) -> IOResult[int, str]:
-        ...
-
-    r: FutureResult[float, str]
-
-    reveal_type(FutureResult.lift_ioresult(test))  # N: Revealed type is 'def (returns.future.FutureResult[builtins.float*, builtins.str*]) -> returns.future.FutureResult[builtins.int*, builtins.str*]'
-    reveal_type(FutureResult.lift_ioresult(test)(r))  # N: Revealed type is 'returns.future.FutureResult[builtins.int*, builtins.str*]'
