@@ -32,7 +32,7 @@
     reveal_type(flow(r, bind_context(test), bind_context(second), identity))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult*[builtins.object, builtins.bool, builtins.str*]'
 
 
-- case: bind_context_and_flow
+- case: bind_context_and_bind
   disable_cache: true
   main: |
     from returns.context import RequiresContext, RequiresContextResult

@@ -90,6 +90,8 @@ We also have a long list of other ``bind_*`` functions, like:
 - ``bind_ioresult`` to bind functions returning ``IOResult`` container
 - ``bind_future`` to bind functions returning ``Future`` container
 - ``bind_context`` to bind functions returning ``RequiresContext`` container
+- ``bind_context_result`` to bind functions
+  returning ``RequiresContextResult`` container
 
 
 unify
@@ -201,6 +203,8 @@ API Reference
 .. autofunction:: returns.pointfree.bind_future
 
 .. autofunction:: returns.pointfree.bind_context
+
+.. autofunction:: returns.pointfree.bind_context_result
 
 .. autofunction:: returns.pointfree.unify
 

@@ -596,50 +596,6 @@ class RequiresContextIOResult(
         return lambda deps: self(deps).failure()
 
     @classmethod
-    def lift_context_result(
-        cls,
-        function: Callable[
-            [_ValueType],
-            'RequiresContextResult[_EnvType, _NewValueType, _ErrorType]',
-        ],
-    ) -> Callable[
-        ['RequiresContextIOResult[_EnvType, _ValueType, _ErrorType]'],
-        'RequiresContextIOResult[_EnvType, _NewValueType, _ErrorType]',
-    ]:
-        """
-        Lifts function from ``RequiresContextResult`` for better composition.
-
-        In other words, it modifies the function's
-        signature from: ``a -> RequiresContextResult[env, b, c]`` to:
-        ``RequiresContextIOResult[env, a, c]``
-        -> ``RequiresContextIOResult[env, b, c]``
-
-        Similar to :meth:`~RequiresContextIOResult.lift`,
-        but works with other type.
-
-        .. code:: python
-
-          >>> from returns.context import RequiresContextResult
-          >>> from returns.io import IOSuccess, IOFailure
-          >>> from returns.result import Success
-
-          >>> def function(arg: int) -> RequiresContextResult[str, int, str]:
-          ...     return RequiresContextResult(
-          ...         lambda deps: Success(len(deps) + arg),
-          ...     )
-
-          >>> assert RequiresContextIOResult.lift_context_result(function)(
-          ...     RequiresContextIOResult.from_value(2),
-          ... )('abc') == IOSuccess(5)
-
-          >>> assert RequiresContextIOResult.lift_context_result(function)(
-          ...     RequiresContextIOResult.from_failure(0),
-          ... )('abc') == IOFailure(0)
-
-        """
-        return lambda container: container.bind_context_result(function)
-
-    @classmethod
     def from_result(
         cls, inner_value: 'Result[_ValueType, _ErrorType]',
     ) -> 'RequiresContextIOResult[Any, _ValueType, _ErrorType]':

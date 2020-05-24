@@ -6,9 +6,6 @@ def _bind_context(function):
     signature from: ``a -> RequiresContext[env, b]`` to:
     ``Container[env, a, c]`` -> ``Container[env, b, c]``
 
-    Similar to :meth:`~RequiresContextResult.lift`,
-    but works with other type.
-
     .. code:: python
 
         >>> from returns.context import RequiresContext, RequiresContextResult
