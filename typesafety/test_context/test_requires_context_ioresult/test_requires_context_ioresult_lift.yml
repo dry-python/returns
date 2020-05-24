@@ -1,14 +1,3 @@
-- case: requires_context_ioresult_lift_context
-  disable_cache: true
-  main: |
-    from returns.context import RequiresContextIOResult, RequiresContext
-
-    def test(arg: int) -> RequiresContext[int, str]:
-        return RequiresContext(lambda deps: str(arg + deps))
-
-    reveal_type(RequiresContextIOResult.lift_context(test))  # N: Revealed type is 'def (returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int*, builtins.int*, <nothing>]) -> returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int*, builtins.str*, <nothing>]'
-
-
 - case: requires_context_ioresult_lift_context_result
   disable_cache: true
   main: |

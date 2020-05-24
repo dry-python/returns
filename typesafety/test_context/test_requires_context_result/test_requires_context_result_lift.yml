@@ -1,9 +1,0 @@
-- case: requires_context_result_lift_context
-  disable_cache: true
-  main: |
-    from returns.context import RequiresContextResult, RequiresContext
-
-    def test(arg: int) -> RequiresContext[int, str]:
-        return RequiresContext(lambda deps: str(arg + deps))
-
-    reveal_type(RequiresContextResult.lift_context(test))  # N: Revealed type is 'def (returns.context.requires_context_result.RequiresContextResult[builtins.int*, builtins.int*, <nothing>]) -> returns.context.requires_context_result.RequiresContextResult[builtins.int*, builtins.str*, <nothing>]'

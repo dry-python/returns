@@ -1,3 +1,17 @@
+- case: apply_result_reverse
+  disable_cache: true
+  main: |
+    from returns.pointfree import apply
+    from returns.result import Result
+    from returns.pipeline import flow
+    from typing import Callable
+
+    test: Result[Callable[[float], int], str]
+    x: Result[float, str]
+
+    reveal_type(flow(test, x.apply))  # N: Revealed type is 'returns.result.Result[builtins.int*, builtins.str]'
+
+
 - case: apply_io
   disable_cache: true
   main: |
