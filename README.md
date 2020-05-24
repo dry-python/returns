@@ -571,8 +571,9 @@ async def get_user_permissions(user: 'User') -> 'Permissions':
 async def ensure_allowed(permissions: 'Permissions') -> bool:
     ...
 
-async def main(user_id: int) -> FutureResultE[bool]:
-    # We don't care about exceptions anymore, they are alrady handled.
+def main(user_id: int) -> FutureResultE[bool]:
+    # We can now turn `main` into a sync function, it does not `await` at all.
+    # We also don't care about exceptions anymore, they are already handled.
     return fetch_user(user_id).bind(get_user_permissions).bind(ensure_allowed)
 
 correct_user_id: int  # has required permissions
@@ -580,11 +581,13 @@ banned_user_id: int  # does not have required permissions
 wrong_user_id: int  # does not exist
 
 # We can have correct business results:
-assert anyio.run(main, correct_user_id) == IOSuccess(True)
-assert anyio.run(main, banned_user_id) == IOSuccess(False)
+assert anyio.run(main(correct_user_id).awaitable) == IOSuccess(True)
+assert anyio.run(main(banned_user_id).awaitable) == IOSuccess(False)
 
 # Or we can have errors along the way:
-assert anyio.run(main, wrong_user_id) == IOFailure(UserDoesNotExistError(...))
+assert anyio.run(main(wrong_user_id).awaitable) == IOFailure(
+    UserDoesNotExistError(...),
+)
 ```
 
 Or even something really fancy:
@@ -593,7 +596,7 @@ Or even something really fancy:
 from returns.pointfree import bind
 from returns.pipeline import flow
 
-async def main(user_id: int) -> FutureResultE[bool]:
+def main(user_id: int) -> FutureResultE[bool]:
     return flow(
         fetch_user(user_id),
         bind(get_user_permissions),
