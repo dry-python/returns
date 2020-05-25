@@ -1212,7 +1212,7 @@ description = "A friendly Python library for async concurrency and I/O"
 name = "trio"
 optional = false
 python-versions = ">=3.6"
-version = "0.15.0"
+version = "0.15.1"
 
 [package.dependencies]
 async-generator = ">=1.9"
@@ -1856,8 +1856,8 @@ tomlkit = [
     {file = "tomlkit-0.6.0.tar.gz", hash = "sha256:74f976908030ff164c0aa1edabe3bf83ea004b3daa5b0940b9c86a060c004e9a"},
 ]
 trio = [
-    {file = "trio-0.15.0-py3-none-any.whl", hash = "sha256:894d6e9a517299f354cb8d520748fec53ae1f34b7355445b3451c48cb665d367"},
-    {file = "trio-0.15.0.tar.gz", hash = "sha256:23b8e3b8e27202792c03ec716079b6b517e53ad68ee9864aa911378842f22e95"},
+    {file = "trio-0.15.1-py3-none-any.whl", hash = "sha256:992763e99c2c37df0796a2ce8c6f498a91df68570cfa3a63acf8367263903ce7"},
+    {file = "trio-0.15.1.tar.gz", hash = "sha256:3010864ab8d8b2ae44d3bc97b0e8924d8f5170bf32f07c7638a930a129687f33"},
 ]
 typed-ast = [
     {file = "typed_ast-1.4.1-cp35-cp35m-manylinux1_i686.whl", hash = "sha256:73d785a950fc82dd2a25897d525d003f6378d1cb23ab305578394694202a58c3"},
