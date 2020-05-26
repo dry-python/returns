@@ -13,12 +13,25 @@ but the same end result.
 Why would anyone need these functions when you can use methods?
 To create pipelines!
 
+Without pointfree functions you cannot easily
+work with containers inside pipelines.
+Because they do not compose well:
+
 .. code:: python
 
+  def returns_result(arg: int) -> ResultE[int]:
+      ...
+
+  def works_with_result(arg: int) -> ResultE[int]:
+      ...
+
+  def finish_work(arg: int) -> ResultE[int]:
+      ...
+
   pipe(
-      returns_result(),
-      works_with_result(),
-      notifies_user(),
+      returns_result,
+      works_with_result,  # does not compose!
+      finish_work,  # does not compose either!
   )
 
 In a normal situation you would probably write:

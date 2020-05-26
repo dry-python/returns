@@ -11,26 +11,40 @@ Note::
     ``IOResult`` only coalesce to ``IO`` values.
     It is impossible to unwrap ``IO`` here.
 
+It works with ``Result``:
+
 .. code:: python
 
     >>> from returns.converters import coalesce_result
     >>> from returns.result import Success, Failure
+
     >>> f1 = lambda x: x + 1
     >>> f2 = lambda y: y + 'b'
+
     >>> assert coalesce_result(f1, f2)(Success(1)) == 2
     >>> assert coalesce_result(f1, f2)(Failure('a')) == 'ab'
 
+With ``IOResult``:
+
+.. code:: python
+
     >>> from returns.converters import coalesce_ioresult
     >>> from returns.io import IO, IOSuccess, IOFailure
+
     >>> f1 = lambda x: x.map(lambda state: state + 1)
     >>> f2 = lambda y: y.map(lambda state: state + 'b')
-    >>> assert coalesce_result(f1, f2)(IOSuccess(1)) == IO(2)
-    >>> assert coalesce_result(f1, f2)(IOFailure('a')) == IO('ab')
+
+    >>> assert coalesce_ioresult(f1, f2)(IOSuccess(1)) == IO(2)
+    >>> assert coalesce_ioresult(f1, f2)(IOFailure('a')) == IO('ab')
+
+And with ``Maybe``:
 
     >>> from returns.converters import coalesce_maybe
     >>> from returns.maybe import Some, Nothing
+
     >>> f1 = lambda x: x + 1
     >>> f2 = lambda _: 'a'
+
     >>> assert coalesce_maybe(f1, f2)(Some(1)) == 2
     >>> assert coalesce_maybe(f1, f2)(Nothing) == 'a'
 

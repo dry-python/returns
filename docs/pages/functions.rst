@@ -78,7 +78,6 @@ We allow you to do that with ease!
 
   from returns.functions import raise_exception
 
-  @pipeline(Result)
   def create_account_and_user(username: str) -> ...:
       """
       Creates new Account-User pair.

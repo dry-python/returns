@@ -53,7 +53,6 @@ def _swap(container):
 
       >>> def function(error: str) -> Result[str, int]:
       ...     return Success('Very bad error: ' + error)
-      ...
 
       >>> container: IOResult[int, str] = IOFailure('boom')
       >>> # You can `.rescue_result`, but you can `.bind_result` instead!

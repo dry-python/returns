@@ -32,6 +32,12 @@ See [0Ver](https://0ver.org/).
   to return `Any` instead of `NoReturn` unfilled type
 - **Breaking**: removes `.lift` and `.lift_*` methods from all containers,
   use `map_`, `bind_result`, `bind_io`, and other pointfree helpers instead
+- **Breaking**: removes `@pipeline` function. It was a mistake:
+  it does not work with mixed container types,
+  it does not type failures properly,
+  it does not work with ``IO`` and ``Future``,
+  it enforces to write imperative code in a functional codebase.
+  Use ``flow`` instead
 
 - Adds typed `partial` and `curry` mypy plugins!
 - Adds typed `flow` plugin, now it can accept any number of arguments,

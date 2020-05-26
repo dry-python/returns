@@ -451,30 +451,6 @@ You can narrow the type in advance.
 
 See :ref:`result-units` for more details.
 
-Why can't we unwrap values or use @pipeline with IO?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Our design decision was not let people unwrap ``IO`` containers,
-so it will indeed infect the whole call-stack with its effect.
-
-Otherwise, people might hack the system
-in some dirty (from our point of view)
-but valid (from the python's point of view) ways.
-
-Even ``IOResult`` can't be unwrapped.
-When used together with ``@pipeline``
-we will still receive ``IO`` values
-from :meth:`returns.io.IOResult.unwrap` calls.
-
-Warning::
-
-  Of course, you can directly access
-  the internal state of the IO with ``._internal_state``,
-  but your are considered to be a grown-up!
-
-Use `wemake-python-styleguide <https://github.com/wemake-services/wemake-python-styleguide>`_
-to restrict ``._`` access in your code.
-
 
 Further reading
 ---------------

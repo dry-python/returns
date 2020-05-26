@@ -7,10 +7,6 @@ from returns.maybe import Maybe
 from returns.primitives.exceptions import UnwrapFailedError
 from returns.result import Result
 
-from returns._generated.pipeline.pipeline import (  # isort:skip  # noqa: F401
-    _pipeline as pipeline,
-)
-
 # Logical aliases:
 _Unwrapable = Union[Result, Maybe, IOResult]
 

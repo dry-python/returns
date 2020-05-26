@@ -40,7 +40,7 @@ Composition
 -----------
 
 Make sure to check out how to compose container with
-``flow``, :ref:`pipe` and :ref:`@pipeline <pipeline>`!
+``flow`` or :ref:`pipe`!
 Read more about them if you want to compose your containers easily.
 
 
