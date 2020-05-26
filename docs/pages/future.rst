@@ -8,9 +8,66 @@ And any event-loop!
 
 Tested with `anyio <https://github.com/agronholm/anyio>`_.
 
+What problems do we solve with these containers? Basically these ones:
+
+1. You cannot call async function from a sync one
+2. Any unexpectedly thrown exception can ruin your whole event loop
+3. Ugly composition with lots of `await` statements
+
 
 Future container
 ----------------
+
+Without ``Future`` container it is impossible to compose two functions:
+sync and async one.
+
+You simply cannot ``await`` coroutines inside a sync context.
+It is even a ``SyntaxError``.
+
+.. code:: python
+
+  def test():
+      await some()
+  # SyntaxError: 'await' outside async function
+
+So, you have to turn you function into async one.
+And all callers of this function in async functions. And all their callers.
+
+This is really hard to model.
+When you code has two types of uncomposable
+functions you increase your mental complexity by extreme levels.
+
+Instead, you can use ``Future`` container,
+it allows you to model async interactions in a sync manner:
+
+.. code::
+
+  >>> from returns.future import Future
+
+  >>> async def first() -> int:
+  ...     return 1
+
+  >>> async def second(arg: int) -> int:
+  ...     return arg + 1
+
+  >>> def main() -> Future[int]:  # sync function!
+  ...    return Future(first()).bind_awaitable(second)
+
+Now we can compose async functions and maintaining a sync context!
+It is also possible run a ``Future``
+with regular tools like ``asyncio.run`` or ``anyio.run``:
+
+.. code:: python
+
+  >>> import anyio
+  >>> from returns.io import IO
+
+  >>> assert anyio.run(main().awaitable) == IO(2)
+
+One more very useful thing ``Future`` does behind the scenes is converting
+its result to ``IO``-based containers.
+This helps a lot when separating pure and impure
+(async functions are impure) code inside your app.
 
 
 FutureResult
@@ -124,6 +181,15 @@ with ``Future`` and ``FutureResult``.
 
 FAQ
 ---
+
+Is it somehow related to Future object from asyncio?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Nope, we just use the same naming there are in other languages and platforms.
+Python happens to have its own meaning for this word.
+
+In our worldview, these two ``Future`` entities should never meet each other
+in a single codebase.
 
 How to create unit objects?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
