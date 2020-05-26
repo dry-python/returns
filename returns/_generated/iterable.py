@@ -4,8 +4,8 @@ from typing import Iterable
 
 def _reducer(acc, current):
     return acc.bind(
-        lambda acc_: current.map(
-            lambda current_: acc_ + (current_,),
+        lambda inner_acc: current.map(
+            lambda inner_current: inner_acc + (inner_current,),  # noqa: WPS430
         ),
     )
 
