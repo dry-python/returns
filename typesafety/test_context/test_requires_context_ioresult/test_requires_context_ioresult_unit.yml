@@ -1,4 +1,4 @@
-- case: requires_context_result_success
+- case: requires_context_ioresult_success
   disable_cache: true
   main: |
     from returns.context import RequiresContextIOResult
@@ -6,7 +6,7 @@
     reveal_type(RequiresContextIOResult.from_value(1))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[Any, builtins.int*, Any]'
 
 
-- case: requires_context_result_failure
+- case: requires_context_ioresult_failure
   disable_cache: true
   main: |
     from returns.context import RequiresContextIOResult
@@ -14,7 +14,18 @@
     reveal_type(RequiresContextIOResult.from_failure(1))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[Any, Any, builtins.int*]'
 
 
-- case: requires_context_result_result
+- case: requires_context_ioresult_from_iterable
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextIOResult
+    from typing import Iterable
+
+    x: Iterable[RequiresContextIOResult[str, int, float]]
+
+    reveal_type(RequiresContextIOResult.from_iterable(x))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.str*, typing.Sequence[builtins.int*], builtins.float*]'
+
+
+- case: requires_context_ioresult_result
   disable_cache: true
   main: |
     from returns.context import RequiresContextIOResult
@@ -25,7 +36,7 @@
     reveal_type(RequiresContextIOResult.from_result(r))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[Any, builtins.int*, builtins.str*]'
 
 
-- case: requires_context_result_ioresult
+- case: requires_context_ioresult_ioresult
   disable_cache: true
   main: |
     from returns.context import RequiresContextIOResult
@@ -36,7 +47,7 @@
     reveal_type(RequiresContextIOResult.from_ioresult(r))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[Any, builtins.int*, builtins.str*]'
 
 
-- case: requires_context_result_typecast
+- case: requires_context_ioresult_typecast
   disable_cache: true
   main: |
     from returns.context import RequiresContextIOResult, RequiresContext
@@ -47,7 +58,7 @@
     reveal_type(RequiresContextIOResult.from_typecast(r))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.float*, builtins.int*, builtins.str*]'
 
 
-- case: requires_context_result_successful_context
+- case: requires_context_ioresult_successful_context
   disable_cache: true
   main: |
     from returns.context import RequiresContextIOResult, RequiresContext
@@ -57,7 +68,7 @@
     reveal_type(RequiresContextIOResult.from_context(r))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.float*, builtins.str*, Any]'
 
 
-- case: requires_context_result_failed_context
+- case: requires_context_ioresult_failed_context
   disable_cache: true
   main: |
     from returns.context import RequiresContextIOResult, RequiresContext
@@ -67,7 +78,7 @@
     reveal_type(RequiresContextIOResult.from_failed_context(r))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.float*, Any, builtins.str*]'
 
 
-- case: requires_context_result_from_result_context
+- case: requires_context_ioresult_from_result_context
   disable_cache: true
   main: |
     from returns.context import RequiresContextIOResult, RequiresContextResult

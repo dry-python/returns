@@ -5,8 +5,10 @@ from typing import (  # noqa: WPS235
     Callable,
     ClassVar,
     Generic,
+    Iterable,
     NoReturn,
     Optional,
+    Sequence,
     Type,
     TypeVar,
     Union,
@@ -14,6 +16,7 @@ from typing import (  # noqa: WPS235
 
 from typing_extensions import final
 
+from returns._generated.iterable import iterable
 from returns.primitives.container import BaseContainer
 from returns.primitives.exceptions import UnwrapFailedError
 
@@ -183,6 +186,36 @@ class Maybe(
         if inner_value is None:
             return _Nothing(inner_value)
         return _Some(inner_value)
+
+    @classmethod
+    def from_iterable(
+        cls,
+        containers: Iterable['Maybe[_ValueType]'],
+    ) -> 'Maybe[Sequence[_ValueType]]':
+        """
+        Transforms an iterable of ``Maybe`` containers into a single container.
+
+        .. code:: python
+
+          >>> from returns.maybe import Maybe, Some, Nothing
+
+          >>> assert Maybe.from_iterable([
+          ...    Some(1),
+          ...    Some(2),
+          ... ]) == Some((1, 2))
+
+          >>> assert Maybe.from_iterable([
+          ...     Some(1),
+          ...     Nothing,
+          ... ]) == Nothing
+
+          >>> assert Maybe.from_iterable([
+          ...     Nothing,
+          ...     Some(1),
+          ... ]) == Nothing
+
+        """
+        return iterable(cls, containers)
 
 
 @final

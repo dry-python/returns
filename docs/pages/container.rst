@@ -124,6 +124,37 @@ and :ref:`interfaces <base-interfaces>` behind them.
 Working with multiple containers
 --------------------------------
 
+Iterable of containers
+~~~~~~~~~~~~~~~~~~~~~~
+
+You might end up with an iterable of containers:
+
+.. code:: python
+
+  >>> from returns.maybe import Maybe, Some, maybe
+
+  >>> source = {'a': 1, 'b': 2}
+  >>> keys_to_fetch = ['a', 'b']
+
+  >>> fetched_values: Maybe[int] = [
+  ...    maybe(source.get)(key)
+  ...    for key in keys_to_fetch
+  ... ]
+
+To work with iterable of containers,
+it is recommended to cast it a container with the iterable inside:
+
+.. code:: python
+
+  >>> assert Maybe.from_iterable(fetched_values) == Some((1, 2))
+
+We support any ``Iterable[T]`` input type
+and return a ``Container[Sequence[T]]``.
+All containers support this method.
+
+Multiple container arguments
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 We have already seen how we can work with one container and functions
 that receive a single argument.
 

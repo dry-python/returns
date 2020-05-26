@@ -1,7 +1,17 @@
-from typing import TYPE_CHECKING, Any, Callable, ClassVar, Generic, TypeVar
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Callable,
+    ClassVar,
+    Generic,
+    Iterable,
+    Sequence,
+    TypeVar,
+)
 
 from typing_extensions import final
 
+from returns._generated.iterable import iterable
 from returns.functions import identity
 from returns.primitives.container import BaseContainer
 from returns.primitives.types import Immutable
@@ -98,6 +108,7 @@ class RequiresContext(
         .. code:: python
 
           >>> from returns.context import RequiresContext
+
           >>> def first(lg: bool) -> RequiresContext[float, int]:
           ...     # `deps` has `float` type here:
           ...     return RequiresContext(
@@ -213,6 +224,28 @@ class RequiresContext(
         protocol.
         """
         return RequiresContext(lambda _: inner_value)
+
+    @classmethod
+    def from_iterable(
+        cls,
+        containers: Iterable['RequiresContext[_EnvType, _ValueType]'],
+    ) -> 'RequiresContext[_EnvType, Sequence[_ValueType]]':
+        """
+        Transforms an iterable of ``RequiresContext`` containers.
+
+        Returns a single container with a sequence of values.
+
+        .. code:: python
+
+          >>> from returns.context import RequiresContext
+
+          >>> assert RequiresContext.from_iterable([
+          ...    RequiresContext.from_value(1),
+          ...    RequiresContext.from_value(2),
+          ... ])(...) == (1, 2)
+
+        """
+        return iterable(cls, containers)
 
     @classmethod
     def from_requires_context_result(

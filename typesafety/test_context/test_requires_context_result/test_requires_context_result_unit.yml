@@ -14,6 +14,17 @@
     reveal_type(RequiresContextResult.from_failure(1))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[Any, Any, builtins.int*]'
 
 
+- case: requires_context_result_from_iterable
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextResult
+    from typing import Iterable
+
+    x: Iterable[RequiresContextResult[str, int, float]]
+
+    reveal_type(RequiresContextResult.from_iterable(x))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.str*, typing.Sequence[builtins.int*], builtins.float*]'
+
+
 - case: requires_context_result_result
   disable_cache: true
   main: |

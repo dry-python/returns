@@ -1,9 +1,20 @@
 from abc import ABCMeta
 from functools import wraps
-from typing import Any, Callable, ClassVar, Generic, Type, TypeVar, Union
+from typing import (
+    Any,
+    Callable,
+    ClassVar,
+    Generic,
+    Iterable,
+    Sequence,
+    Type,
+    TypeVar,
+    Union,
+)
 
 from typing_extensions import final
 
+from returns._generated.iterable import iterable
 from returns.primitives.container import BaseContainer
 from returns.result import Failure, Result, Success
 
@@ -147,6 +158,26 @@ class IO(BaseContainer, Generic[_ValueType]):
         protocol.
         """
         return IO(inner_value)
+
+    @classmethod
+    def from_iterable(
+        cls,
+        containers: Iterable['IO[_ValueType]'],
+    ) -> 'IO[Sequence[_ValueType]]':
+        """
+        Transforms an iterable of ``IO`` containers into a single container.
+
+        .. code:: python
+
+          >>> from returns.io import IO
+
+          >>> assert IO.from_iterable([
+          ...    IO(1),
+          ...    IO(2),
+          ... ]) == IO((1, 2))
+
+        """
+        return iterable(cls, containers)
 
     @classmethod
     def from_ioresult(
@@ -662,6 +693,36 @@ class IOResult(
 
         """
         return IOFailure(inner_value)
+
+    @classmethod
+    def from_iterable(
+        cls,
+        containers: Iterable['IOResult[_ValueType, _ErrorType]'],
+    ) -> 'IOResult[Sequence[_ValueType], _ErrorType]':
+        """
+        Transforms an iterable of ``IOResult`` containers into a single one.
+
+        .. code:: python
+
+          >>> from returns.io import IOResult, IOSuccess, IOFailure
+
+          >>> assert IOResult.from_iterable([
+          ...    IOSuccess(1),
+          ...    IOSuccess(2),
+          ... ]) == IOSuccess((1, 2))
+
+          >>> assert IOResult.from_iterable([
+          ...     IOSuccess(1),
+          ...     IOFailure('a'),
+          ... ]) == IOFailure('a')
+
+          >>> assert IOResult.from_iterable([
+          ...     IOFailure('a'),
+          ...     IOSuccess(1),
+          ... ]) == IOFailure('a')
+
+        """
+        return iterable(cls, containers)
 
     def __str__(self) -> str:
         """Custom ``str`` representation for better readability."""

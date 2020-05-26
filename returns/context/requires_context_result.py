@@ -4,12 +4,15 @@ from typing import (
     Callable,
     ClassVar,
     Generic,
+    Iterable,
+    Sequence,
     TypeVar,
     Union,
 )
 
 from typing_extensions import final
 
+from returns._generated.iterable import iterable
 from returns.context import NoDeps
 from returns.primitives.container import BaseContainer
 from returns.primitives.types import Immutable
@@ -132,6 +135,7 @@ class RequiresContextResult(
 
           >>> from returns.context import RequiresContextResult
           >>> from returns.result import Success
+
           >>> def first(lg: bool) -> RequiresContextResult[float, int, str]:
           ...     # `deps` has `float` type here:
           ...     return RequiresContextResult(
@@ -251,6 +255,7 @@ class RequiresContextResult(
 
           >>> from returns.context import RequiresContextResult
           >>> from returns.result import Success, Failure, Result
+
           >>> def function(number: int) -> Result[int, str]:
           ...     if number > 0:
           ...         return Success(number + 1)
@@ -285,6 +290,7 @@ class RequiresContextResult(
 
           >>> from returns.context import RequiresContext
           >>> from returns.result import Success, Failure
+
           >>> def function(arg: int) -> RequiresContext[str, int]:
           ...     return RequiresContext(lambda deps: len(deps) + arg)
 
@@ -582,6 +588,40 @@ class RequiresContextResult(
 
         """
         return RequiresContextResult(lambda _: Failure(inner_value))
+
+    @classmethod
+    def from_iterable(
+        cls,
+        containers:
+            Iterable['RequiresContextResult[_EnvType, _ValueType, _ErrorType]'],
+    ) -> 'RequiresContextResult[_EnvType, Sequence[_ValueType], _ErrorType]':
+        """
+        Transforms an iterable of ``RequiresContextResult`` containers.
+
+        Returns a single container with multiple elements inside.
+
+        .. code:: python
+
+          >>> from returns.context import RequiresContextResult
+          >>> from returns.result import Success, Failure
+
+          >>> assert RequiresContextResult.from_iterable([
+          ...    RequiresContextResult.from_value(1),
+          ...    RequiresContextResult.from_value(2),
+          ... ])(...) == Success((1, 2))
+
+          >>> assert RequiresContextResult.from_iterable([
+          ...    RequiresContextResult.from_value(1),
+          ...    RequiresContextResult.from_failure('a'),
+          ... ])(...) == Failure('a')
+
+          >>> assert RequiresContextResult.from_iterable([
+          ...    RequiresContextResult.from_failure('a'),
+          ...    RequiresContextResult.from_value(1),
+          ... ])(...) == Failure('a')
+
+        """
+        return iterable(cls, containers)
 
 
 @final

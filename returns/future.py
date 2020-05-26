@@ -6,6 +6,8 @@ from typing import (
     Coroutine,
     Generator,
     Generic,
+    Iterable,
+    Sequence,
     TypeVar,
     Union,
 )
@@ -13,6 +15,7 @@ from typing import (
 from typing_extensions import final
 
 from returns._generated.futures import _future, _future_result
+from returns._generated.iterable import iterable
 from returns.io import IO, IOResult
 from returns.primitives.container import BaseContainer
 from returns.result import Failure, Result, Success
@@ -333,6 +336,28 @@ class Future(BaseContainer, Generic[_ValueType]):
 
         """
         return Future(async_identity(inner_value))
+
+    @classmethod
+    def from_iterable(
+        cls,
+        containers: Iterable['Future[_ValueType]'],
+    ) -> 'Future[Sequence[_ValueType]]':
+        """
+        Transforms an iterable of ``Future`` containers into a single container.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.future import Future
+          >>> from returns.io import IO
+
+          >>> assert anyio.run(Future.from_iterable([
+          ...    Future.from_value(1),
+          ...    Future.from_value(2),
+          ... ]).awaitable) == IO((1, 2))
+
+        """
+        return iterable(cls, containers)
 
     @classmethod
     def from_io(cls, inner_value: IO[_NewValueType]) -> 'Future[_NewValueType]':
@@ -1264,6 +1289,43 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
 
         """
         return FutureResult(async_identity(Failure(inner_value)))
+
+    @classmethod
+    def from_iterable(
+        cls,
+        containers: Iterable['FutureResult[_ValueType, _ErrorType]'],
+    ) -> 'FutureResult[Sequence[_ValueType], _ErrorType]':
+        """
+        Transforms an iterable of ``FutureResult`` containers.
+
+        Returns a single container with multiple elements inside.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.future import FutureResult
+          >>> from returns.io import IOSuccess, IOFailure
+
+          >>> all_success = FutureResult.from_iterable([
+          ...    FutureResult.from_value(1),
+          ...    FutureResult.from_value(2),
+          ... ])
+          >>> assert anyio.run(all_success.awaitable) == IOSuccess((1, 2))
+
+          >>> mixed = FutureResult.from_iterable([
+          ...     FutureResult.from_value(1),
+          ...     FutureResult.from_failure('a'),
+          ... ])
+          >>> assert anyio.run(mixed.awaitable) == IOFailure('a')
+
+          >>> mixed = FutureResult.from_iterable([
+          ...     FutureResult.from_failure('a'),
+          ...     FutureResult.from_value(1),
+          ... ])
+          >>> assert anyio.run(mixed.awaitable) == IOFailure('a')
+
+        """
+        return iterable(cls, containers)
 
 
 # Aliases:

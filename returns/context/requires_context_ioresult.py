@@ -4,12 +4,15 @@ from typing import (
     Callable,
     ClassVar,
     Generic,
+    Iterable,
+    Sequence,
     TypeVar,
     Union,
 )
 
 from typing_extensions import final
 
+from returns._generated.iterable import iterable
 from returns.context import NoDeps
 from returns.io import IO, IOFailure, IOResult, IOSuccess
 from returns.primitives.container import BaseContainer
@@ -144,6 +147,7 @@ class RequiresContextIOResult(
           >>> from returns.context import RequiresContextIOResult
           >>> from returns.context import RequiresContext
           >>> from returns.io import IOSuccess
+
           >>> def first(lg: bool) -> RequiresContextIOResult[float, int, str]:
           ...     # `deps` has `float` type here:
           ...     return RequiresContext(
@@ -264,6 +268,7 @@ class RequiresContextIOResult(
           >>> from returns.context import RequiresContextIOResult
           >>> from returns.result import Success, Failure, Result
           >>> from returns.io import IOSuccess, IOFailure
+
           >>> def function(number: int) -> Result[int, str]:
           ...     if number > 0:
           ...         return Success(number + 1)
@@ -781,6 +786,42 @@ class RequiresContextIOResult(
 
         """
         return RequiresContextIOResult(lambda _: IOFailure(inner_value))
+
+    @classmethod
+    def from_iterable(
+        cls,
+        containers:
+            Iterable[
+                'RequiresContextIOResult[_EnvType, _ValueType, _ErrorType]',
+            ],
+    ) -> 'RequiresContextIOResult[_EnvType, Sequence[_ValueType], _ErrorType]':
+        """
+        Transforms an iterable of ``RequiresContextIOResult`` containers.
+
+        Returns a single container with multiple elements inside.
+
+        .. code:: python
+
+          >>> from returns.context import RequiresContextIOResult
+          >>> from returns.io import IOSuccess, IOFailure
+
+          >>> assert RequiresContextIOResult.from_iterable([
+          ...    RequiresContextIOResult.from_value(1),
+          ...    RequiresContextIOResult.from_value(2),
+          ... ])(...) == IOSuccess((1, 2))
+
+          >>> assert RequiresContextIOResult.from_iterable([
+          ...    RequiresContextIOResult.from_value(1),
+          ...    RequiresContextIOResult.from_failure('a'),
+          ... ])(...) == IOFailure('a')
+
+          >>> assert RequiresContextIOResult.from_iterable([
+          ...    RequiresContextIOResult.from_failure('a'),
+          ...    RequiresContextIOResult.from_value(1),
+          ... ])(...) == IOFailure('a')
+
+        """
+        return iterable(cls, containers)
 
 
 @final

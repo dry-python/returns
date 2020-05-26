@@ -1,3 +1,14 @@
+- case: requires_context_from_iterable
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContext
+    from typing import Iterable
+
+    x: Iterable[RequiresContext[str, int]]
+
+    reveal_type(RequiresContext.from_iterable(x))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[builtins.str*, typing.Sequence[builtins.int*]]'
+
+
 - case: requires_context_from_requires_context_ioresult
   disable_cache: true
   main: |

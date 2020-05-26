@@ -5,7 +5,9 @@ from typing import (
     Callable,
     ClassVar,
     Generic,
+    Iterable,
     NoReturn,
+    Sequence,
     Type,
     TypeVar,
     Union,
@@ -13,6 +15,7 @@ from typing import (
 
 from typing_extensions import final
 
+from returns._generated.iterable import iterable
 from returns.primitives.container import BaseContainer
 from returns.primitives.exceptions import UnwrapFailedError
 
@@ -311,6 +314,36 @@ class Result(
 
         """
         return Failure(inner_value)
+
+    @classmethod
+    def from_iterable(
+        cls,
+        containers: Iterable['Result[_ValueType, _ErrorType]'],
+    ) -> 'Result[Sequence[_ValueType], _ErrorType]':
+        """
+        Transforms an iterable of ``Result`` containers into a single container.
+
+        .. code:: python
+
+          >>> from returns.result import Result, Success, Failure
+
+          >>> assert Result.from_iterable([
+          ...    Success(1),
+          ...    Success(2),
+          ... ]) == Success((1, 2))
+
+          >>> assert Result.from_iterable([
+          ...     Success(1),
+          ...     Failure('a'),
+          ... ]) == Failure('a')
+
+          >>> assert Result.from_iterable([
+          ...     Failure('a'),
+          ...     Success(1),
+          ... ]) == Failure('a')
+
+        """
+        return iterable(cls, containers)
 
 
 @final
