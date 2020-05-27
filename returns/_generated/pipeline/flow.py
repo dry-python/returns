@@ -1,7 +1,7 @@
+from functools import reduce
 from typing import TypeVar
 
-# We import from the source, becase otherwise we will have a circular import.
-from returns._generated.pipeline.pipe import _pipe
+from returns.functions import compose
 
 _InstanceType = TypeVar('_InstanceType')
 _PipelineStepType = TypeVar('_PipelineStepType')
@@ -21,9 +21,6 @@ def _flow(
     We use a custom ``mypy`` plugin to make sure types are correct.
     Otherwise, it is currently impossible to properly type this function.
 
-    This function is closely related
-    to :func:`pipe <returns._generated.pipeline.pipe._pipe>`.
-
     Here's how it should be used:
 
     .. code:: python
@@ -33,6 +30,14 @@ def _flow(
        >>> # => executes: str(float(int('1')))
        >>> assert flow('1', int, float, str) == '1.0'
 
+    This function is closely related
+    to :func:`pipe <returns._generated.pipeline.pipe._pipe>`:
+
+    .. code:: python
+
+      >>> from returns.pipeline import pipe
+      >>> assert flow('1', int, float, str) == pipe(int, float, str)('1')
+
     See also:
         - https://stackoverflow.com/a/41585450/4842742
         - https://github.com/gcanti/fp-ts/blob/master/src/pipeable.ts
@@ -40,4 +45,4 @@ def _flow(
     Requires our :ref:`mypy plugin <mypy-plugins>`.
 
     """
-    return _pipe(*functions)(instance)  # type: ignore
+    return reduce(compose, functions)(instance)  # type: ignore

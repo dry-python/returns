@@ -2,11 +2,12 @@ from types import MappingProxyType
 from typing import List, Optional, overload
 
 from mypy.nodes import ARG_NAMED, ARG_OPT
-from mypy.plugin import FunctionContext
 from mypy.types import CallableType, FunctionLike
+from mypy.types import Type as MypyType
 from typing_extensions import Literal
 
 from returns.contrib.mypy._structures.args import FuncArg
+from returns.contrib.mypy._structures.types import CallableContext
 
 #: Mapping for better `call || function` argument compatibility.
 _KIND_MAPPING = MappingProxyType({
@@ -21,7 +22,7 @@ _KIND_MAPPING = MappingProxyType({
 def analyze_call(
     function: FunctionLike,
     args: List[FuncArg],
-    ctx: FunctionContext,
+    ctx: CallableContext,
     *,
     show_errors: Literal[True],
 ) -> CallableType:
@@ -32,7 +33,7 @@ def analyze_call(
 def analyze_call(
     function: FunctionLike,
     args: List[FuncArg],
-    ctx: FunctionContext,
+    ctx: CallableContext,
     *,
     show_errors: bool,
 ) -> Optional[CallableType]:
@@ -62,3 +63,31 @@ def analyze_call(function, args, ctx, *, show_errors):
     if not show_errors and messages.is_errors():
         return None
     return checked_function
+
+
+def safe_translate_to_function(
+    function_def: MypyType,
+    ctx: CallableContext,
+) -> MypyType:
+    """
+    Tranforms many other types to something close to callable type.
+
+    There's why we need it:
+
+    - We can use this on real functions
+    - We can use this on ``@overload`` functions
+    - We can use this on instances with ``__call__``
+    - We can use this on ``Type`` types
+
+    It can probably work with other types as well.
+
+    This function allows us to unify this process.
+    We also need to disable errors, because we explicitly pass empty args.
+    """
+    checker = ctx.api.expr_checker  # type: ignore
+    checker.msg.disable_errors()
+    _return_type, function_def = checker.check_call(
+        function_def, [], [], ctx.context, [],
+    )
+    checker.msg.enable_errors()
+    return function_def

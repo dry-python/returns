@@ -84,3 +84,22 @@
         ...
 
     reveal_type(flow(1, test))  # N: Revealed type is 'Any'
+
+
+- case: flow_with_containers
+  disable_cache: true
+  main: |
+    from returns.pipeline import flow
+    from returns.pointfree import bind, map_
+    from returns.result import Result
+    from returns.functions import identity
+
+    x: Result[int, str]
+
+    def bound(arg: int) -> Result[float, str]:
+        ...
+
+    def mappable(arg: float) -> bool:
+        ...
+
+    reveal_type(flow(x, bind(bound), identity, map_(mappable)))  # N: Revealed type is 'returns.result.Result[builtins.bool, builtins.str*]'

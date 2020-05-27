@@ -204,10 +204,8 @@ It can be illustrated as a simple nested function:
   ...         return len(deps) > limit
   ...    return inner
   ...
-  >>> first(2)('abc')  # first(arg1)(dependencies)
-  True
-  >>> first(5)('abc')  # first(arg1)(dependencies)
-  False
+  >>> assert first(2)('abc')  # first(limit)(deps)
+  >>> assert not first(5)('abc')  # first(limit)(deps)
 
 That's basically enough to make dependency injection possible.
 But how would you compose ``first`` function?
@@ -217,7 +215,6 @@ Let's say with the following function:
 
   >>> def bool_to_str(arg: bool) -> str:
   ...     return 'ok' if arg else 'nope'
-  ...
 
 It would be hard, knowing that it returns another
 function to be called later when the context is known.
@@ -232,12 +229,9 @@ We can wrap it in ``RequiresContext`` container to allow better composition!
   ...    def inner(deps: str) -> bool:
   ...         return len(deps) > limit
   ...    return RequiresContext(inner)  # wrapping function here!
-  ...
 
-  >>> first(1).map(bool_to_str)('abc')
-  'ok'
-  >>> first(5).map(bool_to_str)('abc')
-  'nope'
+  >>> assert first(1).map(bool_to_str)('abc') == 'ok'
+  >>> assert first(5).map(bool_to_str)('abc') == 'nope'
 
 There's how execution flows:
 

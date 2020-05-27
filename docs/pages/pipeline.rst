@@ -92,6 +92,10 @@ pipe
 ``pipe`` is an easy way to compose functions together.
 It is useful when you don't have an instance to compose functions with yet.
 
+.. note::
+
+  ``pipe`` require to use our :ref:`mypy plugins <mypy-plugin>`.
+
 Let's see an example.
 
 .. code:: python
@@ -140,15 +144,6 @@ You might consider ``pipe()`` as :func:`returns.functions.compose` on steroids.
 The main difference is that ``compose`` takes strictly two arguments
 (or you might say that it has an arity of two),
 while ``pipe`` has infinite possible arguments.
-
-Limitations
-~~~~~~~~~~~
-
-But, composition with ``pipe`` is limited to two things:
-
-1. It only allows to pipe up to 7 functions.
-   If you need more - send a PR with the type annotations.
-   Python cannot figure things out by itself.
 
 
 is_successful

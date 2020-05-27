@@ -3,13 +3,16 @@ from typing import List, Mapping, Optional, cast
 from mypy.argmap import map_actuals_to_formals
 from mypy.constraints import infer_constraints_for_callable
 from mypy.expandtype import expand_type
+from mypy.nodes import ARG_POS
 from mypy.plugin import FunctionContext
-from mypy.types import CallableType
+from mypy.types import CallableType, FunctionLike
 from mypy.types import Type as MypyType
 from mypy.types import TypeVarId
 from typing_extensions import final
 
 from returns.contrib.mypy._structures.args import FuncArg
+from returns.contrib.mypy._structures.types import CallableContext
+from returns.contrib.mypy._typeops.analtype import analyze_call
 
 #: Mapping of `typevar` to real type.
 _Constraints = Mapping[TypeVarId, MypyType]
@@ -88,3 +91,44 @@ class CallableInference(object):
             constraint.type_var: constraint.target
             for constraint in constraints
         }
+
+
+@final
+class PipelineInference(object):
+    """
+    Very helpful tool to work with functions like ``flow`` and ``pipe``.
+
+    It iterates all over the given list of pipeline steps,
+    passes the first argument, and then infers types step by step.
+    """
+
+    def __init__(self, instance: MypyType) -> None:
+        """We do need the first argument to start the inference."""
+        self._instance = instance
+
+    def from_callable_sequence(
+        self,
+        pipeline_types: List[MypyType],
+        pipeline_kinds: List[int],
+        ctx: CallableContext,
+    ) -> MypyType:
+        """Pass pipeline functions to infer them one by one."""
+        parameter = FuncArg(None, self._instance, ARG_POS)
+        ret_type = ctx.default_return_type
+
+        for pipeline, kind in zip(pipeline_types, pipeline_kinds):
+            ret_type = self._proper_type(
+                analyze_call(
+                    cast(FunctionLike, pipeline),
+                    [parameter],
+                    ctx,
+                    show_errors=True,
+                ),
+            )
+            parameter = FuncArg(None, ret_type, kind)
+        return ret_type
+
+    def _proper_type(self, typ: MypyType) -> MypyType:
+        if isinstance(typ, CallableType):
+            return typ.ret_type
+        return typ  # It might be `Instance` or `AnyType` or `Nothing`

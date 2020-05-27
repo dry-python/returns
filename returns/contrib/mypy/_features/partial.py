@@ -9,7 +9,10 @@ from mypy.types import TypeType
 from typing_extensions import Final, final
 
 from returns.contrib.mypy._structures.args import FuncArg
-from returns.contrib.mypy._typeops.analtype import analyze_call
+from returns.contrib.mypy._typeops.analtype import (
+    analyze_call,
+    safe_translate_to_function,
+)
 from returns.contrib.mypy._typeops.inference import CallableInference
 from returns.contrib.mypy._typeops.transform_callable import (
     Functions,
@@ -219,29 +222,11 @@ class _AppliedArgs(object):
         )
 
     def get_callable_from_context(self) -> MypyType:
-        """
-        Returns callable type from the context.
-
-        There's why we need it:
-
-        - We can use ``curry`` on real functions
-        - We can use ``curry`` on ``@overload`` functions
-        - We can use ``curry`` on instances with ``__call__``
-        - We can use ``curry`` on ``Type`` types
-
-        This function allows us to unify this process.
-        We also need to disable errors, because we explicitly pass empty args.
-        """
-        checker = self._function_ctx.api.expr_checker  # type: ignore
-        function_def = self._function_ctx.arg_types[0][0]
-
-        checker.msg.disable_errors()
-        _return_type, function_def = checker.check_call(
-            function_def, [], [], self._function_ctx.context, [],
+        """Returns callable type from the context."""
+        return safe_translate_to_function(
+            self._function_ctx.arg_types[0][0],
+            self._function_ctx,
         )
-        checker.msg.enable_errors()
-
-        return function_def
 
     def build_from_context(self) -> Tuple[bool, List[FuncArg]]:
         """

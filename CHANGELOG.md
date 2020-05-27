@@ -41,7 +41,9 @@ See [0Ver](https://0ver.org/).
 
 - Adds typed `partial` and `curry` mypy plugins!
 - Adds typed `flow` plugin, now it can accept any number of arguments,
-  it now also has excelent type inference
+  it now also has **excelent** type inference
+- Adds typed `pipe` plugin, now it can accept any number of arguments,
+  it now also has good type inference
 
 - Adds typed `map_` pointfree function
 - Adds typed `bind_result` pointfree function

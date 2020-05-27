@@ -10,6 +10,7 @@
         ...
 
     reveal_type(flow(1, curried, identity)(2)('a'))  # N: Revealed type is 'builtins.float'
+    reveal_type(flow(1, curried, identity)(2, 'a'))  # N: Revealed type is 'builtins.float'
 
 
 - case: flow_function_with_curried2

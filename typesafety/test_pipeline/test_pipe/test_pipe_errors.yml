@@ -1,55 +1,67 @@
-- case: flow_function_error
+- case: pipe_function_error
   disable_cache: true
   main: |
-    from returns.pipeline import flow
+    from returns.pipeline import pipe
 
     def convert(arg: str) -> float:
         ...
 
-    reveal_type(flow('1', int, convert))
+    reveal_type(pipe(int, convert)('a'))
   out: |
     main:6: error: Argument 1 to "convert" has incompatible type "int"; expected "str"
     main:6: note: Revealed type is 'builtins.float'
 
 
-- case: flow_function_first_arg_error
+- case: pipe_function_without_steps
   disable_cache: true
   main: |
-    from returns.pipeline import flow
+    from returns.pipeline import pipe
+
+    pipe()
+  out: |
+    main:3: error: Too few arguments for "_pipe"
+
+
+- case: pipe_function_first_arg_error
+  disable_cache: true
+  main: |
+    from returns.pipeline import pipe
 
     def convert(arg: str) -> float:
         ...
 
-    reveal_type(flow(1, convert))
+    reveal_type(pipe(convert)(1))
   out: |
+    main:6: error: Argument 1 to "__call__" of "_Pipe" has incompatible type "int"; expected "str"
     main:6: error: Argument 1 to "convert" has incompatible type "int"; expected "str"
     main:6: note: Revealed type is 'builtins.float'
 
 
-- case: flow_function_without_args_error
+- case: pipe_function_without_args_error
   disable_cache: true
   main: |
-    from returns.pipeline import flow
+    from returns.pipeline import pipe
 
     def convert() -> float:
         ...
 
-    reveal_type(flow(1, convert))
+    reveal_type(pipe(convert)(1))
   out: |
     main:6: error: Too many arguments for "convert"
     main:6: note: Revealed type is 'builtins.float'
 
 
-- case: flow_function_with_too_many_args_error
+- case: pipe_function_with_too_many_args_error
   disable_cache: true
   main: |
-    from returns.pipeline import flow
+    from returns.pipeline import pipe
 
     def convert(first: str, other: int) -> float:
         ...
 
-    reveal_type(flow(1, convert))
+    reveal_type(pipe(convert)(1))
   out: |
+    main:6: error: Argument 1 to "__call__" of "_Pipe" has incompatible type "int"; expected "str"
     main:6: error: Argument 1 to "convert" has incompatible type "int"; expected "str"
     main:6: error: Too few arguments for "convert"
     main:6: note: Revealed type is 'builtins.float'

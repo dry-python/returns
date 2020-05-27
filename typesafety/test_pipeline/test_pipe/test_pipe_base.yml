@@ -1,0 +1,143 @@
+- case: pipe_function1
+  disable_cache: true
+  main: |
+    from returns.pipeline import pipe
+
+    def convert(arg: str) -> float:
+        ...
+
+    predefined = pipe(convert, int, bool)
+    reveal_type(predefined('1.0'))  # N: Revealed type is 'builtins.bool'
+
+
+- case: pipe_function2
+  disable_cache: true
+  main: |
+    from returns.pipeline import pipe
+    from returns.functions import identity
+
+    def convert(arg: str) -> float:
+        ...
+
+    predefined = pipe(identity, convert, identity, identity, int, identity, bool, identity)
+    reveal_type(predefined('1.0'))  # N: Revealed type is 'builtins.bool*'
+
+
+- case: pipe_callable_instances
+  disable_cache: true
+  main: |
+    from returns.pipeline import pipe
+
+    def convert(arg: str) -> float:
+        ...
+
+    class Test(object):
+        def __init__(self, arg: int) -> None:
+            ...
+
+        def __call__(self, arg: float) -> bool:
+            ...
+
+    def with_instance(arg: Test) -> str:
+        ...
+
+    predefined = pipe(Test, with_instance, convert, Test(1))
+    reveal_type(predefined(1))  # N: Revealed type is 'builtins.bool'
+
+
+- case: pipe_star_args
+  disable_cache: true
+  main: |
+    from returns.pipeline import pipe
+    from returns.functions import identity
+
+    reveal_type(
+        pipe(  # N: Revealed type is 'builtins.int*'
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,  # very long amount of args!
+        )(1)
+    )
+
+
+- case: pipe_with_lambdas
+  disable_cache: true
+  main: |
+    from returns.pipeline import pipe
+
+    reveal_type(
+        pipe(  # N: Revealed type is 'builtins.float'
+            lambda x: x,
+            str,
+            lambda y: y.split(' '),
+            lambda z: ''.join(z),
+            lambda x: x,
+            lambda f: float(f),
+        )(1)
+    )
+
+
+- case: pipe_with_any
+  disable_cache: true
+  main: |
+    from returns.pipeline import pipe
+    from typing import Any
+
+    def test(arg: int) -> Any:
+        ...
+
+    reveal_type(pipe(test)(1))  # N: Revealed type is 'Any'
+
+
+- case: pipe_with_overloads
+  disable_cache: true
+  main: |
+    from returns.pipeline import pipe
+
+    x = pipe(int, str, int)
+    reveal_type(x(1.0))  # N: Revealed type is 'builtins.int'
+    reveal_type(x('a'))  # N: Revealed type is 'builtins.int'
+
+
+- case: pipe_with_containers
+  disable_cache: true
+  main: |
+    from returns.pipeline import pipe
+    from returns.pointfree import bind, map_
+    from returns.result import Result
+    from returns.functions import identity
+
+    x: Result[int, str]
+
+    def bound(arg: int) -> Result[float, str]:
+        ...
+
+    def mappable(arg: float) -> bool:
+        ...
+
+    reveal_type(pipe(bind(bound), identity, map_(mappable))(x))  # N: Revealed type is 'returns.result.Result[builtins.bool, builtins.str*]'

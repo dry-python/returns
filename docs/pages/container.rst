@@ -131,22 +131,31 @@ You might end up with an iterable of containers:
 
 .. code:: python
 
-  >>> from returns.maybe import Maybe, Some, maybe
+  >>> from returns.maybe import Maybe, Some, Nothing, maybe
 
   >>> source = {'a': 1, 'b': 2}
-  >>> keys_to_fetch = ['a', 'b']
 
   >>> fetched_values: Maybe[int] = [
   ...    maybe(source.get)(key)
-  ...    for key in keys_to_fetch
+  ...    for key in ('a', 'b')
   ... ]
 
 To work with iterable of containers,
-it is recommended to cast it a container with the iterable inside:
+it is recommended to cast it into a container with the iterable inside:
 
 .. code:: python
 
   >>> assert Maybe.from_iterable(fetched_values) == Some((1, 2))
+
+Any falsy values will result in a falsy result (pun intended):
+
+.. code:: python
+
+  >>> fetched_values: Maybe[int] = [
+  ...    maybe(source.get)(key)
+  ...    for key in ('a', 'c')  # 'c' is missing!
+  ... ]
+  >>> assert Maybe.from_iterable(fetched_values) == Nothing
 
 We support any ``Iterable[T]`` input type
 and return a ``Container[Sequence[T]]``.

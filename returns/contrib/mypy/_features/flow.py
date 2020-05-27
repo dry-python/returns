@@ -1,12 +1,7 @@
-from typing import cast
-
-from mypy.nodes import ARG_POS
 from mypy.plugin import FunctionContext
-from mypy.types import CallableType, FunctionLike
 from mypy.types import Type as MypyType
 
-from returns.contrib.mypy._structures.args import FuncArg
-from returns.contrib.mypy._typeops.analtype import analyze_call
+from returns.contrib.mypy._typeops.inference import PipelineInference
 
 
 def analyze(ctx: FunctionContext) -> MypyType:
@@ -41,27 +36,11 @@ def analyze(ctx: FunctionContext) -> MypyType:
     if not ctx.arg_types[1]:  # We do require to pass `*functions` arg.
         ctx.api.fail('Too few arguments for "_flow"', ctx.context)
         return ctx.default_return_type
-    return _infer_pipeline(ctx)
 
-
-def _infer_pipeline(ctx: FunctionContext) -> MypyType:
-    parameter = FuncArg(None, ctx.arg_types[0][0], ARG_POS)
-    ret_type = ctx.default_return_type
-
-    for pipeline, kind in zip(ctx.arg_types[1], ctx.arg_kinds[1]):
-        ret_type = _proper_type(
-            analyze_call(
-                cast(FunctionLike, pipeline),
-                [parameter],
-                ctx,
-                show_errors=True,
-            ),
-        )
-        parameter = FuncArg(None, ret_type, kind)
-    return ret_type
-
-
-def _proper_type(typ: MypyType) -> MypyType:
-    if isinstance(typ, CallableType):
-        return typ.ret_type
-    return typ  # It might be `Instance` or `AnyType`
+    return PipelineInference(
+        ctx.arg_types[0][0],
+    ).from_callable_sequence(
+        ctx.arg_types[1],
+        ctx.arg_kinds[1],
+        ctx,
+    )
