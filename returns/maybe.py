@@ -1,6 +1,6 @@
 from abc import ABCMeta
 from functools import wraps
-from typing import (  # noqa: WPS235
+from typing import (
     Any,
     Callable,
     ClassVar,

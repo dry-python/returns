@@ -94,7 +94,7 @@ It is useful when you don't have an instance to compose functions with yet.
 
 .. note::
 
-  ``pipe`` require to use our :ref:`mypy plugins <mypy-plugin>`.
+  ``pipe`` requires to use our :ref:`mypy plugins <mypy-plugin>`.
 
 Let's see an example.
 
