@@ -102,6 +102,32 @@
     )
 
 
+- case: pipe_with_methods
+  disable_cache: true
+  main: |
+    from returns.pipeline import pipe
+
+    class Test(object):
+        def method(self, arg: int) -> int:
+            ...
+
+        @classmethod
+        def method_class(cls, arg: int) -> int:
+            ...
+
+        @staticmethod
+        def method_static(arg: int) -> int:
+            ...
+
+    reveal_type(
+        pipe(  # N: Revealed type is 'builtins.int'
+            Test().method,
+            Test.method_class,
+            Test.method_static,
+        )(1)
+    )
+
+
 - case: pipe_with_any
   disable_cache: true
   main: |

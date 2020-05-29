@@ -25,12 +25,14 @@ Only works with regular functions (not async).
 
 .. warning::
 
-  ``compose`` might not work with some functions.
+  ``compose`` might fail to infer types for some functions.
   There are several problems: ``lambda`` and generic functions.
   In these cases ``mypy`` will fail to infer
   the types of the resulting function.
+
   In this case, use :func:`pipe <returns._generated.pipeline.pipe._pipe>`
   it does the same thing, but has pretty good type inference.
+  Or use manual annotations with ``Callable`` type.
 
 
 identity

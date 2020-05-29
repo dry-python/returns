@@ -12,6 +12,18 @@
     main:6: note: Revealed type is 'builtins.float'
 
 
+- case: pipe_wrong_steps_error
+  disable_cache: true
+  main: |
+    from returns.pipeline import pipe
+
+    reveal_type(pipe([], int)('a'))
+  out: |
+    main:3: error: "object" not callable
+    main:3: error: Argument 1 to "__call__" of "_Pipe" has incompatible type "str"; expected <nothing>
+    main:3: note: Revealed type is 'Any'
+
+
 - case: pipe_function_without_steps
   disable_cache: true
   main: |

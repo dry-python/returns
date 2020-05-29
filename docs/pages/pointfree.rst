@@ -105,6 +105,8 @@ We also have a long list of other ``bind_*`` functions, like:
 - ``bind_context`` to bind functions returning ``RequiresContext`` container
 - ``bind_context_result`` to bind functions
   returning ``RequiresContextResult`` container
+- ``bind_async`` to bind async functions
+  returning ``Future`` or ``FutureResult``
 
 
 unify
@@ -218,6 +220,8 @@ API Reference
 .. autofunction:: returns.pointfree.bind_context
 
 .. autofunction:: returns.pointfree.bind_context_result
+
+.. autofunction:: returns.pointfree.bind_async
 
 .. autofunction:: returns.pointfree.unify
 

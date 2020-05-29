@@ -12,6 +12,17 @@
     main:6: note: Revealed type is 'builtins.float'
 
 
+- case: flow_wrong_steps_error
+  disable_cache: true
+  main: |
+    from returns.pipeline import flow
+
+    reveal_type(flow('a', [], int))
+  out: |
+    main:3: error: "List[<nothing>]" not callable
+    main:3: note: Revealed type is 'builtins.int'
+
+
 - case: flow_function_first_arg_error
   disable_cache: true
   main: |
