@@ -46,7 +46,8 @@ See [0Ver](https://0ver.org/).
   it now also has good type inference
 
 - Adds typed `map_` pointfree function
-- Adds typed `bind_result` pointfree function
+- Adds typed `bind_result`, `bind_io`, `bind_ioresult`,
+  `bind_context`, `bind_context_result`, `bind_future` pointfree functions
 - Adds typed `unify` pointfree function
 - Adds typed `apply` pointfree function
 

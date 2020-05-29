@@ -23,6 +23,15 @@ functions with one argument and one return to be composed.
 
 Only works with regular functions (not async).
 
+.. warning::
+
+  ``compose`` might not work with some functions.
+  There are several problems: ``lambda`` and generic functions.
+  In these cases ``mypy`` will fail to infer
+  the types of the resulting function.
+  In this case, use :func:`pipe <returns._generated.pipeline.pipe._pipe>`
+  it does the same thing, but has pretty good type inference.
+
 
 identity
 --------
