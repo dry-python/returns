@@ -45,12 +45,14 @@ _TYPED_DECORATORS: Final = frozenset((
 #: Typed pointfree functions.
 _TYPED_POINTFREE_FUNCTIONS: Final = frozenset((
     'returns._generated.pointfree.map._map',
+
     'returns._generated.pointfree.bind_result._bind_result',
     'returns._generated.pointfree.bind_io._bind_io',
     'returns._generated.pointfree.bind_ioresult._bind_ioresult',
     'returns._generated.pointfree.bind_future._bind_future',
     'returns._generated.pointfree.bind_context._bind_context',
     'returns._generated.pointfree.bind_context_result._bind_context_result',
+    'returns._generated.pointfree.bind_awaitable._bind_awaitable',
 ))
 
 #: Used for typed ``partial`` function.
@@ -79,6 +81,9 @@ _MethodCallback = Callable[[MethodContext], MypyType]
 #: Type for a method signature hook.
 _MethodSigCallback = Callable[[MethodSigContext], CallableType]
 
+
+# Interface
+# =========
 
 @final
 class _ReturnsPlugin(Plugin):

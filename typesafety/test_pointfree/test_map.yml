@@ -25,7 +25,6 @@
 
     _ValueType = TypeVar('_ValueType', contravariant=True)
     _NewValueType = TypeVar('_NewValueType', covariant=True)
-    _ErrorType = TypeVar('_ErrorType', contravariant=True)
 
     def ensure_callback(
         f: Callable[[Maybe[_ValueType]], Maybe[_NewValueType]],

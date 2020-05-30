@@ -1,6 +1,9 @@
 from returns._generated.pointfree.apply import _apply as apply
 from returns._generated.pointfree.bind import _bind as bind
 from returns._generated.pointfree.bind_async import _bind_async as bind_async
+from returns._generated.pointfree.bind_awaitable import (
+    _bind_awaitable as bind_awaitable,
+)
 from returns._generated.pointfree.bind_context import (
     _bind_context as bind_context,
 )
