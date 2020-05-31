@@ -60,11 +60,13 @@ See [0Ver](https://0ver.org/).
 - Adds `RequiresContextFutureResult` container
 - Adds `ReaderFutureResult` alias for `RequiresContextFutureResult`
 - Adds `RequiresContextFutureResultE` and `ReaderFutureResultE` aliases
+- Adds `Future`, `FutureResult` and `RequiresContextFutureResult`
+  support for all existing pointfree functions
 
 - Adds `bind_io` method to `IOResult`
 - Adds `bind_io` method to `RequiresContextIOResult`
-- Adds `Future`, `FutureResult` and `RequiresContextFutureResult`
-  support for all existing pointfree functions
+- Adds `or_else` method to `Maybe`
+
 - Adds `not_` composition helper
 - Adds `flatten` support for `Future`,
   `FutureResult` and `RequiresContextFutureResult`

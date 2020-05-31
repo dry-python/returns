@@ -198,6 +198,36 @@ So, use ``Result`` instead, which can represent what happened to your ``IO``.
 You can convert ``Maybe`` to ``Result``
 and back again with special :ref:`converters`.
 
+Why Maybe does not have rescue, fix, and alt methods?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Well, because ``Maybe`` only has a single type argument: ``_ValueType``.
+And all these method implies that we also has ``_ErrorType``.
+
+We used to have them. There were several issues:
+
+1. If we leave their signature untouched (with the explicit ``None`` error type)
+   then we would have to write functions that always ignore the passed argument.
+   It is a bit ugly!
+2. If we change the signature of the passed function to have zero arguments,
+   then we would have a lot of problems with typing.
+   Because now different types would require different
+   callback functions for the same methods!
+
+We didn't like both options and dropped these methods in some early release.
+
+Now, ``Maybe`` has :meth:`returns.maybe.Maybe.or_else_call` method to call
+a passed callback function with zero argument on failed container:
+
+.. code:: python
+
+  >>> from returns.maybe import Some, Nothing
+
+  >>> assert Some(1).or_else_call(lambda: 2) == 1
+  >>> assert Nothing.or_else_call(lambda: 2) == 2
+
+This method is unique to ``Maybe`` container.
+
 
 Further reading
 ---------------

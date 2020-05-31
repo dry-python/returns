@@ -131,6 +131,42 @@ class Maybe(
         """
         raise NotImplementedError
 
+    def or_else(
+        self,
+        function: Callable[[], _NewValueType],
+    ) -> Union[_ValueType, _NewValueType]:
+        """
+        Get value from successful container or default value from failed one.
+
+        Really close to :meth:`~Maybe.value_or` but works with lazy values.
+        This method is unique to ``Maybe`` container, because other containers
+        do have ``.rescue``, ``.alt``, ``.fix`` methods.
+        But, ``Maybe`` does not.
+
+        Instead, it has this method to execute
+        some function if called on a failed container:
+
+        .. code:: python
+
+          >>> from returns.maybe import Some, Nothing
+          >>> assert Some(1).or_else_call(lambda: 2) == 1
+          >>> assert Nothing.or_else_call(lambda: 2) == 2
+
+        It might be useful to work with exceptions as well:
+
+        .. code::
+
+          >>> def fallback() -> NoReturn:
+          ...    raise ValueError('Nothing!')
+
+          >>> Nothing.or_else_call(fallback)
+          Traceback (most recent call last):
+            ...
+          ValueError: Nothing!
+
+        """
+        raise NotImplementedError
+
     def unwrap(self) -> _ValueType:
         """
         Get value from successful container or raise exception for failed one.
@@ -255,6 +291,10 @@ class _Nothing(Maybe[Any]):
         """Returns default value."""
         return default_value
 
+    def or_else(self, function):
+        """Returns the result of a passed function."""
+        return function()
+
     def unwrap(self):
         """Raises an exception, since it does not have a value inside."""
         raise UnwrapFailedError(self)
@@ -298,6 +338,10 @@ class _Some(Maybe[_ValueType]):
         return function(self._inner_value)
 
     def value_or(self, default_value):
+        """Returns inner value for successful container."""
+        return self._inner_value
+
+    def or_else(self, function):
         """Returns inner value for successful container."""
         return self._inner_value
 

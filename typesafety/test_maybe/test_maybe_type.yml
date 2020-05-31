@@ -91,6 +91,40 @@
     reveal_type(result)  # N: Revealed type is 'Union[builtins.int, None]'
 
 
+- case: maybe_or_else1
+  disable_cache: true
+  main: |
+    from returns.maybe import Maybe
+
+    result = Maybe.from_value(1).or_else_call(lambda: 2)
+    reveal_type(result)  # N: Revealed type is 'builtins.int'
+
+
+- case: maybe_or_else2
+  disable_cache: true
+  main: |
+    from returns.maybe import Maybe
+
+    def fallback() -> str:
+        ...
+
+    result = Maybe.from_value(1).or_else_call(fallback)
+    reveal_type(result)  # N: Revealed type is 'Union[builtins.int, builtins.str*]'
+
+
+- case: maybe_or_else3
+  disable_cache: true
+  main: |
+    from returns.maybe import Maybe
+    from typing import NoReturn
+
+    def fallback() -> NoReturn:
+        ...
+
+    result = Maybe.from_value(1).or_else_call(fallback)
+    reveal_type(result)  # N: Revealed type is 'builtins.int'
+
+
 - case: maybe_unwrap
   disable_cache: true
   main: |
