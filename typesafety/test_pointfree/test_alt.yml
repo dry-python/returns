@@ -13,7 +13,7 @@
     def test(a: A) -> C:
         ...
 
-    reveal_type(alt(test)(x))  # N: Revealed type is 'returns.result.Result[builtins.str*, main.A]'
+    reveal_type(alt(test)(x))  # N: Revealed type is 'returns.result.Result[builtins.str*, main.C]'
 
 
 - case: alt_callback_protocol
