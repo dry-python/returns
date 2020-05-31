@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from returns.primitives.container import BaseContainer
+    from returns.primitives.container import BaseContainer  # noqa: WPS433
 
 
 class UnwrapFailedError(Exception):
