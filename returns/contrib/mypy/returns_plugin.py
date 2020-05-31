@@ -42,8 +42,9 @@ _TYPED_DECORATORS: Final = frozenset((
     'returns.functions.not_',
 ))
 
-#: Typed pointfree functions.
-_TYPED_POINTFREE_FUNCTIONS: Final = frozenset((
+#: Used for cases when we return a protocol overloaded based on a return type.
+_TYPED_PROTOCOL_OVERLOADED: Final = frozenset((
+    # Pointfree functions:
     'returns._generated.pointfree.map._map',
 
     'returns._generated.pointfree.bind_result._bind_result',
@@ -94,7 +95,7 @@ class _ReturnsPlugin(Plugin):
         _TYPED_CURRY_FUNCTION: curry.analyze,
         _TYPED_FLOW_FUNCTION: flow.analyze,
         _TYPED_PIPE_FUNCTION: pipe.analyze,
-        **dict.fromkeys(_TYPED_POINTFREE_FUNCTIONS, pointfree.analyze),
+        **dict.fromkeys(_TYPED_PROTOCOL_OVERLOADED, pointfree.analyze),
         **dict.fromkeys(_TYPED_DECORATORS, decorators.analyze),
     }
 

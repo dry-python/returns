@@ -77,6 +77,7 @@ See [0Ver](https://0ver.org/).
 - Fixes that `.rescue()` of `RequiresContextIOResult` was returning `Any`
 - Fixes that `RequiresContextResult` and `RequiresContextIOResult`
   were not `final`
+- Fixes that `ImmutableStateError` was not a subclass of `AttributeError`
 
 ### Misc
 

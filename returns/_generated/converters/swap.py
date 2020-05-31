@@ -55,15 +55,14 @@ def _swap(container):
       ...     return Success('Very bad error: ' + error)
 
       >>> container: IOResult[int, str] = IOFailure('boom')
-      >>> # You can `.rescue_result`, but you can `.bind_result` instead!
+      >>> # You cannot `.rescue_result`, but you can `.bind_result` instead!
       >>> assert swap(
       ...     swap(container).bind_result(function),
       ... ) == IOFailure('Very bad error: boom')
 
     This converter supports only containers
     that have ``.success_type`` property.
-
-    Basically ``Result`` and ``IOResult``.
+    Basically, just ``Result`` and ``IOResult``.
 
     """
     if isinstance(container, container.success_type):
