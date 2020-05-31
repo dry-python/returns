@@ -2,16 +2,13 @@ from typing import ClassVar
 
 from typing_extensions import Protocol
 
-from returns._generated.pipeline.flow import _flow as flow
-from returns._generated.pipeline.pipe import _pipe as pipe
-from returns.io import IOResult
-from returns.maybe import Maybe
-from returns.primitives.exceptions import UnwrapFailedError
-from returns.result import Result
+from returns._generated.pipeline.flow import _flow as flow  # noqa: F401
+from returns._generated.pipeline.pipe import _pipe as pipe  # noqa: F401
 
 
 class _HasSuccessAndFailureTypes(Protocol):
     """This protocol enforces container to have a ``.success_type`` field."""
+
     success_type: ClassVar[type]
 
 
