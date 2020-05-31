@@ -131,7 +131,7 @@ class Maybe(
         """
         raise NotImplementedError
 
-    def or_else(
+    def or_else_call(
         self,
         function: Callable[[], _NewValueType],
     ) -> Union[_ValueType, _NewValueType]:
@@ -291,7 +291,7 @@ class _Nothing(Maybe[Any]):
         """Returns default value."""
         return default_value
 
-    def or_else(self, function):
+    def or_else_call(self, function):
         """Returns the result of a passed function."""
         return function()
 
@@ -341,7 +341,7 @@ class _Some(Maybe[_ValueType]):
         """Returns inner value for successful container."""
         return self._inner_value
 
-    def or_else(self, function):
+    def or_else_call(self, function):
         """Returns inner value for successful container."""
         return self._inner_value
 
