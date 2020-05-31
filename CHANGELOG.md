@@ -45,9 +45,10 @@ See [0Ver](https://0ver.org/).
 - Adds typed `pipe` plugin, now it can accept any number of arguments,
   it now also has good type inference
 
-- Adds typed `map_` pointfree function
+- Adds typed `map_`, `fix`, and `alt` pointfree functions
 - Adds typed `bind_result`, `bind_io`, `bind_ioresult`,
-  `bind_context`, `bind_context_result`, `bind_future` pointfree functions
+  `bind_context`, `bind_context_result`, `bind_future`,
+  `bind_async`, and `bind_awaitable` pointfree functions
 - Adds typed `unify` pointfree function
 - Adds typed `apply` pointfree function
 

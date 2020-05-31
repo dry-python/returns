@@ -36,9 +36,5 @@ def _bind_io(function):
           >>> assert bound(IOSuccess(1)) == IOSuccess(1.5)
           >>> assert bound(IOFailure(1)) == IOFailure(1)
 
-    See also:
-        - https://wiki.haskell.org/Lifting
-        - https://en.wikipedia.org/wiki/Natural_transformation
-
     """
     return lambda container: container.bind_io(function)

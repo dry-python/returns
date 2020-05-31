@@ -30,9 +30,5 @@ def _bind_future(function):
         >>> assert anyio.run(success) == IOSuccess(0.5)
         >>> assert anyio.run(failure) == IOFailure(1)
 
-    See also:
-        - https://wiki.haskell.org/Lifting
-        - https://en.wikipedia.org/wiki/Natural_transformation
-
     """
     return lambda container: container.bind_future(function)

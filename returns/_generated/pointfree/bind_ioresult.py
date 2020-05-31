@@ -54,9 +54,5 @@ def _bind_ioresult(function):
         ...     RequiresContextIOResult.from_failure('nope'),
         ... )(deps) == IOFailure('nope')
 
-    See also:
-        - https://wiki.haskell.org/Lifting
-        - https://en.wikipedia.org/wiki/Natural_transformation
-
     """
     return lambda container: container.bind_ioresult(function)

@@ -22,6 +22,5 @@ def _bind_awaitable(function):
         ...     bind_awaitable(coroutine)(Future.from_value(1)).awaitable,
         ... ) == IO(2)
 
-
     """
     return lambda container: container.bind_awaitable(function)

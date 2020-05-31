@@ -46,6 +46,8 @@ _TYPED_DECORATORS: Final = frozenset((
 _TYPED_PROTOCOL_OVERLOADED: Final = frozenset((
     # Pointfree functions:
     'returns._generated.pointfree.map._map',
+    'returns._generated.pointfree.alt._alt',
+    'returns._generated.pointfree.fix._fix',
 
     'returns._generated.pointfree.bind_result._bind_result',
     'returns._generated.pointfree.bind_io._bind_io',

@@ -18,7 +18,7 @@ def _map(function):
         >>> from returns.pointfree import map_
 
         >>> def example(argument: int) -> float:
-        ...     return argument / 2  # not Future!
+        ...     return argument / 2  # not a container!
 
         >>> async def main() -> Future[float]:
         ...     return await map_(example)(Future.from_value(1))
@@ -27,7 +27,6 @@ def _map(function):
 
     See also:
         - https://wiki.haskell.org/Lifting
-        - https://en.wikipedia.org/wiki/Natural_transformation
 
     """
     return lambda container: container.map(function)
