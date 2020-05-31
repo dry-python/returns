@@ -69,6 +69,7 @@ See [0Ver](https://0ver.org/).
 - Adds `flatten` support for `Future`,
   `FutureResult` and `RequiresContextFutureResult`
 - Adds `__copy__` and `__deepcopy__` magic methods to `Immutable` class
+- Speeds up ``is_successful`` function
 
 ### Bugfixes
 
