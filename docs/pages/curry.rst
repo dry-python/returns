@@ -201,7 +201,7 @@ Let's see how types do look like for a curried function:
 
   >>> @curry
   ... def zero(a: int, b: float, *, kw: bool) -> str:
-  ...      return str(a - b) if kw else ''
+  ...     return str(a - b) if kw else ''
 
   >>> assert zero(1)(0.3)(kw=True) == '0.7'
   >>> assert zero(1)(0.3, kw=False) == ''

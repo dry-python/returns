@@ -45,7 +45,7 @@ It might be very useful for complex operations like the following one:
 
   >>> @dataclass
   ... class Order(object):
-  ...    user: Optional[User]
+  ...     user: Optional[User]
 
   >>> def get_street_address(order: Order) -> Maybe[str]:
   ...     return Maybe.from_value(order.user).map(

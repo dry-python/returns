@@ -46,7 +46,7 @@ And it infects all other functions that call it.
 .. code:: python
 
   >>> def modify_number(number: int) -> IO[float]:
-  ...      return get_random_number().map(lambda rnd: number / rnd)
+  ...     return get_random_number().map(lambda rnd: number / rnd)
   ...
   >>> assert isinstance(modify_number(1), IO)
 
@@ -361,8 +361,7 @@ In other words:
   >>> from returns.unsafe import unsafe_perform_io
   >>> from returns.io import IO
 
-  >>> unsafe_perform_io(IO('abc'))
-  'abc'
+  >>> assert unsafe_perform_io(IO('abc')) == 'abc'
 
 It is recommended
 to use `import-linter <https://github.com/seddonym/import-linter>`_
@@ -439,6 +438,7 @@ or ``IOResult.from_value`` and ``IOResult.from_failure`` methods:
 .. code:: python
 
   >>> from returns.io import IOResult, IOSuccess, IOFailure
+
   >>> first: IOResult[int, str] = IOSuccess(1)
   >>> second: IOResult[float, int] = IOFailure(1)
 

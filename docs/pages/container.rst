@@ -136,8 +136,8 @@ You might end up with an iterable of containers:
   >>> source = {'a': 1, 'b': 2}
 
   >>> fetched_values: Maybe[int] = [
-  ...    maybe(source.get)(key)
-  ...    for key in ('a', 'b')
+  ...     maybe(source.get)(key)
+  ...     for key in ('a', 'b')
   ... ]
 
 To work with iterable of containers,
@@ -152,8 +152,8 @@ Any falsy values will result in a falsy result (pun intended):
 .. code:: python
 
   >>> fetched_values: Maybe[int] = [
-  ...    maybe(source.get)(key)
-  ...    for key in ('a', 'c')  # 'c' is missing!
+  ...     maybe(source.get)(key)
+  ...     for key in ('a', 'c')  # 'c' is missing!
   ... ]
   >>> assert Maybe.from_iterable(fetched_values) == Nothing
 
