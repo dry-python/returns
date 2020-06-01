@@ -361,8 +361,7 @@ In other words:
   >>> from returns.unsafe import unsafe_perform_io
   >>> from returns.io import IO
 
-  >>> unsafe_perform_io(IO('abc'))
-  'abc'
+  >>> assert unsafe_perform_io(IO('abc')) == 'abc'
 
 It is recommended
 to use `import-linter <https://github.com/seddonym/import-linter>`_
@@ -390,7 +389,7 @@ But, you can always make your ``IO`` lazy:
 .. code:: python
 
   >>> from returns.io import IO
-  >>> lazy = lambda: IO(1)  # noqa: E731
+  >>> lazy = lambda: IO(1)
   >>> str(lazy())
   '<IO: 1>'
 
@@ -439,6 +438,7 @@ or ``IOResult.from_value`` and ``IOResult.from_failure`` methods:
 .. code:: python
 
   >>> from returns.io import IOResult, IOSuccess, IOFailure
+
   >>> first: IOResult[int, str] = IOSuccess(1)
   >>> second: IOResult[float, int] = IOFailure(1)
 
