@@ -1,0 +1,41 @@
+- case: managed_with_ioresult_callback
+  disable_cache: true
+  main: |
+    from returns.io import IOResult
+    from returns.pipeline import managed
+    from returns.result import Result
+
+    def use(aquired_value: int) -> IOResult[float, str]:
+        ...
+
+    def release(
+        aquired_value: int,
+        use_value: Result[float, str],
+    ) -> IOResult[None, str]:
+        ...
+
+    reveal_type(managed(use, release))  # N: Revealed type is 'def (returns.io.IOResult[builtins.int*, builtins.str*]) -> returns.io.IOResult[builtins.float*, builtins.str*]'
+
+
+- case: managed_with_ioresult_error
+  disable_cache: true
+  main: |
+    from returns.io import IOResult
+    from returns.pipeline import managed
+    from returns.result import Result
+
+    def use(aquired_value: int) -> IOResult[float, int]:
+        ...
+
+    def release(
+        aquired_value: int,
+        use_value: Result[int, str],
+    ) -> IOResult[str, str]:
+        ...
+
+    reveal_type(managed(use, release))
+  out: |
+    main:15: error: Argument 2 to "_managed" has incompatible type "Callable[[int, Result[int, str]], IOResult[str, str]]"; expected "Callable[[Any, Result[Any, Any]], IOResult[None, Any]]"
+    main:15: error: Cannot infer type argument 2 of "_managed"
+    main:15: error: Cannot infer type argument 3 of "_managed"
+    main:15: note: Revealed type is 'def (returns.io.IOResult[Any, Any]) -> returns.io.IOResult[Any, Any]'

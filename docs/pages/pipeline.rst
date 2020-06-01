@@ -146,6 +146,82 @@ The main difference is that ``compose`` takes strictly two arguments
 while ``pipe`` has infinite possible arguments.
 
 
+managed
+-------
+
+A really common task is to work with something stateful,
+like database connections or files.
+
+First, you need to acquire,
+then use it and do your thing,
+and clear things up and release the aquired resource.
+
+Let's say you have to read a file contents:
+
+.. code:: python
+
+  >>> from typing import TextIO
+  >>> from returns.pipeline import managed, is_successful
+  >>> from returns.result import ResultE
+  >>> from returns.io import IOResultE, impure_safe
+
+  >>> def read_file(file_obj: TextIO) -> IOResultE[str]:
+  ...     return impure_safe(file_obj.read)()
+
+  >>> def close_file(
+  ...     file_obj: TextIO,
+  ...     file_contents: ResultE[str],
+  ... ) -> IOResultE[None]:
+  ...     return impure_safe(file_obj.close)()
+
+  >>> managed_read = managed(read_file, close_file)
+
+  >>> read_result = managed_read(
+  ...     impure_safe(lambda filename: open(filename, 'r'))('pyproject.toml'),
+  ... )
+  >>> assert is_successful(read_result)
+
+And here's how we recommend to combine ``managed`` with other pipe functions:
+
+.. code:: python
+
+  >>> import tomlkit
+  >>> from returns.pipeline import flow
+  >>> from returns.pointfree import bind_result
+  >>> from returns.result import safe
+  >>> from returns.io import IOSuccess
+
+  >>> def parse_toml(file_contents: str) -> ResultE[dict]:
+  ...     return safe(tomlkit.parse)(file_contents)
+
+  >>> @safe
+  ... def get_project_name(parsed: dict) -> str:
+  ...     return parsed['tool']['poetry']['name']
+
+  >>> pipeline_result = flow(
+  ...     'pyproject.toml',
+  ...     impure_safe(lambda filename: open(filename, 'r')),
+  ...     managed_read,
+  ...     bind_result(parse_toml),
+  ...     bind_result(get_project_name),
+  ... )
+  >>> assert pipeline_result == IOSuccess('returns')
+
+Notice a few tricks here:
+
+1. We use ``managed`` with and without ``flow`` here,
+   both are fine!
+2. We have created a ``managed_read`` managed function,
+   so we don't need to specify it everytime we want
+   to read a file in a functional way
+3. We are using impure and pure operations inside the pipeline:
+   this helps us to understand how our app works.
+   Which parts do access the file system and which just work.
+
+However, you can still use imperative approach wrapped into ``@impure_safe``,
+your choice! We don't recommend to mix these two. Stick to one you like more.
+
+
 is_successful
 -------------
 
@@ -169,6 +245,7 @@ Further reading
 ---------------
 
 - `fp-ts pipeable <https://github.com/gcanti/fp-ts/blob/master/src/pipeable.ts>`_
+- `ZIO Managed <https://zio.dev/docs/datatypes/datatypes_managed>`_
 
 
 API Reference
@@ -177,6 +254,8 @@ API Reference
 .. autofunction:: returns.pipeline.flow
 
 .. autofunction:: returns.pipeline.pipe
+
+.. autofunction:: returns.pipeline.managed
 
 .. automodule:: returns.pipeline
    :members:

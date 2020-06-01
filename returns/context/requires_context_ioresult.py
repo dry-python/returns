@@ -1,3 +1,4 @@
+from abc import ABCMeta
 from typing import (
     TYPE_CHECKING,
     Any,
@@ -603,7 +604,7 @@ class RequiresContextIOResult(
     @classmethod
     def from_result(
         cls, inner_value: 'Result[_ValueType, _ErrorType]',
-    ) -> 'RequiresContextIOResult[Any, _ValueType, _ErrorType]':
+    ) -> 'RequiresContextIOResult[NoDeps, _ValueType, _ErrorType]':
         """
         Creates new container with ``Result`` as a unit value.
 
@@ -630,7 +631,7 @@ class RequiresContextIOResult(
     @classmethod
     def from_ioresult(
         cls, inner_value: IOResult[_ValueType, _ErrorType],
-    ) -> 'RequiresContextIOResult[Any, _ValueType, _ErrorType]':
+    ) -> 'RequiresContextIOResult[NoDeps, _ValueType, _ErrorType]':
         """
         Creates new container with ``Result`` as a unit value.
 
@@ -752,7 +753,7 @@ class RequiresContextIOResult(
     @classmethod
     def from_value(
         cls, inner_value: _FirstType,
-    ) -> 'RequiresContextIOResult[Any, _FirstType, Any]':
+    ) -> 'RequiresContextIOResult[NoDeps, _FirstType, Any]':
         """
         Creates new container with ``IOSuccess(inner_value)`` as a unit value.
 
@@ -771,7 +772,7 @@ class RequiresContextIOResult(
     @classmethod
     def from_failure(
         cls, inner_value: _FirstType,
-    ) -> 'RequiresContextIOResult[Any, Any, _FirstType]':
+    ) -> 'RequiresContextIOResult[NoDeps, Any, _FirstType]':
         """
         Creates new container with ``IOFailure(inner_value)`` as a unit value.
 
@@ -825,7 +826,7 @@ class RequiresContextIOResult(
 
 
 @final
-class ContextIOResult(Immutable, Generic[_EnvType]):
+class ContextIOResult(Immutable, Generic[_EnvType], metaclass=ABCMeta):
     """
     Helpers that can be used to work with ``RequiresContextIOResult`` container.
 
@@ -833,6 +834,8 @@ class ContextIOResult(Immutable, Generic[_EnvType]):
     and :class:`returns.context.requires_context_result.ContextResult`,
     refer there for the docs.
     """
+
+    __slots__ = ()
 
     @classmethod
     def ask(cls) -> RequiresContextIOResult[_EnvType, _EnvType, Any]:

@@ -1,3 +1,4 @@
+from abc import ABCMeta
 from typing import (
     TYPE_CHECKING,
     Any,
@@ -470,7 +471,7 @@ class RequiresContextResult(
     @classmethod
     def from_result(
         cls, inner_value: Result[_ValueType, _ErrorType],
-    ) -> 'RequiresContextResult[Any, _ValueType, _ErrorType]':
+    ) -> 'RequiresContextResult[NoDeps, _ValueType, _ErrorType]':
         """
         Creates new container with ``Result`` as a unit value.
 
@@ -560,7 +561,7 @@ class RequiresContextResult(
     @classmethod
     def from_value(
         cls, inner_value: _FirstType,
-    ) -> 'RequiresContextResult[Any, _FirstType, Any]':
+    ) -> 'RequiresContextResult[NoDeps, _FirstType, Any]':
         """
         Creates new container with ``Success(inner_value)`` as a unit value.
 
@@ -576,7 +577,7 @@ class RequiresContextResult(
     @classmethod
     def from_failure(
         cls, inner_value: _FirstType,
-    ) -> 'RequiresContextResult[Any, Any, _FirstType]':
+    ) -> 'RequiresContextResult[NoDeps, Any, _FirstType]':
         """
         Creates new container with ``Failure(inner_value)`` as a unit value.
 
@@ -625,12 +626,14 @@ class RequiresContextResult(
 
 
 @final
-class ContextResult(Immutable, Generic[_EnvType]):
+class ContextResult(Immutable, Generic[_EnvType], metaclass=ABCMeta):
     """
     Helpers that can be used to work with ``RequiresContextResult`` container.
 
     Related to :class:`returns.context.Context`, refer there for the docs.
     """
+
+    __slots__ = ()
 
     @classmethod
     def ask(cls) -> RequiresContextResult[_EnvType, _EnvType, Any]:

@@ -24,14 +24,12 @@ _NewValueType = TypeVar('_NewValueType')
 # Result related:
 _ErrorType = TypeVar('_ErrorType', covariant=True)
 _NewErrorType = TypeVar('_NewErrorType')
-_ContraErrorType = TypeVar('_ContraErrorType', contravariant=True)
 
 # Helpers:
 _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')
 
 
-@final
 class IO(BaseContainer, Generic[_ValueType]):
     """
     Explicit container for impure function results.
@@ -293,9 +291,11 @@ class IOResult(
     that we have to use special :class:`~_IOSuccess` and :class:`~_IOFailure`
     implementation details to correctly handle these callbacks.
 
-    Do not rely on them! Use public data.
+    Do not rely on them! Use public functions and types instead.
 
     """
+
+    outer: ClassVar[Type[IO]] = IO
 
     _inner_value: Result[_ValueType, _ErrorType]
 

@@ -44,6 +44,8 @@ See [0Ver](https://0ver.org/).
   it now also has **excelent** type inference
 - Adds typed `pipe` plugin, now it can accept any number of arguments,
   it now also has good type inference
+- Adds `managed` pipeline function that is useful
+  for working with stateful computations
 
 - Adds typed `map_`, `fix`, and `alt` pointfree functions
 - Adds typed `bind_result`, `bind_io`, `bind_ioresult`,
@@ -72,6 +74,10 @@ See [0Ver](https://0ver.org/).
   `FutureResult` and `RequiresContextFutureResult`
 - Adds `__copy__` and `__deepcopy__` magic methods to `Immutable` class
 - Speeds up ``is_successful`` function
+- Makes all `Context` context helpers abstract,
+  so you cannot create new instances of this class,
+  also adds `__slots__` to these classes
+- Improves `RequiresContext*` types with `NoDeps` where it is logically true
 
 ### Bugfixes
 
@@ -90,8 +96,8 @@ See [0Ver](https://0ver.org/).
 - Updates lots of dependencies
 - Adds lots of new tests
 - Updates lots of docs
-- Remove "IO marker" name from docs in favor for "IO container",
-  it is not special at all
+- Removes "IO marker" name from docs in favor for "IO container",
+  it is not special at all. Why would we call it differently?
 
 
 ## 0.13.0

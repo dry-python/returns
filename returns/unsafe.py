@@ -17,15 +17,15 @@ def unsafe_perform_io(wrapped_in_io: IO[_ValueType]) -> _ValueType:
     It is recommended to have only one place (module / file)
     in your program where you allow unsafe operations.
 
-    We recommend to use ``import-linter`` to enforce this rule:
-
-    - https://github.com/seddonym/import-linter
+    We recommend to use ``import-linter`` to enforce this rule.
 
     .. code:: python
 
       >>> from returns.io import IO
-      >>> unsafe_perform_io(IO(1))
-      1
+      >>> assert unsafe_perform_io(IO(1)) == 1
+
+    See also:
+        https://github.com/seddonym/import-linter
 
     """
     return wrapped_in_io._inner_value  # noqa: WPS437

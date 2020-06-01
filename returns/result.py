@@ -24,7 +24,6 @@ _ValueType = TypeVar('_ValueType', covariant=True)
 _NewValueType = TypeVar('_NewValueType')
 _ErrorType = TypeVar('_ErrorType', covariant=True)
 _NewErrorType = TypeVar('_NewErrorType')
-_ContraErrorType = TypeVar('_ContraErrorType', contravariant=True)
 
 # Aliases:
 _FirstType = TypeVar('_FirstType')

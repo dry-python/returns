@@ -2,8 +2,9 @@ from typing import ClassVar
 
 from typing_extensions import Protocol
 
-from returns._generated.pipeline.flow import _flow as flow  # noqa: F401
-from returns._generated.pipeline.pipe import _pipe as pipe  # noqa: F401
+from returns._generated.pipeline.flow import _flow as flow
+from returns._generated.pipeline.managed import _managed as managed
+from returns._generated.pipeline.pipe import _pipe as pipe
 
 
 class _HasSuccessAndFailureTypes(Protocol):

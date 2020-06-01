@@ -3,11 +3,13 @@ from typing import (
     Any,
     Awaitable,
     Callable,
+    ClassVar,
     Coroutine,
     Generator,
     Generic,
     Iterable,
     Sequence,
+    Type,
     TypeVar,
     Union,
 )
@@ -25,7 +27,6 @@ _ValueType = TypeVar('_ValueType', covariant=True)
 _NewValueType = TypeVar('_NewValueType')
 _ErrorType = TypeVar('_ErrorType', covariant=True)
 _NewErrorType = TypeVar('_NewErrorType')
-_ContraErrorType = TypeVar('_ContraErrorType', contravariant=True)
 
 # Aliases:
 _FirstType = TypeVar('_FirstType')
@@ -502,7 +503,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
     to turn complex nested operations into a one function calls.
 
     Tradeoffs
-    ---------
+    ~~~~~~~~~
 
     Due to possible performance issues we move all coroutines definitions
     to a separate module.
@@ -512,6 +513,8 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
         https://zio.dev/docs/overview/overview_basic_concurrency
 
     """
+
+    outer: ClassVar[Type[Future]] = Future
 
     _inner_value: Awaitable[Result[_ValueType, _ErrorType]]
 

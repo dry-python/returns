@@ -1,3 +1,4 @@
+from abc import ABCMeta
 from typing import (
     TYPE_CHECKING,
     Any,
@@ -203,7 +204,7 @@ class RequiresContext(
     @classmethod
     def from_value(
         cls, inner_value: _FirstType,
-    ) -> 'RequiresContext[Any, _FirstType]':
+    ) -> 'RequiresContext[NoDeps, _FirstType]':
         """
         Used to return some specific value from the container.
 
@@ -299,7 +300,7 @@ class RequiresContext(
 
 
 @final
-class Context(Immutable, Generic[_EnvType]):
+class Context(Immutable, Generic[_EnvType], metaclass=ABCMeta):
     """
     Helpers that can be used to work with ``RequiresContext`` container.
 
@@ -327,6 +328,8 @@ class Context(Immutable, Generic[_EnvType]):
     And ``mypy`` will warn you: ``error: Need type annotation for 'a'``
 
     """
+
+    __slots__ = ()
 
     @classmethod
     def ask(cls) -> RequiresContext[_EnvType, _EnvType]:

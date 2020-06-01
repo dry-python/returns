@@ -1,0 +1,40 @@
+- case: managed_with_future_result_callback
+  disable_cache: true
+  main: |
+    from returns.future import FutureResult
+    from returns.pipeline import managed
+    from returns.result import Result
+
+    def use(aquired_value: int) -> FutureResult[float, str]:
+        ...
+
+    def release(
+        aquired_value: int,
+        use_value: Result[float, str],
+    ) -> FutureResult[None, str]:
+        ...
+
+    reveal_type(managed(use, release))  # N: Revealed type is 'def (returns.future.FutureResult[builtins.int*, builtins.str*]) -> returns.future.FutureResult[builtins.float*, builtins.str*]'
+
+
+- case: managed_with_future_result_error
+  disable_cache: true
+  main: |
+    from returns.future import FutureResult
+    from returns.pipeline import managed
+    from returns.result import Result
+
+    def use(aquired_value: int) -> FutureResult[float, str]:
+        ...
+
+    def release(
+        aquired_value: int,
+        use_value: Result[float, int],
+    ) -> FutureResult[None, str]:
+        ...
+
+    reveal_type(managed(use, release))
+  out: |
+    main:14: error: Argument 1 to "_managed" has incompatible type "Callable[[int], FutureResult[float, str]]"; expected "Callable[[int], IOResult[float, int]]"
+    main:14: error: Argument 2 to "_managed" has incompatible type "Callable[[int, Result[float, int]], FutureResult[None, str]]"; expected "Callable[[int, Result[float, int]], IOResult[None, int]]"
+    main:14: note: Revealed type is 'def (returns.io.IOResult[builtins.int*, builtins.int*]) -> returns.io.IOResult[builtins.float*, builtins.int*]'
