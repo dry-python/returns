@@ -46,7 +46,7 @@ And it infects all other functions that call it.
 .. code:: python
 
   >>> def modify_number(number: int) -> IO[float]:
-  ...      return get_random_number().map(lambda rnd: number / rnd)
+  ...     return get_random_number().map(lambda rnd: number / rnd)
   ...
   >>> assert isinstance(modify_number(1), IO)
 
@@ -390,7 +390,7 @@ But, you can always make your ``IO`` lazy:
 .. code:: python
 
   >>> from returns.io import IO
-  >>> lazy = lambda: IO(1)
+  >>> lazy = lambda: IO(1)  # noqa: E731
   >>> str(lazy())
   '<IO: 1>'
 

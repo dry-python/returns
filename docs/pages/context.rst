@@ -200,9 +200,9 @@ It can be illustrated as a simple nested function:
 
   >>> from typing import Callable
   >>> def first(limit: int) -> Callable[[str], bool]:
-  ...    def inner(deps: str) -> bool:
+  ...     def inner(deps: str) -> bool:
   ...         return len(deps) > limit
-  ...    return inner
+  ...     return inner
   ...
   >>> assert first(2)('abc')  # first(limit)(deps)
   >>> assert not first(5)('abc')  # first(limit)(deps)
@@ -226,9 +226,9 @@ We can wrap it in ``RequiresContext`` container to allow better composition!
   >>> from returns.context import RequiresContext
 
   >>> def first(limit: int) -> RequiresContext[str, bool]:
-  ...    def inner(deps: str) -> bool:
+  ...     def inner(deps: str) -> bool:
   ...         return len(deps) > limit
-  ...    return RequiresContext(inner)  # wrapping function here!
+  ...     return RequiresContext(inner)  # wrapping function here!
 
   >>> assert first(1).map(bool_to_str)('abc') == 'ok'
   >>> assert first(5).map(bool_to_str)('abc') == 'nope'
@@ -397,7 +397,7 @@ let see an example:
   ...         def factory(*args, **kwargs):
   ...             original = function(*args, **kwargs)
   ...             if print_result:
-  ...                  print(original)
+  ...                 print(original)
   ...             return original
   ...         return factory
   ...     return decorator

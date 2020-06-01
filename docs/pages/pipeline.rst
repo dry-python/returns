@@ -55,7 +55,7 @@ You can also use ``flow`` with pointfree functions and containers:
 
   >>> def returns_container(arg: float) -> Result[str, ValueError]:
   ...     if arg != 0:
-  ...          return Success(str(arg))
+  ...         return Success(str(arg))
   ...     return Failure(ValueError('Wrong arg'))
 
   >>> def also_returns_container(arg: str) -> Result[str, ValueError]:
@@ -124,7 +124,7 @@ It is also might be useful to compose containers together:
 
   >>> def returns_container(arg: float) -> Result[str, ValueError]:
   ...     if arg != 0:
-  ...          return Success(str(arg))
+  ...         return Success(str(arg))
   ...     return Failure(ValueError('Wrong arg'))
 
   >>> def also_returns_container(arg: str) -> Result[str, ValueError]:

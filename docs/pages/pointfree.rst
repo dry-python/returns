@@ -19,6 +19,9 @@ Because they do not compose well:
 
 .. code:: python
 
+  from returns.pipeline import pipe
+  from returns.result import ResultE
+
   def returns_result(arg: int) -> ResultE[int]:
       ...
 
