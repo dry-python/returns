@@ -126,3 +126,7 @@ API Reference
    :members:
 
 .. autofunction:: returns.converters.coalesce_maybe
+
+.. autofunction:: returns.converters.coalesce_result
+
+.. autofunction:: returns.converters.coalesce_ioresult

@@ -176,20 +176,20 @@ Let's say you have to read a file contents:
   >>> from returns.io import IOResultE, impure_safe
 
   >>> def read_file(file_obj: TextIO) -> IOResultE[str]:
-  ...     return impure_safe(file_obj.read)()
+  ...     return impure_safe(file_obj.read)()  # this will be the final result
 
   >>> def close_file(
   ...     file_obj: TextIO,
   ...     file_contents: ResultE[str],
-  ... ) -> IOResultE[None]:
-  ...     return impure_safe(file_obj.close)()
+  ... ) -> IOResultE[None]:  # sometimes might require to use `untap`
+  ...     return impure_safe(file_obj.close)()  # this value will be dropped
 
   >>> managed_read = managed(read_file, close_file)
 
   >>> read_result = managed_read(
   ...     impure_safe(lambda filename: open(filename, 'r'))('pyproject.toml'),
   ... )
-  >>> assert is_successful(read_result)
+  >>> assert is_successful(read_result)  # file contents are inside `IOSuccess`
 
 And here's how we recommend to combine ``managed`` with other pipe functions:
 
