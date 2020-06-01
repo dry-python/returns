@@ -1,0 +1,76 @@
+- case: bind_context_wrong_env
+  disable_cache: true
+  main: |
+    from returns.pointfree import bind_context
+    from returns.context import RequiresContext, RequiresContextResult
+
+    def test(arg: float) -> RequiresContext[str, int]:
+        ...
+
+    x: RequiresContextResult[bool, float, str]
+    reveal_type(bind_context(test)(x))
+  out: |
+    main:8: error: Argument 1 to "__call__" of "_BindContext" has incompatible type "RequiresContextResult[bool, float, str]"; expected "RequiresContextResult[str, float, str]"
+    main:8: note: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.str, builtins.int, builtins.str*]'
+
+
+- case: bind_context_and_flow
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContext, RequiresContextResult
+    from returns.functions import identity
+    from returns.pointfree import bind_context
+    from returns.pipeline import flow
+
+    def test(arg: int) -> RequiresContext[object, float]:
+        ...
+
+    def second(arg: float) -> RequiresContext[object, bool]:
+        ...
+
+    r: RequiresContextResult[object, int, str]
+    reveal_type(flow(r, bind_context(test), bind_context(second), identity))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult*[builtins.object, builtins.bool, builtins.str*]'
+
+
+- case: bind_context_and_bind
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContext, RequiresContextResult
+    from returns.functions import identity
+    from returns.pointfree import bind, bind_context
+    from returns.pipeline import flow
+
+    def test(arg: int) -> RequiresContext[object, float]:
+        ...
+
+    def second(arg: float) -> RequiresContextResult[object, bool, str]:
+        ...
+
+    r: RequiresContextResult[object, int, str]
+    reveal_type(flow(r, bind_context(test), bind(second), identity))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult*[builtins.object*, builtins.bool*, builtins.str*]'
+
+
+- case: bind_context_requires_context_result
+  disable_cache: true
+  main: |
+    from returns.pointfree import bind_context
+    from returns.context import RequiresContext, RequiresContextResult
+
+    def test(arg: float) -> RequiresContext[bool, int]:
+        ...
+
+    x: RequiresContextResult[bool, float, str]
+    reveal_type(bind_context(test)(x))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.bool, builtins.int, builtins.str*]'
+
+
+- case: bind_context_requires_context_ioresult
+  disable_cache: true
+  main: |
+    from returns.pointfree import bind_context
+    from returns.context import RequiresContext, RequiresContextIOResult
+
+    def test(arg: float) -> RequiresContext[bool, int]:
+        ...
+
+    x: RequiresContextIOResult[bool, float, str]
+    reveal_type(bind_context(test)(x))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.bool, builtins.int, builtins.str*]'

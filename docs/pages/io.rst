@@ -18,8 +18,8 @@ Furthermore, there are several types of ``IO`` in our programs:
 There's a solution.
 
 
-IO marker
----------
+IO container
+------------
 
 Once you have an ``IO`` operation you can mark it appropriately.
 We can use a simple class :class:`returns.io.IO`
@@ -198,6 +198,7 @@ It really helps you with the composition!
 .. code:: python
 
   >>> from returns.io import IO
+  >>> from returns.pointfree import map_
 
   >>> def regular_function(arg: int) -> float:
   ...     return arg / 2  # not an `IO` operation
@@ -209,7 +210,7 @@ It really helps you with the composition!
   >>> assert io == IO(0.5)
 
   >>> # or, it is the same as:
-  >>> io = IO.lift(regular_function)(container)
+  >>> io = map_(regular_function)(container)
   >>> assert io == IO(0.5)
 
 ``IOResult`` can lift both regular functions and ones that return ``Result``:
@@ -217,6 +218,7 @@ It really helps you with the composition!
 .. code:: python
 
   >>> from returns.io import IOResult, IOSuccess
+  >>> from returns.pointfree import map_
 
   >>> def regular_function(arg: int) -> float:
   ...     return arg / 2  # not an `IO` operation
@@ -228,7 +230,7 @@ It really helps you with the composition!
   >>> assert io == IOSuccess(0.5)
 
   >>> # or, it is the same as:
-  >>> io = IOResult.lift(regular_function)(container)
+  >>> io = map_(regular_function)(container)
   >>> assert io == IOSuccess(0.5)
 
 And ``Result`` based functions:
@@ -237,14 +239,14 @@ And ``Result`` based functions:
 
   >>> from returns.io import IOResult, IOSuccess
   >>> from returns.result import Result, Success, Failure
+  >>> from returns.pointfree import bind_result
 
   >>> def regular_function(arg: int) -> Result[float, str]:
   ...     if arg > 0:
   ...         return Success(arg / 2)
   ...     return Failure('zero')
-  ...
 
-  >>> assert IOResult.lift_result(regular_function)(
+  >>> assert bind_result(regular_function)(
   ...     IOSuccess(1),
   ... ) == IOResult.from_result(regular_function(1))
 
@@ -432,7 +434,7 @@ How to create unit objects for IOResult?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 *TLDR*: you need to use ``IOSuccess`` and ``IOFailure`` functions
-or ``IOResult.from_success`` and ``IOResult.from_failure`` methods:
+or ``IOResult.from_value`` and ``IOResult.from_failure`` methods:
 
 .. code:: python
 
@@ -440,7 +442,7 @@ or ``IOResult.from_success`` and ``IOResult.from_failure`` methods:
   >>> first: IOResult[int, str] = IOSuccess(1)
   >>> second: IOResult[float, int] = IOFailure(1)
 
-  >>> assert IOResult.from_success(1) == IOSuccess(1)
+  >>> assert IOResult.from_value(1) == IOSuccess(1)
   >>> assert IOResult.from_failure(2) == IOFailure(2)
 
 You can also annotate your variables properly.
@@ -448,30 +450,6 @@ Otherwise, ``mypy`` will treat ``IOSuccess(1)`` as ``IOSuccess[int, Any]``.
 You can narrow the type in advance.
 
 See :ref:`result-units` for more details.
-
-Why can't we unwrap values or use @pipeline with IO?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Our design decision was not let people unwrap ``IO`` containers,
-so it will indeed infect the whole call-stack with its effect.
-
-Otherwise, people might hack the system
-in some dirty (from our point of view)
-but valid (from the python's point of view) ways.
-
-Even ``IOResult`` can't be unwrapped.
-When used together with ``@pipeline``
-we will still receive ``IO`` values
-from :meth:`returns.io.IOResult.unwrap` calls.
-
-Warning::
-
-  Of course, you can directly access
-  the internal state of the IO with ``._internal_state``,
-  but your are considered to be a grown-up!
-
-Use `wemake-python-styleguide <https://github.com/wemake-services/wemake-python-styleguide>`_
-to restrict ``._`` access in your code.
 
 
 Further reading
@@ -482,6 +460,7 @@ Further reading
 - `IO effect in Scala <https://typelevel.org/cats-effect/datatypes/io.html>`_
 - `Getting started with fp-ts: IO <https://dev.to/gcanti/getting-started-with-fp-ts-io-36p6>`_
 - `IOEither <https://github.com/gcanti/fp-ts/blob/master/docs/modules/IOEither.ts.md>`_
+- `Effect Tracking Is Commercially Worthless <https://degoes.net/articles/no-effect-tracking>`_
 
 
 API Reference

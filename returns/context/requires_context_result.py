@@ -4,12 +4,16 @@ from typing import (
     Callable,
     ClassVar,
     Generic,
+    Iterable,
+    Sequence,
     TypeVar,
     Union,
 )
 
 from typing_extensions import final
 
+from returns._generated.iterable import iterable
+from returns.context import NoDeps
 from returns.primitives.container import BaseContainer
 from returns.primitives.types import Immutable
 from returns.result import Failure, Result, Success
@@ -30,6 +34,7 @@ _NewErrorType = TypeVar('_NewErrorType')
 _FirstType = TypeVar('_FirstType')
 
 
+@final
 class RequiresContextResult(
     BaseContainer,
     Generic[_EnvType, _ValueType, _ErrorType],
@@ -66,7 +71,7 @@ class RequiresContextResult(
       ... )(...) == Success(2)
 
       >>> # With wrapper:
-      >>> assert RequiresContextResult.from_success(1).bind_result(
+      >>> assert RequiresContextResult.from_value(1).bind_result(
       ...     function,
       ... )(...) == Success(2)
 
@@ -100,7 +105,7 @@ class RequiresContextResult(
     ]
 
     #: A convinient placeholder to call methods created by `.from_value()`.
-    empty: ClassVar[Any] = object()
+    empty: ClassVar[NoDeps] = object()
 
     def __init__(
         self,
@@ -130,12 +135,13 @@ class RequiresContextResult(
 
           >>> from returns.context import RequiresContextResult
           >>> from returns.result import Success
+
           >>> def first(lg: bool) -> RequiresContextResult[float, int, str]:
           ...     # `deps` has `float` type here:
           ...     return RequiresContextResult(
           ...         lambda deps: Success(deps if lg else -deps),
           ...     )
-          ...
+
           >>> instance = first(False)
           >>> assert instance(3.5) == Success(-3.5)
 
@@ -155,7 +161,7 @@ class RequiresContextResult(
           >>> from returns.context import RequiresContextResult
           >>> from returns.result import Success, Failure
 
-          >>> assert RequiresContextResult.from_success(1).map(
+          >>> assert RequiresContextResult.from_value(1).map(
           ...     lambda x: x + 1,
           ... )(...) == Success(2)
 
@@ -165,6 +171,39 @@ class RequiresContextResult(
 
         """
         return RequiresContextResult(lambda deps: self(deps).map(function))
+
+    def apply(
+        self,
+        container: 'RequiresContextResult['
+            '_EnvType, Callable[[_ValueType], _NewValueType], _ErrorType]',
+    ) -> 'RequiresContextResult[_EnvType, _NewValueType, _ErrorType]':
+        """
+        Calls a wrapped function in a container on this container.
+
+        .. code:: python
+
+          >>> from returns.context import RequiresContextResult
+          >>> from returns.result import Success, Failure, Result
+
+          >>> def transform(arg: str) -> str:
+          ...     return arg + 'b'
+
+          >>> assert RequiresContextResult.from_value('a').apply(
+          ...    RequiresContextResult.from_value(transform),
+          ... )(...) == Success('ab')
+
+          >>> assert RequiresContextResult.from_failure('a').apply(
+          ...    RequiresContextResult.from_value(transform),
+          ... )(...) == Failure('a')
+
+          >>> assert isinstance(RequiresContextResult.from_value('a').apply(
+          ...    RequiresContextResult.from_failure(transform),
+          ... )(...), Result.failure_type) is True
+
+        """
+        return RequiresContextResult(
+            lambda deps: self(deps).apply(container(deps)),
+        )
 
     def bind(
         self,
@@ -186,7 +225,6 @@ class RequiresContextResult(
           ...     return RequiresContextResult(
           ...         lambda deps: Success(deps) if lg else Failure(-deps),
           ...     )
-          ...
 
           >>> def second(
           ...     number: int,
@@ -195,7 +233,6 @@ class RequiresContextResult(
           ...     return RequiresContextResult(
           ...         lambda deps: Success('>=' if number >= deps else '<'),
           ...     )
-          ...
 
           >>> assert first(True).bind(second)(1) == Success('>=')
           >>> assert first(False).bind(second)(2) == Failure(-2)
@@ -218,17 +255,17 @@ class RequiresContextResult(
 
           >>> from returns.context import RequiresContextResult
           >>> from returns.result import Success, Failure, Result
+
           >>> def function(number: int) -> Result[int, str]:
           ...     if number > 0:
           ...         return Success(number + 1)
           ...     return Failure('<0')
-          ...
 
-          >>> assert RequiresContextResult.from_success(1).bind_result(
+          >>> assert RequiresContextResult.from_value(1).bind_result(
           ...     function,
           ... )(RequiresContextResult.empty) == Success(2)
 
-          >>> assert RequiresContextResult.from_success(0).bind_result(
+          >>> assert RequiresContextResult.from_value(0).bind_result(
           ...     function,
           ... )(RequiresContextResult.empty) == Failure('<0')
 
@@ -253,12 +290,13 @@ class RequiresContextResult(
 
           >>> from returns.context import RequiresContext
           >>> from returns.result import Success, Failure
+
           >>> def function(arg: int) -> RequiresContext[str, int]:
           ...     return RequiresContext(lambda deps: len(deps) + arg)
-          ...
+
           >>> assert function(2)('abc') == 5
 
-          >>> assert RequiresContextResult.from_success(2).bind_context(
+          >>> assert RequiresContextResult.from_value(2).bind_context(
           ...     function,
           ... )('abc') == Success(5)
 
@@ -284,7 +322,7 @@ class RequiresContextResult(
           >>> from returns.context import RequiresContextResult
           >>> from returns.result import Success
 
-          >>> assert RequiresContextResult.from_success(1).fix(
+          >>> assert RequiresContextResult.from_value(1).fix(
           ...     lambda x: x + 1,
           ... )(...) == Success(1)
 
@@ -306,7 +344,7 @@ class RequiresContextResult(
           >>> from returns.context import RequiresContextResult
           >>> from returns.result import Success, Failure
 
-          >>> assert RequiresContextResult.from_success(1).alt(
+          >>> assert RequiresContextResult.from_value(1).alt(
           ...     lambda x: x + 1,
           ... )(...) == Success(1)
 
@@ -323,7 +361,7 @@ class RequiresContextResult(
             [_ErrorType],
             'RequiresContextResult[_EnvType, _ValueType, _NewErrorType]',
         ],
-    ):
+    ) -> 'RequiresContextResult[_EnvType, _ValueType, _NewErrorType]':
         """
         Composes this container with a function returning the same type.
 
@@ -340,9 +378,8 @@ class RequiresContextResult(
           ...      return RequiresContextResult(
           ...          lambda deps: Failure(arg + deps),
           ...      )
-          ...
 
-          >>> assert RequiresContextResult.from_success('a').rescue(
+          >>> assert RequiresContextResult.from_value('a').rescue(
           ...     rescuable,
           ... )('c') == Success('a')
           >>> assert RequiresContextResult.from_failure('a').rescue(
@@ -369,7 +406,7 @@ class RequiresContextResult(
 
           >>> from returns.context import RequiresContextResult
 
-          >>> assert RequiresContextResult.from_success(1).value_or(2)(
+          >>> assert RequiresContextResult.from_value(1).value_or(2)(
           ...     RequiresContextResult.empty,
           ... ) == 1
 
@@ -431,137 +468,6 @@ class RequiresContextResult(
         return lambda deps: self(deps).failure()
 
     @classmethod
-    def lift(
-        cls,
-        function: Callable[[_ValueType], _NewValueType],
-    ) -> Callable[
-        ['RequiresContextResult[_EnvType, _ValueType, _ErrorType]'],
-        'RequiresContextResult[_EnvType, _NewValueType, _ErrorType]',
-    ]:
-        """
-        Lifts function to be wrapped in a container for better composition.
-
-        In other words, it modifies the function's
-        signature from: ``a -> b`` to:
-        ``RequiresContextResult[env, a, err]``
-        -> ``RequiresContextResult[env, b, err]``
-
-        Works similar to :meth:`~RequiresContextResult.map`,
-        but has inverse semantics.
-
-        This is how it should be used:
-
-        .. code:: python
-
-          >>> from returns.context import RequiresContextResult
-          >>> from returns.result import Success
-
-          >>> def function(arg: int) -> str:
-          ...     return str(arg) + '!'
-          ...
-          >>> unit = RequiresContextResult.from_success(1)
-          >>> deps = RequiresContextResult.empty
-          >>> assert RequiresContextResult.lift(function)(
-          ...     unit,
-          ... )(deps) == Success('1!')
-
-        See also:
-            - https://wiki.haskell.org/Lifting
-            - https://github.com/witchcrafters/witchcraft
-            - https://en.wikipedia.org/wiki/Natural_transformation
-
-        """
-        return lambda container: container.map(function)
-
-    @classmethod
-    def lift_result(
-        cls,
-        function: Callable[[_ValueType], Result[_NewValueType, _ErrorType]],
-    ) -> Callable[
-        ['RequiresContextResult[_EnvType, _ValueType, _ErrorType]'],
-        'RequiresContextResult[_EnvType, _NewValueType, _ErrorType]',
-    ]:
-        """
-        Lifts function from ``Result`` for better composition.
-
-        In other words, it modifies the function's
-        signature from: ``a -> Result[b, c]`` to:
-        ``RequiresContextResult[env, a, c]``
-        -> ``RequiresContextResult[env, b, c]``
-
-        Similar to :meth:`~RequiresContextResult.lift`,
-        but works with other type.
-
-        .. code:: python
-
-          >>> from returns.context import RequiresContextResult
-          >>> from returns.result import Success, Failure, Result
-
-          >>> def function(arg: int) -> Result[str, int]:
-          ...     if arg > 0:
-          ...         return Success(str(arg) + '!')
-          ...     return Failure(arg)
-          ...
-          >>> deps = RequiresContextResult.empty
-
-          >>> assert RequiresContextResult.lift_result(function)(
-          ...     RequiresContextResult.from_success(1),
-          ... )(deps) == Success('1!')
-
-          >>> assert RequiresContextResult.lift_result(function)(
-          ...     RequiresContextResult.from_success(0),
-          ... )(deps) == Failure(0)
-
-          >>> assert RequiresContextResult.lift_result(function)(
-          ...     RequiresContextResult.from_failure('nope'),
-          ... )(deps) == Failure('nope')
-
-        """
-        return lambda container: container.bind_result(function)
-
-    @classmethod
-    def lift_context(
-        cls,
-        function: Callable[
-            [_ValueType],
-            'RequiresContext[_EnvType, _NewValueType]',
-        ],
-    ) -> Callable[
-        ['RequiresContextResult[_EnvType, _ValueType, _ErrorType]'],
-        'RequiresContextResult[_EnvType, _NewValueType, _ErrorType]',
-    ]:
-        """
-        Lifts function from ``RequiresContext`` for better composition.
-
-        In other words, it modifies the function's
-        signature from: ``a -> RequiresContext[env, b]`` to:
-        ``RequiresContextResult[env, a, c]``
-        -> ``RequiresContextResult[env, b, c]``
-
-        Similar to :meth:`~RequiresContextResult.lift`,
-        but works with other type.
-
-        .. code:: python
-
-          >>> from returns.context import RequiresContext
-          >>> from returns.result import Success, Failure
-
-          >>> def function(arg: int) -> RequiresContext[str, int]:
-          ...     return RequiresContext(lambda deps: len(deps) + arg)
-          ...
-
-          >>> assert RequiresContextResult.lift_context(function)(
-          ...     RequiresContextResult.from_success(2),
-          ... )('abc') == Success(5)
-
-          >>> assert RequiresContextResult.lift_context(function)(
-          ...     RequiresContextResult.from_failure(0),
-          ... )('abc') == Failure(0)
-
-        """
-        return lambda container: container.bind_context(function)
-
-    @classmethod
     def from_result(
         cls, inner_value: Result[_ValueType, _ErrorType],
     ) -> 'RequiresContextResult[Any, _ValueType, _ErrorType]':
@@ -616,7 +522,7 @@ class RequiresContextResult(
         return RequiresContextResult(container)
 
     @classmethod
-    def from_successful_context(
+    def from_context(
         cls, inner_value: 'RequiresContext[_EnvType, _FirstType]',
     ) -> 'RequiresContextResult[_EnvType, _FirstType, Any]':
         """
@@ -626,7 +532,7 @@ class RequiresContextResult(
 
           >>> from returns.context import RequiresContext
           >>> from returns.result import Success
-          >>> assert RequiresContextResult.from_successful_context(
+          >>> assert RequiresContextResult.from_context(
           ...     RequiresContext.from_value(1),
           ... )(...) == Success(1)
 
@@ -652,7 +558,7 @@ class RequiresContextResult(
         return RequiresContextResult(lambda deps: Failure(inner_value(deps)))
 
     @classmethod
-    def from_success(
+    def from_value(
         cls, inner_value: _FirstType,
     ) -> 'RequiresContextResult[Any, _FirstType, Any]':
         """
@@ -662,7 +568,7 @@ class RequiresContextResult(
 
           >>> from returns.context import RequiresContextResult
           >>> from returns.result import Success
-          >>> assert RequiresContextResult.from_success(1)(...) == Success(1)
+          >>> assert RequiresContextResult.from_value(1)(...) == Success(1)
 
         """
         return RequiresContextResult(lambda _: Success(inner_value))
@@ -682,6 +588,40 @@ class RequiresContextResult(
 
         """
         return RequiresContextResult(lambda _: Failure(inner_value))
+
+    @classmethod
+    def from_iterable(
+        cls,
+        containers:
+            Iterable['RequiresContextResult[_EnvType, _ValueType, _ErrorType]'],
+    ) -> 'RequiresContextResult[_EnvType, Sequence[_ValueType], _ErrorType]':
+        """
+        Transforms an iterable of ``RequiresContextResult`` containers.
+
+        Returns a single container with multiple elements inside.
+
+        .. code:: python
+
+          >>> from returns.context import RequiresContextResult
+          >>> from returns.result import Success, Failure
+
+          >>> assert RequiresContextResult.from_iterable([
+          ...    RequiresContextResult.from_value(1),
+          ...    RequiresContextResult.from_value(2),
+          ... ])(...) == Success((1, 2))
+
+          >>> assert RequiresContextResult.from_iterable([
+          ...    RequiresContextResult.from_value(1),
+          ...    RequiresContextResult.from_failure('a'),
+          ... ])(...) == Failure('a')
+
+          >>> assert RequiresContextResult.from_iterable([
+          ...    RequiresContextResult.from_failure('a'),
+          ...    RequiresContextResult.from_value(1),
+          ... ])(...) == Failure('a')
+
+        """
+        return iterable(cls, containers)
 
 
 @final

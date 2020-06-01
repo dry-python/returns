@@ -26,3 +26,18 @@
 
     reveal_type(unify(test))  # N: Revealed type is 'def [_ErrorType] (returns.io.IOResult[builtins.float*, _ErrorType`-4]) -> returns.io.IOResult[builtins.int*, Union[_ErrorType`-4, builtins.str*]]'
     reveal_type(unify(test)(x))  # N: Revealed type is 'returns.io.IOResult[builtins.int, Union[builtins.bool*, builtins.str]]'
+
+
+- case: unify_ioresult
+  disable_cache: true
+  main: |
+    from returns.pointfree import unify
+    from returns.future import FutureResult
+
+    def test(arg: float) -> FutureResult[int, str]:
+        ...
+
+    x: FutureResult[int, bool]
+
+    reveal_type(unify(test))  # N: Revealed type is 'def [_ErrorType] (returns.future.FutureResult[builtins.float*, _ErrorType`-4]) -> returns.future.FutureResult[builtins.int*, Union[_ErrorType`-4, builtins.str*]]'
+    reveal_type(unify(test)(x))  # N: Revealed type is 'returns.future.FutureResult[builtins.int, Union[builtins.bool*, builtins.str]]'

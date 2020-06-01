@@ -1,0 +1,28 @@
+- case: pipe_generic_function
+  disable_cache: true
+  main: |
+    from returns.pipeline import pipe
+    from returns.functions import identity
+    from typing import TypeVar
+
+    _NewValueType = TypeVar('_NewValueType')
+
+    def test(arg: _NewValueType) -> _NewValueType:
+        x = pipe(identity)(arg)
+        reveal_type(x)  # N: Revealed type is '_NewValueType`-1'
+        return x
+
+
+- case: pipe_generic_argument
+  disable_cache: true
+  main: |
+    from returns.pipeline import pipe
+    from returns.functions import identity
+    from typing import TypeVar
+
+    _NewValueType = TypeVar('_NewValueType')
+
+    def test(arg: _NewValueType) -> _NewValueType:
+        x = pipe(identity, str)(arg)
+        reveal_type(x)  # N: Revealed type is 'builtins.str'
+        return arg

@@ -5,6 +5,7 @@ from returns.context import (
     RequiresContextIOResult,
     RequiresContextResult,
 )
+from returns.future import Future, FutureResult
 from returns.io import IO, IOResult
 from returns.maybe import Maybe
 from returns.result import Result
@@ -14,8 +15,6 @@ _ErrorType = TypeVar('_ErrorType')
 _NewValueType = TypeVar('_NewValueType')
 _EnvType = TypeVar('_EnvType')
 
-
-# Bind:
 
 @overload
 def _bind(
@@ -83,5 +82,22 @@ def _bind(
 ) -> Callable[
     [IOResult[_ValueType, _ErrorType]],
     IOResult[_NewValueType, _ErrorType],
+]:
+    ...
+
+
+@overload
+def _bind(
+    function: Callable[[_ValueType], Future[_NewValueType]],
+) -> Callable[[Future[_ValueType]], Future[_NewValueType]]:
+    ...
+
+
+@overload
+def _bind(
+    function: Callable[[_ValueType], FutureResult[_NewValueType, _ErrorType]],
+) -> Callable[
+    [FutureResult[_ValueType, _ErrorType]],
+    FutureResult[_NewValueType, _ErrorType],
 ]:
     ...

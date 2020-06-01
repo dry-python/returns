@@ -1,0 +1,45 @@
+- case: future_correct_cast
+  disable_cache: true
+  main: |
+    from returns.future import Future
+
+    first: Future[ValueError]
+    second: Future[Exception] = first
+    reveal_type(second)  # N: Revealed type is 'returns.future.Future[builtins.Exception]'
+
+
+- case: future_from_value
+  disable_cache: true
+  main: |
+    from returns.future import Future
+
+    reveal_type(Future.from_value(1))  # N: Revealed type is 'returns.future.Future[builtins.int*]'
+
+
+- case: future_from_iterable
+  disable_cache: true
+  main: |
+    from returns.future import Future
+    from typing import Iterable
+
+    x: Iterable[Future[int]]
+
+    reveal_type(Future.from_iterable(x))  # N: Revealed type is 'returns.future.Future[typing.Sequence[builtins.int*]]'
+
+
+- case: future_from_io
+  disable_cache: true
+  main: |
+    from returns.future import Future
+    from returns.io import IO
+
+    reveal_type(Future.from_io(IO(1)))  # N: Revealed type is 'returns.future.Future[builtins.int*]'
+
+
+- case: future_from_downcast
+  disable_cache: true
+  main: |
+    from returns.future import Future, FutureResult
+
+    first: FutureResult[int, ValueError]
+    reveal_type(Future.from_future_result(first))  # N: Revealed type is 'returns.future.Future[returns.result.Result[builtins.int*, builtins.ValueError*]]'

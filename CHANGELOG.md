@@ -10,18 +10,88 @@ See [0Ver](https://0ver.org/).
 
 ### Features
 
-- **Breaking**: renames `Maybe.from_value` to `Maybe.from_value`.
+- **Breaking**: renames mypy plugin from `decorator_plugin` to `returns_plugin`
+  because of a complete rewrite and lots of new features
+- **Breaking**: changes `@safe`, `@impure`, `impure_safe`, `@maybe` semantics:
+  they do not work with `async` functions anymore;
+  now you are forced to use `Future` and its helpers
+  to work with `async` functions
+- **Breaking**: renames `Maybe.new` to `Maybe.from_value`.
   Because all our other containers support this protocol.
   Only `Maybe` was different, sorry for that!
-- Adds typed `partial` plugin!
+- **Breaking**: renames `.from_success()` to `.from_value()`,
+  there's no need in two separate methods
+- **Breaking**: renames `.from_successful_io()` to `.from_io()`,
+  there's no need in two separate methods
+- **Breaking**: renames `.from_successful_context()` to `.from_context()`,
+  there's no need in two separate methods
+- **Breaking**: since we now support `.apply()` method,
+  there's no more need in `*_squash` converters, they are removed
+- **Breaking**: renamed `Instanceable` to `Applicative`
+- **Breaking**: changes `.from_io` and `.from_failed_io` of `IOResult`
+  to return `Any` instead of `NoReturn` unfilled type
+- **Breaking**: removes `.lift` and `.lift_*` methods from all containers,
+  use `map_`, `bind_result`, `bind_io`, and other pointfree helpers instead
+- **Breaking**: removes `@pipeline` function. It was a mistake:
+  it does not work with mixed container types,
+  it does not type failures properly,
+  it does not work with ``IO`` and ``Future``,
+  it enforces to write imperative code in a functional codebase.
+  Use ``flow`` instead
+
+- Adds typed `partial` and `curry` mypy plugins!
+- Adds typed `flow` plugin, now it can accept any number of arguments,
+  it now also has **excelent** type inference
+- Adds typed `pipe` plugin, now it can accept any number of arguments,
+  it now also has good type inference
+
+- Adds typed `map_`, `fix`, and `alt` pointfree functions
+- Adds typed `bind_result`, `bind_io`, `bind_ioresult`,
+  `bind_context`, `bind_context_result`, `bind_future`,
+  `bind_async`, and `bind_awaitable` pointfree functions
+- Adds typed `unify` pointfree function
+- Adds typed `apply` pointfree function
+
 - Adds `pytest` plugin with the ability to tests error handling
-- Adds `unify` point free function
+
+- Adds `Future` container to easily work with `async` functions
+- Adds `FutureResult` container to easily work
+  with `async` function that might fail
+- Adds `RequiresContextFutureResult` container
+- Adds `ReaderFutureResult` alias for `RequiresContextFutureResult`
+- Adds `RequiresContextFutureResultE` and `ReaderFutureResultE` aliases
+- Adds `Future`, `FutureResult` and `RequiresContextFutureResult`
+  support for all existing pointfree functions
+
+- Adds `bind_io` method to `IOResult`
+- Adds `bind_io` method to `RequiresContextIOResult`
+- Adds `or_else` method to `Maybe`
+
+- Adds `not_` composition helper
+- Adds `flatten` support for `Future`,
+  `FutureResult` and `RequiresContextFutureResult`
 - Adds `__copy__` and `__deepcopy__` magic methods to `Immutable` class
+- Speeds up ``is_successful`` function
 
 ### Bugfixes
 
-- **Breaking**: `Some(None)` does no evaluate to `Nothing` anymore,
-  it might break some people's programms. But it was very wrong!
+- Fixes that `@safe` decorator was generating incorrect signatures
+  for functions with `Any`
+- Fixes that `.rescue()` of `RequiresContextResult` was returning `Any`
+- Fixes that `.rescue()` of `RequiresContextIOResult` was returning `Any`
+- Fixes that `RequiresContextResult` and `RequiresContextIOResult`
+  were not `final`
+- Fixes that `ImmutableStateError` was not a subclass of `AttributeError`
+
+### Misc
+
+- Replaces `pytest-asyncio` with `anyio` plugin,
+  now we test compatibility with any IO stack: `asyncio`, `trio`, `curio`
+- Updates lots of dependencies
+- Adds lots of new tests
+- Updates lots of docs
+- Remove "IO marker" name from docs in favor for "IO container",
+  it is not special at all
 
 
 ## 0.13.0
@@ -70,7 +140,7 @@ See [0Ver](https://0ver.org/).
 
 - Adds `Immutable` primitive type
 - Adds `Unitable` protocol and `.from_success()` and `.from_failure()`
-  methods for all `Result` realted classes
+  methods for all `Result` related classes
 - Adds `Instanceable` protocol and `.from_value()` method
   for `IO` and `RequiresContext`
 
@@ -221,7 +291,7 @@ See [0Ver](https://0ver.org/).
 
 ### Features
 
-- Adds `IO` marker
+- Adds `IO` container
 - Adds `unsafe` module with unsafe functions
 - Changes how functions are located inside the project
 

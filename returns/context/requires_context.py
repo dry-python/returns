@@ -1,7 +1,17 @@
-from typing import TYPE_CHECKING, Any, Callable, ClassVar, Generic, TypeVar
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Callable,
+    ClassVar,
+    Generic,
+    Iterable,
+    Sequence,
+    TypeVar,
+)
 
 from typing_extensions import final
 
+from returns._generated.iterable import iterable
 from returns.functions import identity
 from returns.primitives.container import BaseContainer
 from returns.primitives.types import Immutable
@@ -9,7 +19,7 @@ from returns.primitives.types import Immutable
 if TYPE_CHECKING:
     # We need this condition to make sure Python can solve cycle imports.
     # But, since we only use these values in types, it is not important.
-    from returns.context.requires_context_io_result import (
+    from returns.context.requires_context_ioresult import (
         RequiresContextIOResult,
     )
     from returns.context.requires_context_result import RequiresContextResult
@@ -26,6 +36,11 @@ _ErrorType = TypeVar('_ErrorType')
 
 # Helpers:
 _FirstType = TypeVar('_FirstType')
+
+# Type Aliases:
+#: Sometimes ``RequiresContext`` and other similar types might be used with
+#: no explicit dependencies so we need to have this type alias for Any.
+NoDeps = Any
 
 
 @final
@@ -67,7 +82,7 @@ class RequiresContext(
     _inner_value: Callable[['RequiresContext', _EnvType], _ReturnType]
 
     #: A convinient placeholder to call methods created by `.from_value()`:
-    empty: ClassVar[Any] = object()
+    empty: ClassVar[NoDeps] = object()
 
     def __init__(
         self, inner_value: Callable[[_EnvType], _ReturnType],
@@ -93,15 +108,18 @@ class RequiresContext(
         .. code:: python
 
           >>> from returns.context import RequiresContext
+
           >>> def first(lg: bool) -> RequiresContext[float, int]:
           ...     # `deps` has `float` type here:
           ...     return RequiresContext(
           ...         lambda deps: deps if lg else -deps,
           ...     )
-          ...
+
           >>> instance = first(False)  # creating `RequiresContext` instance
-          >>> instance(3.5)  # calling it with `__call__`
-          -3.5
+          >>> assert instance(3.5) == -3.5 # calling it with `__call__`
+
+          >>> # Example with another logic:
+          >>> assert first(True)(3.5) == 3.5
 
         In other things, it is a regular python magic method.
         """
@@ -123,14 +141,29 @@ class RequiresContext(
           ...     return RequiresContext(
           ...         lambda deps: deps if lg else -deps,
           ...     )
-          ...
-          >>> first(True).map(lambda number: number * 10)(2.5)
-          25.0
-          >>> first(False).map(lambda number: number * 10)(0.1)
-          -1.0
+
+          >>> assert first(True).map(lambda number: number * 10)(2.5) == 25.0
+          >>> assert first(False).map(lambda number: number * 10)(0.1) -1.0
 
         """
         return RequiresContext(lambda deps: function(self(deps)))
+
+    def apply(
+        self,
+        container: 'Reader[_EnvType, Callable[[_ReturnType], _NewReturnType]]',
+    ) -> 'RequiresContext[_EnvType, _NewReturnType]':
+        """
+        Calls a wrapped function in a container on this container.
+
+        .. code:: python
+
+          >>> from returns.context import RequiresContext
+          >>> assert RequiresContext.from_value('a').apply(
+          ...    RequiresContext.from_value(lambda inner: inner + 'b')
+          ... )(...) == 'ab'
+
+        """
+        return RequiresContext(lambda deps: self.map(container(deps))(deps))
 
     def bind(
         self,
@@ -154,63 +187,18 @@ class RequiresContext(
           ...     return RequiresContext(
           ...         lambda deps: deps if lg else -deps,
           ...     )
-          ...
 
           >>> def second(number: int) -> RequiresContext[float, str]:
           ...     # `deps` has `float` type here:
           ...     return RequiresContext(
           ...         lambda deps: '>=' if number >= deps else '<',
           ...     )
-          ...
 
-          >>> first(True).bind(second)(1)
-          '>='
-          >>> first(False).bind(second)(2)
-          '<'
+          >>> assert first(True).bind(second)(1) == '>='
+          >>> assert first(False).bind(second)(2) == '<'
 
         """
         return RequiresContext(lambda deps: function(self(deps))(deps))
-
-    @classmethod
-    def lift(
-        cls,
-        function: Callable[[_ReturnType], _NewReturnType],
-    ) -> Callable[
-        ['RequiresContext[_EnvType, _ReturnType]'],
-        'RequiresContext[_EnvType, _NewReturnType]',
-    ]:
-        """
-        Lifts function to be wrapped in a container for better composition.
-
-        In other words, it modifies the function's
-        signature from: ``a -> b`` to:
-        ``RequiresContext[env, a] -> RequiresContext[env, b]``
-
-        Works similar to :meth:`~RequiresContext.map`,
-        but has inverse semantics.
-
-        This is how it should be used:
-
-        .. code:: python
-
-          >>> from returns.context import RequiresContext
-          >>> def example(argument: int) -> float:
-          ...     return argument / 2
-          ...
-
-          >>> container = RequiresContext.lift(example)(
-          ...     RequiresContext.from_value(2),
-          ... )
-          >>> container(RequiresContext.empty)
-          1.0
-
-        See also:
-            - https://wiki.haskell.org/Lifting
-            - https://github.com/witchcrafters/witchcraft
-            - https://en.wikipedia.org/wiki/Natural_transformation
-
-        """
-        return lambda container: container.map(function)
 
     @classmethod
     def from_value(
@@ -232,34 +220,32 @@ class RequiresContext(
 
         Might be used with or without direct type hint.
 
-        Part of the :class:`returns.primitives.interfaces.Instanceable`
+        Part of the :class:`returns.primitives.interfaces.Applicative`
         protocol.
         """
         return RequiresContext(lambda _: inner_value)
 
     @classmethod
-    def from_requires_context_ioresult(
+    def from_iterable(
         cls,
-        container: 'RequiresContextIOResult[_EnvType, _ValueType, _ErrorType]',
-    ) -> 'RequiresContext[_EnvType, IOResult[_ValueType, _ErrorType]]':
+        containers: Iterable['RequiresContext[_EnvType, _ValueType]'],
+    ) -> 'RequiresContext[_EnvType, Sequence[_ValueType]]':
         """
-        Typecasts ``RequiresContextIOResult`` to ``RequiresContext`` instance.
+        Transforms an iterable of ``RequiresContext`` containers.
 
-        Breaks ``RequiresContextIOResult[e, a, b]``
-        into ``RequiresContext[e, IOResult[a, b]]``.
+        Returns a single container with a sequence of values.
 
         .. code:: python
 
           >>> from returns.context import RequiresContext
-          >>> from returns.context import RequiresContextIOResult
-          >>> from returns.io import IOSuccess
-          >>> assert RequiresContext.from_requires_context_ioresult(
-          ...    RequiresContextIOResult.from_success(1),
-          ... )(...) == IOSuccess(1)
 
-        Can be reverted with `RequiresContextIOResult.from_typecast`.
+          >>> assert RequiresContext.from_iterable([
+          ...    RequiresContext.from_value(1),
+          ...    RequiresContext.from_value(2),
+          ... ])(...) == (1, 2)
+
         """
-        return RequiresContext(container)
+        return iterable(cls, containers)
 
     @classmethod
     def from_requires_context_result(
@@ -278,10 +264,36 @@ class RequiresContext(
           >>> from returns.context import RequiresContextResult
           >>> from returns.result import Success
           >>> assert RequiresContext.from_requires_context_result(
-          ...    RequiresContextResult.from_success(1),
+          ...    RequiresContextResult.from_value(1),
           ... )(...) == Success(1)
 
-        Can be reverted with `RequiresContextResult.from_typecast`.
+        Can be reverted with ``RequiresContextResult.from_typecast``.
+
+        """
+        return RequiresContext(container)
+
+    @classmethod
+    def from_requires_context_ioresult(
+        cls,
+        container: 'RequiresContextIOResult[_EnvType, _ValueType, _ErrorType]',
+    ) -> 'RequiresContext[_EnvType, IOResult[_ValueType, _ErrorType]]':
+        """
+        Typecasts ``RequiresContextIOResult`` to ``RequiresContext`` instance.
+
+        Breaks ``RequiresContextIOResult[e, a, b]``
+        into ``RequiresContext[e, IOResult[a, b]]``.
+
+        .. code:: python
+
+          >>> from returns.context import RequiresContext
+          >>> from returns.context import RequiresContextIOResult
+          >>> from returns.io import IOSuccess
+          >>> assert RequiresContext.from_requires_context_ioresult(
+          ...    RequiresContextIOResult.from_value(1),
+          ... )(...) == IOSuccess(1)
+
+        Can be reverted with ``RequiresContextIOResult.from_typecast``.
+
         """
         return RequiresContext(container)
 
@@ -331,18 +343,15 @@ class Context(Immutable, Generic[_EnvType]):
           >>> from typing_extensions import TypedDict
           >>> class Deps(TypedDict):
           ...     message: str
-          ...
 
           >>> def first(lg: bool) -> RequiresContext[Deps, int]:
           ...     # `deps` has `Deps` type here:
           ...     return RequiresContext(
           ...         lambda deps: deps['message'] if lg else 'error',
           ...     )
-          ...
 
           >>> def second(text: str) -> RequiresContext[int, int]:
           ...     return first(len(text) > 3)
-          ...
 
           >>> assert second('abc')({'message': 'ok'}) == 'error'
           >>> assert second('abcd')({'message': 'ok'}) == 'ok'
@@ -357,30 +366,32 @@ class Context(Immutable, Generic[_EnvType]):
           >>> class Deps(TypedDict):
           ...     message: str
           ...     limit: int   # note this new field!
-          ...
 
           >>> def new_first(lg: bool) -> RequiresContext[Deps, int]:
           ...     # `deps` has `Deps` type here:
           ...     return RequiresContext(
-          ...         lambda deps: deps['message'] if lg else 'error',
+          ...         lambda deps: deps['message'] if lg else 'err',
           ...     )
-          ...
 
           >>> def new_second(text: str) -> RequiresContext[int, int]:
           ...     return Context[Deps].ask().bind(
           ...         lambda deps: new_first(len(text) > deps.get('limit', 3)),
           ...     )
-          ...
 
           >>> assert new_second('abc')({'message': 'ok', 'limit': 2}) == 'ok'
           >>> assert new_second('abcd')({'message': 'ok'}) == 'ok'
-          >>> new_second('abcd')({'message': 'ok', 'limit': 5})
-          'error'
+          >>> assert new_second('abcd')({'message': 'ok', 'limit': 5}) == 'err'
 
-        That's how ``ask`` works and can be used.
+        That's how ``ask`` works.
 
         See also:
             https://dev.to/gcanti/getting-started-with-fp-ts-reader-1ie5
 
         """
         return RequiresContext(identity)
+
+
+# Aliases
+
+#: Sometimes `RequiresContext` is too long to type.
+Reader = RequiresContext

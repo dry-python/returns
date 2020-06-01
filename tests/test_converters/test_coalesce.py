@@ -16,12 +16,17 @@ def _failed_case(_) -> int:
     return 0
 
 
+def _iosuccess_case(state: IO[int]) -> IO[int]:
+    return state
+
+
+def _iofailed_case(_) -> IO[int]:
+    return IO(0)
+
+
 _result_converter = coalesce_result(_success_case, _failed_case)
 _maybe_converter = coalesce_maybe(_success_case, _failed_case)
-_ioresult_converter = coalesce_ioresult(
-    IO.lift(_success_case),
-    IO.lift(_failed_case),
-)
+_ioresult_converter = coalesce_ioresult(_iosuccess_case, _iofailed_case)
 
 
 def test_coalesce_result():
@@ -32,7 +37,7 @@ def test_coalesce_result():
 
 def test_coalesce_ioresult():
     """Ensures that `coalesce` is always returning the correct type."""
-    assert _ioresult_converter(IOSuccess(1)) == IO(2)
+    assert _ioresult_converter(IOSuccess(1)) == IO(1)
     assert _ioresult_converter(IOFailure(1)) == IO(0)
 
 

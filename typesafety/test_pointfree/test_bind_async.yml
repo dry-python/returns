@@ -1,0 +1,24 @@
+- case: bind_async_future
+  disable_cache: true
+  main: |
+    from returns.pointfree import bind_async
+    from returns.future import Future
+
+    async def test(arg: float) -> Future[int]:
+        ...
+
+    x: Future[float]
+    reveal_type(bind_async(test)(x))  # N: Revealed type is 'returns.future.Future[builtins.int*]'
+
+
+- case: bind_async_futureresult
+  disable_cache: true
+  main: |
+    from returns.pointfree import bind_async
+    from returns.future import FutureResult
+
+    async def test(arg: float) -> FutureResult[int, str]:
+        ...
+
+    x: FutureResult[float, str]
+    reveal_type(bind_async(test)(x))  # N: Revealed type is 'returns.future.FutureResult[builtins.int*, builtins.str*]'

@@ -1,0 +1,27 @@
+- case: future_safe_decorator_with_args
+  disable_cache: true
+  main: |
+    from typing import Optional
+    from returns.future import future_safe
+
+    @future_safe
+    async def test(
+         first: int, second: Optional[str] = None, *, kw: bool = True,
+    ) -> int:
+        return 1
+
+    reveal_type(test)  # N: Revealed type is 'def (first: builtins.int, second: Union[builtins.str, None] =, *, kw: builtins.bool =) -> returns.future.FutureResult[builtins.int, builtins.Exception]'
+
+
+- case: future_safe_composition_with_args
+  disable_cache: true
+  main: |
+    from typing import Optional
+    from returns.future import future_safe
+
+    async def test(
+         first: int, second: Optional[str] = None, *, kw: bool = True,
+    ) -> int:
+        return 1
+
+    reveal_type(future_safe(test))  # N: Revealed type is 'def (first: builtins.int, second: Union[builtins.str, None] =, *, kw: builtins.bool =) -> returns.future.FutureResult[builtins.int, builtins.Exception]'

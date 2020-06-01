@@ -1,0 +1,115 @@
+- case: curry_zero_args
+  disable_cache: true
+  main: |
+    from returns.curry import curry
+
+    @curry
+    def zero() -> str:
+        ...
+
+    reveal_type(zero)  # N: Revealed type is 'def () -> builtins.str'
+    reveal_type(zero())  # N: Revealed type is 'builtins.str'
+
+
+- case: curry_single_arg
+  disable_cache: true
+  main: |
+    from returns.curry import curry
+
+    @curry
+    def zero(arg: int) -> str:
+        ...
+
+    reveal_type(zero)  # N: Revealed type is 'def (arg: builtins.int) -> builtins.str'
+    reveal_type(zero(1))  # N: Revealed type is 'builtins.str'
+
+
+- case: curry_two_args1
+  disable_cache: true
+  main: |
+    from returns.curry import curry
+
+    @curry
+    def zero(arg: int, other: float) -> str:
+        ...
+
+    reveal_type(zero)  # N: Revealed type is 'Overload(def (arg: builtins.int) -> def (other: builtins.float) -> builtins.str, def (arg: builtins.int, other: builtins.float) -> builtins.str)'
+    reveal_type(zero(1))  # N: Revealed type is 'def (other: builtins.float) -> builtins.str'
+    reveal_type(zero(1, 2.0))  # N: Revealed type is 'builtins.str'
+    reveal_type(zero(1)(2.0))  # N: Revealed type is 'builtins.str'
+
+
+- case: curry_two_args2
+  disable_cache: true
+  main: |
+    from returns.curry import curry
+
+    def zero(arg: int, other: float) -> str:
+        ...
+
+    reveal_type(curry(zero))  # N: Revealed type is 'Overload(def (arg: builtins.int) -> def (other: builtins.float) -> builtins.str, def (arg: builtins.int, other: builtins.float) -> builtins.str)'
+    reveal_type(curry(zero)(1))  # N: Revealed type is 'def (other: builtins.float) -> builtins.str'
+    reveal_type(curry(zero)(1, 2.0))  # N: Revealed type is 'builtins.str'
+    reveal_type(curry(zero)(1)(2.0))  # N: Revealed type is 'builtins.str'
+
+
+- case: curry_two_args3
+  disable_cache: true
+  main: |
+    from returns.curry import curry
+
+    @curry
+    def zero(arg: int, other: float) -> str:
+        ...
+
+    reveal_type(zero('a'))
+    reveal_type(zero(1.0, 1))
+    reveal_type(zero(1, 2.0, 2.0))
+  out: |
+    main:7: error: No overload variant of "zero" matches argument type "str"
+    main:7: note:     <1 more non-matching overload not shown>
+    main:7: note:     def zero(arg: int) -> Callable[..., str]
+    main:7: note: Possible overload variant:
+    main:7: note: Revealed type is 'Any'
+    main:8: error: No overload variant of "zero" matches argument types "float", "int"
+    main:8: note:     <1 more non-matching overload not shown>
+    main:8: note:     def zero(arg: int, other: float) -> str
+    main:8: note: Possible overload variant:
+    main:8: note: Revealed type is 'Any'
+    main:9: error: No overload variant of "zero" matches argument types "int", "float", "float"
+    main:9: note:     def zero(arg: int) -> Callable[..., str]
+    main:9: note:     def zero(arg: int, other: float) -> str
+    main:9: note: Possible overload variants:
+    main:9: note: Revealed type is 'Any'
+
+- case: curry_two_args_one_default
+  disable_cache: true
+  main: |
+    from returns.curry import curry
+
+    @curry
+    def zero(arg: int, other: float = 1.0) -> str:
+        ...
+
+    reveal_type(zero)  # N: Revealed type is 'Overload(def (arg: builtins.int) -> def (other: builtins.float =) -> builtins.str, def (arg: builtins.int, other: builtins.float =) -> builtins.str)'
+    reveal_type(zero(1))  # N: Revealed type is 'def (other: builtins.float =) -> builtins.str'
+    reveal_type(zero(1, 2.0))  # N: Revealed type is 'builtins.str'
+    reveal_type(zero(1)(2.0))  # N: Revealed type is 'builtins.str'
+
+
+- case: curry_three_args
+  disable_cache: true
+  main: |
+    from returns.curry import curry
+
+    @curry
+    def zero(arg: int, other: float, *, kw: bool) -> str:
+        ...
+
+    reveal_type(zero)  # N: Revealed type is 'Overload(def (arg: builtins.int) -> Overload(def (other: builtins.float, *, kw: builtins.bool) -> builtins.str, def (other: builtins.float) -> def (*, kw: builtins.bool) -> builtins.str), def (arg: builtins.int, other: builtins.float) -> def (*, kw: builtins.bool) -> builtins.str, def (arg: builtins.int, other: builtins.float, *, kw: builtins.bool) -> builtins.str)'
+    reveal_type(zero(1))  # N: Revealed type is 'Overload(def (other: builtins.float, *, kw: builtins.bool) -> builtins.str, def (other: builtins.float) -> def (*, kw: builtins.bool) -> builtins.str)'
+    reveal_type(zero(1, 2.0))  # N: Revealed type is 'def (*, kw: builtins.bool) -> builtins.str'
+    reveal_type(zero(1)(2.0))  # N: Revealed type is 'def (*, kw: builtins.bool) -> builtins.str'
+    reveal_type(zero(1, 2.0)(kw=True))  # N: Revealed type is 'builtins.str'
+    reveal_type(zero(1)(2.0)(kw=True))  # N: Revealed type is 'builtins.str'
+    reveal_type(zero(1, 2.0, kw=True))  # N: Revealed type is 'builtins.str'

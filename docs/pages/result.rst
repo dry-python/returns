@@ -40,7 +40,7 @@ Composition
 -----------
 
 Make sure to check out how to compose container with
-``flow``, :ref:`pipe` and :ref:`@pipeline <pipeline>`!
+``flow`` or :ref:`pipe`!
 Read more about them if you want to compose your containers easily.
 
 
@@ -99,7 +99,7 @@ How to create unit objects?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Use ``Success`` or ``Failure``.
-Alternatively :meth:`returns.result.Result.from_success`
+Alternatively :meth:`returns.result.Result.from_value`
 or :meth:`returns.result.Result.from_failure`.
 
 It might be a good idea to use unit functions

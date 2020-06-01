@@ -1,22 +1,22 @@
 from abc import ABCMeta
 from functools import wraps
-from inspect import iscoroutinefunction
-from typing import (  # noqa: WPS235
+from typing import (
     Any,
     Callable,
     ClassVar,
-    Coroutine,
     Generic,
+    Iterable,
     NoReturn,
     Optional,
+    Sequence,
     Type,
     TypeVar,
     Union,
-    overload,
 )
 
 from typing_extensions import final
 
+from returns._generated.iterable import iterable
 from returns.primitives.container import BaseContainer
 from returns.primitives.exceptions import UnwrapFailedError
 
@@ -55,24 +55,6 @@ class Maybe(
     #: Failure type that is used to represent the failed computation.
     failure_type: ClassVar[Type['_Nothing']]
 
-    @classmethod
-    def from_value(
-        cls, inner_value: Optional[_ValueType],
-    ) -> 'Maybe[_ValueType]':
-        """
-        Creates new instance of ``Maybe`` container based on a value.
-
-        .. code:: python
-
-          >>> from returns.maybe import Maybe, Some, Nothing
-          >>> assert Maybe.from_value(1) == Some(1)
-          >>> assert Maybe.from_value(None) == Nothing
-
-        """
-        if inner_value is None:
-            return _Nothing(inner_value)
-        return _Some(inner_value)
-
     def map(  # noqa: WPS125
         self,
         function: Callable[[_ValueType], Optional[_NewValueType]],
@@ -85,9 +67,31 @@ class Maybe(
           >>> from returns.maybe import Some, Nothing
           >>> def mappable(string: str) -> str:
           ...      return string + 'b'
-          ...
+
           >>> assert Some('a').map(mappable) == Some('ab')
           >>> assert Nothing.map(mappable) == Nothing
+
+        """
+        raise NotImplementedError
+
+    def apply(
+        self,
+        function: 'Maybe[Callable[[_ValueType], _NewValueType]]',
+    ) -> 'Maybe[_NewValueType]':
+        """
+        Calls a wrapped function in a container on this container.
+
+        .. code:: python
+
+          >>> from returns.maybe import Some, Nothing
+
+          >>> def appliable(string: str) -> str:
+          ...      return string + 'b'
+
+          >>> assert Some('a').apply(Some(appliable)) == Some('ab')
+          >>> assert Some('a').apply(Nothing) == Nothing
+          >>> assert Nothing.apply(Some(appliable)) == Nothing
+          >>> assert Nothing.apply(Nothing) == Nothing
 
         """
         raise NotImplementedError
@@ -104,7 +108,7 @@ class Maybe(
           >>> from returns.maybe import Nothing, Maybe, Some
           >>> def bindable(string: str) -> Maybe[str]:
           ...      return Some(string + 'b')
-          ...
+
           >>> assert Some('a').bind(bindable) == Some('ab')
           >>> assert Nothing.bind(bindable) == Nothing
 
@@ -123,6 +127,42 @@ class Maybe(
           >>> from returns.maybe import Nothing, Some
           >>> assert Some(0).value_or(1) == 0
           >>> assert Nothing.value_or(1) == 1
+
+        """
+        raise NotImplementedError
+
+    def or_else_call(
+        self,
+        function: Callable[[], _NewValueType],
+    ) -> Union[_ValueType, _NewValueType]:
+        """
+        Get value from successful container or default value from failed one.
+
+        Really close to :meth:`~Maybe.value_or` but works with lazy values.
+        This method is unique to ``Maybe`` container, because other containers
+        do have ``.rescue``, ``.alt``, ``.fix`` methods.
+        But, ``Maybe`` does not.
+
+        Instead, it has this method to execute
+        some function if called on a failed container:
+
+        .. code:: python
+
+          >>> from returns.maybe import Some, Nothing
+          >>> assert Some(1).or_else_call(lambda: 2) == 1
+          >>> assert Nothing.or_else_call(lambda: 2) == 2
+
+        It might be useful to work with exceptions as well:
+
+        .. code::
+
+          >>> def fallback() -> NoReturn:
+          ...    raise ValueError('Nothing!')
+
+          >>> Nothing.or_else_call(fallback)
+          Traceback (most recent call last):
+            ...
+          ValueError: Nothing!
 
         """
         raise NotImplementedError
@@ -166,36 +206,52 @@ class Maybe(
         raise NotImplementedError
 
     @classmethod
-    def lift(
-        cls,
-        function: Callable[[_ValueType], _NewValueType],
-    ) -> Callable[['Maybe[_ValueType]'], 'Maybe[_NewValueType]']:
+    def from_value(
+        cls, inner_value: Optional[_ValueType],
+    ) -> 'Maybe[_ValueType]':
         """
-        Lifts function to be wrapped in ``Maybe`` for better composition.
-
-        In other words, it modifies the function's
-        signature from: ``a -> b`` to: ``Maybe[a] -> Maybe[b]``
-
-        Works similar to :meth:`~Maybe.map`, but has inverse semantics.
-
-        This is how it should be used:
+        Creates new instance of ``Maybe`` container based on a value.
 
         .. code:: python
 
-          >>> from returns.maybe import Maybe, Nothing, Some
-          >>> def example(argument: int) -> float:
-          ...     return argument / 2
-          ...
-          >>> assert Maybe.lift(example)(Some(2)) == Some(1.0)
-          >>> assert Maybe.lift(example)(Nothing) == Nothing
-
-        See also:
-            - https://wiki.haskell.org/Lifting
-            - https://github.com/witchcrafters/witchcraft
-            - https://en.wikipedia.org/wiki/Natural_transformation
+          >>> from returns.maybe import Maybe, Some, Nothing
+          >>> assert Maybe.from_value(1) == Some(1)
+          >>> assert Maybe.from_value(None) == Nothing
 
         """
-        return lambda container: container.map(function)
+        if inner_value is None:
+            return _Nothing(inner_value)
+        return _Some(inner_value)
+
+    @classmethod
+    def from_iterable(
+        cls,
+        containers: Iterable['Maybe[_ValueType]'],
+    ) -> 'Maybe[Sequence[_ValueType]]':
+        """
+        Transforms an iterable of ``Maybe`` containers into a single container.
+
+        .. code:: python
+
+          >>> from returns.maybe import Maybe, Some, Nothing
+
+          >>> assert Maybe.from_iterable([
+          ...    Some(1),
+          ...    Some(2),
+          ... ]) == Some((1, 2))
+
+          >>> assert Maybe.from_iterable([
+          ...     Some(1),
+          ...     Nothing,
+          ... ]) == Nothing
+
+          >>> assert Maybe.from_iterable([
+          ...     Nothing,
+          ...     Some(1),
+          ... ]) == Nothing
+
+        """
+        return iterable(cls, containers)
 
 
 @final
@@ -223,6 +279,10 @@ class _Nothing(Maybe[Any]):
         """Does nothing for ``Nothing``."""
         return self
 
+    def apply(self, container):
+        """Does nothing for ``Nothing``."""
+        return self
+
     def bind(self, function):
         """Does nothing for ``Nothing``."""
         return self
@@ -230,6 +290,10 @@ class _Nothing(Maybe[Any]):
     def value_or(self, default_value):
         """Returns default value."""
         return default_value
+
+    def or_else_call(self, function):
+        """Returns the result of a passed function."""
+        return function()
 
     def unwrap(self):
         """Raises an exception, since it does not have a value inside."""
@@ -248,9 +312,9 @@ class _Some(Maybe[_ValueType]):
     Quite similar to ``Success`` type.
     """
 
-    _inner_value: Optional[_ValueType]
+    _inner_value: _ValueType
 
-    def __init__(self, inner_value: Optional[_ValueType]) -> None:
+    def __init__(self, inner_value: _ValueType) -> None:
         """
         Private type constructor.
 
@@ -263,11 +327,21 @@ class _Some(Maybe[_ValueType]):
         """Composes current container with a pure function."""
         return Maybe.from_value(function(self._inner_value))
 
+    def apply(self, container):
+        """Calls a wrapped function in a container on this container."""
+        if isinstance(container, self.success_type):
+            return self.map(container.unwrap())  # type: ignore
+        return container
+
     def bind(self, function):
         """Binds current container to a function that returns container."""
         return function(self._inner_value)
 
     def value_or(self, default_value):
+        """Returns inner value for successful container."""
+        return self._inner_value
+
+    def or_else_call(self, function):
         """Returns inner value for successful container."""
         return self._inner_value
 
@@ -288,47 +362,32 @@ def Some(inner_value: Optional[_ValueType]) -> Maybe[_ValueType]:  # noqa: N802
     """
     Public unit function of protected :class:`~_Some` type.
 
+    Can return ``Nothing`` for passed ``None`` argument.
+    Because ``Some(None)`` does not make sence.
+
     .. code:: python
 
       >>> from returns.maybe import Some
       >>> str(Some(1))
       '<Some: 1>'
       >>> str(Some(None))
-      '<Some: None>'
+      '<Nothing>'
 
     """
-    return _Some(inner_value)
+    return Maybe.from_value(inner_value)
 
 
 #: Public unit value of protected :class:`~_Nothing` type.
 Nothing: Maybe[NoReturn] = _Nothing()
 
 
-@overload
-def maybe(  # type: ignore
-    function: Callable[
-        ...,
-        Coroutine[_FirstType, _SecondType, Optional[_ValueType]],
-    ],
-) -> Callable[
-    ...,
-    Coroutine[_FirstType, _SecondType, Maybe[_ValueType]],
-]:
-    """Case for async functions."""
-
-
-@overload
 def maybe(
     function: Callable[..., Optional[_ValueType]],
 ) -> Callable[..., Maybe[_ValueType]]:
-    """Case for regular functions."""
-
-
-def maybe(function):
     """
     Decorator to convert ``None``-returning function to ``Maybe`` container.
 
-    Supports both async and regular functions.
+    This decorator works with sync functions only. Example:
 
     .. code:: python
 
@@ -340,21 +399,14 @@ def maybe(function):
       ...     if arg == 0:
       ...         return None
       ...     return 1 / arg
-      ...
+
       >>> assert might_be_none(0) == Nothing
       >>> assert might_be_none(1) == Some(1.0)
 
+    Requires our :ref:`mypy plugin <mypy-plugins>`.
+
     """
-    if iscoroutinefunction(function):
-        async def decorator(*args, **kwargs):  # noqa: WPS430
-            regular_result = await function(*args, **kwargs)
-            if regular_result is None:
-                return Nothing
-            return Some(regular_result)
-    else:
-        def decorator(*args, **kwargs):  # noqa: WPS430
-            regular_result = function(*args, **kwargs)
-            if regular_result is None:
-                return Nothing
-            return Some(regular_result)
-    return wraps(function)(decorator)
+    @wraps(function)
+    def decorator(*args, **kwargs):
+        return Maybe.from_value(function(*args, **kwargs))
+    return decorator

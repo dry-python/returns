@@ -1,0 +1,72 @@
+- case: future_constructor
+  disable_cache: true
+  main: |
+    from returns.future import Future
+
+    async def test() -> int:
+        ...
+
+    reveal_type(Future(test()))  # N: Revealed type is 'returns.future.Future[builtins.int*]'
+    reveal_type(Future.from_value(1))  # N: Revealed type is 'returns.future.Future[builtins.int*]'
+
+
+- case: future_awaitable
+  disable_cache: true
+  main: |
+    from returns.future import Future
+
+    async def main() -> None:
+        reveal_type(await Future.from_value(1))  # N: Revealed type is 'returns.io.IO[builtins.int*]'
+        reveal_type(await Future.from_value(1).awaitable())  # N: Revealed type is 'returns.io.IO*[builtins.int*]'
+
+
+- case: future_bind
+  disable_cache: true
+  main: |
+    from returns.future import Future
+
+    def bind_future(arg: int) -> Future[str]:
+        ...
+
+    reveal_type(Future.from_value(1).bind(bind_future))  # N: Revealed type is 'returns.future.Future[builtins.str*]'
+
+
+- case: future_bind_awaitable
+  disable_cache: true
+  main: |
+    from returns.future import Future
+
+    async def bind_awaitable(arg: int) -> str:
+        ...
+
+    reveal_type(Future.from_value(1).bind_awaitable(bind_awaitable))  # N: Revealed type is 'returns.future.Future[builtins.str*]'
+
+
+- case: future_bind_async
+  disable_cache: true
+  main: |
+    from returns.future import Future
+
+    async def bind_async(arg: int) -> Future[str]:
+        ...
+
+    reveal_type(Future.from_value(1).bind_async(bind_async))  # N: Revealed type is 'returns.future.Future[builtins.str*]'
+
+
+- case: future_map
+  disable_cache: true
+  main: |
+    from returns.future import Future
+
+    reveal_type(Future.from_value(1).map(str))  # N: Revealed type is 'returns.future.Future[builtins.str*]'
+
+
+- case: future_apply
+  disable_cache: true
+  main: |
+    from returns.future import Future
+
+    def transform(arg: int) -> str:
+        ...
+
+    reveal_type(Future.from_value(1).apply(Future.from_value(transform)))  # N: Revealed type is 'returns.future.Future[builtins.str*]'

@@ -1,0 +1,66 @@
+- case: flow_function_error
+  disable_cache: true
+  main: |
+    from returns.pipeline import flow
+
+    def convert(arg: str) -> float:
+        ...
+
+    reveal_type(flow('1', int, convert))
+  out: |
+    main:6: error: Argument 1 to "convert" has incompatible type "int"; expected "str"
+    main:6: note: Revealed type is 'builtins.float'
+
+
+- case: flow_wrong_steps_error
+  disable_cache: true
+  main: |
+    from returns.pipeline import flow
+
+    reveal_type(flow('a', [], int))
+  out: |
+    main:3: error: "List[<nothing>]" not callable
+    main:3: note: Revealed type is 'builtins.int'
+
+
+- case: flow_function_first_arg_error
+  disable_cache: true
+  main: |
+    from returns.pipeline import flow
+
+    def convert(arg: str) -> float:
+        ...
+
+    reveal_type(flow(1, convert))
+  out: |
+    main:6: error: Argument 1 to "convert" has incompatible type "int"; expected "str"
+    main:6: note: Revealed type is 'builtins.float'
+
+
+- case: flow_function_without_args_error
+  disable_cache: true
+  main: |
+    from returns.pipeline import flow
+
+    def convert() -> float:
+        ...
+
+    reveal_type(flow(1, convert))
+  out: |
+    main:6: error: Too many arguments for "convert"
+    main:6: note: Revealed type is 'builtins.float'
+
+
+- case: flow_function_with_too_many_args_error
+  disable_cache: true
+  main: |
+    from returns.pipeline import flow
+
+    def convert(first: str, other: int) -> float:
+        ...
+
+    reveal_type(flow(1, convert))
+  out: |
+    main:6: error: Argument 1 to "convert" has incompatible type "int"; expected "str"
+    main:6: error: Too few arguments for "convert"
+    main:6: note: Revealed type is 'builtins.float'

@@ -16,6 +16,7 @@ Make your functions return something meaningful, typed, and safe!
 
 ## Features
 
+- Brings functional programming to Python land
 - Provides a bunch of primitives to write declarative business logic
 - Enforces better architecture
 - Fully typed with annotations and checked with `mypy`, [PEP561 compatible](https://www.python.org/dev/peps/pep-0561/)
@@ -39,7 +40,7 @@ to fix [this existing issue](https://github.com/python/mypy/issues/3157):
 # In setup.cfg or mypy.ini:
 [mypy]
 plugins =
-  returns.contrib.mypy.decorator_plugin
+  returns.contrib.mypy.returns_plugin
 ```
 
 We also recommend to use the same `mypy` settings [we use](https://github.com/wemake-services/wemake-python-styleguide/blob/master/styles/mypy.toml).
@@ -52,7 +53,8 @@ Make sure you know how to get started, [check out our docs](https://returns.read
 - [Maybe container](#maybe-container) that allows you to write `None`-free code
 - [RequiresContext container](#requirescontext-container) that allows you to use typed functional dependency injection
 - [Result container](#result-container) that let's you to get rid of exceptions
-- [IO marker](#io-marker) and [IOResult](#troublesome-io) that marks all impure operations and structures them
+- [IO container](#io-container) and [IOResult](#troublesome-io) that marks all impure operations and structures them
+- [Future container](#future-container) and [FutureResult](#async-code-without-exceptions) to work with `async` code
 
 
 ## Maybe container
@@ -321,7 +323,7 @@ We are not yet done with this example,
 let's continue to improve it in the next chapter.
 
 
-## IO marker
+## IO container
 
 Let's look at our example from another angle.
 All its functions look like regular ones:
@@ -337,7 +339,7 @@ we suffer really bad when testing or reusing it.
 Almost everything should be pure by default.
 And we should explicitly mark impure parts of the program.
 
-That's why we have created `IO` marker
+That's why we have created `IO` container
 to mark impure functions that never fail.
 
 These impure functions use `random`, current datetime, environment, or console:
@@ -396,7 +398,7 @@ import requests
 from returns.io import IO, IOResult, impure_safe
 from returns.result import safe
 from returns.pipeline import flow
-from returns.pointfree import bind
+from returns.pointfree import bind_result
 
 def fetch_user_profile(user_id: int) -> IOResult['UserProfile', Exception]:
     """Fetches `UserProfile` TypedDict from foreign API."""
@@ -405,9 +407,8 @@ def fetch_user_profile(user_id: int) -> IOResult['UserProfile', Exception]:
         _make_request,
         # before: def (Response) -> UserProfile
         # after safe: def (Response) -> ResultE[UserProfile]
-        # after bind: def (ResultE[Response]) -> ResultE[UserProfile]
-        # after lift: def (IOResultE[Response]) -> IOResultE[UserProfile]
-        IOResult.lift_result(bind(_parse_json)),
+        # after bind_result: def (IOResultE[Response]) -> IOResultE[UserProfile]
+        bind_result(_parse_json),
     )
 
 @impure_safe
@@ -429,6 +430,181 @@ As a result of this refactoring session, we know everything about our code:
 - Which parts can fail,
 - Which parts are impure,
 - How to compose them in a smart manner.
+
+
+## Future container
+
+There are several issues with `async` code in Python:
+
+1. You cannot call `async` function from a sync one
+2. Any unexpectedly thrown exception can ruin your whole event loop
+3. Ugly composition with lots of `await` statements
+
+`Future` and `FutureResult` containers solve these issues!
+
+### Mixing sync and async code
+
+The main feature of [Future](https://returns.readthedocs.io/en/latest/pages/future.html)
+is that it allows to run async code
+while maintaining sync context. Let's see an example.
+
+Let's say we have two functions,
+the `first` one returns a number and the `second` one increments it:
+
+```python
+async def first() -> int:
+    return 1
+
+def second():  # How can we call `first()` from here?
+    return first() + 1  # Boom! Don't do this, this is wrong. Just an example.
+```
+
+If we try to just run `first()`, we will just create an unawaited coroutine.
+It won't return the value we want.
+
+But, if we would try to run `await first()`,
+then we would need to change `second` to be `async`.
+And sometimes it is not possible for various reasons.
+
+However, with `Future` we can "pretend" to call async code from sync code:
+
+```python
+from returns.future import Future
+
+def second() -> Future[int]:
+    return Future(first()).map(lambda num: num + 1)
+```
+
+Without touching our `first` async function
+or making `second` async we have achieved our goal.
+Now, our async value is incremented inside a sync function.
+
+However, `Future` still requires to be executed inside a proper eventloop:
+
+```python
+import anyio  # or asyncio, or any other lib
+
+# We can then pass our `Future` to any library: asyncio, trio, curio.
+# And use any event loop: regular, uvloop, even a custom one, etc
+assert anyio.run(second().awaitable) == 2
+```
+
+As you can see `Future` allows you
+to work with async functions from a sync context.
+And to mix these two realms together.
+Use raw `Future` for operations that cannot raise exceptions.
+
+### Async code without exceptions
+
+We have already covered how [`Result` works](#result-container).
+The main idea is: we don't raise exceptions, we return them.
+It is **especially** critical in async code,
+because a single exception can ruin
+all our coroutines running in a single eventloop.
+
+We have a handy combination of `Future` and `Result` containers: `FutureResult`.
+Use it when your `Future` might have problems:
+like HTTP requests or filesystem oprations.
+
+You can easily turn any wild throwing coroutine into a calm `FutureResult`:
+
+```python
+import anyio
+from returns.future import future_safe
+from returns.io import IOFailure
+from returns.pipeline import is_successful
+
+@future_safe
+async def raising():
+    raise ValueError('Not so fast!')
+
+ioresult = anyio.run(raising.awaitable)  # all `Future`s return IO containers
+assert not is_successful(ioresult)  # True
+assert ioresult == IOFailure(ValueError('Not so fast!'))  # Also True
+```
+
+Using `FutureResult` will keep your code safe from exceptions.
+You can always `await` or execute inside an eventloop any `FutureResult`
+to get sync `IOResult` instance to work with it in a sync manner.
+
+### Better async composition
+
+Previously, you had to do quite a lot of `await`ing while writting `async` code:
+
+```python
+async def fetch_user(user_id: int) -> 'User':
+    ...
+
+async def get_user_permissions(user: 'User') -> 'Permissions':
+    ...
+
+async def ensure_allowed(permissions: 'Permissions') -> bool:
+    ...
+
+async def main(user_id: int) -> bool:
+    # Also, don't forget to handle all possible errors with `try / except`!
+    user = await fetch_user(user_id)  # We will await each time we use a coro!
+    permissions = await get_user_permissions(user)
+    return await ensure_allowed(permissions)
+```
+
+Some people are ok with it, but some people don't like this imperative style.
+The problem is that there was no choice.
+
+But now, you can do the same thing in functional style!
+With the help of `Future` and `FutureResult` containers:
+
+```python
+import anyio
+from returns.future import FutureResultE, future_safe
+from returns.io import IOSuccess, IOFailure
+
+@future_safe
+async def fetch_user(user_id: int) -> 'User':
+    ...
+
+@future_safe
+async def get_user_permissions(user: 'User') -> 'Permissions':
+    ...
+
+@future_safe
+async def ensure_allowed(permissions: 'Permissions') -> bool:
+    ...
+
+def main(user_id: int) -> FutureResultE[bool]:
+    # We can now turn `main` into a sync function, it does not `await` at all.
+    # We also don't care about exceptions anymore, they are already handled.
+    return fetch_user(user_id).bind(get_user_permissions).bind(ensure_allowed)
+
+correct_user_id: int  # has required permissions
+banned_user_id: int  # does not have required permissions
+wrong_user_id: int  # does not exist
+
+# We can have correct business results:
+assert anyio.run(main(correct_user_id).awaitable) == IOSuccess(True)
+assert anyio.run(main(banned_user_id).awaitable) == IOSuccess(False)
+
+# Or we can have errors along the way:
+assert anyio.run(main(wrong_user_id).awaitable) == IOFailure(
+    UserDoesNotExistError(...),
+)
+```
+
+Or even something really fancy:
+
+```python
+from returns.pointfree import bind
+from returns.pipeline import flow
+
+def main(user_id: int) -> FutureResultE[bool]:
+    return flow(
+        fetch_user(user_id),
+        bind(get_user_permissions),
+        bind(ensure_allowed),
+    )
+```
+
+Lovely, isn't it?
 
 
 ## More!

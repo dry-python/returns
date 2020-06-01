@@ -151,9 +151,6 @@ inner state of containers into a regular types:
     ...
   returns.primitives.exceptions.UnwrapFailedError
 
-The most user-friendly way to use ``.unwrap()`` method is with :ref:`pipeline`.
-We even discourage using ``.unwrap()`` without a ``@pipeline``.
-
 For failing containers you can
 use :func:`.failure <returns.primitives.container.Unwrapable.failure>`
 to unwrap the failed state:

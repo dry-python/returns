@@ -25,12 +25,12 @@
     reveal_type(first)  # N: Revealed type is 'returns.io.IOResult[builtins.int, builtins.Exception]'
 
 
-- case: ioresult_from_success
+- case: ioresult_from_value
   disable_cache: true
   main: |
     from returns.io import IOResult
 
-    reveal_type(IOResult.from_success(1))  # N: Revealed type is 'returns.io.IOResult[builtins.int*, Any]'
+    reveal_type(IOResult.from_value(1))  # N: Revealed type is 'returns.io.IOResult[builtins.int*, Any]'
 
 
 - case: ioresult_from_failure
@@ -39,6 +39,17 @@
     from returns.io import IOResult
 
     reveal_type(IOResult.from_failure(1))  # N: Revealed type is 'returns.io.IOResult[Any, builtins.int*]'
+
+
+- case: ioresult_from_iterable
+  disable_cache: true
+  main: |
+    from returns.io import IOResult
+    from typing import Iterable
+
+    x: Iterable[IOResult[int, str]]
+
+    reveal_type(IOResult.from_iterable(x))  # N: Revealed type is 'returns.io.IOResult[typing.Sequence[builtins.int*], builtins.str*]'
 
 
 - case: ioresult_covariant_cast

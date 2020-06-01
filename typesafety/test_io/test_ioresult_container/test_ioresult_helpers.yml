@@ -9,14 +9,14 @@
     reveal_type(IOResult.from_typecast(container))  # N: Revealed type is 'returns.io.IOResult[builtins.int*, builtins.str*]'
 
 
-- case: ioresult_from_successful_io
+- case: ioresult_from_io
   disable_cache: true
   main: |
     from returns.io import IO, IOResult
 
     container: IO[str]
 
-    reveal_type(IOResult.from_successful_io(container))  # N: Revealed type is 'returns.io.IOResult[builtins.str*, <nothing>]'
+    reveal_type(IOResult.from_io(container))  # N: Revealed type is 'returns.io.IOResult[builtins.str*, Any]'
 
 
 - case: ioresult_from_failed_io
@@ -26,7 +26,7 @@
 
     container: IO[str]
 
-    reveal_type(IOResult.from_failed_io(container))  # N: Revealed type is 'returns.io.IOResult[<nothing>, builtins.str*]'
+    reveal_type(IOResult.from_failed_io(container))  # N: Revealed type is 'returns.io.IOResult[Any, builtins.str*]'
 
 
 - case: ioresult_success_type

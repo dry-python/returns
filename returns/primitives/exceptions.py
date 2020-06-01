@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from returns.primitives.container import BaseContainer  # noqa: F401, WPS433
+    from returns.primitives.container import BaseContainer  # noqa: WPS433
 
 
 class UnwrapFailedError(Exception):
@@ -18,5 +18,16 @@ class UnwrapFailedError(Exception):
         self.halted_container = container
 
 
-class ImmutableStateError(Exception):
-    """Raised when a container is forced to be mutated."""
+class ImmutableStateError(AttributeError):
+    """
+    Raised when a container is forced to be mutated.
+
+    It is a sublclass of ``AttributeError`` for two reasons:
+
+    1. It seems kinda reasonable to expect ``AttributeError``
+       on attribute modification
+    2. It is used inside ``typing.py`` this way,
+       we do have several typing features that requires that behaviour
+
+    See: https://github.com/dry-python/returns/issues/394
+    """

@@ -1,0 +1,79 @@
+- case: pipe_function_error
+  disable_cache: true
+  main: |
+    from returns.pipeline import pipe
+
+    def convert(arg: str) -> float:
+        ...
+
+    reveal_type(pipe(int, convert)('a'))
+  out: |
+    main:6: error: Argument 1 to "convert" has incompatible type "int"; expected "str"
+    main:6: note: Revealed type is 'builtins.float'
+
+
+- case: pipe_wrong_steps_error
+  disable_cache: true
+  main: |
+    from returns.pipeline import pipe
+
+    reveal_type(pipe([], int)('a'))
+  out: |
+    main:3: error: "object" not callable
+    main:3: error: Argument 1 to "__call__" of "_Pipe" has incompatible type "str"; expected <nothing>
+    main:3: note: Revealed type is 'Any'
+
+
+- case: pipe_function_without_steps
+  disable_cache: true
+  main: |
+    from returns.pipeline import pipe
+
+    pipe()
+  out: |
+    main:3: error: Too few arguments for "_pipe"
+
+
+- case: pipe_function_first_arg_error
+  disable_cache: true
+  main: |
+    from returns.pipeline import pipe
+
+    def convert(arg: str) -> float:
+        ...
+
+    reveal_type(pipe(convert)(1))
+  out: |
+    main:6: error: Argument 1 to "__call__" of "_Pipe" has incompatible type "int"; expected "str"
+    main:6: error: Argument 1 to "convert" has incompatible type "int"; expected "str"
+    main:6: note: Revealed type is 'builtins.float'
+
+
+- case: pipe_function_without_args_error
+  disable_cache: true
+  main: |
+    from returns.pipeline import pipe
+
+    def convert() -> float:
+        ...
+
+    reveal_type(pipe(convert)(1))
+  out: |
+    main:6: error: Too many arguments for "convert"
+    main:6: note: Revealed type is 'builtins.float'
+
+
+- case: pipe_function_with_too_many_args_error
+  disable_cache: true
+  main: |
+    from returns.pipeline import pipe
+
+    def convert(first: str, other: int) -> float:
+        ...
+
+    reveal_type(pipe(convert)(1))
+  out: |
+    main:6: error: Argument 1 to "__call__" of "_Pipe" has incompatible type "int"; expected "str"
+    main:6: error: Argument 1 to "convert" has incompatible type "int"; expected "str"
+    main:6: error: Too few arguments for "convert"
+    main:6: note: Revealed type is 'builtins.float'

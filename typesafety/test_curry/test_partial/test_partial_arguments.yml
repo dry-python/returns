@@ -1,0 +1,214 @@
+- case: partial_complex_args
+  disable_cache: true
+  main: |
+    from returns.curry import partial
+
+    def multiple(
+        a: int,
+        b: int,
+        c: int = 0,
+        *args: float,
+        d: str,
+        e: bool = True,
+        **kwargs: str,
+    ) -> str:
+        ...
+
+    reveal_type(partial(multiple))
+    reveal_type(partial(multiple, 1))
+    reveal_type(partial(multiple, 1, 2))
+    reveal_type(partial(multiple, 1, 2, c=3))
+    reveal_type(partial(multiple, 1, 2, c=3, d='a'))
+    reveal_type(partial(multiple, 1, 2, c=3, e=False))
+    reveal_type(partial(multiple, 1, 2, d='a'))
+    reveal_type(partial(multiple, 1, 2, e=False))
+    reveal_type(partial(multiple, 1, 2, 3, 4.0, 5.0))
+    reveal_type(partial(multiple, 1, 2, 3, m='m', q='q', long='long'))
+  out: |
+    main:14: note: Revealed type is 'def (a: builtins.int, b: builtins.int, c: builtins.int =, *args: builtins.float, *, d: builtins.str, e: builtins.bool =, **kwargs: builtins.str) -> builtins.str'
+    main:15: note: Revealed type is 'def (b: builtins.int, c: builtins.int =, *args: builtins.float, *, d: builtins.str, e: builtins.bool =, **kwargs: builtins.str) -> builtins.str'
+    main:16: note: Revealed type is 'def (c: builtins.int =, *args: builtins.float, *, d: builtins.str, e: builtins.bool =, **kwargs: builtins.str) -> builtins.str'
+    main:17: note: Revealed type is 'def (*args: builtins.float, *, d: builtins.str, e: builtins.bool =, **kwargs: builtins.str) -> builtins.str'
+    main:18: note: Revealed type is 'def (*args: builtins.float, *, e: builtins.bool =, **kwargs: builtins.str) -> builtins.str'
+    main:19: note: Revealed type is 'def (*args: builtins.float, *, d: builtins.str, **kwargs: builtins.str) -> builtins.str'
+    main:20: note: Revealed type is 'def (c: builtins.int =, *args: builtins.float, *, e: builtins.bool =, **kwargs: builtins.str) -> builtins.str'
+    main:21: note: Revealed type is 'def (c: builtins.int =, *args: builtins.float, *, d: builtins.str, **kwargs: builtins.str) -> builtins.str'
+    main:22: note: Revealed type is 'def (*args: builtins.float, *, d: builtins.str, e: builtins.bool =, **kwargs: builtins.str) -> builtins.str'
+    main:23: note: Revealed type is 'def (*args: builtins.float, *, d: builtins.str, e: builtins.bool =, **kwargs: builtins.str) -> builtins.str'
+
+
+- case: partial_args_kwargs
+  disable_cache: true
+  main: |
+    from returns.curry import partial
+
+    def multiple(
+        *args: int,
+        **kwargs: str,
+    ) -> str:
+        ...
+
+    reveal_type(partial(multiple, 1, 2, 3, x='x', y='y')(4, 5, z='z'))  # N: Revealed type is 'builtins.str'
+
+
+- case: partial_pos_only_args
+  disable_cache: true
+  skip: sys.version_info < (3, 8)
+  main: |
+    from returns.curry import partial
+
+    def multiple(
+        a: int,
+        b: int,
+        c: int,
+        /,
+        d: int,
+    ) -> str:
+        ...
+
+    reveal_type(partial(multiple, 1))  # N: Revealed type is 'def (builtins.int, builtins.int, d: builtins.int) -> builtins.str'
+    reveal_type(partial(multiple, 1, 2))  # N: Revealed type is 'def (builtins.int, d: builtins.int) -> builtins.str'
+    reveal_type(partial(multiple, 1, 2, 3))  # N: Revealed type is 'def (d: builtins.int) -> builtins.str'
+    reveal_type(partial(multiple, 1, 2, d=4))  # N: Revealed type is 'def (builtins.int) -> builtins.str'
+    reveal_type(partial(multiple, 1, 2, 3, d=4))  # N: Revealed type is 'def () -> builtins.str'
+
+
+- case: partial_object
+  disable_cache: true
+  main: |
+    from returns.curry import partial
+
+    class Inst(object):
+        def __init__(self, arg: int) -> None:
+            ...
+
+        def __call__(self, other: int) -> int:
+            ...
+
+    reveal_type(partial(Inst))
+    reveal_type(partial(Inst, 1))
+    reveal_type(partial(Inst(1)))
+    reveal_type(partial(Inst(1), 1))
+  out: |
+    main:10: note: Revealed type is 'def (arg: builtins.int) -> main.Inst'
+    main:11: note: Revealed type is 'def () -> main.Inst'
+    main:12: note: Revealed type is 'main.Inst'
+    main:13: note: Revealed type is 'def () -> builtins.int'
+
+
+- case: partial_classmethod
+  disable_cache: true
+  main: |
+    from returns.curry import partial
+
+    class Test(object):
+        @classmethod
+        def some(cls, arg: int, other: str) -> float:
+            ...
+
+    reveal_type(partial(Test.some, 1))  # N: Revealed type is 'def (other: builtins.str) -> builtins.float'
+
+
+- case: partial_staticmethod
+  disable_cache: true
+  main: |
+    from returns.curry import partial
+
+    class Test(object):
+        @staticmethod
+        def some(arg: int, other: str) -> float:
+            ...
+
+    reveal_type(partial(Test.some, 1))  # N: Revealed type is 'def (other: builtins.str) -> builtins.float'
+
+
+- case: partial_union
+  disable_cache: true
+  main: |
+    from typing import Union
+    from returns.curry import partial
+
+    class Inst(object):
+        def __call__(self, arg: int) -> None:
+            ...
+
+    class Other(object):
+        def __call__(self, arg: int, other: str) -> None:
+            ...
+
+    x: Union[Inst, Other]
+    reveal_type(partial(x))
+    # This does not work as well:
+    reveal_type(partial(x, 1))
+  out: |
+    main:13: note: Revealed type is 'Union[main.Inst, main.Other]'
+    main:15: note: Revealed type is 'def (*Any, **Any)'
+
+
+- case: partial_type_var
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar
+    from returns.curry import partial
+
+    C = TypeVar('C', bound=Callable)
+
+    def first(arg: int) -> int:
+        return arg
+
+    def test(func: C) -> C:
+        # One can say, that this case is not supported,
+        # but I don't know how to work with it
+        reveal_type(partial(func, 1))  # N: Revealed type is 'def (*Any, **Any) -> <nothing>'
+        return func
+
+    test(first)
+
+
+- case: partial_type_type
+  disable_cache: true
+  main: |
+    from typing import Type, TypeVar
+    from returns.curry import partial
+
+    class Inst(object):
+        def __init__(self, arg: int) -> None:
+            self.arg = arg
+
+    I = TypeVar('I', bound=Inst)
+
+    def receives_type(a: int, t: Type[I]) -> I:
+        x = partial(t, a)
+        reveal_type(x)  # N: Revealed type is 'def () -> I`-1'
+        reveal_type(x().arg)  # N: Revealed type is 'builtins.int'
+        return t(1)
+
+
+- case: partial_star_arg
+  disable_cache: true
+  main: |
+    from returns.curry import partial
+
+    def multiple(a: int, b: int) -> int:
+        ...
+
+    reveal_type(partial(multiple, *(1, 2)))  # N: Revealed type is 'def (*Any, **Any) -> builtins.int*'
+
+
+- case: partial_star2_arg
+  disable_cache: true
+  main: |
+    from returns.curry import partial
+
+    def multiple(a: int, b: int) -> int:
+        ...
+
+    reveal_type(partial(multiple, **{'a': 1, 'b': 2}))  # N: Revealed type is 'def (*Any, **Any) -> builtins.int*'
+
+
+- case: partial_lambda
+  disable_cache: true
+  main: |
+    from returns.curry import partial
+
+    reveal_type(partial((lambda x, y: str(x + y)), 1))  # N: Revealed type is 'def (Any) -> builtins.str'

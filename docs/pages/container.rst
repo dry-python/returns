@@ -12,11 +12,13 @@ List of supported containers:
 - :class:`Maybe <returns.maybe.Maybe>` to handle ``None`` cases
 - :class:`Result <returns.result.Result>` to handle possible exceptions
 - :class:`IO <returns.io.IO>` to mark explicit ``IO`` actions
+- :class:`Future <returns.future.Future>` to work with ``async`` code
 - :class:`RequiresContext <returns.context.requires_context.RequiresContext>`
   to pass context to your functions (DI and similar)
 
 There are also some combintations like
 :class:`IOResult <returns.io.IOResult>`,
+:class:`FutureResult <returns.future.FutureResult>`,
 :class:`RequiresContextResult <.RequiresContextResult>` and
 :class:`RequiresContextIOResult <.RequiresContextIOResult>`.
 
@@ -45,9 +47,19 @@ And we can see how this state is evolving during the execution.
        F3                       --> F4["Container(FailedLoginAttempt(1))"]
        F4                       --> F5["Container(SentNotificationId(992))"]
 
+All containers support special ``.from_value`` method
+to construct a new container from a raw value.
 
-Working with containers
------------------------
+.. code:: python
+
+  >>> from returns.result import Result
+
+  >>> str(Result.from_value(1))
+  '<Success: 1>'
+
+
+Working with a container
+------------------------
 
 We use two methods to create a new container from the previous one.
 ``bind`` and ``map``.
@@ -109,6 +121,106 @@ that some other containers support
 and :ref:`interfaces <base-interfaces>` behind them.
 
 
+Working with multiple containers
+--------------------------------
+
+Iterable of containers
+~~~~~~~~~~~~~~~~~~~~~~
+
+You might end up with an iterable of containers:
+
+.. code:: python
+
+  >>> from returns.maybe import Maybe, Some, Nothing, maybe
+
+  >>> source = {'a': 1, 'b': 2}
+
+  >>> fetched_values: Maybe[int] = [
+  ...    maybe(source.get)(key)
+  ...    for key in ('a', 'b')
+  ... ]
+
+To work with iterable of containers,
+it is recommended to cast it into a container with the iterable inside:
+
+.. code:: python
+
+  >>> assert Maybe.from_iterable(fetched_values) == Some((1, 2))
+
+Any falsy values will result in a falsy result (pun intended):
+
+.. code:: python
+
+  >>> fetched_values: Maybe[int] = [
+  ...    maybe(source.get)(key)
+  ...    for key in ('a', 'c')  # 'c' is missing!
+  ... ]
+  >>> assert Maybe.from_iterable(fetched_values) == Nothing
+
+We support any ``Iterable[T]`` input type
+and return a ``Container[Sequence[T]]``.
+All containers support this method.
+
+Multiple container arguments
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We have already seen how we can work with one container and functions
+that receive a single argument.
+
+Let's say you have a function of two arguments and two containers:
+
+.. code:: python
+
+  def sum_two_numbers(first: int, second: int) -> int:
+      return first + second
+
+And here are our two containers:
+
+.. code:: python
+
+  from returns.io import IO
+
+  one = IO(1)
+  two = IO(2)
+
+Naive approach to compose two ``IO`` containers and a function
+would be two hard to show here.
+Luckly, we support partial application and ``.apply()`` method.
+
+Here are the required steps:
+
+0. We make ``sum_two_numbers`` to receive :ref:`partial arguments <curry>`
+1. We create a new container that wraps ``sum_two_numbers`` function as a value
+2. We then call ``.apply()`` twice to pass each value
+
+It can be done like so:
+
+.. code:: python
+
+  >>> from returns.curry import curry
+  >>> from returns.io import IO
+
+  >>> @curry
+  ... def sum_two_numbers(first: int, second: int) -> int:
+  ...     return first + second
+
+  >>> one = IO(1)
+  >>> two = IO(2)
+  >>> assert two.apply(one.apply(IO(sum_two_numbers))) == IO(3)
+
+But, there are other ways to make ``sum_two_numbers`` partial. One can use:
+
+.. code:: python
+
+  >>> one = IO(1)
+  >>> two = IO(2)
+  >>> assert two.apply(one.apply(
+  ...     IO(lambda x: lambda y: sum_two_numbers(x, y)),
+  ... )) == IO(3)
+
+It would be faster, but not as elegant (and type-safe).
+
+
 .. _immutability:
 
 Immutability
@@ -163,6 +275,10 @@ Here's a table of some compositions that do not make sense:
 Needs transformation
 ~~~~~~~~~~~~~~~~~~~~
 
+You can use :ref:`converters` to convert ``Maybe`` and ``Result`` containers.
+You can also use :func:`flatten <returns.converters.flatten>`
+to merge nested containers.
+
 - ``IO[Result[A, B]]`` 🤔,
   use :meth:`returns.io.IOResult.from_typecast` and ``IOResult``
 - ``IO[Maybe[A]]`` 🤔,
@@ -198,15 +314,6 @@ Nope
 
 - ``Result[IO[A], B]`` 🚫
 - ``Result[A, IO[A]]`` 🚫
-- ``Result[A, Maybe[B]]`` 🚫
-- ``Result[A, Result[B, C]]`` 🚫
-- ``Maybe[IO[A]]`` 🚫
-- ``RequiresContext[IO[A], B]`` 🚫
-- ``IO[RequiresContext[A, B]`` 🚫
-
-You can use :ref:`converters` to convert ``Maybe`` and ``Result`` containers.
-You can also use :func:`flatten <returns.converters.flatten>`
-to merge nested containers.
 
 
 Further reading

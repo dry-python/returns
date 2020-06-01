@@ -14,16 +14,25 @@ We also ship an utility function to compose two different functions together.
   >>> from returns.functions import compose
 
   >>> bool_after_int = compose(int, bool)
-  >>> bool_after_int('1')
-  True
-  >>> bool_after_int('0')
-  False
+  >>> assert bool_after_int('1') is True
+  >>> assert bool_after_int('0') is False
 
 Composition is also type-safe.
 The only limitation is that we only support
 functions with one argument and one return to be composed.
 
 Only works with regular functions (not async).
+
+.. warning::
+
+  ``compose`` might fail to infer types for some functions.
+  There are several problems: ``lambda`` and generic functions.
+  In these cases ``mypy`` will fail to infer
+  the types of the resulting function.
+
+  In this case, use :func:`pipe <returns._generated.pipeline.pipe._pipe>`
+  it does the same thing, but has pretty good type inference.
+  Or use manual annotations with ``Callable`` type.
 
 
 identity
@@ -80,7 +89,6 @@ We allow you to do that with ease!
 
   from returns.functions import raise_exception
 
-  @pipeline(Result)
   def create_account_and_user(username: str) -> ...:
       """
       Creates new Account-User pair.
@@ -103,6 +111,28 @@ We allow you to do that with ease!
 
 Use this with caution. We try to remove exceptions from our code base.
 Original proposal is `here <https://github.com/dry-python/returns/issues/56>`_.
+
+
+not\_
+-----
+
+With ``not_`` helper function we can easily deny a function returns.
+It supports functions with one or more arguments.
+
+.. code:: python
+
+  >>> from typing import List
+  >>> from returns.functions import compose, not_
+
+  >>> def is_even(number: int) -> bool:
+  ...     return number % 2 == 0
+
+  >>> def number_is_in_list(number: int, list_: List[int]) -> bool:
+  ...     return number in list_
+
+  >>> assert not_(is_even)(2) is False
+  >>> assert not_(number_is_in_list)(1, [2, 3, 4]) is True
+  >>> assert compose(int, not_(is_even))("1") is True
 
 
 API Reference

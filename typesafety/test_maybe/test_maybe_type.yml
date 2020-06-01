@@ -1,4 +1,4 @@
-- case: maybe_type_regular
+- case: maybe_type_regular1
   disable_cache: true
   main: |
     from returns.maybe import Maybe
@@ -7,7 +7,7 @@
     reveal_type(Maybe.from_value(value))  # N: Revealed type is 'returns.maybe.Maybe[builtins.int*]'
 
 
-- case: maybe_type_regular
+- case: maybe_type_regular2
   disable_cache: true
   main: |
     from typing import Optional
@@ -15,6 +15,17 @@
 
     value: Optional[int]
     reveal_type(Maybe.from_value(value))  # N: Revealed type is 'returns.maybe.Maybe[builtins.int*]'
+
+
+- case: maybe_from_iterable
+  disable_cache: true
+  main: |
+    from returns.maybe import Maybe
+    from typing import Iterable
+
+    x: Iterable[Maybe[int]]
+
+    reveal_type(Maybe.from_iterable(x))  # N: Revealed type is 'returns.maybe.Maybe[typing.Sequence[builtins.int*]]'
 
 
 - case: maybe_map_regular
@@ -26,7 +37,7 @@
     reveal_type(result)  # N: Revealed type is 'returns.maybe.Maybe[builtins.float*]'
 
 
-- case: maybe_map_optional
+- case: maybe_map_optional1
   disable_cache: true
   main: |
     from returns.maybe import Maybe
@@ -35,13 +46,22 @@
     reveal_type(result)  # N: Revealed type is 'returns.maybe.Maybe[builtins.str*]'
 
 
-- case: maybe_map_optional
+- case: maybe_map_optional2
   disable_cache: true
   main: |
     from returns.maybe import Maybe
 
     result = Maybe.from_value(1).bind(lambda d: Maybe.from_value(str(d)))
     reveal_type(result)  # N: Revealed type is 'returns.maybe.Maybe[builtins.str*]'
+
+
+- case: maybe_apply
+  disable_cache: true
+  main: |
+    from returns.maybe import Maybe
+
+    result = Maybe.from_value(1).apply(Maybe.from_value(float))
+    reveal_type(result)  # N: Revealed type is 'returns.maybe.Maybe[builtins.float*]'
 
 
 - case: maybe_bind
@@ -69,6 +89,40 @@
 
     result = Maybe.from_value(1).value_or(None)
     reveal_type(result)  # N: Revealed type is 'Union[builtins.int, None]'
+
+
+- case: maybe_or_else1
+  disable_cache: true
+  main: |
+    from returns.maybe import Maybe
+
+    result = Maybe.from_value(1).or_else_call(lambda: 2)
+    reveal_type(result)  # N: Revealed type is 'builtins.int'
+
+
+- case: maybe_or_else2
+  disable_cache: true
+  main: |
+    from returns.maybe import Maybe
+
+    def fallback() -> str:
+        ...
+
+    result = Maybe.from_value(1).or_else_call(fallback)
+    reveal_type(result)  # N: Revealed type is 'Union[builtins.int, builtins.str*]'
+
+
+- case: maybe_or_else3
+  disable_cache: true
+  main: |
+    from returns.maybe import Maybe
+    from typing import NoReturn
+
+    def fallback() -> NoReturn:
+        ...
+
+    result = Maybe.from_value(1).or_else_call(fallback)
+    reveal_type(result)  # N: Revealed type is 'builtins.int'
 
 
 - case: maybe_unwrap

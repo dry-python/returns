@@ -1,0 +1,120 @@
+- case: apply_result_reverse
+  disable_cache: true
+  main: |
+    from returns.pointfree import apply
+    from returns.result import Result
+    from returns.pipeline import flow
+    from typing import Callable
+
+    test: Result[Callable[[float], int], str]
+    x: Result[float, str]
+
+    reveal_type(flow(test, x.apply))  # N: Revealed type is 'returns.result.Result[builtins.int*, builtins.str]'
+
+
+- case: apply_io
+  disable_cache: true
+  main: |
+    from returns.pointfree import apply
+    from returns.io import IO
+
+    def test(arg: float) -> int:
+        ...
+
+    reveal_type(apply(IO(test)))  # N: Revealed type is 'def (returns.io.IO[builtins.float*]) -> returns.io.IO[builtins.int*]'
+
+
+- case: apply_maybe
+  disable_cache: true
+  main: |
+    from returns.pointfree import apply
+    from returns.maybe import Maybe
+
+    def test(arg: float) -> int:
+        ...
+
+    reveal_type(apply(Maybe.from_value(test)))  # N: Revealed type is 'def (returns.maybe.Maybe[builtins.float*]) -> returns.maybe.Maybe[builtins.int*]'
+
+
+- case: apply_result
+  disable_cache: true
+  main: |
+    from returns.pointfree import apply
+    from returns.result import Result
+    from typing import Callable
+
+    test: Result[Callable[[float], int], str]
+
+    reveal_type(apply(test))  # N: Revealed type is 'def (returns.result.Result[builtins.float*, builtins.str*]) -> returns.result.Result[builtins.int*, builtins.str*]'
+
+
+- case: apply_ioresult
+  disable_cache: true
+  main: |
+    from returns.pointfree import apply
+    from returns.io import IOResult
+    from typing import Callable
+
+    test: IOResult[Callable[[float], int], str]
+
+    reveal_type(apply(test))  # N: Revealed type is 'def (returns.io.IOResult[builtins.float*, builtins.str*]) -> returns.io.IOResult[builtins.int*, builtins.str*]'
+
+
+- case: apply_requires_context
+  disable_cache: true
+  main: |
+    from returns.pointfree import apply
+    from returns.context import RequiresContext
+    from typing import Callable
+
+    test: RequiresContext[bool, Callable[[float], int]]
+
+    reveal_type(apply(test))  # N: Revealed type is 'def (returns.context.requires_context.RequiresContext[builtins.bool*, builtins.float*]) -> returns.context.requires_context.RequiresContext[builtins.bool*, builtins.int*]'
+
+
+- case: apply_requires_context_result
+  disable_cache: true
+  main: |
+    from returns.pointfree import apply
+    from returns.context import RequiresContextResult
+    from typing import Callable
+
+    test: RequiresContextResult[bool, Callable[[float], int], str]
+
+    reveal_type(apply(test))  # N: Revealed type is 'def (returns.context.requires_context_result.RequiresContextResult[builtins.bool*, builtins.float*, builtins.str*]) -> returns.context.requires_context_result.RequiresContextResult[builtins.bool*, builtins.int*, builtins.str*]'
+
+
+- case: apply_requires_context_ioresult
+  disable_cache: true
+  main: |
+    from returns.pointfree import apply
+    from returns.context import RequiresContextIOResult
+    from typing import Callable
+
+    test: RequiresContextIOResult[bool, Callable[[float], int], str]
+
+    reveal_type(apply(test))  # N: Revealed type is 'def (returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.bool*, builtins.float*, builtins.str*]) -> returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.bool*, builtins.int*, builtins.str*]'
+
+
+- case: apply_future
+  disable_cache: true
+  main: |
+    from returns.pointfree import apply
+    from returns.future import Future
+
+    def test(arg: float) -> int:
+        ...
+
+    reveal_type(apply(Future.from_value(test)))  # N: Revealed type is 'def (returns.future.Future[builtins.float*]) -> returns.future.Future[builtins.int*]'
+
+
+- case: apply_futureresult
+  disable_cache: true
+  main: |
+    from returns.pointfree import apply
+    from returns.future import FutureResult
+    from typing import Callable
+
+    test: FutureResult[Callable[[float], int], str]
+
+    reveal_type(apply(test))  # N: Revealed type is 'def (returns.future.FutureResult[builtins.float*, builtins.str*]) -> returns.future.FutureResult[builtins.int*, builtins.str*]'

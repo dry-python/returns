@@ -1,0 +1,202 @@
+- case: curry_pos_only_args
+  disable_cache: true
+  skip: sys.version_info < (3, 8)
+  main: |
+    from returns.curry import curry
+
+    @curry
+    def multiple(
+        a: int,
+        b: int,
+        c: int,
+        /,
+        d: int,
+    ) -> str:
+        ...
+
+    reveal_type(multiple)  # N: Revealed type is 'Overload(def (builtins.int) -> Overload(def (builtins.int, builtins.int, d: builtins.int) -> builtins.str, def (builtins.int, builtins.int) -> def (d: builtins.int) -> builtins.str, def (builtins.int) -> Overload(def (builtins.int, d: builtins.int) -> builtins.str, def (builtins.int) -> def (d: builtins.int) -> builtins.str)), def (builtins.int, builtins.int) -> Overload(def (builtins.int, d: builtins.int) -> builtins.str, def (builtins.int) -> def (d: builtins.int) -> builtins.str), def (builtins.int, builtins.int, builtins.int) -> def (d: builtins.int) -> builtins.str, def (builtins.int, builtins.int, builtins.int, d: builtins.int) -> builtins.str)'
+
+
+# TODO: remove skip after this bug in `mypy` is fixed:
+# https://github.com/python/mypy/issues/8801
+- case: curry_init_magic_method
+  disable_cache: true
+  skip: true
+  main: |
+    from returns.curry import curry
+
+    class Test(object):
+        @curry
+        def __init__(self, arg: int, other: str) -> None:
+            ...
+
+    reveal_type(Test)  # N: Revealed type is 'Overload(def (arg: builtins.int) -> def (other: builtins.str) -> ex.Test, def (arg: builtins.int, other: builtins.str) -> ex.Test)'
+
+
+- case: curry_call_magic_method
+  disable_cache: true
+  main: |
+    from returns.curry import curry
+
+    class Test(object):
+        @curry
+        def __call__(self, arg: int, other: float, last: str) -> str:
+            ...
+
+    reveal_type(Test()(1))  # N: Revealed type is 'Overload(def (other: builtins.float, last: builtins.str) -> builtins.str, def (other: builtins.float) -> def (last: builtins.str) -> builtins.str)'
+
+
+- case: curry_classmethod1
+  disable_cache: true
+  main: |
+    from returns.curry import curry
+
+    class Test(object):
+        @curry
+        @classmethod
+        def some(cls, arg: int, other: float, last: str) -> str:
+            ...
+
+    reveal_type(Test.some)  # N: Revealed type is 'Overload(def () -> Overload(def (arg: builtins.int, other: builtins.float, last: builtins.str) -> builtins.str, def (arg: builtins.int, other: builtins.float) -> def (last: builtins.str) -> builtins.str, def (arg: builtins.int) -> Overload(def (other: builtins.float, last: builtins.str) -> builtins.str, def (other: builtins.float) -> def (last: builtins.str) -> builtins.str)), def (arg: builtins.int) -> Overload(def (other: builtins.float, last: builtins.str) -> builtins.str, def (other: builtins.float) -> def (last: builtins.str) -> builtins.str), def (arg: builtins.int, other: builtins.float) -> def (last: builtins.str) -> builtins.str, def (arg: builtins.int, other: builtins.float, last: builtins.str) -> builtins.str)'
+
+    reveal_type(Test.some(1))  # N: Revealed type is 'Overload(def (other: builtins.float, last: builtins.str) -> builtins.str, def (other: builtins.float) -> def (last: builtins.str) -> builtins.str)'
+
+    reveal_type(Test.some(1, 2.0, 'a'))  # N: Revealed type is 'builtins.str'
+
+
+- case: curry_classmethod2
+  disable_cache: true
+  main: |
+    from returns.curry import curry
+    from typing import Callable
+
+    class Test(object):
+        @curry
+        @classmethod
+        def some(cls, arg: int, other: str) -> str:
+            ...
+
+    def test(c: Callable[[int, str], str]) -> str:
+        return c(1, 'a')
+
+    reveal_type(test(Test.some))  # N: Revealed type is 'builtins.str'
+
+
+- case: curry_classmethod3
+  disable_cache: true
+  main: |
+    from returns.curry import curry
+    from typing import Callable
+
+    class Test(object):
+        @curry
+        @classmethod
+        def some(cls, first:str, arg: int, other: str) -> str:
+            ...
+
+    def test(c: Callable[[int, str], str]) -> str:
+        return c(1, 'a')
+
+    reveal_type(test(Test.some('a')))  # N: Revealed type is 'builtins.str'
+
+
+- case: curry_staticmethod
+  disable_cache: true
+  main: |
+    from returns.curry import curry
+
+    class Test(object):
+        @curry
+        @staticmethod
+        def some(arg: int, other: float, last: str) -> str:
+            ...
+
+    reveal_type(Test.some)  # N: Revealed type is 'Overload(def (arg: builtins.int) -> Overload(def (other: builtins.float, last: builtins.str) -> builtins.str, def (other: builtins.float) -> def (last: builtins.str) -> builtins.str), def (arg: builtins.int, other: builtins.float) -> def (last: builtins.str) -> builtins.str, def (arg: builtins.int, other: builtins.float, last: builtins.str) -> builtins.str)'
+
+
+- case: curry_regular_method
+  disable_cache: true
+  main: |
+    from returns.curry import curry
+
+    class Test(object):
+        @curry
+        def some(self, arg: int, other: float, last: str) -> str:
+            ...
+
+    reveal_type(Test.some)  # N: Revealed type is 'Overload(def (self: main.Test) -> Overload(def (arg: builtins.int, other: builtins.float, last: builtins.str) -> builtins.str, def (arg: builtins.int, other: builtins.float) -> def (last: builtins.str) -> builtins.str, def (arg: builtins.int) -> Overload(def (other: builtins.float, last: builtins.str) -> builtins.str, def (other: builtins.float) -> def (last: builtins.str) -> builtins.str)), def (self: main.Test, arg: builtins.int) -> Overload(def (other: builtins.float, last: builtins.str) -> builtins.str, def (other: builtins.float) -> def (last: builtins.str) -> builtins.str), def (self: main.Test, arg: builtins.int, other: builtins.float) -> def (last: builtins.str) -> builtins.str, def (self: main.Test, arg: builtins.int, other: builtins.float, last: builtins.str) -> builtins.str)'
+
+    reveal_type(Test.some(Test(), 1))  # N: Revealed type is 'Overload(def (other: builtins.float, last: builtins.str) -> builtins.str, def (other: builtins.float) -> def (last: builtins.str) -> builtins.str)'
+
+    reveal_type(Test().some)  # N: Revealed type is 'Overload(def () -> Overload(def (arg: builtins.int, other: builtins.float, last: builtins.str) -> builtins.str, def (arg: builtins.int, other: builtins.float) -> def (last: builtins.str) -> builtins.str, def (arg: builtins.int) -> Overload(def (other: builtins.float, last: builtins.str) -> builtins.str, def (other: builtins.float) -> def (last: builtins.str) -> builtins.str)), def (arg: builtins.int) -> Overload(def (other: builtins.float, last: builtins.str) -> builtins.str, def (other: builtins.float) -> def (last: builtins.str) -> builtins.str), def (arg: builtins.int, other: builtins.float) -> def (last: builtins.str) -> builtins.str, def (arg: builtins.int, other: builtins.float, last: builtins.str) -> builtins.str)'
+
+    reveal_type(Test().some(1))  # N: Revealed type is 'Overload(def (other: builtins.float, last: builtins.str) -> builtins.str, def (other: builtins.float) -> def (last: builtins.str) -> builtins.str)'
+
+
+- case: curry_match_callable_protocol1
+  disable_cache: true
+  main: |
+    from returns.curry import curry
+    from typing import Callable
+
+    class Test(object):
+        @curry
+        def some(self, a: int, arg: int, other: str) -> str:
+            ...
+
+    def test(c: Callable[[int, str], str]) -> str:
+        return c(1, 'a')
+
+    reveal_type(test(Test().some(1)))  # N: Revealed type is 'builtins.str'
+
+
+- case: curry_match_callable_protocol2
+  disable_cache: true
+  main: |
+    from returns.curry import curry
+    from typing import Callable
+
+    class Test(object):
+        @curry
+        def some(self, arg: int, other: str) -> str:
+            ...
+
+    def test(c: Callable[[int, str], str]) -> str:
+        return c(1, 'a')
+
+    reveal_type(test(Test().some))  # N: Revealed type is 'builtins.str'
+
+
+- case: curry_match_callable_protocol3
+  disable_cache: true
+  main: |
+    from returns.curry import curry
+    from typing import Callable
+
+    class Test(object):
+        @curry
+        def some(self, arg: int, other: float) -> str:
+            ...
+
+    def test(c: Callable[[int], Callable[[float], str]]) -> str:
+        return c(1)(5.0)
+
+    reveal_type(test(Test().some))  # N: Revealed type is 'builtins.str'
+
+
+- case: curry_match_callable_protocol4
+  disable_cache: true
+  main: |
+    from returns.curry import curry
+    from typing import Callable
+
+    class Test(object):
+        @curry
+        @classmethod
+        def some(cls, arg: int, other: float) -> str:
+            ...
+
+    def test(c: Callable[[int], Callable[[float], str]]) -> str:
+        return c(1)(5.0)
+
+    reveal_type(test(Test.some))  # N: Revealed type is 'builtins.str'

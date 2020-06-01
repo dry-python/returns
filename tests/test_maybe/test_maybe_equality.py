@@ -5,8 +5,8 @@ import pytest
 from returns.maybe import Nothing, Some, _Nothing
 from returns.primitives.exceptions import ImmutableStateError
 from returns.primitives.interfaces import (
+    Applicative,
     Bindable,
-    Instanceable,
     Mappable,
     Unwrapable,
 )
@@ -20,7 +20,7 @@ from returns.primitives.interfaces import (
     Bindable,
     Mappable,
     Unwrapable,
-    Instanceable,
+    Applicative,
 ])
 def test_protocols(container, protocol):
     """Ensures that Maybe has all the right protocols."""

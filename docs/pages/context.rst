@@ -204,10 +204,8 @@ It can be illustrated as a simple nested function:
   ...         return len(deps) > limit
   ...    return inner
   ...
-  >>> first(2)('abc')  # first(arg1)(dependencies)
-  True
-  >>> first(5)('abc')  # first(arg1)(dependencies)
-  False
+  >>> assert first(2)('abc')  # first(limit)(deps)
+  >>> assert not first(5)('abc')  # first(limit)(deps)
 
 That's basically enough to make dependency injection possible.
 But how would you compose ``first`` function?
@@ -217,7 +215,6 @@ Let's say with the following function:
 
   >>> def bool_to_str(arg: bool) -> str:
   ...     return 'ok' if arg else 'nope'
-  ...
 
 It would be hard, knowing that it returns another
 function to be called later when the context is known.
@@ -232,12 +229,9 @@ We can wrap it in ``RequiresContext`` container to allow better composition!
   ...    def inner(deps: str) -> bool:
   ...         return len(deps) > limit
   ...    return RequiresContext(inner)  # wrapping function here!
-  ...
 
-  >>> first(1).map(bool_to_str)('abc')
-  'ok'
-  >>> first(5).map(bool_to_str)('abc')
-  'nope'
+  >>> assert first(1).map(bool_to_str)('abc') == 'ok'
+  >>> assert first(5).map(bool_to_str)('abc') == 'nope'
 
 There's how execution flows:
 
@@ -287,13 +281,15 @@ Which means that it is a wrapper around impure function that might fail.
 We also added a lot of useful methods for this container,
 so you can work easily with it:
 
-.. currentmodule:: returns.context.requires_context_io_result
+.. currentmodule:: returns.context.requires_context_ioresult
 
 - :meth:`~RequiresContextIOResult.from_typecast`
   turns accidental ``RequiresContext[env, IOResult[a, b]]`` into
   full-featured ``RequiresContextIOResult[env, a, b]``
 - :meth:`~RequiresContextIOResult.bind_result`
   allows to bind functions that return ``Result`` with just one call
+- :meth:`~RequiresContextIOResult.bind_io`
+  allows to bind functions that return ``IO`` with just one call
 - :meth:`~RequiresContextIOResult.bind_ioresult`
   allows to bind functions that return ``IOResult`` with just one call
 - :meth:`~RequiresContextIOResult.bind_context`
@@ -312,28 +308,133 @@ Aliases
 There are several useful alises for ``RequiresContext``
 and friends with some common values:
 
-- :attr:`returns.context.requires_context_result.ReaderResult`
-  is an alias for ``RequiresContextResult[...]`` to save you some typing.
+.. currentmodule:: returns.context.requires_context
+
+- :attr:`~Reader`
+  is an alias for ``RequiresContext[...]`` to save you some typing.
   Uses ``Reader`` because it is a native name for this concept from Haskell.
-- :attr:`returns.result.requires_context.ReaderResultE`
+
+.. currentmodule:: returns.context.requires_context_result
+
+- :attr:`~RequiresContextResultE`
   is an alias for ``RequiresContextResult[..., Exception]``,
   just use it when you want to work with ``RequiresContextResult`` containers
   that use exceptions as error type.
   It is named ``ResultE`` because it is ``ResultException``
   and ``ResultError`` at the same time.
-- :attr:`returns.context.requires_context_io_result.ReaderIOResult`
+- :attr:`~ReaderResult`
+  is an alias for ``RequiresContextResult[...]`` to save you some typing.
+- :attr:`~ReaderResultE`
+  is an alias for ``RequiresContextResult[..., Exception]``
+
+.. currentmodule:: returns.context.requires_context_ioresult
+
+- :attr:`~RequiresContextIOResultE`
+  is an alias for ``RequiresContextIOResult[..., Exception]``
+- :attr:`~ReaderIOResult`
   is an alias for ``RequiresContextIOResult[...]`` to save you some typing.
-  Uses ``Reader`` because it is a native name for this concept from Haskell.
-- :attr:`returns.result.requires_context.ReaderIOResultE`
-  is an alias for ``RequiresContextIOResult[..., Exception]``,
-  just use it when you want to work with ``RequiresContextIOResult`` containers
-  that use exceptions as error type.
-  It is named ``ResultE`` because it is ``ResultException``
-  and ``ResultError`` at the same time.
+- :attr:`~ReaderIOResultE`
+  is an alias for ``RequiresContextIOResult[..., Exception]``
+
+.. currentmodule:: returns.context.requires_context_future_result
+
+- :attr:`~RequiresContextFutureResultE`
+  is an alias for ``RequiresContextFutureResult[..., Exception]``
+- :attr:`~ReaderFutureResult`
+  is an alias for ``RequiresContextFutureResult[...]`` to save you some typing.
+- :attr:`~ReaderFutureResultE`
+  is an alias for ``RequiresContextFutureResult[..., Exception]``
 
 
 FAQ
 ---
+
+How to create unit objects?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``RequiresContext`` requires you to use one of the following methods:
+
+- ``from_value`` when you have a raw value
+- ``from_requires_context_result`` when you have ``RequiresContextResult``
+- ``from_requires_context_ioresult``  when you have ``RequiresContextIOResult``
+
+``RequiresContextResult`` requires you to use one of the following methods:
+
+- ``from_value`` when you want to mark some raw value as a ``Success``
+- ``from_failure`` when you want to mark some raw value as a ``Failure``
+- ``from_result`` when you already have ``Result`` container
+- ``from_context`` when you have successful ``RequiresContext``
+- ``from_failed_context`` when you have failed ``RequiresContext``
+- ``from_typecast`` when you have ``RequiresContext[..., Result]``
+
+``RequiresContextIOResult`` requires you to use one of the following methods:
+
+- ``from_value`` when you want to mark some raw value as a ``Success``
+- ``from_failure`` when you want to mark some raw value as a ``Failure``
+- ``from_result`` when you already have ``Result`` container
+- ``from_ioresult`` when you already have ``IOResult`` container
+- ``from_context`` when you have successful ``RequiresContext``
+- ``from_failed_context`` when you have failed ``RequiresContext``
+- ``from_typecast`` when you have ``RequiresContext[..., IOResult]``
+
+How can I access dependencies inside the context?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Use ``.ask()`` method!
+
+See :ref:`this guide <ask>`.
+
+RequiresContext looks like a decorator with arguments
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Yes, this container might remind a traditional decorator with arguments,
+let see an example:
+
+.. code:: python
+
+  >>> def example(print_result: bool):
+  ...     def decorator(function):
+  ...         def factory(*args, **kwargs):
+  ...             original = function(*args, **kwargs)
+  ...             if print_result:
+  ...                  print(original)
+  ...             return original
+  ...         return factory
+  ...     return decorator
+
+And it can be used like so:
+
+.. code:: python
+
+  >>> @example(print_result=True)
+  ... def my_function(first: int, second: int) -> int:
+  ...     return first + second
+
+  >>> assert my_function(2, 3) == 5
+  5
+
+We can model the similar idea with ``RequiresContext``:
+
+.. code:: python
+
+  >>> from returns.context import RequiresContext
+
+  >>> def my_function(first: int, second: int) -> RequiresContext[bool, int]:
+  ...     def factory(print_result: bool) -> int:
+  ...         original = first + second
+  ...         if print_result:
+  ...             print(original)
+  ...         return original
+  ...     return RequiresContext(factory)
+
+  >>> assert my_function(2, 3)(False) == 5
+  >>> assert my_function(2, 3)(True) == 5
+  5
+
+As you can see,
+it is easier to change the behaviour of a function with ``RequiresContext``.
+While decorator with arguments glues values to a function forever.
+Decide when you need which behaviour carefully.
 
 Why can’t we use RequiresContext[e, Result] instead of RequiresContextResult?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -353,46 +454,8 @@ the very same thing as ``RequiresContext[e, Result]``, but has nicer API:
   y.map(lambda number: number + 1)
 
 The second one looks better, doesn't it?
-The same applies for ``RequiresContextIOResult`` as well.
-
-How to create unit objects?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-``RequiresContext`` allows you to create
-unit values with the help of ``.from_value`` method:
-
-.. code:: python
-
-  >>> from returns.context import RequiresContext
-  >>> assert RequiresContext.from_value(1)(...) == 1
-
-``RequiresContextResult`` requires you to use one of the following methods:
-
-- ``from_success`` when you want to mark some raw value as a ``Success``
-- ``from_failure`` when you want to mark some raw value as a ``Failure``
-- ``from_result`` when you already have one
-- ``from_successful_context`` when you have successful ``RequiresContext``
-- ``from_failed_context`` when you have failed ``RequiresContext``
-
-But, think twice: why would you need to do it?
-These classes represent computations that rely on context.
-Maybe, you should not do creat their units?
-
-``RequiresContextIOResult`` requires you to use one of the following methods:
-
-- ``from_success`` when you want to mark some raw value as a ``Success``
-- ``from_failure`` when you want to mark some raw value as a ``Failure``
-- ``from_result`` when you already have ``Result`` container
-- ``from_ioresult`` when you already have ``IOResult`` container
-- ``from_successful_context`` when you have successful ``RequiresContext``
-- ``from_failed_context`` when you have failed ``RequiresContext``
-
-How can I access dependencies inside the context?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Use ``.ask()`` method!
-
-See :ref:`this guide <ask>`.
+The same applies for ``RequiresContextIOResult``
+and ``RequiresContextFutureResult`` as well.
 
 Why do I have to use explicit type annotation for ask method?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -411,6 +474,95 @@ So, using this technique is better:
           ...
       return Context[int].ask().bind(factory)
 
+What is the difference between DI and RequiresContext?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Dependency Injection pattern and
+`Inversion of Control <https://en.wikipedia.org/wiki/Inversion_of_control>`_
+principle forms a lot of ideas and tooling
+that do pretty much the same as ``RequiresContext`` container.
+
+What is the difference? Why do we need each of them?
+
+Let's find out!
+Tools like `dependencies <https://github.com/dry-python/dependencies>`_
+or `punq <https://github.com/bobthemighty/punq>`_
+tries to:
+
+1. inspect (by name or type respectively)
+   function or class that needs dependencies
+2. build the required dependency tree from the source
+   defined in the service container
+
+There are other tools like ``inject`` that also invades
+your code with ``@inject`` decorator.
+
+``RequiresContext`` works completely different.
+It respects your code and does not try to inspect in any manner.
+It also does not care about building dependencies at all.
+
+All it does is: provides simple API to compose functions
+that need additional context (or dependencies) to run.
+
+You can even use them together: ``RequiresContext`` will pass depedencies
+built by ``dry-python/dependencies`` (or any other tool of your choice)
+as a ``deps`` parameter to ``RequiresContext`` instance.
+
+When to use which?
+
+1. Use ``RequiresContext`` when you write code in a functional manner,
+   when you respect function composition, typing, and explicitness.
+   ``RequiresContext`` fits very well when you need
+   to provide your users a single callable that does the job
+2. Use traditional invasive DI in other cases
+
+Here's an example that might give you a better understanding of how
+``RequiresContext`` is used on real and rather big projects:
+
+.. code:: python
+
+  from typing import Callable, Dict, Protocol, final
+  from returns.io import IOResultE
+  from returns.context import ReaderIOResultE
+
+  @final
+  class _SyncPermissionsDeps(Protocol):
+      fetch_metadata: Callable[[], IOResultE['Metadata']]
+      get_user_permissions: Callable[['Metadata'], Dict[int, str]]
+      update_bi_permissions: Callable[[Dict[int, str]], IOResultE['Payload']]
+
+  def sync_permissions() -> ReaderIOResultE[_SyncPermissionsDeps, 'Payload']:
+      """
+      This functions runs a scheduled task once a day.
+
+      It syncs permissions from the metadata storage to our BI system.
+      """
+      def factory(deps: _SyncPermissionsDeps) -> IOResultE['Payload']:
+          return deps.fetch_metadata().map(
+              deps.get_user_permissions,
+          ).bind_ioresult(
+              deps.update_bi_permissions,
+          )
+      return ReaderIOResult(factory)
+
+And then it is called like so:
+
+.. code:: python
+
+  # tasks.py
+  from celery import shared_task
+  from returns.functions import raise_exception
+
+  from logic.usecases.sync_permissions import sync_permissions
+  from infrastructure.implemented import container
+
+  @shared_task(autoretry_for=(ConnectionError,), max_retries=3)
+  def queue_sync_permissions():
+      # `container.build()` mimics some real DI framework here
+      # and returns the prepared class with all things you need
+      # We also make sure that we don't forget to raise internal exceptions
+      # and trigger celery retries.
+      return sync_permissions().fix(raise_exception)(container.build())
 
 Further reading
 ---------------
@@ -444,7 +596,15 @@ RequiresContextResult
 RequiresContextIOResult
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-.. autoclasstree:: returns.context.requires_context_io_result
+.. autoclasstree:: returns.context.requires_context_ioresult
 
-.. automodule:: returns.context.requires_context_io_result
+.. automodule:: returns.context.requires_context_ioresult
+   :members:
+
+RequiresContextFutureResult
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autoclasstree:: returns.context.requires_context_future_result
+
+.. automodule:: returns.context.requires_context_future_result
    :members:

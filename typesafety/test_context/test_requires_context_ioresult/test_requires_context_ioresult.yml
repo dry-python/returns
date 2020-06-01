@@ -1,0 +1,173 @@
+# TODO bind_io, bind_ioresult, bind_context_result
+
+- case: requires_context_ioresult_bind
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextIOResult
+
+    x: RequiresContextIOResult[str, int, float]
+
+    def test(param: int) -> RequiresContextIOResult[str, bool, float]:
+        ...
+
+    reveal_type(x.bind(test))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.str, builtins.bool*, builtins.float]'
+
+
+- case: requires_context_ioresult_bind_result
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextIOResult
+    from returns.result import Result
+
+    x: RequiresContextIOResult[str, int, float]
+
+    def test(param: int) -> Result[bool, float]:
+        ...
+
+    reveal_type(x.bind_result(test))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.str, builtins.bool*, builtins.float]'
+
+
+- case: requires_context_ioresult_bind_ioresult
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextIOResult
+    from returns.io import IOResult
+
+    x: RequiresContextIOResult[str, int, float]
+
+    def test(param: int) -> IOResult[bool, float]:
+        ...
+
+    reveal_type(x.bind_ioresult(test))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.str, builtins.bool*, builtins.float]'
+
+
+- case: requires_context_ioresult_bind_io
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextIOResult
+    from returns.io import IO
+
+    x: RequiresContextIOResult[str, int, float]
+
+    def test(param: int) -> IO[bool]:
+        ...
+
+    reveal_type(x.bind_io(test))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.str, builtins.bool*, builtins.float]'
+
+
+- case: requires_context_ioresult_bind_context
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextIOResult, RequiresContext
+
+    x: RequiresContextIOResult[str, int, float]
+
+    def test(param: int) -> RequiresContext[str, bool]:
+        ...
+
+    reveal_type(x.bind_context(test))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.str, builtins.bool*, builtins.float]'
+
+
+
+- case: requires_context_ioresult_bind_context_result
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextIOResult, RequiresContextResult
+
+    x: RequiresContextIOResult[str, int, float]
+
+    def test(param: int) -> RequiresContextResult[str, bool, float]:
+        ...
+
+    reveal_type(x.bind_context_result(test))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.str, builtins.bool*, builtins.float]'
+
+
+- case: requires_context_ioresult_map
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextIOResult
+
+    x: RequiresContextIOResult[str, int, float]
+
+    reveal_type(x.map(bool))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.str, builtins.bool*, builtins.float]'
+
+
+- case: requires_context_ioresult_apply
+  disable_cache: true
+  main: |
+    from typing import Callable
+    from returns.context import RequiresContextIOResult
+
+    x: RequiresContextIOResult[str, int, float]
+    y: RequiresContextIOResult[str, Callable[[int], bool], float]
+
+    reveal_type(x.apply(y))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.str, builtins.bool*, builtins.float]'
+
+
+- case: requires_context_ioresult_rescue
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextIOResult
+
+    x: RequiresContextIOResult[str, int, float]
+
+    def test(param: float) -> RequiresContextIOResult[str, int, bool]:
+        ...
+
+    reveal_type(x.rescue(test))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.str, builtins.int, builtins.bool*]'
+
+
+- case: requires_context_ioresult_fix
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextIOResult
+
+    x: RequiresContextIOResult[str, int, float]
+
+    def test(param: float) -> bool:
+        ...
+
+    reveal_type(x.fix(test))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.str, builtins.bool*, builtins.float]'
+
+
+- case: requires_context_ioresult_alt
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextIOResult
+
+    x: RequiresContextIOResult[str, int, float]
+
+    def test(param: float) -> bool:
+        ...
+
+    reveal_type(x.alt(test))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.str, builtins.int, builtins.bool*]'
+
+
+- case: requires_context_ioresult_value_or
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextIOResult
+
+    x: RequiresContextIOResult[str, int, float]
+
+    reveal_type(x.value_or(None)('a'))  # N: Revealed type is 'returns.io.IO[Union[builtins.int, None]]'
+
+
+- case: requires_context_ioresult_unwrap
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextIOResult
+
+    x: RequiresContextIOResult[str, int, float]
+
+    reveal_type(x.unwrap()('a'))  # N: Revealed type is 'returns.io.IO[builtins.int*]'
+
+
+- case: requires_context_ioresult_failure
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextIOResult
+
+    x: RequiresContextIOResult[str, int, float]
+
+    reveal_type(x.failure()('a'))  # N: Revealed type is 'returns.io.IO[builtins.float*]'

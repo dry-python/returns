@@ -6,3 +6,9 @@
   margin-bottom: 1em;
   border: 0;
 }
+
+/* For some reason it did not have a scroll attached. */
+
+.mermaid {
+  overflow: scroll;
+}

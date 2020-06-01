@@ -1,6 +1,6 @@
 def _rescue(function):
     """
-    Boxes function's input parameter from a regular value to a container.
+    Turns function's input parameter from a regular value to a container.
 
     In other words, it modifies the function
     signature from: ``a -> Container[b]`` to: ``Container[a] -> Container[b]``
@@ -16,7 +16,7 @@ def _rescue(function):
 
       >>> def example(argument: int) -> Result[str, int]:
       ...     return Success(argument + 1)
-      ...
+
       >>> assert rescue(example)(Success('a')) == Success('a')
       >>> assert rescue(example)(Failure(1)) == Success(2)
 

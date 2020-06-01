@@ -1,0 +1,61 @@
+- case: flow_zero_args
+  disable_cache: true
+  main: |
+    from returns.pipeline import flow
+
+    reveal_type(flow())
+  out: |
+    main:3: error: Too few arguments for "_flow"
+    main:3: note: Revealed type is '<nothing>'
+
+
+- case: flow_one_arg
+  disable_cache: true
+  main: |
+    from returns.pipeline import flow
+
+    reveal_type(flow(1))
+  out: |
+    main:3: error: Too few arguments for "_flow"
+    main:3: note: Revealed type is '<nothing>'
+
+
+- case: flow_star_args
+  disable_cache: true
+  main: |
+    from returns.pipeline import flow
+    from returns.functions import identity
+
+    reveal_type(
+        flow(  # N: Revealed type is 'builtins.int*'
+            1,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,
+            identity,  # very long amount of args!
+        )
+    )

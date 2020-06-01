@@ -1,21 +1,20 @@
 from abc import ABCMeta
 from functools import wraps
-from inspect import iscoroutinefunction
-from typing import (  # noqa: WPS235
+from typing import (
     Any,
     Callable,
     ClassVar,
-    Coroutine,
     Generic,
-    NoReturn,
+    Iterable,
+    Sequence,
     Type,
     TypeVar,
     Union,
-    overload,
 )
 
 from typing_extensions import final
 
+from returns._generated.iterable import iterable
 from returns.primitives.container import BaseContainer
 from returns.result import Failure, Result, Success
 
@@ -35,12 +34,10 @@ _SecondType = TypeVar('_SecondType')
 @final
 class IO(BaseContainer, Generic[_ValueType]):
     """
-    Explicit marker for impure function results.
+    Explicit container for impure function results.
 
-    We call it "marker" since once it is marked, it cannot be unmarked.
-
-    ``IO`` is also a container.
-    But, it is different in a way that it can't be unwrapped / rescued / fixed.
+    We also sometimes call it "marker" since once it is marked,
+    it cannot be ever unmarked.
     There's no way to directly get its internal value.
 
     Note that ``IO`` represents a computation that never fails.
@@ -92,11 +89,39 @@ class IO(BaseContainer, Generic[_ValueType]):
 
           >>> def mappable(string: str) -> str:
           ...      return string + 'b'
-          ...
+
           >>> assert IO('a').map(mappable) == IO('ab')
 
         """
         return IO(function(self._inner_value))
+
+    def apply(
+        self,
+        container: 'IO[Callable[[_ValueType], _NewValueType]]',
+    ) -> 'IO[_NewValueType]':
+        """
+        Calls a wrapped function in a container on this container.
+
+        .. code:: python
+
+          >>> from returns.io import IO
+          >>> assert IO('a').apply(IO(lambda inner: inner + 'b')) == IO('ab')
+
+        Or more complex example that shows how we can work
+        with regular functions and multiple ``IO`` arguments:
+
+        .. code:: python
+
+          >>> from returns.curry import curry
+
+          >>> @curry
+          ... def appliable(first: str, second: str) -> str:
+          ...      return first + second
+
+          >>> assert IO('b').apply(IO('a').apply(IO(appliable))) == IO('ab')
+
+        """
+        return self.map(container._inner_value)  # noqa: WPS437
 
     def bind(
         self, function: Callable[[_ValueType], 'IO[_NewValueType]'],
@@ -105,48 +130,17 @@ class IO(BaseContainer, Generic[_ValueType]):
         Applies 'function' to the result of a previous calculation.
 
         'function' should accept a single "normal" (non-container) argument
-        and return IO type object.
+        and return ``IO`` type object.
 
         .. code:: python
 
           >>> def bindable(string: str) -> IO[str]:
           ...      return IO(string + 'b')
-          ...
+
           >>> assert IO('a').bind(bindable) == IO('ab')
 
         """
         return function(self._inner_value)
-
-    @classmethod
-    def lift(
-        cls,
-        function: Callable[[_ValueType], _NewValueType],
-    ) -> Callable[['IO[_ValueType]'], 'IO[_NewValueType]']:
-        """
-        Lifts function to be wrapped in ``IO`` for better composition.
-
-        In other words, it modifies the function's
-        signature from: ``a -> b`` to: ``IO[a] -> IO[b]``
-
-        Works similar to :meth:`~IO.map`, but has inverse semantics.
-
-        This is how it should be used:
-
-        .. code:: python
-
-          >>> from returns.io import IO
-          >>> def example(argument: int) -> float:
-          ...     return argument / 2  # not exactly IO action!
-          ...
-          >>> assert IO.lift(example)(IO(2)) == IO(1.0)
-
-        See also:
-            - https://wiki.haskell.org/Lifting
-            - https://github.com/witchcrafters/witchcraft
-            - https://en.wikipedia.org/wiki/Natural_transformation
-
-        """
-        return lambda container: container.map(function)
 
     @classmethod
     def from_value(cls, inner_value: _NewValueType) -> 'IO[_NewValueType]':
@@ -160,10 +154,30 @@ class IO(BaseContainer, Generic[_ValueType]):
           >>> from returns.io import IO
           >>> assert IO(1) == IO.from_value(1)
 
-        Part of the :class:`returns.primitives.interfaces.Instanceable`
+        Part of the :class:`returns.primitives.interfaces.Applicative`
         protocol.
         """
         return IO(inner_value)
+
+    @classmethod
+    def from_iterable(
+        cls,
+        containers: Iterable['IO[_ValueType]'],
+    ) -> 'IO[Sequence[_ValueType]]':
+        """
+        Transforms an iterable of ``IO`` containers into a single container.
+
+        .. code:: python
+
+          >>> from returns.io import IO
+
+          >>> assert IO.from_iterable([
+          ...    IO(1),
+          ...    IO(2),
+          ... ]) == IO((1, 2))
+
+        """
+        return iterable(cls, containers)
 
     @classmethod
     def from_ioresult(
@@ -188,46 +202,34 @@ class IO(BaseContainer, Generic[_ValueType]):
 
 # Helper functions:
 
-@overload
-def impure(  # type: ignore
-    function: Callable[..., Coroutine[_FirstType, _SecondType, _NewValueType]],
-) -> Callable[
-    ...,
-    Coroutine[_FirstType, _SecondType, IO[_NewValueType]],
-]:
-    """Case for async functions."""
-
-
-@overload
 def impure(
     function: Callable[..., _NewValueType],
 ) -> Callable[..., IO[_NewValueType]]:
-    """Case for regular functions."""
-
-
-def impure(function):
     """
     Decorator to mark function that it returns :class:`~IO` container.
 
-    Supports both async and regular functions. Example:
+    If you need to mark ``async`` function as impure,
+    use :func:`returns.future.future` instead.
+    This decorator only works with sync functions. Example:
 
     .. code:: python
 
       >>> from returns.io import IO, impure
+
       >>> @impure
       ... def function(arg: int) -> int:
-      ...     return arg + 1
+      ...     return arg + 1  # this action is pure, just an example
       ...
+
       >>> assert function(1) == IO(2)
 
+    Requires our :ref:`mypy plugin <mypy-plugins>`.
+
     """
-    if iscoroutinefunction(function):
-        async def decorator(*args, **kwargs):  # noqa: WPS430
-            return IO(await function(*args, **kwargs))
-    else:
-        def decorator(*args, **kwargs):  # noqa: WPS430
-            return IO(function(*args, **kwargs))
-    return wraps(function)(decorator)
+    @wraps(function)
+    def decorator(*args, **kwargs):
+        return IO(function(*args, **kwargs))
+    return decorator
 
 
 # IO and Result:
@@ -238,12 +240,10 @@ class IOResult(
     metaclass=ABCMeta,
 ):
     """
-    Explicit marker for impure function results that might fail.
+    Explicit container for impure function results that might fail.
 
     Definition
     ~~~~~~~~~~
-
-    We call it "marker" since once it is marked, it cannot be unmarked.
 
     This type is similar to :class:`returns.result.Result`.
     This basically a more useful version of ``IO[Result[a, b]]``.
@@ -271,7 +271,7 @@ class IOResult(
       with :func:`~IOSuccess` and :func:`~IOFailure` public type constructors
     - You can construct ``IOResult`` from ``IO`` values
       with :meth:`~IOResult.from_failed_io`
-      and :meth:`IOResult.from_successful_io`
+      and :meth:`IOResult.from_io`
     - You can construct ``IOResult`` from ``Result`` values
       with :meth:`~IOResult.from_result`
 
@@ -280,9 +280,6 @@ class IOResult(
     - :meth:`~IOResult.bind_result` to work
       with functions which return ``Result``
     - :meth:`~IOResult.from_typecast` to work with ``IO[Result[...]]`` values
-    - :meth:`~IOResult.lift` and :meth:`~IOResult.lift_result` to allow
-      indirect function composition
-      with regular and ``Result`` based functions.
 
     See also:
         https://github.com/gcanti/fp-ts/blob/master/docs/modules/IOEither.ts.md
@@ -331,6 +328,41 @@ class IOResult(
         """
         return self.from_result(self._inner_value.map(function))
 
+    def apply(
+        self,
+        container:
+            'IOResult[Callable[[_ValueType], _NewValueType], _ErrorType]',
+    ) -> 'IOResult[_NewValueType, _ErrorType]':
+        """
+        Calls a wrapped function in a container on this container.
+
+        .. code:: python
+
+          >>> from returns.io import IOSuccess, IOFailure, IOResult
+
+          >>> def appliable(first: str) -> str:
+          ...      return first + 'b'
+
+          >>> assert IOSuccess('a').apply(
+          ...     IOSuccess(appliable),
+          ... ) == IOSuccess('ab')
+          >>> assert IOFailure('a').apply(
+          ...     IOSuccess(appliable),
+          ... ) == IOFailure('a')
+
+          >>> assert isinstance(IOSuccess('a').apply(
+          ...     IOFailure(appliable),
+          ... ), IOResult.failure_type)
+
+        """
+        if isinstance(container, self.success_type):
+            return self.from_result(
+                self._inner_value.map(
+                    container.unwrap()._inner_value,  # noqa: WPS437
+                ),
+            )
+        return container  # type: ignore
+
     def bind(
         self,
         function: Callable[
@@ -348,38 +380,13 @@ class IOResult(
           ...      if len(string) > 1:
           ...          return IOSuccess(string + 'b')
           ...      return IOFailure(string + 'c')
-          ...
+
           >>> assert IOSuccess('aa').bind(bindable) == IOSuccess('aab')
           >>> assert IOSuccess('a').bind(bindable) == IOFailure('ac')
           >>> assert IOFailure('a').bind(bindable) == IOFailure('a')
 
         """
         raise NotImplementedError
-
-    def unify(
-        self,
-        function: Callable[
-            [_ValueType],
-            'IOResult[_NewValueType, _NewErrorType]',
-        ],
-    ) -> 'IOResult[_NewValueType, Union[_ErrorType, _NewErrorType]]':
-        """
-        Composes successful container with a function that returns a container.
-
-        .. code:: python
-
-          >>> from returns.io import IOResult, IOFailure, IOSuccess
-          >>> def bindable(string: str) -> IOResult[str, str]:
-          ...      if len(string) > 1:
-          ...          return IOSuccess(string + 'b')
-          ...      return IOFailure(string + 'c')
-          ...
-          >>> assert IOSuccess('aa').unify(bindable) == IOSuccess('aab')
-          >>> assert IOSuccess('a').unify(bindable) == IOFailure('ac')
-          >>> assert IOFailure('a').unify(bindable) == IOFailure('a')
-
-        """
-        return self.bind(function)  # type: ignore
 
     def bind_result(
         self,
@@ -404,13 +411,61 @@ class IOResult(
           ...      if len(string) > 1:
           ...          return Success(string + 'b')
           ...      return Failure(string + 'c')
-          ...
+
           >>> assert IOSuccess('aa').bind_result(bindable) == IOSuccess('aab')
           >>> assert IOSuccess('a').bind_result(bindable) == IOFailure('ac')
           >>> assert IOFailure('a').bind_result(bindable) == IOFailure('a')
 
         """
         raise NotImplementedError
+
+    def bind_io(
+        self,
+        function: Callable[[_ValueType], IO[_NewValueType]],
+    ) -> 'IOResult[_NewValueType, _ErrorType]':
+        """
+        Composes successful container with a function that returns a container.
+
+        Similar to :meth:`~IOResult.bind`, but works with containers
+        that return :class:`returns.io.IO` instead of :class:`~IOResult`.
+
+        .. code:: python
+
+          >>> from returns.io import IO, IOFailure, IOSuccess
+
+          >>> def bindable(string: str) -> IO[str]:
+          ...      return IO(string + 'z')
+
+          >>> assert IOSuccess('a').bind_io(bindable) == IOSuccess('az')
+          >>> assert IOFailure('a').bind_io(bindable) == IOFailure('a')
+
+        """
+        raise NotImplementedError
+
+    def unify(
+        self,
+        function: Callable[
+            [_ValueType],
+            'IOResult[_NewValueType, _NewErrorType]',
+        ],
+    ) -> 'IOResult[_NewValueType, Union[_ErrorType, _NewErrorType]]':
+        """
+        Composes successful container with a function that returns a container.
+
+        .. code:: python
+
+          >>> from returns.io import IOResult, IOFailure, IOSuccess
+          >>> def bindable(string: str) -> IOResult[str, str]:
+          ...      if len(string) > 1:
+          ...          return IOSuccess(string + 'b')
+          ...      return IOFailure(string + 'c')
+
+          >>> assert IOSuccess('aa').unify(bindable) == IOSuccess('aab')
+          >>> assert IOSuccess('a').unify(bindable) == IOFailure('ac')
+          >>> assert IOFailure('a').unify(bindable) == IOFailure('a')
+
+        """
+        return self.bind(function)  # type: ignore
 
     def fix(
         self,
@@ -524,72 +579,6 @@ class IOResult(
         return IO(self._inner_value.failure())
 
     @classmethod
-    def lift(
-        cls,
-        function: Callable[[_ValueType], _NewValueType],
-    ) -> Callable[
-        ['IOResult[_ValueType, _ContraErrorType]'],
-        'IOResult[_NewValueType, _ContraErrorType]',
-    ]:
-        """
-        Lifts function to be wrapped in ``IOResult`` for better composition.
-
-        In other words, it modifies the function's
-        signature from: ``a -> b`` to:
-        ``IOResult[a, error] -> IOResult[b, error]``
-
-        Works similar to :meth:`~IOResult.map`, but has inverse semantics.
-
-        This is how it should be used:
-
-        .. code:: python
-
-          >>> from returns.io import IOResult, IOSuccess, IOFailure
-          >>> def example(argument: int) -> float:
-          ...     return argument / 2  # not exactly IO action!
-          ...
-          >>> assert IOResult.lift(example)(IOSuccess(2)) == IOSuccess(1.0)
-          >>> assert IOResult.lift(example)(IOFailure(2)) == IOFailure(2)
-
-        This one is similar to appling :meth:`~IO.lift`
-        and :meth:`returns.result.Result.lift` in order.
-
-        See also:
-            - https://wiki.haskell.org/Lifting
-            - https://github.com/witchcrafters/witchcraft
-            - https://en.wikipedia.org/wiki/Natural_transformation
-
-        """
-        return lambda container: container.map(function)
-
-    @classmethod
-    def lift_result(
-        cls,
-        function: Callable[[_ValueType], Result[_NewValueType, _ErrorType]],
-    ) -> Callable[
-        ['IOResult[_ValueType, _ErrorType]'],
-        'IOResult[_NewValueType, _ErrorType]',
-    ]:
-        """
-        Lifts function from ``Result`` to ``IOResult`` for better composition.
-
-        Similar to :meth:`~IOResult.lift`, but works with other type.
-
-        .. code:: python
-
-          >>> from returns.io import IOResult, IOSuccess
-          >>> from returns.result import Result, Success
-
-          >>> def returns_result(arg: int) -> Result[int, str]:
-          ...     return Success(arg + 1)
-          ...
-          >>> returns_ioresult = IOResult.lift_result(returns_result)
-          >>> assert returns_ioresult(IOSuccess(1)) == IOSuccess(2)
-
-        """
-        return lambda container: container.bind_result(function)
-
-    @classmethod
     def from_typecast(
         cls, container: IO[Result[_NewValueType, _NewErrorType]],
     ) -> 'IOResult[_NewValueType, _NewErrorType]':
@@ -614,7 +603,7 @@ class IOResult(
     @classmethod
     def from_failed_io(
         cls, container: IO[_NewErrorType],
-    ) -> 'IOResult[NoReturn, _NewErrorType]':
+    ) -> 'IOResult[Any, _NewErrorType]':
         """
         Creates new ``IOResult`` from "failed" ``IO`` container.
 
@@ -628,9 +617,9 @@ class IOResult(
         return IOFailure(container._inner_value)  # noqa: WPS437
 
     @classmethod
-    def from_successful_io(
+    def from_io(
         cls, container: IO[_NewValueType],
-    ) -> 'IOResult[_NewValueType, NoReturn]':
+    ) -> 'IOResult[_NewValueType, Any]':
         """
         Creates new ``IOResult`` from "successful" ``IO`` container.
 
@@ -638,7 +627,7 @@ class IOResult(
 
           >>> from returns.io import IO, IOResult, IOSuccess
           >>> container = IO(1)
-          >>> assert IOResult.from_successful_io(container) == IOSuccess(1)
+          >>> assert IOResult.from_io(container) == IOSuccess(1)
 
         """
         return IOSuccess(container._inner_value)  # noqa: WPS437
@@ -664,7 +653,7 @@ class IOResult(
         return _IOFailure(container)
 
     @classmethod
-    def from_success(
+    def from_value(
         cls, inner_value: _NewValueType,
     ) -> 'IOResult[_NewValueType, Any]':
         """
@@ -676,7 +665,7 @@ class IOResult(
         .. code:: python
 
           >>> from returns.io import IOResult, IOSuccess
-          >>> assert IOResult.from_success(1) == IOSuccess(1)
+          >>> assert IOResult.from_value(1) == IOSuccess(1)
 
         You can use this method or :func:`~IOSuccess`,
         choose the most convenient for you.
@@ -704,6 +693,36 @@ class IOResult(
 
         """
         return IOFailure(inner_value)
+
+    @classmethod
+    def from_iterable(
+        cls,
+        containers: Iterable['IOResult[_ValueType, _ErrorType]'],
+    ) -> 'IOResult[Sequence[_ValueType], _ErrorType]':
+        """
+        Transforms an iterable of ``IOResult`` containers into a single one.
+
+        .. code:: python
+
+          >>> from returns.io import IOResult, IOSuccess, IOFailure
+
+          >>> assert IOResult.from_iterable([
+          ...    IOSuccess(1),
+          ...    IOSuccess(2),
+          ... ]) == IOSuccess((1, 2))
+
+          >>> assert IOResult.from_iterable([
+          ...     IOSuccess(1),
+          ...     IOFailure('a'),
+          ... ]) == IOFailure('a')
+
+          >>> assert IOResult.from_iterable([
+          ...     IOFailure('a'),
+          ...     IOSuccess(1),
+          ... ]) == IOFailure('a')
+
+        """
+        return iterable(cls, containers)
 
     def __str__(self) -> str:
         """Custom ``str`` representation for better readability."""
@@ -736,6 +755,10 @@ class _IOFailure(IOResult):
         return self
 
     def bind_result(self, function):
+        """Does nothing for ``IOFailure``."""
+        return self
+
+    def bind_io(self, function):
         """Does nothing for ``IOFailure``."""
         return self
 
@@ -772,6 +795,10 @@ class _IOSuccess(IOResult):
     def bind_result(self, function):
         """Binds ``Result`` returning function to current container."""
         return self.from_result(function(self._inner_value.unwrap()))
+
+    def bind_io(self, function):
+        """Binds ``IO`` returning function to current container."""
+        return self.from_io(function(self._inner_value.unwrap()))
 
     def rescue(self, function):
         """Does nothing for ``IOSuccess``."""
@@ -824,50 +851,41 @@ IOResultE = IOResult[_ValueType, Exception]
 
 # impure_safe decorator:
 
-@overload
-def impure_safe(  # type: ignore
-    function: Callable[..., Coroutine[_FirstType, _SecondType, _NewValueType]],
-) -> Callable[
-    ...,
-    Coroutine[_FirstType, _SecondType, IOResultE[_NewValueType]],
-]:
-    """Case for async functions."""
-
-
-@overload
 def impure_safe(
     function: Callable[..., _NewValueType],
 ) -> Callable[..., IOResultE[_NewValueType]]:
-    """Case for regular functions."""
-
-
-def impure_safe(function):  # noqa: C901
     """
-    Decorator to mark function that it returns :class:`~IO` container.
+    Decorator to mark function that it returns :class:`~IOResult` container.
 
-    Supports both async and regular functions. Example:
+    Should be used with care, since it only catches ``Exception`` subclasses.
+    It does not catch ``BaseException`` subclasses.
+
+    If you need to mark ``async`` function as impure,
+    use :func:`returns.future.future_safe` instead.
+    This decorator only works with sync functions. Example:
 
     .. code:: python
 
       >>> from returns.io import IOSuccess, impure_safe
+
       >>> @impure_safe
       ... def function(arg: int) -> float:
       ...     return 1 / arg
       ...
+
       >>> assert function(1) == IOSuccess(1.0)
       >>> assert function(0).failure()
 
+    Similar to :func:`returns.future.future_safe`
+    and :func:`returns.result.safe` decorators.
+
+    Requires our :ref:`mypy plugin <mypy-plugins>`.
+
     """
-    if iscoroutinefunction(function):
-        async def decorator(*args, **kwargs):  # noqa: WPS430
-            try:
-                return IOSuccess(await function(*args, **kwargs))
-            except Exception as exc:
-                return IOFailure(exc)
-    else:
-        def decorator(*args, **kwargs):  # noqa: WPS430
-            try:
-                return IOSuccess(function(*args, **kwargs))
-            except Exception as exc:
-                return IOFailure(exc)
-    return wraps(function)(decorator)
+    @wraps(function)
+    def decorator(*args, **kwargs):
+        try:
+            return IOSuccess(function(*args, **kwargs))
+        except Exception as exc:
+            return IOFailure(exc)
+    return decorator

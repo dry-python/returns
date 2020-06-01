@@ -1,9 +1,28 @@
-- case: io_constructor
+- case: io_constructor1
   disable_cache: true
   main: |
     from returns.io import IO
 
     reveal_type(IO(1))  # N: Revealed type is 'returns.io.IO[builtins.int*]'
+
+
+- case: io_constructor2
+  disable_cache: true
+  main: |
+    from returns.io import IO
+
+    reveal_type(IO.from_value(1))  # N: Revealed type is 'returns.io.IO[builtins.int*]'
+
+
+- case: io_from_iterable
+  disable_cache: true
+  main: |
+    from returns.io import IO
+    from typing import Iterable
+
+    x: Iterable[IO[int]]
+
+    reveal_type(IO.from_iterable(x))  # N: Revealed type is 'returns.io.IO[typing.Sequence[builtins.int*]]'
 
 
 - case: io_bind
@@ -23,3 +42,14 @@
     from returns.io import IO
 
     reveal_type(IO(1).map(str))  # N: Revealed type is 'returns.io.IO[builtins.str*]'
+
+
+- case: io_apply
+  disable_cache: true
+  main: |
+    from returns.io import IO
+
+    def transform(arg: int) -> str:
+        ...
+
+    reveal_type(IO(1).apply(IO(transform)))  # N: Revealed type is 'returns.io.IO[builtins.str*]'

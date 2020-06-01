@@ -18,6 +18,18 @@
     reveal_type(first.map(lambda char: float(char)))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[builtins.int, builtins.float*]'
 
 
+- case: requires_context_apply_correct
+  disable_cache: true
+  main: |
+    from typing import Callable
+    from returns.context import RequiresContext
+
+    first: RequiresContext[int, str]
+    second: RequiresContext[int, Callable[[str], float]]
+
+    reveal_type(first.apply(second))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[builtins.int, builtins.float*]'
+
+
 - case: requires_context_bind_correct
   disable_cache: true
   main: |

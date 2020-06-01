@@ -1,0 +1,58 @@
+- case: pipe_regular_callable
+  disable_cache: true
+  main: |
+    from typing import Callable
+    from returns.pipeline import pipe
+
+    def convert(arg: str) -> float:
+        ...
+
+    def callback(f: Callable[[str], bool]) -> bool:
+        return f('a')
+
+    predefined = pipe(convert, int, bool)
+    reveal_type(callback(predefined))  # N: Revealed type is 'builtins.bool'
+
+
+- case: pipe_generic_callable1
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar
+    from returns.pipeline import pipe
+
+    T = TypeVar('T')
+    R = TypeVar('R')
+
+    def callback(f: Callable[[T], R], i: T) -> R:
+        return f(i)
+
+    def first(a: int) -> float:
+        ...
+
+    def second(a: float) -> str:
+        ...
+
+    predefined = pipe(first, second)
+    reveal_type(callback(predefined, 1))  # N: Revealed type is 'builtins.str*'
+
+
+- case: pipe_generic_callable2
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar
+    from returns.pipeline import pipe
+
+    T = TypeVar('T')
+    R = TypeVar('R')
+
+    def callback(f: Callable[[T], R]) -> R:
+        ...
+
+    def first(a: int) -> float:
+        ...
+
+    def second(a: float) -> str:
+        ...
+
+    predefined = pipe(first, second)
+    reveal_type(callback(predefined))  # N: Revealed type is 'builtins.str*'

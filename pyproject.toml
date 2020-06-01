@@ -42,6 +42,9 @@ classifiers = [
   "Topic :: Utilities"
 ]
 
+[tool.poetry.urls]
+"Funding" = "https://github.com/sponsors/dry-python"
+
 [tool.poetry.plugins.pytest11]
 returns = "returns.contrib.pytest.plugin"
 
@@ -56,16 +59,20 @@ typing-extensions = "^3.7"
 mypy = "^0.770"
 wemake-python-styleguide = "^0.14"
 flake8-pytest-style = "^1.1"
-flake8-pyi = "^19.3"
+flake8-pyi = "^20.5"
 nitpick = "^0.22"
+
+anyio = "^1.3"
+curio = "^1.2"
+trio = "^0.15"
 
 safety = "^1.8"
 
 pytest = "^5.4"
-pytest-cov = "^2.8"
-pytest-randomly = "^3.3"
-pytest-asyncio = "^0.11"
+pytest-cov = "^2.9"
+pytest-randomly = "^3.4"
 pytest-mypy-plugins = "^1.3"
+pytest-subtests = "^0.3"
 
 sphinx = "^2.4"
 sphinx-autodoc-typehints = "^1.10"

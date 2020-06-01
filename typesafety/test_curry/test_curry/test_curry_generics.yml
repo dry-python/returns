@@ -1,0 +1,76 @@
+- case: curry_single_generic_arg
+  disable_cache: true
+  main: |
+    from returns.curry import curry
+    from typing import List, TypeVar
+
+    T = TypeVar('T')
+
+    @curry
+    def zero(arg: List[T]) -> T:
+        ...
+
+    x: List[int]
+
+    reveal_type(zero)  # N: Revealed type is 'def [T] (arg: builtins.list[T`-1]) -> T`-1'
+    reveal_type(zero(x))  # N: Revealed type is 'builtins.int*'
+
+
+- case: curry_two_generic_args1
+  disable_cache: true
+  main: |
+    from returns.curry import curry
+    from typing import List, TypeVar
+
+    T = TypeVar('T')
+
+    @curry
+    def zero(arg: List[T], other: int) -> T:
+        ...
+
+    x: List[int]
+
+    reveal_type(zero)  # N: Revealed type is 'Overload(def [T] (arg: builtins.list[T`-1]) -> def (other: builtins.int) -> T`-1, def [T] (arg: builtins.list[T`-1], other: builtins.int) -> T`-1)'
+    reveal_type(zero(x))  # N: Revealed type is 'def (other: builtins.int) -> builtins.int*'
+    reveal_type(zero(x)(1))  # N: Revealed type is 'builtins.int*'
+    reveal_type(zero(x, 1))  # N: Revealed type is 'builtins.int*'
+
+
+- case: curry_two_generic_args2
+  disable_cache: true
+  main: |
+    from returns.curry import curry
+    from typing import List, TypeVar
+
+    T = TypeVar('T')
+
+    @curry
+    def zero(arg: int, other: List[T]) -> T:
+        ...
+
+    x: List[int]
+
+    reveal_type(zero)  # N: Revealed type is 'Overload(def (arg: builtins.int) -> def [T] (other: builtins.list[T`-1]) -> T`-1, def [T] (arg: builtins.int, other: builtins.list[T`-1]) -> T`-1)'
+    reveal_type(zero(1))  # N: Revealed type is 'def [T] (other: builtins.list[T`-1]) -> T`-1'
+    reveal_type(zero(1)(x))  # N: Revealed type is 'builtins.int*'
+    reveal_type(zero(1, x))  # N: Revealed type is 'builtins.int*'
+
+
+- case: curry_two_generic_args3
+  disable_cache: true
+  main: |
+    from returns.curry import curry
+    from typing import List, TypeVar
+
+    T = TypeVar('T')
+
+    @curry
+    def zero(arg: T, other: List[T]) -> T:
+        ...
+
+    x: List[int]
+
+    reveal_type(zero)  # N: Revealed type is 'Overload(def [T] (arg: T`-1) -> def [T] (other: builtins.list[T`-1]) -> T`-1, def [T] (arg: T`-1, other: builtins.list[T`-1]) -> T`-1)'
+    reveal_type(zero(1))  # N: Revealed type is 'def [T] (other: builtins.list[builtins.int*]) -> builtins.int*'
+    reveal_type(zero(1)(x))  # N: Revealed type is 'builtins.int'
+    reveal_type(zero(1, x))  # N: Revealed type is 'builtins.int*'

@@ -1,48 +1,38 @@
-from typing import Union
+from typing import ClassVar
+
+from typing_extensions import Protocol
 
 from returns._generated.pipeline.flow import _flow as flow  # noqa: F401
 from returns._generated.pipeline.pipe import _pipe as pipe  # noqa: F401
-from returns.io import IOResult
-from returns.maybe import Maybe
-from returns.primitives.exceptions import UnwrapFailedError
-from returns.result import Result
-
-from returns._generated.pipeline.pipeline import (  # isort:skip  # noqa: F401
-    _pipeline as pipeline,
-)
-
-# Logical aliases:
-_Unwrapable = Union[Result, Maybe, IOResult]
 
 
-def is_successful(container: '_Unwrapable') -> bool:
+class _HasSuccessAndFailureTypes(Protocol):
+    """This protocol enforces container to have a ``.success_type`` field."""
+
+    success_type: ClassVar[type]
+
+
+def is_successful(container: _HasSuccessAndFailureTypes) -> bool:
     """
     Determins if a container was successful or not.
-
-    We treat container that raise ``UnwrapFailedError`` on ``.unwrap()``
-    not successful.
 
     .. code:: python
 
       >>> from returns.maybe import Some, Nothing
       >>> from returns.result import Failure, Success
-      >>> is_successful(Some(1))
-      True
-      >>> is_successful(Nothing)
-      False
-      >>> is_successful(Success(1))
-      True
-      >>> is_successful(Failure(1))
-      False
+      >>> from returns.io import IOSuccess, IOFailure
 
-    This function can work with containers that support
-    :class:`returns.primitives.interfaces.Unwrapable` protocol.
-    But only non-lazy containers are supported.
+      >>> assert is_successful(Some(1))
+      >>> assert not is_successful(Nothing)
+
+      >>> assert is_successful(Success(1))
+      >>> assert not is_successful(Failure(1))
+
+      >>> assert is_successful(IOSuccess(1))
+      >>> assert not is_successful(IOFailure(1))
+
+    This function can work with containers
+    that have ``.success_type`` class field.
 
     """
-    try:
-        container.unwrap()
-    except UnwrapFailedError:
-        return False
-    else:
-        return True
+    return isinstance(container, container.success_type)

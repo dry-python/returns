@@ -1,9 +1,0 @@
-- case: flow_function
-  disable_cache: true
-  main: |
-    from returns.pipeline import flow
-
-    def convert(arg: str) -> float:
-        return float(arg)
-
-    reveal_type(flow('1.0', convert, int, bool))  # N: Revealed type is 'builtins.bool*'

@@ -1,0 +1,79 @@
+- case: bind_context_result_wrong_env
+  disable_cache: true
+  main: |
+    from returns.pointfree import bind_context_result
+    from returns.context import RequiresContextResult, RequiresContextIOResult
+
+    def test(arg: float) -> RequiresContextResult[str, int, str]:
+        ...
+
+    x: RequiresContextIOResult[bool, float, str]
+    reveal_type(bind_context_result(test)(x))
+  out: |
+    main:8: error: Argument 1 to "__call__" of "_BindContextResult" has incompatible type "RequiresContextIOResult[bool, float, str]"; expected "RequiresContextIOResult[str, float, str]"
+    main:8: note: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.str*, builtins.int*, builtins.str*]'
+
+
+- case: bind_context_result_wrong_error
+  disable_cache: true
+  main: |
+    from returns.pointfree import bind_context_result
+    from returns.context import RequiresContextResult, RequiresContextIOResult
+
+    def test(arg: float) -> RequiresContextResult[str, int, str]:
+        ...
+
+    x: RequiresContextIOResult[str, float, bool]
+    reveal_type(bind_context_result(test)(x))
+  out: |
+    main:8: error: Argument 1 to "__call__" of "_BindContextResult" has incompatible type "RequiresContextIOResult[str, float, bool]"; expected "RequiresContextIOResult[str, float, str]"
+    main:8: note: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.str*, builtins.int*, builtins.str*]'
+
+
+- case: bind_context_result_and_flow
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextResult, RequiresContextIOResult
+    from returns.functions import identity
+    from returns.pointfree import bind_context_result
+    from returns.pipeline import flow
+
+    def test(arg: int) -> RequiresContextResult[object, float, str]:
+        ...
+
+    def second(arg: float) -> RequiresContextResult[object, bool, str]:
+        ...
+
+    r: RequiresContextIOResult[object, int, str]
+    reveal_type(flow(r, bind_context_result(test), bind_context_result(second), identity))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult*[builtins.object*, builtins.bool*, builtins.str*]'
+
+
+- case: bind_context_result_and_bind
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextResult, RequiresContextIOResult
+    from returns.functions import identity
+    from returns.pointfree import bind, bind_context_result
+    from returns.pipeline import flow
+
+    def test(arg: int) -> RequiresContextResult[object, float, str]:
+        ...
+
+    def second(arg: float) -> RequiresContextIOResult[object, bool, str]:
+        ...
+
+    r: RequiresContextIOResult[object, int, str]
+    reveal_type(flow(r, bind_context_result(test), bind(second), identity))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult*[builtins.object*, builtins.bool*, builtins.str*]'
+
+
+- case: bind_context_result_requires_context_ioresult
+  disable_cache: true
+  main: |
+    from returns.pointfree import bind_context_result
+    from returns.context import RequiresContextResult, RequiresContextIOResult
+
+    def test(arg: float) -> RequiresContextResult[bool, int, str]:
+        ...
+
+    x: RequiresContextIOResult[bool, float, str]
+    reveal_type(bind_context_result(test)(x))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.bool*, builtins.int*, builtins.str*]'

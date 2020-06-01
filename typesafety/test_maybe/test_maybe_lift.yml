@@ -1,9 +1,0 @@
-- case: maybe_lift
-  disable_cache: true
-  main: |
-    from returns.maybe import Maybe
-
-    def test(arg: int) -> str:
-        return str(arg)
-
-    reveal_type(Maybe.lift(test))  # N: Revealed type is 'def (returns.maybe.Maybe[builtins.int*]) -> returns.maybe.Maybe[builtins.str*]'

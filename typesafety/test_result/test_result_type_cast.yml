@@ -25,12 +25,12 @@
     reveal_type(first)  # N: Revealed type is 'returns.result.Result[builtins.int, builtins.Exception]'
 
 
-- case: result_from_success
+- case: result_from_value
   disable_cache: true
   main: |
     from returns.result import Result
 
-    reveal_type(Result.from_success(1))  # N: Revealed type is 'returns.result.Result[builtins.int*, Any]'
+    reveal_type(Result.from_value(1))  # N: Revealed type is 'returns.result.Result[builtins.int*, Any]'
 
 
 - case: result_from_failure
@@ -39,6 +39,26 @@
     from returns.result import Result
 
     reveal_type(Result.from_failure(1))  # N: Revealed type is 'returns.result.Result[Any, builtins.int*]'
+
+
+- case: result_from_iterable
+  disable_cache: true
+  main: |
+    from returns.result import Result
+    from typing import List, Iterable, Sequence, Iterator, Tuple
+
+    x1: List[Result[int, str]]
+    x2: Iterable[Result[int, str]]
+    x3: Sequence[Result[int, str]]
+    x4: Iterator[Result[int, str]]
+    x5: Tuple[Result[int, str], ...]
+
+    reveal_type(Result.from_iterable(x1))  # N: Revealed type is 'returns.result.Result[typing.Sequence[builtins.int*], builtins.str*]'
+    reveal_type(Result.from_iterable(x2))  # N: Revealed type is 'returns.result.Result[typing.Sequence[builtins.int*], builtins.str*]'
+    reveal_type(Result.from_iterable(x3))  # N: Revealed type is 'returns.result.Result[typing.Sequence[builtins.int*], builtins.str*]'
+    reveal_type(Result.from_iterable(x4))  # N: Revealed type is 'returns.result.Result[typing.Sequence[builtins.int*], builtins.str*]'
+    reveal_type(Result.from_iterable(x5))  # N: Revealed type is 'returns.result.Result[typing.Sequence[builtins.int*], builtins.str*]'
+
 
 
 - case: result_covariant_cast
