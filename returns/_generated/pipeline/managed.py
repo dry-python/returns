@@ -54,7 +54,6 @@ class _managed(Immutable):  # noqa: N801
 
     Implementation
     ~~~~~~~~~~~~~~
-
     This class requires some explanation.
 
     First of all, we modeled this function as a class,

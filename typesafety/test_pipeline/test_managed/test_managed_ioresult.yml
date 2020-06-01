@@ -35,7 +35,7 @@
 
     reveal_type(managed(use, release))
   out: |
-    main:15: error: Argument 2 to "_managed" has incompatible type "Callable[[int, Result[int, str]], IOResult[str, str]]"; expected "Callable[[Any, Result[Any, Any]], IOResult[None, Any]]"
-    main:15: error: Cannot infer type argument 2 of "_managed"
-    main:15: error: Cannot infer type argument 3 of "_managed"
-    main:15: note: Revealed type is 'def (returns.io.IOResult[Any, Any]) -> returns.io.IOResult[Any, Any]'
+    main:14: error: Argument 2 to "_managed" has incompatible type "Callable[[int, Result[int, str]], IOResult[str, str]]"; expected "Callable[[Any, Result[Any, Any]], IOResult[None, Any]]"
+    main:14: error: Cannot infer type argument 2 of "_managed"
+    main:14: error: Cannot infer type argument 3 of "_managed"
+    main:14: note: Revealed type is 'def (returns.io.IOResult[Any, Any]) -> returns.io.IOResult[Any, Any]'

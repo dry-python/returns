@@ -242,7 +242,6 @@ class IOResult(
 
     Definition
     ~~~~~~~~~~
-
     This type is similar to :class:`returns.result.Result`.
     This basically a more useful version of ``IO[Result[a, b]]``.
     Use this type for ``IO`` computations that might fail.
@@ -285,7 +284,6 @@ class IOResult(
 
     Implementation
     ~~~~~~~~~~~~~~
-
     This class contains all the methods that can be delegated to ``Result``.
     But, some methods have ``raise NotImplementedError`` which means
     that we have to use special :class:`~_IOSuccess` and :class:`~_IOFailure`

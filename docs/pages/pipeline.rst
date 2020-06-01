@@ -40,7 +40,7 @@ that should be performed on an existing value.
 
   Technical note: ``flow`` has the best type inference mechanism
   among all other tools we provide here.
-  This happens due to our :ref:`mypy plugins <mypy-plugin>`.
+  This happens due to our :ref:`mypy plugins <mypy-plugins>`.
 
 You can also use ``flow`` with pointfree functions and containers:
 
@@ -94,7 +94,7 @@ It is useful when you don't have an instance to compose functions with yet.
 
 .. note::
 
-  ``pipe`` requires to use our :ref:`mypy plugins <mypy-plugin>`.
+  ``pipe`` requires to use our :ref:`mypy plugins <mypy-plugins>`.
 
 Let's see an example.
 
@@ -152,9 +152,19 @@ managed
 A really common task is to work with something stateful,
 like database connections or files.
 
-First, you need to acquire,
+First, you need to acquire some resource,
 then use it and do your thing,
 and clear things up and release the aquired resource.
+
+There are several rules here:
+
+1. If the aquiring failed,
+   then do nothing: do not try to use the resource or release it
+2. If the resource is aquired, then try to use it
+   and then release it desipe of the usage result
+
+In other words, if you cannot open a file, then do nothing.
+If you opened it, then try to read it. And then always close it.
 
 Let's say you have to read a file contents:
 
@@ -216,10 +226,12 @@ Notice a few tricks here:
    to read a file in a functional way
 3. We are using impure and pure operations inside the pipeline:
    this helps us to understand how our app works.
-   Which parts do access the file system and which just work.
+   Which parts do access the file system and which just work
 
-However, you can still use imperative approach wrapped into ``@impure_safe``,
-your choice! We don't recommend to mix these two. Stick to one you like more.
+However, you can still use the imperative approach
+with ``with:`` or ``try/finally`` wrapped into ``@impure_safe`` decorator,
+your choice! We don't recommend to mix these two.
+Stick to one you like the most.
 
 
 is_successful

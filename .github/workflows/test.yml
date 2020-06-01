@@ -43,7 +43,7 @@ jobs:
         poetry run doc8 -q docs
         poetry run poetry check
         poetry run pip check
-        poetry run safety check --bare --full-report
+        poetry run safety check --full-report
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
