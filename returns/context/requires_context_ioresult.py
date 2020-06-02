@@ -555,7 +555,7 @@ class RequiresContextIOResult(
         """
         Returns a callable that unwraps success value or raises exception.
 
-        .. code:: python
+        .. code:: pycon
 
           >>> from returns.context import RequiresContextIOResult
           >>> from returns.io import IO
@@ -563,8 +563,6 @@ class RequiresContextIOResult(
           >>> assert RequiresContextIOResult.from_value(1).unwrap()(
           ...     RequiresContextIOResult.empty,
           ... ) == IO(1)
-
-        .. code::
 
           >>> RequiresContextIOResult.from_failure(1).unwrap()(
           ...     RequiresContextIOResult.empty,
@@ -580,7 +578,7 @@ class RequiresContextIOResult(
         """
         Returns a callable that unwraps failure value or raises exception.
 
-        .. code:: python
+        .. code:: pycon
 
           >>> from returns.context import RequiresContextIOResult
           >>> from returns.io import IO
@@ -588,8 +586,6 @@ class RequiresContextIOResult(
           >>> assert RequiresContextIOResult.from_failure(1).failure()(
           ...     RequiresContextIOResult.empty,
           ... ) == IO(1)
-
-        .. code::
 
           >>> RequiresContextIOResult.from_value(1).failure()(
           ...    RequiresContextIOResult.empty,

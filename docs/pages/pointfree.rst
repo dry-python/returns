@@ -39,7 +39,7 @@ Because they do not compose well:
 
 In a normal situation you would probably write:
 
-.. code::
+.. code:: python
 
   returns_result().bind(works_with_result).bind(notifies_user)
 

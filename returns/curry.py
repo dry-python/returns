@@ -57,7 +57,7 @@ def curry(function: Callable[..., _ReturnType]) -> Callable[..., _ReturnType]:
     We use a custom ``mypy`` plugin to make sure types are correct.
     Otherwise, it is currently impossible to properly type this function.
 
-    .. code:: python
+    .. code:: pycon
 
       >>> from returns.curry import curry
 
@@ -72,7 +72,7 @@ def curry(function: Callable[..., _ReturnType]) -> Callable[..., _ReturnType]:
 
     Here are several examples with wrong arguments:
 
-    .. code::
+    .. code:: pycon
 
       >>> divide(1, 2, 3)
       Traceback (most recent call last):

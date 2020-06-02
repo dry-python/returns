@@ -238,12 +238,10 @@ class Result(
         """
         Get value or raise exception.
 
-        .. code:: python
+        .. code:: pycon
 
           >>> from returns.result import Failure, Success
           >>> assert Success(1).unwrap() == 1
-
-        .. code::
 
           >>> Failure(1).unwrap()
           Traceback (most recent call last):
@@ -257,12 +255,10 @@ class Result(
         """
         Get failed value or raise exception.
 
-        .. code:: python
+        .. code:: pycon
 
           >>> from returns.result import Failure, Success
           >>> assert Failure(1).failure() == 1
-
-        .. code::
 
           >>> Success(1).failure()
           Traceback (most recent call last):

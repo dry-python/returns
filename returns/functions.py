@@ -122,15 +122,13 @@ def raise_exception(exception: Exception) -> NoReturn:
     It might be required as a compatibility tool for existing APIs.
     That's how it can be used:
 
-    .. code:: python
+    .. code:: pycon
 
       >>> from returns.result import Failure, Result
       >>> # Some operation result:
       >>> user: Result[int, ValueError] = Failure(ValueError('boom'))
+
       >>> # Here we unwrap internal exception and raise it:
-
-    .. code::
-
       >>> user.fix(raise_exception)
       Traceback (most recent call last):
         ...

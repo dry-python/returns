@@ -40,7 +40,7 @@ functions you increase your mental complexity by extreme levels.
 Instead, you can use ``Future`` container,
 it allows you to model async interactions in a sync manner:
 
-.. code::
+.. code:: pycon
 
   >>> from returns.future import Future
 
@@ -124,7 +124,7 @@ which means that it becomes:
 
 Let's dig into it:
 
-.. code::
+.. code:: pycon
 
   >>> import anyio
   >>> from returns.future import future_safe, FutureResult

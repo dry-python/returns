@@ -542,12 +542,10 @@ class IOResult(
         """
         Get value from successful container or raise exception for failed one.
 
-        .. code:: python
+        .. code:: pycon
 
           >>> from returns.io import IO, IOFailure, IOSuccess
           >>> assert IOSuccess(1).unwrap() == IO(1)
-
-        .. code::
 
           >>> IOFailure(1).unwrap()
           Traceback (most recent call last):
@@ -561,12 +559,10 @@ class IOResult(
         """
         Get failed value from failed container or raise exception from success.
 
-        .. code:: python
+        .. code:: pycon
 
           >>> from returns.io import IO, IOFailure, IOSuccess
           >>> assert IOFailure(1).failure() == IO(1)
-
-        .. code::
 
           >>> IOSuccess(1).failure()
           Traceback (most recent call last):

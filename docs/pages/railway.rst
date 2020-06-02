@@ -139,7 +139,7 @@ inner state of containers into a regular types:
   >>> Failure(1).value_or(100)
   100
 
-.. code::
+.. code:: pycon
 
   >>> Failure(1).unwrap()
   Traceback (most recent call last):
@@ -155,13 +155,9 @@ For failing containers you can
 use :func:`.failure <returns.primitives.container.Unwrapable.failure>`
 to unwrap the failed state:
 
-.. code:: python
+.. code:: pycon
 
-  >>> Failure(1).failure()
-  1
-
-.. code::
-
+  >>> assert Failure(1).failure() == 1
   >>> Success(1).failure()
   Traceback (most recent call last):
     ...

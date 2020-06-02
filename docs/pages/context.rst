@@ -489,9 +489,9 @@ Tools like `dependencies <https://github.com/dry-python/dependencies>`_
 or `punq <https://github.com/bobthemighty/punq>`_
 tries to:
 
-1. inspect (by name or type respectively)
+1. Inspect (by name or type respectively)
    function or class that needs dependencies
-2. build the required dependency tree from the source
+2. Build the required dependency tree from the source
    defined in the service container
 
 There are other tools like ``inject`` that also invades
@@ -508,13 +508,12 @@ You can even use them together: ``RequiresContext`` will pass depedencies
 built by ``dry-python/dependencies`` (or any other tool of your choice)
 as a ``deps`` parameter to ``RequiresContext`` instance.
 
-When to use which?
+When to use which? Let's dig into it!
 
-1. Use ``RequiresContext`` when you write code in a functional manner,
-   when you respect function composition, typing, and explicitness.
-   ``RequiresContext`` fits very well when you need
-   to provide your users a single callable that does the job
-2. Use traditional invasive DI in other cases
+- ``RequiresContext`` offers explicit context passing
+  for the whole function stack inside your program.
+  This means two things: you will have to pass it through all your code and
+  
 
 Here's an example that might give you a better understanding of how
 ``RequiresContext`` is used on real and rather big projects:
@@ -563,6 +562,7 @@ And then it is called like so:
       # We also make sure that we don't forget to raise internal exceptions
       # and trigger celery retries.
       return sync_permissions().fix(raise_exception)(container.build())
+
 
 Further reading
 ---------------

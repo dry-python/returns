@@ -174,7 +174,7 @@ In contrast to ``partial`` which works on the calling stage,
 
 Take a note, that providing invalid arguments will raise ``TypeError``:
 
-.. code::
+.. code:: pycon
 
   >>> function(1, 2, 3)
   Traceback (most recent call last):

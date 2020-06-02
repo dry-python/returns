@@ -104,11 +104,9 @@ one for successful case, one for failing case.
 
   >>> def handle_success(state: int) -> float:
   ...     return state / 2
-  ...
 
   >>> def handle_failure(state: str) -> float:
   ...     return 0.0
-  ...
 
   >>> assert coalesce_result(handle_success, handle_failure)(Success(1)) == 0.5
   >>> assert coalesce_result(handle_success, handle_failure)(Failure(1)) == 0.0

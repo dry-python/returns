@@ -422,7 +422,7 @@ class RequiresContextResult(
         """
         Returns a callable that unwraps success value or raises exception.
 
-        .. code:: python
+        .. code:: pycon
 
           >>> from returns.context import RequiresContextResult
           >>> from returns.result import Success, Failure
@@ -430,8 +430,6 @@ class RequiresContextResult(
           >>> assert RequiresContextResult(
           ...    lambda _: Success(1),
           ... ).unwrap()(RequiresContextResult.empty) == 1
-
-        .. code::
 
           >>> RequiresContextResult(
           ...    lambda _: Failure(1),
@@ -447,7 +445,7 @@ class RequiresContextResult(
         """
         Returns a callable that unwraps failure value or raises exception.
 
-        .. code:: python
+        .. code:: pycon
 
           >>> from returns.context import RequiresContextResult
           >>> from returns.result import Success, Failure
@@ -455,8 +453,6 @@ class RequiresContextResult(
           >>> assert RequiresContextResult(
           ...    lambda _: Failure(1),
           ... ).failure()(RequiresContextResult.empty) == 1
-
-        .. code::
 
           >>> RequiresContextResult(
           ...    lambda _: Success(1),

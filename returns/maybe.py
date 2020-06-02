@@ -146,7 +146,7 @@ class Maybe(
         Instead, it has this method to execute
         some function if called on a failed container:
 
-        .. code:: python
+        .. code:: pycon
 
           >>> from returns.maybe import Some, Nothing
           >>> assert Some(1).or_else_call(lambda: 2) == 1
@@ -154,7 +154,7 @@ class Maybe(
 
         It might be useful to work with exceptions as well:
 
-        .. code::
+        .. code:: pycon
 
           >>> def fallback() -> NoReturn:
           ...    raise ValueError('Nothing!')
@@ -171,12 +171,10 @@ class Maybe(
         """
         Get value from successful container or raise exception for failed one.
 
-        .. code:: python
+        .. code:: pycon
 
           >>> from returns.maybe import Nothing, Some
           >>> assert Some(1).unwrap() == 1
-
-        .. code::
 
           >>> Nothing.unwrap()
           Traceback (most recent call last):
@@ -190,12 +188,10 @@ class Maybe(
         """
         Get failed value from failed container or raise exception from success.
 
-        .. code:: python
+        .. code:: pycon
 
           >>> from returns.maybe import Nothing, Some
           >>> assert Nothing.failure() is None
-
-        .. code::
 
           >>> Some(1).failure()
           Traceback (most recent call last):

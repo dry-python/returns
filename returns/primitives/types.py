@@ -10,16 +10,13 @@ class Immutable(object):
     When applied, each instance becomes immutable.
     Nothing can be added or deleted from it.
 
-    .. code:: python
+    .. code:: pycon
 
       >>> from returns.primitives.types import Immutable
       >>> class MyModel(Immutable):
       ...     ...
-      ...
+
       >>> model = MyModel()
-
-    .. code::
-
       >>> model.prop = 1
       Traceback (most recent call last):
          ...
@@ -30,11 +27,11 @@ class Immutable(object):
     """
 
     def __copy__(self) -> 'Immutable':
-        """Returns it self."""
+        """Returns itself."""
         return self
 
     def __deepcopy__(self, memo: Dict[Any, Any]) -> 'Immutable':
-        """Returns it self."""
+        """Returns itself."""
         return self
 
     def __setattr__(self, attr_name: str, attr_value: Any) -> NoReturn:

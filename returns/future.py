@@ -1028,14 +1028,12 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
         """
         Get value or raise exception.
 
-        .. code:: python
+        .. code:: pycon
 
           >>> import anyio
           >>> from returns.future import FutureResult
           >>> from returns.io import IO
           >>> assert anyio.run(FutureResult.from_value(1).unwrap) == IO(1)
-
-        .. code::
 
           >>> anyio.run(FutureResult.from_failure(1).unwrap)
           Traceback (most recent call last):
@@ -1049,14 +1047,12 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
         """
         Get failed value or raise exception.
 
-        .. code:: python
+        .. code:: pycon
 
           >>> import anyio
           >>> from returns.future import FutureResult
           >>> from returns.io import IO
           >>> assert anyio.run(FutureResult.from_failure(1).failure) == IO(1)
-
-        .. code::
 
           >>> anyio.run(FutureResult.from_value(1).failure)
           Traceback (most recent call last):
