@@ -117,7 +117,6 @@ class RequiresContextFutureResult(
             lambda deps: self(deps).map(function),
         )
 
-    # TODO: add `bind` and `flatten`
     def bind(
         self,
         function: Callable[
