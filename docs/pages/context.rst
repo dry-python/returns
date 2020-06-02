@@ -513,7 +513,30 @@ When to use which? Let's dig into it!
 - ``RequiresContext`` offers explicit context passing
   for the whole function stack inside your program.
   This means two things: you will have to pass it through all your code and
-  
+  use it everywhere inside your program explicitly,
+  when you need to access the environment and dependencies
+- Traditional ``DI`` allows to leave a lot
+  of code unaware of dependency injection.
+  Because you don't have to maintain the context everywhere.
+  You just need to adjust your API to meet the dependency injector requirements.
+  On the other hand, you lose explicitness here.
+
+So when to use ``RequiresContext``?
+
+1. When you write pure functional code
+2. When you want to know which code relies on context and which is free from it,
+   ``RequiresContext`` makes this explicit and typed
+3. When you rely on types inside your program
+4. When you want to rely on functions rather than magic
+
+When not to use ``RequiresContext`` and use traditional DI?
+
+1. When you already have a lot of code written in a different approach:
+   in OOP and/or imperative styles
+2. When you need to pass dependencies into a very deep level of your call stack
+   implicitly (without modifing the whole stack), this is called magic
+3. When you not rely on types for dependencies.
+   There are cases when DI is made by names or tags
 
 Here's an example that might give you a better understanding of how
 ``RequiresContext`` is used on real and rather big projects:
@@ -527,7 +550,7 @@ Here's an example that might give you a better understanding of how
   @final
   class _SyncPermissionsDeps(Protocol):
       fetch_metadata: Callable[[], IOResultE['Metadata']]
-      get_user_permissions: Callable[['Metadata'], Dict[int, str]]
+      get_user_permissions: Callable[['Metadata'], Dict[int, str]]  # pure
       update_bi_permissions: Callable[[Dict[int, str]], IOResultE['Payload']]
 
   def sync_permissions() -> ReaderIOResultE[_SyncPermissionsDeps, 'Payload']:
@@ -553,15 +576,20 @@ And then it is called like so:
   from returns.functions import raise_exception
 
   from logic.usecases.sync_permissions import sync_permissions
-  from infrastructure.implemented import container
+  from infrastructure.implemented import Container
+  from infrastructure.services import bi
+  from infrastructure.repositories import db
 
   @shared_task(autoretry_for=(ConnectionError,), max_retries=3)
   def queue_sync_permissions():
-      # `container.build()` mimics some real DI framework here
-      # and returns the prepared class with all things you need
+      # Building the container with dependencies to pass it into the context.
       # We also make sure that we don't forget to raise internal exceptions
       # and trigger celery retries.
-      return sync_permissions().fix(raise_exception)(container.build())
+      return sync_permissions().fix(raise_exception)(Container(
+          fetch_metadata=bd.select_user_metadata,
+          get_user_permissions=bi.permissions_from_user,
+          update_bi_permissions=bi.put_user_permissions,
+      ))
 
 
 Further reading
