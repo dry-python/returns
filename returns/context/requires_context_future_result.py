@@ -1,7 +1,9 @@
-from typing import Generic, TypeVar
+from typing import Any, Callable, ClassVar, Generic, TypeVar
 
 from typing_extensions import final
 
+from returns.context import NoDeps
+from returns.future import FutureResult
 from returns.primitives.container import BaseContainer
 
 # Context:
@@ -23,6 +25,141 @@ class RequiresContextFutureResult(
     Generic[_EnvType, _ValueType, _ErrorType],
 ):
     """Someday this container will grow very big."""
+
+    #: Inner value of `RequiresContext`
+    #: is just a function that returns `FutureResult`.
+    #: This field has an extra 'RequiresContext' just because `mypy` needs it.
+    _inner_value: Callable[
+        ['RequiresContextFutureResult', _EnvType],
+        FutureResult[_ValueType, _ErrorType],
+    ]
+
+    #: A convinient placeholder to call methods created by `.from_value()`.
+    empty: ClassVar[NoDeps] = object()
+
+    def __init__(
+        self,
+        inner_value: Callable[[_EnvType], FutureResult[_ValueType, _ErrorType]],
+    ) -> None:
+        """
+        Public constructor for this type. Also required for typing.
+
+        Only allows functions of kind ``* -> *``
+        and returning :class:`returns.result.Result` instances.
+
+        .. code:: python
+
+          >>> from returns.context import RequiresContextFutureResult
+          >>> from returns.future import FutureResult
+
+          >>> instance = RequiresContextFutureResult(
+          ...    lambda deps: FutureResult.from_value(1),
+          ... )
+          >>> str(instance)
+          '<RequiresContextFutureResult: <function <lambda> at ...>>'
+
+        """
+        super().__init__(inner_value)
+
+    def __call__(self, deps: _EnvType) -> FutureResult[_ValueType, _ErrorType]:
+        """
+        Evaluates the wrapped function.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.context import RequiresContextFutureResult
+          >>> from returns.future import FutureResult
+          >>> from returns.io import IOSuccess
+
+          >>> def first(lg: bool) -> RequiresContextFutureResult[int, int, str]:
+          ...     # `dps` has `int` type here:
+          ...     return RequiresContextFutureResult(
+          ...         lambda dps: FutureResult.from_value(dps if lg else -dps),
+          ...     )
+
+          >>> instance = first(False)
+          >>> assert anyio.run(instance(3).awaitable) == IOSuccess(-3)
+
+          >>> instance = first(True)
+          >>> assert anyio.run(instance(3).awaitable) == IOSuccess(3)
+
+        In other things, it is a regular Python magic method.
+
+        """
+        return self._inner_value(deps)
+
+    def map(  # noqa: WPS125
+        self,
+        function: Callable[[_ValueType], _NewValueType],
+    ) -> 'RequiresContextFutureResult[_EnvType, _NewValueType, _ErrorType]':
+        """
+        Composes successful container with a pure function.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.context import RequiresContextFutureResult
+          >>> from returns.io import IOSuccess, IOFailure
+
+          >>> assert anyio.run(RequiresContextFutureResult.from_value(1).map(
+          ...     lambda x: x + 1,
+          ... )(...).awaitable) == IOSuccess(2)
+
+          >>> assert anyio.run(RequiresContextFutureResult.from_failure(1).map(
+          ...     lambda x: x + 1,
+          ... )(...).awaitable) == IOFailure(1)
+
+        """
+        return RequiresContextFutureResult(
+            lambda deps: self(deps).map(function),
+        )
+
+    # TODO: add `bind` and `flatten`
+
+    @classmethod
+    def from_value(
+        cls, inner_value: _FirstType,
+    ) -> 'RequiresContextFutureResult[NoDeps, _FirstType, Any]':
+        """
+        Creates new container with successful ``FutureResult`` as a unit value.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.context import RequiresContextFutureResult
+          >>> from returns.io import IOSuccess
+
+          >>> assert anyio.run(RequiresContextFutureResult.from_value(1)(
+          ...    RequiresContextFutureResult.empty,
+          ... ).awaitable) == IOSuccess(1)
+
+        """
+        return RequiresContextFutureResult(
+            lambda _: FutureResult.from_value(inner_value),
+        )
+
+    @classmethod
+    def from_failure(
+        cls, inner_value: _FirstType,
+    ) -> 'RequiresContextFutureResult[NoDeps, Any, _FirstType]':
+        """
+        Creates new container with failed ``FutureResult`` as a unit value.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.context import RequiresContextFutureResult
+          >>> from returns.io import IOFailure
+
+          >>> assert anyio.run(RequiresContextFutureResult.from_failure(1)(
+          ...     RequiresContextFutureResult.empty,
+          ... ).awaitable) == IOFailure(1)
+
+        """
+        return RequiresContextFutureResult(
+            lambda _: FutureResult.from_failure(inner_value),
+        )
 
 
 # Aliases:

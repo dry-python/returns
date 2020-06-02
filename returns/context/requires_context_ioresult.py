@@ -146,12 +146,11 @@ class RequiresContextIOResult(
         .. code:: python
 
           >>> from returns.context import RequiresContextIOResult
-          >>> from returns.context import RequiresContext
           >>> from returns.io import IOSuccess
 
           >>> def first(lg: bool) -> RequiresContextIOResult[float, int, str]:
           ...     # `deps` has `float` type here:
-          ...     return RequiresContext(
+          ...     return RequiresContextIOResult(
           ...         lambda deps: IOSuccess(deps if lg else -deps),
           ...     )
 

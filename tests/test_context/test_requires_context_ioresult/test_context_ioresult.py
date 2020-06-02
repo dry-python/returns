@@ -56,8 +56,8 @@ def test_requires_context_result_immutable():
 
 def test_requires_context_result_immutable_copy():
     """Ensures that helper returns it self when passed to copy function."""
-    context_i_o_result: ContextIOResult = ContextIOResult()
-    assert context_i_o_result is copy(context_i_o_result)
+    context_ioresult: ContextIOResult = ContextIOResult()
+    assert context_ioresult is copy(context_ioresult)
 
 
 def test_requires_context_result_immutable_deepcopy():  # noqa: WPS118

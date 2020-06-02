@@ -1,0 +1,14 @@
+- case: requires_context_future_result_success
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextFutureResult
+
+    reveal_type(RequiresContextFutureResult.from_value(1))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[Any, builtins.int*, Any]'
+
+
+- case: requires_context_future_result_failure
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextFutureResult
+
+    reveal_type(RequiresContextFutureResult.from_failure(1))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[Any, Any, builtins.int*]'

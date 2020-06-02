@@ -4,6 +4,7 @@ from typing_extensions import Protocol
 
 from returns.context import (
     RequiresContext,
+    RequiresContextFutureResult,
     RequiresContextIOResult,
     RequiresContextResult,
 )
@@ -61,6 +62,15 @@ class _Mappable(Protocol[_ValueType, _NewValueType]):
         self,
         container: RequiresContextIOResult[_EnvType, _ValueType, _ErrorType],
     ) -> RequiresContextIOResult[_EnvType, _NewValueType, _ErrorType]:
+        ...
+
+    @overload
+    def __call__(
+        self,
+        container: RequiresContextFutureResult[
+            _EnvType, _ValueType, _ErrorType,
+        ],
+    ) -> RequiresContextFutureResult[_EnvType, _NewValueType, _ErrorType]:
         ...
 
     @overload

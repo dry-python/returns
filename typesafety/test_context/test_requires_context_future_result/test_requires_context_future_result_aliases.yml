@@ -1,0 +1,15 @@
+- case: requires_context_future_result_aliases
+  disable_cache: true
+  main: |
+    from returns.context import (
+        RequiresContextFutureResult,
+        RequiresContextFutureResultE,
+        ReaderFutureResult,
+        ReaderFutureResultE,
+    )
+
+    x: RequiresContextFutureResult[str, int, Exception]
+
+    x1: RequiresContextFutureResultE[str, int] = x
+    x2: ReaderFutureResult[str, int, Exception] = x
+    x3: ReaderFutureResultE[str, int] = x

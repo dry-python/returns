@@ -68,15 +68,14 @@ But, **having `null` checks here and there makes your code unreadable**.
 
 ```python
 user: Optional[User]
+discount_program: Optional['DiscountProgram'] = None
 
 if user is not None:
      balance = user.get_balance()
      if balance is not None:
-         balance_credit = balance.credit_amount()
-         if balance_credit is not None and balance_credit > 0:
-             can_buy_stuff = True
-else:
-    can_buy_stuff = False
+         credit = balance.credit_amount()
+         if credit is not None and credit > 0:
+             discount_program = choose_discount(credit)
 ```
 
 Or you can use
@@ -92,7 +91,7 @@ from returns.maybe import Maybe, maybe
 def bad_function() -> Optional[int]:
     ...
 
-maybe_result: Maybe[float] = bad_function().map(
+maybe_number: Maybe[float] = bad_function().map(
     lambda number: number / 2,
 )
 # => Maybe will return Some[float] only if there's a non-None value
@@ -107,12 +106,15 @@ And that's how your initial refactored code will look like:
 ```python
 user: Optional[User]
 
-can_buy_stuff: Maybe[bool] = Maybe.from_value(user).map(  # type hint is not required
+# Type hint here is optional, it only helps the reader here:
+discount_program: Maybe['DiscountProgram'] = Maybe.from_value(
+    user,
+).map(  # This won't be called if `user is None`
     lambda real_user: real_user.get_balance(),
-).map(
+).map(  # This won't be called if `real_user.get_balance()` returns None
     lambda balance: balance.credit_amount(),
-).map(
-    lambda balance_credit: balance_credit > 0,
+).map(  # And so on!
+    lambda credit: choose_discount(credit) if credit > 0 else None,
 )
 ```
 
