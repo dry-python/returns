@@ -7,8 +7,8 @@ from returns.io import IOFailure, IOSuccess
 from returns.pipeline import managed
 from returns.result import Failure, Result, Success
 
-_aquire_success = ReaderIOResult.from_value('aquire success')
-_aquire_failure = ReaderIOResult.from_failure('aquire failure')
+_acquire_success = ReaderIOResult.from_value('acquire success')
+_acquire_failure = ReaderIOResult.from_failure('acquire failure')
 
 
 def _use_success(inner_value: str) -> ReaderIOResult[NoDeps, str, str]:
@@ -44,74 +44,74 @@ class _ReleaseFailure(object):
         return ReaderIOResult.from_failure('release failure')
 
 
-@pytest.mark.parametrize(('aquire', 'use', 'release', 'final_result', 'log'), [
-    # Aquire success:
+@pytest.mark.parametrize(('acquire', 'use', 'release', 'final_result', 'log'), [
+    # Acquire success:
     (
-        _aquire_success,
+        _acquire_success,
         _use_success,
         _ReleaseSuccess,
         IOSuccess('use success'),
-        [('aquire success', Success('use success'))],
+        [('acquire success', Success('use success'))],
     ),
     (
-        _aquire_success,
+        _acquire_success,
         _use_success,
         _ReleaseFailure,
         IOSuccess('use success'),
         [],
     ),
     (
-        _aquire_success,
+        _acquire_success,
         _use_failure,
         _ReleaseSuccess,
         IOFailure('use failure'),
-        [('aquire success', Failure('use failure'))],
+        [('acquire success', Failure('use failure'))],
     ),
     (
-        _aquire_success,
+        _acquire_success,
         _use_failure,
         _ReleaseFailure,
         IOFailure('use failure'),
         [],
     ),
 
-    # Aquire failure:
+    # Acquire failure:
     (
-        _aquire_failure,
+        _acquire_failure,
         _use_success,
         _ReleaseSuccess,
-        IOFailure('aquire failure'),
+        IOFailure('acquire failure'),
         [],
     ),
     (
-        _aquire_failure,
+        _acquire_failure,
         _use_failure,
         _ReleaseSuccess,
-        IOFailure('aquire failure'),
+        IOFailure('acquire failure'),
         [],
     ),
     (
-        _aquire_failure,
+        _acquire_failure,
         _use_success,
         _ReleaseFailure,
-        IOFailure('aquire failure'),
+        IOFailure('acquire failure'),
         [],
     ),
     (
-        _aquire_failure,
+        _acquire_failure,
         _use_failure,
         _ReleaseFailure,
-        IOFailure('aquire failure'),
+        IOFailure('acquire failure'),
         [],
     ),
 ])
-def test_all_success(aquire, use, release, final_result, log):
+def test_all_success(acquire, use, release, final_result, log):
     """Ensures that managed works as intended."""
     pipeline_logs: List[Tuple[str, Result[str, str]]] = []
     pipeline_result = managed(  # type: ignore
         use,
         release(pipeline_logs),
-    )(aquire)
+    )(acquire)
 
     assert pipeline_result(ReaderIOResult.empty) == final_result
     assert pipeline_logs == log
@@ -123,7 +123,7 @@ def test_full_typing():
     pipeline_result = managed(
         _use_success,
         _ReleaseSuccess(logs),
-    )(_aquire_success)
+    )(_acquire_success)
 
     assert pipeline_result(ReaderIOResult.empty) == IOSuccess('use success')
-    assert logs == [('aquire success', Success('use success'))]
+    assert logs == [('acquire success', Success('use success'))]

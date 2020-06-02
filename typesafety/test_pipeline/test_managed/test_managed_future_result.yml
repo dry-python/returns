@@ -5,11 +5,11 @@
     from returns.pipeline import managed
     from returns.result import Result
 
-    def use(aquired_value: int) -> FutureResult[float, str]:
+    def use(acquired_value: int) -> FutureResult[float, str]:
         ...
 
     def release(
-        aquired_value: int,
+        acquired_value: int,
         use_value: Result[float, str],
     ) -> FutureResult[None, str]:
         ...
@@ -24,11 +24,11 @@
     from returns.pipeline import managed
     from returns.result import Result
 
-    def use(aquired_value: int) -> FutureResult[float, str]:
+    def use(acquired_value: int) -> FutureResult[float, str]:
         ...
 
     def release(
-        aquired_value: int,
+        acquired_value: int,
         use_value: Result[float, int],
     ) -> FutureResult[None, str]:
         ...

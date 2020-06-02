@@ -154,13 +154,13 @@ like database connections or files.
 
 First, you need to acquire some resource,
 then use it and do your thing,
-and clear things up and release the aquired resource.
+and clear things up and release the acquired resource.
 
 There are several rules here:
 
 1. If the aquiring failed,
    then do nothing: do not try to use the resource or release it
-2. If the resource is aquired, then try to use it
+2. If the resource is acquired, then try to use it
    and then release it desipe of the usage result
 
 In other words, if you cannot open a file, then do nothing.
