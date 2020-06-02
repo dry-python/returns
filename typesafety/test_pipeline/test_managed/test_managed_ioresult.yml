@@ -5,11 +5,11 @@
     from returns.pipeline import managed
     from returns.result import Result
 
-    def use(aquired_value: int) -> IOResult[float, str]:
+    def use(acquired_value: int) -> IOResult[float, str]:
         ...
 
     def release(
-        aquired_value: int,
+        acquired_value: int,
         use_value: Result[float, str],
     ) -> IOResult[None, str]:
         ...
@@ -24,11 +24,11 @@
     from returns.pipeline import managed
     from returns.result import Result
 
-    def use(aquired_value: int) -> IOResult[float, int]:
+    def use(acquired_value: int) -> IOResult[float, int]:
         ...
 
     def release(
-        aquired_value: int,
+        acquired_value: int,
         use_value: Result[int, str],
     ) -> IOResult[str, str]:
         ...

@@ -13,15 +13,15 @@ class _managed(Immutable):  # noqa: N801
 
     Managed computations consist of three steps:
 
-    1. ``aquire`` when we get some initial resource to work with
+    1. ``acquire`` when we get some initial resource to work with
     2. ``use`` when the main logic is done
-    3. ``release`` when we release aquired resource
+    3. ``release`` when we release acquired resource
 
     Let's look at the example:
 
-    1. We need to aquire an opened file to read it later
-    2. We need to use aquired file to read its content
-    3. We need to release the aquired file in the end
+    1. We need to acquire an opened file to read it later
+    2. We need to use acquired file to read its content
+    3. We need to release the acquired file in the end
 
     Here's a code example:
 
@@ -31,7 +31,7 @@ class _managed(Immutable):  # noqa: N801
       >>> from returns.io import IOSuccess, IOFailure, impure_safe
 
       >>> class Lock(object):
-      ...     '''Example class to emulate state to aquire and release.'''
+      ...     '''Example class to emulate state to acquire and release.'''
       ...     def __init__(self, default: bool = False) -> None:
       ...         self.set = default
       ...     def __eq__(self, lock) -> bool:  # we need this for testing
@@ -77,20 +77,20 @@ class _managed(Immutable):  # noqa: N801
         object.__setattr__(self, '_use', use)  # noqa: WPS609
         object.__setattr__(self, '_release', release)  # noqa: WPS609
 
-    def __call__(self, aquire):
+    def __call__(self, acquire):
         """
-        Calling the pipeline by providing the first ``aquire`` step.
+        Calling the pipeline by providing the first ``acquire`` step.
 
         It might look like a typeclass,
         but typeclass support is not yet enabled in our project.
         So, it is just a bunch of ``if`` statements for now.
         """
-        if isinstance(aquire, IOResult):
-            return aquire.bind(self._ioresult_pipeline)
-        elif isinstance(aquire, RequiresContextIOResult):
-            return aquire.bind(self._reader_ioresult_pipeline)
+        if isinstance(acquire, IOResult):
+            return acquire.bind(self._ioresult_pipeline)
+        elif isinstance(acquire, RequiresContextIOResult):
+            return acquire.bind(self._reader_ioresult_pipeline)
         # TODO: add RequiresContextFutureResult support
-        return aquire.bind_async(self._future_pipeline)
+        return acquire.bind_async(self._future_pipeline)
 
     def _ioresult_pipeline(self, inner_value):
         used = self._use(inner_value)
