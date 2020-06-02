@@ -1,6 +1,6 @@
 from typing_extensions import final
 
-from returns.context import RequiresContextIOResult
+from returns.context import RequiresContextFutureResult, RequiresContextIOResult
 from returns.future import FutureResult
 from returns.io import IOResult
 from returns.primitives.types import Immutable
@@ -89,7 +89,8 @@ class _managed(Immutable):  # noqa: N801
             return acquire.bind(self._ioresult_pipeline)
         elif isinstance(acquire, RequiresContextIOResult):
             return acquire.bind(self._reader_ioresult_pipeline)
-        # TODO: add RequiresContextFutureResult support
+        elif isinstance(acquire, RequiresContextFutureResult):
+            return acquire.bind(self._reader_future_result_pipeline)
         return acquire.bind_async(self._future_pipeline)
 
     def _ioresult_pipeline(self, inner_value):
@@ -100,14 +101,22 @@ class _managed(Immutable):  # noqa: N801
 
     def _reader_ioresult_pipeline(self, inner_value):
         def factory(deps):
-            used = self._use(inner_value)(deps)
-            inner_result = used._inner_value  # noqa: WPS437
-            self._release(inner_value, inner_result)(deps)
-            return used
+            return _managed(
+                lambda inner: self._use(inner)(deps),
+                lambda inner, pure: self._release(inner, pure)(deps),
+            )(IOResult.from_value(inner_value))
         return RequiresContextIOResult(factory)
 
-    async def _future_pipeline(self, inner_value) -> FutureResult:
+    async def _future_pipeline(self, inner_value):
         used = self._use(inner_value)
         inner_result = await used._inner_value  # noqa: WPS437
-        self._release(inner_value, inner_result)
+        await self._release(inner_value, inner_result)
         return FutureResult.from_result(inner_result)
+
+    def _reader_future_result_pipeline(self, inner_value):
+        def factory(deps):
+            return _managed(
+                lambda inner: self._use(inner)(deps),
+                lambda inner, pure: self._release(inner, pure)(deps),
+            )(FutureResult.from_value(inner_value))
+        return RequiresContextFutureResult(factory)

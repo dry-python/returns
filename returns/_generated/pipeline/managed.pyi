@@ -1,6 +1,6 @@
 from typing import Callable, TypeVar, overload
 
-from returns.context import ReaderIOResult
+from returns.context import ReaderFutureResult, ReaderIOResult
 from returns.future import FutureResult
 from returns.io import IOResult
 from returns.result import Result
@@ -32,6 +32,23 @@ def _managed(
 def _managed(
     use: Callable[
         [_ValueType],
+        FutureResult[_NewValueType, _ErrorType],
+    ],
+    release: Callable[
+        [_ValueType, Result[_NewValueType, _ErrorType]],
+        FutureResult[None, _ErrorType],
+    ],
+) -> Callable[
+    [FutureResult[_ValueType, _ErrorType]],
+    FutureResult[_NewValueType, _ErrorType],
+]:
+    ...
+
+
+@overload
+def _managed(
+    use: Callable[
+        [_ValueType],
         ReaderIOResult[_EnvType, _NewValueType, _ErrorType],
     ],
     release: Callable[
@@ -49,14 +66,14 @@ def _managed(
 def _managed(
     use: Callable[
         [_ValueType],
-        FutureResult[_NewValueType, _ErrorType],
+        ReaderFutureResult[_EnvType, _NewValueType, _ErrorType],
     ],
     release: Callable[
         [_ValueType, Result[_NewValueType, _ErrorType]],
-        FutureResult[None, _ErrorType],
+        ReaderFutureResult[_EnvType, None, _ErrorType],
     ],
 ) -> Callable[
-    [FutureResult[_ValueType, _ErrorType]],
-    FutureResult[_NewValueType, _ErrorType],
+    [ReaderFutureResult[_EnvType, _ValueType, _ErrorType]],
+    ReaderFutureResult[_EnvType, _NewValueType, _ErrorType],
 ]:
     ...

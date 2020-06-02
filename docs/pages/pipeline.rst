@@ -233,6 +233,13 @@ with ``with:`` or ``try/finally`` wrapped into ``@impure_safe`` decorator,
 your choice! We don't recommend to mix these two.
 Stick to one you like the most.
 
+``managed`` can be used with:
+
+- ``IOResult``
+- ``FutureResult``
+- ``RequiresContextIOResult``
+- ``RequiresContextFutureResult``
+
 
 is_successful
 -------------
