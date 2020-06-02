@@ -2,9 +2,9 @@ from typing import Callable, TypeVar, overload
 
 from returns.context import (
     RequiresContext,
+    RequiresContextFutureResult,
     RequiresContextIOResult,
     RequiresContextResult,
-    RequiresContextFutureResult,
 )
 from returns.future import Future, FutureResult
 from returns.io import IO, IOResult
