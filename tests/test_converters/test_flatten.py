@@ -2,6 +2,7 @@ import pytest
 
 from returns.context import (
     RequiresContext,
+    RequiresContextFutureResult,
     RequiresContextIOResult,
     RequiresContextResult,
 )
@@ -78,16 +79,60 @@ async def test_flatten_future(subtests):
 
 
 @pytest.mark.anyio
+async def test_flatten_context_future_result(subtests):
+    """Ensures that `flatten` is always returning the correct type."""
+    futures = [
+        # Flattens:
+        (
+            RequiresContextFutureResult.from_value(
+                RequiresContextFutureResult.from_value(1),
+            ),
+            RequiresContextFutureResult.from_value(1),
+        ),
+    ]
+
+    for container, merged in futures:
+        with subtests.test(container=container, merged=merged):
+            assert await flatten(
+                container,
+            )(...) == await merged(...)
+
+
+@pytest.mark.anyio
 async def test_non_flatten_future(subtests):
     """Ensures that `flatten` is always returning the correct type."""
     futures = [
         # Not flattens:
         FutureResult.from_failure(FutureResult.from_failure(1)),
+        FutureResult.from_failure(FutureResult.from_value(1)),
     ]
 
     for cont in futures:
         with subtests.test(container=cont):
             assert isinstance(
                 (await flatten(cont)).failure()._inner_value,  # noqa: WPS437
-                FutureResult,
+                cont.__class__,
+            )
+
+
+@pytest.mark.anyio
+async def test_non_flatten_context_future_result(subtests):
+    """Ensures that `flatten` is always returning the correct type."""
+    futures = [
+        # Not flattens:
+        RequiresContextFutureResult.from_failure(
+            RequiresContextFutureResult.from_failure(1),
+        ),
+        RequiresContextFutureResult.from_failure(
+            RequiresContextFutureResult.from_value(1),
+        ),
+    ]
+
+    for cont in futures:
+        with subtests.test(container=cont):
+            assert isinstance(
+                (
+                    await flatten(cont)(...)  # noqa: WPS437
+                ).failure()._inner_value,
+                cont.__class__,
             )

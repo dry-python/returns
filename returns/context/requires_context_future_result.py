@@ -73,9 +73,11 @@ class RequiresContextFutureResult(
           >>> from returns.io import IOSuccess
 
           >>> def first(lg: bool) -> RequiresContextFutureResult[int, int, str]:
-          ...     # `dps` has `int` type here:
+          ...     # `deps` has `int` type here:
           ...     return RequiresContextFutureResult(
-          ...         lambda dps: FutureResult.from_value(dps if lg else -dps),
+          ...         lambda deps: FutureResult.from_value(
+          ...             deps if lg else -deps,
+          ...         ),
           ...     )
 
           >>> instance = first(False)
@@ -116,6 +118,52 @@ class RequiresContextFutureResult(
         )
 
     # TODO: add `bind` and `flatten`
+    def bind(
+        self,
+        function: Callable[
+            [_ValueType],
+            'RequiresContextFutureResult[_EnvType, _NewValueType, _ErrorType]',
+        ],
+    ) -> 'RequiresContextFutureResult[_EnvType, _NewValueType, _ErrorType]':
+        """
+        Composes this container with a function returning the same type.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.context import RequiresContextFutureResult
+          >>> from returns.future import FutureResult
+          >>> from returns.io import IOSuccess, IOFailure
+
+          >>> def first(lg: bool) -> RequiresContextFutureResult[int, int, int]:
+          ...     # `deps` has `int` type here:
+          ...     return RequiresContextFutureResult(
+          ...         lambda deps: FutureResult.from_value(
+          ...             deps,
+          ...         ) if lg else FutureResult.from_failure(-deps),
+          ...     )
+
+          >>> def second(
+          ...     number: int,
+          ... ) -> RequiresContextFutureResult[int, str, int]:
+          ...     # `deps` has `int` type here:
+          ...     return RequiresContextFutureResult(
+          ...         lambda deps: FutureResult.from_value(str(number + deps)),
+          ...     )
+
+          >>> assert anyio.run(
+          ...     first(True).bind(second)(1).awaitable,
+          ... ) == IOSuccess('2')
+          >>> assert anyio.run(
+          ...     first(False).bind(second)(2).awaitable,
+          ... ) == IOFailure(-2)
+
+        """
+        return RequiresContextFutureResult(
+            lambda deps: self(deps).bind(
+                lambda inner: function(inner)(deps),  # type: ignore
+            ),
+        )
 
     @classmethod
     def from_value(
