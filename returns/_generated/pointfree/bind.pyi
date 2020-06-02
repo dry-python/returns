@@ -4,6 +4,7 @@ from returns.context import (
     RequiresContext,
     RequiresContextIOResult,
     RequiresContextResult,
+    RequiresContextFutureResult,
 )
 from returns.future import Future, FutureResult
 from returns.io import IO, IOResult
@@ -62,6 +63,19 @@ def _bind(
 ) -> Callable[
     [RequiresContextIOResult[_EnvType, _ValueType, _ErrorType]],
     RequiresContextIOResult[_EnvType, _NewValueType, _ErrorType],
+]:
+    ...
+
+
+@overload
+def _bind(
+    function: Callable[
+        [_ValueType],
+        RequiresContextFutureResult[_EnvType, _NewValueType, _ErrorType],
+    ],
+) -> Callable[
+    [RequiresContextFutureResult[_EnvType, _ValueType, _ErrorType]],
+    RequiresContextFutureResult[_EnvType, _NewValueType, _ErrorType],
 ]:
     ...
 
