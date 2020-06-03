@@ -11,10 +11,10 @@ from returns.io import IO, IOResult
 from returns.maybe import Maybe
 from returns.result import Result
 
-_ValueType = TypeVar('_ValueType')
+_ValueType = TypeVar('_ValueType', contravariant=True)
 _ErrorType = TypeVar('_ErrorType')
-_NewValueType = TypeVar('_NewValueType')
-_EnvType = TypeVar('_EnvType')
+_NewValueType = TypeVar('_NewValueType', covariant=True)
+_EnvType = TypeVar('_EnvType', contravariant=True)
 
 
 @overload

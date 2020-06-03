@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Awaitable, Callable, TypeVar
+from typing import TYPE_CHECKING, Any, Awaitable, Callable, TypeVar, Union
 
 from returns.io import IO, IOResult
 from returns.result import Failure, Result, Success
@@ -106,7 +106,7 @@ async def async_bind_future(
     """Async binds a container returning ``IO`` over a value."""
     container = await inner_value
     if isinstance(container, Result.success_type):
-        return await async_success(function(container.unwrap()))
+        return await async_from_success(function(container.unwrap()))
     return container  # type: ignore
 
 
@@ -143,14 +143,36 @@ async def async_rescue(
     return (await function(container.failure()))._inner_value
 
 
-async def async_success(
+async def async_value_or(
+    container: 'FutureResult[_ValueType, _ErrorType]',
+    default_value: _NewValueType,
+) -> IO[Union[_ValueType, _NewValueType]]:
+    """Return async value or default value."""
+    return IO((await container._inner_value).value_or(default_value))
+
+
+async def async_unwrap(
+    container: 'FutureResult[_ValueType, _ErrorType]',
+) -> IO[_ValueType]:
+    """Async unwrap a container."""
+    return IO((await container._inner_value).unwrap())
+
+
+async def async_failure(
+    container: 'FutureResult[_ValueType, _ErrorType]',
+) -> IO[_ErrorType]:
+    """Async unwrap an error from container."""
+    return IO((await container._inner_value).failure())
+
+
+async def async_from_success(
     container: 'Future[_NewValueType]',
 ) -> Result[_NewValueType, Any]:
     """Async success unit factory."""
     return Success((await container)._inner_value)
 
 
-async def async_failure(
+async def async_from_failure(
     container: 'Future[_NewErrorType]',
 ) -> Result[Any, _NewErrorType]:
     """Async failure unit factory."""

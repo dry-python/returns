@@ -6,13 +6,12 @@ from returns.io import IOResult
 from returns.result import Result
 
 # Result:
-_ValueType = TypeVar('_ValueType')
+_ValueType = TypeVar('_ValueType', contravariant=True)
 _ErrorType = TypeVar('_ErrorType')
-_NewValueType = TypeVar('_NewValueType')
 _NewErrorType = TypeVar('_NewErrorType')
 
 # Context:
-_EnvType = TypeVar('_EnvType')
+_EnvType = TypeVar('_EnvType', contravariant=True)
 
 
 @overload

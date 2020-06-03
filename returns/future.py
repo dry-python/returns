@@ -1001,10 +1001,10 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
             function, self._inner_value,
         ))
 
-    async def value_or(
+    def value_or(
         self,
         default_value: _NewValueType,
-    ) -> IO[Union[_ValueType, _NewValueType]]:
+    ) -> Awaitable[IO[Union[_ValueType, _NewValueType]]]:
         """
         Get value or default value.
 
@@ -1022,9 +1022,9 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           >>> assert anyio.run(main) == (IO(1), IO(4))
 
         """
-        return IO((await self._inner_value).value_or(default_value))
+        return _future_result.async_value_or(self, default_value)
 
-    async def unwrap(self) -> IO[_ValueType]:
+    def unwrap(self) -> Awaitable[IO[_ValueType]]:
         """
         Get value or raise exception.
 
@@ -1041,9 +1041,9 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           returns.primitives.exceptions.UnwrapFailedError
 
         """
-        return IO((await self._inner_value).unwrap())
+        return _future_result.async_unwrap(self)
 
-    async def failure(self) -> IO[_ErrorType]:
+    def failure(self) -> Awaitable[IO[_ErrorType]]:
         """
         Get failed value or raise exception.
 
@@ -1060,7 +1060,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           returns.primitives.exceptions.UnwrapFailedError
 
         """
-        return IO((await self._inner_value).failure())
+        return _future_result.async_failure(self)
 
     @classmethod
     def from_typecast(
@@ -1112,7 +1112,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           >>> anyio.run(main)
 
         """
-        return FutureResult(_future_result.async_success(container))
+        return FutureResult(_future_result.async_from_success(container))
 
     @classmethod
     def from_failed_future(
@@ -1136,7 +1136,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           >>> anyio.run(main)
 
         """
-        return FutureResult(_future_result.async_failure(container))
+        return FutureResult(_future_result.async_from_failure(container))
 
     @classmethod
     def from_io(

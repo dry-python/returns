@@ -21,3 +21,4 @@ from returns._generated.pointfree.fix import _fix as fix
 from returns._generated.pointfree.map import _map as map_
 from returns._generated.pointfree.rescue import _rescue as rescue
 from returns._generated.pointfree.unify import _unify as unify
+from returns._generated.pointfree.value_or import _value_or as value_or
