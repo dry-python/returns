@@ -119,6 +119,42 @@ class RequiresContextFutureResult(
             lambda deps: self(deps).map(function),
         )
 
+    def apply(
+        self,
+        container: 'RequiresContextFutureResult['
+            '_EnvType, Callable[[_ValueType], _NewValueType], _ErrorType]',
+    ) -> 'RequiresContextFutureResult[_EnvType, _NewValueType, _ErrorType]':
+        """
+        Calls a wrapped function in a container on this container.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.context import RequiresContextFutureResult
+          >>> from returns.io import IOSuccess, IOFailure
+
+          >>> def transform(arg: str) -> str:
+          ...     return arg + 'b'
+
+          >>> assert anyio.run(
+          ...    RequiresContextFutureResult.from_value('a').apply(
+          ...        RequiresContextFutureResult.from_value(transform),
+          ...    ),
+          ...    RequiresContextFutureResult.empty,
+          ... ) == IOSuccess('ab')
+
+          >>> assert anyio.run(
+          ...    RequiresContextFutureResult.from_failure('a').apply(
+          ...        RequiresContextFutureResult.from_value(transform),
+          ...    ),
+          ...    RequiresContextFutureResult.empty,
+          ... ) == IOFailure('a')
+
+        """
+        return RequiresContextFutureResult(
+            lambda deps: self(deps).apply(container(deps)),
+        )
+
     def bind(
         self,
         function: Callable[
@@ -162,7 +198,7 @@ class RequiresContextFutureResult(
         """
         return RequiresContextFutureResult(
             lambda deps: self(deps).bind(
-                lambda inner: function(inner)(deps),  # type: ignore
+                lambda inner: function(inner)(deps),  # type: ignore[misc]
             ),
         )
 
@@ -216,7 +252,7 @@ class RequiresContextFutureResult(
         """
         return RequiresContextFutureResult(
             lambda deps: self(deps).rescue(
-                lambda inner: function(inner)(deps),  # type: ignore
+                lambda inner: function(inner)(deps),  # type: ignore[misc]
             ),
         )
 

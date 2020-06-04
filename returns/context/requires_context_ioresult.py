@@ -252,7 +252,7 @@ class RequiresContextIOResult(
         """
         return RequiresContextIOResult(
             lambda deps: self(deps).bind(
-                lambda inner: function(inner)(deps),  # type: ignore
+                lambda inner: function(inner)(deps),  # type: ignore[misc]
             ),
         )
 
@@ -322,7 +322,7 @@ class RequiresContextIOResult(
         """
         return RequiresContextIOResult(
             lambda deps: self(deps).map(
-                lambda inner: function(inner)(deps),  # type: ignore
+                lambda inner: function(inner)(deps),  # type: ignore[misc]
             ),
         )
 
@@ -375,7 +375,7 @@ class RequiresContextIOResult(
         """
         return RequiresContextIOResult(
             lambda deps: self(deps).bind_result(
-                lambda inner: function(inner)(deps),  # type: ignore
+                lambda inner: function(inner)(deps),  # type: ignore[misc]
             ),
         )
 
@@ -524,7 +524,7 @@ class RequiresContextIOResult(
         """
         return RequiresContextIOResult(
             lambda deps: self(deps).rescue(
-                lambda inner: function(inner)(deps),  # type: ignore
+                lambda inner: function(inner)(deps),  # type: ignore[misc]
             ),
         )
 

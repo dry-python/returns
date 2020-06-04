@@ -96,6 +96,18 @@
     reveal_type(apply(test))  # N: Revealed type is 'def (returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.bool*, builtins.float*, builtins.str*]) -> returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.bool*, builtins.int*, builtins.str*]'
 
 
+- case: apply_requires_context_future_result
+  disable_cache: true
+  main: |
+    from returns.pointfree import apply
+    from returns.context import RequiresContextFutureResult
+    from typing import Callable
+
+    test: RequiresContextFutureResult[bool, Callable[[float], int], str]
+
+    reveal_type(apply(test))  # N: Revealed type is 'def (returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool*, builtins.float*, builtins.str*]) -> returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool*, builtins.int*, builtins.str*]'
+
+
 - case: apply_future
   disable_cache: true
   main: |
