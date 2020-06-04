@@ -189,9 +189,10 @@ Let's say you have to read a file contents:
   >>> read_result = managed_read(
   ...     impure_safe(lambda filename: open(filename, 'r'))('pyproject.toml'),
   ... )
-  >>> assert is_successful(read_result)  # file contents are inside `IOSuccess`
+  >>> assert is_successful(read_result)  # file content is inside `IOSuccess`
 
-And here's how we recommend to combine ``managed`` with other pipe functions:
+And here's how we recommend to combine
+``managed`` with other pipeline functions:
 
 .. code:: python
 
@@ -201,15 +202,16 @@ And here's how we recommend to combine ``managed`` with other pipe functions:
   >>> from returns.result import safe
   >>> from returns.io import IOSuccess
 
-  >>> def parse_toml(file_contents: str) -> ResultE[dict]:
-  ...     return safe(tomlkit.parse)(file_contents)
+  >>> @safe
+  ... def parse_toml(file_contents: str) -> dict:
+  ...     return tomlkit.parse(file_contents)
 
   >>> @safe
   ... def get_project_name(parsed: dict) -> str:
   ...     return parsed['tool']['poetry']['name']
 
   >>> pipeline_result = flow(
-  ...     'pyproject.toml',
+  ...     'pyproject.toml',  # filename we work with
   ...     impure_safe(lambda filename: open(filename, 'r')),
   ...     managed_read,
   ...     bind_result(parse_toml),

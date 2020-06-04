@@ -68,6 +68,9 @@ class _managed(Immutable):  # noqa: N801
     We also do not break a functional abstraction for the end user.
     It is just an implementation detail.
 
+    Type inference does not work so well with ``lambda`` functions.
+    But, we do not recommend to use this function with ``lambda`` functions.
+
     """
 
     __slots__ = ('_use', '_release')
