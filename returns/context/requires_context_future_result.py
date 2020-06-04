@@ -166,6 +166,60 @@ class RequiresContextFutureResult(
             ),
         )
 
+    def rescue(
+        self,
+        function: Callable[
+            [_ErrorType],
+            'RequiresContextFutureResult[_EnvType, _ValueType, _NewErrorType]',
+        ],
+    ) -> 'RequiresContextFutureResult[_EnvType, _ValueType, _NewErrorType]':
+        """
+        Composes this container with a function returning the same type.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.context import RequiresContextFutureResult
+          >>> from returns.future import FutureResult
+          >>> from returns.io import IOSuccess, IOFailure
+
+          >>> def rescuable(
+          ...     arg: str,
+          ... ) -> RequiresContextFutureResult[str, str, str]:
+          ...      return RequiresContextFutureResult(
+          ...          lambda deps: FutureResult.from_value(
+          ...              deps + arg,
+          ...          ) if len(arg) > 1 else FutureResult.from_failure(
+          ...              arg + deps,
+          ...          ),
+          ...      )
+
+          >>> assert anyio.run(
+          ...     RequiresContextFutureResult.from_value('a').rescue(rescuable),
+          ...     'c',
+          ... ) == IOSuccess('a')
+
+          >>> assert anyio.run(
+          ...     RequiresContextFutureResult.from_failure('a').rescue(
+          ...         rescuable,
+          ...     ),
+          ...     'c',
+          ... ) == IOFailure('ac')
+
+          >>> assert anyio.run(
+          ...     RequiresContextFutureResult.from_failure('aa').rescue(
+          ...         rescuable,
+          ...     ),
+          ...     'b',
+          ... ) == IOSuccess('baa')
+
+        """
+        return RequiresContextFutureResult(
+            lambda deps: self(deps).rescue(
+                lambda inner: function(inner)(deps),  # type: ignore
+            ),
+        )
+
     def value_or(  # noqa: WPS234
         self, default_value: _FirstType,
     ) -> Callable[

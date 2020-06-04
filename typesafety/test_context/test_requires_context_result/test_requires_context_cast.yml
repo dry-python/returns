@@ -1,0 +1,27 @@
+- case: requires_context_result_success_cast
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextResult
+
+    first: RequiresContextResult[str, object, Exception] = RequiresContextResult.from_value(1)
+    reveal_type(first)  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.str, builtins.object, builtins.Exception]'
+
+
+- case: requires_context_result_failure_cast
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextResult
+
+    first: RequiresContextResult[str, object, Exception] = RequiresContextResult.from_failure(TypeError())
+    reveal_type(first)  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.str, builtins.object, builtins.Exception]'
+
+
+- case: requires_context_result_env_cast
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextResult
+
+    first: RequiresContextResult[object, object, Exception]
+    second: RequiresContextResult[str, object, Exception] = first
+
+    reveal_type(second)  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.str, builtins.object, builtins.Exception]'

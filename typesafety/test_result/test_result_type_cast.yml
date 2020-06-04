@@ -1,10 +1,19 @@
-- case: result_success_cast
+- case: result_success_cast1
   disable_cache: true
   main: |
     from returns.result import Result, Success
 
     first: Result[int, Exception] = Success(1)
     reveal_type(first)  # N: Revealed type is 'returns.result.Result[builtins.int, builtins.Exception]'
+
+
+- case: result_success_cast2
+  disable_cache: true
+  main: |
+    from returns.result import Result, Success
+
+    first: Result[object, Exception] = Success(1)
+    reveal_type(first)  # N: Revealed type is 'returns.result.Result[builtins.object, builtins.Exception]'
 
 
 - case: result_failure_cast1
