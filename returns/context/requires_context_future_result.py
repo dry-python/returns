@@ -202,6 +202,68 @@ class RequiresContextFutureResult(
             ),
         )
 
+    def fix(
+        self, function: Callable[[_ErrorType], _NewValueType],
+    ) -> 'RequiresContextFutureResult[_EnvType, _NewValueType, _ErrorType]':
+        """
+        Composes failed container with a pure function.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.context import RequiresContextFutureResult
+          >>> from returns.io import IOSuccess
+
+          >>> assert anyio.run(
+          ...     RequiresContextFutureResult.from_value(1).fix(
+          ...        lambda x: x + 1,
+          ...     ),
+          ...     RequiresContextFutureResult.empty,
+          ... ) == IOSuccess(1)
+
+          >>> assert anyio.run(
+          ...     RequiresContextFutureResult.from_failure(1).fix(
+          ...        lambda x: x + 1,
+          ...     ),
+          ...     RequiresContextFutureResult.empty,
+          ... ) == IOSuccess(2)
+
+        """
+        return RequiresContextFutureResult(
+            lambda deps: self(deps).fix(function),
+        )
+
+    def alt(
+        self, function: Callable[[_ErrorType], _NewErrorType],
+    ) -> 'RequiresContextFutureResult[_EnvType, _ValueType, _NewErrorType]':
+        """
+        Composes failed container with a pure function.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.context import RequiresContextFutureResult
+          >>> from returns.io import IOSuccess, IOFailure
+
+          >>> assert anyio.run(
+          ...     RequiresContextFutureResult.from_value(1).alt(
+          ...        lambda x: x + 1,
+          ...     ),
+          ...     RequiresContextFutureResult.empty,
+          ... ) == IOSuccess(1)
+
+          >>> assert anyio.run(
+          ...     RequiresContextFutureResult.from_failure(1).alt(
+          ...        lambda x: x + 1,
+          ...     ),
+          ...     RequiresContextFutureResult.empty,
+          ... ) == IOFailure(2)
+
+        """
+        return RequiresContextFutureResult(
+            lambda deps: self(deps).alt(function),
+        )
+
     def rescue(
         self,
         function: Callable[

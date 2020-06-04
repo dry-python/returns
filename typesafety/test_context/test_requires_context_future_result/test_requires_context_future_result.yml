@@ -46,6 +46,32 @@
     reveal_type(x.rescue(test))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.str, builtins.int, builtins.bool*]'
 
 
+- case: requires_context_future_result_fix
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextFutureResult
+
+    x: RequiresContextFutureResult[str, int, float]
+
+    def test(param: float) -> bool:
+        ...
+
+    reveal_type(x.fix(test))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.str, builtins.bool*, builtins.float]'
+
+
+- case: requires_context_future_result_alt
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextFutureResult
+
+    x: RequiresContextFutureResult[str, int, float]
+
+    def test(param: float) -> bool:
+        ...
+
+    reveal_type(x.alt(test))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.str, builtins.int, builtins.bool*]'
+
+
 - case: requires_context_future_result_value_or
   disable_cache: true
   main: |

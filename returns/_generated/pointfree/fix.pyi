@@ -2,7 +2,11 @@ from typing import Callable, TypeVar, overload
 
 from typing_extensions import Protocol
 
-from returns.context import RequiresContextIOResult, RequiresContextResult
+from returns.context import (
+    RequiresContextFutureResult,
+    RequiresContextIOResult,
+    RequiresContextResult,
+)
 from returns.future import FutureResult
 from returns.io import IOResult
 from returns.result import Result
@@ -35,6 +39,15 @@ class _Fixable(Protocol[_ErrorType, _NewValueType]):
         self,
         container: RequiresContextIOResult[_EnvType, _ValueType, _ErrorType],
     ) -> RequiresContextIOResult[_EnvType, _NewValueType, _ErrorType]:
+        ...
+
+    @overload
+    def __call__(
+        self,
+        container: RequiresContextFutureResult[
+            _EnvType, _ValueType, _ErrorType,
+        ],
+    ) -> RequiresContextFutureResult[_EnvType, _NewValueType, _ErrorType]:
         ...
 
     @overload

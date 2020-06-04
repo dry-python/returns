@@ -113,6 +113,19 @@
     reveal_type(alt(test)(x))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.bool*, builtins.str*, builtins.int]'
 
 
+- case: alt_requires_context_future_result
+  disable_cache: true
+  main: |
+    from returns.pointfree import alt
+    from returns.context import RequiresContextFutureResult
+
+    def test(arg: float) -> int:
+        ...
+
+    x: RequiresContextFutureResult[bool, str, float]
+    reveal_type(alt(test)(x))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool*, builtins.str*, builtins.int]'
+
+
 - case: alt_futureresult
   disable_cache: true
   main: |
