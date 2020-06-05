@@ -341,7 +341,7 @@ class Future(BaseContainer, Generic[_ValueType]):
     @classmethod
     def from_iterable(
         cls,
-        containers: Iterable['Future[_ValueType]'],
+        inner_value: Iterable['Future[_ValueType]'],
     ) -> 'Future[Sequence[_ValueType]]':
         """
         Transforms an iterable of ``Future`` containers into a single container.
@@ -358,7 +358,7 @@ class Future(BaseContainer, Generic[_ValueType]):
           ... ]).awaitable) == IO((1, 2))
 
         """
-        return iterable(cls, containers)
+        return iterable(cls, inner_value)
 
     @classmethod
     def from_io(cls, inner_value: IO[_NewValueType]) -> 'Future[_NewValueType]':
@@ -382,7 +382,7 @@ class Future(BaseContainer, Generic[_ValueType]):
     @classmethod
     def from_future_result(
         cls,
-        container: 'FutureResult[_ValueType, _ErrorType]',
+        inner_value: 'FutureResult[_ValueType, _ErrorType]',
     ) -> 'Future[Result[_ValueType, _ErrorType]]':
         """
         Creates ``Future[Result[a, b]]`` instance from ``FutureResult[a, b]``.
@@ -400,7 +400,7 @@ class Future(BaseContainer, Generic[_ValueType]):
           >>> assert anyio.run(container.awaitable) == IO(Success(1))
 
         """
-        return Future(container._inner_value)
+        return Future(inner_value._inner_value)
 
 
 # Decorators:
@@ -1065,7 +1065,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
     @classmethod
     def from_typecast(
         cls,
-        container: Future[Result[_NewValueType, _NewErrorType]],
+        inner_value: Future[Result[_NewValueType, _NewErrorType]],
     ) -> 'FutureResult[_NewValueType, _NewErrorType]':
         """
         Creates ``FutureResult[a, b]`` from ``Future[Result[a, b]]``.
@@ -1088,12 +1088,12 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           >>> anyio.run(main)
 
         """
-        return FutureResult(container._inner_value)
+        return FutureResult(inner_value._inner_value)
 
     @classmethod
     def from_future(
         cls,
-        container: Future[_NewValueType],
+        inner_value: Future[_NewValueType],
     ) -> 'FutureResult[_NewValueType, Any]':
         """
         Creates ``FutureResult`` from successful ``Future`` value.
@@ -1112,12 +1112,12 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           >>> anyio.run(main)
 
         """
-        return FutureResult(_future_result.async_from_success(container))
+        return FutureResult(_future_result.async_from_success(inner_value))
 
     @classmethod
     def from_failed_future(
         cls,
-        container: Future[_NewErrorType],
+        inner_value: Future[_NewErrorType],
     ) -> 'FutureResult[Any, _NewErrorType]':
         """
         Creates ``FutureResult`` from failed ``Future`` value.
@@ -1136,12 +1136,12 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           >>> anyio.run(main)
 
         """
-        return FutureResult(_future_result.async_from_failure(container))
+        return FutureResult(_future_result.async_from_failure(inner_value))
 
     @classmethod
     def from_io(
         cls,
-        container: IO[_NewValueType],
+        inner_value: IO[_NewValueType],
     ) -> 'FutureResult[_NewValueType, Any]':
         """
         Creates ``FutureResult`` from successful ``IO`` value.
@@ -1160,12 +1160,12 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           >>> anyio.run(main)
 
         """
-        return FutureResult.from_value(container._inner_value)
+        return FutureResult.from_value(inner_value._inner_value)
 
     @classmethod
     def from_failed_io(
         cls,
-        container: IO[_NewErrorType],
+        inner_value: IO[_NewErrorType],
     ) -> 'FutureResult[Any, _NewErrorType]':
         """
         Creates ``FutureResult`` from failed ``IO`` value.
@@ -1184,12 +1184,12 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           >>> anyio.run(main)
 
         """
-        return FutureResult.from_failure(container._inner_value)
+        return FutureResult.from_failure(inner_value._inner_value)
 
     @classmethod
     def from_ioresult(
         cls,
-        container: IOResult[_NewValueType, _NewErrorType],
+        inner_value: IOResult[_NewValueType, _NewErrorType],
     ) -> 'FutureResult[_NewValueType, _NewErrorType]':
         """
         Creates ``FutureResult`` from ``IOResult`` value.
@@ -1211,12 +1211,12 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           >>> anyio.run(main)
 
         """
-        return FutureResult(async_identity(container._inner_value))
+        return FutureResult(async_identity(inner_value._inner_value))
 
     @classmethod
     def from_result(
         cls,
-        container: Result[_NewValueType, _NewErrorType],
+        inner_value: Result[_NewValueType, _NewErrorType],
     ) -> 'FutureResult[_NewValueType, _NewErrorType]':
         """
         Creates ``FutureResult`` from ``Result`` value.
@@ -1239,7 +1239,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           >>> anyio.run(main)
 
         """
-        return FutureResult(async_identity(container))
+        return FutureResult(async_identity(inner_value))
 
     @classmethod
     def from_value(
@@ -1292,7 +1292,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
     @classmethod
     def from_iterable(
         cls,
-        containers: Iterable['FutureResult[_ValueType, _ErrorType]'],
+        inner_value: Iterable['FutureResult[_ValueType, _ErrorType]'],
     ) -> 'FutureResult[Sequence[_ValueType], _ErrorType]':
         """
         Transforms an iterable of ``FutureResult`` containers.
@@ -1324,7 +1324,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
           >>> assert anyio.run(mixed.awaitable) == IOFailure('a')
 
         """
-        return iterable(cls, containers)
+        return iterable(cls, inner_value)
 
 
 # Aliases:

@@ -665,6 +665,54 @@ class RequiresContextFutureResult(
         )
 
     @classmethod
+    def from_io(
+        cls,
+        inner_value: IO[_NewValueType],
+    ) -> 'RequiresContextFutureResult[NoDeps, _NewValueType, Any]':
+        """
+        Creates new container from successful ``IO`` value.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.io import IO, IOSuccess
+          >>> from returns.context import RequiresContextFutureResult
+
+          >>> assert anyio.run(
+          ...     RequiresContextFutureResult.from_io(IO(1)),
+          ...     RequiresContextFutureResult.empty,
+          ... ) == IOSuccess(1)
+
+        """
+        return RequiresContextFutureResult(
+            lambda deps: FutureResult.from_io(inner_value),
+        )
+
+    @classmethod
+    def from_failed_io(
+        cls,
+        inner_value: IO[_NewErrorType],
+    ) -> 'RequiresContextFutureResult[NoDeps, Any, _NewErrorType]':
+        """
+        Creates a new container from failed ``IO`` value.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.io import IO, IOFailure
+          >>> from returns.context import RequiresContextFutureResult
+
+          >>> assert anyio.run(
+          ...     RequiresContextFutureResult.from_failed_io(IO(1)),
+          ...     RequiresContextFutureResult.empty,
+          ... ) == IOFailure(1)
+
+        """
+        return RequiresContextFutureResult(
+            lambda deps: FutureResult.from_failed_io(inner_value),
+        )
+
+    @classmethod
     def from_ioresult(
         cls, inner_value: IOResult[_ValueType, _ErrorType],
     ) -> 'RequiresContextFutureResult[NoDeps, _ValueType, _ErrorType]':
@@ -695,7 +743,7 @@ class RequiresContextFutureResult(
     @classmethod
     def from_typecast(
         cls,
-        container: 'RequiresContext['
+        inner_value: 'RequiresContext['
             '_EnvType, FutureResult[_NewValueType, _NewErrorType]]',
     ) -> 'RequiresContextFutureResult[_EnvType, _NewValueType, _NewErrorType]':
         """
@@ -728,7 +776,7 @@ class RequiresContextFutureResult(
           ... ) == IOFailure(1)
 
         """
-        return RequiresContextFutureResult(container)
+        return RequiresContextFutureResult(inner_value)
 
     @classmethod
     def from_context(
@@ -860,7 +908,7 @@ class RequiresContextFutureResult(
     @classmethod
     def from_iterable(
         cls,
-        containers:
+        inner_value:
             Iterable[
                 'RequiresContextFutureResult[_EnvType, _ValueType, _ErrorType]',
             ],
@@ -893,7 +941,7 @@ class RequiresContextFutureResult(
           ... ) == IOFailure('a')
 
         """
-        return iterable(cls, containers)
+        return iterable(cls, inner_value)
 
 
 @final

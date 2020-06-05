@@ -421,6 +421,21 @@ How to create unit objects?
 - ``from_value`` when you want to mark some raw value as a ``Success``
 - ``from_failure`` when you want to mark some raw value as a ``Failure``
 - ``from_result`` when you already have ``Result`` container
+- ``from_io`` when you have successful ``IO`` container
+- ``from_failed_io`` when you have failed ``IO`` container
+- ``from_ioresult`` when you already have ``IOResult`` container
+- ``from_context`` when you have successful ``RequiresContext``
+- ``from_failed_context`` when you have failed ``RequiresContext``
+- ``from_typecast`` when you have ``RequiresContext[..., IOResult]``
+
+``RequiresContextFutureResult`` requires
+you to use one of the following methods:
+
+- ``from_value`` when you want to mark some raw value as a ``Success``
+- ``from_failure`` when you want to mark some raw value as a ``Failure``
+- ``from_result`` when you already have ``Result`` container
+- ``from_io`` when you have successful ``IO`` container
+- ``from_failed_io`` when you have failed ``IO`` container
 - ``from_ioresult`` when you already have ``IOResult`` container
 - ``from_context`` when you have successful ``RequiresContext``
 - ``from_failed_context`` when you have failed ``RequiresContext``

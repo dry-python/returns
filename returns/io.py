@@ -160,7 +160,7 @@ class IO(BaseContainer, Generic[_ValueType]):
     @classmethod
     def from_iterable(
         cls,
-        containers: Iterable['IO[_ValueType]'],
+        inner_value: Iterable['IO[_ValueType]'],
     ) -> 'IO[Sequence[_ValueType]]':
         """
         Transforms an iterable of ``IO`` containers into a single container.
@@ -175,12 +175,12 @@ class IO(BaseContainer, Generic[_ValueType]):
           ... ]) == IO((1, 2))
 
         """
-        return iterable(cls, containers)
+        return iterable(cls, inner_value)
 
     @classmethod
     def from_ioresult(
         cls,
-        container: 'IOResult[_NewValueType, _ErrorType]',
+        inner_value: 'IOResult[_NewValueType, _ErrorType]',
     ) -> 'IO[Result[_NewValueType, _ErrorType]]':
         """
         Converts ``IOResult[a, b]`` back to ``IO[Result[a, b]]``.
@@ -195,7 +195,7 @@ class IO(BaseContainer, Generic[_ValueType]):
 
         Is the reverse of :meth:`returns.io.IOResult.from_typecast`.
         """
-        return IO(container._inner_value)  # noqa: WPS437
+        return IO(inner_value._inner_value)  # noqa: WPS437
 
 
 # Helper functions:
@@ -574,7 +574,7 @@ class IOResult(
 
     @classmethod
     def from_typecast(
-        cls, container: IO[Result[_NewValueType, _NewErrorType]],
+        cls, inner_value: IO[Result[_NewValueType, _NewErrorType]],
     ) -> 'IOResult[_NewValueType, _NewErrorType]':
         """
         Converts ``IO[Result[_ValueType, _ErrorType]]`` to ``IOResult``.
@@ -592,11 +592,11 @@ class IOResult(
 
         Can be reverted via :meth:`returns.io.IO.from_ioresult` method.
         """
-        return cls.from_result(container._inner_value)  # noqa: WPS437
+        return cls.from_result(inner_value._inner_value)  # noqa: WPS437
 
     @classmethod
     def from_failed_io(
-        cls, container: IO[_NewErrorType],
+        cls, inner_value: IO[_NewErrorType],
     ) -> 'IOResult[Any, _NewErrorType]':
         """
         Creates new ``IOResult`` from "failed" ``IO`` container.
@@ -608,11 +608,11 @@ class IOResult(
           >>> assert IOResult.from_failed_io(container) == IOFailure(1)
 
         """
-        return IOFailure(container._inner_value)  # noqa: WPS437
+        return IOFailure(inner_value._inner_value)  # noqa: WPS437
 
     @classmethod
     def from_io(
-        cls, container: IO[_NewValueType],
+        cls, inner_value: IO[_NewValueType],
     ) -> 'IOResult[_NewValueType, Any]':
         """
         Creates new ``IOResult`` from "successful" ``IO`` container.
@@ -624,11 +624,11 @@ class IOResult(
           >>> assert IOResult.from_io(container) == IOSuccess(1)
 
         """
-        return IOSuccess(container._inner_value)  # noqa: WPS437
+        return IOSuccess(inner_value._inner_value)  # noqa: WPS437
 
     @classmethod
     def from_result(
-        cls, container: Result[_NewValueType, _NewErrorType],
+        cls, inner_value: Result[_NewValueType, _NewErrorType],
     ) -> 'IOResult[_NewValueType, _NewErrorType]':
         """
         Creates ``IOResult`` from ``Result`` value.
@@ -642,9 +642,9 @@ class IOResult(
           >>> assert IOResult.from_result(Failure(2)) == IOFailure(2)
 
         """
-        if isinstance(container, container.success_type):
-            return _IOSuccess(container)
-        return _IOFailure(container)
+        if isinstance(inner_value, inner_value.success_type):
+            return _IOSuccess(inner_value)
+        return _IOFailure(inner_value)
 
     @classmethod
     def from_value(
@@ -691,7 +691,7 @@ class IOResult(
     @classmethod
     def from_iterable(
         cls,
-        containers: Iterable['IOResult[_ValueType, _ErrorType]'],
+        inner_value: Iterable['IOResult[_ValueType, _ErrorType]'],
     ) -> 'IOResult[Sequence[_ValueType], _ErrorType]':
         """
         Transforms an iterable of ``IOResult`` containers into a single one.
@@ -716,7 +716,7 @@ class IOResult(
           ... ]) == IOFailure('a')
 
         """
-        return iterable(cls, containers)
+        return iterable(cls, inner_value)
 
     def __str__(self) -> str:
         """Custom ``str`` representation for better readability."""

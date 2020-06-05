@@ -229,7 +229,7 @@ class RequiresContext(
     @classmethod
     def from_iterable(
         cls,
-        containers: Iterable['RequiresContext[_EnvType, _ValueType]'],
+        inner_value: Iterable['RequiresContext[_EnvType, _ValueType]'],
     ) -> 'RequiresContext[_EnvType, Sequence[_ValueType]]':
         """
         Transforms an iterable of ``RequiresContext`` containers.
@@ -246,12 +246,12 @@ class RequiresContext(
           ... ])(...) == (1, 2)
 
         """
-        return iterable(cls, containers)
+        return iterable(cls, inner_value)
 
     @classmethod
     def from_requires_context_result(
         cls,
-        container: 'RequiresContextResult[_EnvType, _ValueType, _ErrorType]',
+        inner_value: 'RequiresContextResult[_EnvType, _ValueType, _ErrorType]',
     ) -> 'RequiresContext[_EnvType, Result[_ValueType, _ErrorType]]':
         """
         Typecasts ``RequiresContextResult`` to ``RequiresContext`` instance.
@@ -271,12 +271,13 @@ class RequiresContext(
         Can be reverted with ``RequiresContextResult.from_typecast``.
 
         """
-        return RequiresContext(container)
+        return RequiresContext(inner_value)
 
     @classmethod
     def from_requires_context_ioresult(
         cls,
-        container: 'RequiresContextIOResult[_EnvType, _ValueType, _ErrorType]',
+        inner_value:
+            'RequiresContextIOResult[_EnvType, _ValueType, _ErrorType]',
     ) -> 'RequiresContext[_EnvType, IOResult[_ValueType, _ErrorType]]':
         """
         Typecasts ``RequiresContextIOResult`` to ``RequiresContext`` instance.
@@ -296,7 +297,7 @@ class RequiresContext(
         Can be reverted with ``RequiresContextIOResult.from_typecast``.
 
         """
-        return RequiresContext(container)
+        return RequiresContext(inner_value)
 
 
 @final

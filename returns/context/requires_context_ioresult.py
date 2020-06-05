@@ -620,6 +620,50 @@ class RequiresContextIOResult(
         )
 
     @classmethod
+    def from_io(
+        cls,
+        inner_value: IO[_NewValueType],
+    ) -> 'RequiresContextIOResult[NoDeps, _NewValueType, Any]':
+        """
+        Creates new container from successful ``IO`` value.
+
+        .. code:: python
+
+          >>> from returns.io import IO, IOSuccess
+          >>> from returns.context import RequiresContextIOResult
+
+          >>> assert RequiresContextIOResult.from_io(IO(1))(
+          ...     RequiresContextIOResult.empty,
+          ... ) == IOSuccess(1)
+
+        """
+        return RequiresContextIOResult(
+            lambda deps: IOResult.from_io(inner_value),
+        )
+
+    @classmethod
+    def from_failed_io(
+        cls,
+        inner_value: IO[_NewErrorType],
+    ) -> 'RequiresContextIOResult[NoDeps, Any, _NewErrorType]':
+        """
+        Creates a new container from failed ``IO`` value.
+
+        .. code:: python
+
+          >>> from returns.io import IO, IOFailure
+          >>> from returns.context import RequiresContextIOResult
+
+          >>> assert RequiresContextIOResult.from_failed_io(IO(1))(
+          ...     RequiresContextIOResult.empty,
+          ... ) == IOFailure(1)
+
+        """
+        return RequiresContextIOResult(
+            lambda deps: IOResult.from_failed_io(inner_value),
+        )
+
+    @classmethod
     def from_ioresult(
         cls, inner_value: IOResult[_ValueType, _ErrorType],
     ) -> 'RequiresContextIOResult[NoDeps, _ValueType, _ErrorType]':
@@ -646,7 +690,7 @@ class RequiresContextIOResult(
     @classmethod
     def from_typecast(
         cls,
-        container:
+        inner_value:
             'RequiresContext[_EnvType, IOResult[_NewValueType, _NewErrorType]]',
     ) -> 'RequiresContextIOResult[_EnvType, _NewValueType, _NewErrorType]':
         """
@@ -671,7 +715,7 @@ class RequiresContextIOResult(
           ... )(RequiresContextIOResult.empty) == IOFailure(1)
 
         """
-        return RequiresContextIOResult(container)
+        return RequiresContextIOResult(inner_value)
 
     @classmethod
     def from_context(
@@ -782,7 +826,7 @@ class RequiresContextIOResult(
     @classmethod
     def from_iterable(
         cls,
-        containers:
+        inner_value:
             Iterable[
                 'RequiresContextIOResult[_EnvType, _ValueType, _ErrorType]',
             ],
@@ -813,7 +857,7 @@ class RequiresContextIOResult(
           ... ])(...) == IOFailure('a')
 
         """
-        return iterable(cls, containers)
+        return iterable(cls, inner_value)
 
 
 @final

@@ -36,6 +36,28 @@
     reveal_type(RequiresContextIOResult.from_result(r))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[Any, builtins.int*, builtins.str*]'
 
 
+- case: requires_context_ioresult_io
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextIOResult
+    from returns.io import IO
+
+    r: IO[int]
+
+    reveal_type(RequiresContextIOResult.from_io(r))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[Any, builtins.int*, Any]'
+
+
+- case: requires_context_ioresult_failed_io
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextIOResult
+    from returns.io import IO
+
+    r: IO[int]
+
+    reveal_type(RequiresContextIOResult.from_failed_io(r))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[Any, Any, builtins.int*]'
+
+
 - case: requires_context_ioresult_ioresult
   disable_cache: true
   main: |

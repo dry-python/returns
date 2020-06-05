@@ -489,7 +489,7 @@ class RequiresContextResult(
     @classmethod
     def from_typecast(
         cls,
-        container:
+        inner_value:
             'RequiresContext[_EnvType, Result[_NewValueType, _NewErrorType]]',
     ) -> 'RequiresContextResult[_EnvType, _NewValueType, _NewErrorType]':
         """
@@ -514,7 +514,7 @@ class RequiresContextResult(
           ... )(RequiresContextResult.empty) == Failure(1)
 
         """
-        return RequiresContextResult(container)
+        return RequiresContextResult(inner_value)
 
     @classmethod
     def from_context(
@@ -587,7 +587,7 @@ class RequiresContextResult(
     @classmethod
     def from_iterable(
         cls,
-        containers:
+        inner_value:
             Iterable['RequiresContextResult[_EnvType, _ValueType, _ErrorType]'],
     ) -> 'RequiresContextResult[_EnvType, Sequence[_ValueType], _ErrorType]':
         """
@@ -616,7 +616,7 @@ class RequiresContextResult(
           ... ])(...) == Failure('a')
 
         """
-        return iterable(cls, containers)
+        return iterable(cls, inner_value)
 
 
 @final

@@ -313,7 +313,7 @@ class Result(
     @classmethod
     def from_iterable(
         cls,
-        containers: Iterable['Result[_ValueType, _ErrorType]'],
+        inner_value: Iterable['Result[_ValueType, _ErrorType]'],
     ) -> 'Result[Sequence[_ValueType], _ErrorType]':
         """
         Transforms an iterable of ``Result`` containers into a single container.
@@ -338,7 +338,7 @@ class Result(
           ... ]) == Failure('a')
 
         """
-        return iterable(cls, containers)
+        return iterable(cls, inner_value)
 
 
 @final

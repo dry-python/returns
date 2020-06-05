@@ -222,7 +222,7 @@ class Maybe(
     @classmethod
     def from_iterable(
         cls,
-        containers: Iterable['Maybe[_ValueType]'],
+        inner_value: Iterable['Maybe[_ValueType]'],
     ) -> 'Maybe[Sequence[_ValueType]]':
         """
         Transforms an iterable of ``Maybe`` containers into a single container.
@@ -247,7 +247,7 @@ class Maybe(
           ... ]) == Nothing
 
         """
-        return iterable(cls, containers)
+        return iterable(cls, inner_value)
 
 
 @final

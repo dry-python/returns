@@ -36,7 +36,29 @@
     reveal_type(RequiresContextFutureResult.from_result(r))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[Any, builtins.int*, builtins.str*]'
 
 
-- case: requires_context_future_result_future_result
+- case: requires_context_future_result_io
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextFutureResult
+    from returns.io import IO
+
+    r: IO[int]
+
+    reveal_type(RequiresContextFutureResult.from_io(r))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[Any, builtins.int*, Any]'
+
+
+- case: requires_context_future_result_failed_io
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextFutureResult
+    from returns.io import IO
+
+    r: IO[int]
+
+    reveal_type(RequiresContextFutureResult.from_failed_io(r))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[Any, Any, builtins.int*]'
+
+
+- case: requires_context_future_result_ioresult
   disable_cache: true
   main: |
     from returns.context import RequiresContextFutureResult

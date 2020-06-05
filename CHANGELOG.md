@@ -68,7 +68,9 @@ See [0Ver](https://0ver.org/).
 - Adds `bind_io` method to `IOResult`
 - Adds `bind_io` method to `RequiresContextIOResult`
 - Adds `or_else` method to `Maybe`
+- Adds `.from_io` and `.from_failed_io` to `RequiresContextIOResult`
 
+- Syncs naming in `from_*` methods, now all parameters are named `inner_value`
 - Adds `not_` composition helper
 - Adds `flatten` support for `Future`,
   `FutureResult` and `RequiresContextFutureResult`
