@@ -42,7 +42,53 @@ class RequiresContextFutureResult(
     BaseContainer,
     Generic[_EnvType, _ValueType, _ErrorType],
 ):
-    """Someday this container will grow very big."""
+    """
+    The ``RequiresContextFutureResult`` combinator.
+
+    This probably the main type people are going to use in ``async`` programms.
+
+    See :class:`returns.context.requires_context.RequiresContext`,
+    :class:`returns.context.requires_context_result.RequiresContextResult`,
+    and
+    :class:`returns.context.requires_context_result.RequiresContextIOResult`
+    for more docs.
+
+    This is just a handy wrapper around
+    ``RequiresContext[env, FutureResult[a, b]]``
+    which represents a context-dependent impure operation that might fail.
+
+    So, this is a thin wrapper, without any changes in logic.
+    Why do we need this wrapper? That's just for better usability!
+
+    This way ``RequiresContextIOResult`` allows to simply work with:
+
+    - raw values and pure functions
+    - ``RequiresContext`` values and pure functions returning it
+    - ``RequiresContextResult`` values and pure functions returning it
+    - ``RequiresContextIOResult`` values and pure functions returning it
+    - ``Result`` and pure functions returning it
+    - ``IOResult`` and functions returning it
+    - ``FutureResult`` and functions returning it
+    - other ``RequiresContextFutureResult`` related functions and values
+
+    This is a complex type for complex tasks!
+
+    Important implementation detail:
+    due it is meaning, ``RequiresContextFutureResult``
+    cannot have ``Success`` and ``Failure`` subclasses.
+
+    We only have just one type. That's by design.
+
+    Different converters are also not supported for this type.
+    Use converters inside the ``RequiresContext`` context, not outside.
+
+    See also:
+        https://dev.to/gcanti/getting-started-with-fp-ts-reader-1ie5
+        https://en.wikipedia.org/wiki/Lazy_evaluation
+        https://bit.ly/2R8l4WK
+        https://bit.ly/2RwP4fp
+
+    """
 
     #: Inner value of `RequiresContext`
     #: is just a function that returns `FutureResult`.
@@ -188,15 +234,7 @@ class RequiresContextFutureResult(
           >>> from returns.future import FutureResult
           >>> from returns.io import IOSuccess, IOFailure
 
-          >>> def first(lg: bool) -> RequiresContextFutureResult[int, int, int]:
-          ...     # `deps` has `int` type here:
-          ...     return RequiresContextFutureResult(
-          ...         lambda deps: FutureResult.from_value(
-          ...             deps,
-          ...         ) if lg else FutureResult.from_failure(-deps),
-          ...     )
-
-          >>> def second(
+          >>> def function(
           ...     number: int,
           ... ) -> RequiresContextFutureResult[int, str, int]:
           ...     # `deps` has `int` type here:
@@ -205,11 +243,13 @@ class RequiresContextFutureResult(
           ...     )
 
           >>> assert anyio.run(
-          ...     first(True).bind(second)(1).awaitable,
-          ... ) == IOSuccess('2')
+          ...     RequiresContextFutureResult.from_value(2).bind(function),
+          ...     3,
+          ... ) == IOSuccess('5')
           >>> assert anyio.run(
-          ...     first(False).bind(second)(2).awaitable,
-          ... ) == IOFailure(-2)
+          ...     RequiresContextFutureResult.from_failure(2).bind(function),
+          ...     3,
+          ... ) == IOFailure(2)
 
         """
         return RequiresContextFutureResult(
@@ -229,11 +269,11 @@ class RequiresContextFutureResult(
 
           >>> import anyio
           >>> from returns.context import RequiresContextFutureResult
-          >>> from returns.result import Success, Failure, Result
+          >>> from returns.result import Success, Result
           >>> from returns.io import IOSuccess, IOFailure
 
           >>> def function(num: int) -> Result[int, str]:
-          ...     return Success(num + 1) if num > 0 else Failure('<0')
+          ...     return Success(num + 1)
 
           >>> assert anyio.run(
           ...     RequiresContextFutureResult.from_value(1).bind_result(
@@ -241,13 +281,6 @@ class RequiresContextFutureResult(
           ...     ),
           ...     RequiresContextFutureResult.empty,
           ... ) == IOSuccess(2)
-
-          >>> assert anyio.run(
-          ...     RequiresContextFutureResult.from_value(0).bind_result(
-          ...         function,
-          ...     ),
-          ...     RequiresContextFutureResult.empty,
-          ... ) == IOFailure('<0')
 
           >>> assert anyio.run(
           ...     RequiresContextFutureResult.from_failure(':(').bind_result(
@@ -279,8 +312,6 @@ class RequiresContextFutureResult(
 
           >>> def function(arg: int) -> RequiresContext[str, int]:
           ...     return RequiresContext(lambda deps: len(deps) + arg)
-
-          >>> assert function(2)('abc') == 5
 
           >>> assert anyio.run(
           ...     RequiresContextFutureResult.from_value(2).bind_context(
@@ -318,19 +349,12 @@ class RequiresContextFutureResult(
           >>> import anyio
           >>> from returns.context import RequiresContextResult
           >>> from returns.io import IOSuccess, IOFailure
-          >>> from returns.result import Success, Failure
+          >>> from returns.result import Success
 
           >>> def function(arg: int) -> RequiresContextResult[str, int, int]:
-          ...     if arg > 0:
-          ...         return RequiresContextResult(
-          ...             lambda deps: Success(len(deps) + arg),
-          ...         )
           ...     return RequiresContextResult(
-          ...         lambda deps: Failure(len(deps) + arg),
+          ...         lambda deps: Success(len(deps) + arg),
           ...     )
-
-          >>> assert function(2)('abc') == Success(5)
-          >>> assert function(-1)('abc') == Failure(2)
 
           >>> instance = RequiresContextFutureResult.from_value(
           ...    2,
@@ -338,13 +362,6 @@ class RequiresContextFutureResult(
           ...     function,
           ... )('abc')
           >>> assert anyio.run(instance.awaitable) == IOSuccess(5)
-
-          >>> instance = RequiresContextFutureResult.from_value(
-          ...    -1,
-          ... ).bind_context_result(
-          ...     function,
-          ... )('abc')
-          >>> assert anyio.run(instance.awaitable) == IOFailure(2)
 
           >>> instance = RequiresContextFutureResult.from_failure(
           ...    2,
@@ -405,7 +422,7 @@ class RequiresContextFutureResult(
           >>> from returns.io import IOResult, IOSuccess, IOFailure
 
           >>> def function(num: int) -> IOResult[int, str]:
-          ...     return IOSuccess(num + 1) if num > 0 else IOFailure('<0')
+          ...     return IOSuccess(num + 1)
 
           >>> assert anyio.run(
           ...     RequiresContextFutureResult.from_value(1).bind_ioresult(
@@ -413,13 +430,6 @@ class RequiresContextFutureResult(
           ...     ),
           ...     RequiresContextFutureResult.empty,
           ... ) == IOSuccess(2)
-
-          >>> assert anyio.run(
-          ...     RequiresContextFutureResult.from_value(0).bind_ioresult(
-          ...         function,
-          ...     ),
-          ...     RequiresContextFutureResult.empty,
-          ... ) == IOFailure('<0')
 
           >>> assert anyio.run(
           ...     RequiresContextFutureResult.from_failure(':(').bind_ioresult(
@@ -510,7 +520,7 @@ class RequiresContextFutureResult(
           >>> import anyio
           >>> from returns.context import RequiresContextFutureResult
           >>> from returns.future import FutureResult
-          >>> from returns.io import IOSuccess, IOFailure
+          >>> from returns.io import IOSuccess
 
           >>> def rescuable(
           ...     arg: str,
@@ -518,8 +528,6 @@ class RequiresContextFutureResult(
           ...      return RequiresContextFutureResult(
           ...          lambda deps: FutureResult.from_value(
           ...              deps + arg,
-          ...          ) if len(arg) > 1 else FutureResult.from_failure(
-          ...              arg + deps,
           ...          ),
           ...      )
 
@@ -527,13 +535,6 @@ class RequiresContextFutureResult(
           ...     RequiresContextFutureResult.from_value('a').rescue(rescuable),
           ...     'c',
           ... ) == IOSuccess('a')
-
-          >>> assert anyio.run(
-          ...     RequiresContextFutureResult.from_failure('a').rescue(
-          ...         rescuable,
-          ...     ),
-          ...     'c',
-          ... ) == IOFailure('ac')
 
           >>> assert anyio.run(
           ...     RequiresContextFutureResult.from_failure('aa').rescue(
