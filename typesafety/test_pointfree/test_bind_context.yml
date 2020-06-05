@@ -80,7 +80,7 @@
   disable_cache: true
   main: |
     from returns.pointfree import bind_context
-    from returns.context import RequiresContext, RequiresContextIOResult
+    from returns.context import RequiresContext, RequiresContextFutureResult
 
     def test(arg: float) -> RequiresContext[bool, int]:
         ...
