@@ -624,7 +624,7 @@ class RequiresContextIOResult(
         cls, inner_value: IOResult[_ValueType, _ErrorType],
     ) -> 'RequiresContextIOResult[NoDeps, _ValueType, _ErrorType]':
         """
-        Creates new container with ``Result`` as a unit value.
+        Creates new container with ``IOResult`` as a unit value.
 
         .. code:: python
 

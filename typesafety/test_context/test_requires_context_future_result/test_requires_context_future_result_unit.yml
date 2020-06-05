@@ -12,3 +12,77 @@
     from returns.context import RequiresContextFutureResult
 
     reveal_type(RequiresContextFutureResult.from_failure(1))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[Any, Any, builtins.int*]'
+
+
+- case: requires_context_future_result_from_iterable
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextFutureResult
+    from typing import Iterable
+
+    x: Iterable[RequiresContextFutureResult[str, int, float]]
+
+    reveal_type(RequiresContextFutureResult.from_iterable(x))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.str*, typing.Sequence[builtins.int*], builtins.float*]'
+
+
+- case: requires_context_future_result_result
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextFutureResult
+    from returns.result import Result
+
+    r: Result[int, str]
+
+    reveal_type(RequiresContextFutureResult.from_result(r))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[Any, builtins.int*, builtins.str*]'
+
+
+- case: requires_context_future_result_future_result
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextFutureResult
+    from returns.io import IOResult
+
+    r: IOResult[int, str]
+
+    reveal_type(RequiresContextFutureResult.from_ioresult(r))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[Any, builtins.int*, builtins.str*]'
+
+
+- case: requires_context_future_result_typecast
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextFutureResult, RequiresContext
+    from returns.future import FutureResult
+
+    r: RequiresContext[float, FutureResult[int, str]]
+
+    reveal_type(RequiresContextFutureResult.from_typecast(r))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.float*, builtins.int*, builtins.str*]'
+
+
+- case: requires_context_future_result_successful_context
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextFutureResult, RequiresContext
+
+    r: RequiresContext[float, str]
+
+    reveal_type(RequiresContextFutureResult.from_context(r))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.float*, builtins.str*, Any]'
+
+
+- case: requires_context_future_result_failed_context
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextFutureResult, RequiresContext
+
+    r: RequiresContext[float, str]
+
+    reveal_type(RequiresContextFutureResult.from_failed_context(r))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.float*, Any, builtins.str*]'
+
+
+- case: requires_context_future_result_from_result_context
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextFutureResult, RequiresContextResult
+
+    r: RequiresContextResult[float, int, str]
+
+    reveal_type(RequiresContextFutureResult.from_result_context(r))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.float*, builtins.int*, builtins.str*]'
