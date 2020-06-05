@@ -5,6 +5,9 @@ from returns.context.requires_context import NoDeps as NoDeps
 from returns.context.requires_context import Reader as Reader
 from returns.context.requires_context import RequiresContext as RequiresContext
 from returns.context.requires_context_future_result import (
+    ContextFutureResult as ContextFutureResult,
+)
+from returns.context.requires_context_future_result import (
     ReaderFutureResult as ReaderFutureResult,
 )
 from returns.context.requires_context_future_result import (

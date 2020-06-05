@@ -1,0 +1,14 @@
+- case: context_result_future_ask1
+  disable_cache: true
+  main: |
+    from returns.context import ContextFutureResult
+
+    reveal_type(ContextFutureResult.ask())  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[<nothing>, <nothing>, Any]'
+
+
+- case: context_result_future_ask2
+  disable_cache: true
+  main: |
+    from returns.context import ContextFutureResult
+
+    reveal_type(ContextFutureResult[str].ask())  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.str*, builtins.str*, Any]'

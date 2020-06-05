@@ -302,6 +302,55 @@ Use it when you work with impure context-related functions that might fail.
 This is basically **the main type** that is going to be used in most apps.
 
 
+RequiresContextFutureResult container
+-------------------------------------
+
+This container is a combintaion of ``RequiresContext[env, FutureResult[a, b]]``.
+Which means that it is a wrapper around impure async function that might fail.
+
+We also added a lot of useful methods for this container,
+so you can work easily with it.
+
+These methods are identical with ``RequiresContextIOResult``:
+
+.. currentmodule:: returns.context.requires_context_future_result
+
+- :meth:`~RequiresContextFutureResult.from_typecast`
+  turns accidental ``RequiresContext[env, IOResult[a, b]]`` into
+  full-featured ``RequiresContextFutureResult[env, a, b]``
+- :meth:`~RequiresContextFutureResult.bind_result`
+  allows to bind functions that return ``Result`` with just one call
+- :meth:`~RequiresContextFutureResult.bind_io`
+  allows to bind functions that return ``IO`` with just one call
+- :meth:`~RequiresContextFutureResult.bind_ioresult`
+  allows to bind functions that return ``IOResult`` with just one call
+- :meth:`~RequiresContextFutureResult.bind_context`
+  allows to bind functions that return ``RequiresContext`` easily
+- :meth:`~RequiresContextFutureResult.bind_context_result`
+  allows to bind functions that return ``RequiresContextResult`` easily
+
+There are new ones:
+
+- :meth:`~RequiresContextFutureResult.bind_future`
+  allows to bind functions that return ``Future`` container
+- :meth:`~RequiresContextFutureResult.bind_future_result`
+  allows to bind functions that return ``FutureResult`` container
+- :meth:`~RequiresContextFutureResult.bind_async_future`
+  allows to bind async functions that return ``Future`` container
+- :meth:`~RequiresContextFutureResult.bind_async_future_result`
+  allows to bind async functions that return ``FutureResult`` container
+- :meth:`~RequiresContextFutureResult.bind_context_ioresult`
+  allows to bind functions that return ``RequiresContextIOResult``
+- :meth:`~RequiresContextFutureResult.bind_async`
+  allows to bind async functions
+  that return ``RequiresContextFutureResult`` container
+- :meth:`~RequiresContextFutureResult.bind_awaitable`
+  allows to bind async function that return raw values
+
+Use it when you work with impure context-related functions that might fail.
+This is basically **the main type** that is going to be used in most apps.
+
+
 Aliases
 -------
 

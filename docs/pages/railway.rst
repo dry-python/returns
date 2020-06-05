@@ -169,7 +169,7 @@ when you try to ``.failure()`` a successful container.
 Note::
 
   Not all containers support these methods.
-  ``IO`` and ``RequiresContext`` cannot be unwrapped.
+  ``IO`` based containers and ``RequiresContext`` cannot be unwrapped.
 
 
 Further reading
