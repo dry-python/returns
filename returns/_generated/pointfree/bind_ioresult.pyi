@@ -2,7 +2,7 @@ from typing import Callable, TypeVar, overload
 
 from typing_extensions import Protocol
 
-from returns.context import RequiresContextIOResult
+from returns.context import RequiresContextFutureResult, RequiresContextIOResult
 from returns.future import FutureResult
 from returns.io import IOResult
 
@@ -27,6 +27,15 @@ class _BindIOResult(Protocol[_ValueType, _NewValueType, _ErrorType]):
         self,
         container: RequiresContextIOResult[_EnvType, _ValueType, _ErrorType],
     ) -> RequiresContextIOResult[_EnvType, _NewValueType, _ErrorType]:
+        ...
+
+    @overload
+    def __call__(
+        self,
+        container: RequiresContextFutureResult[
+            _EnvType, _ValueType, _ErrorType,
+        ],
+    ) -> RequiresContextFutureResult[_EnvType, _NewValueType, _ErrorType]:
         ...
 
     @overload

@@ -78,6 +78,20 @@
     reveal_type(bind_result(test)(x))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.bool*, builtins.int, builtins.str]'
 
 
+- case: bind_result_requires_context_future_result
+  disable_cache: true
+  main: |
+    from returns.pointfree import bind_result
+    from returns.context import RequiresContextFutureResult
+    from returns.result import Result
+
+    def test(arg: float) -> Result[int, str]:
+        ...
+
+    x: RequiresContextFutureResult[bool, float, str]
+    reveal_type(bind_result(test)(x))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool*, builtins.int, builtins.str]'
+
+
 - case: bind_result_futureresult
   disable_cache: true
   main: |

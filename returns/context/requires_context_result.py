@@ -257,10 +257,8 @@ class RequiresContextResult(
           >>> from returns.context import RequiresContextResult
           >>> from returns.result import Success, Failure, Result
 
-          >>> def function(number: int) -> Result[int, str]:
-          ...     if number > 0:
-          ...         return Success(number + 1)
-          ...     return Failure('<0')
+          >>> def function(num: int) -> Result[int, str]:
+          ...     return Success(num + 1) if num > 0 else Failure('<0')
 
           >>> assert RequiresContextResult.from_value(1).bind_result(
           ...     function,

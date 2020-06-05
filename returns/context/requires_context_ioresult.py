@@ -18,11 +18,11 @@ from returns.context import NoDeps
 from returns.io import IO, IOFailure, IOResult, IOSuccess
 from returns.primitives.container import BaseContainer
 from returns.primitives.types import Immutable
+from returns.result import Result
 
 if TYPE_CHECKING:
     from returns.context.requires_context import RequiresContext
     from returns.context.requires_context_result import RequiresContextResult
-    from returns.result import Result
 
 # Context:
 _EnvType = TypeVar('_EnvType', contravariant=True)
@@ -269,10 +269,8 @@ class RequiresContextIOResult(
           >>> from returns.result import Success, Failure, Result
           >>> from returns.io import IOSuccess, IOFailure
 
-          >>> def function(number: int) -> Result[int, str]:
-          ...     if number > 0:
-          ...         return Success(number + 1)
-          ...     return Failure('<0')
+          >>> def function(num: int) -> Result[int, str]:
+          ...     return Success(num + 1) if num > 0 else Failure('<0')
 
           >>> assert RequiresContextIOResult.from_value(1).bind_result(
           ...     function,
@@ -417,12 +415,10 @@ class RequiresContextIOResult(
         .. code:: python
 
           >>> from returns.context import RequiresContextIOResult
-          >>> from returns.io import IOSuccess, IOFailure
+          >>> from returns.io import IOResult, IOSuccess, IOFailure
 
-          >>> def function(number: int) -> IOResult[int, str]:
-          ...     if number > 0:
-          ...         return IOSuccess(number + 1)
-          ...     return IOFailure('<0')
+          >>> def function(num: int) -> IOResult[int, str]:
+          ...     return IOSuccess(num + 1) if num > 0 else IOFailure('<0')
 
           >>> assert RequiresContextIOResult.from_value(1).bind_ioresult(
           ...     function,
