@@ -73,6 +73,67 @@ This helps a lot when separating pure and impure
 FutureResult
 ------------
 
+This container becomes very useful when working
+with ``async`` function that can fail.
+
+It works the similar way regular ``Result`` does.
+And is literally a wrapper around ``Future[Result[_V, _E]]`` type.
+
+Let's see how it can be used in a real program:
+
+.. code:: python
+
+  from typing import Sequence
+
+  import anyio
+  import httpx
+  from typing_extensions import Final, TypedDict
+  from returns.future import FutureResultE, future_safe
+
+  _URL: Final = 'https://jsonplaceholder.typicode.com/posts/{0}'
+  _Post = TypedDict('_Post', {
+      'id': int,
+      'userId': int,
+      'title': str,
+      'body': str,
+  })
+  _TitleOnly = TypedDict('_TitleOnly', {'title': str})
+
+  @future_safe
+  async def _fetch_post(post_id: int) -> _Post:
+      # Ideally, we can use `ReaderFutureResult` to provide `client` from deps.
+      async with httpx.AsyncClient(timeout=5) as client:
+          response = await client.get(_URL.format(post_id))
+          response.raise_for_status()
+          return response.json()
+
+  def show_titles(number_of_posts: int) -> FutureResultE[Sequence[_TitleOnly]]:
+      return FutureResultE.from_iterable([
+          # Notice how easily we compose async and sync functions:
+          _fetch_post(post_id).map(lambda post: post['title'])
+          # TODO: try `for post_id in {2, 1, 0}:` to see how errors work
+          for post_id in range(1, number_of_posts + 1)
+      ])
+
+  if __name__ == '__main__':
+      # Let's fetch 3 titles of posts asynchronously:
+      print(anyio.run(show_titles(3).awaitable))
+      # <IOResult: <Success: (
+      #    'sunt aut facere repellat provident occaecati ...',
+      #    'qui est esse',
+      #    'ea molestias quasi exercitationem repellat qui ipsa sit aut',
+      # )>>
+
+What is different?
+
+1. We can now easily make ``show_titles`` sync,
+   we can also make ``_fetch_post`` sync,
+   but we would need to use ``ReaderFutureResult`` container
+   with proper dependencies in this case
+2. We now don't care about errors at all.
+   In this example any error will cancel the whole pipeline
+3. We now have ``.map`` method to easily compose sync and async functions
+
 
 Aliases
 -------
