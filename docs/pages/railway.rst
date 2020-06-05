@@ -176,3 +176,4 @@ Further reading
 ---------------
 
 - `Railway oriented programming in F# <https://fsharpforfunandprofit.com/rop/>`_
+- `Against Railway-Oriented Programming <https://fsharpforfunandprofit.com/posts/against-railway-oriented-programming/>`_
