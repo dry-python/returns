@@ -110,6 +110,17 @@ async def async_bind_future(
     return container  # type: ignore[return-value]
 
 
+async def async_bind_async_future(
+    function: Callable[[_ValueType], Awaitable['Future[_NewValueType]']],
+    inner_value: Awaitable[Result[_ValueType, _ErrorType]],
+) -> Result[_NewValueType, _ErrorType]:
+    """Async binds a container returning ``IO`` over a value."""
+    container = await inner_value
+    if isinstance(container, Result.success_type):
+        return await async_from_success(await function(container.unwrap()))
+    return container  # type: ignore[return-value]
+
+
 async def async_fix(
     function: Callable[[_ErrorType], _NewValueType],
     inner_value: Awaitable[Result[_ValueType, _ErrorType]],

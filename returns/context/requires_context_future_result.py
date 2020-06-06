@@ -600,7 +600,7 @@ class RequiresContextFutureResult(
 
           >>> failed = RequiresContextFutureResult.from_failure(':(')
           >>> assert anyio.run(
-          ...     failed.bind_future_result(function),
+          ...     failed.bind_future(function),
           ...     RequiresContextFutureResult.empty,
           ... ) == IOFailure(':(')
 
@@ -645,6 +645,81 @@ class RequiresContextFutureResult(
         """
         return RequiresContextFutureResult(
             lambda deps: self(deps).bind(function),
+        )
+
+    def bind_async_future(
+        self,
+        function: Callable[[_ValueType], Awaitable[Future[_NewValueType]]],
+    ) -> 'RequiresContextFutureResult[_EnvType, _NewValueType, _ErrorType]':
+        """
+        Binds ``Future`` returning async function to the current container.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.context import RequiresContextFutureResult
+          >>> from returns.future import Future
+          >>> from returns.io import IOSuccess, IOFailure
+
+          >>> def function(num: int) -> Future[int]:
+          ...     return Future.from_value(num + 1)
+
+          >>> assert anyio.run(
+          ...     RequiresContextFutureResult.from_value(1).bind_future(
+          ...         function,
+          ...     ),
+          ...     RequiresContextFutureResult.empty,
+          ... ) == IOSuccess(2)
+
+          >>> failed = RequiresContextFutureResult.from_failure(':(')
+          >>> assert anyio.run(
+          ...     failed.bind_future(function),
+          ...     RequiresContextFutureResult.empty,
+          ... ) == IOFailure(':(')
+
+        """
+        return RequiresContextFutureResult(
+            lambda deps: self(deps).bind_async_future(function),
+        )
+
+    def bind_async_future_result(
+        self,
+        function: Callable[
+            [_ValueType],
+            Awaitable[FutureResult[_NewValueType, _ErrorType]],
+        ],
+    ) -> 'RequiresContextFutureResult[_EnvType, _NewValueType, _ErrorType]':
+        """
+        Bind ``FutureResult`` returning async function to the current container.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.context import RequiresContextFutureResult
+          >>> from returns.future import FutureResult
+          >>> from returns.io import IOSuccess, IOFailure
+
+          >>> async def function(num: int) -> FutureResult[int, str]:
+          ...     return FutureResult.from_value(num + 1)
+
+          >>> assert anyio.run(
+          ...     RequiresContextFutureResult.from_value(
+          ...         1,
+          ...     ).bind_async_future_result(
+          ...         function,
+          ...     ),
+          ...     RequiresContextFutureResult.empty,
+          ... ) == IOSuccess(2)
+
+          >>> failed = RequiresContextFutureResult.from_failure(':(')
+          >>> assert anyio.run(
+          ...     failed.bind_async_future_result(function),
+          ...     RequiresContextFutureResult.empty,
+          ... ) == IOFailure(':(')
+
+        """
+        return RequiresContextFutureResult(
+            lambda deps: self(deps).bind_async(function),
         )
 
     def fix(

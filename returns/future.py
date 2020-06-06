@@ -879,6 +879,39 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
             function, self._inner_value,
         ))
 
+    def bind_async_future(
+        self,
+        function: Callable[[_ValueType], Awaitable['Future[_NewValueType]']],
+    ) -> 'FutureResult[_NewValueType, _ErrorType]':
+        """
+        Composes a container and ``async`` function returning ``Future``.
+
+        Similar to :meth:`~FutureResult.bind_future`
+        but works with async functions.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.future import Future, FutureResult
+          >>> from returns.io import IOSuccess, IOFailure
+
+          >>> async def coroutine(x: int) -> Future[str]:
+          ...    return Future.from_value(str(x + 1))
+
+          >>> assert anyio.run(
+          ...     FutureResult.from_value(1).bind_async_future,
+          ...     coroutine,
+          ... ) == IOSuccess('2')
+          >>> assert anyio.run(
+          ...     FutureResult.from_failure(1).bind_async,
+          ...     coroutine,
+          ... ) == IOFailure(1)
+
+        """
+        return FutureResult(_future_result.async_bind_async_future(
+            function, self._inner_value,
+        ))
+
     def unify(
         self,
         function: Callable[
