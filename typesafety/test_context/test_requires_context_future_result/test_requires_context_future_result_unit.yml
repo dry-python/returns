@@ -69,6 +69,39 @@
     reveal_type(RequiresContextFutureResult.from_ioresult(r))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[Any, builtins.int*, builtins.str*]'
 
 
+- case: requires_context_future_result_future
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextFutureResult
+    from returns.future import Future
+
+    r: Future[int]
+
+    reveal_type(RequiresContextFutureResult.from_future(r))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[Any, builtins.int*, Any]'
+
+
+- case: requires_context_future_result_failed_future
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextFutureResult
+    from returns.future import Future
+
+    r: Future[int]
+
+    reveal_type(RequiresContextFutureResult.from_failed_future(r))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[Any, Any, builtins.int*]'
+
+
+- case: requires_context_future_result_future_result
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextFutureResult
+    from returns.future import FutureResult
+
+    r: FutureResult[int, str]
+
+    reveal_type(RequiresContextFutureResult.from_future_result(r))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[Any, builtins.int*, builtins.str*]'
+
+
 - case: requires_context_future_result_typecast
   disable_cache: true
   main: |
@@ -108,3 +141,13 @@
     r: RequiresContextResult[float, int, str]
 
     reveal_type(RequiresContextFutureResult.from_result_context(r))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.float*, builtins.int*, builtins.str*]'
+
+
+- case: requires_context_future_result_from_ioresult_context
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextFutureResult, RequiresContextIOResult
+
+    r: RequiresContextIOResult[float, int, str]
+
+    reveal_type(RequiresContextFutureResult.from_ioresult_context(r))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.float*, builtins.int*, builtins.str*]'

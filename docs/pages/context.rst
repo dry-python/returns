@@ -424,8 +424,9 @@ How to create unit objects?
 - ``from_io`` when you have successful ``IO`` container
 - ``from_failed_io`` when you have failed ``IO`` container
 - ``from_ioresult`` when you already have ``IOResult`` container
-- ``from_context`` when you have successful ``RequiresContext``
-- ``from_failed_context`` when you have failed ``RequiresContext``
+- ``from_context`` when you have successful ``RequiresContext`` container
+- ``from_failed_context`` when you have failed ``RequiresContext`` container
+- ``from_result_context`` when you have ``RequiresContextResult`` container
 - ``from_typecast`` when you have ``RequiresContext[..., IOResult]``
 
 ``RequiresContextFutureResult`` requires
@@ -437,8 +438,13 @@ you to use one of the following methods:
 - ``from_io`` when you have successful ``IO`` container
 - ``from_failed_io`` when you have failed ``IO`` container
 - ``from_ioresult`` when you already have ``IOResult`` container
+- ``from_future`` when you already have successful ``Future`` container
+- ``from_failed_future`` when you already have failed ``Future`` container
+- ``from_future_result`` when you already have ``FutureResult`` container
 - ``from_context`` when you have successful ``RequiresContext``
 - ``from_failed_context`` when you have failed ``RequiresContext``
+- ``from_result_context`` when you have ``RequiresContextResult`` container
+- ``from_ioresult_context`` when you have ``RequiresContextIOResult`` container
 - ``from_typecast`` when you have ``RequiresContext[..., IOResult]``
 
 How can I access dependencies inside the context?

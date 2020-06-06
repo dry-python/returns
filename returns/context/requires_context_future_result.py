@@ -17,7 +17,7 @@ from typing_extensions import final
 from returns._generated.futures import _future_result
 from returns._generated.iterable import iterable
 from returns.context import NoDeps
-from returns.future import FutureResult
+from returns.future import Future, FutureResult
 from returns.io import IO, IOResult
 from returns.primitives.container import BaseContainer
 from returns.primitives.types import Immutable
@@ -26,6 +26,9 @@ from returns.result import Result
 if TYPE_CHECKING:
     from returns.context.requires_context import RequiresContext
     from returns.context.requires_context_result import RequiresContextResult
+    from returns.context.requires_context_ioresult import (
+        RequiresContextIOResult,
+    )
 
 # Context:
 _EnvType = TypeVar('_EnvType', contravariant=True)
@@ -741,6 +744,90 @@ class RequiresContextFutureResult(
         )
 
     @classmethod
+    def from_future(
+        cls,
+        inner_value: Future[_ValueType],
+    ) -> 'RequiresContextFutureResult[NoDeps, _ValueType, Any]':
+        """
+        Creates new container with successful ``Future`` as a unit value.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.context import RequiresContextFutureResult
+          >>> from returns.future import Future
+          >>> from returns.io import IOSuccess
+
+          >>> assert anyio.run(
+          ...    RequiresContextFutureResult.from_future(Future.from_value(1)),
+          ...    RequiresContextFutureResult.empty,
+          ... ) == IOSuccess(1)
+
+        """
+        return RequiresContextFutureResult(
+            lambda _: FutureResult.from_future(inner_value),
+        )
+
+    @classmethod
+    def from_failed_future(
+        cls,
+        inner_value: Future[_ErrorType],
+    ) -> 'RequiresContextFutureResult[NoDeps, Any, _ErrorType]':
+        """
+        Creates new container with failed ``Future`` as a unit value.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.context import RequiresContextFutureResult
+          >>> from returns.future import Future
+          >>> from returns.io import IOSuccess
+
+          >>> assert anyio.run(
+          ...    RequiresContextFutureResult.from_failed_future(
+          ...        Future.from_value(1),
+          ...    ),
+          ...    RequiresContextFutureResult.empty,
+          ... ) == IOSuccess(1)
+
+        """
+        return RequiresContextFutureResult(
+            lambda _: FutureResult.from_failed_future(inner_value),
+        )
+
+    @classmethod
+    def from_future_result(
+        cls,
+        inner_value: FutureResult[_ValueType, _ErrorType],
+    ) -> 'RequiresContextFutureResult[NoDeps, _ValueType, _ErrorType]':
+        """
+        Creates new container with ``FutureResult`` as a unit value.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.context import RequiresContextFutureResult
+          >>> from returns.future import FutureResult
+          >>> from returns.io import IOSuccess, IOFailure
+
+          >>> assert anyio.run(
+          ...    RequiresContextFutureResult.from_future_result(
+          ...        FutureResult.from_value(1),
+          ...    ),
+          ...    RequiresContextFutureResult.empty,
+          ... ) == IOSuccess(1)
+
+          >>> assert anyio.run(
+          ...    RequiresContextFutureResult.from_future_result(
+          ...        FutureResult.from_failure(1),
+          ...    ),
+          ...    RequiresContextFutureResult.empty,
+          ... ) == IOFailure(1)
+
+        """
+        return RequiresContextFutureResult(lambda _: inner_value)
+
+    @classmethod
     def from_typecast(
         cls,
         inner_value: 'RequiresContext['
@@ -859,6 +946,40 @@ class RequiresContextFutureResult(
         """
         return RequiresContextFutureResult(
             lambda deps: FutureResult.from_result(inner_value(deps)),
+        )
+
+    @classmethod
+    def from_ioresult_context(
+        cls,
+        inner_value:
+            'RequiresContextIOResult[_EnvType, _ValueType, _ErrorType]',
+    ) -> 'RequiresContextFutureResult[_EnvType, _ValueType, _ErrorType]':
+        """
+        Creates new container from ``RequiresContextIOResult`` as a unit value.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.context import RequiresContextIOResult
+          >>> from returns.io import IOSuccess, IOFailure
+
+          >>> assert anyio.run(
+          ...     RequiresContextFutureResult.from_ioresult_context(
+          ...         RequiresContextIOResult.from_value(1),
+          ...     ),
+          ...     RequiresContextFutureResult.empty,
+          ... ) == IOSuccess(1)
+
+          >>> assert anyio.run(
+          ...     RequiresContextFutureResult.from_ioresult_context(
+          ...         RequiresContextIOResult.from_failure(1),
+          ...     ),
+          ...     RequiresContextFutureResult.empty,
+          ... ) == IOFailure(1)
+
+        """
+        return RequiresContextFutureResult(
+            lambda deps: FutureResult.from_ioresult(inner_value(deps)),
         )
 
     @classmethod
