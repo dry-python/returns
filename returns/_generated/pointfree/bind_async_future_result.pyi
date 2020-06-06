@@ -1,4 +1,4 @@
-from typing import Awaitable, Callable, TypeVar, overload
+from typing import Awaitable, Callable, TypeVar
 
 from typing_extensions import Protocol
 
