@@ -466,6 +466,48 @@ class RequiresContextFutureResult(
             ),
         )
 
+    def bind_context_ioresult(
+        self,
+        function: Callable[
+            [_ValueType],
+            'RequiresContextIOResult[_EnvType, _NewValueType, _ErrorType]',
+        ],
+    ) -> 'RequiresContextFutureResult[_EnvType, _NewValueType, _ErrorType]':
+        """
+        Binds ``RequiresContextIOResult`` returning function to the current one.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.context import RequiresContextIOResult
+          >>> from returns.io import IOSuccess, IOFailure
+
+          >>> def function(arg: int) -> RequiresContextIOResult[str, int, int]:
+          ...     return RequiresContextIOResult(
+          ...         lambda deps: IOSuccess(len(deps) + arg),
+          ...     )
+
+          >>> instance = RequiresContextFutureResult.from_value(
+          ...    2,
+          ... ).bind_context_ioresult(
+          ...     function,
+          ... )('abc')
+          >>> assert anyio.run(instance.awaitable) == IOSuccess(5)
+
+          >>> instance = RequiresContextFutureResult.from_failure(
+          ...    2,
+          ... ).bind_context_ioresult(
+          ...     function,
+          ... )('abc')
+          >>> assert anyio.run(instance.awaitable) == IOFailure(2)
+
+        """
+        return RequiresContextFutureResult(
+            lambda deps: self(deps).bind_ioresult(
+                lambda inner: function(inner)(deps),  # type: ignore[misc]
+            ),
+        )
+
     def bind_io(
         self,
         function: Callable[[_ValueType], IO[_NewValueType]],

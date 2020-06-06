@@ -56,6 +56,7 @@ _TYPED_PROTOCOL_OVERLOADED: Final = frozenset((
     'returns._generated.pointfree.bind_future_result._bind_future_result',
     'returns._generated.pointfree.bind_context._bind_context',
     'returns._generated.pointfree.bind_context_result._bind_context_result',
+    'returns._generated.pointfree.bind_context_ioresult._bind_context_ioresult',
     'returns._generated.pointfree.bind_awaitable._bind_awaitable',
 
     'returns._generated.pointfree.value_or._value_or',

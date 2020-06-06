@@ -8,6 +8,9 @@ from returns._generated.pointfree.bind_awaitable import (
 from returns._generated.pointfree.bind_context import (
     _bind_context as bind_context,
 )
+from returns._generated.pointfree.bind_context_ioresult import (
+    _bind_context_ioresult as bind_context_ioresult,
+)
 from returns._generated.pointfree.bind_context_result import (
     _bind_context_result as bind_context_result,
 )
