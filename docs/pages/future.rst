@@ -85,8 +85,8 @@ Let's see how it can be used in a real program:
 
   from typing import Sequence
 
-  import anyio
-  import httpx
+  import anyio  # you would need to `pip install anyio`
+  import httpx  # you would need to `pip install httpx`
   from typing_extensions import Final, TypedDict
   from returns.future import FutureResultE, future_safe
 
@@ -134,6 +134,11 @@ What is different?
    In this example any error will cancel the whole pipeline
 3. We now have ``.map`` method to easily compose sync and async functions
 
+You can see the next example
+with :ref:`RequiresContextFutureResult <requires_context_future_result>`
+and without a single ``async/await``.
+That example illustrates the whole point of our actions: writting
+sync code that executes asynchronously without any magic at all.
 
 Aliases
 -------

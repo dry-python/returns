@@ -26,7 +26,6 @@ def _bind_future(function):
         ...     container = FutureResult.from_failure(1)
         ...     return await bind_future(example)(container)
 
-
         >>> assert anyio.run(success) == IOSuccess(0.5)
         >>> assert anyio.run(failure) == IOFailure(1)
 

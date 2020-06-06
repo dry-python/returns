@@ -302,11 +302,77 @@ Use it when you work with impure context-related functions that might fail.
 This is basically **the main type** that is going to be used in most apps.
 
 
+.. _requires_context_future_result:
+
 RequiresContextFutureResult container
 -------------------------------------
 
 This container is a combintaion of ``RequiresContext[env, FutureResult[a, b]]``.
 Which means that it is a wrapper around impure async function that might fail.
+
+Here's how it should be used:
+
+.. code:: python
+
+  from typing import Sequence
+
+  import anyio  # you wound need to `pip install anyio`
+  import httpx  # you wound need to `pip install httpx`
+  from typing_extensions import Final, TypedDict
+
+  from returns.context import ContextFutureResult, RequiresContextFutureResultE
+  from returns.functions import tap
+  from returns.future import FutureResultE, future_safe
+  from returns.pipeline import managed
+
+  _URL: Final = 'https://jsonplaceholder.typicode.com/posts/{0}'
+  _Post = TypedDict('_Post', {
+      'id': int,
+      'userId': int,
+      'title': str,
+      'body': str,
+  })
+  _TitleOnly = TypedDict('_TitleOnly', {'title': str})
+
+  def _close(client: httpx.AsyncClient, _) -> FutureResultE[None]:
+      return future_safe(client.aclose)()
+
+  def _fetch_post(
+      post_id: int,
+  ) -> RequiresContextFutureResultE[httpx.AsyncClient, _Post]:
+      return ContextFutureResult[httpx.AsyncClient].ask().bind_future_result(
+          lambda client: future_safe(client.get)(_URL.format(post_id)),
+      ).map(
+          lambda response: tap(httpx.Response.raise_for_status)(response),
+      ).map(
+          lambda response: response.json(),
+      )
+
+  def show_titles(
+      number_of_posts: int,
+  ) -> RequiresContextFutureResultE[httpx.AsyncClient, Sequence[_TitleOnly]]:
+      return RequiresContextFutureResultE.from_iterable([
+          # Notice how easily we compose async and sync functions:
+          _fetch_post(post_id).map(lambda post: post['title'])
+          # TODO: try `for post_id in {2, 1, 0}:` to see how errors work
+          for post_id in range(1, number_of_posts + 1)
+      ])
+
+  if __name__ == '__main__':
+      # Let's fetch 3 titles of posts asynchronously:
+      managed_httpx = managed(show_titles(3), _close)
+      future_result = managed_httpx(
+          FutureResultE.from_value(httpx.AsyncClient(timeout=5)),
+      )
+      print(anyio.run(future_result.awaitable))
+      # <IOResult: <Success: (
+      #    'sunt aut facere repellat provident occaecati ...',
+      #    'qui est esse',
+      #    'ea molestias quasi exercitationem repellat qui ipsa sit aut',
+      # )>>
+
+This example illustrates the whole point of our actions: writting
+sync code that executes asynchronously without any magic at all!
 
 We also added a lot of useful methods for this container,
 so you can work easily with it.
@@ -324,6 +390,8 @@ These methods are identical with ``RequiresContextIOResult``:
   allows to bind functions that return ``IO`` with just one call
 - :meth:`~RequiresContextFutureResult.bind_ioresult`
   allows to bind functions that return ``IOResult`` with just one call
+- :meth:`~RequiresContextFutureResult.bind_future_result`
+  allows to bind functions that return ``FutureResult`` with just one call
 - :meth:`~RequiresContextFutureResult.bind_context`
   allows to bind functions that return ``RequiresContext`` easily
 - :meth:`~RequiresContextFutureResult.bind_context_result`

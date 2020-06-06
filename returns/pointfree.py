@@ -12,6 +12,9 @@ from returns._generated.pointfree.bind_context_result import (
     _bind_context_result as bind_context_result,
 )
 from returns._generated.pointfree.bind_future import _bind_future as bind_future
+from returns._generated.pointfree.bind_future_result import (
+    _bind_future_result as bind_future_result,
+)
 from returns._generated.pointfree.bind_io import _bind_io as bind_io
 from returns._generated.pointfree.bind_ioresult import (
     _bind_ioresult as bind_ioresult,

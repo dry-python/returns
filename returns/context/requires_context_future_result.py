@@ -449,6 +449,79 @@ class RequiresContextFutureResult(
             lambda deps: self(deps).bind_ioresult(function),
         )
 
+    def bind_future(
+        self,
+        function: Callable[[_ValueType], Future[_NewValueType]],
+    ) -> 'RequiresContextFutureResult[_EnvType, _NewValueType, _ErrorType]':
+        """
+        Binds ``Future`` returning function to the current container.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.context import RequiresContextFutureResult
+          >>> from returns.future import Future
+          >>> from returns.io import IOSuccess, IOFailure
+
+          >>> def function(num: int) -> Future[int]:
+          ...     return Future.from_value(num + 1)
+
+          >>> assert anyio.run(
+          ...     RequiresContextFutureResult.from_value(1).bind_future(
+          ...         function,
+          ...     ),
+          ...     RequiresContextFutureResult.empty,
+          ... ) == IOSuccess(2)
+
+          >>> failed = RequiresContextFutureResult.from_failure(':(')
+          >>> assert anyio.run(
+          ...     failed.bind_future_result(function),
+          ...     RequiresContextFutureResult.empty,
+          ... ) == IOFailure(':(')
+
+        """
+        return RequiresContextFutureResult(
+            lambda deps: self(deps).bind_future(function),
+        )
+
+    def bind_future_result(
+        self,
+        function: Callable[
+            [_ValueType],
+            FutureResult[_NewValueType, _ErrorType],
+        ],
+    ) -> 'RequiresContextFutureResult[_EnvType, _NewValueType, _ErrorType]':
+        """
+        Binds ``FutureResult`` returning function to the current container.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.context import RequiresContextFutureResult
+          >>> from returns.future import FutureResult
+          >>> from returns.io import IOSuccess, IOFailure
+
+          >>> def function(num: int) -> FutureResult[int, str]:
+          ...     return FutureResult.from_value(num + 1)
+
+          >>> assert anyio.run(
+          ...     RequiresContextFutureResult.from_value(1).bind_future_result(
+          ...         function,
+          ...     ),
+          ...     RequiresContextFutureResult.empty,
+          ... ) == IOSuccess(2)
+
+          >>> failed = RequiresContextFutureResult.from_failure(':(')
+          >>> assert anyio.run(
+          ...     failed.bind_future_result(function),
+          ...     RequiresContextFutureResult.empty,
+          ... ) == IOFailure(':(')
+
+        """
+        return RequiresContextFutureResult(
+            lambda deps: self(deps).bind(function),
+        )
+
     def fix(
         self, function: Callable[[_ErrorType], _NewValueType],
     ) -> 'RequiresContextFutureResult[_EnvType, _NewValueType, _ErrorType]':
@@ -781,14 +854,14 @@ class RequiresContextFutureResult(
           >>> import anyio
           >>> from returns.context import RequiresContextFutureResult
           >>> from returns.future import Future
-          >>> from returns.io import IOSuccess
+          >>> from returns.io import IOFailure
 
           >>> assert anyio.run(
           ...    RequiresContextFutureResult.from_failed_future(
           ...        Future.from_value(1),
           ...    ),
           ...    RequiresContextFutureResult.empty,
-          ... ) == IOSuccess(1)
+          ... ) == IOFailure(1)
 
         """
         return RequiresContextFutureResult(

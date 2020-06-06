@@ -1,4 +1,4 @@
-- case: bind_io_and_flow
+- case: bind_future_and_flow
   disable_cache: true
   main: |
     from returns.functions import identity
@@ -27,3 +27,17 @@
 
     x: FutureResult[float, str]
     reveal_type(bind_future(test)(x))  # N: Revealed type is 'returns.future.FutureResult[builtins.int, builtins.str*]'
+
+
+- case: bind_future_requires_context_future_result
+  disable_cache: true
+  main: |
+    from returns.pointfree import bind_future
+    from returns.future import Future
+    from returns.context import ReaderFutureResult
+
+    def test(arg: float) -> Future[int]:
+        ...
+
+    x: ReaderFutureResult[bool, float, Exception]
+    reveal_type(bind_future(test)(x))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool*, builtins.int, builtins.Exception*]'
