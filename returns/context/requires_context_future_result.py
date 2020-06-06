@@ -661,11 +661,11 @@ class RequiresContextFutureResult(
           >>> from returns.future import Future
           >>> from returns.io import IOSuccess, IOFailure
 
-          >>> def function(num: int) -> Future[int]:
+          >>> async def function(num: int) -> Future[int]:
           ...     return Future.from_value(num + 1)
 
           >>> assert anyio.run(
-          ...     RequiresContextFutureResult.from_value(1).bind_future(
+          ...     RequiresContextFutureResult.from_value(1).bind_async_future(
           ...         function,
           ...     ),
           ...     RequiresContextFutureResult.empty,
@@ -673,7 +673,7 @@ class RequiresContextFutureResult(
 
           >>> failed = RequiresContextFutureResult.from_failure(':(')
           >>> assert anyio.run(
-          ...     failed.bind_future(function),
+          ...     failed.bind_async_future(function),
           ...     RequiresContextFutureResult.empty,
           ... ) == IOFailure(':(')
 
