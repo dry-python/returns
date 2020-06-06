@@ -41,7 +41,7 @@ async def async_bind(
     container = await inner_value
     if isinstance(container, Result.success_type):
         return (await function(container.unwrap()))._inner_value
-    return container  # type: ignore
+    return container  # type: ignore[return-value]
 
 
 async def async_bind_awaitable(
@@ -52,7 +52,7 @@ async def async_bind_awaitable(
     container = await inner_value
     if isinstance(container, Result.success_type):
         return Result.from_value(await function(container.unwrap()))
-    return container  # type: ignore
+    return container  # type: ignore[return-value]
 
 
 async def async_bind_async(
@@ -66,7 +66,7 @@ async def async_bind_async(
     container = await inner_value
     if isinstance(container, Result.success_type):
         return await (await function(container.unwrap()))._inner_value
-    return container  # type: ignore
+    return container  # type: ignore[return-value]
 
 
 async def async_bind_result(
@@ -85,7 +85,7 @@ async def async_bind_ioresult(
     container = await inner_value
     if isinstance(container, Result.success_type):
         return function(container.unwrap())._inner_value
-    return container  # type: ignore
+    return container  # type: ignore[return-value]
 
 
 async def async_bind_io(
@@ -96,7 +96,7 @@ async def async_bind_io(
     container = await inner_value
     if isinstance(container, Result.success_type):
         return Success(function(container.unwrap())._inner_value)
-    return container  # type: ignore
+    return container  # type: ignore[return-value]
 
 
 async def async_bind_future(
@@ -107,7 +107,7 @@ async def async_bind_future(
     container = await inner_value
     if isinstance(container, Result.success_type):
         return await async_from_success(function(container.unwrap()))
-    return container  # type: ignore
+    return container  # type: ignore[return-value]
 
 
 async def async_fix(

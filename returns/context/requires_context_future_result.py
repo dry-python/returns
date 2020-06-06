@@ -14,7 +14,7 @@ from typing import (
 
 from typing_extensions import final
 
-from returns._generated.futures import _future_result
+from returns._generated.futures import _future_result, _reader_future_result
 from returns._generated.iterable import iterable
 from returns.context import NoDeps
 from returns.future import Future, FutureResult
@@ -262,6 +262,89 @@ class RequiresContextFutureResult(
             lambda deps: self(deps).bind(
                 lambda inner: function(inner)(deps),  # type: ignore[misc]
             ),
+        )
+
+    def bind_async(
+        self,
+        function: Callable[
+            [_ValueType],
+            Awaitable[
+                'RequiresContextFutureResult'
+                '[_EnvType, _NewValueType, _ErrorType]'
+            ],
+        ],
+    ) -> 'RequiresContextFutureResult[_EnvType, _NewValueType, _ErrorType]':
+        """
+        Composes this container with a async function returning the same type.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.context import RequiresContextFutureResult
+          >>> from returns.io import IOSuccess, IOFailure
+
+          >>> async def function(
+          ...     number: int,
+          ... ) -> RequiresContextFutureResult[int, str, int]:
+          ...     return RequiresContextFutureResult.from_value(number + 1)
+
+          >>> assert anyio.run(
+          ...     RequiresContextFutureResult.from_value(1).bind_async(
+          ...        function,
+          ...     ),
+          ...     RequiresContextFutureResult.empty,
+          ... ) == IOSuccess(2)
+          >>> assert anyio.run(
+          ...     RequiresContextFutureResult.from_failure(1).bind_async(
+          ...        function,
+          ...     ),
+          ...     RequiresContextFutureResult.empty,
+          ... ) == IOFailure(1)
+
+        """
+        return RequiresContextFutureResult(
+            lambda deps: FutureResult(_reader_future_result.async_bind_async(
+                function, self, deps,
+            )),
+        )
+
+    def bind_awaitable(
+        self,
+        function: Callable[[_ValueType], 'Awaitable[_NewValueType]'],
+    ) -> 'RequiresContextFutureResult[_EnvType, _NewValueType, _ErrorType]':
+        """
+        Allows to compose a container and a regular ``async`` function.
+
+        This function should return plain, non-container value.
+        See :meth:`~RequiresContextFutureResult.bind_async`
+        to bind ``async`` function that returns a container.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.context import RequiresContextFutureResult
+          >>> from returns.io import IOSuccess, IOFailure
+
+          >>> async def coroutine(x: int) -> int:
+          ...    return x + 1
+
+          >>> assert anyio.run(
+          ...     RequiresContextFutureResult.from_value(1).bind_awaitable(
+          ...         coroutine,
+          ...     ),
+          ...     RequiresContextFutureResult.empty,
+          ... ) == IOSuccess(2)
+
+          >>> assert anyio.run(
+          ...     RequiresContextFutureResult.from_failure(1).bind_awaitable(
+          ...         coroutine,
+          ...     ),
+          ...     RequiresContextFutureResult.empty,
+          ... ) == IOFailure(1)
+
+        """
+        return RequiresContextFutureResult(
+            lambda deps: self(deps).bind_awaitable(function),
         )
 
     def bind_result(

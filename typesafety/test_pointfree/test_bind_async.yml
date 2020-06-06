@@ -22,3 +22,17 @@
 
     x: FutureResult[float, str]
     reveal_type(bind_async(test)(x))  # N: Revealed type is 'returns.future.FutureResult[builtins.int*, builtins.str*]'
+
+
+- case: bind_async_requires_context_future_result
+  disable_cache: true
+  main: |
+    from returns.pointfree import bind_async
+    from returns.context import RequiresContextFutureResult
+
+    async def test(arg: int) -> RequiresContextFutureResult[bool, float, str]:
+        ...
+
+    first: RequiresContextFutureResult[bool, int, str]
+
+    reveal_type(bind_async(test)(first))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool*, builtins.float*, builtins.str*]'

@@ -33,6 +33,32 @@
     reveal_type(x.bind(test))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.str, builtins.bool*, builtins.float]'
 
 
+- case: requires_context_future_result_bind_awaitable
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextFutureResult
+
+    async def bind_awaitable(arg: int) -> float:
+        ...
+
+    first: RequiresContextFutureResult[bool, int, str]
+
+    reveal_type(first.bind_awaitable(bind_awaitable))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool, builtins.float*, builtins.str]'
+
+
+- case: requires_context_future_result_bind_async
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextFutureResult
+
+    async def bind_async(arg: int) -> RequiresContextFutureResult[bool, float, str]:
+        ...
+
+    first: RequiresContextFutureResult[bool, int, str]
+
+    reveal_type(first.bind_async(bind_async))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool, builtins.float*, builtins.str]'
+
+
 - case: requires_context_future_result_bind_result
   disable_cache: true
   main: |

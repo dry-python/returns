@@ -260,9 +260,6 @@ so you can work easily with it:
 
 .. currentmodule:: returns.context.requires_context_result
 
-- :meth:`~RequiresContextResult.from_typecast`
-  turns accidental ``RequiresContext[env, Result[a, b]]`` into
-  full-featured ``RequiresContextResult[env, a, b]``
 - :meth:`~RequiresContextResult.bind_result`
   allows to bind functions that return ``Result`` with just one call
 - :meth:`~RequiresContextResult.bind_context`
@@ -283,9 +280,6 @@ so you can work easily with it:
 
 .. currentmodule:: returns.context.requires_context_ioresult
 
-- :meth:`~RequiresContextIOResult.from_typecast`
-  turns accidental ``RequiresContext[env, IOResult[a, b]]`` into
-  full-featured ``RequiresContextIOResult[env, a, b]``
 - :meth:`~RequiresContextIOResult.bind_result`
   allows to bind functions that return ``Result`` with just one call
 - :meth:`~RequiresContextIOResult.bind_io`
@@ -381,9 +375,6 @@ These methods are identical with ``RequiresContextIOResult``:
 
 .. currentmodule:: returns.context.requires_context_future_result
 
-- :meth:`~RequiresContextFutureResult.from_typecast`
-  turns accidental ``RequiresContext[env, IOResult[a, b]]`` into
-  full-featured ``RequiresContextFutureResult[env, a, b]``
 - :meth:`~RequiresContextFutureResult.bind_result`
   allows to bind functions that return ``Result`` with just one call
 - :meth:`~RequiresContextFutureResult.bind_io`

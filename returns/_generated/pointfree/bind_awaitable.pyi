@@ -2,11 +2,13 @@ from typing import Awaitable, Callable, TypeVar, overload
 
 from typing_extensions import Protocol
 
+from returns.context import RequiresContextFutureResult
 from returns.future import Future, FutureResult
 
 _ValueType = TypeVar('_ValueType', contravariant=True)
 _ErrorType = TypeVar('_ErrorType')
 _NewValueType = TypeVar('_NewValueType', covariant=True)
+_EnvType = TypeVar('_EnvType')
 
 
 class _BindAwaitable(Protocol[_ValueType, _NewValueType]):
@@ -31,6 +33,15 @@ class _BindAwaitable(Protocol[_ValueType, _NewValueType]):
         self,
         container: FutureResult[_ValueType, _ErrorType],
     ) -> FutureResult[_NewValueType, _ErrorType]:
+        ...
+
+    @overload
+    def __call__(
+        self,
+        container: RequiresContextFutureResult[
+            _EnvType, _ValueType, _ErrorType,
+        ],
+    ) -> RequiresContextFutureResult[_EnvType, _NewValueType, _ErrorType]:
         ...
 
 
