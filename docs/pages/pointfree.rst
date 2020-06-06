@@ -105,7 +105,10 @@ We also have a long list of other ``bind_*`` functions, like:
 - ``bind_result`` to bind functions returning ``Result`` container
 - ``bind_ioresult`` to bind functions returning ``IOResult`` container
 - ``bind_future`` to bind functions returning ``Future`` container
+- ``bind_async_future`` to bind async functions returning ``Future`` container
 - ``bind_future_result`` to bind functions returning ``FutureResult`` container
+- ``bind_async_future_result`` to bind async functions
+  returning ``FutureResult`` container
 - ``bind_context`` to bind functions returning ``RequiresContext`` container
 - ``bind_context_result`` to bind functions
   returning ``RequiresContextResult`` container
@@ -241,7 +244,11 @@ API Reference
 
 .. autofunction:: returns.pointfree.bind_future
 
+.. autofunction:: returns.pointfree.bind_async_future
+
 .. autofunction:: returns.pointfree.bind_future_result
+
+.. autofunction:: returns.pointfree.bind_async_future_result
 
 .. autofunction:: returns.pointfree.bind_context
 

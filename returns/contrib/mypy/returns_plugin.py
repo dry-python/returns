@@ -53,7 +53,12 @@ _TYPED_PROTOCOL_OVERLOADED: Final = frozenset((
     'returns._generated.pointfree.bind_io._bind_io',
     'returns._generated.pointfree.bind_ioresult._bind_ioresult',
     'returns._generated.pointfree.bind_future._bind_future',
+    'returns._generated.pointfree.bind_async_future._bind_async_future',
     'returns._generated.pointfree.bind_future_result._bind_future_result',
+    (
+        'returns._generated.pointfree.bind_async_future_result.' +
+        '_bind_async_future_result'
+    ),
     'returns._generated.pointfree.bind_context._bind_context',
     'returns._generated.pointfree.bind_context_result._bind_context_result',
     'returns._generated.pointfree.bind_context_ioresult._bind_context_ioresult',
