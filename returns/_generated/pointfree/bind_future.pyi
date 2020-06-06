@@ -2,8 +2,8 @@ from typing import Callable, TypeVar, overload
 
 from typing_extensions import Protocol
 
-from returns.future import Future, FutureResult
 from returns.context import RequiresContextFutureResult
+from returns.future import Future, FutureResult
 
 _ValueType = TypeVar('_ValueType', contravariant=True)
 _ErrorType = TypeVar('_ErrorType')
