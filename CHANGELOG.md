@@ -51,8 +51,11 @@ See [0Ver](https://0ver.org/).
 - Adds typed `bind_result`, `bind_io`, `bind_ioresult`,
   `bind_context`, `bind_context_result`, `bind_future`,
   `bind_async`, and `bind_awaitable` pointfree functions
+- Adds typed `bind_async_future` and `bind_async_future_result`
+  pointfree functions
 - Adds typed `unify` pointfree function
 - Adds typed `apply` pointfree function
+- Adds typed `value_or` pointfree function
 
 - Adds `pytest` plugin with the ability to tests error handling
 
