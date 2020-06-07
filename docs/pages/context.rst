@@ -308,7 +308,7 @@ Here's how it should be used:
 
 .. code:: python
 
-  from typing import Sequence
+  from typing import Callable, Sequence
 
   import anyio  # you wound need to `pip install anyio`
   import httpx  # you wound need to `pip install httpx`
@@ -318,6 +318,7 @@ Here's how it should be used:
   from returns.functions import tap
   from returns.future import FutureResultE, future_safe
   from returns.pipeline import managed
+  from returns.result import safe
 
   _URL: Final = 'https://jsonplaceholder.typicode.com/posts/{0}'
   _Post = TypedDict('_Post', {
@@ -336,8 +337,8 @@ Here's how it should be used:
   ) -> RequiresContextFutureResultE[httpx.AsyncClient, _Post]:
       return ContextFutureResult[httpx.AsyncClient].ask().bind_future_result(
           lambda client: future_safe(client.get)(_URL.format(post_id)),
-      ).map(
-          lambda response: tap(httpx.Response.raise_for_status)(response),
+      ).bind_result(
+          safe(tap(httpx.Response.raise_for_status)),
       ).map(
           lambda response: response.json(),
       )

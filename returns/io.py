@@ -720,7 +720,7 @@ class IOResult(
 
     def __str__(self) -> str:
         """Custom ``str`` representation for better readability."""
-        return '<IOResult: {0}>'.format(self._inner_value)
+        return '<IOResult: {0}>'.format(str(self._inner_value))
 
 
 @final

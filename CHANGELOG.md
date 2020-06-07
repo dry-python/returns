@@ -93,6 +93,8 @@ See [0Ver](https://0ver.org/).
 - Fixes that `RequiresContextResult` and `RequiresContextIOResult`
   were not `final`
 - Fixes that `ImmutableStateError` was not a subclass of `AttributeError`
+- Fixes that `IOResult` was not showing `str` representation
+  of wrapped `inner_value`
 
 ### Misc
 
