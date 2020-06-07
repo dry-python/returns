@@ -6,7 +6,7 @@ incremental in minor, bugfixes only are patches.
 See [0Ver](https://0ver.org/).
 
 
-## 0.14.0 WIP
+## 0.14.0
 
 ### Features
 

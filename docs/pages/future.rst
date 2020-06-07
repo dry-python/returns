@@ -257,6 +257,8 @@ Python happens to have its own meaning for this word.
 In our worldview, these two ``Future`` entities should never meet each other
 in a single codebase.
 
+It is also not related to `concurrent.Future <https://docs.python.org/3/library/concurrent.futures.html>`.
+
 How to create unit objects?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -293,6 +295,7 @@ You can always covert it with methods like
 Further reading
 ---------------
 
+- `How Async Should Have Been <https://sobolevn.me/2020/06/how-async-should-have-been>`_
 - `What Color is Your Function? <https://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function/>`_
 - `From Promises to Futures <https://dev.to/nadeesha/from-promises-to-futures-in-javascript-2m6g>`_
 
