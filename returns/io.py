@@ -719,7 +719,18 @@ class IOResult(
         return iterable(cls, inner_value)
 
     def __str__(self) -> str:
-        """Custom ``str`` representation for better readability."""
+        """
+        Custom ``str`` representation for better readability.
+
+        .. code:: python
+
+          >>> from returns.io import IOSuccess, IOFailure
+          >>> str(IOSuccess(1))
+          '<IOResult: <Success: 1>>'
+          >>> str(IOFailure(ValueError('wrong!')))
+          '<IOResult: <Failure: wrong!>>'
+
+        """
         return '<IOResult: {0}>'.format(str(self._inner_value))
 
 
