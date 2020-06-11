@@ -17,6 +17,10 @@ _ERRORS_COPIERS: Final = (
 
 @final
 class _ReturnsAsserts(object):
+    """Class with helpers assertions to check containers."""
+
+    __slots__ = ()
+
     def is_error_handled(self, container) -> bool:
         """Ensures that container has its error handled in the end."""
         return getattr(container, _ERROR_FIELD, False)
