@@ -56,7 +56,12 @@ def _patch_error_handling(methods, patch_handler) -> None:
                 setattr(container, method, patch_handler(original))
 
 
+@final
 class _PatchedContainer(object):
+    """Class with helper methods to patched containers."""
+
+    __slots__ = ()
+
     @classmethod
     def containers_to_patch(cls) -> tuple:
         """We need this method so coverage will work correctly."""
