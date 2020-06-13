@@ -1,11 +1,14 @@
 from abc import ABCMeta
 from functools import wraps
+from inspect import FrameInfo
 from typing import (
     Any,
     Callable,
     ClassVar,
     Generic,
     Iterable,
+    List,
+    Optional,
     Sequence,
     Type,
     TypeVar,
@@ -311,6 +314,11 @@ class IOResult(
         Or :meth:`~IOResult.from_result` factory.
         """
         super().__init__(inner_value)
+
+    @property
+    def trace(self) -> Optional[List[FrameInfo]]:
+        """Returns a list with stack trace when :func:`~Failure` was called."""
+        return self._inner_value.trace
 
     def map(  # noqa: WPS125
         self, function: Callable[[_ValueType], _NewValueType],
