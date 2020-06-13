@@ -127,7 +127,7 @@ Many developers do use some kind of [dependency injection](https://github.com/dr
 And usually it is based on the idea
 that there's some kind of a container and assembly process.
 
-Functional approach is much simplier!
+Functional approach is much simpler!
 
 Imagine that you have a `django` based game, where you award users with points for each guessed letter in a word (unguessed letters are marked as `'.'`):
 
@@ -152,7 +152,7 @@ def _award_points_for_letters(guessed: int) -> int:
 
 Awesome! It works, users are happy, your logic is pure and awesome.
 But, later you decide to make the game more fun:
-let's make the minimal accoutable letters threshold
+let's make the minimal accountable letters threshold
 configurable for an extra challenge.
 
 You can just do it directly:
@@ -366,7 +366,7 @@ def return_and_show_next_number(previous: int) -> int:
 
 Now we can clearly see which functions are pure and which ones are impure.
 This helps us a lot in building large applications, unit testing you code,
-and composing bussiness logic together.
+and composing business logic together.
 
 ### Troublesome IO
 
@@ -506,7 +506,7 @@ all our coroutines running in a single eventloop.
 
 We have a handy combination of `Future` and `Result` containers: `FutureResult`.
 Use it when your `Future` might have problems:
-like HTTP requests or filesystem oprations.
+like HTTP requests or filesystem operations.
 
 You can easily turn any wild throwing coroutine into a calm `FutureResult`:
 
@@ -531,7 +531,7 @@ to get sync `IOResult` instance to work with it in a sync manner.
 
 ### Better async composition
 
-Previously, you had to do quite a lot of `await`ing while writting `async` code:
+Previously, you had to do quite a lot of `await`ing while writing `async` code:
 
 ```python
 async def fetch_user(user_id: int) -> 'User':
