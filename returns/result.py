@@ -373,7 +373,7 @@ class _Failure(Result[Any, _ErrorType]):
         Use :func:`~Success` and :func:`~Failure` instead.
         Required for typing.
         """
-        super().__init__(inner_value)
+        super().__init__(inner_value, self._get_trace())
 
     def map(self, function):  # noqa: WPS125
         """Does nothing for ``Failure``."""
@@ -412,6 +412,10 @@ class _Failure(Result[Any, _ErrorType]):
     def failure(self) -> _ErrorType:
         """Returns failed value."""
         return self._inner_value
+
+    def _get_trace(self) -> Optional[List[FrameInfo]]:
+        """Method that will be monkey patched when trace is active."""
+        return None  # noqa: WPS324
 
 
 @final
