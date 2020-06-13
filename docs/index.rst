@@ -42,6 +42,12 @@ Contents
 
 .. toctree::
   :maxdepth: 2
+  :caption: Utilities
+
+  pages/tracing.rst
+
+.. toctree::
+  :maxdepth: 2
   :caption: Integration
 
   pages/contrib/mypy_plugins.rst
