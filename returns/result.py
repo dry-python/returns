@@ -1,12 +1,15 @@
 from abc import ABCMeta
 from functools import wraps
+from inspect import FrameInfo
 from typing import (
     Any,
     Callable,
     ClassVar,
     Generic,
     Iterable,
+    List,
     NoReturn,
+    Optional,
     Sequence,
     Type,
     TypeVar,
@@ -54,6 +57,11 @@ class Result(
     success_type: ClassVar[Type['_Success']]
     #: Failure type that is used to represent the failed computation.
     failure_type: ClassVar[Type['_Failure']]
+
+    @property
+    def trace(self) -> Optional[List[FrameInfo]]:
+        """Returns a list with stack trace when :func:`~Failure` was called."""
+        return self._trace
 
     def map(  # noqa: WPS125
         self,
