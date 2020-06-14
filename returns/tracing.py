@@ -1,7 +1,7 @@
 import types
 from contextlib import contextmanager
 from inspect import FrameInfo, stack
-from typing import List
+from typing import List, Optional
 
 from returns.result import _Failure
 
@@ -37,6 +37,6 @@ def collect_traces():
         setattr(_Failure, '_get_trace', unpatched_get_trace)  # noqa: B010
 
 
-def _get_trace(_self) -> List[FrameInfo]:
+def _get_trace(_self) -> Optional[List[FrameInfo]]:
     current_stack = stack()
     return current_stack[2:]
