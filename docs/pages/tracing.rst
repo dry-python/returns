@@ -1,8 +1,8 @@
-Tracing
-=======
+Development
+===========
 
-collect_traces
---------------
+Tracing Failures
+----------------
 
 Sometimes we want to trace where the ``Failure`` has occurred in our system,
 `returns` provide a way to trace those failures. By default tracing is disabled.
