@@ -42,14 +42,9 @@ Contents
 
 .. toctree::
   :maxdepth: 2
-  :caption: Utilities
-
-  pages/tracing.rst
-
-.. toctree::
-  :maxdepth: 2
   :caption: Integration
 
+  pages/tracing.rst
   pages/contrib/mypy_plugins.rst
   pages/contrib/pytest_plugins.rst
 
