@@ -37,6 +37,23 @@ def collect_traces():
         setattr(_Failure, '_get_trace', unpatched_get_trace)  # noqa: B010
 
 
-def _get_trace(_self) -> Optional[List[FrameInfo]]:
+def _get_trace(_self: _Failure) -> Optional[List[FrameInfo]]:
+    """
+    Function to be used on Monkey Patching.
+
+    This function is the substitute for '_get_trace' method from ``_Failure``
+    class on Monkey Patching promoted by :func:`returns.tracing.collect_traces`
+    function.
+
+    We get all the call stack from the current call and return it from the
+    third position, to avoid two non-useful calls on the call stack.
+    Those non-useful calls are a call to this function and a call to `__init__`
+    method from ``_Failure`` class. We're just interested in the call stack
+    ending on `Failure` function call!
+
+    See also:
+        https://github.com/dry-python/returns/issues/409
+
+    """
     current_stack = stack()
     return current_stack[2:]
