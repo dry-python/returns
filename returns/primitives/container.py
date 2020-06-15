@@ -1,6 +1,5 @@
 from abc import ABCMeta
-from inspect import FrameInfo
-from typing import Any, List, Optional, TypeVar
+from typing import Any, TypeVar
 
 from returns.primitives.types import Immutable
 
@@ -13,18 +12,16 @@ _NewErrorType = TypeVar('_NewErrorType')
 class BaseContainer(Immutable, metaclass=ABCMeta):
     """Utility class to provide all needed magic methods to the context."""
 
-    __slots__ = ('_inner_value', '_trace')
+    __slots__ = ('_inner_value',)
     _inner_value: Any
-    _trace: Optional[List[FrameInfo]]
 
-    def __init__(self, inner_value, trace=None) -> None:
+    def __init__(self, inner_value) -> None:
         """
         Wraps the given value in the Container.
 
         'value' is any arbitrary value of any type including functions.
         """
         object.__setattr__(self, '_inner_value', inner_value)  # noqa: WPS609
-        object.__setattr__(self, '_trace', trace)  # noqa: WPS609
 
     def __str__(self) -> str:
         """Converts to string."""

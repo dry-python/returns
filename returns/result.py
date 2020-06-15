@@ -50,7 +50,10 @@ class Result(
 
     """
 
+    __slots__ = ('_trace',)
+
     _inner_value: Union[_ValueType, _ErrorType]
+    _trace: Optional[List[FrameInfo]]
 
     # These two are required for projects like `classes`:
     #: Success type that is used to represent the successful computation.
@@ -373,7 +376,8 @@ class _Failure(Result[Any, _ErrorType]):
         Use :func:`~Success` and :func:`~Failure` instead.
         Required for typing.
         """
-        super().__init__(inner_value, self._get_trace())
+        super().__init__(inner_value)
+        object.__setattr__(self, '_trace', self._get_trace())  # noqa: WPS609
 
     def map(self, function):  # noqa: WPS125
         """Does nothing for ``Failure``."""
