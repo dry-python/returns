@@ -11,7 +11,8 @@ The trace is accessible by **trace** property that is available for ``Result``,
 ``IOResult`` containers. It's basically a list containing all
 :class:`inspect.FrameInfo` from the call stack when the ``Failure`` was created.
 
-To enable it you can use :func:`returns.tracing.collect_traces`.
+To enable it you can use
+:func:`collect_traces <returns.tracing.collect_traces>`.
 See some examples bellow:
 
 You can use it as a context manager:
