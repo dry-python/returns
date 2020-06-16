@@ -420,7 +420,7 @@ description = "A flake8 plugin checking common style issues or inconsistencies w
 name = "flake8-pytest-style"
 optional = false
 python-versions = ">=3.6,<4.0"
-version = "1.2.0"
+version = "1.2.1"
 
 [package.dependencies]
 flake8-plugin-utils = ">=1.3.0,<2.0.0"
@@ -1512,8 +1512,8 @@ flake8-pyi = [
     {file = "flake8_pyi-20.5.0-py36-none-any.whl", hash = "sha256:f22cbadb5e51bd273906d5f94fafa94caefc80d7605a9cafe8f20f95496a7cfe"},
 ]
 flake8-pytest-style = [
-    {file = "flake8-pytest-style-1.2.0.tar.gz", hash = "sha256:7c950b812e79805848290eadb4dd9930c5d9d03408db2c3a631f673140e90163"},
-    {file = "flake8_pytest_style-1.2.0-py3-none-any.whl", hash = "sha256:af4d24df0447cc0738afd445d92acc35aefe6ec7527ce330bbe7fe6132c31d39"},
+    {file = "flake8-pytest-style-1.2.1.tar.gz", hash = "sha256:9e5e72bc0cce6bfb65560b369312d0413ea3a2a7065b00f3a01f088f58d0f122"},
+    {file = "flake8_pytest_style-1.2.1-py3-none-any.whl", hash = "sha256:28a060362e1fae609c4274636fa39f3e5db38a5584d7aa8b19dc35b405d68946"},
 ]
 flake8-quotes = [
     {file = "flake8-quotes-2.1.2.tar.gz", hash = "sha256:c844c9592940c8926c60f00bc620808912ff2acd34923ab5338f3a5ca618a331"},
