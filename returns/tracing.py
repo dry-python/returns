@@ -26,6 +26,10 @@ def collect_traces():
         >>> assert non_traced_failure.trace is None
         >>> assert isinstance(traced_failure.trace, list)
         >>> assert isinstance(traced_failure.trace[0], FrameInfo)
+        >>> traced_failure.trace  # doctest: +SKIP
+        [FrameInfo(frame=<frame at 0x7f, file '.../returns/returns/result.py', line 525, code Failure>, ...]
+
+        # doctest: # noqa: DAR301, E501
 
     """
     unpatched_get_trace = getattr(_Failure, '_get_trace')  # noqa: B009
