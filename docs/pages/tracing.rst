@@ -56,6 +56,10 @@ Or as a decorator:
 
   Activating trace can make your program a bit slower if it has many points where ``Failure`` is often created.
 
+.. warning::
+
+  ``collect_traces`` is not Thread Safety, beware to use it!
+
 API Reference
 -------------
 
