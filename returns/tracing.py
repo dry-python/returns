@@ -26,9 +26,15 @@ def collect_traces():
         >>> assert non_traced_failure.trace is None
         >>> assert isinstance(traced_failure.trace, list)
         >>> assert isinstance(traced_failure.trace[0], FrameInfo)
-        >>> traced_failure.trace  # doctest: +SKIP
-        [FrameInfo(frame=<frame at 0x7f, file '.../returns/returns/result.py', line 525, code Failure>, ...]
 
+        >>> str(non_traced_failure.trace)
+        'None'
+        >>> for trace_line in traced_failure.trace:
+        ...     print(f'{trace_line.filename}:{trace_line.lineno} in `{trace_line.function}`') # doctest: +SKIP
+        ...
+        /returns/returns/result.py:525 in `Failure`
+        /returns/returns/result.py:322 in `from_failure`
+        /example_folder/example.py:1 in `<module>`
         # doctest: # noqa: DAR301, E501
 
     """
