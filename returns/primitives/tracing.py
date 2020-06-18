@@ -17,7 +17,7 @@ def collect_traces():
 
         >>> from returns.io import IOResult
         >>> from returns.result import Result
-        >>> from returns.tracing import collect_traces
+        >>> from returns.primitives.tracing import collect_traces
 
         >>> with collect_traces():
         ...     traced_failure = Result.from_failure('Traced Failure')
@@ -50,8 +50,8 @@ def _get_trace(_self: _Failure) -> Optional[List[FrameInfo]]:
     Function to be used on Monkey Patching.
 
     This function is the substitute for '_get_trace' method from ``_Failure``
-    class on Monkey Patching promoted by :func:`returns.tracing.collect_traces`
-    function.
+    class on Monkey Patching promoted by
+    :func:`returns.primitives.tracing.collect_traces` function.
 
     We get all the call stack from the current call and return it from the
     third position, to avoid two non-useful calls on the call stack.

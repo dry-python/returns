@@ -14,7 +14,8 @@ containing all :class:`inspect.FrameInfo` objects from the call stack when the
 ``Failure`` was originally created.
 
 To enable it you can use
-:func:`collect_traces <returns.tracing.collect_traces>`. See examples bellow:
+:func:`collect_traces <returns.primitives.tracing.collect_traces>`.
+See examples bellow:
 
 You can use it as a context manager:
 
@@ -23,7 +24,7 @@ You can use it as a context manager:
   >>> from inspect import FrameInfo
 
   >>> from returns.result import Failure, Result
-  >>> from returns.tracing import collect_traces
+  >>> from returns.primitives.tracing import collect_traces
 
   >>> def get_failure(argument: str) -> Result[str, str]:
   ...     return Failure(argument)
@@ -51,7 +52,7 @@ Or as a decorator:
 
   >>> from returns.io import IOFailure, IOResult
   >>> from returns.result import Failure, Result
-  >>> from returns.tracing import collect_traces
+  >>> from returns.primitives.tracing import collect_traces
 
   >>> @collect_traces()
   ... def traced_function(value: str) -> IOResult[str, str]:
@@ -88,5 +89,5 @@ Or as a decorator:
 API Reference
 -------------
 
-.. automodule:: returns.tracing
+.. automodule:: returns.primitives.tracing
   :members:
