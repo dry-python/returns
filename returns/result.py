@@ -1,12 +1,15 @@
 from abc import ABCMeta
 from functools import wraps
+from inspect import FrameInfo
 from typing import (
     Any,
     Callable,
     ClassVar,
     Generic,
     Iterable,
+    List,
     NoReturn,
+    Optional,
     Sequence,
     Type,
     TypeVar,
@@ -47,13 +50,21 @@ class Result(
 
     """
 
+    __slots__ = ('_trace',)
+
     _inner_value: Union[_ValueType, _ErrorType]
+    _trace: Optional[List[FrameInfo]]
 
     # These two are required for projects like `classes`:
     #: Success type that is used to represent the successful computation.
     success_type: ClassVar[Type['_Success']]
     #: Failure type that is used to represent the failed computation.
     failure_type: ClassVar[Type['_Failure']]
+
+    @property
+    def trace(self) -> Optional[List[FrameInfo]]:
+        """Returns a list with stack trace when :func:`~Failure` was called."""
+        return self._trace
 
     def map(  # noqa: WPS125
         self,
@@ -366,6 +377,7 @@ class _Failure(Result[Any, _ErrorType]):
         Required for typing.
         """
         super().__init__(inner_value)
+        object.__setattr__(self, '_trace', self._get_trace())  # noqa: WPS609
 
     def map(self, function):  # noqa: WPS125
         """Does nothing for ``Failure``."""
@@ -404,6 +416,10 @@ class _Failure(Result[Any, _ErrorType]):
     def failure(self) -> _ErrorType:
         """Returns failed value."""
         return self._inner_value
+
+    def _get_trace(self) -> Optional[List[FrameInfo]]:
+        """Method that will be monkey patched when trace is active."""
+        return None  # noqa: WPS324
 
 
 @final

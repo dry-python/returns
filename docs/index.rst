@@ -44,6 +44,7 @@ Contents
   :maxdepth: 2
   :caption: Integration
 
+  pages/development.rst
   pages/contrib/mypy_plugins.rst
   pages/contrib/pytest_plugins.rst
 
