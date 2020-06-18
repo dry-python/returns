@@ -25,10 +25,8 @@ def collect_traces():
 
         >>> assert non_traced_failure.trace is None
         >>> assert isinstance(traced_failure.trace, list)
-        >>> assert isinstance(traced_failure.trace[0], FrameInfo)
+        >>> assert all(isinstance(trace_line, FrameInfo) for trace_line in traced_failure.trace)
 
-        >>> str(non_traced_failure.trace)
-        'None'
         >>> for trace_line in traced_failure.trace:
         ...     print(f'{trace_line.filename}:{trace_line.lineno} in `{trace_line.function}`') # doctest: +SKIP
         ...
@@ -59,7 +57,7 @@ def _get_trace(_self: _Failure) -> Optional[List[FrameInfo]]:
     third position, to avoid two non-useful calls on the call stack.
     Those non-useful calls are a call to this function and a call to `__init__`
     method from ``_Failure`` class. We're just interested in the call stack
-    ending on `Failure` function call!
+    ending on ``Failure`` function call!
 
     See also:
         https://github.com/dry-python/returns/issues/409
