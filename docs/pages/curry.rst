@@ -188,6 +188,11 @@ Take a note, that providing invalid arguments will raise ``TypeError``:
 
 This is really helpful when working with ``.apply()`` method of containers.
 
+.. warning::
+
+  We recommend using :ref:`partial <Partial>` instead of ``@curry`` when
+  possible because it's much faster.
+
 Typing
 ~~~~~~
 
