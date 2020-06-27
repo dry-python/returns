@@ -1,13 +1,13 @@
 import types
 from contextlib import contextmanager
 from inspect import FrameInfo, stack
-from typing import List, Optional
+from typing import Iterator, List, Optional
 
 from returns.result import _Failure
 
 
 @contextmanager
-def collect_traces():
+def collect_traces() -> Iterator[None]:
     """
     Context Manager/Decorator to active traces collect to the Failures.
 
