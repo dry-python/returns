@@ -38,7 +38,7 @@ def collect_traces() -> Iterator[None]:
     unpatched_get_trace = getattr(_Failure, '_get_trace')  # noqa: B009
     substitute_get_trace = types.MethodType(_get_trace, _Failure)
     setattr(_Failure, '_get_trace', substitute_get_trace)  # noqa: B010
-    try:
+    try:  # noqa: WPS501
         yield
     finally:
         setattr(_Failure, '_get_trace', unpatched_get_trace)  # noqa: B010
