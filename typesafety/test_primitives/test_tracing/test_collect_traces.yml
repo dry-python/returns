@@ -3,11 +3,11 @@
   main: |
     from returns.primitives.tracing import collect_traces
 
-    reveal_type(collect_traces)  # N: Revealed type is 'def () -> contextlib._GeneratorContextManager[None]'
+    reveal_type(collect_traces)  # N: Revealed type is 'def () -> typing.Iterator[None]'
 
 - case: collect_traces_context_manager_return_type
   disable_cache: true
   main: |
     from returns.primitives.tracing import collect_traces
 
-    reveal_type(collect_traces())  # N: Revealed type is 'contextlib._GeneratorContextManager[None]'
+    reveal_type(collect_traces())  # N: Revealed type is 'typing.Iterator[None]'
