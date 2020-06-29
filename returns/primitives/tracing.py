@@ -6,7 +6,6 @@ from typing import Iterator, List, Optional
 from returns.result import _Failure
 
 
-@contextmanager
 def collect_traces() -> Iterator[None]:
     """
     Context Manager/Decorator to active traces collect to the Failures.
@@ -65,3 +64,6 @@ def _get_trace(_self: _Failure) -> Optional[List[FrameInfo]]:
     """
     current_stack = stack()
     return current_stack[2:]
+
+
+collect_traces = contextmanager(collect_traces)  # type: ignore
