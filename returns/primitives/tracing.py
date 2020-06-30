@@ -1,12 +1,35 @@
 import types
 from contextlib import contextmanager
 from inspect import FrameInfo, stack
-from typing import Iterator, List, Optional
+from typing import (
+    Callable,
+    ContextManager,
+    Iterator,
+    List,
+    Optional,
+    TypeVar,
+    Union,
+    overload,
+)
 
 from returns.result import _Failure
 
+Function = TypeVar('Function', bound=Callable)
 
-def collect_traces() -> Iterator[None]:
+
+@overload
+def collect_traces() -> ContextManager[None]:
+    """Context Manager to active traces collect to the Failures."""
+
+
+@overload
+def collect_traces(function: Function) -> Function:
+    """Decorator to active traces collect to the Failures."""
+
+
+def collect_traces(
+    function: Optional[Function] = None,
+) -> Union[Function, ContextManager[None]]:  # noqa: DAR101, DAR201, DAR301
     """
     Context Manager/Decorator to active traces collect to the Failures.
 
@@ -35,13 +58,16 @@ def collect_traces() -> Iterator[None]:
         # doctest: # noqa: DAR301, E501
 
     """
-    unpatched_get_trace = getattr(_Failure, '_get_trace')  # noqa: B009
-    substitute_get_trace = types.MethodType(_get_trace, _Failure)
-    setattr(_Failure, '_get_trace', substitute_get_trace)  # noqa: B010
-    try:  # noqa: WPS501
-        yield
-    finally:
-        setattr(_Failure, '_get_trace', unpatched_get_trace)  # noqa: B010
+    def factory() -> Iterator[None]:
+        unpatched_get_trace = getattr(_Failure, '_get_trace')  # noqa: B009
+        substitute_get_trace = types.MethodType(_get_trace, _Failure)
+        setattr(_Failure, '_get_trace', substitute_get_trace)  # noqa: B010
+        try:  # noqa: WPS501
+            yield
+        finally:
+            setattr(_Failure, '_get_trace', unpatched_get_trace)  # noqa: B010
+    collect_traces_cm = contextmanager(factory)()
+    return collect_traces_cm(function) if function else collect_traces_cm
 
 
 def _get_trace(_self: _Failure) -> Optional[List[FrameInfo]]:
@@ -64,6 +90,3 @@ def _get_trace(_self: _Failure) -> Optional[List[FrameInfo]]:
     """
     current_stack = stack()
     return current_stack[2:]
-
-
-collect_traces = contextmanager(collect_traces)  # type: ignore
