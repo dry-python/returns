@@ -54,7 +54,7 @@ Or as a decorator:
   >>> from returns.result import Failure, Result
   >>> from returns.primitives.tracing import collect_traces
 
-  >>> @collect_traces()
+  >>> @collect_traces
   ... def traced_function(value: str) -> IOResult[str, str]:
   ...     return IOFailure(value)
 
