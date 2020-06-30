@@ -1,13 +1,35 @@
-- case: collect_traces_context_manager_return_type_hint
+- case: collect_traces_context_manager_return_type_one
   disable_cache: true
   main: |
     from returns.primitives.tracing import collect_traces
 
-    reveal_type(collect_traces)  # N: Revealed type is 'def () -> typing.Iterator[None]'
+    reveal_type(collect_traces)  # N: Revealed type is 'Overload(def () -> typing.ContextManager[None], def [Function <: def (*Any, **Any) -> Any] (function: Function`-1) -> Function`-1)'
 
-- case: collect_traces_context_manager_return_type
+- case: collect_traces_context_manager_return_type_two
   disable_cache: true
   main: |
     from returns.primitives.tracing import collect_traces
 
-    reveal_type(collect_traces())  # N: Revealed type is 'typing.Iterator[None]'
+    reveal_type(collect_traces())  # N: Revealed type is 'typing.ContextManager[None]'
+
+- case: collect_traces_decorated_function_return_type
+  disable_cache: true
+  main: |
+    from returns.primitives.tracing import collect_traces
+
+    @collect_traces
+    def function() -> int:
+      return 0
+
+    reveal_type(function)  # N: Revealed type is 'def () -> builtins.int'
+
+- case: collect_traces_decorated_function_with_argument_return_type
+  disable_cache: true
+  main: |
+    from returns.primitives.tracing import collect_traces
+
+    @collect_traces
+    def function(number: int) -> str:
+      return str(number)
+
+    reveal_type(function)  # N: Revealed type is 'def (number: builtins.int) -> builtins.str'
