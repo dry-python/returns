@@ -10,7 +10,8 @@
   main: |
     from returns.primitives.tracing import collect_traces
 
-    reveal_type(collect_traces())  # N: Revealed type is 'typing.ContextManager[None]'
+    with reveal_type(collect_traces()):  # N: Revealed type is 'typing.ContextManager[None]'
+        pass
 
 - case: collect_traces_decorated_function_return_type
   disable_cache: true
