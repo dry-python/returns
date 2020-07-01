@@ -58,6 +58,7 @@ def collect_traces(
         # doctest: # noqa: DAR301, E501
 
     """
+    @contextmanager
     def factory() -> Iterator[None]:
         unpatched_get_trace = getattr(_Failure, '_get_trace')  # noqa: B009
         substitute_get_trace = types.MethodType(_get_trace, _Failure)
@@ -66,8 +67,7 @@ def collect_traces(
             yield
         finally:
             setattr(_Failure, '_get_trace', unpatched_get_trace)  # noqa: B010
-    collect_traces_cm = contextmanager(factory)()
-    return collect_traces_cm(function) if function else collect_traces_cm
+    return factory()(function) if function else factory()
 
 
 def _get_trace(_self: _Failure) -> Optional[List[FrameInfo]]:
