@@ -14,7 +14,7 @@ from typing import (
 
 from returns.result import _Failure
 
-Function = TypeVar('Function', bound=Callable)
+_FunctionType = TypeVar('_FunctionType', bound=Callable)
 
 
 @overload
@@ -23,13 +23,13 @@ def collect_traces() -> ContextManager[None]:
 
 
 @overload
-def collect_traces(function: Function) -> Function:
+def collect_traces(function: _FunctionType) -> _FunctionType:
     """Decorator to active traces collect to the Failures."""
 
 
 def collect_traces(
-    function: Optional[Function] = None,
-) -> Union[Function, ContextManager[None]]:  # noqa: DAR101, DAR201, DAR301
+    function: Optional[_FunctionType] = None,
+) -> Union[_FunctionType, ContextManager[None]]:  # noqa: DAR101, DAR201, DAR301
     """
     Context Manager/Decorator to active traces collect to the Failures.
 
