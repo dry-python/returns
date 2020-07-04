@@ -19,3 +19,15 @@ class Kind(Generic[_InstanceType, _TypeArgTypes]):
         https://bow-swift.io/docs/fp-concepts/higher-kinded-types
 
     """
+
+    __slots__ = ()
+
+    def __class_getitem__(cls, type_params):  # noqa: N805
+        """Used to suppress generic validation."""
+        if not isinstance(type_params, tuple):
+            type_params = (type_params,)  # noqa: WPS434
+
+        real_args = len(cls.__parameters__)  # type: ignore
+        return super().__class_getitem__(  # type: ignore
+            type_params[:real_args],
+        )
