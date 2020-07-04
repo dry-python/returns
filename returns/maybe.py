@@ -4,7 +4,6 @@ from typing import (
     Any,
     Callable,
     ClassVar,
-    Generic,
     Iterable,
     NoReturn,
     Optional,
@@ -17,8 +16,10 @@ from typing import (
 from typing_extensions import final
 
 from returns._generated.iterable import iterable
+from returns.hkt import Kind
 from returns.primitives.container import BaseContainer
 from returns.primitives.exceptions import UnwrapFailedError
+from returns.typeclasses import functor
 
 # Definitions:
 _ValueType = TypeVar('_ValueType', covariant=True)
@@ -31,7 +32,8 @@ _SecondType = TypeVar('_SecondType')
 
 class Maybe(
     BaseContainer,
-    Generic[_ValueType],
+    Kind['Maybe', _ValueType],
+    functor.Functor[_ValueType],
     metaclass=ABCMeta,
 ):
     """
