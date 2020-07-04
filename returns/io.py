@@ -18,8 +18,10 @@ from typing import (
 from typing_extensions import final
 
 from returns._generated.iterable import iterable
+from returns.hkt import Kind
 from returns.primitives.container import BaseContainer
 from returns.result import Failure, Result, Success
+from returns.typeclasses import functor
 
 _ValueType = TypeVar('_ValueType', covariant=True)
 _NewValueType = TypeVar('_NewValueType')
@@ -33,7 +35,11 @@ _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')
 
 
-class IO(BaseContainer, Generic[_ValueType]):
+class IO(
+    BaseContainer,
+    Kind['IO', _ValueType],
+    functor.Functor[_ValueType],
+):
     """
     Explicit container for impure function results.
 
