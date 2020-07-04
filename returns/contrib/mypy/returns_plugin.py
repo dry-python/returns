@@ -13,7 +13,13 @@ https://github.com/mkurnikov/pytest-mypy-plugins
 
 from typing import Callable, ClassVar, Mapping, Optional, Type
 
-from mypy.plugin import FunctionContext, MethodContext, MethodSigContext, Plugin
+from mypy.plugin import (
+    AnalyzeTypeContext,
+    FunctionContext,
+    MethodContext,
+    MethodSigContext,
+    Plugin,
+)
 from mypy.types import CallableType
 from mypy.types import Type as MypyType
 from typing_extensions import Final, final
@@ -22,6 +28,7 @@ from returns.contrib.mypy._features import (
     curry,
     decorators,
     flow,
+    kind,
     partial,
     pipe,
     pointfree,
@@ -80,9 +87,16 @@ _TYPED_FLOW_FUNCTION: Final = 'returns._generated.pipeline.flow._flow'
 _TYPED_PIPE_FUNCTION: Final = 'returns._generated.pipeline.pipe._pipe'
 _TYPED_PIPE_METHOD: Final = 'returns._generated.pipeline.pipe._Pipe.__call__'
 
+#: Used for HKT emulation.
+_TYPED_KIND: Final = 'returns.hkt.Kind'
+
 
 # Type aliases
 # ============
+
+#: Types for a type analyze hook.
+_AnalyzeCallback = Callable[[AnalyzeTypeContext], MypyType]
+_AnalyzePlugin = Callable[[Plugin, str], _AnalyzeCallback]
 
 #: Type for a function hook.
 _FunctionCallback = Callable[[FunctionContext], MypyType]
@@ -101,6 +115,10 @@ _MethodSigCallback = Callable[[MethodSigContext], CallableType]
 class _ReturnsPlugin(Plugin):
     """Our main plugin to dispatch different callbacks to specific features."""
 
+    _analyze_hook_plugins: ClassVar[Mapping[str, _AnalyzePlugin]] = {
+        _TYPED_KIND: kind.analyze,
+    }
+
     _function_hook_plugins: ClassVar[Mapping[str, _FunctionCallback]] = {
         _TYPED_PARTIAL_FUNCTION: partial.analyze,
         _TYPED_CURRY_FUNCTION: curry.analyze,
@@ -117,6 +135,22 @@ class _ReturnsPlugin(Plugin):
     _method_sig_hook_plugins: ClassVar[Mapping[str, _MethodSigCallback]] = {
         _TYPED_PIPE_METHOD: pipe.signature,
     }
+
+    def get_type_analyze_hook(
+        self,
+        fullname: str,
+    ) -> Optional[_AnalyzeCallback]:
+        """
+        Called for all types.
+
+        Is called during semantic analizing phase.
+        It does not have an access to a typechecker.
+        It is used to transform types into different other types.
+        """
+        plugin = self._analyze_hook_plugins.get(fullname)
+        if plugin is not None:
+            return plugin(self, fullname)
+        return None
 
     def get_function_hook(
         self,

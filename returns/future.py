@@ -6,7 +6,6 @@ from typing import (
     ClassVar,
     Coroutine,
     Generator,
-    Generic,
     Iterable,
     Sequence,
     Type,
@@ -18,9 +17,11 @@ from typing_extensions import final
 
 from returns._generated.futures import _future, _future_result
 from returns._generated.iterable import iterable
+from returns.hkt import Kind
 from returns.io import IO, IOResult
 from returns.primitives.container import BaseContainer
 from returns.result import Failure, Result, Success
+from returns.typeclasses import functor
 
 # Definitions:
 _ValueType = TypeVar('_ValueType', covariant=True)
@@ -56,7 +57,11 @@ async def async_identity(instance: _FirstType) -> _FirstType:
 # ======
 
 @final
-class Future(BaseContainer, Generic[_ValueType]):
+class Future(
+    BaseContainer,
+    Kind['Future', _ValueType],
+    functor.Functor[_ValueType],
+):
     """
     Container to easily compose ``async`` functions.
 
@@ -482,7 +487,11 @@ def asyncify(function: Callable[..., _ValueType]) -> Callable[
 # ============
 
 @final
-class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
+class FutureResult(
+    BaseContainer,
+    Kind['FutureResult', _ValueType, _ErrorType],
+    functor.Functor[_ValueType],
+):
     """
     Container to easily compose ``async`` functions.
 

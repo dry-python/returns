@@ -18,6 +18,28 @@
     reveal_type(MyClass('1').map(int))  # N: Revealed type is 'main.MyClass[builtins.int*]'
 
 
+- case: functor_inheritance_correct2
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar
+    from returns.typeclasses.functor import Functor
+    from returns.hkt import Kind
+
+    V = TypeVar('V')
+    E = TypeVar('E')
+    N = TypeVar('N')
+
+    class MyClass(Kind['MyClass', V, E], Functor[V]):
+        def __init__(self, value: V, error: E) -> None:
+            self.value = value
+            self.error = error
+
+        def map(self, function: Callable[[V], N]) -> 'MyClass[N, E]':
+            return MyClass(function(self.value), self.error)
+
+    reveal_type(MyClass('1', 1).map(int))  # N: Revealed type is 'main.MyClass[builtins.int*, builtins.int]'
+
+
 - case: functor_inheritance_missing
   disable_cache: true
   main: |
@@ -57,3 +79,27 @@
             return MyClass(self.value)
   out: |
     main:13: error: Return type "MyClass[V]" of "map" incompatible with return type "Kind[MyClass[V], _NewValueType]" in supertype "Functor"
+
+
+- case: functor_inheritance_wrong2
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar
+    from returns.typeclasses.functor import Functor
+    from returns.hkt import Kind
+
+    V = TypeVar('V')
+    E = TypeVar('E')
+    N = TypeVar('N')
+
+    class MyClass(Kind['MyClass', V, E], Functor[V]):
+        def __init__(self, value: V, error: E) -> None:
+            self.value = value
+            self.error = error
+
+        def map(self, function: Callable[[E], N]) -> 'MyClass[N, E]':
+            return MyClass(function(self.error), self.error)
+  out: |
+    main:14: error: Argument 1 of "map" is incompatible with supertype "Functor"; supertype defines the argument type as "Callable[[V], _NewValueType]"
+    main:14: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:14: note: This violates the Liskov substitution principle

@@ -32,7 +32,7 @@ Make your functions return something meaningful, typed, and safe!
 pip install returns
 ```
 
-You might also want to [configure](https://returns.readthedocs.io/en/latest/pages/container.html#type-safety)
+You are also required to [configure](https://returns.readthedocs.io/en/latest/pages/container.html#type-safety)
 `mypy` correctly and install our plugin
 to fix [this existing issue](https://github.com/python/mypy/issues/3157):
 

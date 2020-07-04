@@ -5,7 +5,6 @@ from typing import (
     Any,
     Callable,
     ClassVar,
-    Generic,
     Iterable,
     List,
     Optional,
@@ -74,8 +73,7 @@ class IO(
         .. code:: python
 
           >>> from returns.io import IO
-          >>> str(IO(1))
-          '<IO: 1>'
+          >>> assert str(IO(1)) == '<IO: 1>'
 
         """
         super().__init__(inner_value)
@@ -243,7 +241,8 @@ def impure(
 
 class IOResult(
     BaseContainer,
-    Generic[_ValueType, _ErrorType],
+    Kind['IOResult', _ValueType, _ErrorType],
+    functor.Functor[_ValueType],
     metaclass=ABCMeta,
 ):
     """

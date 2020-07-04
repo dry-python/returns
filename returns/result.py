@@ -5,7 +5,6 @@ from typing import (
     Any,
     Callable,
     ClassVar,
-    Generic,
     Iterable,
     List,
     NoReturn,
@@ -19,8 +18,10 @@ from typing import (
 from typing_extensions import final
 
 from returns._generated.iterable import iterable
+from returns.hkt import Kind
 from returns.primitives.container import BaseContainer
 from returns.primitives.exceptions import UnwrapFailedError
+from returns.typeclasses import functor
 
 # Definitions:
 _ValueType = TypeVar('_ValueType', covariant=True)
@@ -35,7 +36,8 @@ _SecondType = TypeVar('_SecondType')
 
 class Result(
     BaseContainer,
-    Generic[_ValueType, _ErrorType],
+    Kind['Result', _ValueType, _ErrorType],
+    functor.Functor[_ValueType],
     metaclass=ABCMeta,
 ):
     """
