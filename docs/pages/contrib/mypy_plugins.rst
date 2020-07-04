@@ -49,7 +49,7 @@ This will allow to keep them in sync with the upstream.
 Supported features
 ------------------
 
-- ``kind` feature adds Higher Kinded Types (HKT) support
+- ``kind`` feature adds Higher Kinded Types (HKT) support
 - ``curry`` feature allows to write typed curried functions
 - ``partial`` feature allows to write typed partial application
 - ``flow`` feature allows to write better typed functional pipelines
