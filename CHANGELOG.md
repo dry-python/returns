@@ -6,6 +6,17 @@ incremental in minor, bugfixes only are patches.
 See [0Ver](https://0ver.org/).
 
 
+## 0.15.0 WIP
+
+### Features
+
+- **Breaking**: changes all `RequiresContext`-based type argument order,
+  previously we used to specify `_EnvType` as the first type argument,
+  now it is the last one
+- Adds Higher Kinded Types partial support
+- Adds `collect_trace` helper function for development
+
+
 ## 0.14.0
 
 ### Features
