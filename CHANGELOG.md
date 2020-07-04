@@ -10,11 +10,16 @@ See [0Ver](https://0ver.org/).
 
 ### Features
 
-- **Breaking**: changes all `RequiresContext`-based type argument order,
+- **Breaking**: drops `python3.6` support, because `Kind`
+  cannot work in this version of Python
+- **Breaking**: changes all `RequiresContext`-based type arguments order,
   previously we used to specify `_EnvType` as the first type argument,
-  now it is the last one
+  now it is the last one. This is done to respect new HKT rules
+- **Breaking**: removes all old interfaces from `primitives/interfaces.py`,
+  use new typeclasses instead
 - Adds Higher Kinded Types partial support
-- Adds `collect_trace` helper function for development
+- Adds new typeclasses for all public interfaces
+- Adds `collect_trace` helper function for better development experience
 
 
 ## 0.14.0

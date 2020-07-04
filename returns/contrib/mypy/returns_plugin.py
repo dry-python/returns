@@ -10,7 +10,6 @@ https://mypy.readthedocs.io/en/latest/extending_mypy.html
 We use ``pytest-mypy-plugins`` to test that it works correctly, see:
 https://github.com/mkurnikov/pytest-mypy-plugins
 """
-
 from typing import Callable, ClassVar, Mapping, Optional, Type
 
 from mypy.plugin import (

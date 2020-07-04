@@ -36,7 +36,6 @@ Here's when it works:
   >>> assert pipeline(0) == 'not bigger'  # `signature and `infer` again
 
 """
-
 from typing import Callable, Tuple
 
 from mypy.checker import detach_callable

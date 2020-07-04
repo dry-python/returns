@@ -25,10 +25,10 @@ from returns.result import Result
 
 if TYPE_CHECKING:
     from returns.context.requires_context import RequiresContext
-    from returns.context.requires_context_result import RequiresContextResult
     from returns.context.requires_context_ioresult import (
         RequiresContextIOResult,
     )
+    from returns.context.requires_context_result import RequiresContextResult
 
 # Context:
 _EnvType = TypeVar('_EnvType', contravariant=True)
