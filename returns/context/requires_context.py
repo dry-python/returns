@@ -14,8 +14,13 @@ from typing_extensions import final
 
 from returns._generated.iterable import iterable
 from returns.functions import identity
+from returns.future import FutureResult
+from returns.hkt import Kind, dekind
+from returns.io import IOResult
 from returns.primitives.container import BaseContainer
 from returns.primitives.types import Immutable
+from returns.result import Result
+from returns.typeclasses import applicative, functor, monad
 
 if TYPE_CHECKING:
     # We need this condition to make sure Python can solve cycle imports.
@@ -24,8 +29,9 @@ if TYPE_CHECKING:
         RequiresContextIOResult,
     )
     from returns.context.requires_context_result import RequiresContextResult
-    from returns.io import IOResult
-    from returns.result import Result
+    from returns.context.requires_context_future_result import (
+        RequiresContextFutureResult,
+    )
 
 # Context:
 _EnvType = TypeVar('_EnvType', contravariant=True)
@@ -47,7 +53,10 @@ NoDeps = Any
 @final
 class RequiresContext(
     BaseContainer,
-    Generic[_EnvType, _ReturnType],
+    Kind['RequiresContext', _ReturnType, _EnvType],
+    functor.Functor[_ReturnType],
+    applicative.Applicative[_ReturnType],
+    monad.Monad[_ReturnType],
 ):
     """
     The ``RequiresContext`` container.
@@ -86,7 +95,8 @@ class RequiresContext(
     empty: ClassVar[NoDeps] = object()
 
     def __init__(
-        self, inner_value: Callable[[_EnvType], _ReturnType],
+        self,
+        inner_value: Callable[[_EnvType], _ReturnType],
     ) -> None:
         """
         Public constructor for this type. Also required for typing.
@@ -128,7 +138,7 @@ class RequiresContext(
 
     def map(  # noqa: WPS125
         self, function: Callable[[_ReturnType], _NewReturnType],
-    ) -> 'RequiresContext[_EnvType, _NewReturnType]':
+    ) -> 'RequiresContext[_NewReturnType, _EnvType]':
         """
         Allows to compose functions inside the wrapped container.
 
@@ -151,8 +161,12 @@ class RequiresContext(
 
     def apply(
         self,
-        container: 'Reader[_EnvType, Callable[[_ReturnType], _NewReturnType]]',
-    ) -> 'RequiresContext[_EnvType, _NewReturnType]':
+        container: Kind[
+            'RequiresContext',
+            Callable[[_ReturnType], _NewReturnType],
+            _EnvType,
+        ],
+    ) -> 'RequiresContext[_NewReturnType, _EnvType]':
         """
         Calls a wrapped function in a container on this container.
 
@@ -164,15 +178,17 @@ class RequiresContext(
           ... )(...) == 'ab'
 
         """
-        return RequiresContext(lambda deps: self.map(container(deps))(deps))
+        return RequiresContext(
+            lambda deps: self.map(dekind(container)(deps))(deps),
+        )
 
     def bind(
         self,
         function: Callable[
             [_ReturnType],
-            'RequiresContext[_EnvType, _NewReturnType]',
+            Kind['RequiresContext', _NewReturnType, _EnvType],
         ],
-    ) -> 'RequiresContext[_EnvType, _NewReturnType]':
+    ) -> 'RequiresContext[_NewReturnType, _EnvType]':
         """
         Composes a container with a function returning another container.
 
@@ -199,12 +215,12 @@ class RequiresContext(
           >>> assert first(False).bind(second)(2) == '<'
 
         """
-        return RequiresContext(lambda deps: function(self(deps))(deps))
+        return RequiresContext(lambda deps: dekind(function(self(deps)))(deps))
 
     @classmethod
     def from_value(
         cls, inner_value: _FirstType,
-    ) -> 'RequiresContext[NoDeps, _FirstType]':
+    ) -> 'RequiresContext[_FirstType, NoDeps]':
         """
         Used to return some specific value from the container.
 
@@ -230,7 +246,7 @@ class RequiresContext(
     def from_iterable(
         cls,
         inner_value: Iterable['RequiresContext[_EnvType, _ValueType]'],
-    ) -> 'RequiresContext[_EnvType, Sequence[_ValueType]]':
+    ) -> 'RequiresContext[Sequence[_ValueType], _EnvType]':
         """
         Transforms an iterable of ``RequiresContext`` containers.
 
@@ -251,8 +267,8 @@ class RequiresContext(
     @classmethod
     def from_requires_context_result(
         cls,
-        inner_value: 'RequiresContextResult[_EnvType, _ValueType, _ErrorType]',
-    ) -> 'RequiresContext[_EnvType, Result[_ValueType, _ErrorType]]':
+        inner_value: 'RequiresContextResult[_ValueType, _ErrorType, _EnvType]',
+    ) -> 'RequiresContext[Result[_ValueType, _ErrorType], _EnvType]':
         """
         Typecasts ``RequiresContextResult`` to ``RequiresContext`` instance.
 
@@ -277,8 +293,8 @@ class RequiresContext(
     def from_requires_context_ioresult(
         cls,
         inner_value:
-            'RequiresContextIOResult[_EnvType, _ValueType, _ErrorType]',
-    ) -> 'RequiresContext[_EnvType, IOResult[_ValueType, _ErrorType]]':
+            'RequiresContextIOResult[_ValueType, _ErrorType, _EnvType]',
+    ) -> 'RequiresContext[IOResult[_ValueType, _ErrorType], _EnvType]':
         """
         Typecasts ``RequiresContextIOResult`` to ``RequiresContext`` instance.
 
@@ -298,6 +314,32 @@ class RequiresContext(
 
         """
         return RequiresContext(inner_value)
+
+    # @classmethod
+    # def from_requires_context_future_result(
+    #     cls,
+    #     inner_value:
+    #         'RequiresContextFutureResult[_ValueType, _ErrorType, _EnvType]',
+    # ) -> 'RequiresContext[_EnvType, FutureResult[_ValueType, _ErrorType]]':
+    #     """
+    #     Typecasts ``RequiresContextIOResult`` to ``RequiresContext`` instance.
+
+    #     Breaks ``RequiresContextIOResult[e, a, b]``
+    #     into ``RequiresContext[e, IOResult[a, b]]``.
+
+    #     .. code:: python
+
+    #       >>> from returns.context import RequiresContext
+    #       >>> from returns.context import RequiresContextIOResult
+    #       >>> from returns.io import IOSuccess
+    #       >>> assert RequiresContext.from_requires_context_ioresult(
+    #       ...    RequiresContextIOResult.from_value(1),
+    #       ... )(...) == IOSuccess(1)
+
+    #     Can be reverted with ``RequiresContextIOResult.from_typecast``.
+
+    #     """
+    #     return RequiresContext(inner_value)
 
 
 @final
@@ -398,4 +440,4 @@ class Context(Immutable, Generic[_EnvType], metaclass=ABCMeta):
 # Aliases
 
 #: Sometimes `RequiresContext` is too long to type.
-Reader = RequiresContext
+Reader = RequiresContext[_ReturnType, _EnvType]

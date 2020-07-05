@@ -7,13 +7,13 @@ from returns.result import Failure, Result, Success
 
 def test_bind():
     """Ensures that bind works."""
-    def factory(inner_value: int) -> RCR[int, float, str]:
+    def factory(inner_value: int) -> RCR[float, str, int]:
         if inner_value > 0:
             return RCR(lambda deps: IOSuccess(inner_value / deps))
         return RCR.from_failure(str(inner_value))
 
     input_value = 5
-    bound: RCR[int, int, str] = RCR.from_value(input_value)
+    bound: RCR[int, str, int] = RCR.from_value(input_value)
     assert bound.bind(factory)(2) == factory(input_value)(2)
     assert bound.bind(factory)(2) == IOSuccess(2.5)
 
@@ -29,8 +29,8 @@ def test_bind_regular_result():
             return Success(inner_value + 1)
         return Failure('nope')
 
-    first: RCR[int, int, str] = RCR.from_value(1)
-    third: RCR[int, int, str] = RCR.from_failure('a')
+    first: RCR[int, str, int] = RCR.from_value(1)
+    third: RCR[int, str, int] = RCR.from_failure('a')
 
     assert first.bind_result(factory)(RCR.empty) == IOSuccess(2)
     assert RCR.from_value(0).bind_result(
@@ -46,8 +46,8 @@ def test_bind_ioresult():
             return IOSuccess(inner_value + 1)
         return IOFailure('nope')
 
-    first: RCR[int, int, str] = RCR.from_value(1)
-    third: RCR[int, int, str] = RCR.from_failure('a')
+    first: RCR[int, str, int] = RCR.from_value(1)
+    third: RCR[int, str, int] = RCR.from_failure('a')
 
     assert first.bind_ioresult(factory)(RCR.empty) == IOSuccess(2)
     assert RCR.from_value(0).bind_ioresult(
@@ -58,11 +58,11 @@ def test_bind_ioresult():
 
 def test_bind_regular_context():
     """Ensures that regular ``RequiresContext`` can be bound."""
-    def factory(inner_value: int) -> RequiresContext[int, float]:
+    def factory(inner_value: int) -> RequiresContext[float, int]:
         return RequiresContext(lambda deps: inner_value / deps)
 
-    first: RCR[int, int, str] = RCR.from_value(1)
-    third: RCR[int, int, str] = RCR.from_failure('a')
+    first: RCR[int, str, int] = RCR.from_value(1)
+    third: RCR[int, str, int] = RCR.from_failure('a')
 
     assert first.bind_context(factory)(2) == IOSuccess(0.5)
     assert RCR.from_value(2).bind_context(
@@ -73,11 +73,11 @@ def test_bind_regular_context():
 
 def test_bind_result_context():
     """Ensures that ``RequiresContextResult`` can be bound."""
-    def factory(inner_value: int) -> RequiresContextResult[int, float, str]:
+    def factory(inner_value: int) -> RequiresContextResult[float, str, int]:
         return RequiresContextResult(lambda deps: Success(inner_value / deps))
 
-    first: RCR[int, int, str] = RCR.from_value(1)
-    third: RCR[int, int, str] = RCR.from_failure('a')
+    first: RCR[int, str, int] = RCR.from_value(1)
+    third: RCR[int, str, int] = RCR.from_failure('a')
 
     assert first.bind_context_result(factory)(2) == IOSuccess(0.5)
     assert RCR.from_value(2).bind_context_result(
@@ -88,7 +88,7 @@ def test_bind_result_context():
 
 def test_rescue_success():
     """Ensures that rescue works for Success container."""
-    def factory(inner_value) -> RCR[int, int, str]:
+    def factory(inner_value) -> RCR[int, str, int]:
         return RCR.from_value(inner_value * 2)
 
     assert RCR.from_value(5).rescue(
@@ -101,7 +101,7 @@ def test_rescue_success():
 
 def test_rescue_failure():
     """Ensures that rescue works for Failure container."""
-    def factory(inner_value) -> RCR[int, int, str]:
+    def factory(inner_value) -> RCR[int, str, int]:
         return RCR.from_failure(inner_value * 2)
 
     assert RCR.from_value(5).rescue(

@@ -11,11 +11,11 @@ _acquire_success = ReaderIOResult.from_value('acquire success')
 _acquire_failure = ReaderIOResult.from_failure('acquire failure')
 
 
-def _use_success(inner_value: str) -> ReaderIOResult[NoDeps, str, str]:
+def _use_success(inner_value: str) -> ReaderIOResult[str, str, NoDeps]:
     return ReaderIOResult.from_value('use success')
 
 
-def _use_failure(inner_value: str) -> ReaderIOResult[NoDeps, str, str]:
+def _use_failure(inner_value: str) -> ReaderIOResult[str, str, NoDeps]:
     return ReaderIOResult.from_failure('use failure')
 
 
@@ -27,7 +27,7 @@ class _ReleaseSuccess(object):
         self,
         inner_value: str,
         use_result: Result[str, str],
-    ) -> ReaderIOResult[NoDeps, None, str]:
+    ) -> ReaderIOResult[None, str, NoDeps]:
         self._logs.append((inner_value, use_result))
         return ReaderIOResult.from_value(None)
 
@@ -40,7 +40,7 @@ class _ReleaseFailure(object):
         self,
         inner_value: str,
         use_result: Result[str, str],
-    ) -> ReaderIOResult[NoDeps, None, str]:
+    ) -> ReaderIOResult[None, str, NoDeps]:
         return ReaderIOResult.from_failure('release failure')
 
 
