@@ -5,6 +5,7 @@ from typing import (
     Any,
     Callable,
     ClassVar,
+    Generic,
     Iterable,
     List,
     Optional,
@@ -37,6 +38,7 @@ _SecondType = TypeVar('_SecondType')
 class IO(
     BaseContainer,
     Kind['IO', _ValueType],
+    Generic[_ValueType],
     functor.Functor[_ValueType],
     applicative.Applicative[_ValueType],
     monad.Monad[_ValueType],
@@ -162,7 +164,7 @@ class IO(
           >>> from returns.io import IO
           >>> assert IO(1) == IO.from_value(1)
 
-        Part of the :class:`returns.primitives.interfaces.Applicative`
+        Part of the :class:`returns.typeclasses.applicative.Applicative`
         protocol.
         """
         return IO(inner_value)
@@ -245,6 +247,7 @@ def impure(
 class IOResult(
     BaseContainer,
     Kind['IOResult', _ValueType, _ErrorType],
+    Generic[_ValueType, _ErrorType],
     functor.Functor[_ValueType],
     applicative.Applicative[_ValueType],
     monad.Monad[_ValueType],
@@ -670,7 +673,6 @@ class IOResult(
         """
         One more value to create success unit values.
 
-        This is a part of :class:`returns.primitives.interfaces.Unitable`.
         It is useful as a united way to create a new value from any container.
 
         .. code:: python
@@ -691,7 +693,6 @@ class IOResult(
         """
         One more value to create failure unit values.
 
-        This is a part of :class:`returns.primitives.interfaces.Unitable`.
         It is useful as a united way to create a new value from any container.
 
         .. code:: python

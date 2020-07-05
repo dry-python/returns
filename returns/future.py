@@ -6,6 +6,7 @@ from typing import (
     ClassVar,
     Coroutine,
     Generator,
+    Generic,
     Iterable,
     Sequence,
     Type,
@@ -60,6 +61,7 @@ async def async_identity(instance: _FirstType) -> _FirstType:
 class Future(
     BaseContainer,
     Kind['Future', _ValueType],
+    Generic[_ValueType],
     functor.Functor[_ValueType],
     applicative.Applicative[_ValueType],
     monad.Monad[_ValueType],
@@ -492,6 +494,7 @@ def asyncify(function: Callable[..., _ValueType]) -> Callable[
 class FutureResult(
     BaseContainer,
     Kind['FutureResult', _ValueType, _ErrorType],
+    Generic[_ValueType, _ErrorType],
     functor.Functor[_ValueType],
     applicative.Applicative[_ValueType],
     monad.Monad[_ValueType],

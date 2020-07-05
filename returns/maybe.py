@@ -4,6 +4,7 @@ from typing import (
     Any,
     Callable,
     ClassVar,
+    Generic,
     Iterable,
     NoReturn,
     Optional,
@@ -33,6 +34,7 @@ _SecondType = TypeVar('_SecondType')
 class Maybe(
     BaseContainer,
     Kind['Maybe', _ValueType],
+    Generic[_ValueType],
     functor.Functor[_ValueType],
     applicative.Applicative[_ValueType],
     monad.Monad[_ValueType],

@@ -5,6 +5,7 @@ from typing import (
     Any,
     Callable,
     ClassVar,
+    Generic,
     Iterable,
     List,
     NoReturn,
@@ -37,6 +38,7 @@ _SecondType = TypeVar('_SecondType')
 class Result(
     BaseContainer,
     Kind['Result', _ValueType, _ErrorType],
+    Generic[_ValueType, _ErrorType],
     functor.Functor[_ValueType],
     applicative.Applicative[_ValueType],
     monad.Monad[_ValueType],
@@ -294,7 +296,6 @@ class Result(
         """
         One more value to create success unit values.
 
-        This is a part of :class:`returns.primitives.interfaces.Unitable`.
         It is useful as a united way to create a new value from any container.
 
         .. code:: python
@@ -315,7 +316,6 @@ class Result(
         """
         One more value to create failure unit values.
 
-        This is a part of :class:`returns.primitives.interfaces.Unitable`.
         It is useful as a united way to create a new value from any container.
 
         .. code:: python

@@ -5,8 +5,7 @@ def _fix(function):
     In other words, it modifies the function's
     signature from: ``a -> b`` to: ``Container[a] -> Container[b]``
 
-    Works similar to :meth:`returns.primitives.interfaces.Fixable.fix`,
-    but has inverse semantics.
+    Works similar to ``.fix`` method, but has inverse semantics.
 
     This is how it should be used:
 

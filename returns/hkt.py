@@ -12,6 +12,25 @@ class Kind(Generic[_InstanceType, _TypeArgTypes]):
     Otherwise, it is currently impossible to properly type this.
 
     We use "emulated Higher Kinded Types" concept.
+    Read the whitepaper: https://bit.ly/2ABACx2
+
+    Here's how one should use this type:
+
+    .. code:: python
+
+      >>> from typing import Generic, TypeVar
+      >>> from returns.hkt import Kind
+      >>> _ValueType = TypeVar('_ValueType')
+
+      >>> class MyContainer(
+      ...    Kind['MyContainer', _ValueType],
+      ...    Generic[_ValueType],
+      ... ):
+      ...     ...
+
+    Note, that we are required to use ``Kind`` and ``Generic`` at the same time.
+    We use ``Generic`` after ``Kind`` to make sure
+    that our custom ``__class_getitem__`` is overriden with the correct one.
 
     See also:
         https://arrow-kt.io/docs/0.10/patterns/glossary/#higher-kinds
@@ -23,7 +42,12 @@ class Kind(Generic[_InstanceType, _TypeArgTypes]):
     __slots__ = ()
 
     def __class_getitem__(cls, type_params):  # noqa: N805
-        """Used to suppress generic validation."""
+        """
+        Used to suppress generic validation.
+
+        In other words, makes ``Kind['UID', T1, T2, T3, ..., TN]`` possible.
+        This method should not be used for other types rather than ``Kind``.
+        """
         if not isinstance(type_params, tuple):
             type_params = (type_params,)  # noqa: WPS434
 

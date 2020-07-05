@@ -21,7 +21,6 @@ def _rescue(function):
       >>> assert rescue(example)(Failure(1)) == Success(2)
 
     Note, that this function works for all containers with ``.rescue`` method.
-    See :class:`returns.primitives.interfaces.Rescueable` for more info.
 
     """
     return lambda container: container.rescue(function)

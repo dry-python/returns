@@ -335,11 +335,3 @@ It defines some basic things like representation, hashing, pickling, etc.
 .. automodule:: returns.primitives.container
    :members:
    :special-members:
-
-Here are our interfaces (or protocols to be more specific)
-that we use inside our app:
-
-.. autoclasstree:: returns.primitives.interfaces
-
-.. automodule:: returns.primitives.interfaces
-   :members:

@@ -5,8 +5,7 @@ def _alt(function):
     In other words, it modifies the function's
     signature from: ``a -> b`` to: ``Container[a] -> Container[b]``
 
-    Works similar to :meth:`returns.primitives.interfaces.Altable.alt`,
-    but has inverse semantics.
+    Works similar to ``.alt`` method, but has inverse semantics.
 
     This is how it should be used:
 

@@ -21,7 +21,6 @@ def _apply(container):
       >>> assert apply(Nothing)(Nothing) == Nothing
 
     Note, that this function works for all containers with ``.apply`` method.
-    See :class:`returns.primitives.interfaces.Applicative` for more info.
 
     """
     return lambda other: other.apply(container)

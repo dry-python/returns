@@ -54,6 +54,7 @@ NoDeps = Any
 class RequiresContext(
     BaseContainer,
     Kind['RequiresContext', _ReturnType, _EnvType],
+    Generic[_ReturnType, _EnvType],
     functor.Functor[_ReturnType],
     applicative.Applicative[_ReturnType],
     monad.Monad[_ReturnType],
@@ -236,9 +237,6 @@ class RequiresContext(
           >>> assert unit(RequiresContext.empty) == 5
 
         Might be used with or without direct type hint.
-
-        Part of the :class:`returns.primitives.interfaces.Applicative`
-        protocol.
         """
         return RequiresContext(lambda _: inner_value)
 
@@ -329,14 +327,19 @@ class RequiresContext(
 
         .. code:: python
 
+          >>> import anyio
           >>> from returns.context import RequiresContext
-          >>> from returns.context import RequiresContextIOResult
+          >>> from returns.context import RequiresContextFutureResult
           >>> from returns.io import IOSuccess
-          >>> assert RequiresContext.from_requires_context_ioresult(
-          ...    RequiresContextIOResult.from_value(1),
-          ... )(...) == IOSuccess(1)
 
-        Can be reverted with ``RequiresContextIOResult.from_typecast``.
+          >>> container = RequiresContext.from_requires_context_future_result(
+          ...    RequiresContextFutureResult.from_value(1),
+          ... )
+          >>> assert anyio.run(
+          ...     container, RequiresContext.empty,
+          ... ) == IOSuccess(1)
+
+        Can be reverted with ``RequiresContextFutureResult.from_typecast``.
 
         """
         return RequiresContext(inner_value)
@@ -440,4 +443,4 @@ class Context(Immutable, Generic[_EnvType], metaclass=ABCMeta):
 # Aliases
 
 #: Sometimes `RequiresContext` is too long to type.
-Reader = RequiresContext[_ReturnType, _EnvType]
+Reader = RequiresContext

@@ -41,6 +41,7 @@ _FirstType = TypeVar('_FirstType')
 class RequiresContextResult(
     BaseContainer,
     Kind['RequiresContextResult', _ValueType, _ErrorType, _EnvType],
+    Generic[_ValueType, _ErrorType, _EnvType],
     functor.Functor[_ValueType],
     applicative.Applicative[_ValueType],
     monad.Monad[_ValueType],
@@ -676,7 +677,7 @@ RequiresContextResultE = RequiresContextResult[
 ]
 
 #: Alias to save you some typing. Uses original name from Haskell.
-ReaderResult = RequiresContextResult[_ValueType, _ErrorType, _EnvType]
+ReaderResult = RequiresContextResult
 
 #: Alias to save you some typing. Has ``Exception`` as error type.
 ReaderResultE = RequiresContextResult[_ValueType, Exception, _EnvType]

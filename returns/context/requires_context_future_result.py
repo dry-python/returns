@@ -49,6 +49,7 @@ _FirstType = TypeVar('_FirstType')
 class RequiresContextFutureResult(
     BaseContainer,
     Kind['RequiresContextFutureResult', _ValueType, _ErrorType, _EnvType],
+    Generic[_ValueType, _ErrorType, _EnvType],
     functor.Functor[_ValueType],
     applicative.Applicative[_ValueType],
     monad.Monad[_ValueType],
@@ -1403,9 +1404,7 @@ RequiresContextFutureResultE = RequiresContextFutureResult[
 ]
 
 #: Sometimes `RequiresContextFutureResult` is too long to type.
-ReaderFutureResult = RequiresContextFutureResult[
-    _ValueType, _ErrorType, _EnvType,
-]
+ReaderFutureResult = RequiresContextFutureResult
 
 #: Alias to save you some typing. Uses ``Exception`` as error type.
 ReaderFutureResultE = RequiresContextFutureResult[
