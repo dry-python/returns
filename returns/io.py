@@ -20,7 +20,7 @@ from returns._generated.iterable import iterable
 from returns.hkt import Kind, dekind
 from returns.primitives.container import BaseContainer
 from returns.result import Failure, Result, Success
-from returns.typeclasses import applicative, functor
+from returns.typeclasses import applicative, functor, monad
 
 _ValueType = TypeVar('_ValueType', covariant=True)
 _NewValueType = TypeVar('_NewValueType')
@@ -39,6 +39,7 @@ class IO(
     Kind['IO', _ValueType],
     functor.Functor[_ValueType],
     applicative.Applicative[_ValueType],
+    monad.Monad[_ValueType],
 ):
     """
     Explicit container for impure function results.
@@ -130,7 +131,8 @@ class IO(
         return self.map(dekind(container)._inner_value)  # noqa: WPS437
 
     def bind(
-        self, function: Callable[[_ValueType], 'IO[_NewValueType]'],
+        self,
+        function: Callable[[_ValueType], Kind['IO', _NewValueType]],
     ) -> 'IO[_NewValueType]':
         """
         Applies 'function' to the result of a previous calculation.
@@ -146,7 +148,7 @@ class IO(
           >>> assert IO('a').bind(bindable) == IO('ab')
 
         """
-        return function(self._inner_value)
+        return dekind(function(self._inner_value))
 
     @classmethod
     def from_value(cls, inner_value: _NewValueType) -> 'IO[_NewValueType]':
@@ -245,6 +247,7 @@ class IOResult(
     Kind['IOResult', _ValueType, _ErrorType],
     functor.Functor[_ValueType],
     applicative.Applicative[_ValueType],
+    monad.Monad[_ValueType],
     metaclass=ABCMeta,
 ):
     """
@@ -379,7 +382,7 @@ class IOResult(
         self,
         function: Callable[
             [_ValueType],
-            'IOResult[_NewValueType, _ErrorType]',
+            Kind['IOResult', _NewValueType, _ErrorType],
         ],
     ) -> 'IOResult[_NewValueType, _ErrorType]':
         """
@@ -477,7 +480,7 @@ class IOResult(
           >>> assert IOFailure('a').unify(bindable) == IOFailure('a')
 
         """
-        return self.bind(function)  # type: ignore
+        return self.bind(function)
 
     def fix(
         self,

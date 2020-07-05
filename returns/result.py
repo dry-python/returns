@@ -21,7 +21,7 @@ from returns._generated.iterable import iterable
 from returns.hkt import Kind
 from returns.primitives.container import BaseContainer
 from returns.primitives.exceptions import UnwrapFailedError
-from returns.typeclasses import applicative, functor
+from returns.typeclasses import applicative, functor, monad
 
 # Definitions:
 _ValueType = TypeVar('_ValueType', covariant=True)
@@ -39,6 +39,7 @@ class Result(
     Kind['Result', _ValueType, _ErrorType],
     functor.Functor[_ValueType],
     applicative.Applicative[_ValueType],
+    monad.Monad[_ValueType],
     metaclass=ABCMeta,
 ):
     """
@@ -114,7 +115,10 @@ class Result(
 
     def bind(
         self,
-        function: Callable[[_ValueType], 'Result[_NewValueType, _ErrorType]'],
+        function: Callable[
+            [_ValueType],
+            Kind['Result', _NewValueType, _ErrorType],
+        ],
     ) -> 'Result[_NewValueType, _ErrorType]':
         """
         Composes successful container with a function that returns a container.
@@ -138,7 +142,8 @@ class Result(
     def unify(
         self,
         function: Callable[
-            [_ValueType], 'Result[_NewValueType, _NewErrorType]',
+            [_ValueType],
+            'Result[_NewValueType, _NewErrorType]',
         ],
     ) -> 'Result[_NewValueType, Union[_ErrorType, _NewErrorType]]':
         """

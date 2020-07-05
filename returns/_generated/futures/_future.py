@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING, Awaitable, Callable, TypeVar
 
+from returns.hkt import Kind, dekind
 from returns.io import IO
 
 if TYPE_CHECKING:
@@ -26,11 +27,11 @@ async def async_apply(
 
 
 async def async_bind(
-    function: Callable[[_ValueType], 'Future[_NewValueType]'],
+    function: Callable[[_ValueType], Kind['Future', _NewValueType]],
     inner_value: Awaitable[_ValueType],
 ) -> _NewValueType:
     """Async binds a container over a value."""
-    return (await function(await inner_value))._inner_value
+    return (await dekind(function(await inner_value)))._inner_value
 
 
 async def async_bind_awaitable(

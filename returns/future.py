@@ -21,7 +21,7 @@ from returns.hkt import Kind, dekind
 from returns.io import IO, IOResult
 from returns.primitives.container import BaseContainer
 from returns.result import Failure, Result, Success
-from returns.typeclasses import applicative, functor
+from returns.typeclasses import applicative, functor, monad
 
 # Definitions:
 _ValueType = TypeVar('_ValueType', covariant=True)
@@ -62,6 +62,7 @@ class Future(
     Kind['Future', _ValueType],
     functor.Functor[_ValueType],
     applicative.Applicative[_ValueType],
+    monad.Monad[_ValueType],
 ):
     """
     Container to easily compose ``async`` functions.
@@ -216,7 +217,7 @@ class Future(
 
     def bind(
         self,
-        function: Callable[[_ValueType], 'Future[_NewValueType]'],
+        function: Callable[[_ValueType], Kind['Future', _NewValueType]],
     ) -> 'Future[_NewValueType]':
         """
         Applies 'function' to the result of a previous calculation.
@@ -493,6 +494,7 @@ class FutureResult(
     Kind['FutureResult', _ValueType, _ErrorType],
     functor.Functor[_ValueType],
     applicative.Applicative[_ValueType],
+    monad.Monad[_ValueType],
 ):
     """
     Container to easily compose ``async`` functions.
@@ -683,7 +685,7 @@ class FutureResult(
         self,
         function: Callable[
             [_ValueType],
-            'FutureResult[_NewValueType, _ErrorType]',
+            Kind['FutureResult', _NewValueType, _ErrorType],
         ],
     ) -> 'FutureResult[_NewValueType, _ErrorType]':
         """
@@ -959,7 +961,7 @@ class FutureResult(
           ... ) == IOFailure(1)
 
         """
-        return self.bind(function)  # type: ignore
+        return self.bind(function)
 
     def fix(
         self,
