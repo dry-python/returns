@@ -147,7 +147,7 @@ class RequiresContextFutureResult(
           >>> from returns.future import FutureResult
           >>> from returns.io import IOSuccess
 
-          >>> def first(lg: bool) -> RequiresContextFutureResult[int, int, str]:
+          >>> def first(lg: bool) -> RequiresContextFutureResult[int, str, int]:
           ...     # `deps` has `int` type here:
           ...     return RequiresContextFutureResult(
           ...         lambda deps: FutureResult.from_value(
@@ -256,7 +256,7 @@ class RequiresContextFutureResult(
 
           >>> def function(
           ...     number: int,
-          ... ) -> RequiresContextFutureResult[int, str, int]:
+          ... ) -> RequiresContextFutureResult[str, int, int]:
           ...     # `deps` has `int` type here:
           ...     return RequiresContextFutureResult(
           ...         lambda deps: FutureResult.from_value(str(number + deps)),
@@ -274,7 +274,9 @@ class RequiresContextFutureResult(
         """
         return RequiresContextFutureResult(
             lambda deps: self(deps).bind(
-                lambda inner: dekind(function(inner))(deps),  # type: ignore[misc]
+                lambda inner: dekind(  # type: ignore[misc]
+                    function(inner),
+                )(deps),
             ),
         )
 
@@ -299,7 +301,7 @@ class RequiresContextFutureResult(
 
           >>> async def function(
           ...     number: int,
-          ... ) -> RequiresContextFutureResult[int, str, int]:
+          ... ) -> RequiresContextFutureResult[str, int, int]:
           ...     return RequiresContextFutureResult.from_value(number + 1)
 
           >>> assert anyio.run(
@@ -413,7 +415,7 @@ class RequiresContextFutureResult(
           >>> from returns.context import RequiresContext
           >>> from returns.io import IOSuccess, IOFailure
 
-          >>> def function(arg: int) -> RequiresContext[str, int]:
+          >>> def function(arg: int) -> RequiresContext[int, str]:
           ...     return RequiresContext(lambda deps: len(deps) + arg)
 
           >>> assert anyio.run(
@@ -454,7 +456,7 @@ class RequiresContextFutureResult(
           >>> from returns.io import IOSuccess, IOFailure
           >>> from returns.result import Success
 
-          >>> def function(arg: int) -> RequiresContextResult[str, int, int]:
+          >>> def function(arg: int) -> RequiresContextResult[int, int, str]:
           ...     return RequiresContextResult(
           ...         lambda deps: Success(len(deps) + arg),
           ...     )
@@ -496,7 +498,7 @@ class RequiresContextFutureResult(
           >>> from returns.context import RequiresContextIOResult
           >>> from returns.io import IOSuccess, IOFailure
 
-          >>> def function(arg: int) -> RequiresContextIOResult[str, int, int]:
+          >>> def function(arg: int) -> RequiresContextIOResult[int, int, str]:
           ...     return RequiresContextIOResult(
           ...         lambda deps: IOSuccess(len(deps) + arg),
           ...     )

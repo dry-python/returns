@@ -142,7 +142,7 @@ class RequiresContextResult(
           >>> from returns.context import RequiresContextResult
           >>> from returns.result import Success
 
-          >>> def first(lg: bool) -> RequiresContextResult[float, int, str]:
+          >>> def first(lg: bool) -> RequiresContextResult[int, str, float]:
           ...     # `deps` has `float` type here:
           ...     return RequiresContextResult(
           ...         lambda deps: Success(deps if lg else -deps),
@@ -235,7 +235,7 @@ class RequiresContextResult(
           >>> from returns.context import RequiresContextResult
           >>> from returns.result import Success, Failure
 
-          >>> def first(lg: bool) -> RequiresContextResult[float, int, int]:
+          >>> def first(lg: bool) -> RequiresContextResult[int, int, float]:
           ...     # `deps` has `float` type here:
           ...     return RequiresContextResult(
           ...         lambda deps: Success(deps) if lg else Failure(-deps),
@@ -243,7 +243,7 @@ class RequiresContextResult(
 
           >>> def second(
           ...     number: int,
-          ... ) -> RequiresContextResult[float, str, int]:
+          ... ) -> RequiresContextResult[str, int, float]:
           ...     # `deps` has `float` type here:
           ...     return RequiresContextResult(
           ...         lambda deps: Success('>=' if number >= deps else '<'),
@@ -271,7 +271,7 @@ class RequiresContextResult(
           >>> from returns.context import RequiresContextResult
           >>> from returns.result import Success, Failure, Result
 
-          >>> def function(num: int) -> Result[int, str]:
+          >>> def function(num: int) -> Result[str, int]:
           ...     return Success(num + 1) if num > 0 else Failure('<0')
 
           >>> assert RequiresContextResult.from_value(1).bind_result(
@@ -304,7 +304,7 @@ class RequiresContextResult(
           >>> from returns.context import RequiresContext
           >>> from returns.result import Success, Failure
 
-          >>> def function(arg: int) -> RequiresContext[str, int]:
+          >>> def function(arg: int) -> RequiresContext[int, str]:
           ...     return RequiresContext(lambda deps: len(deps) + arg)
 
           >>> assert function(2)('abc') == 5
@@ -672,7 +672,7 @@ class ContextResult(Immutable, Generic[_EnvType], metaclass=ABCMeta):
 
 #: Alias for a popular case when ``Result`` has ``Exception`` as error type.
 RequiresContextResultE = RequiresContextResult[
-    _ValueType, Exception, _EnvType
+    _ValueType, Exception, _EnvType,
 ]
 
 #: Alias to save you some typing. Uses original name from Haskell.

@@ -123,7 +123,7 @@ Much better, isn't it?
 
 ## RequiresContext container
 
-Many developers do use some kind of [dependency injection](https://github.com/dry-python/dependencies) in Python.
+Many developers do use some kind of dependency injection in Python.
 And usually it is based on the idea
 that there's some kind of a container and assembly process.
 
@@ -193,11 +193,11 @@ from returns.context import RequiresContext
 class _Deps(Protocol):  # we rely on abstractions, not direct values or types
     WORD_THRESHOLD: int
 
-def calculate_points(word: str) -> RequiresContext[_Deps, int]:
+def calculate_points(word: str) -> RequiresContext[int, _Deps]:
     guessed_letters_count = len([letter for letter in word if letter != '.'])
     return _award_points_for_letters(guessed_letters_count)
 
-def _award_points_for_letters(guessed: int) -> RequiresContext[_Deps, int]:
+def _award_points_for_letters(guessed: int) -> RequiresContext[int, _Deps]:
     return RequiresContext(
         lambda deps: 0 if guessed < deps.WORD_THRESHOLD else guessed,
     )
@@ -208,7 +208,7 @@ And have the type-safety to check what you pass to cover your back.
 Check out [RequiresContext](https://returns.readthedocs.io/en/latest/pages/context.html) docs for more. There you will learn how to make `'.'` also configurable.
 
 We also have [RequiresContextResult](https://returns.readthedocs.io/en/latest/pages/context.html#requirescontextresult-container)
-for context-related operations that might fail.
+for context-related operations that might fail. And also [RequiresContextIOResult](https://returns.readthedocs.io/en/latest/pages/context.html#requirescontextioresult-container) and [RequiresContextFutureResult](https://returns.readthedocs.io/en/latest/pages/context.html#requirescontextfutureresult-container).
 
 
 ## Result container

@@ -120,7 +120,7 @@ class RequiresContext(
 
           >>> from returns.context import RequiresContext
 
-          >>> def first(lg: bool) -> RequiresContext[float, int]:
+          >>> def first(lg: bool) -> RequiresContext[int, float]:
           ...     # `deps` has `float` type here:
           ...     return RequiresContext(
           ...         lambda deps: deps if lg else -deps,
@@ -147,7 +147,7 @@ class RequiresContext(
         .. code:: python
 
           >>> from returns.context import RequiresContext
-          >>> def first(lg: bool) -> RequiresContext[float, int]:
+          >>> def first(lg: bool) -> RequiresContext[int, float]:
           ...     # `deps` has `float` type here:
           ...     return RequiresContext(
           ...         lambda deps: deps if lg else -deps,
@@ -199,13 +199,13 @@ class RequiresContext(
 
           >>> from returns.context import RequiresContext
 
-          >>> def first(lg: bool) -> RequiresContext[float, int]:
+          >>> def first(lg: bool) -> RequiresContext[int, float]:
           ...     # `deps` has `float` type here:
           ...     return RequiresContext(
           ...         lambda deps: deps if lg else -deps,
           ...     )
 
-          >>> def second(number: int) -> RequiresContext[float, str]:
+          >>> def second(number: int) -> RequiresContext[str, float]:
           ...     # `deps` has `float` type here:
           ...     return RequiresContext(
           ...         lambda deps: '>=' if number >= deps else '<',
@@ -272,8 +272,8 @@ class RequiresContext(
         """
         Typecasts ``RequiresContextResult`` to ``RequiresContext`` instance.
 
-        Breaks ``RequiresContextResult[e, a, b]``
-        into ``RequiresContext[e, Result[a, b]]``.
+        Breaks ``RequiresContextResult[a, b, e]``
+        into ``RequiresContext[Result[a, b], e]``.
 
         .. code:: python
 
@@ -298,8 +298,8 @@ class RequiresContext(
         """
         Typecasts ``RequiresContextIOResult`` to ``RequiresContext`` instance.
 
-        Breaks ``RequiresContextIOResult[e, a, b]``
-        into ``RequiresContext[e, IOResult[a, b]]``.
+        Breaks ``RequiresContextIOResult[a, b, e]``
+        into ``RequiresContext[IOResult[a, b], e]``.
 
         .. code:: python
 
@@ -315,31 +315,31 @@ class RequiresContext(
         """
         return RequiresContext(inner_value)
 
-    # @classmethod
-    # def from_requires_context_future_result(
-    #     cls,
-    #     inner_value:
-    #         'RequiresContextFutureResult[_ValueType, _ErrorType, _EnvType]',
-    # ) -> 'RequiresContext[_EnvType, FutureResult[_ValueType, _ErrorType]]':
-    #     """
-    #     Typecasts ``RequiresContextIOResult`` to ``RequiresContext`` instance.
+    @classmethod
+    def from_requires_context_future_result(
+        cls,
+        inner_value:
+            'RequiresContextFutureResult[_ValueType, _ErrorType, _EnvType]',
+    ) -> 'RequiresContext[FutureResult[_ValueType, _ErrorType], _EnvType]':
+        """
+        Typecasts ``RequiresContextIOResult`` to ``RequiresContext`` instance.
 
-    #     Breaks ``RequiresContextIOResult[e, a, b]``
-    #     into ``RequiresContext[e, IOResult[a, b]]``.
+        Breaks ``RequiresContextIOResult[a, b, e]``
+        into ``RequiresContext[IOResult[a, b], e]``.
 
-    #     .. code:: python
+        .. code:: python
 
-    #       >>> from returns.context import RequiresContext
-    #       >>> from returns.context import RequiresContextIOResult
-    #       >>> from returns.io import IOSuccess
-    #       >>> assert RequiresContext.from_requires_context_ioresult(
-    #       ...    RequiresContextIOResult.from_value(1),
-    #       ... )(...) == IOSuccess(1)
+          >>> from returns.context import RequiresContext
+          >>> from returns.context import RequiresContextIOResult
+          >>> from returns.io import IOSuccess
+          >>> assert RequiresContext.from_requires_context_ioresult(
+          ...    RequiresContextIOResult.from_value(1),
+          ... )(...) == IOSuccess(1)
 
-    #     Can be reverted with ``RequiresContextIOResult.from_typecast``.
+        Can be reverted with ``RequiresContextIOResult.from_typecast``.
 
-    #     """
-    #     return RequiresContext(inner_value)
+        """
+        return RequiresContext(inner_value)
 
 
 @final
@@ -390,7 +390,7 @@ class Context(Immutable, Generic[_EnvType], metaclass=ABCMeta):
           >>> class Deps(TypedDict):
           ...     message: str
 
-          >>> def first(lg: bool) -> RequiresContext[Deps, int]:
+          >>> def first(lg: bool) -> RequiresContext[int, Deps]:
           ...     # `deps` has `Deps` type here:
           ...     return RequiresContext(
           ...         lambda deps: deps['message'] if lg else 'error',
@@ -413,7 +413,7 @@ class Context(Immutable, Generic[_EnvType], metaclass=ABCMeta):
           ...     message: str
           ...     limit: int   # note this new field!
 
-          >>> def new_first(lg: bool) -> RequiresContext[Deps, int]:
+          >>> def new_first(lg: bool) -> RequiresContext[int, Deps]:
           ...     # `deps` has `Deps` type here:
           ...     return RequiresContext(
           ...         lambda deps: deps['message'] if lg else 'err',

@@ -153,7 +153,7 @@ class RequiresContextIOResult(
           >>> from returns.context import RequiresContextIOResult
           >>> from returns.io import IOSuccess
 
-          >>> def first(lg: bool) -> RequiresContextIOResult[float, int, str]:
+          >>> def first(lg: bool) -> RequiresContextIOResult[int, str, float]:
           ...     # `deps` has `float` type here:
           ...     return RequiresContextIOResult(
           ...         lambda deps: IOSuccess(deps if lg else -deps),
@@ -246,7 +246,7 @@ class RequiresContextIOResult(
           >>> from returns.context import RequiresContextIOResult
           >>> from returns.io import IOSuccess, IOFailure
 
-          >>> def first(lg: bool) -> RequiresContextIOResult[float, int, int]:
+          >>> def first(lg: bool) -> RequiresContextIOResult[int, int, float]:
           ...     # `deps` has `float` type here:
           ...     return RequiresContextIOResult(
           ...         lambda deps: IOSuccess(deps) if lg else IOFailure(-deps),
@@ -254,7 +254,7 @@ class RequiresContextIOResult(
 
           >>> def second(
           ...     number: int,
-          ... ) -> RequiresContextIOResult[float, str, int]:
+          ... ) -> RequiresContextIOResult[str, int, float]:
           ...     # `deps` has `float` type here:
           ...     return RequiresContextIOResult(
           ...         lambda deps: IOSuccess('>=' if number >= deps else '<'),
@@ -266,7 +266,9 @@ class RequiresContextIOResult(
         """
         return RequiresContextIOResult(
             lambda deps: self(deps).bind(
-                lambda inner: dekind(function(inner))(deps),  # type: ignore[misc]
+                lambda inner: dekind(  # type: ignore[misc]
+                    function(inner),
+                )(deps),
             ),
         )
 
@@ -318,7 +320,7 @@ class RequiresContextIOResult(
           >>> from returns.context import RequiresContext
           >>> from returns.io import IOSuccess, IOFailure
 
-          >>> def function(arg: int) -> RequiresContext[str, int]:
+          >>> def function(arg: int) -> RequiresContext[int, str]:
           ...     return RequiresContext(lambda deps: len(deps) + arg)
 
           >>> assert function(2)('abc') == 5
@@ -354,7 +356,7 @@ class RequiresContextIOResult(
           >>> from returns.io import IOSuccess, IOFailure
           >>> from returns.result import Success, Failure
 
-          >>> def function(arg: int) -> RequiresContextResult[str, int, int]:
+          >>> def function(arg: int) -> RequiresContextResult[int, int, str]:
           ...     if arg > 0:
           ...         return RequiresContextResult(
           ...             lambda deps: Success(len(deps) + arg),

@@ -1,7 +1,7 @@
 Context
 =======
 
-`Dependency injection <https://github.com/dry-python/dependencies>`_ is a popular software architechture pattern.
+Dependency injection is a popular software architechture pattern.
 
 It's main idea is that you provide `Inversion of Control <https://en.wikipedia.org/wiki/Inversion_of_control>`_
 and can pass different things into your logic instead of hardcoding you stuff.
@@ -125,11 +125,11 @@ Let's see how our code changes:
   class _Deps(Protocol):  # we rely on abstractions, not direct values or types
       WORD_THRESHOLD: int
 
-  def calculate_points(word: str) -> RequiresContext[_Deps, int]:
+  def calculate_points(word: str) -> RequiresContext[int, _Deps]:
       guessed_letters_count = len([letter for letter in word if letter != '.'])
       return _award_points_for_letters(guessed_letters_count)
 
-  def _award_points_for_letters(guessed: int) -> RequiresContext[_Deps, int]:
+  def _award_points_for_letters(guessed: int) -> RequiresContext[int, _Deps]:
       return RequiresContext(
           lambda deps: 0 if guessed < deps.WORD_THRESHOLD else guessed,
       )
@@ -149,7 +149,7 @@ How can we do that with our existing function?
 
 .. code:: python
 
-  def calculate_points(word: str) -> RequiresContext[_Deps, int]:
+  def calculate_points(word: str) -> RequiresContext[int, _Deps]:
       guessed_letters_count = len([letter for letter in word if letter != '.'])
       return _award_points_for_letters(guessed_letters_count)
 
@@ -173,8 +173,8 @@ Let's see the final result:
       WORD_THRESHOLD: int
       UNGUESSED_CHAR: str
 
-  def calculate_points(word: str) -> RequiresContext[_Deps, int]:
-      def factory(deps: _Deps) -> RequiresContext[_Deps, int]:
+  def calculate_points(word: str) -> RequiresContext[int, _Deps]:
+      def factory(deps: _Deps) -> RequiresContext[int, _Deps]:
           guessed_letters_count = len([
               letter for letter in word if letter != deps.UNGUESSED_CHAR
           ])
@@ -203,7 +203,7 @@ It can be illustrated as a simple nested function:
   ...     def inner(deps: str) -> bool:
   ...         return len(deps) > limit
   ...     return inner
-  ...
+
   >>> assert first(2)('abc')  # first(limit)(deps)
   >>> assert not first(5)('abc')  # first(limit)(deps)
 
@@ -225,7 +225,7 @@ We can wrap it in ``RequiresContext`` container to allow better composition!
 
   >>> from returns.context import RequiresContext
 
-  >>> def first(limit: int) -> RequiresContext[str, bool]:
+  >>> def first(limit: int) -> RequiresContext[bool, str]:
   ...     def inner(deps: str) -> bool:
   ...         return len(deps) > limit
   ...     return RequiresContext(inner)  # wrapping function here!
@@ -252,7 +252,7 @@ And then normal logical execution happens.
 RequiresContextResult container
 -------------------------------
 
-This container is a combintaion of ``RequiresContext[env, Result[a, b]]``.
+This container is a combintaion of ``RequiresContext[Result[a, b], env]``.
 Which means that it is a wrapper around pure function that might fail.
 
 We also added a lot of useful methods for this container,
@@ -272,7 +272,7 @@ Use it when you work with pure context-related functions that might fail.
 RequiresContextIOResult container
 ---------------------------------
 
-This container is a combintaion of ``RequiresContext[env, IOResult[a, b]]``.
+This container is a combintaion of ``RequiresContext[IOResult[a, b], env]``.
 Which means that it is a wrapper around impure function that might fail.
 
 We also added a lot of useful methods for this container,
@@ -301,7 +301,7 @@ This is basically **the main type** that is going to be used in most apps.
 RequiresContextFutureResult container
 -------------------------------------
 
-This container is a combintaion of ``RequiresContext[env, FutureResult[a, b]]``.
+This container is a combintaion of ``RequiresContext[FutureResult[a, b], env]``.
 Which means that it is a wrapper around impure async function that might fail.
 
 Here's how it should be used:
@@ -334,7 +334,7 @@ Here's how it should be used:
 
   def _fetch_post(
       post_id: int,
-  ) -> RequiresContextFutureResultE[httpx.AsyncClient, _Post]:
+  ) -> RequiresContextFutureResultE[_Post, httpx.AsyncClient]:
       return ContextFutureResult[httpx.AsyncClient].ask().bind_future_result(
           lambda client: future_safe(client.get)(_URL.format(post_id)),
       ).bind_result(
@@ -345,7 +345,7 @@ Here's how it should be used:
 
   def show_titles(
       number_of_posts: int,
-  ) -> RequiresContextFutureResultE[httpx.AsyncClient, Sequence[_TitleOnly]]:
+  ) -> RequiresContextFutureResultE[Sequence[_TitleOnly], httpx.AsyncClient]:
       return RequiresContextFutureResultE.from_iterable([
           # Notice how easily we compose async and sync functions:
           _fetch_post(post_id).map(lambda post: post['title'])
@@ -549,7 +549,7 @@ We can model the similar idea with ``RequiresContext``:
 
   >>> from returns.context import RequiresContext
 
-  >>> def my_function(first: int, second: int) -> RequiresContext[bool, int]:
+  >>> def my_function(first: int, second: int) -> RequiresContext[int, bool]:
   ...     def factory(print_result: bool) -> int:
   ...         original = first + second
   ...         if print_result:
@@ -566,21 +566,21 @@ it is easier to change the behaviour of a function with ``RequiresContext``.
 While decorator with arguments glues values to a function forever.
 Decide when you need which behaviour carefully.
 
-Why can’t we use RequiresContext[e, Result] instead of RequiresContextResult?
+Why can’t we use RequiresContext[Result, e] instead of RequiresContextResult?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We actually can! But, it is harder to write.
 And ``RequiresContextResult`` is actually
-the very same thing as ``RequiresContext[e, Result]``, but has nicer API:
+the very same thing as ``RequiresContext[Result, e]``, but has nicer API:
 
 .. code:: python
 
-  x: RequiresContext[int, Result[int, str]]
+  x: RequiresContext[Result[int, str], int]
   x.map(lambda result: result.map(lambda number: number + 1))
 
   # Is the same as:
 
-  y: RequiresContextResult[int, int, str]
+  y: RequiresContextResult[int, str, int]
   y.map(lambda number: number + 1)
 
 The second one looks better, doesn't it?
@@ -599,8 +599,8 @@ So, using this technique is better:
 
   from returns.context import Context, RequiresContext
 
-  def some_context(*args, **kwargs) -> RequiresContext[int, str]:
-      def factory(deps: int) -> RequiresContext[int, str]:
+  def some_context(*args, **kwargs) -> RequiresContext[str, int]:
+      def factory(deps: int) -> RequiresContext[str, int]:
           ...
       return Context[int].ask().bind(factory)
 
@@ -615,7 +615,7 @@ that do pretty much the same as ``RequiresContext`` container.
 What is the difference? Why do we need each of them?
 
 Let's find out!
-Tools like `dependencies <https://github.com/dry-python/dependencies>`_
+Tools like `dependencies <https://github.com/proofit404/dependencies>`_
 or `punq <https://github.com/bobthemighty/punq>`_
 tries to:
 
@@ -635,7 +635,7 @@ All it does is: provides simple API to compose functions
 that need additional context (or dependencies) to run.
 
 You can even use them together: ``RequiresContext`` will pass depedencies
-built by ``dry-python/dependencies`` (or any other tool of your choice)
+built by ``punq`` (or any other tool of your choice)
 as a ``deps`` parameter to ``RequiresContext`` instance.
 
 When to use which? Let's dig into it!
