@@ -170,7 +170,7 @@ class Result(
           >>> assert Failure('a').unify(bindable) == Failure('a')
 
         """
-        return self.bind(function)  # type: ignore
+        return self.bind(function)
 
     def fix(
         self,
