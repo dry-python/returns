@@ -19,7 +19,7 @@ from returns._generated.iterable import iterable
 from returns.hkt import Kind
 from returns.primitives.container import BaseContainer
 from returns.primitives.exceptions import UnwrapFailedError
-from returns.typeclasses import functor
+from returns.typeclasses import applicative, functor
 
 # Definitions:
 _ValueType = TypeVar('_ValueType', covariant=True)
@@ -34,6 +34,7 @@ class Maybe(
     BaseContainer,
     Kind['Maybe', _ValueType],
     functor.Functor[_ValueType],
+    applicative.Applicative[_ValueType],
     metaclass=ABCMeta,
 ):
     """
@@ -78,7 +79,7 @@ class Maybe(
 
     def apply(
         self,
-        function: 'Maybe[Callable[[_ValueType], _NewValueType]]',
+        function: Kind['Maybe', Callable[[_ValueType], _NewValueType]],
     ) -> 'Maybe[_NewValueType]':
         """
         Calls a wrapped function in a container on this container.
@@ -205,8 +206,8 @@ class Maybe(
 
     @classmethod
     def from_value(
-        cls, inner_value: Optional[_ValueType],
-    ) -> 'Maybe[_ValueType]':
+        cls, inner_value: Optional[_NewValueType],
+    ) -> 'Maybe[_NewValueType]':
         """
         Creates new instance of ``Maybe`` container based on a value.
 

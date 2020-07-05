@@ -17,11 +17,11 @@ from typing_extensions import final
 
 from returns._generated.futures import _future, _future_result
 from returns._generated.iterable import iterable
-from returns.hkt import Kind
+from returns.hkt import Kind, dekind
 from returns.io import IO, IOResult
 from returns.primitives.container import BaseContainer
 from returns.result import Failure, Result, Success
-from returns.typeclasses import functor
+from returns.typeclasses import applicative, functor
 
 # Definitions:
 _ValueType = TypeVar('_ValueType', covariant=True)
@@ -61,6 +61,7 @@ class Future(
     BaseContainer,
     Kind['Future', _ValueType],
     functor.Functor[_ValueType],
+    applicative.Applicative[_ValueType],
 ):
     """
     Container to easily compose ``async`` functions.
@@ -191,7 +192,7 @@ class Future(
 
     def apply(
         self,
-        container: 'Future[Callable[[_ValueType], _NewValueType]]',
+        container: Kind['Future', Callable[[_ValueType], _NewValueType]],
     ) -> 'Future[_NewValueType]':
         """
         Calls a wrapped function in a container on this container.
@@ -211,7 +212,7 @@ class Future(
           ... ) == IO('1b')
 
         """
-        return Future(_future.async_apply(container, self._inner_value))
+        return Future(_future.async_apply(dekind(container), self._inner_value))
 
     def bind(
         self,
@@ -491,6 +492,7 @@ class FutureResult(
     BaseContainer,
     Kind['FutureResult', _ValueType, _ErrorType],
     functor.Functor[_ValueType],
+    applicative.Applicative[_ValueType],
 ):
     """
     Container to easily compose ``async`` functions.
@@ -637,8 +639,11 @@ class FutureResult(
 
     def apply(
         self,
-        container:
-            'FutureResult[Callable[[_ValueType], _NewValueType], _ErrorType]',
+        container: Kind[
+            'FutureResult',
+            Callable[[_ValueType], _NewValueType],
+            _ErrorType,
+        ],
     ) -> 'FutureResult[_NewValueType, _ErrorType]':
         """
         Calls a wrapped function in a container on this container.
@@ -671,7 +676,7 @@ class FutureResult(
 
         """
         return FutureResult(_future_result.async_apply(
-            container, self._inner_value,
+            dekind(container), self._inner_value,
         ))
 
     def bind(

@@ -16,4 +16,4 @@ class Functor(Generic[_ValueType]):
         self: _FunctorType,
         function: Callable[[_ValueType], _NewValueType],
     ) -> Kind[_FunctorType, _NewValueType]:
-        """Allows to apply a pure function over a container."""
+        """Allows to run a pure function over a container."""

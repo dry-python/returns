@@ -21,7 +21,7 @@ from returns._generated.iterable import iterable
 from returns.hkt import Kind
 from returns.primitives.container import BaseContainer
 from returns.primitives.exceptions import UnwrapFailedError
-from returns.typeclasses import functor
+from returns.typeclasses import applicative, functor
 
 # Definitions:
 _ValueType = TypeVar('_ValueType', covariant=True)
@@ -38,6 +38,7 @@ class Result(
     BaseContainer,
     Kind['Result', _ValueType, _ErrorType],
     functor.Functor[_ValueType],
+    applicative.Applicative[_ValueType],
     metaclass=ABCMeta,
 ):
     """
@@ -90,7 +91,7 @@ class Result(
 
     def apply(
         self,
-        container: 'Result[Callable[[_ValueType], _NewValueType], _ErrorType]',
+        container: Kind['Result', Callable[[_ValueType], _NewValueType]],
     ) -> 'Result[_NewValueType, _ErrorType]':
         """
         Calls a wrapped function in a container on this container.

@@ -88,6 +88,7 @@ _TYPED_PIPE_METHOD: Final = 'returns._generated.pipeline.pipe._Pipe.__call__'
 
 #: Used for HKT emulation.
 _TYPED_KIND: Final = 'returns.hkt.Kind'
+_TYPED_KIND_DEKIND: Final = 'returns.hkt.dekind'
 
 
 # Type aliases
@@ -123,6 +124,7 @@ class _ReturnsPlugin(Plugin):
         _TYPED_CURRY_FUNCTION: curry.analyze,
         _TYPED_FLOW_FUNCTION: flow.analyze,
         _TYPED_PIPE_FUNCTION: pipe.analyze,
+        _TYPED_KIND_DEKIND: kind.infer,
         **dict.fromkeys(_TYPED_PROTOCOL_OVERLOADED, pointfree.analyze),
         **dict.fromkeys(_TYPED_DECORATORS, decorators.analyze),
     }

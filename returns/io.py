@@ -17,10 +17,10 @@ from typing import (
 from typing_extensions import final
 
 from returns._generated.iterable import iterable
-from returns.hkt import Kind
+from returns.hkt import Kind, dekind
 from returns.primitives.container import BaseContainer
 from returns.result import Failure, Result, Success
-from returns.typeclasses import functor
+from returns.typeclasses import applicative, functor
 
 _ValueType = TypeVar('_ValueType', covariant=True)
 _NewValueType = TypeVar('_NewValueType')
@@ -38,6 +38,7 @@ class IO(
     BaseContainer,
     Kind['IO', _ValueType],
     functor.Functor[_ValueType],
+    applicative.Applicative[_ValueType],
 ):
     """
     Explicit container for impure function results.
@@ -102,7 +103,7 @@ class IO(
 
     def apply(
         self,
-        container: 'IO[Callable[[_ValueType], _NewValueType]]',
+        container: Kind['IO', Callable[[_ValueType], _NewValueType]],
     ) -> 'IO[_NewValueType]':
         """
         Calls a wrapped function in a container on this container.
@@ -126,7 +127,7 @@ class IO(
           >>> assert IO('b').apply(IO('a').apply(IO(appliable))) == IO('ab')
 
         """
-        return self.map(container._inner_value)  # noqa: WPS437
+        return self.map(dekind(container)._inner_value)  # noqa: WPS437
 
     def bind(
         self, function: Callable[[_ValueType], 'IO[_NewValueType]'],
@@ -243,6 +244,7 @@ class IOResult(
     BaseContainer,
     Kind['IOResult', _ValueType, _ErrorType],
     functor.Functor[_ValueType],
+    applicative.Applicative[_ValueType],
     metaclass=ABCMeta,
 ):
     """
@@ -341,8 +343,7 @@ class IOResult(
 
     def apply(
         self,
-        container:
-            'IOResult[Callable[[_ValueType], _NewValueType], _ErrorType]',
+        container: Kind['IOResult', Callable[[_ValueType], _NewValueType]],
     ) -> 'IOResult[_NewValueType, _ErrorType]':
         """
         Calls a wrapped function in a container on this container.

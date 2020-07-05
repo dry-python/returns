@@ -18,6 +18,7 @@ See [0Ver](https://0ver.org/).
 - **Breaking**: removes all old interfaces from `primitives/interfaces.py`,
   use new typeclasses instead
 - Adds Higher Kinded Types partial support
+- Adds `dekind` function to turn `Kind[IO, T]` into `IO[T]`
 - Adds new typeclasses for all public interfaces
 - Adds `collect_trace` helper function for better development experience
 
