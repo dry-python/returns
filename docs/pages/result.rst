@@ -170,10 +170,12 @@ Like so:
 
 .. code:: python
 
-  >>> from returns.result import Result, Success
+  >>> from returns.result import Result, Success, Failure
 
   >>> def div(number: int) -> Result[float, ZeroDivisionError]:
-  ...     return Success(1 / number)
+  ...     if number:
+  ...         return Success(1 / number)
+  ...     return Failure(ZeroDivisionError('division by zero'))
 
   >>> container: Result[int, ValueError] = Success(1)
   >>> str(container.unify(div))
