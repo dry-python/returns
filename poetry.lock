@@ -799,6 +799,14 @@ version = "2.4.7"
 
 [[package]]
 category = "dev"
+description = "Mustache for Python"
+name = "pystache"
+optional = false
+python-versions = "*"
+version = "0.5.4"
+
+[[package]]
+category = "dev"
 description = "pytest: simple powerful testing with Python"
 name = "pytest"
 optional = false
@@ -843,13 +851,14 @@ category = "dev"
 description = "pytest plugin for writing tests for mypy plugins"
 name = "pytest-mypy-plugins"
 optional = false
-python-versions = "*"
-version = "1.3.0"
+python-versions = ">=3.6"
+version = "1.4.0"
 
 [package.dependencies]
 decorator = "*"
 mypy = ">=0.730"
-pytest = "*"
+pystache = ">=0.5.4"
+pytest = ">=5.4.0"
 pyyaml = "*"
 
 [[package]]
@@ -1314,7 +1323,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "fcc827cbec0b0f77cf98c66e240ffc661f0be8c3d9d2c1ce4ca0d6c3f961c991"
+content-hash = "c8f269c19f760f70b312811905c78ca8112bdd5c097bae54b1d7185cc4c14d26"
 python-versions = "^3.6"
 
 [metadata.files]
@@ -1701,6 +1710,9 @@ pyparsing = [
     {file = "pyparsing-2.4.7-py2.py3-none-any.whl", hash = "sha256:ef9d7589ef3c200abe66653d3f1ab1033c3c419ae9b9bdb1240a85b024efc88b"},
     {file = "pyparsing-2.4.7.tar.gz", hash = "sha256:c203ec8783bf771a155b207279b9bccb8dea02d8f0c9e5f8ead507bc3246ecc1"},
 ]
+pystache = [
+    {file = "pystache-0.5.4.tar.gz", hash = "sha256:f7bbc265fb957b4d6c7c042b336563179444ab313fb93a719759111eabd3b85a"},
+]
 pytest = [
     {file = "pytest-5.4.3-py3-none-any.whl", hash = "sha256:5c0db86b698e8f170ba4582a492248919255fcd4c79b1ee64ace34301fb589a1"},
     {file = "pytest-5.4.3.tar.gz", hash = "sha256:7979331bfcba207414f5e1263b5a0f8f521d0f457318836a7355531ed1a4c7d8"},
@@ -1710,8 +1722,8 @@ pytest-cov = [
     {file = "pytest_cov-2.10.0-py2.py3-none-any.whl", hash = "sha256:6e6d18092dce6fad667cd7020deed816f858ad3b49d5b5e2b1cc1c97a4dba65c"},
 ]
 pytest-mypy-plugins = [
-    {file = "pytest-mypy-plugins-1.3.0.tar.gz", hash = "sha256:7920a38520f914e849cafc81582318673bec8924ff71ee2d0f98dc738995d06d"},
-    {file = "pytest_mypy_plugins-1.3.0-py3-none-any.whl", hash = "sha256:db18943f8775260308a11948a42739c6789bbab8a1bafb64103e4429ce31dfc0"},
+    {file = "pytest-mypy-plugins-1.4.0.tar.gz", hash = "sha256:f1a1d34bf01cb6d8bf455409ed4e391c0b2f0a64cb0f6e743db975bcafcc8cf2"},
+    {file = "pytest_mypy_plugins-1.4.0-py3-none-any.whl", hash = "sha256:baa43948e9873220876fae86dbefc69727803b2df8c20f8164ff0be9823e91d7"},
 ]
 pytest-randomly = [
     {file = "pytest-randomly-3.4.0.tar.gz", hash = "sha256:e44a69623237e47cc4ee77da9c04c6b505ed1a7b00656dc1409f8344c707b87b"},
