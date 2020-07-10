@@ -166,4 +166,4 @@
     def mappable(arg: float) -> bool:
         ...
 
-    reveal_type(pipe(bind(bound), identity, map_(mappable))(x))  # N: Revealed type is 'returns.result.Result[builtins.bool, builtins.str*]'
+    reveal_type(pipe(bind(bound), identity, map_(mappable))(x))  # N: Revealed type is 'returns.result.Result*[builtins.bool, builtins.str*]'
