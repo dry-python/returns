@@ -2,7 +2,7 @@ from copy import copy, deepcopy
 
 import pytest
 
-from returns.context import Context, RequiresContext
+from returns.context import Context
 from returns.primitives.exceptions import ImmutableStateError
 
 

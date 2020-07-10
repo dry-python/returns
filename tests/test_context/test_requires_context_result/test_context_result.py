@@ -4,7 +4,6 @@ import pytest
 
 from returns.context import ContextResult, RequiresContextResult
 from returns.primitives.exceptions import ImmutableStateError
-from returns.result import Failure, Success
 
 
 def test_context_result_immutable():

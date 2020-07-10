@@ -3,9 +3,7 @@ from copy import copy, deepcopy
 import pytest
 
 from returns.context import ContextIOResult, RequiresContextIOResult
-from returns.io import IOFailure, IOSuccess
 from returns.primitives.exceptions import ImmutableStateError
-from returns.result import Failure, Success
 
 
 def test_context_ioresult_immutable():
