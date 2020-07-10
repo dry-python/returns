@@ -12,7 +12,7 @@ _TypeArgType3 = TypeVar('_TypeArgType3', covariant=True)
 _FunctionDefType = TypeVar(
     '_FunctionDefType',
     bound=Callable[..., 'KindN'],
-    covariant=True,
+    covariant=True,  # This is a must! Otherwise it would not work.
 )
 _FunctionType = TypeVar(
     '_FunctionType',
@@ -136,7 +136,7 @@ def dekind(
 # Utils to define kinded functions
 # ================================
 
-class Kinded(Protocol[_FunctionDefType]):
+class Kinded(Protocol[_FunctionDefType]):  # type: ignore
     """
     Protocol that tracks kinded functions calls.
 
@@ -144,13 +144,7 @@ class Kinded(Protocol[_FunctionDefType]):
     Otherwise, it is currently impossible to properly type this.
     """
 
-    def __call__(self, *args, **kwargs):
-        """
-        This method is augmented via our own mypy plugin.
-
-        It helps to create a correct function signature
-        for actually calling a ``@kinded`` function.
-        """
+    __call__: _FunctionDefType
 
 
 def kinded(function: _FunctionType) -> Kinded[_FunctionType]:
@@ -208,7 +202,7 @@ def kinded(function: _FunctionType) -> Kinded[_FunctionType]:
 
     You must use this decorator for your own kinded functions as well.
     """
-    return function
+    return function  # type: ignore
 
 
 def debound(

@@ -104,23 +104,11 @@ def kinded_method(ctx: MethodContext) -> MypyType:
     - ``KindN[IO, int, <nothing>, <nothing>]`` will be ``IO[int]``
     - ``KindN[Result, int, str, <nothing>]`` will be ``Result[int, str]``
 
+    It also processes nested ``KindN`` with recursive strategy.
+
     See :class:`returns.primitives.hkt.Kinded` for more information.
     """
-    default = ctx.default_return_type
-    if not isinstance(default, Instance) or not default.args:
-        return ctx.default_return_type
-    assert isinstance(ctx.default_return_type, Instance)  # mypy needs this line
-
-    real_type = default.args[0]
-    if isinstance(real_type, TypeVarType):
-        return erase_to_bound(real_type)
-
-    real_type = get_proper_type(real_type)
-    if isinstance(real_type, Instance):
-        return real_type.copy_modified(
-            args=ctx.default_return_type.args[1:len(real_type.args) + 1],
-        )
-    return ctx.default_return_type
+    return _process_kinded_type(ctx.default_return_type)
 
 
 @unique  # noqa: WPS600
@@ -133,3 +121,25 @@ class _KindErrors(str, Enum):  # noqa: WPS600
     debound_not_typevar = (
         'debound must be used with bound TypeVar as the first type argument'
     )
+
+
+def _process_kinded_type(kind: MypyType) -> MypyType:
+    """Recursively process all type arguments in a kind."""
+    kind = get_proper_type(kind)
+    if not isinstance(kind, Instance) or not kind.args:
+        return kind
+
+    real_type = kind.args[0]
+    if isinstance(real_type, TypeVarType):
+        return erase_to_bound(real_type)
+
+    real_type = get_proper_type(real_type)
+    if isinstance(real_type, Instance):
+        return real_type.copy_modified(args=[
+            # Let's check if there are any nested `KindN[]` instance,
+            # if so, it would be dekinded into a regular type following
+            # the same rules:
+            _process_kinded_type(type_arg)
+            for type_arg in kind.args[1:len(real_type.args) + 1]
+        ])
+    return kind

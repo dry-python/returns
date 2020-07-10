@@ -44,7 +44,7 @@ def bind(
       >>> assert bind(example)(Nothing) == Nothing
 
     Note, that this function works for all containers with ``.bind`` method.
-    See :class:`returns.primitives.interfaces.BindableN` for more info.
+    See :class:`returns.primitives.interfaces.bindable.BindableN` for more info.
 
     """
     @kinded
