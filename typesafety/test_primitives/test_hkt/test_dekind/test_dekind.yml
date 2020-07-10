@@ -1,0 +1,72 @@
+- case: dekind_correct_fully_known
+  disable_cache: true
+  main: |
+    from returns.io import IO
+    from returns.primitives.hkt import Kind1, dekind
+
+    container: Kind1[IO, int]
+    reveal_type(dekind(container))  # N: Revealed type is 'returns.io.IO[builtins.int]'
+
+
+- case: dekind_bindable
+  disable_cache: true
+  main: |
+    from returns.interfaces.bindable import Bindable1
+    from typing import Callable, TypeVar
+    from returns.primitives.hkt import Kind1, dekind
+
+    T = TypeVar('T')
+    N = TypeVar('N')
+
+    def bind(
+        instance: Bindable1[T],
+        function: Callable[[T], Kind1[Bindable1, N]],
+    ) -> Bindable1[N]:
+        x = dekind(instance.bind(function))
+        reveal_type(x)  # N: Revealed type is 'returns.interfaces.bindable.BindableN[N`-2, <nothing>, <nothing>]'
+        return x
+
+
+- case: dekind_correct_two_type_args
+  disable_cache: true
+  main: |
+    from returns.io import IOResult
+    from returns.primitives.hkt import Kind2, dekind
+
+    container: Kind2[IOResult, int, str]
+    reveal_type(dekind(container))  # N: Revealed type is 'returns.io.IOResult[builtins.int, builtins.str]'
+
+
+- case: dekind_correct_typevar
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar
+    from returns.primitives.hkt import Kind1, dekind
+
+    _ValueType = TypeVar('_ValueType')
+    _NewValueType = TypeVar('_NewValueType')
+
+    class IO(Kind1['IO', _ValueType]):
+        def apply(
+            self,
+            container: Kind1[
+                'IO', Callable[[_ValueType], _NewValueType],
+            ],
+        ):
+            reveal_type(dekind(container))  # N: Revealed type is 'main.IO[def (_ValueType`1) -> _NewValueType`-1]'
+
+
+- case: dekind_wrong_non_instance
+  disable_cache: true
+  main: |
+    from typing import TypeVar
+    from returns.primitives.hkt import Kind2, dekind
+
+    T = TypeVar('T')
+
+    def some(arg: T):
+        container: Kind2[T, int, str]
+        reveal_type(dekind(container))
+  out: |
+    main:8: error: dekind must be used with Instance as the first type argument
+    main:8: note: Revealed type is 'Any'

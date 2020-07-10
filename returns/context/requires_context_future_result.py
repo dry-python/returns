@@ -18,12 +18,12 @@ from returns._generated.futures import _future_result, _reader_future_result
 from returns._generated.iterable import iterable
 from returns.context import NoDeps
 from returns.future import Future, FutureResult
-from returns.hkt import Kind, dekind
+from returns.interfaces import applicative, bindable, mappable
 from returns.io import IO, IOResult
 from returns.primitives.container import BaseContainer
+from returns.primitives.hkt import Kind3, dekind
 from returns.primitives.types import Immutable
 from returns.result import Result
-from returns.typeclasses import applicative, functor, monad
 
 if TYPE_CHECKING:
     from returns.context.requires_context import RequiresContext
@@ -48,11 +48,10 @@ _FirstType = TypeVar('_FirstType')
 @final
 class RequiresContextFutureResult(
     BaseContainer,
-    Kind['RequiresContextFutureResult', _ValueType, _ErrorType, _EnvType],
-    Generic[_ValueType, _ErrorType, _EnvType],
-    functor.Functor[_ValueType],
-    applicative.Applicative[_ValueType],
-    monad.Monad[_ValueType],
+    Kind3['RequiresContextFutureResult', _ValueType, _ErrorType, _EnvType],
+    mappable.Mappable3[_ValueType, _ErrorType, _EnvType],
+    bindable.Bindable3[_ValueType, _ErrorType, _EnvType],
+    applicative.Applicative3[_ValueType, _ErrorType, _EnvType],
 ):
     """
     The ``RequiresContextFutureResult`` combinator.
@@ -195,7 +194,7 @@ class RequiresContextFutureResult(
 
     def apply(
         self,
-        container: Kind[
+        container: Kind3[
             'RequiresContextFutureResult',
             Callable[[_ValueType], _NewValueType],
             _ErrorType,
@@ -237,7 +236,7 @@ class RequiresContextFutureResult(
         self,
         function: Callable[
             [_ValueType],
-            Kind[
+            Kind3[
                 'RequiresContextFutureResult',
                 _NewValueType,
                 _ErrorType,

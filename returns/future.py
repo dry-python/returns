@@ -6,7 +6,6 @@ from typing import (
     ClassVar,
     Coroutine,
     Generator,
-    Generic,
     Iterable,
     Sequence,
     Type,
@@ -18,11 +17,11 @@ from typing_extensions import final
 
 from returns._generated.futures import _future, _future_result
 from returns._generated.iterable import iterable
-from returns.hkt import Kind, dekind
+from returns.interfaces import applicative, bindable, mappable
 from returns.io import IO, IOResult
 from returns.primitives.container import BaseContainer
+from returns.primitives.hkt import Kind1, Kind2, dekind
 from returns.result import Failure, Result, Success
-from returns.typeclasses import applicative, functor, monad
 
 # Definitions:
 _ValueType = TypeVar('_ValueType', covariant=True)
@@ -60,11 +59,10 @@ async def async_identity(instance: _FirstType) -> _FirstType:
 @final
 class Future(
     BaseContainer,
-    Kind['Future', _ValueType],
-    Generic[_ValueType],
-    functor.Functor[_ValueType],
-    applicative.Applicative[_ValueType],
-    monad.Monad[_ValueType],
+    Kind1['Future', _ValueType],
+    mappable.Mappable1[_ValueType],
+    bindable.Bindable1[_ValueType],
+    applicative.Applicative1[_ValueType],
 ):
     """
     Container to easily compose ``async`` functions.
@@ -195,7 +193,7 @@ class Future(
 
     def apply(
         self,
-        container: Kind['Future', Callable[[_ValueType], _NewValueType]],
+        container: Kind1['Future', Callable[[_ValueType], _NewValueType]],
     ) -> 'Future[_NewValueType]':
         """
         Calls a wrapped function in a container on this container.
@@ -219,7 +217,7 @@ class Future(
 
     def bind(
         self,
-        function: Callable[[_ValueType], Kind['Future', _NewValueType]],
+        function: Callable[[_ValueType], Kind1['Future', _NewValueType]],
     ) -> 'Future[_NewValueType]':
         """
         Applies 'function' to the result of a previous calculation.
@@ -493,11 +491,10 @@ def asyncify(function: Callable[..., _ValueType]) -> Callable[
 @final
 class FutureResult(
     BaseContainer,
-    Kind['FutureResult', _ValueType, _ErrorType],
-    Generic[_ValueType, _ErrorType],
-    functor.Functor[_ValueType],
-    applicative.Applicative[_ValueType],
-    monad.Monad[_ValueType],
+    Kind2['FutureResult', _ValueType, _ErrorType],
+    mappable.Mappable2[_ValueType, _ErrorType],
+    bindable.Bindable2[_ValueType, _ErrorType],
+    applicative.Applicative2[_ValueType, _ErrorType],
 ):
     """
     Container to easily compose ``async`` functions.
@@ -644,7 +641,7 @@ class FutureResult(
 
     def apply(
         self,
-        container: Kind[
+        container: Kind2[
             'FutureResult',
             Callable[[_ValueType], _NewValueType],
             _ErrorType,
@@ -688,7 +685,7 @@ class FutureResult(
         self,
         function: Callable[
             [_ValueType],
-            Kind['FutureResult', _NewValueType, _ErrorType],
+            Kind2['FutureResult', _NewValueType, _ErrorType],
         ],
     ) -> 'FutureResult[_NewValueType, _ErrorType]':
         """
@@ -964,7 +961,7 @@ class FutureResult(
           ... ) == IOFailure(1)
 
         """
-        return self.bind(function)
+        return self.bind(function)  # type: ignore
 
     def fix(
         self,

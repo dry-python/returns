@@ -5,7 +5,6 @@ from typing import (
     Any,
     Callable,
     ClassVar,
-    Generic,
     Iterable,
     List,
     Optional,
@@ -18,10 +17,10 @@ from typing import (
 from typing_extensions import final
 
 from returns._generated.iterable import iterable
-from returns.hkt import Kind, dekind
+from returns.interfaces import applicative, bindable, mappable
 from returns.primitives.container import BaseContainer
+from returns.primitives.hkt import Kind1, Kind2, dekind
 from returns.result import Failure, Result, Success
-from returns.typeclasses import applicative, functor, monad
 
 _ValueType = TypeVar('_ValueType', covariant=True)
 _NewValueType = TypeVar('_NewValueType')
@@ -37,11 +36,10 @@ _SecondType = TypeVar('_SecondType')
 
 class IO(
     BaseContainer,
-    Kind['IO', _ValueType],
-    Generic[_ValueType],
-    functor.Functor[_ValueType],
-    applicative.Applicative[_ValueType],
-    monad.Monad[_ValueType],
+    Kind1['IO', _ValueType],
+    mappable.Mappable1[_ValueType],
+    bindable.Bindable1[_ValueType],
+    applicative.Applicative1[_ValueType],
 ):
     """
     Explicit container for impure function results.
@@ -106,7 +104,7 @@ class IO(
 
     def apply(
         self,
-        container: Kind['IO', Callable[[_ValueType], _NewValueType]],
+        container: Kind1['IO', Callable[[_ValueType], _NewValueType]],
     ) -> 'IO[_NewValueType]':
         """
         Calls a wrapped function in a container on this container.
@@ -134,7 +132,7 @@ class IO(
 
     def bind(
         self,
-        function: Callable[[_ValueType], Kind['IO', _NewValueType]],
+        function: Callable[[_ValueType], Kind1['IO', _NewValueType]],
     ) -> 'IO[_NewValueType]':
         """
         Applies 'function' to the result of a previous calculation.
@@ -164,7 +162,7 @@ class IO(
           >>> from returns.io import IO
           >>> assert IO(1) == IO.from_value(1)
 
-        Part of the :class:`returns.typeclasses.applicative.Applicative`
+        Part of the :class:`returns.interfaces.applicative.Applicative`
         protocol.
         """
         return IO(inner_value)
@@ -246,11 +244,10 @@ def impure(
 
 class IOResult(
     BaseContainer,
-    Kind['IOResult', _ValueType, _ErrorType],
-    Generic[_ValueType, _ErrorType],
-    functor.Functor[_ValueType],
-    applicative.Applicative[_ValueType],
-    monad.Monad[_ValueType],
+    Kind2['IOResult', _ValueType, _ErrorType],
+    mappable.Mappable2[_ValueType, _ErrorType],
+    bindable.Bindable2[_ValueType, _ErrorType],
+    applicative.Applicative2[_ValueType, _ErrorType],
     metaclass=ABCMeta,
 ):
     """
@@ -349,7 +346,11 @@ class IOResult(
 
     def apply(
         self,
-        container: Kind['IOResult', Callable[[_ValueType], _NewValueType]],
+        container: Kind2[
+            'IOResult',
+            Callable[[_ValueType], _NewValueType],
+            _ErrorType,
+        ],
     ) -> 'IOResult[_NewValueType, _ErrorType]':
         """
         Calls a wrapped function in a container on this container.
@@ -385,7 +386,7 @@ class IOResult(
         self,
         function: Callable[
             [_ValueType],
-            Kind['IOResult', _NewValueType, _ErrorType],
+            Kind2['IOResult', _NewValueType, _ErrorType],
         ],
     ) -> 'IOResult[_NewValueType, _ErrorType]':
         """
@@ -483,7 +484,7 @@ class IOResult(
           >>> assert IOFailure('a').unify(bindable) == IOFailure('a')
 
         """
-        return self.bind(function)
+        return self.bind(function)  # type: ignore
 
     def fix(
         self,

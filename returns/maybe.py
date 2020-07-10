@@ -4,7 +4,6 @@ from typing import (
     Any,
     Callable,
     ClassVar,
-    Generic,
     Iterable,
     NoReturn,
     Optional,
@@ -17,10 +16,10 @@ from typing import (
 from typing_extensions import final
 
 from returns._generated.iterable import iterable
-from returns.hkt import Kind
+from returns.interfaces import applicative, bindable, mappable
 from returns.primitives.container import BaseContainer
 from returns.primitives.exceptions import UnwrapFailedError
-from returns.typeclasses import applicative, functor, monad
+from returns.primitives.hkt import Kind1
 
 # Definitions:
 _ValueType = TypeVar('_ValueType', covariant=True)
@@ -33,11 +32,10 @@ _SecondType = TypeVar('_SecondType')
 
 class Maybe(
     BaseContainer,
-    Kind['Maybe', _ValueType],
-    Generic[_ValueType],
-    functor.Functor[_ValueType],
-    applicative.Applicative[_ValueType],
-    monad.Monad[_ValueType],
+    Kind1['Maybe', _ValueType],
+    mappable.Mappable1[_ValueType],
+    bindable.Bindable1[_ValueType],
+    applicative.Applicative1[_ValueType],
     metaclass=ABCMeta,
 ):
     """
@@ -82,7 +80,7 @@ class Maybe(
 
     def apply(
         self,
-        function: Kind['Maybe', Callable[[_ValueType], _NewValueType]],
+        function: Kind1['Maybe', Callable[[_ValueType], _NewValueType]],
     ) -> 'Maybe[_NewValueType]':
         """
         Calls a wrapped function in a container on this container.
@@ -104,7 +102,7 @@ class Maybe(
 
     def bind(
         self,
-        function: Callable[[_ValueType], Kind['Maybe', _NewValueType]],
+        function: Callable[[_ValueType], Kind1['Maybe', _NewValueType]],
     ) -> 'Maybe[_NewValueType]':
         """
         Composes successful container with a function that returns a container.

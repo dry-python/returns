@@ -15,12 +15,12 @@ from typing_extensions import final
 from returns._generated.iterable import iterable
 from returns.functions import identity
 from returns.future import FutureResult
-from returns.hkt import Kind, dekind
+from returns.interfaces import applicative, bindable, mappable
 from returns.io import IOResult
 from returns.primitives.container import BaseContainer
+from returns.primitives.hkt import Kind2, dekind
 from returns.primitives.types import Immutable
 from returns.result import Result
-from returns.typeclasses import applicative, functor, monad
 
 if TYPE_CHECKING:
     # We need this condition to make sure Python can solve cycle imports.
@@ -53,11 +53,10 @@ NoDeps = Any
 @final
 class RequiresContext(
     BaseContainer,
-    Kind['RequiresContext', _ReturnType, _EnvType],
-    Generic[_ReturnType, _EnvType],
-    functor.Functor[_ReturnType],
-    applicative.Applicative[_ReturnType],
-    monad.Monad[_ReturnType],
+    Kind2['RequiresContext', _ReturnType, _EnvType],
+    mappable.Mappable2[_ReturnType, _EnvType],
+    bindable.Bindable2[_ReturnType, _EnvType],
+    applicative.Applicative2[_ReturnType, _EnvType],
 ):
     """
     The ``RequiresContext`` container.
@@ -162,7 +161,7 @@ class RequiresContext(
 
     def apply(
         self,
-        container: Kind[
+        container: Kind2[
             'RequiresContext',
             Callable[[_ReturnType], _NewReturnType],
             _EnvType,
@@ -187,7 +186,7 @@ class RequiresContext(
         self,
         function: Callable[
             [_ReturnType],
-            Kind['RequiresContext', _NewReturnType, _EnvType],
+            Kind2['RequiresContext', _NewReturnType, _EnvType],
         ],
     ) -> 'RequiresContext[_NewReturnType, _EnvType]':
         """

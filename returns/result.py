@@ -5,7 +5,6 @@ from typing import (
     Any,
     Callable,
     ClassVar,
-    Generic,
     Iterable,
     List,
     NoReturn,
@@ -19,10 +18,10 @@ from typing import (
 from typing_extensions import final
 
 from returns._generated.iterable import iterable
-from returns.hkt import Kind
+from returns.interfaces import applicative, bindable, mappable
 from returns.primitives.container import BaseContainer
 from returns.primitives.exceptions import UnwrapFailedError
-from returns.typeclasses import applicative, functor, monad
+from returns.primitives.hkt import Kind2
 
 # Definitions:
 _ValueType = TypeVar('_ValueType', covariant=True)
@@ -37,11 +36,10 @@ _SecondType = TypeVar('_SecondType')
 
 class Result(
     BaseContainer,
-    Kind['Result', _ValueType, _ErrorType],
-    Generic[_ValueType, _ErrorType],
-    functor.Functor[_ValueType],
-    applicative.Applicative[_ValueType],
-    monad.Monad[_ValueType],
+    Kind2['Result', _ValueType, _ErrorType],
+    mappable.Mappable2[_ValueType, _ErrorType],
+    bindable.Bindable2[_ValueType, _ErrorType],
+    applicative.Applicative2[_ValueType, _ErrorType],
     metaclass=ABCMeta,
 ):
     """
@@ -94,7 +92,11 @@ class Result(
 
     def apply(
         self,
-        container: Kind['Result', Callable[[_ValueType], _NewValueType]],
+        container: Kind2[
+            'Result',
+            Callable[[_ValueType], _NewValueType],
+            _ErrorType,
+        ],
     ) -> 'Result[_NewValueType, _ErrorType]':
         """
         Calls a wrapped function in a container on this container.
@@ -119,7 +121,7 @@ class Result(
         self,
         function: Callable[
             [_ValueType],
-            Kind['Result', _NewValueType, _ErrorType],
+            Kind2['Result', _NewValueType, _ErrorType],
         ],
     ) -> 'Result[_NewValueType, _ErrorType]':
         """
@@ -172,7 +174,7 @@ class Result(
           >>> assert Failure('a').unify(bindable) == Failure('a')
 
         """
-        return self.bind(function)
+        return self.bind(function)  # type: ignore
 
     def fix(
         self,

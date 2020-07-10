@@ -49,36 +49,6 @@ from returns.contrib.mypy._typeops.analtype import safe_translate_to_function
 from returns.contrib.mypy._typeops.inference import PipelineInference
 
 
-def _get_first_arg_type(case: CallableType) -> MypyType:
-    """Function might not have args at all."""
-    if case.arg_types:
-        return case.arg_types[0]
-    return AnyType(TypeOfAny.implementation_artifact)
-
-
-def _unify_type(
-    function: FunctionLike,
-    fetch_type: Callable[[CallableType], MypyType],
-) -> MypyType:
-    return UnionType.make_union([
-        fetch_type(case)
-        for case in function.items()
-    ])
-
-
-def _get_pipeline_def(
-    ctx: FunctionContext,
-) -> Tuple[MypyType, MypyType]:
-    first_step = ctx.arg_types[0][0]
-    last_step = ctx.arg_types[0][-1]
-
-    if isinstance(first_step, (Instance, TypeType)):
-        first_step = safe_translate_to_function(ctx.arg_types[0][0], ctx)
-    if isinstance(last_step, (Instance, TypeType)):
-        last_step = safe_translate_to_function(ctx.arg_types[0][-1], ctx)
-    return first_step, last_step
-
-
 def analyze(ctx: FunctionContext) -> MypyType:
     """This hook helps when we create the pipeline from sequence of funcs."""
     if not isinstance(ctx.default_return_type, Instance):
@@ -124,3 +94,33 @@ def infer(ctx: MethodContext) -> MypyType:
 def signature(ctx: MethodSigContext) -> CallableType:
     """Helps to fix generics in method signature."""
     return detach_callable(ctx.default_signature)
+
+
+def _get_first_arg_type(case: CallableType) -> MypyType:
+    """Function might not have args at all."""
+    if case.arg_types:
+        return case.arg_types[0]
+    return AnyType(TypeOfAny.implementation_artifact)
+
+
+def _unify_type(
+    function: FunctionLike,
+    fetch_type: Callable[[CallableType], MypyType],
+) -> MypyType:
+    return UnionType.make_union([
+        fetch_type(case)
+        for case in function.items()
+    ])
+
+
+def _get_pipeline_def(
+    ctx: FunctionContext,
+) -> Tuple[MypyType, MypyType]:
+    first_step = ctx.arg_types[0][0]
+    last_step = ctx.arg_types[0][-1]
+
+    if isinstance(first_step, (Instance, TypeType)):
+        first_step = safe_translate_to_function(ctx.arg_types[0][0], ctx)
+    if isinstance(last_step, (Instance, TypeType)):
+        last_step = safe_translate_to_function(ctx.arg_types[0][-1], ctx)
+    return first_step, last_step

@@ -1,0 +1,128 @@
+- case: bindable_inheritance_correct1
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar
+    from returns.interfaces.bindable import Bindable1
+    from returns.primitives.hkt import Kind1, dekind
+
+    V = TypeVar('V')
+    N = TypeVar('N')
+
+    class MyClass(Kind1['MyClass', V], Bindable1[V]):
+        def __init__(self, value: V) -> None:
+            self.value = value
+
+        def bind(
+            self,
+            function: Callable[[V], Kind1['MyClass', N]],
+        ) -> 'MyClass[N]':
+            return dekind(function(self.value))
+
+    def test(arg: str) -> MyClass[int]:
+        return MyClass(int(arg))
+
+    reveal_type(MyClass('1').bind(test))  # N: Revealed type is 'main.MyClass[builtins.int*]'
+
+
+- case: bindable_inheritance_correct2
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar
+    from returns.interfaces.bindable import Bindable2
+    from returns.primitives.hkt import Kind2, dekind
+
+    V = TypeVar('V')
+    T = TypeVar('T')
+    N = TypeVar('N')
+
+    class MyClass(Kind2['MyClass', V, T], Bindable2[V, T]):
+        def __init__(self, value: V, other: T) -> None:
+            self.value = value
+            self.other = other
+
+        def bind(
+            self,
+            function: Callable[[V], Kind2['MyClass', N, T]],
+        ) -> 'MyClass[N, T]':
+            return dekind(function(self.value))
+
+    def test(arg: str) -> MyClass[int, str]:
+        return MyClass(int(arg), 'a')
+
+    reveal_type(MyClass('1', 'a').bind(test))  # N: Revealed type is 'main.MyClass[builtins.int*, builtins.str]'
+
+
+- case: bindable_inheritance_correct3
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar
+    from returns.interfaces.bindable import Bindable3
+    from returns.primitives.hkt import Kind3, dekind
+
+    V = TypeVar('V')
+    T = TypeVar('T')
+    K = TypeVar('K')
+    N = TypeVar('N')
+
+    class MyClass(Kind3['MyClass', V, T, K], Bindable3[V, T, K]):
+        def __init__(self, value: V, other: T, last: K) -> None:
+            self.value = value
+            self.other = other
+            self.last = last
+
+        def bind(
+            self,
+            function: Callable[[V], Kind3['MyClass', N, T, K]],
+        ) -> 'MyClass[N, T, K]':
+            return dekind(function(self.value))
+
+    def test(arg: str) -> MyClass[int, str, bool]:
+        return MyClass(int(arg), 'a', True)
+
+    reveal_type(MyClass('1', 'a', True).bind(test))  # N: Revealed type is 'main.MyClass[builtins.int*, builtins.str, builtins.bool]'
+
+
+- case: bindable_inheritance_missing
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar
+    from returns.interfaces.bindable import Bindable1
+    from returns.primitives.hkt import Kind1, dekind
+
+    V = TypeVar('V')
+    N = TypeVar('N')
+
+    class MyClass(Kind1['MyClass', V], Bindable1[V]):
+        def __init__(self, value: V) -> None:
+            self.value = value
+
+    reveal_type(MyClass('1'))
+  out: |
+    main:12: error: Cannot instantiate abstract class 'MyClass' with abstract attribute 'bind'
+    main:12: note: Revealed type is 'main.MyClass[builtins.str*]'
+
+
+- case: bindable_inheritance_wrong
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar
+    from returns.interfaces.bindable import Bindable1
+    from returns.primitives.hkt import Kind1, dekind
+
+    V = TypeVar('V')
+    N = TypeVar('N')
+
+    class MyClass(Kind1['MyClass', V], Bindable1[V]):
+        def __init__(self, value: V) -> None:
+            self.value = value
+
+        def bind(
+            self,
+            function: Callable[[V], Kind1['MyClass', V]],
+        ) -> 'MyClass[V]':
+            return dekind(function(self.value))
+  out: |
+    main:12: error: Argument 1 of "bind" is incompatible with supertype "BindableN"; supertype defines the argument type as "Callable[[V], KindN[MyClass[V], _UpdatedType, NoReturn, NoReturn]]"
+    main:12: error: Return type "MyClass[V]" of "bind" incompatible with return type "KindN[MyClass[V], _UpdatedType, NoReturn, NoReturn]" in supertype "BindableN"
+    main:12: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:12: note: This violates the Liskov substitution principle

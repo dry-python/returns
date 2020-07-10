@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Any, Awaitable, Callable, TypeVar, Union
 
-from returns.hkt import Kind, dekind
 from returns.io import IO, IOResult
+from returns.primitives.hkt import Kind2, dekind
 from returns.result import Failure, Result, Success
 
 if TYPE_CHECKING:
@@ -34,7 +34,7 @@ async def async_apply(
 async def async_bind(
     function: Callable[
         [_ValueType],
-        Kind['FutureResult', _NewValueType, _ErrorType],
+        Kind2['FutureResult', _NewValueType, _ErrorType],
     ],
     inner_value: Awaitable[Result[_ValueType, _ErrorType]],
 ) -> Result[_NewValueType, _ErrorType]:
