@@ -1,13 +1,35 @@
 import types
 from contextlib import contextmanager
 from inspect import FrameInfo, stack
-from typing import List, Optional
+from typing import (
+    Callable,
+    ContextManager,
+    Iterator,
+    List,
+    Optional,
+    TypeVar,
+    Union,
+    overload,
+)
 
 from returns.result import _Failure
 
+_FunctionType = TypeVar('_FunctionType', bound=Callable)
 
-@contextmanager
-def collect_traces():
+
+@overload
+def collect_traces() -> ContextManager[None]:
+    """Context Manager to active traces collect to the Failures."""
+
+
+@overload
+def collect_traces(function: _FunctionType) -> _FunctionType:
+    """Decorator to active traces collect to the Failures."""
+
+
+def collect_traces(
+    function: Optional[_FunctionType] = None,
+) -> Union[_FunctionType, ContextManager[None]]:  # noqa: DAR101, DAR201, DAR301
     """
     Context Manager/Decorator to active traces collect to the Failures.
 
@@ -36,13 +58,16 @@ def collect_traces():
         # doctest: # noqa: DAR301, E501
 
     """
-    unpatched_get_trace = getattr(_Failure, '_get_trace')  # noqa: B009
-    substitute_get_trace = types.MethodType(_get_trace, _Failure)
-    setattr(_Failure, '_get_trace', substitute_get_trace)  # noqa: B010
-    try:
-        yield
-    finally:
-        setattr(_Failure, '_get_trace', unpatched_get_trace)  # noqa: B010
+    @contextmanager
+    def factory() -> Iterator[None]:
+        unpatched_get_trace = getattr(_Failure, '_get_trace')  # noqa: B009
+        substitute_get_trace = types.MethodType(_get_trace, _Failure)
+        setattr(_Failure, '_get_trace', substitute_get_trace)  # noqa: B010
+        try:  # noqa: WPS501
+            yield
+        finally:
+            setattr(_Failure, '_get_trace', unpatched_get_trace)  # noqa: B010
+    return factory()(function) if function else factory()
 
 
 def _get_trace(_self: _Failure) -> Optional[List[FrameInfo]]:
