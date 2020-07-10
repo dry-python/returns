@@ -72,7 +72,6 @@ class KindN(
 
     Implementation details
     ~~~~~~~~~~~~~~~~~~~~~~
-
     We didn't use ``ABCMeta`` to disallow its creation,
     because we don't want to have
     a possible metaclass conflict with other metaclasses.
@@ -84,9 +83,9 @@ class KindN(
     To work with ``TypeVarType`` types use ``debound``.
 
     See also:
-        https://arrow-kt.io/docs/0.10/patterns/glossary/#higher-kinds
-        https://github.com/gcanti/fp-ts/blob/master/docs/guides/HKT.md
-        https://bow-swift.io/docs/fp-concepts/higher-kinded-types
+        - https://arrow-kt.io/docs/0.10/patterns/glossary/#higher-kinds
+        - https://github.com/gcanti/fp-ts/blob/master/docs/guides/HKT.md
+        - https://bow-swift.io/docs/fp-concepts/higher-kinded-types
 
     """
 

@@ -294,7 +294,6 @@ class IOResult(
     See also:
         https://github.com/gcanti/fp-ts/blob/master/docs/modules/IOEither.ts.md
 
-
     Implementation
     ~~~~~~~~~~~~~~
     This class contains all the methods that can be delegated to ``Result``.
@@ -305,8 +304,6 @@ class IOResult(
     Do not rely on them! Use public functions and types instead.
 
     """
-
-    outer: ClassVar[Type[IO]] = IO
 
     _inner_value: Result[_ValueType, _ErrorType]
 
@@ -327,7 +324,7 @@ class IOResult(
 
     @property
     def trace(self) -> Optional[List[FrameInfo]]:
-        """Returns a list with stack trace when :func:`~Failure` was called."""
+        """Returns a stack trace when :func:`~IOFailure` was called."""
         return self._inner_value.trace
 
     def map(  # noqa: WPS125
@@ -886,7 +883,8 @@ def impure_safe(
 
     If you need to mark ``async`` function as impure,
     use :func:`returns.future.future_safe` instead.
-    This decorator only works with sync functions. Example:
+    This decorator only works with sync functions.
+    Example:
 
     .. code:: python
 
