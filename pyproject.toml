@@ -50,7 +50,7 @@ returns = "returns.contrib.pytest.plugin"
 
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.6"
 
 typing-extensions = "^3.7"
 

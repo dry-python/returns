@@ -10,8 +10,6 @@ See [0Ver](https://0ver.org/).
 
 ### Features
 
-- **Breaking**: drops `python3.6` support, because `Kind`
-  cannot work in this version of Python
 - **Breaking**: changes all `RequiresContext`-based type arguments order,
   previously we used to specify `_EnvType` as the first type argument,
   now it is the last one. This is done to respect new HKT rules
