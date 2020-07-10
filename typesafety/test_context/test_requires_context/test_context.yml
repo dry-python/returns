@@ -19,4 +19,4 @@
   main: |
     from returns.context import RequiresContext
 
-    reveal_type(RequiresContext.from_value(1))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[Any, builtins.int*]'
+    reveal_type(RequiresContext.from_value(1))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[builtins.int*, Any]'
