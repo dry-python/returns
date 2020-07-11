@@ -135,6 +135,14 @@ def dekind(
 # Utils to define kinded functions
 # ================================
 
+# TODO: in the future we would be able to write a custom plugin
+# with `transform_kind(T) -> T'` support.
+# It would visit all the possible `KindN[]` types in any type and run `dekind`
+# on them, so this will be how it works:
+# in:  => Callable[[KindN[IO[Any], int]], KindN[IO[Any], str]]
+# out: => Callable[[IO[int]], IO[str]]
+# This will allow to have better support for callable protocols and similar.
+# Blocked by: https://github.com/python/mypy/issues/9001
 class Kinded(Protocol[_FunctionDefType]):  # type: ignore
     """
     Protocol that tracks kinded functions calls.
