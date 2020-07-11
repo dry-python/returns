@@ -35,7 +35,7 @@ def internal_apply(
     .. code:: python
 
       >>> from returns.methods.apply import internal_apply, apply
-      >>> from returns.maybe import Maybe, Some, Nothing
+      >>> from returns.maybe import Some, Nothing
 
       >>> def example(argument: int) -> int:
       ...     return argument + 1
