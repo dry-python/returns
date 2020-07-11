@@ -1,19 +1,13 @@
 from typing import ClassVar
 
-from typing_extensions import Protocol
-
 from returns._generated.pipeline.flow import _flow as flow
 from returns._generated.pipeline.managed import _managed as managed
 from returns._generated.pipeline.pipe import _pipe as pipe
+from returns.interfaces.unwrappable import Unwrappable
+from returns.primitives.exceptions import UnwrapFailedError
 
 
-class _HasSuccessAndFailureTypes(Protocol):
-    """This protocol enforces container to have a ``.success_type`` field."""
-
-    success_type: ClassVar[type]
-
-
-def is_successful(container: _HasSuccessAndFailureTypes) -> bool:
+def is_successful(container: Unwrappable) -> bool:
     """
     Determins if a container was successful or not.
 
@@ -33,7 +27,11 @@ def is_successful(container: _HasSuccessAndFailureTypes) -> bool:
       >>> assert not is_successful(IOFailure(1))
 
     This function can work with containers
-    that have ``.success_type`` class field.
+    that are instance of :class:`returns.interfaces.unwrappable.Unwrappable`.
 
     """
-    return isinstance(container, container.success_type)
+    try:
+        container.unwrap()
+    except UnwrapFailedError:
+        return False
+    return True

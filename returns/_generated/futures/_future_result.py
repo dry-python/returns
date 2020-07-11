@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Awaitable, Callable, TypeVar, Union
+from typing import TYPE_CHECKING, Any, Awaitable, Callable, TypeVar
 
 from returns.io import IO, IOResult
 from returns.primitives.hkt import Kind2, dekind
@@ -153,28 +153,6 @@ async def async_rescue(
     if isinstance(container, Result.success_type):
         return container
     return (await function(container.failure()))._inner_value
-
-
-async def async_value_or(
-    container: 'FutureResult[_ValueType, _ErrorType]',
-    default_value: _NewValueType,
-) -> IO[Union[_ValueType, _NewValueType]]:
-    """Return async value or default value."""
-    return IO((await container._inner_value).value_or(default_value))
-
-
-async def async_unwrap(
-    container: 'FutureResult[_ValueType, _ErrorType]',
-) -> IO[_ValueType]:
-    """Async unwrap a container."""
-    return IO((await container._inner_value).unwrap())
-
-
-async def async_failure(
-    container: 'FutureResult[_ValueType, _ErrorType]',
-) -> IO[_ErrorType]:
-    """Async unwrap an error from container."""
-    return IO((await container._inner_value).failure())
 
 
 async def async_from_success(

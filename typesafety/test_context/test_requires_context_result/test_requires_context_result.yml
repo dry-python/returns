@@ -107,33 +107,3 @@
         ...
 
     reveal_type(x.alt(test))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.int, builtins.bool*, builtins.str]'
-
-
-- case: requires_context_result_value_or
-  disable_cache: true
-  main: |
-    from returns.context import RequiresContextResult
-
-    x: RequiresContextResult[int, float, str]
-
-    reveal_type(x.value_or(None)('a'))  # N: Revealed type is 'Union[builtins.int, None]'
-
-
-- case: requires_context_result_unwrap
-  disable_cache: true
-  main: |
-    from returns.context import RequiresContextResult
-
-    x: RequiresContextResult[int, float, str]
-
-    reveal_type(x.unwrap()('a'))  # N: Revealed type is 'builtins.int*'
-
-
-- case: requires_context_result_failure
-  disable_cache: true
-  main: |
-    from returns.context import RequiresContextResult
-
-    x: RequiresContextResult[int, float, str]
-
-    reveal_type(x.failure()('a'))  # N: Revealed type is 'builtins.float*'

@@ -45,7 +45,7 @@ def internal_bind(
       >>> assert bound == internal_bind(Nothing, example) == Nothing
 
     Note, that this function works for all containers with ``.bind`` method.
-    See :class:`returns.primitives.interfaces.BindableN` for more info.
+    See :class:`returns.primitives.interfaces.bindable.BindableN` for more info.
 
     """
     new_instance, rebound = debound(container)

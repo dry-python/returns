@@ -8,7 +8,6 @@ from typing import (
     Iterable,
     Sequence,
     TypeVar,
-    Union,
 )
 
 from typing_extensions import final
@@ -539,74 +538,6 @@ class RequiresContextIOResult(
                 lambda inner: function(inner)(deps),  # type: ignore[misc]
             ),
         )
-
-    def value_or(
-        self, default_value: _FirstType,
-    ) -> Callable[[_EnvType], IO[Union[_ValueType, _FirstType]]]:
-        """
-        Returns a callable that either returns a success or default value.
-
-        .. code:: python
-
-          >>> from returns.context import RequiresContextIOResult
-          >>> from returns.io import IO
-
-          >>> assert RequiresContextIOResult.from_value(1).value_or(2)(
-          ...     RequiresContextIOResult.empty,
-          ... ) == IO(1)
-
-          >>> assert RequiresContextIOResult.from_failure(1).value_or(2)(
-          ...     RequiresContextIOResult.empty,
-          ... ) == IO(2)
-
-        """
-        return lambda deps: self(deps).value_or(default_value)
-
-    def unwrap(self) -> Callable[[_EnvType], IO[_ValueType]]:
-        """
-        Returns a callable that unwraps success value or raises exception.
-
-        .. code:: pycon
-
-          >>> from returns.context import RequiresContextIOResult
-          >>> from returns.io import IO
-
-          >>> assert RequiresContextIOResult.from_value(1).unwrap()(
-          ...     RequiresContextIOResult.empty,
-          ... ) == IO(1)
-
-          >>> RequiresContextIOResult.from_failure(1).unwrap()(
-          ...     RequiresContextIOResult.empty,
-          ... )
-          Traceback (most recent call last):
-            ...
-          returns.primitives.exceptions.UnwrapFailedError
-
-        """
-        return lambda deps: self(deps).unwrap()
-
-    def failure(self) -> Callable[[_EnvType], IO[_ErrorType]]:
-        """
-        Returns a callable that unwraps failure value or raises exception.
-
-        .. code:: pycon
-
-          >>> from returns.context import RequiresContextIOResult
-          >>> from returns.io import IO
-
-          >>> assert RequiresContextIOResult.from_failure(1).failure()(
-          ...     RequiresContextIOResult.empty,
-          ... ) == IO(1)
-
-          >>> RequiresContextIOResult.from_value(1).failure()(
-          ...    RequiresContextIOResult.empty,
-          ... )
-          Traceback (most recent call last):
-            ...
-          returns.primitives.exceptions.UnwrapFailedError
-
-        """
-        return lambda deps: self(deps).failure()
 
     @classmethod
     def from_result(

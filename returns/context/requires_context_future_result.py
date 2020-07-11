@@ -9,12 +9,11 @@ from typing import (
     Iterable,
     Sequence,
     TypeVar,
-    Union,
 )
 
 from typing_extensions import final
 
-from returns._generated.futures import _future_result, _reader_future_result
+from returns._generated.futures import _reader_future_result
 from returns._generated.iterable import iterable
 from returns.context import NoDeps
 from returns.future import Future, FutureResult
@@ -844,88 +843,6 @@ class RequiresContextFutureResult(
                 lambda inner: function(inner)(deps),  # type: ignore[misc]
             ),
         )
-
-    def value_or(  # noqa: WPS234
-        self, default_value: _FirstType,
-    ) -> Callable[
-        [_EnvType],
-        Awaitable[IO[Union[_ValueType, _FirstType]]],
-    ]:
-        """
-        Returns a callable that either returns a success or default value.
-
-        .. code:: python
-
-          >>> import anyio
-          >>> from returns.context import RequiresContextFutureResult
-          >>> from returns.io import IO
-
-          >>> assert anyio.run(
-          ...     RequiresContextFutureResult.from_value(1).value_or(2),
-          ...     RequiresContextFutureResult.empty,
-          ... ) == IO(1)
-
-          >>> assert anyio.run(
-          ...     RequiresContextFutureResult.from_failure(1).value_or(2),
-          ...     RequiresContextFutureResult.empty,
-          ... ) == IO(2)
-
-        """
-        return lambda deps: _future_result.async_value_or(
-            self(deps), default_value,
-        )
-
-    def unwrap(self) -> Callable[[_EnvType], Awaitable[IO[_ValueType]]]:
-        """
-        Returns a callable that unwraps success value or raises exception.
-
-        .. code:: pycon
-
-          >>> import anyio
-          >>> from returns.context import RequiresContextFutureResult
-          >>> from returns.io import IO
-
-          >>> assert anyio.run(
-          ...     RequiresContextFutureResult.from_value(1).unwrap(),
-          ...     RequiresContextFutureResult.empty,
-          ... ) == IO(1)
-
-          >>> anyio.run(
-          ...     RequiresContextFutureResult.from_failure(1).unwrap(),
-          ...     RequiresContextFutureResult.empty,
-          ... )
-          Traceback (most recent call last):
-            ...
-          returns.primitives.exceptions.UnwrapFailedError
-
-        """
-        return lambda deps: _future_result.async_unwrap(self(deps))
-
-    def failure(self) -> Callable[[_EnvType], Awaitable[IO[_ErrorType]]]:
-        """
-        Returns a callable that unwraps failure value or raises exception.
-
-        .. code:: pycon
-
-          >>> import anyio
-          >>> from returns.context import RequiresContextFutureResult
-          >>> from returns.io import IO
-
-          >>> assert anyio.run(
-          ...     RequiresContextFutureResult.from_failure(1).failure(),
-          ...     RequiresContextFutureResult.empty,
-          ... ) == IO(1)
-
-          >>> anyio.run(
-          ...    RequiresContextFutureResult.from_value(1).failure(),
-          ...    RequiresContextFutureResult.empty,
-          ... )
-          Traceback (most recent call last):
-            ...
-          returns.primitives.exceptions.UnwrapFailedError
-
-        """
-        return lambda deps: _future_result.async_failure(self(deps))
 
     @classmethod
     def from_result(

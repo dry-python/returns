@@ -29,3 +29,39 @@
     from returns.maybe import Maybe
 
     reveal_type(is_successful(Maybe.from_value(1)))  # N: Revealed type is 'builtins.bool'
+
+
+- case: custom_type_is_successful
+  disable_cache: true
+  main: |
+    from returns.pipeline import is_successful
+    from returns.primitives.hkt import Kind2
+    from returns.primitives.exceptions import UnwrapFailedError
+    from returns.interfaces.unwrappable import Unwrappable
+    from typing import TypeVar
+
+    T = TypeVar('T')
+    N = TypeVar('N')
+
+    class MyOwn(
+        Kind2['MyOwn', T, N],
+        Unwrappable[T, N],
+    ):
+        def __init__(self, value: T, error: N) -> None:
+            self.value = value
+            self.error = error
+
+        def unwrap(self) -> T:
+            if self.error:
+                raise UnwrapFailedError(self)
+            return self.value
+
+        def failure(self) -> N:
+            if self.value:
+                raise UnwrapFailedError(self)
+            return self.error
+
+    x: MyOwn[int, str]
+    reveal_type(x.unwrap())  # N: Revealed type is 'builtins.int*'
+    reveal_type(x.failure())  # N: Revealed type is 'builtins.str*'
+    reveal_type(is_successful(x))  # N: Revealed type is 'builtins.bool'

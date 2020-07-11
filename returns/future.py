@@ -1050,67 +1050,6 @@ class FutureResult(
             function, self._inner_value,
         ))
 
-    def value_or(
-        self,
-        default_value: _NewValueType,
-    ) -> Awaitable[IO[Union[_ValueType, _NewValueType]]]:
-        """
-        Get value or default value.
-
-        .. code:: python
-
-          >>> import anyio
-          >>> from returns.future import FutureResult
-          >>> from returns.io import IO
-
-          >>> async def main():
-          ...     first = await FutureResult.from_value(1).value_or(2)
-          ...     second = await FutureResult.from_failure(3).value_or(4)
-          ...     return first, second
-
-          >>> assert anyio.run(main) == (IO(1), IO(4))
-
-        """
-        return _future_result.async_value_or(self, default_value)
-
-    def unwrap(self) -> Awaitable[IO[_ValueType]]:
-        """
-        Get value or raise exception.
-
-        .. code:: pycon
-
-          >>> import anyio
-          >>> from returns.future import FutureResult
-          >>> from returns.io import IO
-          >>> assert anyio.run(FutureResult.from_value(1).unwrap) == IO(1)
-
-          >>> anyio.run(FutureResult.from_failure(1).unwrap)
-          Traceback (most recent call last):
-            ...
-          returns.primitives.exceptions.UnwrapFailedError
-
-        """
-        return _future_result.async_unwrap(self)
-
-    def failure(self) -> Awaitable[IO[_ErrorType]]:
-        """
-        Get failed value or raise exception.
-
-        .. code:: pycon
-
-          >>> import anyio
-          >>> from returns.future import FutureResult
-          >>> from returns.io import IO
-          >>> assert anyio.run(FutureResult.from_failure(1).failure) == IO(1)
-
-          >>> anyio.run(FutureResult.from_value(1).failure)
-          Traceback (most recent call last):
-            ...
-          returns.primitives.exceptions.UnwrapFailedError
-
-        """
-        return _future_result.async_failure(self)
-
     @classmethod
     def from_typecast(
         cls,

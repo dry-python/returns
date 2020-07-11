@@ -1,13 +1,15 @@
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from returns.primitives.container import BaseContainer  # noqa: WPS433
+    from returns.interfaces.unwrappable import Unwrappable  # noqa: WPS433
 
 
 class UnwrapFailedError(Exception):
     """Raised when a container can not be unwrapped into a meaningful value."""
 
-    def __init__(self, container: 'BaseContainer') -> None:
+    __slots__ = ('halted_container',)
+
+    def __init__(self, container: 'Unwrappable') -> None:
         """
         Saves halted container in the inner state.
 

@@ -1,4 +1,4 @@
-from abc import ABCMeta
+from abc import ABCMeta, abstractmethod
 from functools import wraps
 from inspect import FrameInfo
 from typing import (
@@ -17,7 +17,7 @@ from typing import (
 from typing_extensions import final
 
 from returns._generated.iterable import iterable
-from returns.interfaces import applicative, bindable, mappable
+from returns.interfaces import applicative, bindable, mappable, unwrappable
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind1, Kind2, dekind
 from returns.result import Failure, Result, Success
@@ -248,6 +248,7 @@ class IOResult(
     mappable.Mappable2[_ValueType, _ErrorType],
     bindable.Bindable2[_ValueType, _ErrorType],
     applicative.Applicative2[_ValueType, _ErrorType],
+    unwrappable.Unwrappable[IO[_ValueType], IO[_ErrorType]],
     metaclass=ABCMeta,
 ):
     """
@@ -297,7 +298,7 @@ class IOResult(
     Implementation
     ~~~~~~~~~~~~~~
     This class contains all the methods that can be delegated to ``Result``.
-    But, some methods have ``raise NotImplementedError`` which means
+    But, some methods are ``@abstractmethod`` which means
     that we have to use special :class:`~_IOSuccess` and :class:`~_IOFailure`
     implementation details to correctly handle these callbacks.
 
@@ -379,6 +380,7 @@ class IOResult(
             )
         return container  # type: ignore
 
+    @abstractmethod
     def bind(
         self,
         function: Callable[
@@ -402,8 +404,8 @@ class IOResult(
           >>> assert IOFailure('a').bind(bindable) == IOFailure('a')
 
         """
-        raise NotImplementedError
 
+    @abstractmethod
     def bind_result(
         self,
         function: Callable[
@@ -433,8 +435,8 @@ class IOResult(
           >>> assert IOFailure('a').bind_result(bindable) == IOFailure('a')
 
         """
-        raise NotImplementedError
 
+    @abstractmethod
     def bind_io(
         self,
         function: Callable[[_ValueType], IO[_NewValueType]],
@@ -456,7 +458,6 @@ class IOResult(
           >>> assert IOFailure('a').bind_io(bindable) == IOFailure('a')
 
         """
-        raise NotImplementedError
 
     def unify(
         self,
@@ -515,6 +516,7 @@ class IOResult(
         """
         return self.from_result(self._inner_value.alt(function))
 
+    @abstractmethod
     def rescue(
         self,
         function: Callable[
@@ -538,7 +540,6 @@ class IOResult(
           >>> assert IOSuccess('a').rescue(rescuable) == IOSuccess('a')
 
         """
-        raise NotImplementedError
 
     def value_or(
         self,
@@ -883,8 +884,7 @@ def impure_safe(
 
     If you need to mark ``async`` function as impure,
     use :func:`returns.future.future_safe` instead.
-    This decorator only works with sync functions.
-    Example:
+    This decorator only works with sync functions. Example:
 
     .. code:: python
 
@@ -902,7 +902,6 @@ def impure_safe(
     and :func:`returns.result.safe` decorators.
 
     Requires our :ref:`mypy plugin <mypy-plugins>`.
-
     """
     @wraps(function)
     def decorator(*args, **kwargs):

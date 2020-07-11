@@ -149,33 +149,3 @@
         ...
 
     reveal_type(x.alt(test))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int, builtins.bool*, builtins.str]'
-
-
-- case: requires_context_ioresult_value_or
-  disable_cache: true
-  main: |
-    from returns.context import RequiresContextIOResult
-
-    x: RequiresContextIOResult[int, float, str]
-
-    reveal_type(x.value_or(None)('a'))  # N: Revealed type is 'returns.io.IO[Union[builtins.int, None]]'
-
-
-- case: requires_context_ioresult_unwrap
-  disable_cache: true
-  main: |
-    from returns.context import RequiresContextIOResult
-
-    x: RequiresContextIOResult[int, float, str]
-
-    reveal_type(x.unwrap()('a'))  # N: Revealed type is 'returns.io.IO[builtins.int*]'
-
-
-- case: requires_context_ioresult_failure
-  disable_cache: true
-  main: |
-    from returns.context import RequiresContextIOResult
-
-    x: RequiresContextIOResult[int, float, str]
-
-    reveal_type(x.failure()('a'))  # N: Revealed type is 'returns.io.IO[builtins.float*]'

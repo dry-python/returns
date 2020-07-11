@@ -42,7 +42,7 @@ def internal_map(
       >>> assert bound == internal_map(Nothing, example) == Nothing
 
     Note, that this function works for all containers with ``.map`` method.
-    See :class:`returns.primitives.interfaces.MappableN` for more info.
+    See :class:`returns.primitives.interfaces.mappable.MappableN` for more info.
 
     """
     new_instance, rebound = debound(container)
