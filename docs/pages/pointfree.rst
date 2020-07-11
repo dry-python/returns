@@ -265,5 +265,3 @@ API Reference
 .. autofunction:: returns.pointfree.rescue
 
 .. autofunction:: returns.pointfree.apply
-
-.. autofunction:: returns.pointfree.value_or
