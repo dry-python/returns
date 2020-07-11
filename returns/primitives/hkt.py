@@ -23,6 +23,11 @@ _UpdatedType = TypeVar('_UpdatedType')
 _FirstKind = TypeVar('_FirstKind')
 _SecondKind = TypeVar('_SecondKind')
 
+# Used fore debound:
+_T1 = TypeVar('_T1')
+_T2 = TypeVar('_T2')
+_T3 = TypeVar('_T3')
+
 
 class KindN(
     Generic[_InstanceType, _TypeArgType1, _TypeArgType2, _TypeArgType3],
@@ -217,8 +222,8 @@ def debound(
 ) -> Tuple[
     _FirstKind,
     Callable[
-        [KindN[_SecondKind, _UpdatedType, _TypeArgType2, _TypeArgType3]],
-        KindN[_FirstKind, _UpdatedType, _TypeArgType2, _TypeArgType3],
+        [KindN[_SecondKind, _T1, _T2, _T3]],
+        KindN[_FirstKind, _T1, _T2, _T3],
     ],
 ]:
     """

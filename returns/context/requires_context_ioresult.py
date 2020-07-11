@@ -14,7 +14,8 @@ from typing_extensions import final
 
 from returns._generated.iterable import iterable
 from returns.context import NoDeps
-from returns.interfaces import applicative, bindable, mappable
+from returns.interfaces import applicative, bindable, mappable, rescuable
+from returns.interfaces.specific import result
 from returns.io import IO, IOFailure, IOResult, IOSuccess
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind3, dekind
@@ -45,6 +46,8 @@ class RequiresContextIOResult(
     mappable.Mappable3[_ValueType, _ErrorType, _EnvType],
     bindable.Bindable3[_ValueType, _ErrorType, _EnvType],
     applicative.Applicative3[_ValueType, _ErrorType, _EnvType],
+    rescuable.Rescuable3[_ValueType, _ErrorType, _EnvType],
+    result.ResultBased3[_ValueType, _ErrorType, _EnvType],
 ):
     """
     The ``RequiresContextIOResult`` combinator.
@@ -500,7 +503,12 @@ class RequiresContextIOResult(
         self,
         function: Callable[
             [_ErrorType],
-            'RequiresContextIOResult[_ValueType, _NewErrorType, _EnvType]',
+            Kind3[
+                'RequiresContextIOResult',
+                _ValueType,
+                _NewErrorType,
+                _EnvType,
+            ],
         ],
     ) -> 'RequiresContextIOResult[_ValueType, _NewErrorType, _EnvType]':
         """
@@ -535,7 +543,7 @@ class RequiresContextIOResult(
         """
         return RequiresContextIOResult(
             lambda deps: self(deps).rescue(
-                lambda inner: function(inner)(deps),  # type: ignore[misc]
+                lambda inner: function(inner)(deps),  # type: ignore
             ),
         )
 

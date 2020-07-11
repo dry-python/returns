@@ -14,7 +14,8 @@ from typing_extensions import final
 
 from returns._generated.iterable import iterable
 from returns.context import NoDeps
-from returns.interfaces import applicative, bindable, mappable
+from returns.interfaces import applicative, bindable, mappable, rescuable
+from returns.interfaces.specific import result
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind3, dekind
 from returns.primitives.types import Immutable
@@ -43,6 +44,8 @@ class RequiresContextResult(
     mappable.Mappable3[_ValueType, _ErrorType, _EnvType],
     bindable.Bindable3[_ValueType, _ErrorType, _EnvType],
     applicative.Applicative3[_ValueType, _ErrorType, _EnvType],
+    rescuable.Rescuable3[_ValueType, _ErrorType, _EnvType],
+    result.ResultBased3[_ValueType, _ErrorType, _EnvType],
 ):
     """
     The ``RequiresContextResult`` combinator.
@@ -371,7 +374,12 @@ class RequiresContextResult(
         self,
         function: Callable[
             [_ErrorType],
-            'RequiresContextResult[_ValueType, _NewErrorType, _EnvType]',
+            Kind3[
+                'RequiresContextResult',
+                _ValueType,
+                _NewErrorType,
+                _EnvType,
+            ],
         ],
     ) -> 'RequiresContextResult[_ValueType, _NewErrorType, _EnvType]':
         """

@@ -1,0 +1,61 @@
+- case: result_inheritance_missing
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar
+    from returns.interfaces.specific.result import ResultBased2
+    from returns.primitives.hkt import Kind2
+
+    V = TypeVar('V')
+    N = TypeVar('N')
+
+    class MyClass(Kind2['MyClass', V, N], ResultBased2[V, N]):
+        ...
+
+    MyClass()
+  out: |
+    main:11: error: Cannot instantiate abstract class 'MyClass' with abstract attributes 'bind_result', 'from_failure' and 'from_result'
+
+
+- case: result_inheritance_wrong
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar
+    from returns.interfaces.specific.result import ResultBased2
+    from returns.primitives.hkt import Kind2
+    from returns.result import Result
+
+    _ValueType = TypeVar('_ValueType', covariant=True)
+    _NewValueType = TypeVar('_NewValueType')
+
+    # Result related:
+    _ErrorType = TypeVar('_ErrorType', covariant=True)
+    _NewErrorType = TypeVar('_NewErrorType')
+
+    class MyClass(
+        Kind2['MyClass', _ValueType, _ErrorType],
+        ResultBased2[_ValueType, _ErrorType],
+    ):
+        def bind_result(
+            self,
+            function: Callable[
+                [_ValueType],
+                Result[_ValueType, _ErrorType],
+            ],
+        ) -> 'MyClass[_ValueType, _ErrorType]':
+            ...
+
+        def from_result(
+            self, inner_value: Result[_NewValueType, _NewErrorType],
+        ) -> 'MyClass[_NewValueType, _NewErrorType]':
+            ...
+
+        @classmethod
+        def from_failure(
+            cls, inner_value: _NewErrorType,
+        ) -> 'MyClass[_NewErrorType, _NewErrorType]':
+            ...
+  out: |
+    main:17: error: Argument 1 of "bind_result" is incompatible with supertype "ResultBasedN"; supertype defines the argument type as "Callable[[_ValueType], Result[_UpdatedType, _ErrorType]]"
+    main:17: error: Return type "MyClass[_ValueType, _ErrorType]" of "bind_result" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType], _UpdatedType, _ErrorType, NoReturn]" in supertype "ResultBasedN"
+    main:26: error: Signature of "from_result" incompatible with supertype "ResultBasedN"
+    main:32: error: Signature of "from_failure" incompatible with supertype "ResultBasedN"

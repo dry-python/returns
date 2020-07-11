@@ -1,17 +1,9 @@
 from functools import reduce
-from typing import TypeVar
 
 from returns.functions import compose
 
-_InstanceType = TypeVar('_InstanceType')
-_PipelineStepType = TypeVar('_PipelineStepType')
-_ReturnType = TypeVar('_ReturnType')
 
-
-def _flow(
-    instance: _InstanceType,
-    *functions: _PipelineStepType,
-) -> _ReturnType:
+def _flow(instance, *functions):
     """
     Allows to compose a value and up to multiple functions that use this value.
 
@@ -20,6 +12,11 @@ def _flow(
 
     We use a custom ``mypy`` plugin to make sure types are correct.
     Otherwise, it is currently impossible to properly type this function.
+
+    Currently, ``flow`` has a hard limit of 21 steps.
+    Because, it is not possible to type it otherwise.
+    We need a hard limit.
+    See: https://github.com/dry-python/returns/issues/461
 
     Here's how it should be used:
 
@@ -43,6 +40,5 @@ def _flow(
         - https://github.com/gcanti/fp-ts/blob/master/src/pipeable.ts
 
     Requires our :ref:`mypy plugin <mypy-plugins>`.
-
     """
-    return reduce(compose, functions)(instance)  # type: ignore
+    return reduce(compose, functions)(instance)

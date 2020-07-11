@@ -18,7 +18,13 @@ from typing import (
 from typing_extensions import final
 
 from returns._generated.iterable import iterable
-from returns.interfaces import applicative, bindable, mappable, unwrappable
+from returns.interfaces import (
+    applicative,
+    bindable,
+    mappable,
+    rescuable,
+    unwrappable,
+)
 from returns.primitives.container import BaseContainer
 from returns.primitives.exceptions import UnwrapFailedError
 from returns.primitives.hkt import Kind2
@@ -41,6 +47,7 @@ class Result(
     bindable.Bindable2[_ValueType, _ErrorType],
     applicative.Applicative2[_ValueType, _ErrorType],
     unwrappable.Unwrappable[_ValueType, _ErrorType],
+    rescuable.Rescuable2[_ValueType, _ErrorType],
     metaclass=ABCMeta,
 ):
     """
@@ -221,7 +228,7 @@ class Result(
     def rescue(
         self,
         function: Callable[
-            [_ErrorType], 'Result[_ValueType, _NewErrorType]',
+            [_ErrorType], Kind2['Result', _ValueType, _NewErrorType],
         ],
     ) -> 'Result[_ValueType, _NewErrorType]':
         """

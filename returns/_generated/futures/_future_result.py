@@ -145,14 +145,17 @@ async def async_alt(
 
 
 async def async_rescue(
-    function: Callable[[_ErrorType], 'FutureResult[_ValueType, _NewErrorType]'],
+    function: Callable[
+        [_ErrorType],
+        Kind2['FutureResult', _ValueType, _NewErrorType],
+    ],
     inner_value: Awaitable[Result[_ValueType, _ErrorType]],
 ) -> Result[_ValueType, _NewErrorType]:
     """Async rescues a function returning a container over a value."""
     container = await inner_value
     if isinstance(container, Result.success_type):
         return container
-    return (await function(container.failure()))._inner_value
+    return (await dekind(function(container.failure())))._inner_value
 
 
 async def async_from_success(

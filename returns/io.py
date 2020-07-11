@@ -17,7 +17,14 @@ from typing import (
 from typing_extensions import final
 
 from returns._generated.iterable import iterable
-from returns.interfaces import applicative, bindable, mappable, unwrappable
+from returns.interfaces import (
+    applicative,
+    bindable,
+    mappable,
+    rescuable,
+    unwrappable,
+)
+from returns.interfaces.specific import result
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind1, Kind2, dekind
 from returns.result import Failure, Result, Success
@@ -249,6 +256,8 @@ class IOResult(
     bindable.Bindable2[_ValueType, _ErrorType],
     applicative.Applicative2[_ValueType, _ErrorType],
     unwrappable.Unwrappable[IO[_ValueType], IO[_ErrorType]],
+    rescuable.Rescuable2[_ValueType, _ErrorType],
+    result.ResultBased2[_ValueType, _ErrorType],
     metaclass=ABCMeta,
 ):
     """
@@ -410,7 +419,7 @@ class IOResult(
         self,
         function: Callable[
             [_ValueType],
-            'Result[_NewValueType, _ErrorType]',
+            Result[_NewValueType, _ErrorType],
         ],
     ) -> 'IOResult[_NewValueType, _ErrorType]':
         """
@@ -521,7 +530,7 @@ class IOResult(
         self,
         function: Callable[
             [_ErrorType],
-            'IOResult[_ValueType, _NewErrorType]',
+            Kind2['IOResult', _ValueType, _NewErrorType],
         ],
     ) -> 'IOResult[_ValueType, _NewErrorType]':
         """

@@ -17,7 +17,8 @@ from returns._generated.futures import _reader_future_result
 from returns._generated.iterable import iterable
 from returns.context import NoDeps
 from returns.future import Future, FutureResult
-from returns.interfaces import applicative, bindable, mappable
+from returns.interfaces import applicative, bindable, mappable, rescuable
+from returns.interfaces.specific import result
 from returns.io import IO, IOResult
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind3, dekind
@@ -51,6 +52,8 @@ class RequiresContextFutureResult(
     mappable.Mappable3[_ValueType, _ErrorType, _EnvType],
     bindable.Bindable3[_ValueType, _ErrorType, _EnvType],
     applicative.Applicative3[_ValueType, _ErrorType, _EnvType],
+    rescuable.Rescuable3[_ValueType, _ErrorType, _EnvType],
+    result.ResultBased3[_ValueType, _ErrorType, _EnvType],
 ):
     """
     The ``RequiresContextFutureResult`` combinator.
@@ -803,7 +806,12 @@ class RequiresContextFutureResult(
         self,
         function: Callable[
             [_ErrorType],
-            'RequiresContextFutureResult[_ValueType, _NewErrorType, _EnvType]',
+            Kind3[
+                'RequiresContextFutureResult',
+                _ValueType,
+                _NewErrorType,
+                _EnvType,
+            ],
         ],
     ) -> 'RequiresContextFutureResult[_ValueType, _NewErrorType, _EnvType]':
         """
@@ -840,7 +848,7 @@ class RequiresContextFutureResult(
         """
         return RequiresContextFutureResult(
             lambda deps: self(deps).rescue(
-                lambda inner: function(inner)(deps),  # type: ignore[misc]
+                lambda inner: function(inner)(deps),  # type: ignore
             ),
         )
 

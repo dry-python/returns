@@ -36,6 +36,11 @@ See [0Ver](https://0ver.org/).
   like `Result`, `Maybe`, and `IOResult`
 - Adds `__slots__` to `UnwrapFailedError` with `halted_container`
 
+### Bugfixes
+
+- **Breaking**: fixes serious typing issue and changes how `flow` works,
+  now it has a hard limit of 21 parameters: 1 instance + 20 functions
+
 ### Misc
 
 - Adds a lot of new typetests

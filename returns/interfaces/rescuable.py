@@ -7,29 +7,29 @@ _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')
 _ThirdType = TypeVar('_ThirdType')
 _UpdatedType = TypeVar('_UpdatedType')
-_BindableType = TypeVar('_BindableType', bound='BindableN')
+_RescuableType = TypeVar('_RescuableType', bound='RescuableN')
 
 
-class BindableN(Generic[_FirstType, _SecondType, _ThirdType]):
+class RescuableN(Generic[_FirstType, _SecondType, _ThirdType]):
     """
     Represents a "context" in which calculations can be executed.
 
-    ``Bindable`` allows you to bind together
+    ``Rescueable`` allows you to bind together
     a series of calculations while maintaining
     the context of that specific container.
 
-    In contrast to :class:`returns.interfaces.rescuable.RescuableN`,
-    works with the first type value.
+    In contrast to :class:`returns.interfaces.bindable.BinbdaleN`,
+    works with the second type value.
     """
 
     @abstractmethod
-    def bind(
-        self: _BindableType,
+    def rescue(
+        self: _RescuableType,
         function: Callable[
-            [_FirstType],
-            KindN[_BindableType, _UpdatedType, _SecondType, _ThirdType],
+            [_SecondType],
+            KindN[_RescuableType, _FirstType, _UpdatedType, _ThirdType],
         ],
-    ) -> KindN[_BindableType, _UpdatedType, _SecondType, _ThirdType]:
+    ) -> KindN[_RescuableType, _FirstType, _UpdatedType, _ThirdType]:
         """
         Applies 'function' to the result of a previous calculation.
 
@@ -38,10 +38,10 @@ class BindableN(Generic[_FirstType, _SecondType, _ThirdType]):
 
 
 #: Type alias for kinds with one type argument.
-Bindable1 = BindableN[_FirstType, NoReturn, NoReturn]
+Rescuable1 = RescuableN[_FirstType, NoReturn, NoReturn]
 
 #: Type alias for kinds with two type arguments.
-Bindable2 = BindableN[_FirstType, _SecondType, NoReturn]
+Rescuable2 = RescuableN[_FirstType, _SecondType, NoReturn]
 
 #: Type alias for kinds with three type arguments.
-Bindable3 = BindableN[_FirstType, _SecondType, _ThirdType]
+Rescuable3 = RescuableN[_FirstType, _SecondType, _ThirdType]

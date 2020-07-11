@@ -1,0 +1,102 @@
+- case: rescue_wrong_second_type
+  disable_cache: true
+  main: |
+    from returns.methods import rescue
+    from returns.context import RequiresContextIOResult
+
+    def test(arg: float) -> RequiresContextIOResult[float, str, int]:
+        ...
+
+    x: RequiresContextIOResult[float, str, int]
+    rescue(x, test)  # E: Argument 2 to "internal_rescue" has incompatible type "Callable[[float], RequiresContextIOResult[float, str, int]]"; expected "Callable[[str], KindN[RequiresContextIOResult[Any, Any, Any], float, str, int]]"
+
+
+- case: rescue_wrong_else_types
+  disable_cache: true
+  main: |
+    from returns.methods import rescue
+    from returns.context import RequiresContextIOResult
+
+    def test(arg: float) -> RequiresContextIOResult[float, str, int]:
+        ...
+
+    x: RequiresContextIOResult[str, float, str]
+    rescue(x, test)  # E: Argument 2 to "internal_rescue" has incompatible type "Callable[[float], RequiresContextIOResult[float, str, int]]"; expected "Callable[[float], KindN[RequiresContextIOResult[Any, Any, Any], str, str, str]]"
+
+
+- case: rescue_result
+  disable_cache: true
+  main: |
+    from returns.methods import rescue
+    from returns.result import Result
+
+    def test(arg: float) -> Result[int, str]:
+        ...
+
+    x: Result[int, float]
+    reveal_type(rescue(x, test))  # N: Revealed type is 'returns.result.Result[builtins.int, builtins.str*]'
+
+
+- case: rescue_ioresult
+  disable_cache: true
+  main: |
+    from returns.methods import rescue
+    from returns.io import IOResult
+
+    def test(arg: float) -> IOResult[int, str]:
+        ...
+
+    x: IOResult[int, float]
+    reveal_type(rescue(x, test))  # N: Revealed type is 'returns.io.IOResult[builtins.int, builtins.str*]'
+
+
+- case: rescue_context_result
+  disable_cache: true
+  main: |
+    from returns.methods import rescue
+    from returns.context import RequiresContextResult
+
+    def test(arg: float) -> RequiresContextResult[float, str, int]:
+        ...
+
+    x: RequiresContextResult[float, float, int]
+    reveal_type(rescue(x, test))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.float, builtins.str*, builtins.int]'
+
+
+- case: rescue_context_ioresult
+  disable_cache: true
+  main: |
+    from returns.methods import rescue
+    from returns.context import RequiresContextIOResult
+
+    def test(arg: float) -> RequiresContextIOResult[float, str, int]:
+        ...
+
+    x: RequiresContextIOResult[float, float, int]
+    reveal_type(rescue(x, test))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.float, builtins.str*, builtins.int]'
+
+
+- case: rescue_context_future_result
+  disable_cache: true
+  main: |
+    from returns.methods import rescue
+    from returns.context import RequiresContextFutureResult
+
+    def test(arg: float) -> RequiresContextFutureResult[float, str, int]:
+        ...
+
+    x: RequiresContextFutureResult[float, float, int]
+    reveal_type(rescue(x, test))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.float, builtins.str*, builtins.int]'
+
+
+- case: rescue_future_result
+  disable_cache: true
+  main: |
+    from returns.methods import rescue
+    from returns.future import FutureResult
+
+    def test(arg: float) -> FutureResult[int, str]:
+        ...
+
+    x: FutureResult[int, float]
+    reveal_type(rescue(x, test))  # N: Revealed type is 'returns.future.FutureResult[builtins.int, builtins.str*]'
