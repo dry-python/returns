@@ -94,3 +94,51 @@
 
     x: FutureResult[float, str]
     reveal_type(bind_result(x, test))  # N: Revealed type is 'returns.future.FutureResult[builtins.int*, builtins.str]'
+
+
+- case: bind_result_custom_type
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar, Any
+    from returns.interfaces.specific.result import ResultBased2
+    from returns.primitives.hkt import Kind2
+    from returns.result import Result
+    from returns.methods import bind_result
+
+    _ValueType = TypeVar('_ValueType')
+    _NewValueType = TypeVar('_NewValueType')
+
+    # Result related:
+    _ErrorType = TypeVar('_ErrorType')
+    _NewErrorType = TypeVar('_NewErrorType')
+
+    class MyClass(
+        Kind2['MyClass', _ValueType, _ErrorType],
+        ResultBased2[_ValueType, _ErrorType],
+    ):
+        def bind_result(
+            self,
+            function: Callable[
+                [_ValueType],
+                Result[_NewValueType, _ErrorType],
+            ],
+        ) -> MyClass[_NewValueType, _ErrorType]:
+            ...
+
+        @classmethod
+        def from_result(
+            self, inner_value: Result[_NewValueType, _NewErrorType],
+        ) -> MyClass[_NewValueType, _NewErrorType]:
+            ...
+
+        @classmethod
+        def from_failure(
+            cls, inner_value: _NewErrorType,
+        ) -> MyClass[Any, _NewErrorType]:
+            ...
+
+    def test(a: int) -> Result[float, str]:
+        ...
+
+    x: MyClass[int, str]
+    reveal_type(bind_result(x, test))  # N: Revealed type is 'main.MyClass[builtins.float*, builtins.str]'
