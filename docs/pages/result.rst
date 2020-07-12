@@ -77,15 +77,13 @@ Supports both async and regular functions.
 
 .. code:: python
 
-  >>> from returns.result import safe
+  >>> from returns.result import Success, safe
 
   >>> @safe  # Will convert type to: Callable[[int], Result[float, Exception]]
   ... def divide(number: int) -> float:
   ...     return number / number
 
-  >>> str(divide(1))
-  '<Success: 1.0>'
-
+  >>> assert divide(1) == Success(1.0)
   >>> str(divide(0))
   '<Failure: division by zero>'
 
@@ -114,8 +112,7 @@ Python's type system does not allow us to do much, so this is required:
   ...     return Success(float(arg))
 
   >>> first: Result[int, int] = Success(1)
-  >>> str(first.bind(callback))
-  '<Success: 1.0>'
+  >>> assert first.bind(callback) == Success(1.0)
 
 Otherwise ``first`` will have ``Result[int, Any]`` type.
 Which is okay in some situations.
@@ -178,9 +175,7 @@ Like so:
   ...     return Failure(ZeroDivisionError('division by zero'))
 
   >>> container: Result[int, ValueError] = Success(1)
-  >>> str(container.unify(div))
-  '<Success: 1.0>'
-
+  >>> assert container.unify(div) == Success(1.0)
   >>> # => Revealed type is:
   >>> # Result[float, Union[ValueError, ZeroDivisionError]]
 

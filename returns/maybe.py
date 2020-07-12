@@ -368,10 +368,8 @@ def Some(inner_value: Optional[_ValueType]) -> Maybe[_ValueType]:  # noqa: N802
     .. code:: python
 
       >>> from returns.maybe import Some
-      >>> str(Some(1))
-      '<Some: 1>'
-      >>> str(Some(None))
-      '<Nothing>'
+      >>> assert str(Some(1)) == '<Some: 1>'
+      >>> assert str(Some(None)) == '<Nothing>'
 
     """
     return Maybe.from_value(inner_value)

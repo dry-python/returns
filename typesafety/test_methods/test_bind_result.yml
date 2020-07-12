@@ -26,6 +26,19 @@
     bind_result(x, test)  # E: Argument 2 to "internal_bind_result" has incompatible type "Callable[[float], Result[int, str]]"; expected "Callable[[float], Result[int, int]]"
 
 
+- case: bind_result_result
+  disable_cache: true
+  main: |
+    from returns.methods import bind_result
+    from returns.result import Result
+
+    def test(arg: float) -> Result[int, str]:
+        ...
+
+    x: Result[float, str]
+    reveal_type(bind_result(x, test))  # N: Revealed type is 'returns.result.Result[builtins.int*, builtins.str]'
+
+
 - case: bind_result_ioresult
   disable_cache: true
   main: |

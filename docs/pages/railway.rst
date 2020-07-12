@@ -74,18 +74,16 @@ during the pipeline execution:
 
 .. code:: python
 
-  >>> from returns.result import Failure, Result
+  >>> from returns.result import Failure, Result, Success
 
   >>> def double(state: int) -> float:
   ...     return state * 2.0
 
   >>> result: Result[str, float] = Failure(1).alt(double)
-  >>> str(result)
-  '<Failure: 2.0>'
+  >>> assert result == Failure(2.0)
 
   >>> result: Result[float, int] = Failure(1).fix(double)
-  >>> str(result)
-  '<Success: 2.0>'
+  >>> assert result == Success(2.0)
 
 ``rescue`` should return one of ``Success`` or ``Failure`` types.
 It can also rescue your flow and get on the successful track again:
@@ -101,8 +99,7 @@ It can also rescue your flow and get on the successful track again:
 
   >>> value: Result[int, Exception] = Failure(ZeroDivisionError())
   >>> result: Result[int, Exception] = value.rescue(tolerate_exception)
-  >>> str(result)
-  '<Success: 0>'
+  >>> assert result == Success(0)
 
   >>> value2: Result[int, Exception] = Failure(ValueError())
   >>> result2: Result[int, Exception] = value2.rescue(tolerate_exception)

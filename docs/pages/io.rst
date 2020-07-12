@@ -390,8 +390,7 @@ But, you can always make your ``IO`` lazy:
 
   >>> from returns.io import IO
   >>> lazy = lambda: IO(1)
-  >>> str(lazy())
-  '<IO: 1>'
+  >>> assert lazy() == IO(1)
 
 We have decided that it would be better and more familiar for Python devs.
 

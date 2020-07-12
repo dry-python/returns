@@ -54,8 +54,7 @@ to construct a new container from a raw value.
 
   >>> from returns.result import Result
 
-  >>> str(Result.from_value(1))
-  '<Success: 1>'
+  >>> assert str(Result.from_value(1)) == '<Success: 1>'
 
 
 Working with a container
@@ -95,12 +94,10 @@ to use containers with regular functions.
   ...     return state * 2
 
   >>> result: Result[int, Any] = Success(1).map(double)
-  >>> str(result)
-  '<Success: 2>'
+  >>> assert str(result) == '<Success: 2>'
 
   >>> result: Result[int, Any] = result.map(lambda state: state + 1)
-  >>> str(result)
-  '<Success: 3>'
+  >>> assert str(result) == '<Success: 3>'
 
 The same works with built-in functions as well:
 

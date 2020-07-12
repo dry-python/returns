@@ -50,6 +50,15 @@
     reveal_type(Result.from_failure(1))  # N: Revealed type is 'returns.result.Result[Any, builtins.int*]'
 
 
+- case: result_from_result
+  disable_cache: true
+  main: |
+    from returns.result import Result
+
+    x: Result[int ,str]
+    reveal_type(Result.from_result(x))  # N: Revealed type is 'returns.result.Result[builtins.int*, builtins.str*]'
+
+
 - case: result_from_iterable
   disable_cache: true
   main: |

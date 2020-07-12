@@ -10,6 +10,18 @@
     reveal_type(first.bind(returns_result))  # N: Revealed type is 'returns.result.Result[builtins.str*, builtins.Exception]'
 
 
+- case: success_bind_result
+  disable_cache: true
+  main: |
+    from returns.result import Success, Result
+
+    def returns_result(param: int) -> Result[str, Exception]:
+        ...
+
+    first: Result[int, Exception] = Success(1)
+    reveal_type(first.bind_result(returns_result))  # N: Revealed type is 'returns.result.Result[builtins.str*, builtins.Exception]'
+
+
 - case: success_unify1
   disable_cache: true
   main: |

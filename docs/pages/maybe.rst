@@ -18,11 +18,8 @@ based on just a single value:
 
   >>> from returns.maybe import Maybe
 
-  >>> str(Maybe.from_value(1))
-  '<Some: 1>'
-
-  >>> str(Maybe.from_value(None))
-  '<Nothing>'
+  >>> assert str(Maybe.from_value(1)) == '<Some: 1>'
+  >>> assert str(Maybe.from_value(None)) == '<Nothing>'
 
 Usage
 ~~~~~
@@ -33,7 +30,7 @@ It might be very useful for complex operations like the following one:
 
   >>> from attr import dataclass
   >>> from typing import Optional
-  >>> from returns.maybe import Maybe
+  >>> from returns.maybe import Maybe, Nothing
 
   >>> @dataclass
   ... class Address(object):
@@ -62,12 +59,9 @@ It might be very useful for complex operations like the following one:
   >>> str(get_street_address(with_address))  # all fields are not None
   '<Some: Some street>'
 
-  >>> str(get_street_address(empty_user))
-  '<Nothing>'
-  >>> str(get_street_address(empty_address))
-  '<Nothing>'
-  >>> str(get_street_address(empty_street))
-  '<Nothing>'
+  >>> assert get_street_address(empty_user) == Nothing
+  >>> assert get_street_address(empty_address) == Nothing
+  >>> assert get_street_address(empty_street) == Nothing
 
 Optional type
 ~~~~~~~~~~~~~
@@ -115,7 +109,7 @@ and converts it to return ``Maybe`` instead:
 .. code:: python
 
   >>> from typing import Optional
-  >>> from returns.maybe import Maybe, maybe
+  >>> from returns.maybe import Maybe, Some, maybe
 
   >>> @maybe
   ... def number(num: int) -> Optional[int]:
@@ -124,8 +118,7 @@ and converts it to return ``Maybe`` instead:
   ...     return None
 
   >>> result: Maybe[int] = number(1)
-  >>> str(result)
-  '<Some: 1>'
+  >>> assert result == Some(1)
 
 
 FAQ

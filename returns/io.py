@@ -751,8 +751,7 @@ class IOResult(
         .. code:: python
 
           >>> from returns.io import IOSuccess, IOFailure
-          >>> str(IOSuccess(1))
-          '<IOResult: <Success: 1>>'
+          >>> assert str(IOSuccess(1)) == '<IOResult: <Success: 1>>'
           >>> str(IOFailure(ValueError('wrong!')))
           '<IOResult: <Failure: wrong!>>'
 
@@ -847,8 +846,7 @@ def IOSuccess(  # noqa: N802
     .. code:: python
 
       >>> from returns.io import IOSuccess
-      >>> str(IOSuccess(1))
-      '<IOResult: <Success: 1>>'
+      >>> assert str(IOSuccess(1)) == '<IOResult: <Success: 1>>'
 
     """
     return _IOSuccess(Success(inner_value))
@@ -863,8 +861,7 @@ def IOFailure(  # noqa: N802
     .. code:: python
 
       >>> from returns.io import IOFailure
-      >>> str(IOFailure(1))
-      '<IOResult: <Failure: 1>>'
+      >>> assert str(IOFailure(1)) == '<IOResult: <Failure: 1>>'
 
     """
     return _IOFailure(Failure(inner_value))

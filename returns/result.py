@@ -25,6 +25,7 @@ from returns.interfaces import (
     rescuable,
     unwrappable,
 )
+from returns.interfaces.specific import result
 from returns.primitives.container import BaseContainer
 from returns.primitives.exceptions import UnwrapFailedError
 from returns.primitives.hkt import Kind2
@@ -48,6 +49,7 @@ class Result(
     applicative.Applicative2[_ValueType, _ErrorType],
     unwrappable.Unwrappable[_ValueType, _ErrorType],
     rescuable.Rescuable2[_ValueType, _ErrorType],
+    result.ResultBased2[_ValueType, _ErrorType],
     metaclass=ABCMeta,
 ):
     """
@@ -150,6 +152,9 @@ class Result(
           >>> assert Failure('a').bind(bindable) == Failure('a')
 
         """
+
+    #: Alias for `bind_result` method, it is the same as `bind` here.
+    bind_result = bind
 
     def unify(
         self,
@@ -340,6 +345,24 @@ class Result(
         return Failure(inner_value)
 
     @classmethod
+    def from_result(
+        cls, inner_value: 'Result[_NewValueType, _NewErrorType]',
+    ) -> 'Result[_NewValueType, _NewErrorType]':
+        """
+        Creates a new ``Result`` instance from existing ``Result`` instance.
+
+        .. code:: python
+
+          >>> from returns.result import Result, Failure, Success
+          >>> assert Result.from_result(Success(1)) == Success(1)
+          >>> assert Result.from_result(Failure(1)) == Failure(1)
+
+        This is a part of
+        :class:`returns.interfaces.specific.result.ResultBasedN` interface.
+        """
+        return inner_value
+
+    @classmethod
     def from_iterable(
         cls,
         inner_value: Iterable['Result[_ValueType, _ErrorType]'],
@@ -408,6 +431,9 @@ class _Failure(Result[Any, _ErrorType]):
     def bind(self, function):
         """Does nothing for ``Failure``."""
         return self
+
+    #: Alias for `bind` method. Part of the `ResultBasedN` interface.
+    bind_result = bind
 
     def fix(self, function):
         """Composes pure function with a failed container."""
@@ -480,6 +506,9 @@ class _Success(Result[_ValueType, Any]):
         """Binds current container to a function that returns container."""
         return function(self._inner_value)
 
+    #: Alias for `bind` method. Part of the `ResultBasedN` interface.
+    bind_result = bind
+
     def fix(self, function):
         """Does nothing for ``Success``."""
         return self
@@ -520,8 +549,7 @@ def Success(  # noqa: N802
     .. code:: python
 
       >>> from returns.result import Success
-      >>> str(Success(1))
-      '<Success: 1>'
+      >>> assert str(Success(1)) == '<Success: 1>'
 
     """
     return _Success(inner_value)
@@ -536,8 +564,7 @@ def Failure(  # noqa: N802
     .. code:: python
 
       >>> from returns.result import Failure
-      >>> str(Failure(1))
-      '<Failure: 1>'
+      >>> assert str(Failure(1)) == '<Failure: 1>'
 
     """
     return _Failure(inner_value)
@@ -571,7 +598,6 @@ def safe(
       >>> @safe
       ... def might_raise(arg: int) -> float:
       ...     return 1 / arg
-      ...
 
       >>> assert might_raise(1) == Success(1.0)
       >>> assert isinstance(might_raise(0), Result.failure_type)

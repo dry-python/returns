@@ -45,6 +45,19 @@
     bind_result(test)(x)  # E: Argument 1 has incompatible type "RequiresContextFutureResult[float, int, bool]"; expected "KindN[RequiresContextFutureResult[Any, Any, Any], float, str, bool]"
 
 
+- case: bind_result_result
+  disable_cache: true
+  main: |
+    from returns.pointfree import bind_result
+    from returns.result import Result
+
+    def test(arg: float) -> Result[int, str]:
+        ...
+
+    x: Result[float, str]
+    reveal_type(bind_result(test)(x))  # N: Revealed type is 'returns.result.Result*[builtins.int, builtins.str]'
+
+
 - case: bind_result_ioresult
   disable_cache: true
   main: |
