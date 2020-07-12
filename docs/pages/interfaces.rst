@@ -48,7 +48,7 @@ Altable
 Rescuable
 ~~~~~~~~~
 
-.. automodule:: returns.interfaces.rescue
+.. automodule:: returns.interfaces.rescuable
   :members:
 
 Unwrappable
