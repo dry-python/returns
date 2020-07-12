@@ -1,11 +1,10 @@
-from abc import ABCMeta
+from abc import ABCMeta, abstractmethod
 from functools import wraps
 from inspect import FrameInfo
 from typing import (
     Any,
     Callable,
     ClassVar,
-    Generic,
     Iterable,
     List,
     NoReturn,
@@ -19,8 +18,16 @@ from typing import (
 from typing_extensions import final
 
 from returns._generated.iterable import iterable
+from returns.interfaces import (
+    applicative,
+    bindable,
+    mappable,
+    rescuable,
+    unwrappable,
+)
 from returns.primitives.container import BaseContainer
 from returns.primitives.exceptions import UnwrapFailedError
+from returns.primitives.hkt import Kind2
 
 # Definitions:
 _ValueType = TypeVar('_ValueType', covariant=True)
@@ -35,7 +42,12 @@ _SecondType = TypeVar('_SecondType')
 
 class Result(
     BaseContainer,
-    Generic[_ValueType, _ErrorType],
+    Kind2['Result', _ValueType, _ErrorType],
+    mappable.Mappable2[_ValueType, _ErrorType],
+    bindable.Bindable2[_ValueType, _ErrorType],
+    applicative.Applicative2[_ValueType, _ErrorType],
+    unwrappable.Unwrappable[_ValueType, _ErrorType],
+    rescuable.Rescuable2[_ValueType, _ErrorType],
     metaclass=ABCMeta,
 ):
     """
@@ -66,6 +78,7 @@ class Result(
         """Returns a list with stack trace when :func:`~Failure` was called."""
         return self._trace
 
+    @abstractmethod  # noqa: WPS125
     def map(  # noqa: WPS125
         self,
         function: Callable[[_ValueType], _NewValueType],
@@ -84,11 +97,15 @@ class Result(
           >>> assert Failure('a').map(mappable) == Failure('a')
 
         """
-        raise NotImplementedError
 
+    @abstractmethod
     def apply(
         self,
-        container: 'Result[Callable[[_ValueType], _NewValueType], _ErrorType]',
+        container: Kind2[
+            'Result',
+            Callable[[_ValueType], _NewValueType],
+            _ErrorType,
+        ],
     ) -> 'Result[_NewValueType, _ErrorType]':
         """
         Calls a wrapped function in a container on this container.
@@ -107,11 +124,14 @@ class Result(
           >>> assert isinstance(with_failure, Result.failure_type)
 
         """
-        raise NotImplementedError
 
+    @abstractmethod
     def bind(
         self,
-        function: Callable[[_ValueType], 'Result[_NewValueType, _ErrorType]'],
+        function: Callable[
+            [_ValueType],
+            Kind2['Result', _NewValueType, _ErrorType],
+        ],
     ) -> 'Result[_NewValueType, _ErrorType]':
         """
         Composes successful container with a function that returns a container.
@@ -130,12 +150,12 @@ class Result(
           >>> assert Failure('a').bind(bindable) == Failure('a')
 
         """
-        raise NotImplementedError
 
     def unify(
         self,
         function: Callable[
-            [_ValueType], 'Result[_NewValueType, _NewErrorType]',
+            [_ValueType],
+            'Result[_NewValueType, _NewErrorType]',
         ],
     ) -> 'Result[_NewValueType, Union[_ErrorType, _NewErrorType]]':
         """
@@ -164,6 +184,7 @@ class Result(
         """
         return self.bind(function)  # type: ignore
 
+    @abstractmethod
     def fix(
         self,
         function: Callable[[_ErrorType], _NewValueType],
@@ -182,8 +203,8 @@ class Result(
           >>> assert Failure('a').fix(fixable) == Success('ab')
 
         """
-        raise NotImplementedError
 
+    @abstractmethod
     def alt(
         self,
         function: Callable[[_ErrorType], _NewErrorType],
@@ -202,12 +223,12 @@ class Result(
           >>> assert Failure('a').alt(altable) == Failure('ab')
 
         """
-        raise NotImplementedError
 
+    @abstractmethod
     def rescue(
         self,
         function: Callable[
-            [_ErrorType], 'Result[_ValueType, _NewErrorType]',
+            [_ErrorType], Kind2['Result', _ValueType, _NewErrorType],
         ],
     ) -> 'Result[_ValueType, _NewErrorType]':
         """
@@ -227,8 +248,8 @@ class Result(
           >>> assert Failure('aa').rescue(rescuable) == Success('aab')
 
         """
-        raise NotImplementedError
 
+    @abstractmethod
     def value_or(
         self,
         default_value: _NewValueType,
@@ -243,8 +264,8 @@ class Result(
           >>> assert Failure(1).value_or(2) == 2
 
         """
-        raise NotImplementedError
 
+    @abstractmethod
     def unwrap(self) -> _ValueType:
         """
         Get value or raise exception.
@@ -260,8 +281,8 @@ class Result(
           returns.primitives.exceptions.UnwrapFailedError
 
         """
-        raise NotImplementedError
 
+    @abstractmethod
     def failure(self) -> _ErrorType:
         """
         Get failed value or raise exception.
@@ -277,7 +298,6 @@ class Result(
           returns.primitives.exceptions.UnwrapFailedError
 
         """
-        raise NotImplementedError
 
     @classmethod
     def from_value(
@@ -286,7 +306,6 @@ class Result(
         """
         One more value to create success unit values.
 
-        This is a part of :class:`returns.primitives.interfaces.Unitable`.
         It is useful as a united way to create a new value from any container.
 
         .. code:: python
@@ -307,7 +326,6 @@ class Result(
         """
         One more value to create failure unit values.
 
-        This is a part of :class:`returns.primitives.interfaces.Unitable`.
         It is useful as a united way to create a new value from any container.
 
         .. code:: python

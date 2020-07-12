@@ -49,13 +49,15 @@ This will allow to keep them in sync with the upstream.
 Supported features
 ------------------
 
+- ``kind`` feature adds Higher Kinded Types (HKT) support
 - ``curry`` feature allows to write typed curried functions
 - ``partial`` feature allows to write typed partial application
 - ``flow`` feature allows to write better typed functional pipelines
+  with ``flow`` function
+- ``pipe`` feature allows to write better typed functional pipelines
+  with ``pipe`` function
 - ``decorators`` allows to infer types of functions that are decorated
   with ``@safe``, ``@maybe``, ``@impure``, etc
-- ``pointfree`` provides better typing inference
-  for some problematic :ref:`pointfree` helpers
 
 
 Further reading
@@ -71,9 +73,20 @@ API Reference
 Plugin defenition
 ~~~~~~~~~~~~~~~~~
 
+.. automodule:: returns.contrib.mypy._consts
+   :members:
+
 .. autoclasstree:: returns.contrib.mypy.returns_plugin
 
 .. automodule:: returns.contrib.mypy.returns_plugin
+   :members:
+
+Kind
+~~~~
+
+.. autoclasstree:: returns.contrib.mypy._features.kind
+
+.. automodule:: returns.contrib.mypy._features.kind
    :members:
 
 Curry
@@ -100,19 +113,18 @@ Flow
 .. automodule:: returns.contrib.mypy._features.flow
    :members:
 
+Pipe
+~~~~
+
+.. autoclasstree:: returns.contrib.mypy._features.pipe
+
+.. automodule:: returns.contrib.mypy._features.pipe
+   :members:
+
 Decorators
 ~~~~~~~~~~
 
 .. autoclasstree:: returns.contrib.mypy._features.decorators
 
 .. automodule:: returns.contrib.mypy._features.decorators
-   :members:
-
-
-Pointfree
-~~~~~~~~~
-
-.. autoclasstree:: returns.contrib.mypy._features.pointfree
-
-.. automodule:: returns.contrib.mypy._features.pointfree
    :members:

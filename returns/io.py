@@ -1,11 +1,10 @@
-from abc import ABCMeta
+from abc import ABCMeta, abstractmethod
 from functools import wraps
 from inspect import FrameInfo
 from typing import (
     Any,
     Callable,
     ClassVar,
-    Generic,
     Iterable,
     List,
     Optional,
@@ -18,7 +17,16 @@ from typing import (
 from typing_extensions import final
 
 from returns._generated.iterable import iterable
+from returns.interfaces import (
+    applicative,
+    bindable,
+    mappable,
+    rescuable,
+    unwrappable,
+)
+from returns.interfaces.specific import result
 from returns.primitives.container import BaseContainer
+from returns.primitives.hkt import Kind1, Kind2, dekind
 from returns.result import Failure, Result, Success
 
 _ValueType = TypeVar('_ValueType', covariant=True)
@@ -33,7 +41,13 @@ _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')
 
 
-class IO(BaseContainer, Generic[_ValueType]):
+class IO(
+    BaseContainer,
+    Kind1['IO', _ValueType],
+    mappable.Mappable1[_ValueType],
+    bindable.Bindable1[_ValueType],
+    applicative.Applicative1[_ValueType],
+):
     """
     Explicit container for impure function results.
 
@@ -68,8 +82,7 @@ class IO(BaseContainer, Generic[_ValueType]):
         .. code:: python
 
           >>> from returns.io import IO
-          >>> str(IO(1))
-          '<IO: 1>'
+          >>> assert str(IO(1)) == '<IO: 1>'
 
         """
         super().__init__(inner_value)
@@ -98,7 +111,7 @@ class IO(BaseContainer, Generic[_ValueType]):
 
     def apply(
         self,
-        container: 'IO[Callable[[_ValueType], _NewValueType]]',
+        container: Kind1['IO', Callable[[_ValueType], _NewValueType]],
     ) -> 'IO[_NewValueType]':
         """
         Calls a wrapped function in a container on this container.
@@ -122,10 +135,11 @@ class IO(BaseContainer, Generic[_ValueType]):
           >>> assert IO('b').apply(IO('a').apply(IO(appliable))) == IO('ab')
 
         """
-        return self.map(container._inner_value)  # noqa: WPS437
+        return self.map(dekind(container)._inner_value)  # noqa: WPS437
 
     def bind(
-        self, function: Callable[[_ValueType], 'IO[_NewValueType]'],
+        self,
+        function: Callable[[_ValueType], Kind1['IO', _NewValueType]],
     ) -> 'IO[_NewValueType]':
         """
         Applies 'function' to the result of a previous calculation.
@@ -141,7 +155,7 @@ class IO(BaseContainer, Generic[_ValueType]):
           >>> assert IO('a').bind(bindable) == IO('ab')
 
         """
-        return function(self._inner_value)
+        return dekind(function(self._inner_value))
 
     @classmethod
     def from_value(cls, inner_value: _NewValueType) -> 'IO[_NewValueType]':
@@ -155,7 +169,7 @@ class IO(BaseContainer, Generic[_ValueType]):
           >>> from returns.io import IO
           >>> assert IO(1) == IO.from_value(1)
 
-        Part of the :class:`returns.primitives.interfaces.Applicative`
+        Part of the :class:`returns.interfaces.applicative.Applicative`
         protocol.
         """
         return IO(inner_value)
@@ -237,7 +251,13 @@ def impure(
 
 class IOResult(
     BaseContainer,
-    Generic[_ValueType, _ErrorType],
+    Kind2['IOResult', _ValueType, _ErrorType],
+    mappable.Mappable2[_ValueType, _ErrorType],
+    bindable.Bindable2[_ValueType, _ErrorType],
+    applicative.Applicative2[_ValueType, _ErrorType],
+    unwrappable.Unwrappable[IO[_ValueType], IO[_ErrorType]],
+    rescuable.Rescuable2[_ValueType, _ErrorType],
+    result.ResultBased2[_ValueType, _ErrorType],
     metaclass=ABCMeta,
 ):
     """
@@ -284,19 +304,16 @@ class IOResult(
     See also:
         https://github.com/gcanti/fp-ts/blob/master/docs/modules/IOEither.ts.md
 
-
     Implementation
     ~~~~~~~~~~~~~~
     This class contains all the methods that can be delegated to ``Result``.
-    But, some methods have ``raise NotImplementedError`` which means
+    But, some methods are ``@abstractmethod`` which means
     that we have to use special :class:`~_IOSuccess` and :class:`~_IOFailure`
     implementation details to correctly handle these callbacks.
 
     Do not rely on them! Use public functions and types instead.
 
     """
-
-    outer: ClassVar[Type[IO]] = IO
 
     _inner_value: Result[_ValueType, _ErrorType]
 
@@ -317,7 +334,7 @@ class IOResult(
 
     @property
     def trace(self) -> Optional[List[FrameInfo]]:
-        """Returns a list with stack trace when :func:`~Failure` was called."""
+        """Returns a stack trace when :func:`~IOFailure` was called."""
         return self._inner_value.trace
 
     def map(  # noqa: WPS125
@@ -336,8 +353,11 @@ class IOResult(
 
     def apply(
         self,
-        container:
-            'IOResult[Callable[[_ValueType], _NewValueType], _ErrorType]',
+        container: Kind2[
+            'IOResult',
+            Callable[[_ValueType], _NewValueType],
+            _ErrorType,
+        ],
     ) -> 'IOResult[_NewValueType, _ErrorType]':
         """
         Calls a wrapped function in a container on this container.
@@ -369,11 +389,12 @@ class IOResult(
             )
         return container  # type: ignore
 
+    @abstractmethod
     def bind(
         self,
         function: Callable[
             [_ValueType],
-            'IOResult[_NewValueType, _ErrorType]',
+            Kind2['IOResult', _NewValueType, _ErrorType],
         ],
     ) -> 'IOResult[_NewValueType, _ErrorType]':
         """
@@ -392,13 +413,13 @@ class IOResult(
           >>> assert IOFailure('a').bind(bindable) == IOFailure('a')
 
         """
-        raise NotImplementedError
 
+    @abstractmethod
     def bind_result(
         self,
         function: Callable[
             [_ValueType],
-            'Result[_NewValueType, _ErrorType]',
+            Result[_NewValueType, _ErrorType],
         ],
     ) -> 'IOResult[_NewValueType, _ErrorType]':
         """
@@ -423,8 +444,8 @@ class IOResult(
           >>> assert IOFailure('a').bind_result(bindable) == IOFailure('a')
 
         """
-        raise NotImplementedError
 
+    @abstractmethod
     def bind_io(
         self,
         function: Callable[[_ValueType], IO[_NewValueType]],
@@ -446,7 +467,6 @@ class IOResult(
           >>> assert IOFailure('a').bind_io(bindable) == IOFailure('a')
 
         """
-        raise NotImplementedError
 
     def unify(
         self,
@@ -505,11 +525,12 @@ class IOResult(
         """
         return self.from_result(self._inner_value.alt(function))
 
+    @abstractmethod
     def rescue(
         self,
         function: Callable[
             [_ErrorType],
-            'IOResult[_ValueType, _NewErrorType]',
+            Kind2['IOResult', _ValueType, _NewErrorType],
         ],
     ) -> 'IOResult[_ValueType, _NewErrorType]':
         """
@@ -528,7 +549,6 @@ class IOResult(
           >>> assert IOSuccess('a').rescue(rescuable) == IOSuccess('a')
 
         """
-        raise NotImplementedError
 
     def value_or(
         self,
@@ -661,7 +681,6 @@ class IOResult(
         """
         One more value to create success unit values.
 
-        This is a part of :class:`returns.primitives.interfaces.Unitable`.
         It is useful as a united way to create a new value from any container.
 
         .. code:: python
@@ -682,7 +701,6 @@ class IOResult(
         """
         One more value to create failure unit values.
 
-        This is a part of :class:`returns.primitives.interfaces.Unitable`.
         It is useful as a united way to create a new value from any container.
 
         .. code:: python
@@ -893,7 +911,6 @@ def impure_safe(
     and :func:`returns.result.safe` decorators.
 
     Requires our :ref:`mypy plugin <mypy-plugins>`.
-
     """
     @wraps(function)
     def decorator(*args, **kwargs):

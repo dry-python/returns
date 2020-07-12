@@ -3,36 +3,7 @@ from copy import copy, deepcopy
 import pytest
 
 from returns.primitives.exceptions import ImmutableStateError
-from returns.primitives.interfaces import (
-    Altable,
-    Bindable,
-    Fixable,
-    Mappable,
-    Rescueable,
-    Unifiable,
-    Unitable,
-    Unwrapable,
-)
 from returns.result import Failure, Success
-
-
-@pytest.mark.parametrize('container', [
-    Failure(1),
-    Success(1),
-])
-@pytest.mark.parametrize('protocol', [
-    Bindable,
-    Mappable,
-    Fixable,
-    Rescueable,
-    Unwrapable,
-    Altable,
-    Unitable,
-    Unifiable,
-])
-def test_protocols(container, protocol):
-    """Ensures that Result has all the right protocols."""
-    assert isinstance(container, protocol)
 
 
 def test_nonequality():

@@ -49,15 +49,15 @@ def _managed(
 def _managed(
     use: Callable[
         [_ValueType],
-        ReaderIOResult[_EnvType, _NewValueType, _ErrorType],
+        ReaderIOResult[_NewValueType, _ErrorType, _EnvType],
     ],
     release: Callable[
         [_ValueType, Result[_NewValueType, _ErrorType]],
-        ReaderIOResult[_EnvType, None, _ErrorType],
+        ReaderIOResult[None, _ErrorType, _EnvType],
     ],
 ) -> Callable[
-    [ReaderIOResult[_EnvType, _ValueType, _ErrorType]],
-    ReaderIOResult[_EnvType, _NewValueType, _ErrorType],
+    [ReaderIOResult[_ValueType, _ErrorType, _EnvType]],
+    ReaderIOResult[_NewValueType, _ErrorType, _EnvType],
 ]:
     ...
 
@@ -66,14 +66,14 @@ def _managed(
 def _managed(
     use: Callable[
         [_ValueType],
-        ReaderFutureResult[_EnvType, _NewValueType, _ErrorType],
+        ReaderFutureResult[_NewValueType, _ErrorType, _EnvType],
     ],
     release: Callable[
         [_ValueType, Result[_NewValueType, _ErrorType]],
-        ReaderFutureResult[_EnvType, None, _ErrorType],
+        ReaderFutureResult[None, _ErrorType, _EnvType],
     ],
 ) -> Callable[
-    [ReaderFutureResult[_EnvType, _ValueType, _ErrorType]],
-    ReaderFutureResult[_EnvType, _NewValueType, _ErrorType],
+    [ReaderFutureResult[_ValueType, _ErrorType, _EnvType]],
+    ReaderFutureResult[_NewValueType, _ErrorType, _EnvType],
 ]:
     ...

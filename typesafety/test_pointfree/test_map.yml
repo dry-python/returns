@@ -13,7 +13,7 @@
     def test(a: A) -> C:
         ...
 
-    reveal_type(map_(test)(x))  # N: Revealed type is 'returns.maybe.Maybe[main.C*]'
+    reveal_type(map_(test)(x))  # N: Revealed type is 'returns.maybe.Maybe*[main.C]'
 
 
 - case: map_callback_protocol
@@ -21,15 +21,21 @@
   main: |
     from typing import Callable, TypeVar
     from returns.pointfree import map_
+    from returns.primitives.hkt import KindN, kinded
+    from returns.interfaces.mappable import MappableN
     from returns.maybe import Maybe
 
-    _ValueType = TypeVar('_ValueType', contravariant=True)
-    _NewValueType = TypeVar('_NewValueType', covariant=True)
+    _T1 = TypeVar('_T1')
+    _T2 = TypeVar('_T2')
+    _T3 = TypeVar('_T3')
+    _U1 = TypeVar('_U1')
+    _Inst = TypeVar('_Inst', bound=MappableN)
 
+    @kinded
     def ensure_callback(
-        f: Callable[[Maybe[_ValueType]], Maybe[_NewValueType]],
-        c: Maybe[_ValueType],
-    ) -> Maybe[_NewValueType]:
+        f: Callable[[KindN[_Inst, _T1, _T2, _T3]], KindN[_Inst, _U1, _T2, _T3]],
+        c: KindN[_Inst, _T1, _T2, _T3],
+    ) -> KindN[_Inst, _U1, _T2, _T3]:
         return f(c)
 
     def test(arg: int) -> float:
@@ -66,7 +72,7 @@
     def test(arg: int) -> Result[float, str]:
         ...
 
-    reveal_type(map_(bind(test))(IO(Success(1))))  # N: Revealed type is 'returns.io.IO[returns.result.Result*[builtins.float*, builtins.str*]]'
+    reveal_type(map_(bind(test))(IO(Success(1))))  # N: Revealed type is 'returns.io.IO*[returns.result.Result[builtins.float, builtins.str]]'
 
 
 - case: map_io
@@ -78,7 +84,7 @@
     def test(arg: float) -> int:
         ...
 
-    reveal_type(map_(test)(IO(1.5)))  # N: Revealed type is 'returns.io.IO[builtins.int*]'
+    reveal_type(map_(test)(IO(1.5)))  # N: Revealed type is 'returns.io.IO*[builtins.int]'
 
 
 - case: map_maybe
@@ -90,7 +96,7 @@
     def test(arg: float) -> int:
         ...
 
-    reveal_type(map_(test)(Maybe.from_value(1.5)))  # N: Revealed type is 'returns.maybe.Maybe[builtins.int*]'
+    reveal_type(map_(test)(Maybe.from_value(1.5)))  # N: Revealed type is 'returns.maybe.Maybe*[builtins.int]'
 
 
 - case: map_result
@@ -103,7 +109,7 @@
         ...
 
     x: Result[float, str]
-    reveal_type(map_(test)(x))  # N: Revealed type is 'returns.result.Result[builtins.int, builtins.str*]'
+    reveal_type(map_(test)(x))  # N: Revealed type is 'returns.result.Result*[builtins.int, builtins.str*]'
 
 
 - case: map_ioresult
@@ -116,7 +122,7 @@
         ...
 
     x: IOResult[float, str]
-    reveal_type(map_(test)(x))  # N: Revealed type is 'returns.io.IOResult[builtins.int, builtins.str*]'
+    reveal_type(map_(test)(x))  # N: Revealed type is 'returns.io.IOResult*[builtins.int, builtins.str*]'
 
 
 - case: map_requires_context
@@ -128,8 +134,8 @@
     def test(arg: float) -> int:
         ...
 
-    x: RequiresContext[str, float]
-    reveal_type(map_(test)(x))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[builtins.str*, builtins.int]'
+    x: RequiresContext[float, str]
+    reveal_type(map_(test)(x))  # N: Revealed type is 'returns.context.requires_context.RequiresContext*[builtins.int, builtins.str*]'
 
 
 - case: map_requires_context_result
@@ -141,8 +147,8 @@
     def test(arg: float) -> int:
         ...
 
-    x: RequiresContextResult[bool, float, str]
-    reveal_type(map_(test)(x))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.bool*, builtins.int, builtins.str*]'
+    x: RequiresContextResult[float, str, bool]
+    reveal_type(map_(test)(x))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult*[builtins.int, builtins.str*, builtins.bool*]'
 
 
 - case: map_requires_context_ioresult
@@ -154,8 +160,8 @@
     def test(arg: float) -> int:
         ...
 
-    x: RequiresContextIOResult[bool, float, str]
-    reveal_type(map_(test)(x))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.bool*, builtins.int, builtins.str*]'
+    x: RequiresContextIOResult[float, str, bool]
+    reveal_type(map_(test)(x))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult*[builtins.int, builtins.str*, builtins.bool*]'
 
 
 - case: map_requires_context_future_result
@@ -167,8 +173,8 @@
     def test(arg: float) -> int:
         ...
 
-    x: RequiresContextFutureResult[bool, float, str]
-    reveal_type(map_(test)(x))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool*, builtins.int, builtins.str*]'
+    x: RequiresContextFutureResult[float, str, bool]
+    reveal_type(map_(test)(x))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult*[builtins.int, builtins.str*, builtins.bool*]'
 
 
 - case: map_future
@@ -180,7 +186,7 @@
     def test(arg: float) -> int:
         ...
 
-    reveal_type(map_(test)(Future.from_value(1.5)))  # N: Revealed type is 'returns.future.Future[builtins.int*]'
+    reveal_type(map_(test)(Future.from_value(1.5)))  # N: Revealed type is 'returns.future.Future*[builtins.int]'
 
 
 - case: map_futureresult
@@ -193,4 +199,34 @@
         ...
 
     x: FutureResult[float, str]
-    reveal_type(map_(test)(x))  # N: Revealed type is 'returns.future.FutureResult[builtins.int, builtins.str*]'
+    reveal_type(map_(test)(x))  # N: Revealed type is 'returns.future.FutureResult*[builtins.int, builtins.str*]'
+
+
+- case: bind_custom_type
+  disable_cache: true
+  main: |
+    from returns.pointfree import bind
+    from returns.primitives.hkt import Kind1, dekind
+    from returns.interfaces.bindable import Bindable1
+    from typing import Callable, TypeVar
+
+    T = TypeVar('T')
+    N = TypeVar('N')
+
+    class MyOwn(
+        Kind1['MyOwn', T],
+        Bindable1[T],
+    ):
+        def __init__(self, value: T) -> None:
+            self.value = value
+
+        def bind(
+            self, function: Callable[[T], Kind1['MyOwn', N]],
+        ) -> 'MyOwn[N]':
+            return dekind(function(self.value))
+
+    def test(arg: float) -> MyOwn[int]:
+        ...
+
+    x: MyOwn[float]
+    reveal_type(bind(test)(x))  # N: Revealed type is 'main.MyOwn*[builtins.int*]'

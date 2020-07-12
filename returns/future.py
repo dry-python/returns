@@ -6,7 +6,6 @@ from typing import (
     ClassVar,
     Coroutine,
     Generator,
-    Generic,
     Iterable,
     Sequence,
     Type,
@@ -18,8 +17,11 @@ from typing_extensions import final
 
 from returns._generated.futures import _future, _future_result
 from returns._generated.iterable import iterable
+from returns.interfaces import applicative, bindable, mappable, rescuable
+from returns.interfaces.specific import result
 from returns.io import IO, IOResult
 from returns.primitives.container import BaseContainer
+from returns.primitives.hkt import Kind1, Kind2, dekind
 from returns.result import Failure, Result, Success
 
 # Definitions:
@@ -56,7 +58,13 @@ async def async_identity(instance: _FirstType) -> _FirstType:
 # ======
 
 @final
-class Future(BaseContainer, Generic[_ValueType]):
+class Future(
+    BaseContainer,
+    Kind1['Future', _ValueType],
+    mappable.Mappable1[_ValueType],
+    bindable.Bindable1[_ValueType],
+    applicative.Applicative1[_ValueType],
+):
     """
     Container to easily compose ``async`` functions.
 
@@ -186,7 +194,7 @@ class Future(BaseContainer, Generic[_ValueType]):
 
     def apply(
         self,
-        container: 'Future[Callable[[_ValueType], _NewValueType]]',
+        container: Kind1['Future', Callable[[_ValueType], _NewValueType]],
     ) -> 'Future[_NewValueType]':
         """
         Calls a wrapped function in a container on this container.
@@ -206,11 +214,11 @@ class Future(BaseContainer, Generic[_ValueType]):
           ... ) == IO('1b')
 
         """
-        return Future(_future.async_apply(container, self._inner_value))
+        return Future(_future.async_apply(dekind(container), self._inner_value))
 
     def bind(
         self,
-        function: Callable[[_ValueType], 'Future[_NewValueType]'],
+        function: Callable[[_ValueType], Kind1['Future', _NewValueType]],
     ) -> 'Future[_NewValueType]':
         """
         Applies 'function' to the result of a previous calculation.
@@ -482,7 +490,15 @@ def asyncify(function: Callable[..., _ValueType]) -> Callable[
 # ============
 
 @final
-class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
+class FutureResult(
+    BaseContainer,
+    Kind2['FutureResult', _ValueType, _ErrorType],
+    mappable.Mappable2[_ValueType, _ErrorType],
+    bindable.Bindable2[_ValueType, _ErrorType],
+    applicative.Applicative2[_ValueType, _ErrorType],
+    rescuable.Rescuable2[_ValueType, _ErrorType],
+    result.ResultBased2[_ValueType, _ErrorType],
+):
     """
     Container to easily compose ``async`` functions.
 
@@ -628,8 +644,11 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
 
     def apply(
         self,
-        container:
-            'FutureResult[Callable[[_ValueType], _NewValueType], _ErrorType]',
+        container: Kind2[
+            'FutureResult',
+            Callable[[_ValueType], _NewValueType],
+            _ErrorType,
+        ],
     ) -> 'FutureResult[_NewValueType, _ErrorType]':
         """
         Calls a wrapped function in a container on this container.
@@ -662,14 +681,14 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
 
         """
         return FutureResult(_future_result.async_apply(
-            container, self._inner_value,
+            dekind(container), self._inner_value,
         ))
 
     def bind(
         self,
         function: Callable[
             [_ValueType],
-            'FutureResult[_NewValueType, _ErrorType]',
+            Kind2['FutureResult', _NewValueType, _ErrorType],
         ],
     ) -> 'FutureResult[_NewValueType, _ErrorType]':
         """
@@ -1007,7 +1026,7 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
         self,
         function: Callable[
             [_ErrorType],
-            'FutureResult[_ValueType, _NewErrorType]',
+            Kind2['FutureResult', _ValueType, _NewErrorType],
         ],
     ) -> 'FutureResult[_ValueType, _NewErrorType]':
         """
@@ -1033,67 +1052,6 @@ class FutureResult(BaseContainer, Generic[_ValueType, _ErrorType]):
         return FutureResult(_future_result.async_rescue(
             function, self._inner_value,
         ))
-
-    def value_or(
-        self,
-        default_value: _NewValueType,
-    ) -> Awaitable[IO[Union[_ValueType, _NewValueType]]]:
-        """
-        Get value or default value.
-
-        .. code:: python
-
-          >>> import anyio
-          >>> from returns.future import FutureResult
-          >>> from returns.io import IO
-
-          >>> async def main():
-          ...     first = await FutureResult.from_value(1).value_or(2)
-          ...     second = await FutureResult.from_failure(3).value_or(4)
-          ...     return first, second
-
-          >>> assert anyio.run(main) == (IO(1), IO(4))
-
-        """
-        return _future_result.async_value_or(self, default_value)
-
-    def unwrap(self) -> Awaitable[IO[_ValueType]]:
-        """
-        Get value or raise exception.
-
-        .. code:: pycon
-
-          >>> import anyio
-          >>> from returns.future import FutureResult
-          >>> from returns.io import IO
-          >>> assert anyio.run(FutureResult.from_value(1).unwrap) == IO(1)
-
-          >>> anyio.run(FutureResult.from_failure(1).unwrap)
-          Traceback (most recent call last):
-            ...
-          returns.primitives.exceptions.UnwrapFailedError
-
-        """
-        return _future_result.async_unwrap(self)
-
-    def failure(self) -> Awaitable[IO[_ErrorType]]:
-        """
-        Get failed value or raise exception.
-
-        .. code:: pycon
-
-          >>> import anyio
-          >>> from returns.future import FutureResult
-          >>> from returns.io import IO
-          >>> assert anyio.run(FutureResult.from_failure(1).failure) == IO(1)
-
-          >>> anyio.run(FutureResult.from_value(1).failure)
-          Traceback (most recent call last):
-            ...
-          returns.primitives.exceptions.UnwrapFailedError
-
-        """
-        return _future_result.async_failure(self)
 
     @classmethod
     def from_typecast(

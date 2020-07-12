@@ -1,3 +1,29 @@
+- case: rescue_wrong_second_type
+  disable_cache: true
+  main: |
+    from returns.pointfree import rescue
+    from returns.context import RequiresContextIOResult
+
+    def test(arg: float) -> RequiresContextIOResult[float, str, int]:
+        ...
+
+    x: RequiresContextIOResult[float, str, int]
+    rescue(test)(x)  # E: Argument 1 has incompatible type "RequiresContextIOResult[float, str, int]"; expected "KindN[RequiresContextIOResult[Any, Any, Any], float, float, int]"
+
+
+- case: rescue_wrong_else_types
+  disable_cache: true
+  main: |
+    from returns.pointfree import rescue
+    from returns.context import RequiresContextIOResult
+
+    def test(arg: float) -> RequiresContextIOResult[float, str, int]:
+        ...
+
+    x: RequiresContextIOResult[str, float, str]
+    rescue(test)(x)  # E: Argument 1 has incompatible type "RequiresContextIOResult[str, float, str]"; expected "KindN[RequiresContextIOResult[Any, Any, Any], float, float, int]"
+
+
 - case: rescue_result
   disable_cache: true
   main: |
@@ -7,7 +33,8 @@
     def test(arg: float) -> Result[int, str]:
         ...
 
-    reveal_type(rescue(test))  # N: Revealed type is 'def (returns.result.Result[builtins.int*, builtins.float*]) -> returns.result.Result[builtins.int*, builtins.str*]'
+    x: Result[int, float]
+    reveal_type(rescue(test)(x))  # N: Revealed type is 'returns.result.Result*[builtins.int*, builtins.str*]'
 
 
 - case: rescue_ioresult
@@ -19,7 +46,8 @@
     def test(arg: float) -> IOResult[int, str]:
         ...
 
-    reveal_type(rescue(test))  # N: Revealed type is 'def (returns.io.IOResult[builtins.int*, builtins.float*]) -> returns.io.IOResult[builtins.int*, builtins.str*]'
+    x: IOResult[int, float]
+    reveal_type(rescue(test)(x))  # N: Revealed type is 'returns.io.IOResult*[builtins.int*, builtins.str*]'
 
 
 - case: rescue_context_result
@@ -28,10 +56,11 @@
     from returns.pointfree import rescue
     from returns.context import RequiresContextResult
 
-    def test(arg: float) -> RequiresContextResult[int, float, str]:
+    def test(arg: float) -> RequiresContextResult[float, str, int]:
         ...
 
-    reveal_type(rescue(test))  # N: Revealed type is 'def (returns.context.requires_context_result.RequiresContextResult[builtins.int*, builtins.float*, builtins.float*]) -> returns.context.requires_context_result.RequiresContextResult[builtins.int*, builtins.float*, builtins.str*]'
+    x: RequiresContextResult[float, float, int]
+    reveal_type(rescue(test)(x))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult*[builtins.float*, builtins.str*, builtins.int*]'
 
 
 - case: rescue_context_ioresult
@@ -40,10 +69,11 @@
     from returns.pointfree import rescue
     from returns.context import RequiresContextIOResult
 
-    def test(arg: float) -> RequiresContextIOResult[int, float, str]:
+    def test(arg: float) -> RequiresContextIOResult[float, str, int]:
         ...
 
-    reveal_type(rescue(test))  # N: Revealed type is 'def (returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int*, builtins.float*, builtins.float*]) -> returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int*, builtins.float*, builtins.str*]'
+    x: RequiresContextIOResult[float, float, int]
+    reveal_type(rescue(test)(x))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult*[builtins.float*, builtins.str*, builtins.int*]'
 
 
 - case: rescue_context_future_result
@@ -52,10 +82,11 @@
     from returns.pointfree import rescue
     from returns.context import RequiresContextFutureResult
 
-    def test(arg: float) -> RequiresContextFutureResult[int, float, str]:
+    def test(arg: float) -> RequiresContextFutureResult[float, str, int]:
         ...
 
-    reveal_type(rescue(test))  # N: Revealed type is 'def (returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.int*, builtins.float*, builtins.float*]) -> returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.int*, builtins.float*, builtins.str*]'
+    x: RequiresContextFutureResult[float, float, int]
+    reveal_type(rescue(test)(x))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult*[builtins.float*, builtins.str*, builtins.int*]'
 
 
 - case: rescue_future_result
@@ -67,4 +98,5 @@
     def test(arg: float) -> FutureResult[int, str]:
         ...
 
-    reveal_type(rescue(test))  # N: Revealed type is 'def (returns.future.FutureResult[builtins.int*, builtins.float*]) -> returns.future.FutureResult[builtins.int*, builtins.str*]'
+    x: FutureResult[int, float]
+    reveal_type(rescue(test)(x))  # N: Revealed type is 'returns.future.FutureResult*[builtins.int*, builtins.str*]'

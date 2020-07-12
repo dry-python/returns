@@ -1,20 +1,6 @@
 import pytest
 
 from returns.io import IO, IOFailure, IOResult, IOSuccess
-from returns.primitives.interfaces import Applicative, Bindable, Mappable
-
-
-@pytest.mark.parametrize('container', [
-    IO(''),
-])
-@pytest.mark.parametrize('protocol', [
-    Bindable,
-    Mappable,
-    Applicative,
-])
-def test_protocols(container, protocol):
-    """Ensures that IO has all the right protocols."""
-    assert isinstance(container, protocol)
 
 
 def test_io_map():

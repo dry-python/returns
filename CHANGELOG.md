@@ -6,6 +6,46 @@ incremental in minor, bugfixes only are patches.
 See [0Ver](https://0ver.org/).
 
 
+## 0.15.0 WIP
+
+### Features
+
+- Adds Higher Kinded Types partial support
+- **Breaking**: makes our `mypy` plugin not optional, but required!
+- **Breaking**: changes all `RequiresContext`-based type arguments order,
+  previously we used to specify `_EnvType` as the first type argument,
+  now it is the last one. This is done to respect new HKT rules
+- **Breaking**: removes all old interfaces from `primitives/interfaces.py`,
+  use new typeclasses instead
+- **Breaking**: removes `value_or` pointfree method,
+  because it is impossible to express with HKT
+- **Breaking**: removes `.value_or`, `.unwrap`, and `.failure` methods
+  from `FutureResult` and `RequiresContext` based types,
+  because we do require these methods to raise an exception on failure,
+  but these methods were lazy and did not raise the required exception
+- **Breaking**: changes how `is_successful` is typed:
+  now we allow any `Unwrappable` interface instances there,
+  including custom ones
+- **Breaking**: changes `UnwrapFailedError` constructor,
+  now it does accept an `Unwrappable` instance instead of a `BaseContainer`
+- Adds new public interfaces: see `returns.interfaces`
+- Adds `methods` package with all the composition methods we support
+- Adds `collect_trace` helper function for better development experience
+- Adds missing `from_requires_context_future_result` to `RequiresContext`
+- Adds `@abstractmethod` to abstract methods in abstract containers
+  like `Result`, `Maybe`, and `IOResult`
+- Adds `__slots__` to `UnwrapFailedError` with `halted_container`
+
+### Bugfixes
+
+- **Breaking**: fixes serious typing issue and changes how `flow` works,
+  now it has a hard limit of 21 parameters: 1 instance + 20 functions
+
+### Misc
+
+- Adds a lot of new typetests
+
+
 ## 0.14.0
 
 ### Features

@@ -8,8 +8,8 @@
         ReaderFutureResultE,
     )
 
-    x: RequiresContextFutureResult[str, int, Exception]
+    x: RequiresContextFutureResult[int, Exception, str]
 
-    x1: RequiresContextFutureResultE[str, int] = x
-    x2: ReaderFutureResult[str, int, Exception] = x
-    x3: ReaderFutureResultE[str, int] = x
+    x1: RequiresContextFutureResultE[int, str] = x
+    x2: ReaderFutureResult[int, Exception, str] = x
+    x3: ReaderFutureResultE[int, str] = x

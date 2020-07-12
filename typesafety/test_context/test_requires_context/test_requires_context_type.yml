@@ -3,7 +3,7 @@
   main: |
     from returns.context import RequiresContext
 
-    first: RequiresContext[int, str]
+    first: RequiresContext[str, int]
 
     reveal_type(first(1))  # N: Revealed type is 'builtins.str*'
 
@@ -13,9 +13,9 @@
   main: |
     from returns.context import RequiresContext
 
-    first: RequiresContext[int, str]
+    first: RequiresContext[str, int]
 
-    reveal_type(first.map(lambda char: float(char)))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[builtins.int, builtins.float*]'
+    reveal_type(first.map(lambda char: float(char)))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[builtins.float*, builtins.int]'
 
 
 - case: requires_context_apply_correct
@@ -24,10 +24,10 @@
     from typing import Callable
     from returns.context import RequiresContext
 
-    first: RequiresContext[int, str]
-    second: RequiresContext[int, Callable[[str], float]]
+    first: RequiresContext[str, int]
+    second: RequiresContext[Callable[[str], float], int]
 
-    reveal_type(first.apply(second))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[builtins.int, builtins.float*]'
+    reveal_type(first.apply(second))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[builtins.float*, builtins.int]'
 
 
 - case: requires_context_bind_correct
@@ -35,12 +35,12 @@
   main: |
     from returns.context import RequiresContext
 
-    first: RequiresContext[int, str]
+    first: RequiresContext[str, int]
 
-    def function(arg: str) -> RequiresContext[int, float]:
+    def function(arg: str) -> RequiresContext[float, int]:
         return RequiresContext.from_value(1.5)
 
-    reveal_type(first.bind(function))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[builtins.int, builtins.float*]'
+    reveal_type(first.bind(function))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[builtins.float*, builtins.int]'
 
 
 - case: requires_context_call_wrong
@@ -48,7 +48,7 @@
   main: |
     from returns.context import RequiresContext
 
-    first: RequiresContext[int, str]
+    first: RequiresContext[str, int]
     first('a')
   out: |
     main:4: error: Argument 1 to "__call__" of "RequiresContext" has incompatible type "str"; expected "int"
@@ -59,7 +59,7 @@
   main: |
     from returns.context import RequiresContext
 
-    first: RequiresContext[int, str]
+    first: RequiresContext[str, int]
 
     def function(arg: int) -> int:
         return arg + 1
@@ -74,14 +74,14 @@
   main: |
     from returns.context import RequiresContext
 
-    first: RequiresContext[int, str]
+    first: RequiresContext[str, int]
 
-    def function(arg: float) -> RequiresContext[int, float]:
+    def function(arg: float) -> RequiresContext[float, int]:
         return RequiresContext.from_value(1.5)
 
     first.bind(function)
   out: |
-    main:8: error: Argument 1 to "bind" of "RequiresContext" has incompatible type "Callable[[float], RequiresContext[int, float]]"; expected "Callable[[str], RequiresContext[int, float]]"
+    main:8: error: Argument 1 to "bind" of "RequiresContext" has incompatible type "Callable[[float], RequiresContext[float, int]]"; expected "Callable[[str], KindN[RequiresContext[Any, Any], float, int, NoReturn]]"
 
 
 - case: requires_context_bind_wrong2
@@ -89,11 +89,11 @@
   main: |
     from returns.context import RequiresContext
 
-    first: RequiresContext[int, str]
+    first: RequiresContext[str, int]
 
-    def function(arg: str) -> RequiresContext[str, float]:
+    def function(arg: str) -> RequiresContext[float, str]:
         return RequiresContext.from_value(1.5)
 
     first.bind(function)
   out: |
-    main:8: error: Argument 1 to "bind" of "RequiresContext" has incompatible type "Callable[[str], RequiresContext[str, float]]"; expected "Callable[[str], RequiresContext[int, float]]"
+    main:8: error: Argument 1 to "bind" of "RequiresContext" has incompatible type "Callable[[str], RequiresContext[float, str]]"; expected "Callable[[str], KindN[RequiresContext[Any, Any], float, int, NoReturn]]"

@@ -1,0 +1,129 @@
+- case: mappable_inheritance_correct1
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar
+    from returns.interfaces.mappable import Mappable1
+    from returns.primitives.hkt import Kind1
+
+    V = TypeVar('V')
+    N = TypeVar('N')
+
+    class MyClass(Kind1['MyClass', V], Mappable1[V]):
+        def __init__(self, value: V) -> None:
+            self.value = value
+
+        def map(self, function: Callable[[V], N]) -> 'MyClass[N]':
+            return MyClass(function(self.value))
+
+    reveal_type(MyClass('1').map(int))  # N: Revealed type is 'main.MyClass[builtins.int*]'
+
+
+- case: mappable_inheritance_correct2
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar
+    from returns.interfaces.mappable import Mappable2
+    from returns.primitives.hkt import Kind2
+
+    V = TypeVar('V')
+    E = TypeVar('E')
+    N = TypeVar('N')
+
+    class MyClass(Kind2['MyClass', V, E], Mappable2[V, E]):
+        def __init__(self, value: V, error: E) -> None:
+            self.value = value
+            self.error = error
+
+        def map(self, function: Callable[[V], N]) -> 'MyClass[N, E]':
+            return MyClass(function(self.value), self.error)
+
+    reveal_type(MyClass('1', 1).map(int))  # N: Revealed type is 'main.MyClass[builtins.int*, builtins.int]'
+
+
+- case: mappable_inheritance_correct3
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar
+    from returns.interfaces.mappable import Mappable3
+    from returns.primitives.hkt import Kind3
+
+    V = TypeVar('V')
+    E = TypeVar('E')
+    K = TypeVar('K')
+    N = TypeVar('N')
+
+    class MyClass(Kind3['MyClass', V, E, K], Mappable3[V, E, K]):
+        def __init__(self, value: V, error: E, last: K) -> None:
+            self.value = value
+            self.error = error
+            self.last = last
+
+        def map(self, function: Callable[[V], N]) -> 'MyClass[N, E, K]':
+            return MyClass(function(self.value), self.error, self.last)
+
+    reveal_type(MyClass('1', 1, True).map(int))  # N: Revealed type is 'main.MyClass[builtins.int*, builtins.int, builtins.bool]'
+
+
+- case: mappable_inheritance_missing
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar
+    from returns.interfaces.mappable import Mappable1
+    from returns.primitives.hkt import Kind1
+
+    V = TypeVar('V')
+    N = TypeVar('N')
+
+    class MyClass(Kind1['MyClass', V], Mappable1[V]):
+        def __init__(self, value: V) -> None:
+            self.value = value
+
+    reveal_type(MyClass('1').map(int))
+  out: |
+    main:12: error: Cannot instantiate abstract class 'MyClass' with abstract attribute 'map'
+    main:12: note: Revealed type is 'returns.primitives.hkt.KindN[main.MyClass[builtins.str], builtins.int*, <nothing>, <nothing>]'
+
+
+- case: mappable_inheritance_wrong
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar
+    from returns.interfaces.mappable import Mappable1
+    from returns.primitives.hkt import Kind1
+
+    V = TypeVar('V')
+    N = TypeVar('N')
+
+    class MyClass(Kind1['MyClass', V], Mappable1[V]):
+        def __init__(self, value: V) -> None:
+            self.value = value
+
+        # Breaks the contract
+        def map(self, function: Callable[[V], N]) -> 'MyClass[V]':
+            return MyClass(self.value)
+  out: |
+    main:13: error: Return type "MyClass[V]" of "map" incompatible with return type "KindN[MyClass[V], _UpdatedType, NoReturn, NoReturn]" in supertype "MappableN"
+
+
+- case: mappable_inheritance_wrong2
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar
+    from returns.interfaces.mappable import Mappable2
+    from returns.primitives.hkt import Kind2
+
+    V = TypeVar('V')
+    E = TypeVar('E')
+    N = TypeVar('N')
+
+    class MyClass(Kind2['MyClass', V, E], Mappable2[V, E]):
+        def __init__(self, value: V, error: E) -> None:
+            self.value = value
+            self.error = error
+
+        def map(self, function: Callable[[E], N]) -> 'MyClass[N, E]':
+            return MyClass(function(self.error), self.error)
+  out: |
+    main:14: error: Argument 1 of "map" is incompatible with supertype "MappableN"; supertype defines the argument type as "Callable[[V], _UpdatedType]"
+    main:14: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:14: note: This violates the Liskov substitution principle

@@ -1,0 +1,15 @@
+- case: requires_context_ioresult_aliases
+  disable_cache: true
+  main: |
+    from returns.context import (
+        RequiresContextIOResult,
+        RequiresContextIOResultE,
+        ReaderIOResult,
+        ReaderIOResultE,
+    )
+
+    x: RequiresContextIOResult[int, Exception, str]
+
+    x1: RequiresContextIOResultE[int, str] = x
+    x2: ReaderIOResult[int, Exception, str] = x
+    x3: ReaderIOResultE[int, str] = x

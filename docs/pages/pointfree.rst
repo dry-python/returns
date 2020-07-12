@@ -205,23 +205,6 @@ Or with function as the first parameter:
   ... ) == Some(5)
 
 
-value_or
---------
-
-Allows to unwrap values from containers:
-
-.. code:: python
-
-  >>> from returns.pointfree import value_or
-  >>> from returns.result import Result
-  >>> from returns.pipeline import flow
-
-  >>> assert flow(Result.from_value(1), value_or(2)) == 1
-  >>> assert flow(Result.from_failure(1), value_or(2)) == 2
-
-All containers with ``.value_or`` method are supported.
-
-
 Further reading
 ---------------
 
@@ -265,5 +248,3 @@ API Reference
 .. autofunction:: returns.pointfree.rescue
 
 .. autofunction:: returns.pointfree.apply
-
-.. autofunction:: returns.pointfree.value_or

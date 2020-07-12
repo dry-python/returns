@@ -1,12 +1,7 @@
 from abc import ABCMeta
-from typing import Any, TypeVar
+from typing import Any
 
 from returns.primitives.types import Immutable
-
-_ValueType = TypeVar('_ValueType', covariant=True)
-_NewValueType = TypeVar('_NewValueType')
-_ErrorType = TypeVar('_ErrorType', covariant=True)
-_NewErrorType = TypeVar('_NewErrorType')
 
 
 class BaseContainer(Immutable, metaclass=ABCMeta):

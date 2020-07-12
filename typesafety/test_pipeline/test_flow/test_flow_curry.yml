@@ -6,11 +6,10 @@
     from returns.functions import identity
 
     @curry
-    def curried(a: int, b: int, c: str) -> float:
+    def curried(a: int, b: int) -> float:
         ...
 
-    reveal_type(flow(1, curried, identity)(2)('a'))  # N: Revealed type is 'builtins.float'
-    reveal_type(flow(1, curried, identity)(2, 'a'))  # N: Revealed type is 'builtins.float'
+    reveal_type(flow(1, curried)(1))  # N: Revealed type is 'builtins.float'
 
 
 - case: flow_function_with_curried2

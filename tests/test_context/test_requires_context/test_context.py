@@ -2,24 +2,8 @@ from copy import copy, deepcopy
 
 import pytest
 
-from returns.context import Context, RequiresContext
+from returns.context import Context
 from returns.primitives.exceptions import ImmutableStateError
-from returns.primitives.interfaces import Applicative, Bindable, Mappable
-
-
-@pytest.mark.parametrize('container', [
-    RequiresContext(lambda deps: deps),
-    RequiresContext.from_value(1),
-    Context.ask(),
-])
-@pytest.mark.parametrize('protocol', [
-    Bindable,
-    Mappable,
-    Applicative,
-])
-def test_protocols(container, protocol):
-    """Ensures that RequiresContext has all the right protocols."""
-    assert isinstance(container, protocol)
 
 
 def test_context_immutable():

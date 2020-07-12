@@ -3,10 +3,10 @@
   main: |
     from returns.context import RequiresContext
 
-    first: RequiresContext[int, TypeError]  # we can only return type
-    second: RequiresContext[int, Exception] = first
+    first: RequiresContext[TypeError, int]  # we can only cast return type
+    second: RequiresContext[Exception, int] = first
 
-    reveal_type(second)  # N: Revealed type is 'returns.context.requires_context.RequiresContext[builtins.int, builtins.Exception]'
+    reveal_type(second)  # N: Revealed type is 'returns.context.requires_context.RequiresContext[builtins.Exception, builtins.int]'
 
 
 - case: context_wrong_cast
@@ -14,7 +14,7 @@
   main: |
     from returns.context import RequiresContext
 
-    first: RequiresContext[ValueError, TypeError]  # we can only return type
+    first: RequiresContext[ValueError, TypeError]  # we can only cast return type
     second: RequiresContext[Exception, Exception] = first
   out: |
     main:4: error: Incompatible types in assignment (expression has type "RequiresContext[ValueError, TypeError]", variable has type "RequiresContext[Exception, Exception]")
@@ -34,18 +34,19 @@
     class C(A):
         c = 3
 
-    def func() -> RequiresContext[B, int]:
+    def func() -> RequiresContext[int, B]:
         return RequiresContext(lambda deps: deps.a + deps.b)
 
-    def second(a: int) -> RequiresContext[A, int]:
+    def second(a: int) -> RequiresContext[int, A]:
         return RequiresContext(lambda deps: deps.a + a)
 
-    def third(a: int) -> RequiresContext[C, int]:
+    def third(a: int) -> RequiresContext[int, C]:
         return RequiresContext(lambda deps: deps.c + a)
 
     reveal_type(func().bind(second))
     reveal_type(func().bind(third))
   out: |
-    main:21: note: Revealed type is 'returns.context.requires_context.RequiresContext[main.B, builtins.int*]'
-    main:22: error: Argument 1 to "bind" of "RequiresContext" has incompatible type "Callable[[int], RequiresContext[C, int]]"; expected "Callable[[int], RequiresContext[B, int]]"
-    main:22: note: Revealed type is 'returns.context.requires_context.RequiresContext[main.B, builtins.int*]'
+    main:21: error: Argument 1 to "bind" of "RequiresContext" has incompatible type "Callable[[int], RequiresContext[int, A]]"; expected "Callable[[int], KindN[RequiresContext[Any, Any], int, B, NoReturn]]"
+    main:21: note: Revealed type is 'returns.context.requires_context.RequiresContext[builtins.int*, main.B]'
+    main:22: error: Argument 1 to "bind" of "RequiresContext" has incompatible type "Callable[[int], RequiresContext[int, C]]"; expected "Callable[[int], KindN[RequiresContext[Any, Any], int, B, NoReturn]]"
+    main:22: note: Revealed type is 'returns.context.requires_context.RequiresContext[builtins.int*, main.B]'

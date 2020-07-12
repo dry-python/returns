@@ -15,10 +15,10 @@ async def async_bind_async(
     function: Callable[
         [_ValueType],
         Awaitable[
-            'RequiresContextFutureResult[_EnvType, _NewValueType, _ErrorType]',
+            'RequiresContextFutureResult[_NewValueType, _ErrorType, _EnvType]',
         ],
     ],
-    container: 'RequiresContextFutureResult[_EnvType, _ValueType, _ErrorType]',
+    container: 'RequiresContextFutureResult[_ValueType, _ErrorType, _EnvType]',
     deps: _EnvType,
 ) -> Result[_NewValueType, _ErrorType]:
     """Async binds a coroutine with container over a value."""

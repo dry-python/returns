@@ -18,6 +18,8 @@ Contents
 
   pages/container.rst
   pages/railway.rst
+  pages/hkt.rst
+  pages/interfaces.rst
 
 .. toctree::
   :maxdepth: 2
@@ -35,6 +37,7 @@ Contents
 
   pages/pipeline.rst
   pages/converters.rst
+  pages/methods.rst
   pages/pointfree.rst
   pages/functions.rst
   pages/curry.rst

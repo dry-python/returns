@@ -69,7 +69,7 @@ The difference is simple:
 - ``map`` works with functions that return regular value
 - ``bind`` works with functions that return new container of the same type
 
-:func:`~returns.primitives.container.Bindable.bind`
+:func:`returns.primitives.container.Bindable.bind`
 is used to literally bind two different containers together.
 
 .. code:: python
@@ -83,7 +83,7 @@ is used to literally bind two different containers together.
   # Can be assumed as either Success[float] or Failure[str]:
   result: Result[float, str] = value.bind(may_fail)
 
-And we have :func:`~returns.primitives.container.Mappable.map`
+And we have :func:`returns.interfaces.mappable.Mappable.map`
 to use containers with regular functions.
 
 .. code:: python
@@ -335,11 +335,3 @@ It defines some basic things like representation, hashing, pickling, etc.
 .. automodule:: returns.primitives.container
    :members:
    :special-members:
-
-Here are our interfaces (or protocols to be more specific)
-that we use inside our app:
-
-.. autoclasstree:: returns.primitives.interfaces
-
-.. automodule:: returns.primitives.interfaces
-   :members:

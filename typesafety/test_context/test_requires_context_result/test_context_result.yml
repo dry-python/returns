@@ -3,7 +3,7 @@
   main: |
     from returns.context import ContextResult
 
-    reveal_type(ContextResult.ask())  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[<nothing>, <nothing>, Any]'
+    reveal_type(ContextResult.ask())  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[<nothing>, Any, <nothing>]'
 
 
 - case: context_ask2
@@ -11,4 +11,4 @@
   main: |
     from returns.context import ContextResult
 
-    reveal_type(ContextResult[str].ask())  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.str*, builtins.str*, Any]'
+    reveal_type(ContextResult[str].ask())  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.str*, Any, builtins.str*]'

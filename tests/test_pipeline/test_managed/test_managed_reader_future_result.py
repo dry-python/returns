@@ -8,19 +8,19 @@ from returns.pipeline import managed
 from returns.result import Failure, Result, Success
 
 
-def _acquire_success() -> ReaderFutureResult[NoDeps, str, str]:
+def _acquire_success() -> ReaderFutureResult[str, str, NoDeps]:
     return ReaderFutureResult.from_value('acquire success')
 
 
-def _acquire_failure() -> ReaderFutureResult[NoDeps, str, str]:
+def _acquire_failure() -> ReaderFutureResult[str, str, NoDeps]:
     return ReaderFutureResult.from_failure('acquire failure')
 
 
-def _use_success(inner_value: str) -> ReaderFutureResult[NoDeps, str, str]:
+def _use_success(inner_value: str) -> ReaderFutureResult[str, str, NoDeps]:
     return ReaderFutureResult.from_value('use success')
 
 
-def _use_failure(inner_value: str) -> ReaderFutureResult[NoDeps, str, str]:
+def _use_failure(inner_value: str) -> ReaderFutureResult[str, str, NoDeps]:
     return ReaderFutureResult.from_failure('use failure')
 
 
@@ -32,7 +32,7 @@ class _ReleaseSuccess(object):
         self,
         inner_value: str,
         use_result: Result[str, str],
-    ) -> ReaderFutureResult[NoDeps, None, str]:
+    ) -> ReaderFutureResult[None, str, NoDeps]:
         self._logs.append((inner_value, use_result))
         return ReaderFutureResult.from_value(None)
 
@@ -45,7 +45,7 @@ class _ReleaseFailure(object):
         self,
         inner_value: str,
         use_result: Result[str, str],
-    ) -> ReaderFutureResult[NoDeps, None, str]:
+    ) -> ReaderFutureResult[None, str, NoDeps]:
         return ReaderFutureResult.from_failure('release failure')
 
 

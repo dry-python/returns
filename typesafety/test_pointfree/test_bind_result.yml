@@ -14,7 +14,35 @@
         ...
 
     r: IOResult[int, str]
-    reveal_type(flow(r, bind_result(test), bind_result(second), identity))  # N: Revealed type is 'returns.io.IOResult*[builtins.bool*, builtins.str*]'
+    reveal_type(flow(r, bind_result(test), bind_result(second)))  # N: Revealed type is 'returns.io.IOResult*[builtins.bool, builtins.str]'
+
+
+- case: bind_result_wrong_first_type
+  disable_cache: true
+  main: |
+    from returns.pointfree import bind_result
+    from returns.context import RequiresContextFutureResult
+    from returns.result import Result
+
+    def test(arg: float) -> Result[int, str]:
+        ...
+
+    x: RequiresContextFutureResult[str, int, bool]
+    bind_result(test)(x)  # E: Argument 1 has incompatible type "RequiresContextFutureResult[str, int, bool]"; expected "KindN[RequiresContextFutureResult[Any, Any, Any], float, str, bool]"
+
+
+- case: bind_result_wrong_second_type
+  disable_cache: true
+  main: |
+    from returns.pointfree import bind_result
+    from returns.context import RequiresContextFutureResult
+    from returns.result import Result
+
+    def test(arg: float) -> Result[int, str]:
+        ...
+
+    x: RequiresContextFutureResult[float, int, bool]
+    bind_result(test)(x)  # E: Argument 1 has incompatible type "RequiresContextFutureResult[float, int, bool]"; expected "KindN[RequiresContextFutureResult[Any, Any, Any], float, str, bool]"
 
 
 - case: bind_result_ioresult
@@ -28,7 +56,7 @@
         ...
 
     x: IOResult[float, str]
-    reveal_type(bind_result(test)(x))  # N: Revealed type is 'returns.io.IOResult[builtins.int*, builtins.str*]'
+    reveal_type(bind_result(test)(x))  # N: Revealed type is 'returns.io.IOResult*[builtins.int, builtins.str]'
 
 
 - case: bind_result_requires_context_result
@@ -41,8 +69,8 @@
     def test(arg: float) -> Result[int, str]:
         ...
 
-    x: RequiresContextResult[bool, float, str]
-    reveal_type(bind_result(test)(x))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.bool*, builtins.int, builtins.str]'
+    x: RequiresContextResult[float, str, bool]
+    reveal_type(bind_result(test)(x))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult*[builtins.int, builtins.str, builtins.bool*]'
 
 
 - case: bind_result_requires_context_ioresult
@@ -55,8 +83,8 @@
     def test(arg: float) -> Result[int, str]:
         ...
 
-    x: RequiresContextIOResult[bool, float, str]
-    reveal_type(bind_result(test)(x))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.bool*, builtins.int, builtins.str]'
+    x: RequiresContextIOResult[float, str, bool]
+    reveal_type(bind_result(test)(x))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult*[builtins.int, builtins.str, builtins.bool*]'
 
 
 - case: bind_result_requires_context_future_result
@@ -69,8 +97,8 @@
     def test(arg: float) -> Result[int, str]:
         ...
 
-    x: RequiresContextFutureResult[bool, float, str]
-    reveal_type(bind_result(test)(x))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool*, builtins.int, builtins.str]'
+    x: RequiresContextFutureResult[float, str, bool]
+    reveal_type(bind_result(test)(x))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult*[builtins.int, builtins.str, builtins.bool*]'
 
 
 - case: bind_result_futureresult
@@ -84,4 +112,52 @@
         ...
 
     x: FutureResult[float, str]
-    reveal_type(bind_result(test)(x))  # N: Revealed type is 'returns.future.FutureResult[builtins.int*, builtins.str*]'
+    reveal_type(bind_result(test)(x))  # N: Revealed type is 'returns.future.FutureResult*[builtins.int, builtins.str]'
+
+
+- case: bind_result_custom_type
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar, Any
+    from returns.interfaces.specific.result import ResultBased2
+    from returns.primitives.hkt import Kind2
+    from returns.result import Result
+    from returns.pointfree import bind_result
+
+    _ValueType = TypeVar('_ValueType')
+    _NewValueType = TypeVar('_NewValueType')
+
+    # Result related:
+    _ErrorType = TypeVar('_ErrorType')
+    _NewErrorType = TypeVar('_NewErrorType')
+
+    class MyClass(
+        Kind2['MyClass', _ValueType, _ErrorType],
+        ResultBased2[_ValueType, _ErrorType],
+    ):
+        def bind_result(
+            self,
+            function: Callable[
+                [_ValueType],
+                Result[_NewValueType, _ErrorType],
+            ],
+        ) -> MyClass[_NewValueType, _ErrorType]:
+            ...
+
+        @classmethod
+        def from_result(
+            self, inner_value: Result[_NewValueType, _NewErrorType],
+        ) -> MyClass[_NewValueType, _NewErrorType]:
+            ...
+
+        @classmethod
+        def from_failure(
+            cls, inner_value: _NewErrorType,
+        ) -> MyClass[Any, _NewErrorType]:
+            ...
+
+    def test(a: int) -> Result[float, str]:
+        ...
+
+    x: MyClass[int, str]
+    reveal_type(bind_result(test)(x))  # N: Revealed type is 'main.MyClass*[builtins.float, builtins.str]'

@@ -62,6 +62,10 @@ flake8-pytest-style = "^1.2"
 flake8-pyi = "^20.5"
 nitpick = "^0.22"
 
+# TODO: remove after
+# https://github.com/gforcada/flake8-isort/issues/88
+isort = "<5.0"
+
 anyio = "^1.4"
 curio = "^1.2"
 trio = "^0.16"

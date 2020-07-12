@@ -1,0 +1,15 @@
+- case: kind_params
+  disable_cache: true
+  parametrized:
+    - count: 1
+      expected: 2
+    - count: 2
+      expected: 3
+    - count: 3
+      expected: 4
+  main: |
+    from returns.primitives.hkt import Kind{{ count }}
+
+    container: Kind{{ count }}[object, int, str, bool, float]
+  out: |
+    main:3: error: Bad number of arguments for type alias, expected: {{ expected }}, given: 5

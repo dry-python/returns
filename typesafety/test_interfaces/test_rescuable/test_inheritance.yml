@@ -1,0 +1,104 @@
+- case: rescuable_inheritance_correct2
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar
+    from returns.interfaces.rescuable import Rescuable2
+    from returns.primitives.hkt import Kind2, dekind
+
+    V = TypeVar('V')
+    E = TypeVar('E')
+    N = TypeVar('N')
+
+    class MyClass(Kind2['MyClass', V, E], Rescuable2[V, E]):
+        def __init__(self, value: V, error: E) -> None:
+            self.value = value
+            self.error = error
+
+        def rescue(
+            self,
+            function: Callable[[E], Kind2['MyClass', V, N]],
+        ) -> 'MyClass[V, N]':
+            return dekind(function(self.error))
+
+    def test(arg: str) -> MyClass[int, int]:
+        ...
+
+    reveal_type(MyClass(1, '1').rescue(test))  # N: Revealed type is 'main.MyClass[builtins.int, builtins.int*]'
+
+
+- case: rescuable_inheritance_correct3
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar
+    from returns.interfaces.rescuable import Rescuable3
+    from returns.primitives.hkt import Kind3, dekind
+
+    V = TypeVar('V')
+    T = TypeVar('T')
+    K = TypeVar('K')
+    N = TypeVar('N')
+
+    class MyClass(Kind3['MyClass', V, T, K], Rescuable3[V, T, K]):
+        def __init__(self, value: V, other: T, last: K) -> None:
+            self.value = value
+            self.other = other
+            self.last = last
+
+        def rescue(
+            self,
+            function: Callable[[T], Kind3['MyClass', V, N, K]],
+        ) -> 'MyClass[V, N, K]':
+            return dekind(function(self.other))
+
+    def test(arg: str) -> MyClass[int, float, bool]:
+        ...
+
+    reveal_type(MyClass(1, 'a', True).rescue(test))  # N: Revealed type is 'main.MyClass[builtins.int, builtins.float*, builtins.bool]'
+
+
+- case: rescuable_inheritance_missing
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar
+    from returns.interfaces.rescuable import Rescuable2
+    from returns.primitives.hkt import Kind2, dekind
+
+    V = TypeVar('V')
+    N = TypeVar('N')
+
+    class MyClass(Kind2['MyClass', V], Rescuable2[V]):
+        def __init__(self, value: V) -> None:
+            self.value = value
+
+    reveal_type(MyClass('1'))
+  out: |
+    main:8: error: Bad number of arguments for type alias, expected: 2, given: 1
+    main:8: error: Bad number of arguments for type alias, expected: 3, given: 2
+    main:12: error: Cannot instantiate abstract class 'MyClass' with abstract attribute 'rescue'
+    main:12: note: Revealed type is 'main.MyClass[builtins.str*]'
+
+
+- case: rescuable_inheritance_wrong
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar
+    from returns.interfaces.rescuable import Rescuable2
+    from returns.primitives.hkt import Kind2, dekind
+
+    V = TypeVar('V')
+    N = TypeVar('N')
+    E = TypeVar('E')
+
+    class MyClass(Kind2['MyClass', V, E], Rescuable2[V, E]):
+        def __init__(self, value: V, error: E) -> None:
+            self.value = value
+            self.error = error
+
+        def rescue(
+            self,
+            function: Callable[[E], Kind2['MyClass', N, N]],
+        ) -> 'MyClass[N, E]':
+            return dekind(function(self.error))
+  out: |
+    main:14: error: Return type "MyClass[N, E]" of "rescue" incompatible with return type "KindN[MyClass[V, E], V, _UpdatedType, NoReturn]" in supertype "RescuableN"
+    main:18: error: Incompatible return value type (got "MyClass[N, N]", expected "MyClass[N, E]")

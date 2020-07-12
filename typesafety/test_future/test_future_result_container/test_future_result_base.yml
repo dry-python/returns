@@ -156,33 +156,3 @@
     first: FutureResult[int, str]
 
     reveal_type(first.rescue(bind))  # N: Revealed type is 'returns.future.FutureResult[builtins.int, builtins.float*]'
-
-
-- case: future_result_value_or
-  disable_cache: true
-  main: |
-    from returns.future import FutureResult
-
-    first: FutureResult[int, bool]
-
-    reveal_type(first.value_or('a'))  # N: Revealed type is 'typing.Awaitable[returns.io.IO[Union[builtins.int, builtins.str*]]]'
-
-
-- case: future_result_unwrap
-  disable_cache: true
-  main: |
-    from returns.future import FutureResult
-
-    first: FutureResult[int, str]
-
-    reveal_type(first.unwrap())  # N: Revealed type is 'typing.Awaitable[returns.io.IO[builtins.int*]]'
-
-
-- case: future_result_failure
-  disable_cache: true
-  main: |
-    from returns.future import FutureResult
-
-    first: FutureResult[int, str]
-
-    reveal_type(first.failure())  # N: Revealed type is 'typing.Awaitable[returns.io.IO[builtins.str*]]'

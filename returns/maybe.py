@@ -1,10 +1,9 @@
-from abc import ABCMeta
+from abc import ABCMeta, abstractmethod
 from functools import wraps
 from typing import (
     Any,
     Callable,
     ClassVar,
-    Generic,
     Iterable,
     NoReturn,
     Optional,
@@ -17,8 +16,10 @@ from typing import (
 from typing_extensions import final
 
 from returns._generated.iterable import iterable
+from returns.interfaces import applicative, bindable, mappable, unwrappable
 from returns.primitives.container import BaseContainer
 from returns.primitives.exceptions import UnwrapFailedError
+from returns.primitives.hkt import Kind1
 
 # Definitions:
 _ValueType = TypeVar('_ValueType', covariant=True)
@@ -31,7 +32,11 @@ _SecondType = TypeVar('_SecondType')
 
 class Maybe(
     BaseContainer,
-    Generic[_ValueType],
+    Kind1['Maybe', _ValueType],
+    mappable.Mappable1[_ValueType],
+    bindable.Bindable1[_ValueType],
+    applicative.Applicative1[_ValueType],
+    unwrappable.Unwrappable[_ValueType, None],
     metaclass=ABCMeta,
 ):
     """
@@ -55,6 +60,7 @@ class Maybe(
     #: Failure type that is used to represent the failed computation.
     failure_type: ClassVar[Type['_Nothing']]
 
+    @abstractmethod  # noqa: WPS125
     def map(  # noqa: WPS125
         self,
         function: Callable[[_ValueType], Optional[_NewValueType]],
@@ -72,11 +78,11 @@ class Maybe(
           >>> assert Nothing.map(mappable) == Nothing
 
         """
-        raise NotImplementedError
 
+    @abstractmethod
     def apply(
         self,
-        function: 'Maybe[Callable[[_ValueType], _NewValueType]]',
+        function: Kind1['Maybe', Callable[[_ValueType], _NewValueType]],
     ) -> 'Maybe[_NewValueType]':
         """
         Calls a wrapped function in a container on this container.
@@ -94,11 +100,11 @@ class Maybe(
           >>> assert Nothing.apply(Nothing) == Nothing
 
         """
-        raise NotImplementedError
 
+    @abstractmethod
     def bind(
         self,
-        function: Callable[[_ValueType], 'Maybe[_NewValueType]'],
+        function: Callable[[_ValueType], Kind1['Maybe', _NewValueType]],
     ) -> 'Maybe[_NewValueType]':
         """
         Composes successful container with a function that returns a container.
@@ -113,7 +119,6 @@ class Maybe(
           >>> assert Nothing.bind(bindable) == Nothing
 
         """
-        raise NotImplementedError
 
     def value_or(
         self,
@@ -129,8 +134,8 @@ class Maybe(
           >>> assert Nothing.value_or(1) == 1
 
         """
-        raise NotImplementedError
 
+    @abstractmethod
     def or_else_call(
         self,
         function: Callable[[], _NewValueType],
@@ -165,8 +170,8 @@ class Maybe(
           ValueError: Nothing!
 
         """
-        raise NotImplementedError
 
+    @abstractmethod
     def unwrap(self) -> _ValueType:
         """
         Get value from successful container or raise exception for failed one.
@@ -182,8 +187,8 @@ class Maybe(
           returns.primitives.exceptions.UnwrapFailedError
 
         """
-        raise NotImplementedError
 
+    @abstractmethod
     def failure(self) -> None:
         """
         Get failed value from failed container or raise exception from success.
@@ -199,12 +204,11 @@ class Maybe(
           returns.primitives.exceptions.UnwrapFailedError
 
         """
-        raise NotImplementedError
 
     @classmethod
     def from_value(
-        cls, inner_value: Optional[_ValueType],
-    ) -> 'Maybe[_ValueType]':
+        cls, inner_value: Optional[_NewValueType],
+    ) -> 'Maybe[_NewValueType]':
         """
         Creates new instance of ``Maybe`` container based on a value.
 

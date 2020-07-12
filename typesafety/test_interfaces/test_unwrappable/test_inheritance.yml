@@ -1,0 +1,73 @@
+- case: unwrappable_correct_inheritance
+  disable_cache: true
+  main: |
+    from returns.primitives.hkt import Kind2
+    from returns.interfaces.unwrappable import Unwrappable
+    from typing import TypeVar
+
+    T = TypeVar('T')
+    N = TypeVar('N')
+
+    class MyOwn(
+        Kind2['MyOwn', T, N],
+        Unwrappable[T, N],
+    ):
+        def __init__(self, value: T, error: N) -> None:
+            ...
+
+        def unwrap(self) -> T:
+            ...
+
+        def failure(self) -> N:
+            ...
+
+    x = MyOwn(1, 'a')
+    reveal_type(x.unwrap())  # N: Revealed type is 'builtins.int*'
+    reveal_type(x.failure())  # N: Revealed type is 'builtins.str*'
+
+
+- case: unwrappable_missing_inheritance
+  disable_cache: true
+  main: |
+    from returns.primitives.hkt import Kind2
+    from returns.interfaces.unwrappable import Unwrappable
+    from typing import TypeVar
+
+    T = TypeVar('T')
+    N = TypeVar('N')
+
+    class MyOwn(
+        Kind2['MyOwn', T, N],
+        Unwrappable[T, N],
+    ):
+        def __init__(self, value: T, error: N) -> None:
+            ...
+
+    x = MyOwn(1, 'a')  # E: Cannot instantiate abstract class 'MyOwn' with abstract attributes 'failure' and 'unwrap'
+
+
+- case: unwrappable_wrong_inheritance
+  disable_cache: true
+  main: |
+    from returns.primitives.hkt import Kind2
+    from returns.interfaces.unwrappable import Unwrappable
+    from typing import TypeVar
+
+    T = TypeVar('T')
+    N = TypeVar('N')
+
+    class MyOwn(
+        Kind2['MyOwn', T, N],
+        Unwrappable[T, N],
+    ):
+        def __init__(self, value: T, error: N) -> None:
+            ...
+
+        def unwrap(self) -> int:
+            ...
+
+        def failure(self) -> T:
+            ...
+  out: |
+    main:15: error: Return type "int" of "unwrap" incompatible with return type "T" in supertype "Unwrappable"
+    main:18: error: Return type "T" of "failure" incompatible with return type "N" in supertype "Unwrappable"

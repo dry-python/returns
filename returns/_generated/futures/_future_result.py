@@ -1,6 +1,7 @@
-from typing import TYPE_CHECKING, Any, Awaitable, Callable, TypeVar, Union
+from typing import TYPE_CHECKING, Any, Awaitable, Callable, TypeVar
 
 from returns.io import IO, IOResult
+from returns.primitives.hkt import Kind2, dekind
 from returns.result import Failure, Result, Success
 
 if TYPE_CHECKING:
@@ -33,14 +34,14 @@ async def async_apply(
 async def async_bind(
     function: Callable[
         [_ValueType],
-        'FutureResult[_NewValueType, _ErrorType]',
+        Kind2['FutureResult', _NewValueType, _ErrorType],
     ],
     inner_value: Awaitable[Result[_ValueType, _ErrorType]],
 ) -> Result[_NewValueType, _ErrorType]:
     """Async binds a container over a value."""
     container = await inner_value
     if isinstance(container, Result.success_type):
-        return (await function(container.unwrap()))._inner_value
+        return (await dekind(function(container.unwrap())))._inner_value
     return container  # type: ignore[return-value]
 
 
@@ -144,36 +145,17 @@ async def async_alt(
 
 
 async def async_rescue(
-    function: Callable[[_ErrorType], 'FutureResult[_ValueType, _NewErrorType]'],
+    function: Callable[
+        [_ErrorType],
+        Kind2['FutureResult', _ValueType, _NewErrorType],
+    ],
     inner_value: Awaitable[Result[_ValueType, _ErrorType]],
 ) -> Result[_ValueType, _NewErrorType]:
     """Async rescues a function returning a container over a value."""
     container = await inner_value
     if isinstance(container, Result.success_type):
         return container
-    return (await function(container.failure()))._inner_value
-
-
-async def async_value_or(
-    container: 'FutureResult[_ValueType, _ErrorType]',
-    default_value: _NewValueType,
-) -> IO[Union[_ValueType, _NewValueType]]:
-    """Return async value or default value."""
-    return IO((await container._inner_value).value_or(default_value))
-
-
-async def async_unwrap(
-    container: 'FutureResult[_ValueType, _ErrorType]',
-) -> IO[_ValueType]:
-    """Async unwrap a container."""
-    return IO((await container._inner_value).unwrap())
-
-
-async def async_failure(
-    container: 'FutureResult[_ValueType, _ErrorType]',
-) -> IO[_ErrorType]:
-    """Async unwrap an error from container."""
-    return IO((await container._inner_value).failure())
+    return (await dekind(function(container.failure())))._inner_value
 
 
 async def async_from_success(

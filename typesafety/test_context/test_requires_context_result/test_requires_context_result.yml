@@ -1,14 +1,24 @@
+- case: requires_context_result_call
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextResult
+
+    x: RequiresContextResult[int, Exception, str]
+
+    reveal_type(x('a'))  # N: Revealed type is 'returns.result.Result[builtins.int*, builtins.Exception*]'
+
+
 - case: requires_context_result_bind
   disable_cache: true
   main: |
     from returns.context import RequiresContextResult
 
-    x: RequiresContextResult[str, int, float]
+    x: RequiresContextResult[int, float, str]
 
-    def test(param: int) -> RequiresContextResult[str, bool, float]:
+    def test(param: int) -> RequiresContextResult[bool, float, str]:
         ...
 
-    reveal_type(x.bind(test))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.str, builtins.bool*, builtins.float]'
+    reveal_type(x.bind(test))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.bool*, builtins.float, builtins.str]'
 
 
 - case: requires_context_result_bind_result
@@ -17,12 +27,12 @@
     from returns.context import RequiresContextResult
     from returns.result import Result
 
-    x: RequiresContextResult[str, int, float]
+    x: RequiresContextResult[int, float, str]
 
     def test(param: int) -> Result[bool, float]:
         ...
 
-    reveal_type(x.bind_result(test))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.str, builtins.bool*, builtins.float]'
+    reveal_type(x.bind_result(test))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.bool*, builtins.float, builtins.str]'
 
 
 - case: requires_context_result_bind_context
@@ -30,12 +40,12 @@
   main: |
     from returns.context import RequiresContextResult, RequiresContext
 
-    x: RequiresContextResult[str, int, float]
+    x: RequiresContextResult[int, float, str]
 
-    def test(param: int) -> RequiresContext[str, bool]:
+    def test(param: int) -> RequiresContext[bool, str]:
         ...
 
-    reveal_type(x.bind_context(test))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.str, builtins.bool*, builtins.float]'
+    reveal_type(x.bind_context(test))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.bool*, builtins.float, builtins.str]'
 
 
 - case: requires_context_result_map
@@ -43,9 +53,9 @@
   main: |
     from returns.context import RequiresContextResult
 
-    x: RequiresContextResult[str, int, float]
+    x: RequiresContextResult[int, float, str]
 
-    reveal_type(x.map(bool))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.str, builtins.bool*, builtins.float]'
+    reveal_type(x.map(bool))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.bool*, builtins.float, builtins.str]'
 
 
 - case: requires_context_result_apply
@@ -54,10 +64,10 @@
     from typing import Callable
     from returns.context import RequiresContextResult
 
-    x: RequiresContextResult[str, int, float]
-    y: RequiresContextResult[str, Callable[[int], bool], float]
+    x: RequiresContextResult[int, float, str]
+    y: RequiresContextResult[Callable[[int], bool], float, str]
 
-    reveal_type(x.apply(y))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.str, builtins.bool*, builtins.float]'
+    reveal_type(x.apply(y))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.bool*, builtins.float, builtins.str]'
 
 
 - case: requires_context_result_rescue
@@ -65,12 +75,12 @@
   main: |
     from returns.context import RequiresContextResult
 
-    x: RequiresContextResult[str, int, float]
+    x: RequiresContextResult[int, float, str]
 
-    def test(param: float) -> RequiresContextResult[str, int, bool]:
+    def test(param: float) -> RequiresContextResult[int, bool, str]:
         ...
 
-    reveal_type(x.rescue(test))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.str, builtins.int, builtins.bool*]'
+    reveal_type(x.rescue(test))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.int, builtins.bool*, builtins.str]'
 
 
 - case: requires_context_result_fix
@@ -78,12 +88,12 @@
   main: |
     from returns.context import RequiresContextResult
 
-    x: RequiresContextResult[str, int, float]
+    x: RequiresContextResult[int, float, str]
 
     def test(param: float) -> bool:
         ...
 
-    reveal_type(x.fix(test))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.str, builtins.bool*, builtins.float]'
+    reveal_type(x.fix(test))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.bool*, builtins.float, builtins.str]'
 
 
 - case: requires_context_result_alt
@@ -91,39 +101,9 @@
   main: |
     from returns.context import RequiresContextResult
 
-    x: RequiresContextResult[str, int, float]
+    x: RequiresContextResult[int, float, str]
 
     def test(param: float) -> bool:
         ...
 
-    reveal_type(x.alt(test))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.str, builtins.int, builtins.bool*]'
-
-
-- case: requires_context_result_value_or
-  disable_cache: true
-  main: |
-    from returns.context import RequiresContextResult
-
-    x: RequiresContextResult[str, int, float]
-
-    reveal_type(x.value_or(None)('a'))  # N: Revealed type is 'Union[builtins.int, None]'
-
-
-- case: requires_context_result_unwrap
-  disable_cache: true
-  main: |
-    from returns.context import RequiresContextResult
-
-    x: RequiresContextResult[str, int, float]
-
-    reveal_type(x.unwrap()('a'))  # N: Revealed type is 'builtins.int*'
-
-
-- case: requires_context_result_failure
-  disable_cache: true
-  main: |
-    from returns.context import RequiresContextResult
-
-    x: RequiresContextResult[str, int, float]
-
-    reveal_type(x.failure()('a'))  # N: Revealed type is 'builtins.float*'
+    reveal_type(x.alt(test))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.int, builtins.bool*, builtins.str]'

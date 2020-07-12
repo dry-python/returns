@@ -5,16 +5,16 @@
     from returns.pipeline import managed
     from returns.result import Result
 
-    def use(acquired_value: int) -> ReaderFutureResult[bool, float, str]:
+    def use(acquired_value: int) -> ReaderFutureResult[float, str, bool]:
         ...
 
     def release(
         acquired_value: int,
         use_value: Result[float, str],
-    ) -> ReaderFutureResult[bool, None, str]:
+    ) -> ReaderFutureResult[None, str, bool]:
         ...
 
-    reveal_type(managed(use, release))  # N: Revealed type is 'def (returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool*, builtins.int*, builtins.str*]) -> returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool*, builtins.float*, builtins.str*]'
+    reveal_type(managed(use, release))  # N: Revealed type is 'def (returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.int*, builtins.str*, builtins.bool*]) -> returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.float*, builtins.str*, builtins.bool*]'
 
 
 - case: managed_with_reader_future_result_error
@@ -24,17 +24,17 @@
     from returns.pipeline import managed
     from returns.result import Result
 
-    def use(acquired_value: int) -> ReaderFutureResult[bool, float, str]:
+    def use(acquired_value: int) -> ReaderFutureResult[float, str, bool]:
         ...
 
     def release(
         acquired_value: int,
         use_value: Result[float, int],
-    ) -> ReaderFutureResult[str, int, str]:
+    ) -> ReaderFutureResult[int, str, str]:
         ...
 
     reveal_type(managed(use, release))  # TODO: this type is really strange!
   out: |
-    main:14: error: Argument 1 to "_managed" has incompatible type "Callable[[int], RequiresContextFutureResult[bool, float, str]]"; expected "Callable[[int], IOResult[float, int]]"
-    main:14: error: Argument 2 to "_managed" has incompatible type "Callable[[int, Result[float, int]], RequiresContextFutureResult[str, int, str]]"; expected "Callable[[int, Result[float, int]], IOResult[None, int]]"
+    main:14: error: Argument 1 to "_managed" has incompatible type "Callable[[int], RequiresContextFutureResult[float, str, bool]]"; expected "Callable[[int], IOResult[float, int]]"
+    main:14: error: Argument 2 to "_managed" has incompatible type "Callable[[int, Result[float, int]], RequiresContextFutureResult[int, str, str]]"; expected "Callable[[int, Result[float, int]], IOResult[None, int]]"
     main:14: note: Revealed type is 'def (returns.io.IOResult[builtins.int*, builtins.int*]) -> returns.io.IOResult[builtins.float*, builtins.int*]'
