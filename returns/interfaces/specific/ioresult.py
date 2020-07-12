@@ -19,12 +19,9 @@ class IOResultBasedN(
     result.ResultBasedN[_FirstType, _SecondType, _ThirdType],
 ):
     """
-    Allows to create unit containers from raw values and to apply wrapped funcs.
+    An interface for types that do ``IO`` and can fail.
 
-    See also:
-        https://en.wikipedia.org/wiki/IOResultBased_functor
-        http://learnyouahaskell.com/functors-IOResultBased-functors-and-monoids
-
+    It is a base interface for both sync and async ``IO`` stacks.
     """
 
     @abstractmethod
@@ -32,7 +29,7 @@ class IOResultBasedN(
         self: _IOResultBasedType,
         function: Callable[[_FirstType], 'IOResult[_UpdatedType, _SecondType]'],
     ) -> KindN[_IOResultBasedType, _UpdatedType, _SecondType, _ThirdType]:
-        """Allows to apply a wrapped function over a container."""
+        """Runs ``IOResult`` returning function over a container."""
 
     @classmethod
     @abstractmethod
@@ -40,7 +37,7 @@ class IOResultBasedN(
         cls: Type[_IOResultBasedType],  # noqa: N805
         inner_value: 'IOResult[_FirstType, _SecondType]',
     ) -> KindN[_IOResultBasedType, _FirstType, _SecondType, _ThirdType]:
-        """Unit method to create new containers from any raw value."""
+        """Unit method to create new containers from ``IOResult`` type."""
 
     @classmethod
     @abstractmethod
@@ -48,7 +45,7 @@ class IOResultBasedN(
         cls: Type[_IOResultBasedType],  # noqa: N805
         inner_value: 'IO[_SecondType]',
     ) -> KindN[_IOResultBasedType, _FirstType, _SecondType, _ThirdType]:
-        """Unit method to create new containers from any raw value."""
+        """Unit method to create new containers from failed ``IO``."""
 
 
 #: Type alias for kinds with one type argument.

@@ -43,8 +43,8 @@ bind_io methods
 .. autofunction:: returns.methods.bind_io.internal_bind_io
 .. autofunction:: returns.methods.bind_io.bind_io
 
-bind_ioresul methods
-~~~~~~~~~~~~~~~~~~~~
+bind_ioresult methods
+~~~~~~~~~~~~~~~~~~~~~
 
 .. autofunction:: returns.methods.bind_ioresult.internal_bind_ioresult
 .. autofunction:: returns.methods.bind_ioresult.bind_ioresult

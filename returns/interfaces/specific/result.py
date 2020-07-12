@@ -21,12 +21,10 @@ class ResultBasedN(
     rescuable.RescuableN[_FirstType, _SecondType, _ThirdType],
 ):
     """
-    Allows to create unit containers from raw values and to apply wrapped funcs.
+    An interface that represents a pure computation result.
 
-    See also:
-        https://en.wikipedia.org/wiki/ResultBased_functor
-        http://learnyouahaskell.com/functors-ResultBased-functors-and-monoids
-
+    For impure result see
+    :class:`returns.interfaces.specific.ioresult.IOResultBasedN` type.
     """
 
     @abstractmethod
@@ -34,7 +32,7 @@ class ResultBasedN(
         self: _ResultBasedType,
         function: Callable[[_FirstType], 'Result[_UpdatedType, _SecondType]'],
     ) -> KindN[_ResultBasedType, _UpdatedType, _SecondType, _ThirdType]:
-        """Allows to apply a wrapped function over a container."""
+        """Runs ``Result`` returning function over a container."""
 
     @classmethod
     @abstractmethod
