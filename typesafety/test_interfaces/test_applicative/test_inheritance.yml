@@ -130,9 +130,4 @@
             ...
   out: |
     main:12: error: Argument 1 of "apply" is incompatible with supertype "ApplicativeN"; supertype defines the argument type as "KindN[MyClass[V], Callable[[V], _UpdatedType], NoReturn, NoReturn]"
-    main:12: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
-    main:12: note: This violates the Liskov substitution principle
-    main:19: error: Argument 1 of "from_value" is incompatible with supertype "ApplicativeN"; supertype defines the argument type as "_UpdatedType"
-    main:19: error: Return type "None" of "from_value" incompatible with return type "KindN[MyClass[V], _UpdatedType, NoReturn, NoReturn]" in supertype "ApplicativeN"
-    main:19: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
-    main:19: note: This violates the Liskov substitution principle
+    main:19: error: Return type "None" of "from_value" incompatible with return type "KindN[MyClass[V], V, NoReturn, NoReturn]" in supertype "ApplicativeN"
