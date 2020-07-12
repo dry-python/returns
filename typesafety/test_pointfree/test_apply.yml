@@ -155,7 +155,7 @@
     reveal_type(apply(Future.from_value(test))(x))  # N: Revealed type is 'returns.future.Future*[builtins.int*]'
 
 
-- case: apply_futureresult
+- case: apply_future_result
   disable_cache: true
   main: |
     from returns.pointfree import apply

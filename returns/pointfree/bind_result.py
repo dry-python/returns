@@ -7,10 +7,10 @@ from returns.primitives.hkt import Kinded, KindN, kinded
 if TYPE_CHECKING:
     from returns.result import Result  # noqa: WPS433
 
-_FirstType = TypeVar('_FirstType', contravariant=True)
+_FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')
-_ThirdType = TypeVar('_ThirdType', contravariant=True)
-_UpdatedType = TypeVar('_UpdatedType', covariant=True)
+_ThirdType = TypeVar('_ThirdType')
+_UpdatedType = TypeVar('_UpdatedType')
 
 _ResultBasedKind = TypeVar('_ResultBasedKind', bound=ResultBasedN)
 

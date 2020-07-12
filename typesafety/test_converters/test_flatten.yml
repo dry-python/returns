@@ -112,7 +112,7 @@
     reveal_type(flatten(x))  # N: Revealed type is 'returns.future.Future[builtins.int*]'
 
 
-- case: flatten_futureresult1
+- case: flatten_future_result1
   disable_cache: true
   main: |
     from returns.converters import flatten
@@ -123,7 +123,7 @@
     reveal_type(flatten(x))  # N: Revealed type is 'returns.future.FutureResult[builtins.int*, builtins.str*]'
 
 
-- case: flatten_futureresult2
+- case: flatten_future_result2
   disable_cache: true
   main: |
     from returns.converters import flatten

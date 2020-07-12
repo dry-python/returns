@@ -17,14 +17,8 @@ from typing import (
 from typing_extensions import final
 
 from returns._generated.iterable import iterable
-from returns.interfaces import (
-    applicative,
-    bindable,
-    mappable,
-    rescuable,
-    unwrappable,
-)
-from returns.interfaces.specific import io, result
+from returns.interfaces import unwrappable
+from returns.interfaces.specific import io, ioresult
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind1, Kind2, dekind
 from returns.result import Failure, Result, Success
@@ -44,9 +38,6 @@ _SecondType = TypeVar('_SecondType')
 class IO(
     BaseContainer,
     Kind1['IO', _ValueType],
-    mappable.Mappable1[_ValueType],
-    bindable.Bindable1[_ValueType],
-    applicative.Applicative1[_ValueType],
     io.IOBased1[_ValueType],
 ):
     """
@@ -271,13 +262,8 @@ def impure(
 class IOResult(
     BaseContainer,
     Kind2['IOResult', _ValueType, _ErrorType],
-    mappable.Mappable2[_ValueType, _ErrorType],
-    bindable.Bindable2[_ValueType, _ErrorType],
-    applicative.Applicative2[_ValueType, _ErrorType],
+    ioresult.IOResultBased2[_ValueType, _ErrorType],
     unwrappable.Unwrappable[IO[_ValueType], IO[_ErrorType]],
-    rescuable.Rescuable2[_ValueType, _ErrorType],
-    result.ResultBased2[_ValueType, _ErrorType],
-    io.IOBased2[_ValueType, _ErrorType],
     metaclass=ABCMeta,
 ):
     """
@@ -433,6 +419,9 @@ class IOResult(
           >>> assert IOFailure('a').bind(bindable) == IOFailure('a')
 
         """
+
+    #: Alias for `bind_ioresult` method. Part of the `IOResultBasedN` interface.
+    bind_ioresult = bind
 
     @abstractmethod
     def bind_result(
@@ -678,6 +667,23 @@ class IOResult(
         return _IOFailure(inner_value)
 
     @classmethod
+    def from_ioresult(
+        cls, inner_value: 'IOResult[_NewValueType, _NewErrorType]',
+    ) -> 'IOResult[_NewValueType, _NewErrorType]':
+        """
+        Creates ``IOResult`` from existing ``IOResult`` value.
+
+        .. code:: python
+
+          >>> from returns.io import IOResult, IOSuccess, IOFailure
+
+          >>> assert IOResult.from_ioresult(IOSuccess(1)) == IOSuccess(1)
+          >>> assert IOResult.from_ioresult(IOFailure(2)) == IOFailure(2)
+
+        """
+        return inner_value
+
+    @classmethod
     def from_value(
         cls, inner_value: _NewValueType,
     ) -> 'IOResult[_NewValueType, Any]':
@@ -787,6 +793,9 @@ class _IOFailure(IOResult):
         """Does nothing for ``IOFailure``."""
         return self
 
+    #: Alias for `bind_ioresult` method. Part of the `IOResultBasedN` interface.
+    bind_ioresult = bind
+
     def bind_result(self, function):
         """Does nothing for ``IOFailure``."""
         return self
@@ -824,6 +833,9 @@ class _IOSuccess(IOResult):
     def bind(self, function):
         """Composes this container with a function returning ``IOResult``."""
         return function(self._inner_value.unwrap())
+
+    #: Alias for `bind_ioresult` method. Part of the `IOResultBasedN` interface.
+    bind_ioresult = bind
 
     def bind_result(self, function):
         """Binds ``Result`` returning function to current container."""

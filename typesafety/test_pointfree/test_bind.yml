@@ -176,7 +176,7 @@
     reveal_type(bind(test)(x))  # N: Revealed type is 'returns.future.Future*[builtins.int*]'
 
 
-- case: bind_futureresult
+- case: bind_future_result
   disable_cache: true
   main: |
     from returns.pointfree import bind

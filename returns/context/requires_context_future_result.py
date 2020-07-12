@@ -17,8 +17,7 @@ from returns._generated.futures import _reader_future_result
 from returns._generated.iterable import iterable
 from returns.context import NoDeps
 from returns.future import Future, FutureResult
-from returns.interfaces import applicative, bindable, mappable, rescuable
-from returns.interfaces.specific import io, result
+from returns.interfaces.specific import ioresult
 from returns.io import IO, IOResult
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind3, dekind
@@ -49,12 +48,7 @@ _FirstType = TypeVar('_FirstType')
 class RequiresContextFutureResult(
     BaseContainer,
     Kind3['RequiresContextFutureResult', _ValueType, _ErrorType, _EnvType],
-    mappable.Mappable3[_ValueType, _ErrorType, _EnvType],
-    bindable.Bindable3[_ValueType, _ErrorType, _EnvType],
-    applicative.Applicative3[_ValueType, _ErrorType, _EnvType],
-    rescuable.Rescuable3[_ValueType, _ErrorType, _EnvType],
-    result.ResultBased3[_ValueType, _ErrorType, _EnvType],
-    io.IOBased3[_ValueType, _ErrorType, _EnvType],
+    ioresult.IOResultBased3[_ValueType, _ErrorType, _EnvType],
 ):
     """
     The ``RequiresContextFutureResult`` combinator.

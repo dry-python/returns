@@ -1,6 +1,7 @@
 from abc import abstractmethod
-from typing import TYPE_CHECKING, Callable, Generic, NoReturn, Type, TypeVar
+from typing import TYPE_CHECKING, Callable, NoReturn, Type, TypeVar
 
+from returns.interfaces import applicative, bindable, mappable
 from returns.primitives.hkt import KindN
 
 if TYPE_CHECKING:
@@ -13,7 +14,11 @@ _UpdatedType = TypeVar('_UpdatedType')
 _IOBasedType = TypeVar('_IOBasedType', bound='IOBasedN')
 
 
-class IOBasedN(Generic[_FirstType, _SecondType, _ThirdType]):
+class IOBasedN(
+    mappable.MappableN[_FirstType, _SecondType, _ThirdType],
+    bindable.BindableN[_FirstType, _SecondType, _ThirdType],
+    applicative.ApplicativeN[_FirstType, _SecondType, _ThirdType],
+):
     """
     Represents the base interfaces for types that do fearless ``IO``.
 

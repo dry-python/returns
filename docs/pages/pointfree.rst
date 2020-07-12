@@ -119,14 +119,6 @@ We also have a long list of other ``bind_*`` functions, like:
 - ``bind_awaitable`` to bind async non-container functions
 
 
-unify
------
-
-``unify`` is the same as ``bind``, but returns different return type.
-While ``bind`` reveals strictly the same error type,
-``unify`` returns ``Union[_OldReturnType, _NewReturnType]``.
-
-
 rescue
 ------
 
@@ -242,8 +234,6 @@ API Reference
 .. autofunction:: returns.pointfree.bind_async
 
 .. autofunction:: returns.pointfree.bind_awaitable
-
-.. autofunction:: returns.pointfree.unify
 
 .. autofunction:: returns.pointfree.rescue
 

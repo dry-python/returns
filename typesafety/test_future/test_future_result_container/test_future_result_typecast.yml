@@ -48,7 +48,7 @@
     reveal_type(FutureResult.from_failure(1))  # N: Revealed type is 'returns.future.FutureResult[Any, builtins.int*]'
 
 
-- case: futureresult_from_iterable
+- case: future_result_from_iterable
   disable_cache: true
   main: |
     from returns.future import FutureResult

@@ -141,7 +141,7 @@
     reveal_type(apply(x, Future.from_value(test)))  # N: Revealed type is 'returns.future.Future[builtins.int*]'
 
 
-- case: apply_futureresult
+- case: apply_future_result
   disable_cache: true
   main: |
     from returns.methods import apply

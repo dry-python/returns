@@ -6,7 +6,7 @@ incremental in minor, bugfixes only are patches.
 See [0Ver](https://0ver.org/).
 
 
-## 0.15.0 WIP
+## 0.15.0 WIP aka The initial HKT release
 
 ### Features
 
@@ -20,7 +20,7 @@ See [0Ver](https://0ver.org/).
 - **Breaking**: removes `value_or` pointfree method,
   because it is impossible to express with HKT
 - **Breaking**: removes `.value_or`, `.unwrap`, and `.failure` methods
-  from `FutureResult` and `RequiresContext` based types,
+  from `FutureResult` and `RequiresContext`-based types,
   because we do require these methods to raise an exception on failure,
   but these methods were lazy and did not raise the required exception
 - **Breaking**: changes how `is_successful` is typed:
@@ -30,6 +30,10 @@ See [0Ver](https://0ver.org/).
   now it does accept an `Unwrappable` instance instead of a `BaseContainer`
 - **Breaking**: removes `.fix` method from all containers,
   also removes `fix` pointfree function
+- **Breaking**: removes `unify` poinfree function,
+  it is not a recommeneded way to compose things,
+  but due to HKT support,
+  users can write their own `unify` poinfree function now
 - Adds new public interfaces: see `returns.interfaces`
 - Adds `methods` package with all the composition methods we support
 - Adds `collect_trace` helper function for better development experience
@@ -46,6 +50,7 @@ See [0Ver](https://0ver.org/).
 ### Misc
 
 - Adds a lot of new typetests
+- Changes docs structure, adds new `Interfaces`, `HKT`, and `Methods` pages
 
 
 ## 0.14.0

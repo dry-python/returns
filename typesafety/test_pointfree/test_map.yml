@@ -189,7 +189,7 @@
     reveal_type(map_(test)(Future.from_value(1.5)))  # N: Revealed type is 'returns.future.Future*[builtins.int]'
 
 
-- case: map_futureresult
+- case: map_future_result
   disable_cache: true
   main: |
     from returns.pointfree import map_

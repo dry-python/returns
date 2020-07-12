@@ -83,7 +83,7 @@
     reveal_type(x.bind_result(test))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool*, builtins.float, builtins.str]'
 
 
-- case: requires_context_futureresult_bind_ioresult
+- case: requires_context_future_result_bind_ioresult
   disable_cache: true
   main: |
     from returns.context import RequiresContextFutureResult
@@ -111,7 +111,7 @@
     reveal_type(x.bind_io(test))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool*, builtins.float, builtins.str]'
 
 
-- case: requires_context_futureresult_bind_future
+- case: requires_context_future_result_bind_future
   disable_cache: true
   main: |
     from returns.context import RequiresContextFutureResult
@@ -125,7 +125,7 @@
     reveal_type(x.bind_future(test))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool*, builtins.float, builtins.str]'
 
 
-- case: requires_context_futureresult_bind_future_result
+- case: requires_context_future_result_bind_future_result
   disable_cache: true
   main: |
     from returns.context import RequiresContextFutureResult
@@ -139,7 +139,7 @@
     reveal_type(x.bind_future_result(test))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool*, builtins.float, builtins.str]'
 
 
-- case: requires_context_futureresult_bind_async_future
+- case: requires_context_future_result_bind_async_future
   disable_cache: true
   main: |
     from returns.context import RequiresContextFutureResult
@@ -153,7 +153,7 @@
     reveal_type(x.bind_async_future(test))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool*, builtins.float, builtins.str]'
 
 
-- case: requires_context_futureresult_bind_async_future_result
+- case: requires_context_future_result_bind_async_future_result
   disable_cache: true
   main: |
     from returns.context import RequiresContextFutureResult

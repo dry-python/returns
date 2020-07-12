@@ -114,7 +114,7 @@
     reveal_type(bind_io(x, test))  # N: Revealed type is 'returns.future.Future[builtins.int*]'
 
 
-- case: bind_io_futureresult
+- case: bind_io_future_result
   disable_cache: true
   main: |
     from returns.methods import bind_io

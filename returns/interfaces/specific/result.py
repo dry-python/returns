@@ -1,6 +1,7 @@
 from abc import abstractmethod
-from typing import TYPE_CHECKING, Callable, Generic, NoReturn, Type, TypeVar
+from typing import TYPE_CHECKING, Callable, NoReturn, Type, TypeVar
 
+from returns.interfaces import applicative, bindable, mappable, rescuable
 from returns.primitives.hkt import KindN
 
 if TYPE_CHECKING:
@@ -13,7 +14,12 @@ _UpdatedType = TypeVar('_UpdatedType')
 _ResultBasedType = TypeVar('_ResultBasedType', bound='ResultBasedN')
 
 
-class ResultBasedN(Generic[_FirstType, _SecondType, _ThirdType]):
+class ResultBasedN(
+    mappable.MappableN[_FirstType, _SecondType, _ThirdType],
+    bindable.BindableN[_FirstType, _SecondType, _ThirdType],
+    applicative.ApplicativeN[_FirstType, _SecondType, _ThirdType],
+    rescuable.RescuableN[_FirstType, _SecondType, _ThirdType],
+):
     """
     Allows to create unit containers from raw values and to apply wrapped funcs.
 

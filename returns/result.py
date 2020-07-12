@@ -18,13 +18,7 @@ from typing import (
 from typing_extensions import final
 
 from returns._generated.iterable import iterable
-from returns.interfaces import (
-    applicative,
-    bindable,
-    mappable,
-    rescuable,
-    unwrappable,
-)
+from returns.interfaces import unwrappable
 from returns.interfaces.specific import result
 from returns.primitives.container import BaseContainer
 from returns.primitives.exceptions import UnwrapFailedError
@@ -44,12 +38,8 @@ _SecondType = TypeVar('_SecondType')
 class Result(
     BaseContainer,
     Kind2['Result', _ValueType, _ErrorType],
-    mappable.Mappable2[_ValueType, _ErrorType],
-    bindable.Bindable2[_ValueType, _ErrorType],
-    applicative.Applicative2[_ValueType, _ErrorType],
-    unwrappable.Unwrappable[_ValueType, _ErrorType],
-    rescuable.Rescuable2[_ValueType, _ErrorType],
     result.ResultBased2[_ValueType, _ErrorType],
+    unwrappable.Unwrappable[_ValueType, _ErrorType],
     metaclass=ABCMeta,
 ):
     """

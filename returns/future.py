@@ -17,8 +17,7 @@ from typing_extensions import final
 
 from returns._generated.futures import _future, _future_result
 from returns._generated.iterable import iterable
-from returns.interfaces import applicative, bindable, mappable, rescuable
-from returns.interfaces.specific import io, result
+from returns.interfaces.specific import io, ioresult
 from returns.io import IO, IOResult
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind1, Kind2, dekind
@@ -61,9 +60,6 @@ async def async_identity(instance: _FirstType) -> _FirstType:
 class Future(
     BaseContainer,
     Kind1['Future', _ValueType],
-    mappable.Mappable1[_ValueType],
-    bindable.Bindable1[_ValueType],
-    applicative.Applicative1[_ValueType],
     io.IOBased1[_ValueType],
 ):
     """
@@ -494,12 +490,7 @@ def asyncify(function: Callable[..., _ValueType]) -> Callable[
 class FutureResult(
     BaseContainer,
     Kind2['FutureResult', _ValueType, _ErrorType],
-    mappable.Mappable2[_ValueType, _ErrorType],
-    bindable.Bindable2[_ValueType, _ErrorType],
-    applicative.Applicative2[_ValueType, _ErrorType],
-    rescuable.Rescuable2[_ValueType, _ErrorType],
-    result.ResultBased2[_ValueType, _ErrorType],
-    io.IOBased2[_ValueType, _ErrorType],
+    ioresult.IOResultBased2[_ValueType, _ErrorType],
 ):
     """
     Container to easily compose ``async`` functions.
