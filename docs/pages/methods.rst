@@ -36,3 +36,9 @@ bind_result methods
 
 .. autofunction:: returns.methods.bind_result.internal_bind_result
 .. autofunction:: returns.methods.bind_result.bind_result
+
+bind_io methods
+~~~~~~~~~~~~~~~
+
+.. autofunction:: returns.methods.bind_io.internal_bind_io
+.. autofunction:: returns.methods.bind_io.bind_io

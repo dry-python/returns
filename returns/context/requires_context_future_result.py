@@ -18,7 +18,7 @@ from returns._generated.iterable import iterable
 from returns.context import NoDeps
 from returns.future import Future, FutureResult
 from returns.interfaces import applicative, bindable, mappable, rescuable
-from returns.interfaces.specific import result
+from returns.interfaces.specific import io, result
 from returns.io import IO, IOResult
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind3, dekind
@@ -54,6 +54,7 @@ class RequiresContextFutureResult(
     applicative.Applicative3[_ValueType, _ErrorType, _EnvType],
     rescuable.Rescuable3[_ValueType, _ErrorType, _EnvType],
     result.ResultBased3[_ValueType, _ErrorType, _EnvType],
+    io.IOBased3[_ValueType, _ErrorType, _EnvType],
 ):
     """
     The ``RequiresContextFutureResult`` combinator.

@@ -24,7 +24,7 @@ from returns.interfaces import (
     rescuable,
     unwrappable,
 )
-from returns.interfaces.specific import result
+from returns.interfaces.specific import io, result
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind1, Kind2, dekind
 from returns.result import Failure, Result, Success
@@ -47,6 +47,7 @@ class IO(
     mappable.Mappable1[_ValueType],
     bindable.Bindable1[_ValueType],
     applicative.Applicative1[_ValueType],
+    io.IOBased1[_ValueType],
 ):
     """
     Explicit container for impure function results.
@@ -157,6 +158,9 @@ class IO(
         """
         return dekind(function(self._inner_value))
 
+    #: Alias for `bind` method. Part of the `IOBasedN` interface.
+    bind_io = bind
+
     @classmethod
     def from_value(cls, inner_value: _NewValueType) -> 'IO[_NewValueType]':
         """
@@ -169,10 +173,25 @@ class IO(
           >>> from returns.io import IO
           >>> assert IO(1) == IO.from_value(1)
 
-        Part of the :class:`returns.interfaces.applicative.Applicative`
-        protocol.
+        Part of the :class:`returns.interfaces.applicative.ApplicativeN`
+        interface.
         """
         return IO(inner_value)
+
+    @classmethod
+    def from_io(cls, inner_value: 'IO[_NewValueType]') -> 'IO[_NewValueType]':
+        """
+        Unit function to construct new ``IO`` values from existing ``IO``.
+
+        .. code:: python
+
+          >>> from returns.io import IO
+          >>> assert IO(1) == IO.from_io(IO(1))
+
+        Part of the :class:`returns.interfaces.specific.IO.IOBasedN` interface.
+
+        """
+        return inner_value
 
     @classmethod
     def from_iterable(
@@ -258,6 +277,7 @@ class IOResult(
     unwrappable.Unwrappable[IO[_ValueType], IO[_ErrorType]],
     rescuable.Rescuable2[_ValueType, _ErrorType],
     result.ResultBased2[_ValueType, _ErrorType],
+    io.IOBased2[_ValueType, _ErrorType],
     metaclass=ABCMeta,
 ):
     """

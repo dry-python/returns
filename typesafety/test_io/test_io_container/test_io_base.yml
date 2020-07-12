@@ -14,6 +14,14 @@
     reveal_type(IO.from_value(1))  # N: Revealed type is 'returns.io.IO[builtins.int*]'
 
 
+- case: io_constructor3
+  disable_cache: true
+  main: |
+    from returns.io import IO
+
+    reveal_type(IO.from_io(IO(1)))  # N: Revealed type is 'returns.io.IO[builtins.int*]'
+
+
 - case: io_from_iterable
   disable_cache: true
   main: |
@@ -34,6 +42,18 @@
         ...
 
     reveal_type(IO(1).bind(bind_io))  # N: Revealed type is 'returns.io.IO[builtins.str*]'
+
+
+
+- case: io_bind_io
+  disable_cache: true
+  main: |
+    from returns.io import IO
+
+    def bind_io(input_io: int) -> IO[str]:
+        ...
+
+    reveal_type(IO(1).bind_io(bind_io))  # N: Revealed type is 'returns.io.IO[builtins.str*]'
 
 
 - case: io_map

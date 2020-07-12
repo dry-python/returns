@@ -41,8 +41,8 @@
     def test(a: int) -> Result[float, str]:
         ...
 
-    x: MyClass[int, str]
-    reveal_type(x.bind_result(test))  # N: Revealed type is 'main.MyClass[builtins.float*, builtins.str]'
+    x: Result[int, str]
+    reveal_type(MyClass.from_result(x).bind_result(test))  # N: Revealed type is 'main.MyClass[builtins.float*, builtins.str]'
 
 
 - case: result_inheritance_missing

@@ -18,7 +18,7 @@ from typing_extensions import final
 from returns._generated.futures import _future, _future_result
 from returns._generated.iterable import iterable
 from returns.interfaces import applicative, bindable, mappable, rescuable
-from returns.interfaces.specific import result
+from returns.interfaces.specific import io, result
 from returns.io import IO, IOResult
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind1, Kind2, dekind
@@ -64,6 +64,7 @@ class Future(
     mappable.Mappable1[_ValueType],
     bindable.Bindable1[_ValueType],
     applicative.Applicative1[_ValueType],
+    io.IOBased1[_ValueType],
 ):
     """
     Container to easily compose ``async`` functions.
@@ -498,6 +499,7 @@ class FutureResult(
     applicative.Applicative2[_ValueType, _ErrorType],
     rescuable.Rescuable2[_ValueType, _ErrorType],
     result.ResultBased2[_ValueType, _ErrorType],
+    io.IOBased2[_ValueType, _ErrorType],
 ):
     """
     Container to easily compose ``async`` functions.

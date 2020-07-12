@@ -1,0 +1,87 @@
+- case: io_inheritance_correct
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar
+    from returns.interfaces.specific.io import IOBased1
+    from returns.primitives.hkt import Kind1
+    from returns.io import IO
+
+    _ValueType = TypeVar('_ValueType')
+    _NewValueType = TypeVar('_NewValueType')
+
+    class MyClass(
+        Kind1['MyClass', _ValueType],
+        IOBased1[_ValueType],
+    ):
+        def bind_io(
+            self,
+            function: Callable[[_ValueType], IO[_NewValueType]],
+        ) -> MyClass[_NewValueType]:
+            ...
+
+        @classmethod
+        def from_io(
+            self, inner_value: IO[_NewValueType],
+        ) -> MyClass[_NewValueType]:
+            ...
+
+    def test(a: int) -> IO[float]:
+        ...
+
+    x: IO[int]
+    reveal_type(MyClass.from_io(x).bind_io(test))  # N: Revealed type is 'main.MyClass[builtins.float*]'
+
+
+- case: io_inheritance_missing
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar
+    from returns.interfaces.specific.io import IOBased1
+    from returns.primitives.hkt import Kind1
+    from returns.io import IO
+
+    _ValueType = TypeVar('_ValueType')
+    _NewValueType = TypeVar('_NewValueType')
+
+    class MyClass(
+        Kind1['MyClass', _ValueType],
+        IOBased1[_ValueType],
+    ):
+        ...
+
+    MyClass()
+  out: |
+    main:15: error: Cannot instantiate abstract class 'MyClass' with abstract attributes 'bind_io' and 'from_io'
+
+
+- case: io_inheritance_wrong
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar
+    from returns.interfaces.specific.io import IOBased1
+    from returns.primitives.hkt import Kind1
+    from returns.io import IO
+
+    _ValueType = TypeVar('_ValueType')
+    _NewValueType = TypeVar('_NewValueType')
+
+    class MyClass(
+        Kind1['MyClass', _ValueType],
+        IOBased1[_ValueType],
+    ):
+        def bind_io(
+            self,
+            function: Callable[[_ValueType], IO[_ValueType]],
+        ) -> MyClass[_ValueType]:
+            ...
+
+        def from_io(
+            self, inner_value: IO[_NewValueType],
+        ) -> MyClass[_NewValueType]:
+            ...
+  out: |
+    main:13: error: Argument 1 of "bind_io" is incompatible with supertype "IOBasedN"; supertype defines the argument type as "Callable[[_ValueType], IO[_UpdatedType]]"
+    main:13: error: Return type "MyClass[_ValueType]" of "bind_io" incompatible with return type "KindN[MyClass[_ValueType], _UpdatedType, NoReturn, NoReturn]" in supertype "IOBasedN"
+    main:13: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:13: note: This violates the Liskov substitution principle
+    main:19: error: Signature of "from_io" incompatible with supertype "IOBasedN"
