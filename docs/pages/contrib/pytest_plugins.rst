@@ -32,12 +32,13 @@ It tests that containers do handle error track.
 
 .. code:: python
 
-  from returns.result import Failure
-  from returns.functions import identity
+  from returns.result import Failure, Success
 
   def test_my_container(returns):
       assert not returns.is_error_handled(Failure(1))
-      assert returns.is_error_handled(Failure(1).fix(identity))
+      assert returns.is_error_handled(
+          Failure(1).rescue(lambda _: Success('default value')),
+      )
 
 We recommed to unit test big chunks of code this way.
 This is helpful for big pipelines where

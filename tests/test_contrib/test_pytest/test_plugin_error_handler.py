@@ -11,12 +11,9 @@ def _under_test(
     container,
     *,
     should_rescue: bool = False,
-    should_fix: bool = False,
 ):
     if should_rescue:
         return container.rescue(lambda inner: container.from_failure(inner))
-    if should_fix:
-        return container.fix(identity)
     return container.bind(lambda inner: container.from_value(inner))
 
 
@@ -34,8 +31,6 @@ def _under_test(
 ])
 @pytest.mark.parametrize('kwargs', [
     {'should_rescue': True},
-    {'should_fix': True},
-    {'should_rescue': True, 'should_fix': True},
 ])
 def test_error_handled(container, returns, kwargs):
     """Demo on how to use ``pytest`` helpers to work with error handling."""

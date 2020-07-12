@@ -326,28 +326,6 @@ class RequiresContextResult(
             ),
         )
 
-    def fix(
-        self, function: Callable[[_ErrorType], _NewValueType],
-    ) -> 'RequiresContextResult[_NewValueType, _ErrorType, _EnvType]':
-        """
-        Composes failed container with a pure function.
-
-        .. code:: python
-
-          >>> from returns.context import RequiresContextResult
-          >>> from returns.result import Success
-
-          >>> assert RequiresContextResult.from_value(1).fix(
-          ...     lambda x: x + 1,
-          ... )(...) == Success(1)
-
-          >>> assert RequiresContextResult.from_failure(1).fix(
-          ...     lambda x: x + 1,
-          ... )(...) == Success(2)
-
-        """
-        return RequiresContextResult(lambda deps: self(deps).fix(function))
-
     def alt(
         self, function: Callable[[_ErrorType], _NewErrorType],
     ) -> 'RequiresContextResult[_ValueType, _NewErrorType, _EnvType]':

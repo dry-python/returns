@@ -966,34 +966,6 @@ class FutureResult(
         """
         return self.bind(function)  # type: ignore
 
-    def fix(
-        self,
-        function: Callable[[_ErrorType], _NewValueType],
-    ) -> 'FutureResult[_NewValueType, _ErrorType]':
-        """
-        Composes failed container with a pure function to fix the failure.
-
-        .. code:: python
-
-          >>> import anyio
-          >>> from returns.future import FutureResult
-          >>> from returns.io import IOSuccess
-
-          >>> def fixable(arg: int) -> int:
-          ...      return arg + 1
-
-          >>> assert anyio.run(
-          ...     FutureResult.from_value(1).fix(fixable).awaitable,
-          ... ) == IOSuccess(1)
-          >>> assert anyio.run(
-          ...     FutureResult.from_failure(1).fix(fixable).awaitable,
-          ... ) == IOSuccess(2)
-
-        """
-        return FutureResult(_future_result.async_fix(
-            function, self._inner_value,
-        ))
-
     def alt(
         self,
         function: Callable[[_ErrorType], _NewErrorType],
@@ -1007,14 +979,14 @@ class FutureResult(
           >>> from returns.future import FutureResult
           >>> from returns.io import IOSuccess, IOFailure
 
-          >>> def fixable(arg: int) -> int:
+          >>> def altable(arg: int) -> int:
           ...      return arg + 1
 
           >>> assert anyio.run(
-          ...     FutureResult.from_value(1).alt(fixable).awaitable,
+          ...     FutureResult.from_value(1).alt(altable).awaitable,
           ... ) == IOSuccess(1)
           >>> assert anyio.run(
-          ...     FutureResult.from_failure(1).alt(fixable).awaitable,
+          ...     FutureResult.from_failure(1).alt(altable).awaitable,
           ... ) == IOFailure(2)
 
         """

@@ -122,17 +122,6 @@ async def async_bind_async_future(
     return container  # type: ignore[return-value]
 
 
-async def async_fix(
-    function: Callable[[_ErrorType], _NewValueType],
-    inner_value: Awaitable[Result[_ValueType, _ErrorType]],
-) -> Result[_NewValueType, _ErrorType]:
-    """Async fixes a function over a value."""
-    container = await inner_value
-    if isinstance(container, Result.success_type):
-        return container
-    return Success(function(container.failure()))
-
-
 async def async_alt(
     function: Callable[[_ErrorType], _NewErrorType],
     inner_value: Awaitable[Result[_ValueType, _ErrorType]],

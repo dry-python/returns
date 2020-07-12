@@ -135,16 +135,6 @@
     reveal_type(first.alt(float))  # N: Revealed type is 'returns.future.FutureResult[builtins.int, builtins.float*]'
 
 
-- case: future_result_fix
-  disable_cache: true
-  main: |
-    from returns.future import FutureResult
-
-    first: FutureResult[int, int]
-
-    reveal_type(first.fix(float))  # N: Revealed type is 'returns.future.FutureResult[builtins.float*, builtins.int]'
-
-
 - case: future_result_rescue
   disable_cache: true
   main: |

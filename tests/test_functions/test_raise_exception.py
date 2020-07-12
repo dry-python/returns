@@ -21,13 +21,13 @@ def test_raise_regular_exception(exception_type: Type[Exception]):
         raise_exception(exception_type())
 
 
-def test_failure_can_be_fixed():
+def test_failure_can_be_alted():
     """Ensures that exceptions can work with Failures."""
     failure = Failure(ValueError('Message'))
     with pytest.raises(ValueError, match='Message'):
-        failure.fix(raise_exception)
+        failure.alt(raise_exception)
 
 
 def test_success_is_not_touched():
     """Ensures that exceptions can work with Success."""
-    assert Success(1).fix(raise_exception) == Success(1)
+    assert Success(1).alt(raise_exception) == Success(1)

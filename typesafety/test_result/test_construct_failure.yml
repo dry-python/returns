@@ -10,14 +10,6 @@
     reveal_type(first.rescue(returns_result))  # N: Revealed type is 'returns.result.Result[builtins.str, builtins.Exception*]'
 
 
-- case: failure_fix
-  disable_cache: true
-  main: |
-    from returns.result import Failure
-
-    reveal_type(Failure(1).fix(str))  # N: Revealed type is 'returns.result.Result[builtins.str*, builtins.int]'
-
-
 - case: failure_alt
   disable_cache: true
   main: |

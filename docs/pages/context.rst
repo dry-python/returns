@@ -715,7 +715,7 @@ And then it is called like so:
       # Building the container with dependencies to pass it into the context.
       # We also make sure that we don't forget to raise internal exceptions
       # and trigger celery retries.
-      return sync_permissions().fix(raise_exception)(Container(
+      return sync_permissions().alt(raise_exception)(Container(
           fetch_metadata=db.select_user_metadata,
           get_user_permissions=bi.permissions_from_user,
           update_bi_permissions=bi.put_user_permissions,

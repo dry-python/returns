@@ -12,12 +12,6 @@ def test_alt_iofailure():
     assert IOFailure(5).alt(str) == IOFailure('5')
 
 
-def test_fix_iosuccess():
-    """Ensures that IOSuccess.fix is NoOp."""
-    assert IOSuccess(5).fix(str) == IOSuccess(5)
+def test_alt_iosuccess():
+    """Ensures that IOSuccess.alt is NoOp."""
     assert IOSuccess(5).alt(str) == IOSuccess(5)
-
-
-def test_fix_iofailure():
-    """Ensures that IOFailure.fix produces the IOSuccess."""
-    assert IOFailure(5).fix(str) == IOSuccess('5')

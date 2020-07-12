@@ -10,14 +10,6 @@
     reveal_type(first.rescue(returns_result))  # N: Revealed type is 'returns.io.IOResult[builtins.str, builtins.Exception*]'
 
 
-- case: iofailure_fix
-  disable_cache: true
-  main: |
-    from returns.io import IOFailure
-
-    reveal_type(IOFailure(1).fix(str))  # N: Revealed type is 'returns.io.IOResult[builtins.str*, builtins.int]'
-
-
 - case: iofailure_alt
   disable_cache: true
   main: |

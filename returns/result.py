@@ -190,26 +190,6 @@ class Result(
         return self.bind(function)  # type: ignore
 
     @abstractmethod
-    def fix(
-        self,
-        function: Callable[[_ErrorType], _NewValueType],
-    ) -> 'Result[_NewValueType, _ErrorType]':
-        """
-        Composes failed container with a pure function to fix the failure.
-
-        .. code:: python
-
-          >>> from returns.result import Failure, Success
-
-          >>> def fixable(arg: str) -> str:
-          ...      return 'ab'
-
-          >>> assert Success('a').fix(fixable) == Success('a')
-          >>> assert Failure('a').fix(fixable) == Success('ab')
-
-        """
-
-    @abstractmethod
     def alt(
         self,
         function: Callable[[_ErrorType], _NewErrorType],
@@ -435,10 +415,6 @@ class _Failure(Result[Any, _ErrorType]):
     #: Alias for `bind` method. Part of the `ResultBasedN` interface.
     bind_result = bind
 
-    def fix(self, function):
-        """Composes pure function with a failed container."""
-        return _Success(function(self._inner_value))
-
     def rescue(self, function):
         """Composes this container with a function returning container."""
         return function(self._inner_value)
@@ -508,10 +484,6 @@ class _Success(Result[_ValueType, Any]):
 
     #: Alias for `bind` method. Part of the `ResultBasedN` interface.
     bind_result = bind
-
-    def fix(self, function):
-        """Does nothing for ``Success``."""
-        return self
 
     def rescue(self, function):
         """Does nothing for ``Success``."""

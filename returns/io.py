@@ -493,23 +493,6 @@ class IOResult(
         """
         return self.bind(function)  # type: ignore
 
-    def fix(
-        self,
-        function: Callable[[_ErrorType], _NewValueType],
-    ) -> 'IOResult[_NewValueType, _ErrorType]':
-        """
-        Composes failed container with a pure function to fix the failure.
-
-        .. code:: python
-
-          >>> from returns.io import IOFailure, IOSuccess
-          >>> assert IOFailure('a').fix(
-          ...     lambda char: char + 'b',
-          ... ) == IOSuccess('ab')
-
-        """
-        return self.from_result(self._inner_value.fix(function))
-
     def alt(
         self,
         function: Callable[[_ErrorType], _NewErrorType],

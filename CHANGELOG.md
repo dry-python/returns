@@ -28,6 +28,8 @@ See [0Ver](https://0ver.org/).
   including custom ones
 - **Breaking**: changes `UnwrapFailedError` constructor,
   now it does accept an `Unwrappable` instance instead of a `BaseContainer`
+- **Breaking**: removes `.fix` method from all containers,
+  also removes `fix` pointfree function
 - Adds new public interfaces: see `returns.interfaces`
 - Adds `methods` package with all the composition methods we support
 - Adds `collect_trace` helper function for better development experience

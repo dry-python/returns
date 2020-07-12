@@ -7,7 +7,6 @@ from typing_extensions import Final, final
 _ERROR_FIELD: Final = '_error_handled'
 _ERROR_HANDLERS: Final = (
     'rescue',
-    'fix',
 )
 _ERRORS_COPIERS: Final = (
     'map',

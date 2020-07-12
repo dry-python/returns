@@ -69,22 +69,6 @@ types like ``Failure``:
   that works only when container is in failed state,
   is the opposite of ``map`` method
 
-``fix`` can be used to fix some fixable errors
-during the pipeline execution:
-
-.. code:: python
-
-  >>> from returns.result import Failure, Result, Success
-
-  >>> def double(state: int) -> float:
-  ...     return state * 2.0
-
-  >>> result: Result[str, float] = Failure(1).alt(double)
-  >>> assert result == Failure(2.0)
-
-  >>> result: Result[float, int] = Failure(1).fix(double)
-  >>> assert result == Success(2.0)
-
 ``rescue`` should return one of ``Success`` or ``Failure`` types.
 It can also rescue your flow and get on the successful track again:
 
@@ -109,7 +93,7 @@ It can also rescue your flow and get on the successful track again:
 Note::
 
   Not all containers support these methods.
-  ``IO`` and ``RequiresContext`` cannot be fixed, alted, or rescued.
+  ``IO`` and ``RequiresContext`` cannot be alted  or rescued.
 
 
 Unwrapping values
