@@ -36,16 +36,16 @@ Here's when it works:
   >>> assert pipeline(0) == 'not bigger'  # `signature and `infer` again
 
 """
-from typing import Callable, Tuple
+from typing import Callable, List, Tuple
 
 from mypy.checker import detach_callable
 from mypy.nodes import ARG_POS
 from mypy.plugin import FunctionContext, MethodContext, MethodSigContext
 from mypy.types import AnyType, CallableType, FunctionLike, Instance
 from mypy.types import Type as MypyType
-from mypy.types import TypeOfAny, TypeType, UnionType
+from mypy.types import TypeOfAny, UnionType, get_proper_type
 
-from returns.contrib.mypy._typeops.analtype import safe_translate_to_function
+from returns.contrib.mypy._typeops.analtype import translate_to_function
 from returns.contrib.mypy._typeops.inference import PipelineInference
 
 
@@ -58,7 +58,8 @@ def analyze(ctx: FunctionContext) -> MypyType:
         ctx.api.fail('Too few arguments for "_pipe"', ctx.context)
         return ctx.default_return_type
 
-    first_step, last_step = _get_pipeline_def(ctx)
+    arg_types = [arg_type[0] for arg_type in ctx.arg_types if arg_type]
+    first_step, last_step = _get_pipeline_def(arg_types, ctx)
     if not isinstance(first_step, FunctionLike):
         return ctx.default_return_type
     if not isinstance(last_step, FunctionLike):
@@ -71,7 +72,7 @@ def analyze(ctx: FunctionContext) -> MypyType:
             # Second argument represents pipeline final return type:
             _unify_type(last_step, lambda case: case.ret_type),
             # Other types are just functions inside the pipeline:
-            *ctx.arg_types[0],
+            *arg_types,
         ],
     )
 
@@ -114,13 +115,14 @@ def _unify_type(
 
 
 def _get_pipeline_def(
+    arg_types: List[MypyType],
     ctx: FunctionContext,
 ) -> Tuple[MypyType, MypyType]:
-    first_step = ctx.arg_types[0][0]
-    last_step = ctx.arg_types[0][-1]
+    first_step = get_proper_type(arg_types[0])
+    last_step = get_proper_type(arg_types[-1])
 
-    if isinstance(first_step, (Instance, TypeType)):
-        first_step = safe_translate_to_function(ctx.arg_types[0][0], ctx)
-    if isinstance(last_step, (Instance, TypeType)):
-        last_step = safe_translate_to_function(ctx.arg_types[0][-1], ctx)
+    if not isinstance(first_step, FunctionLike):
+        first_step = translate_to_function(first_step, ctx)  # type: ignore
+    if not isinstance(last_step, FunctionLike):
+        last_step = translate_to_function(last_step, ctx)  # type: ignore
     return first_step, last_step

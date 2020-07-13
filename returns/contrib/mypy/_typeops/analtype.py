@@ -1,6 +1,7 @@
 from types import MappingProxyType
 from typing import List, Optional, overload
 
+from mypy.checkmember import analyze_member_access
 from mypy.nodes import ARG_NAMED, ARG_OPT
 from mypy.types import CallableType, FunctionLike
 from mypy.types import Type as MypyType
@@ -83,6 +84,8 @@ def safe_translate_to_function(
 
     This function allows us to unify this process.
     We also need to disable errors, because we explicitly pass empty args.
+
+    This function also resolves all type arguments.
     """
     checker = ctx.api.expr_checker  # type: ignore
     checker.msg.disable_errors()
@@ -91,3 +94,28 @@ def safe_translate_to_function(
     )
     checker.msg.enable_errors()
     return function_def
+
+
+def translate_to_function(
+    function_def: MypyType,
+    ctx: CallableContext,
+) -> MypyType:
+    """
+    Tryies to translate a type into callable by accessing ``__call__`` attr.
+
+    This might fail with ``mypy`` errors and that's how must work.
+    This also preserves all type arguments as-is.
+    """
+    checker = ctx.api.expr_checker  # type: ignore
+    return analyze_member_access(
+        '__call__',
+        function_def,
+        ctx.context,
+        is_lvalue=False,
+        is_super=False,
+        is_operator=True,
+        msg=checker.msg,
+        original_type=function_def,
+        chk=checker.chk,
+        in_literal_context=checker.is_literal_context(),
+    )

@@ -30,6 +30,7 @@ Contents
   pages/io.rst
   pages/future.rst
   pages/context.rst
+  pages/create-your-own-container.rst
 
 .. toctree::
   :maxdepth: 2

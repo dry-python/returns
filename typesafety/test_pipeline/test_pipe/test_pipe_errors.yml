@@ -17,11 +17,11 @@
   main: |
     from returns.pipeline import pipe
 
-    reveal_type(pipe([], int)('a'))
+    pipe([], int)('a')
   out: |
-    main:3: error: "object" not callable
+    main:3: error: "List[<nothing>]" not callable
+    main:3: error: <nothing> not callable
     main:3: error: Argument 1 to "__call__" of "_Pipe" has incompatible type "str"; expected <nothing>
-    main:3: note: Revealed type is 'Any'
 
 
 - case: pipe_function_without_steps

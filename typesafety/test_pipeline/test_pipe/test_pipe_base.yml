@@ -67,19 +67,6 @@
             identity,
             identity,
             identity,
-            identity,
-            identity,
-            identity,
-            identity,
-            identity,
-            identity,
-            identity,
-            identity,
-            identity,
-            identity,
-            identity,
-            identity,
-            identity,
             identity,  # very long amount of args!
         )(1)
     )
@@ -167,3 +154,22 @@
         ...
 
     reveal_type(pipe(bind(bound), identity, map_(mappable))(x))  # N: Revealed type is 'returns.result.Result*[builtins.bool, builtins.str*]'
+
+
+- case: pipe_with_containers2
+  disable_cache: true
+  main: |
+    from returns.result import Result
+    from returns.io import IOResult
+    from returns.functions import identity
+    from returns.pointfree import bind_result
+    from returns.pipeline import pipe
+
+    def test(arg: int) -> Result[float, str]:
+        ...
+
+    def second(arg: float) -> Result[bool, str]:
+        ...
+
+    r: IOResult[int, str]
+    reveal_type(pipe(bind_result(test), bind_result(second))(r))  # N: Revealed type is 'returns.io.IOResult*[builtins.bool, builtins.str]'
