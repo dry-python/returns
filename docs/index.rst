@@ -36,9 +36,9 @@ Contents
   :maxdepth: 2
   :caption: Composition helpers
 
+  pages/methods.rst
   pages/pipeline.rst
   pages/converters.rst
-  pages/methods.rst
   pages/pointfree.rst
   pages/functions.rst
   pages/curry.rst
