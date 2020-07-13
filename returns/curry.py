@@ -43,13 +43,13 @@ def curry(function: Callable[..., _ReturnType]) -> Callable[..., _ReturnType]:
 
     Currying is a conception from functional languages that does partial
     applying. That means that if we pass one argument in a function that
-    get 2 or more arguments, we'll get a new function that remembers all
+    gets 2 or more arguments, we'll get a new function that remembers all
     previously passed arguments. Then we can pass remaining arguments, and
     the function will be executed.
 
-    :func`~partial` sunction does a similar thing,
+    :func:`~partial` function does a similar thing,
     but it does partial application exactly once.
-    ``curry`` is a bit smarter and will do parial
+    ``curry`` is a bit smarter and will do partial
     application until enough arguments passed.
 
     If wrong arguments are passed, ``TypeError`` will be raised immediately.
@@ -97,13 +97,13 @@ def curry(function: Callable[..., _ReturnType]) -> Callable[..., _ReturnType]:
     - We use a custom ``mypy`` plugin to make types correct,
       otherwise, it is currently impossible
     - It might not work as expected with curried ``Klass().method``,
-      it might generate invalid method signrature
+      it might generate invalid method signature
       (looks like a bug in ``mypy``)
     - It is probably a bad idea to ``curry`` a function with lots of arguments,
       because you will end up with lots of overload functions,
       that you won't be able to understand.
-      It might be also be slow during the typecheck
-    - Cyrrying of ``__init__`` does not work because of the bug in ``mypy``:
+      It might also be slow during the typecheck
+    - Currying of ``__init__`` does not work because of the bug in ``mypy``:
       https://github.com/python/mypy/issues/8801
 
     We expect people to use this tool responsibly
