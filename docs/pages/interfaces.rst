@@ -38,8 +38,13 @@ for example, can have one, two or three possible types. See the example below:
 Mappable
 --------
 
-:class:`Mappable <returns.interfaces.mappable.MappableN>` interface help us to
-create our own ``Functor`` like :class:`Result <returns.maybe.Maybe>`.
+Something is considered mappable if we can `map` it using a function, generally
+`map` is a method that accepts a function. An example in this library is
+:class:`Maybe <returns.maybe.Maybe>`, it has the `map` method.
+
+:class:`Mappable <returns.interfaces.mappable.MappableN>`
+interface help us to create our own mappable container like
+:class:`Maybe <returns.maybe.Maybe>`.
 
 .. code:: python
 
@@ -47,26 +52,38 @@ create our own ``Functor`` like :class:`Result <returns.maybe.Maybe>`.
 
   >>> from returns.interfaces.mappable import Mappable1
 
-  >>> _FunctorValueType = TypeVar('_FunctorValueType', covariant=True)
-  >>> _NewFunctorValueType = TypeVar('_NewFunctorValueType')
+  >>> _NumberType = TypeVar('_NumberType', covariant=True)
+  >>> _NewNumberType = TypeVar('_NewNumberType')
 
-  >>> class MyFunctor(Mappable1[_FunctorValueType]):
-  ...     _inner_value: _FunctorValueType
+  >>> class Number(Mappable1[_NumberType]):
+  ...     _inner_value: _NumberType
   ...
-  ...     def __init__(self, inner_value: _FunctorValueType):
+  ...     def __init__(self, inner_value: _NumberType):
   ...         self._inner_value = inner_value
   ...
   ...     def map(  # This method is required by Mappable
   ...         self,
-  ...         function: Callable[[_FunctorValueType], _NewFunctorValueType]
-  ...     ) -> 'MyFunctor[_NewFunctorValueType]':
+  ...         function: Callable[[_NumberType], _NewNumberType]
+  ...     ) -> 'Number[_NewNumberType]':
   ...         new_value = function(self._inner_value)
-  ...         return MyFunctor(new_value)
+  ...         return Number(new_value)
   ...
   ...     def __eq__(self, other: Any) -> bool:  # Required to check the identity law
   ...         if not isinstance(self, type(other)):
   ...             return False
   ...         return self._inner_value == other._inner_value
+
+With our ``Number`` mappable class we can compose easily math functions on it.
+
+.. code:: python
+
+  >>> from math import floor, sqrt
+
+  >>> def my_math_function(number: int) -> int:
+  ...     return number + 1
+
+  >>> number: Number[int] = Number(-82)
+  >>> assert number.map(my_math_function).map(abs).map(sqrt).map(floor) == Number(9)
 
 Laws
 ~~~~
@@ -81,8 +98,8 @@ the functor has to be the same, unaltered.
 
   >>> from returns.functions import identity
 
-  >>> functor = MyFunctor(1) # MyFunctor[int]
-  >>> assert functor.map(identity) == MyFunctor(1)
+  >>> functor = Number(1) # Number[int]
+  >>> assert functor.map(identity) == Number(1)
 
 2. **Associative Law**: Given two functions, `x` and `y`, calling the map
 method with `x` function and after that calling with `y` function must have the
@@ -96,7 +113,7 @@ same result if we compose them together.
   >>> def multiply_by_ten(number: int) -> int:
   ...     return number * 10
 
-  >>> functor = MyFunctor(9) # MyFunctor[int]
+  >>> functor = Number(9) # Number[int]
   >>> assert functor.map(add_one).map(multiply_by_ten) == functor.map(lambda value: multiply_by_ten(add_one(value)))
 
 Naming convention
