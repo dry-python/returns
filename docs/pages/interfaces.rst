@@ -51,7 +51,7 @@ that implements the ``Mappable`` interface:
   >>> def mappable(string: str) -> str:
   ...     return string + '!'
 
-  >>> maybe_str: Maybe[str] = Maybe.from_value('example')
+  >>> maybe_str: Maybe[str] = Some('example')
   >>> assert maybe_str.map(mappable) == Some('example!')
 
 :class:`Mappable <returns.interfaces.mappable.MappableN>` interface help us to
@@ -59,14 +59,18 @@ create our own mappable container like :class:`Maybe <returns.maybe.Maybe>`.
 
 .. code:: python
 
-  >>> from typing import Any, Callable, TypeVar, Union
+  >>> from typing import Any, Callable, TypeVar
 
   >>> from returns.interfaces.mappable import Mappable1
+  >>> from returns.primitives.hkt import Kind1
 
-  >>> _NumberType = TypeVar('_NumberType', bound=Union[int, float, complex])
-  >>> _NewNumberType = TypeVar('_NewNumberType', bound=Union[int, float, complex])
+  >>> _NumberType = TypeVar('_NumberType')
+  >>> _NewNumberType = TypeVar('_NewNumberType')
 
-  >>> class Number(Mappable1[_NumberType]):
+  >>> class Number(
+  ...     Kind1['Number', _NumberType],
+  ...     Mappable1[_NumberType],
+  ... ):
   ...     def __init__(self, inner_value: _NumberType):
   ...         self._inner_value = inner_value
   ...
@@ -94,18 +98,18 @@ With our ``Number`` mappable class we can compose easily math functions with it.
 Laws
 ~~~~
 
-To make sure your functor implementation is right, you can apply the
-Functors law on it to test.
+To make sure your mappable implementation is right, you can apply the
+Mappable laws on it to test.
 
 1. **Identity Law:** When we pass the identity function to the map method,
-the functor has to be the same, unaltered.
+the mappable has to be the same, unaltered.
 
 .. code:: python
 
   >>> from returns.functions import identity
 
-  >>> functor = Number(1) # Number[int]
-  >>> assert functor.map(identity) == Number(1)
+  >>> mappable_number: Number[int] = Number(1)
+  >>> assert mappable_number.map(identity) == Number(1)
 
 2. **Associative Law**: Given two functions, `x` and `y`, calling the map
 method with `x` function and after that calling with `y` function must have the
@@ -119,8 +123,8 @@ same result if we compose them together.
   >>> def multiply_by_ten(number: int) -> int:
   ...     return number * 10
 
-  >>> functor = Number(9) # Number[int]
-  >>> assert functor.map(add_one).map(multiply_by_ten) == functor.map(lambda value: multiply_by_ten(add_one(value)))
+  >>> mappable_number: Number[int] = Number(9)
+  >>> assert mappable_number.map(add_one).map(multiply_by_ten) == mappable_number.map(lambda value: multiply_by_ten(add_one(value)))
 
 Naming convention
 -----------------
