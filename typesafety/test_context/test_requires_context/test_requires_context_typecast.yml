@@ -6,7 +6,7 @@
 
     x: Iterable[RequiresContext[int, str]]
 
-    reveal_type(RequiresContext.from_iterable(x))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[typing.Sequence[builtins.str*], builtins.int*]'
+    reveal_type(RequiresContext.from_iterable(x))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[typing.Sequence[builtins.int*], builtins.str*]'
 
 
 - case: requires_context_from_requires_context_ioresult

@@ -101,4 +101,4 @@
         ) -> MyClass[N]:
             ...
   out: |
-    main:11: error: Signature of "from_iterable" incompatible with supertype "IterableN"
+    main:10: error: Signature of "from_iterable" incompatible with supertype "IterableN"
