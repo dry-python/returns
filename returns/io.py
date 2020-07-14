@@ -16,8 +16,8 @@ from typing import (
 
 from typing_extensions import final
 
-from returns._generated.iterable import iterable
-from returns.interfaces import unwrappable
+from returns._generated.iterable import iterable_kind
+from returns.interfaces import iterable, unwrappable
 from returns.interfaces.specific import io, ioresult
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind1, Kind2, dekind
@@ -39,6 +39,7 @@ class IO(
     BaseContainer,
     Kind1['IO', _ValueType],
     io.IOBased1[_ValueType],
+    iterable.Iterable1[_ValueType],
 ):
     """
     Explicit container for impure function results.
@@ -187,7 +188,7 @@ class IO(
     @classmethod
     def from_iterable(
         cls,
-        inner_value: Iterable['IO[_ValueType]'],
+        inner_value: Iterable[Kind1['IO', _ValueType]],
     ) -> 'IO[Sequence[_ValueType]]':
         """
         Transforms an iterable of ``IO`` containers into a single container.
@@ -202,7 +203,7 @@ class IO(
           ... ]) == IO((1, 2))
 
         """
-        return iterable(cls, inner_value)
+        return dekind(iterable_kind(cls, inner_value))
 
     @classmethod
     def from_ioresult(
@@ -264,6 +265,7 @@ class IOResult(
     Kind2['IOResult', _ValueType, _ErrorType],
     ioresult.IOResultBased2[_ValueType, _ErrorType],
     unwrappable.Unwrappable[IO[_ValueType], IO[_ErrorType]],
+    iterable.Iterable2[_ValueType, _ErrorType],
     metaclass=ABCMeta,
 ):
     """
@@ -726,7 +728,7 @@ class IOResult(
     @classmethod
     def from_iterable(
         cls,
-        inner_value: Iterable['IOResult[_ValueType, _ErrorType]'],
+        inner_value: Iterable[Kind2['IOResult', _ValueType, _ErrorType]],
     ) -> 'IOResult[Sequence[_ValueType], _ErrorType]':
         """
         Transforms an iterable of ``IOResult`` containers into a single one.
@@ -751,7 +753,7 @@ class IOResult(
           ... ]) == IOFailure('a')
 
         """
-        return iterable(cls, inner_value)
+        return dekind(iterable_kind(cls, inner_value))
 
     def __str__(self) -> str:
         """

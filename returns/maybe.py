@@ -15,11 +15,17 @@ from typing import (
 
 from typing_extensions import final
 
-from returns._generated.iterable import iterable
-from returns.interfaces import applicative, bindable, mappable, unwrappable
+from returns._generated.iterable import iterable_kind
+from returns.interfaces import (
+    applicative,
+    bindable,
+    iterable,
+    mappable,
+    unwrappable,
+)
 from returns.primitives.container import BaseContainer
 from returns.primitives.exceptions import UnwrapFailedError
-from returns.primitives.hkt import Kind1
+from returns.primitives.hkt import Kind1, dekind
 
 # Definitions:
 _ValueType = TypeVar('_ValueType', covariant=True)
@@ -37,6 +43,7 @@ class Maybe(
     bindable.Bindable1[_ValueType],
     applicative.Applicative1[_ValueType],
     unwrappable.Unwrappable[_ValueType, None],
+    iterable.Iterable1[_ValueType],
     metaclass=ABCMeta,
 ):
     """
@@ -226,7 +233,7 @@ class Maybe(
     @classmethod
     def from_iterable(
         cls,
-        inner_value: Iterable['Maybe[_ValueType]'],
+        inner_value: Iterable[Kind1['Maybe', _ValueType]],
     ) -> 'Maybe[Sequence[_ValueType]]':
         """
         Transforms an iterable of ``Maybe`` containers into a single container.
@@ -251,7 +258,7 @@ class Maybe(
           ... ]) == Nothing
 
         """
-        return iterable(cls, inner_value)
+        return dekind(iterable_kind(cls, inner_value))
 
 
 @final

@@ -12,8 +12,9 @@ from typing import (
 
 from typing_extensions import final
 
-from returns._generated.iterable import iterable
+from returns._generated.iterable import iterable_kind
 from returns.context import NoDeps
+from returns.interfaces import iterable
 from returns.interfaces.specific import result
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind3, dekind
@@ -41,6 +42,7 @@ class RequiresContextResult(
     BaseContainer,
     Kind3['RequiresContextResult', _ValueType, _ErrorType, _EnvType],
     result.ResultBased3[_ValueType, _ErrorType, _EnvType],
+    iterable.Iterable3[_ValueType, _ErrorType, _EnvType],
 ):
     """
     The ``RequiresContextResult`` combinator.
@@ -515,7 +517,14 @@ class RequiresContextResult(
     def from_iterable(
         cls,
         inner_value:
-            Iterable['RequiresContextResult[_ValueType, _ErrorType, _EnvType]'],
+            Iterable[
+                Kind3[
+                    'RequiresContextResult',
+                    _ValueType,
+                    _ErrorType,
+                    _EnvType,
+                ],
+            ],
     ) -> 'RequiresContextResult[Sequence[_ValueType], _ErrorType, _EnvType]':
         """
         Transforms an iterable of ``RequiresContextResult`` containers.
@@ -543,7 +552,7 @@ class RequiresContextResult(
           ... ])(...) == Failure('a')
 
         """
-        return iterable(cls, inner_value)
+        return dekind(iterable_kind(cls, inner_value))
 
 
 @final

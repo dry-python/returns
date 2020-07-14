@@ -12,8 +12,9 @@ from typing import (
 
 from typing_extensions import final
 
-from returns._generated.iterable import iterable
+from returns._generated.iterable import iterable_kind
 from returns.context import NoDeps
+from returns.interfaces import iterable
 from returns.interfaces.specific import ioresult
 from returns.io import IO, IOFailure, IOResult, IOSuccess
 from returns.primitives.container import BaseContainer
@@ -43,6 +44,7 @@ class RequiresContextIOResult(
     BaseContainer,
     Kind3['RequiresContextIOResult', _ValueType, _ErrorType, _EnvType],
     ioresult.IOResultBased3[_ValueType, _ErrorType, _EnvType],
+    iterable.Iterable3[_ValueType, _ErrorType, _EnvType],
 ):
     """
     The ``RequiresContextIOResult`` combinator.
@@ -758,7 +760,12 @@ class RequiresContextIOResult(
         cls,
         inner_value:
             Iterable[
-                'RequiresContextIOResult[_ValueType, _ErrorType, _EnvType]',
+                Kind3[
+                    'RequiresContextIOResult',
+                    _ValueType,
+                    _ErrorType,
+                    _EnvType,
+                ],
             ],
     ) -> 'RequiresContextIOResult[Sequence[_ValueType], _ErrorType, _EnvType]':
         """
@@ -787,7 +794,7 @@ class RequiresContextIOResult(
           ... ])(...) == IOFailure('a')
 
         """
-        return iterable(cls, inner_value)
+        return dekind(iterable_kind(cls, inner_value))
 
 
 @final

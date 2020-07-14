@@ -12,10 +12,10 @@ from typing import (
 
 from typing_extensions import final
 
-from returns._generated.iterable import iterable
+from returns._generated.iterable import iterable_kind
 from returns.functions import identity
 from returns.future import FutureResult
-from returns.interfaces import applicative, bindable, mappable
+from returns.interfaces import applicative, bindable, iterable, mappable
 from returns.io import IOResult
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind2, dekind
@@ -57,6 +57,7 @@ class RequiresContext(
     mappable.Mappable2[_ReturnType, _EnvType],
     bindable.Bindable2[_ReturnType, _EnvType],
     applicative.Applicative2[_ReturnType, _EnvType],
+    iterable.Iterable2[_ReturnType, _EnvType],
 ):
     """
     The ``RequiresContext`` container.
@@ -242,7 +243,7 @@ class RequiresContext(
     @classmethod
     def from_iterable(
         cls,
-        inner_value: Iterable['RequiresContext[_EnvType, _ValueType]'],
+        inner_value: Iterable[Kind2['RequiresContext', _ValueType, _EnvType]],
     ) -> 'RequiresContext[Sequence[_ValueType], _EnvType]':
         """
         Transforms an iterable of ``RequiresContext`` containers.
@@ -259,7 +260,7 @@ class RequiresContext(
           ... ])(...) == (1, 2)
 
         """
-        return iterable(cls, inner_value)
+        return dekind(iterable_kind(cls, inner_value))
 
     @classmethod
     def from_requires_context_result(

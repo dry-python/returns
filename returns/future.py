@@ -16,7 +16,8 @@ from typing import (
 from typing_extensions import final
 
 from returns._generated.futures import _future, _future_result
-from returns._generated.iterable import iterable
+from returns._generated.iterable import iterable_kind
+from returns.interfaces import iterable
 from returns.interfaces.specific import io, ioresult
 from returns.io import IO, IOResult
 from returns.primitives.container import BaseContainer
@@ -61,6 +62,7 @@ class Future(
     BaseContainer,
     Kind1['Future', _ValueType],
     io.IOBased1[_ValueType],
+    iterable.Iterable1[_ValueType],
 ):
     """
     Container to easily compose ``async`` functions.
@@ -346,7 +348,7 @@ class Future(
     @classmethod
     def from_iterable(
         cls,
-        inner_value: Iterable['Future[_ValueType]'],
+        inner_value: Iterable[Kind1['Future', _ValueType]],
     ) -> 'Future[Sequence[_ValueType]]':
         """
         Transforms an iterable of ``Future`` containers into a single container.
@@ -363,7 +365,7 @@ class Future(
           ... ]).awaitable) == IO((1, 2))
 
         """
-        return iterable(cls, inner_value)
+        return dekind(iterable_kind(cls, inner_value))
 
     @classmethod
     def from_io(cls, inner_value: IO[_NewValueType]) -> 'Future[_NewValueType]':
@@ -491,6 +493,7 @@ class FutureResult(
     BaseContainer,
     Kind2['FutureResult', _ValueType, _ErrorType],
     ioresult.IOResultBased2[_ValueType, _ErrorType],
+    iterable.Iterable2[_ValueType, _ErrorType],
 ):
     """
     Container to easily compose ``async`` functions.
@@ -1248,7 +1251,7 @@ class FutureResult(
     @classmethod
     def from_iterable(
         cls,
-        inner_value: Iterable['FutureResult[_ValueType, _ErrorType]'],
+        inner_value: Iterable[Kind2['FutureResult', _ValueType, _ErrorType]],
     ) -> 'FutureResult[Sequence[_ValueType], _ErrorType]':
         """
         Transforms an iterable of ``FutureResult`` containers.
@@ -1280,7 +1283,7 @@ class FutureResult(
           >>> assert anyio.run(mixed.awaitable) == IOFailure('a')
 
         """
-        return iterable(cls, inner_value)
+        return dekind(iterable_kind(cls, inner_value))
 
 
 # Aliases:

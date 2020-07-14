@@ -1,0 +1,104 @@
+- case: iterable_inheritance_correct1
+  disable_cache: true
+  main: |
+    from typing import TypeVar, Iterable, Sequence
+    from returns.interfaces.iterable import Iterable1
+    from returns.primitives.hkt import Kind1, dekind
+    from returns._generated.iterable import iterable_kind
+
+    V = TypeVar('V')
+    N = TypeVar('N')
+
+    class MyClass(Kind1['MyClass', V], Iterable1[V]):
+        @classmethod
+        def from_iterable(
+            cls, inner_value: Iterable[Kind1['MyClass', N]],
+        ) -> MyClass[Sequence[N]]:
+            return dekind(iterable_kind(cls, inner_value))
+
+    x: Iterable[MyClass[str]]
+    reveal_type(MyClass.from_iterable(x))  # N: Revealed type is 'main.MyClass[typing.Sequence[builtins.str*]]'
+
+
+- case: iterable_inheritance_correct2
+  disable_cache: true
+  main: |
+    from typing import TypeVar, Iterable, Sequence
+    from returns.interfaces.iterable import Iterable2
+    from returns.primitives.hkt import Kind2, dekind
+    from returns._generated.iterable import iterable_kind
+
+    V = TypeVar('V')
+    E = TypeVar('E')
+    N = TypeVar('N')
+
+    class MyClass(Kind2['MyClass', V, E], Iterable2[V, E]):
+        @classmethod
+        def from_iterable(
+            cls, inner_value: Iterable[Kind2['MyClass', N, E]],
+        ) -> MyClass[Sequence[N], E]:
+            return dekind(iterable_kind(cls, inner_value))
+
+    x: Iterable[MyClass[str, int]]
+    reveal_type(MyClass.from_iterable(x))  # N: Revealed type is 'main.MyClass[typing.Sequence[builtins.str*], builtins.int*]'
+
+
+- case: iterable_inheritance_correct3
+  disable_cache: true
+  main: |
+    from typing import TypeVar, Iterable, Sequence
+    from returns.interfaces.iterable import Iterable3
+    from returns.primitives.hkt import Kind3, dekind
+    from returns._generated.iterable import iterable_kind
+
+    V = TypeVar('V')
+    E = TypeVar('E')
+    T = TypeVar('T')
+    N = TypeVar('N')
+
+    class MyClass(Kind3['MyClass', V, E, T], Iterable3[V, E, T]):
+        @classmethod
+        def from_iterable(
+            cls, inner_value: Iterable[Kind3['MyClass', N, E, T]],
+        ) -> MyClass[Sequence[N], E, T]:
+            return dekind(iterable_kind(cls, inner_value))
+
+    x: Iterable[MyClass[str, int, bool]]
+    reveal_type(MyClass.from_iterable(x))  # N: Revealed type is 'main.MyClass[typing.Sequence[builtins.str*], builtins.int*, builtins.bool*]'
+
+
+- case: iterable_inheritance_missing
+  disable_cache: true
+  main: |
+    from typing import TypeVar
+    from returns.interfaces.iterable import Iterable1
+    from returns.primitives.hkt import Kind1
+
+    V = TypeVar('V')
+
+    class MyClass(Kind1['MyClass', V], Iterable1[V]):
+        ...
+
+    MyClass()
+  out: |
+    main:10: error: Cannot instantiate abstract class 'MyClass' with abstract attribute 'from_iterable'
+
+
+- case: iterable_inheritance_wrong
+  disable_cache: true
+  main: |
+    from typing import TypeVar, Iterable, Sequence
+    from returns.interfaces.iterable import Iterable1
+    from returns.primitives.hkt import Kind1, dekind
+
+    V = TypeVar('V')
+    N = TypeVar('N')
+
+    class MyClass(Kind1['MyClass', V], Iterable1[V]):
+        @classmethod
+        def from_iterable(
+            cls, inner_value: Iterable[Kind1['MyClass', N]],
+        ) -> MyClass[N]:
+            ...
+  out: |
+    main:11: error: Signature of "from_iterable" incompatible with supertype "IterableN"

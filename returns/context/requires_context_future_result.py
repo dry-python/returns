@@ -14,9 +14,10 @@ from typing import (
 from typing_extensions import final
 
 from returns._generated.futures import _reader_future_result
-from returns._generated.iterable import iterable
+from returns._generated.iterable import iterable_kind
 from returns.context import NoDeps
 from returns.future import Future, FutureResult
+from returns.interfaces import iterable
 from returns.interfaces.specific import ioresult
 from returns.io import IO, IOResult
 from returns.primitives.container import BaseContainer
@@ -49,6 +50,7 @@ class RequiresContextFutureResult(
     BaseContainer,
     Kind3['RequiresContextFutureResult', _ValueType, _ErrorType, _EnvType],
     ioresult.IOResultBased3[_ValueType, _ErrorType, _EnvType],
+    iterable.Iterable3[_ValueType, _ErrorType, _EnvType],
 ):
     """
     The ``RequiresContextFutureResult`` combinator.
@@ -1209,7 +1211,12 @@ class RequiresContextFutureResult(
         cls,
         inner_value:
             Iterable[
-                'RequiresContextFutureResult[_ValueType, _ErrorType, _EnvType]',
+                Kind3[
+                    'RequiresContextFutureResult',
+                    _ValueType,
+                    _ErrorType,
+                    _EnvType,
+                ],
             ],
     ) -> 'ReaderFutureResult[Sequence[_ValueType], _ErrorType, _EnvType]':
         """
@@ -1240,7 +1247,7 @@ class RequiresContextFutureResult(
           ... ) == IOFailure('a')
 
         """
-        return iterable(cls, inner_value)
+        return dekind(iterable_kind(cls, inner_value))
 
 
 @final

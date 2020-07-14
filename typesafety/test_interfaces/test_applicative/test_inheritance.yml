@@ -54,7 +54,7 @@
     reveal_type(MyClass('1', True).apply(MyClass.from_value(int)))  # N: Revealed type is 'main.MyClass[builtins.int*, builtins.bool]'
 
 
-- case: applicative_inheritance_correct2
+- case: applicative_inheritance_correct3
   disable_cache: true
   main: |
     from typing import Any, Callable, TypeVar

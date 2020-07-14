@@ -17,12 +17,12 @@ from typing import (
 
 from typing_extensions import final
 
-from returns._generated.iterable import iterable
-from returns.interfaces import unwrappable
+from returns._generated.iterable import iterable_kind
+from returns.interfaces import iterable, unwrappable
 from returns.interfaces.specific import result
 from returns.primitives.container import BaseContainer
 from returns.primitives.exceptions import UnwrapFailedError
-from returns.primitives.hkt import Kind2
+from returns.primitives.hkt import Kind2, dekind
 
 # Definitions:
 _ValueType = TypeVar('_ValueType', covariant=True)
@@ -40,6 +40,7 @@ class Result(
     Kind2['Result', _ValueType, _ErrorType],
     result.ResultBased2[_ValueType, _ErrorType],
     unwrappable.Unwrappable[_ValueType, _ErrorType],
+    iterable.Iterable2[_ValueType, _ErrorType],
     metaclass=ABCMeta,
 ):
     """
@@ -335,7 +336,7 @@ class Result(
     @classmethod
     def from_iterable(
         cls,
-        inner_value: Iterable['Result[_ValueType, _ErrorType]'],
+        inner_value: Iterable[Kind2['Result', _ValueType, _ErrorType]],
     ) -> 'Result[Sequence[_ValueType], _ErrorType]':
         """
         Transforms an iterable of ``Result`` containers into a single container.
@@ -360,7 +361,7 @@ class Result(
           ... ]) == Failure('a')
 
         """
-        return iterable(cls, inner_value)
+        return dekind(iterable_kind(cls, inner_value))
 
 
 @final
