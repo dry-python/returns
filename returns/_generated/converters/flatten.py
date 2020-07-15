@@ -1,7 +1,23 @@
+from typing import TypeVar
+
 from returns.functions import identity
+from returns.interfaces.bindable import BindableN
+from returns.primitives.hkt import KindN, debound, kinded
+
+_FirstType = TypeVar('_FirstType')
+_SecondType = TypeVar('_SecondType')
+_ThirdType = TypeVar('_ThirdType')
+
+_BindableKind = TypeVar('_BindableKind', bound=BindableN)
 
 
-def _flatten(container):
+@kinded
+def _flatten(container: KindN[
+    _BindableKind,
+    KindN[_BindableKind, _FirstType, _SecondType, _ThirdType],
+    _SecondType,
+    _ThirdType,
+]) -> KindN[_BindableKind, _FirstType, _SecondType, _ThirdType]:
     """
     Joins two nested containers together.
 
@@ -41,4 +57,5 @@ def _flatten(container):
         https://bit.ly/2sIviUr
 
     """
-    return container.bind(identity)
+    new_instance, rebound = debound(container)
+    return rebound(new_instance.bind(identity))

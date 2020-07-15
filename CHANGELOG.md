@@ -41,6 +41,9 @@ See [0Ver](https://0ver.org/).
 - Adds `@abstractmethod` to abstract methods in abstract containers
   like `Result`, `Maybe`, and `IOResult`
 - Adds `__slots__` to `UnwrapFailedError` with `halted_container`
+- Changes `flatten` to work with `KindN` and any possible container
+- Changes `iterable` helper function to be `iterable_kind`,
+  now it works with any `KindN`
 
 ### Bugfixes
 

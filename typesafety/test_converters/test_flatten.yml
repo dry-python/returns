@@ -1,34 +1,55 @@
-- case: flatten_io
+- case: flatten_wrong_flatten_non_bindable
   disable_cache: true
   main: |
+    from typing import Callable, TypeVar
     from returns.converters import flatten
-    from returns.io import IO
+    from returns.interfaces.mappable import Mappable1
+    from returns.primitives.hkt import Kind1
+    from returns.result import Result
 
-    reveal_type(flatten(IO(IO(1))))  # N: Revealed type is 'returns.io.IO[builtins.int*]'
+    V = TypeVar('V')
+    N = TypeVar('N')
+
+    class Functor(Kind1['Functor', V], Mappable1[V]):
+        def map(self, function: Callable[[V], N]) -> Functor[N]:
+            ...
+
+    x: Functor[Functor[int]]
+    flatten(x)  # E: Value of type variable "_BindableKind" of "_flatten" cannot be "Functor[Any]"
 
 
-- case: flatten_maybe
-  disable_cache: true
-  main: |
-    from returns.converters import flatten
-    from returns.maybe import Some
-
-    reveal_type(flatten(Some(Some(1))))  # N: Revealed type is 'returns.maybe.Maybe[builtins.int*]'
-
-
-- case: flatten_result1
+- case: flatten_wrong_error_type
   disable_cache: true
   main: |
     from returns.converters import flatten
     from returns.result import Result
 
-    def returns_result() -> Result[Result[int, str], str]:
-        ...
+    x: Result[Result[int, str], float]
+    # TODO: I am pretty sure we can later fix this to be an error:
+    reveal_type(flatten(x))  # N: Revealed type is 'returns.result.Result*[builtins.int*, builtins.object*]'
 
-    reveal_type(flatten(returns_result()))  # N: Revealed type is 'returns.result.Result[builtins.int*, builtins.str*]'
+
+- case: flatten_custom_type
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar
+    from returns.converters import flatten
+    from returns.interfaces.bindable import Bindable1
+    from returns.primitives.hkt import Kind1
+    from returns.result import Result
+
+    V = TypeVar('V')
+    N = TypeVar('N')
+
+    class MyClass(Kind1['MyClass', V], Bindable1[V]):
+        def bind(self, function: Callable[[V], Kind1['MyClass', N]]) -> MyClass[N]:
+            ...
+
+    x: MyClass[MyClass[int]]
+    reveal_type(flatten(x))  # N: Revealed type is 'main.MyClass*[builtins.int*]'
 
 
-- case: flatten_result2
+- case: flatten_wrong_flatten_error_type
   disable_cache: true
   main: |
     from returns.converters import flatten
@@ -39,10 +60,40 @@
 
     flatten(returns_result())
   out: |
-    main:7: error: Argument 1 to "_flatten" has incompatible type "Result[int, Result[int, str]]"; expected "Result[Result[<nothing>, Result[int, str]], Result[int, str]]"
+    main:7: error: Argument 1 to "_flatten" has incompatible type "Result[int, Result[int, str]]"; expected "KindN[Result[Any, Any], KindN[Result[Any, Any], <nothing>, Result[int, str], NoReturn], Result[int, str], NoReturn]"
 
 
-- case: flatten_ioresult1
+- case: flatten_io
+  disable_cache: true
+  main: |
+    from returns.converters import flatten
+    from returns.io import IO
+
+    reveal_type(flatten(IO(IO(1))))  # N: Revealed type is 'returns.io.IO*[builtins.int*]'
+
+
+- case: flatten_maybe
+  disable_cache: true
+  main: |
+    from returns.converters import flatten
+    from returns.maybe import Some
+
+    reveal_type(flatten(Some(Some(1))))  # N: Revealed type is 'returns.maybe.Maybe*[builtins.int*]'
+
+
+- case: flatten_result
+  disable_cache: true
+  main: |
+    from returns.converters import flatten
+    from returns.result import Result
+
+    def returns_result() -> Result[Result[int, str], str]:
+        ...
+
+    reveal_type(flatten(returns_result()))  # N: Revealed type is 'returns.result.Result*[builtins.int*, builtins.str*]'
+
+
+- case: flatten_ioresult
   disable_cache: true
   main: |
     from returns.converters import flatten
@@ -51,21 +102,7 @@
     def returns_ioresult() -> IOResult[IOResult[int, str], str]:
         ...
 
-    reveal_type(flatten(returns_ioresult()))  # N: Revealed type is 'returns.io.IOResult[builtins.int*, builtins.str*]'
-
-
-- case: flatten_ioresult2
-  disable_cache: true
-  main: |
-    from returns.converters import flatten
-    from returns.io import IOResult
-
-    def returns_ioresult() -> IOResult[int, IOResult[int, str]]:
-        ...
-
-    flatten(returns_ioresult())
-  out: |
-    main:7: error: Argument 1 to "_flatten" has incompatible type "IOResult[int, IOResult[int, str]]"; expected "IOResult[IOResult[<nothing>, IOResult[int, str]], IOResult[int, str]]"
+    reveal_type(flatten(returns_ioresult()))  # N: Revealed type is 'returns.io.IOResult*[builtins.int*, builtins.str*]'
 
 
 - case: flatten_context
@@ -74,9 +111,9 @@
     from returns.converters import flatten
     from returns.context import RequiresContext
 
-    x: RequiresContext[str, RequiresContext[str, int]]
+    x: RequiresContext[RequiresContext[str, int], int]
 
-    reveal_type(flatten(x))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[builtins.str*, builtins.int*]'
+    reveal_type(flatten(x))  # N: Revealed type is 'returns.context.requires_context.RequiresContext*[builtins.str*, builtins.int*]'
 
 
 - case: flatten_context_result
@@ -85,9 +122,9 @@
     from returns.converters import flatten
     from returns.context import RequiresContextResult
 
-    x: RequiresContextResult[str, RequiresContextResult[str, int, float], float]
+    x: RequiresContextResult[RequiresContextResult[str, int, float], int, float]
 
-    reveal_type(flatten(x))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.str*, builtins.int*, builtins.float*]'
+    reveal_type(flatten(x))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult*[builtins.str*, builtins.int*, builtins.float*]'
 
 
 - case: flatten_context_ioresult
@@ -96,9 +133,9 @@
     from returns.converters import flatten
     from returns.context import RequiresContextIOResult
 
-    x: RequiresContextIOResult[str, RequiresContextIOResult[str, int, float], float]
+    x: RequiresContextIOResult[RequiresContextIOResult[str, int, float], int, float]
 
-    reveal_type(flatten(x))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.str*, builtins.int*, builtins.float*]'
+    reveal_type(flatten(x))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult*[builtins.str*, builtins.int*, builtins.float*]'
 
 
 - case: flatten_future
@@ -109,7 +146,7 @@
 
     x: Future[Future[int]]
 
-    reveal_type(flatten(x))  # N: Revealed type is 'returns.future.Future[builtins.int*]'
+    reveal_type(flatten(x))  # N: Revealed type is 'returns.future.Future*[builtins.int*]'
 
 
 - case: flatten_future_result1
@@ -120,17 +157,4 @@
 
     x: FutureResult[FutureResult[int, str], str]
 
-    reveal_type(flatten(x))  # N: Revealed type is 'returns.future.FutureResult[builtins.int*, builtins.str*]'
-
-
-- case: flatten_future_result2
-  disable_cache: true
-  main: |
-    from returns.converters import flatten
-    from returns.future import FutureResult
-
-    x: FutureResult[int, FutureResult[int, str]]
-
-    flatten(x)
-  out: |
-    main:6: error: Argument 1 to "_flatten" has incompatible type "FutureResult[int, FutureResult[int, str]]"; expected "FutureResult[FutureResult[<nothing>, FutureResult[int, str]], FutureResult[int, str]]"
+    reveal_type(flatten(x))  # N: Revealed type is 'returns.future.FutureResult*[builtins.int*, builtins.str*]'
