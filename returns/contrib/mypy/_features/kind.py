@@ -132,6 +132,8 @@ def _process_kinded_type(kind: MypyType) -> MypyType:
     real_type = kind.args[0]
     if isinstance(real_type, TypeVarType):
         return erase_to_bound(real_type)
+    elif isinstance(real_type, AnyType):
+        return real_type
 
     real_type = get_proper_type(real_type)
     if isinstance(real_type, Instance):
