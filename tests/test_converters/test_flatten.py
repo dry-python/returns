@@ -11,7 +11,6 @@ from returns.future import Future, FutureResult
 from returns.io import IO, IOFailure, IOSuccess
 from returns.maybe import Nothing, Some
 from returns.result import Failure, Success
-from returns.primitives.hkt import Kind3
 
 
 @pytest.mark.parametrize(('container', 'merged'), [
