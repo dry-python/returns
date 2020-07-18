@@ -185,8 +185,8 @@ class RequiresContextFutureResult(
           >>> success = RequiresContextFutureResult.from_value(1)
           >>> failure = RequiresContextFutureResult.from_failure(1)
 
-          >>> assert anyio.run(success.swap) == IOFailure(1)
-          >>> assert anyio.run(failure.swap) == IOSuccess(1)
+          >>> assert anyio.run(success.swap(), ...) == IOFailure(1)
+          >>> assert anyio.run(failure.swap(), ...) == IOSuccess(1)
 
         """
         return RequiresContextFutureResult(lambda deps: self(deps).swap())
