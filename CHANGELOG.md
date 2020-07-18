@@ -23,6 +23,9 @@ See [0Ver](https://0ver.org/).
   from `FutureResult` and `RequiresContext`-based types,
   because we do require these methods to raise an exception on failure,
   but these methods were lazy and did not raise the required exception
+- **Breaking**: changes how `is_successful` is typed:
+  now we allow any `Unwrappable` interface instances there,
+  including custom ones
 - **Breaking**: changes `UnwrapFailedError` constructor,
   now it does accept an `Unwrappable` instance instead of a `BaseContainer`
 - **Breaking**: removes `.fix` method from all containers,
@@ -31,10 +34,15 @@ See [0Ver](https://0ver.org/).
   it is not a recommeneded way to compose things,
   but due to HKT support,
   users can write their own `unify` poinfree function now
-- **Breaking**: Removes `coalesce` function, because it is impossible to properly type it
+- **Breaking**: Removes `coalesce` function,
+  because it is impossible to properly type it
 - **Breaking**: Removes `swap` converter, because it was impossible to type
 - Adds new public interfaces: see `returns.interfaces`
 - Adds `methods` package with all the composition methods we support
+- Adds `FutureSuccess` and `FutureFailure` unit functions
+  to be similar to `Result` and `IOResult`
+- Adds `.swap` method to `Result`, `IOResult`, `FutureResult`,
+  and other result based containers
 - Adds `collect_trace` helper function for better development experience
 - Adds missing `from_requires_context_future_result` to `RequiresContext`
 - Adds `@abstractmethod` to abstract methods in abstract containers

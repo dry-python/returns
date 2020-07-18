@@ -605,6 +605,28 @@ class FutureResult(
         """
         return IOResult.from_result(await self._inner_value)
 
+    def swap(self) -> 'FutureResult[_ErrorType, _ValueType]':
+        """
+        Swaps value and error types.
+
+        So, values become errors and errors become values.
+        It is useful when you have to work with errors a lot.
+        And since we have a lot of ``.bind_`` related methods
+        and only a single ``.rescue``.
+        It is easier to work with values than with errors.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.future import FutureSuccess, FutureFailure
+          >>> from returns.io import IOSuccess, IOFailure
+
+          >>> assert anyio.run(FutureSuccess(1).swap) == IOFailure(1)
+          >>> assert anyio.run(FutureFailure(1).swap) == IOSuccess(1)
+
+        """
+        return FutureResult(_future_result.async_swap(self._inner_value))
+
     def map(  # noqa: WPS125
         self,
         function: Callable[[_ValueType], _NewValueType],
@@ -1284,6 +1306,48 @@ class FutureResult(
 
         """
         return dekind(iterable_kind(cls, inner_value))
+
+
+def FutureSuccess(  # noqa: N802
+    inner_value: _NewValueType,
+) -> FutureResult[_NewValueType, Any]:
+    """
+    Public unit function to create successful ``FutureResult`` objects.
+
+    Is the same as :meth:`~FutureResult.from_value`.
+
+    .. code:: python
+
+      >>> import anyio
+      >>> from returns.future import FutureResult, FutureSuccess
+
+      >>> assert anyio.run(FutureSuccess(1).awaitable) == anyio.run(
+      ...     FutureResult.from_value(1).awaitable,
+      ... )
+
+    """
+    return FutureResult.from_value(inner_value)
+
+
+def FutureFailure(  # noqa: N802
+    inner_value: _NewErrorType,
+) -> FutureResult[Any, _NewErrorType]:
+    """
+    Public unit function to create failed ``FutureResult`` objects.
+
+    Is the same as :meth:`~FutureResult.from_failure`.
+
+    .. code:: python
+
+      >>> import anyio
+      >>> from returns.future import FutureResult, FutureFailure
+
+      >>> assert anyio.run(FutureFailure(1).awaitable) == anyio.run(
+      ...     FutureResult.from_failure(1).awaitable,
+      ... )
+
+    """
+    return FutureResult.from_failure(inner_value)
 
 
 # Aliases:

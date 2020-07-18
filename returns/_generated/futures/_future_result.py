@@ -14,6 +14,13 @@ _ErrorType = TypeVar('_ErrorType', covariant=True)
 _NewErrorType = TypeVar('_NewErrorType')
 
 
+async def async_swap(
+    inner_value: Awaitable[Result[_ValueType, _ErrorType]],
+) -> Result[_ErrorType, _ValueType]:
+    """Swaps value and error types in ``Result``."""
+    return (await inner_value).swap()
+
+
 async def async_map(
     function: Callable[[_ValueType], _NewValueType],
     inner_value: Awaitable[Result[_ValueType, _ErrorType]],

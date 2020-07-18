@@ -8,6 +8,16 @@
     reveal_type(x('a'))  # N: Revealed type is 'returns.io.IOResult[builtins.int*, builtins.float*]'
 
 
+- case: requires_context_ioresult_swap
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextIOResult
+
+    x: RequiresContextIOResult[int, float, str]
+
+    reveal_type(x.swap())  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.float*, builtins.int*, builtins.str*]'
+
+
 - case: requires_context_ioresult_bind
   disable_cache: true
   main: |

@@ -8,6 +8,16 @@
     reveal_type(x('a'))  # N: Revealed type is 'returns.result.Result[builtins.int*, builtins.Exception*]'
 
 
+- case: requires_context_result_swap
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextResult
+
+    x: RequiresContextResult[int, float, str]
+
+    reveal_type(x.swap())  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.float*, builtins.int*, builtins.str*]'
+
+
 - case: requires_context_result_bind
   disable_cache: true
   main: |

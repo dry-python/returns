@@ -345,6 +345,24 @@ class IOResult(
         """Returns a stack trace when :func:`~IOFailure` was called."""
         return self._inner_value.trace
 
+    def swap(self) -> 'IOResult[_ErrorType, _ValueType]':
+        """
+        Swaps value and error types.
+
+        So, values become errors and errors become values.
+        It is useful when you have to work with errors a lot.
+        And since we have a lot of ``.bind_`` related methods
+        and only a single ``.rescue`` - it is easier to work with values.
+
+        .. code:: python
+
+          >>> from returns.io import IOSuccess, IOFailure
+          >>> assert IOSuccess(1).swap() == IOFailure(1)
+          >>> assert IOFailure(1).swap() == IOSuccess(1)
+
+        """
+        return self.from_result(self._inner_value.swap())
+
     def map(  # noqa: WPS125
         self, function: Callable[[_ValueType], _NewValueType],
     ) -> 'IOResult[_NewValueType, _ErrorType]':

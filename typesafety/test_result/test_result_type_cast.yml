@@ -34,6 +34,15 @@
     reveal_type(first)  # N: Revealed type is 'returns.result.Result[builtins.int, builtins.Exception]'
 
 
+- case: result_swap
+  disable_cache: true
+  main: |
+    from returns.result import Result
+
+    x: Result[int, str]
+    reveal_type(x.swap())  # N: Revealed type is 'returns.result.Result[builtins.str*, builtins.int*]'
+
+
 - case: result_from_value
   disable_cache: true
   main: |

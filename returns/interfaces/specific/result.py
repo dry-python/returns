@@ -28,6 +28,12 @@ class ResultBasedN(
     """
 
     @abstractmethod
+    def swap(
+        self: _ResultBasedType,
+    ) -> KindN[_ResultBasedType, _SecondType, _FirstType, _ThirdType]:
+        """Swaps value and error types in ``Result``."""
+
+    @abstractmethod
     def bind_result(
         self: _ResultBasedType,
         function: Callable[[_FirstType], 'Result[_UpdatedType, _SecondType]'],

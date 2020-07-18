@@ -48,6 +48,15 @@
     reveal_type(FutureResult.from_failure(1))  # N: Revealed type is 'returns.future.FutureResult[Any, builtins.int*]'
 
 
+- case: future_result_unit_functions
+  disable_cache: true
+  main: |
+    from returns.future import FutureSuccess, FutureFailure
+
+    reveal_type(FutureSuccess(1))  # N: Revealed type is 'returns.future.FutureResult[builtins.int*, Any]'
+    reveal_type(FutureFailure(1))  # N: Revealed type is 'returns.future.FutureResult[Any, builtins.int*]'
+
+
 - case: future_result_from_iterable
   disable_cache: true
   main: |

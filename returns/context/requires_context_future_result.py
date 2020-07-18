@@ -165,6 +165,32 @@ class RequiresContextFutureResult(
         """
         return self._inner_value(deps)
 
+    def swap(
+        self,
+    ) -> 'RequiresContextFutureResult[_ErrorType, _ValueType, _EnvType]':
+        """
+        Swaps value and error types.
+
+        So, values become errors and errors become values.
+        It is useful when you have to work with errors a lot.
+        And since we have a lot of ``.bind_`` related methods
+        and only a single ``.rescue`` - it is easier to work with values.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.context import RequiresContextFutureResult
+          >>> from returns.io import IOSuccess, IOFailure
+
+          >>> success = RequiresContextFutureResult.from_value(1)
+          >>> failure = RequiresContextFutureResult.from_failure(1)
+
+          >>> assert anyio.run(success.swap) == IOFailure(1)
+          >>> assert anyio.run(failure.swap) == IOSuccess(1)
+
+        """
+        return RequiresContextFutureResult(lambda deps: self(deps).swap())
+
     def map(  # noqa: WPS125
         self,
         function: Callable[[_ValueType], _NewValueType],

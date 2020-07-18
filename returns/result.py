@@ -71,6 +71,24 @@ class Result(
         """Returns a list with stack trace when :func:`~Failure` was called."""
         return self._trace
 
+    @abstractmethod
+    def swap(self) -> 'Result[_ErrorType, _ValueType]':
+        """
+        Swaps value and error types.
+
+        So, values become errors and errors become values.
+        It is useful when you have to work with errors a lot.
+        And since we have a lot of ``.bind_`` related methods
+        and only a single ``.rescue`` - it is easier to work with values.
+
+        .. code:: python
+
+          >>> from returns.result import Success, Failure
+          >>> assert Success(1).swap() == Failure(1)
+          >>> assert Failure(1).swap() == Success(1)
+
+        """
+
     @abstractmethod  # noqa: WPS125
     def map(  # noqa: WPS125
         self,
@@ -391,6 +409,10 @@ class _Failure(Result[Any, _ErrorType]):
         super().__init__(inner_value)
         object.__setattr__(self, '_trace', self._get_trace())  # noqa: WPS609
 
+    def swap(self):
+        """Failures swap to :class:`_Success`."""
+        return _Success(self._inner_value)
+
     def map(self, function):  # noqa: WPS125
         """Does nothing for ``Failure``."""
         return self
@@ -458,6 +480,10 @@ class _Success(Result[_ValueType, Any]):
         Required for typing.
         """
         super().__init__(inner_value)
+
+    def swap(self):
+        """Successes swap to :class:`_Failure`."""
+        return _Failure(self._inner_value)
 
     def map(self, function):  # noqa: WPS125
         """Composes current container with a pure function."""

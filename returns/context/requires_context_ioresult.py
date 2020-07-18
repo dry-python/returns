@@ -166,6 +166,31 @@ class RequiresContextIOResult(
         """
         return self._inner_value(deps)
 
+    def swap(
+        self,
+    ) -> 'RequiresContextIOResult[_ErrorType, _ValueType, _EnvType]':
+        """
+        Swaps value and error types.
+
+        So, values become errors and errors become values.
+        It is useful when you have to work with errors a lot.
+        And since we have a lot of ``.bind_`` related methods
+        and only a single ``.rescue`` - it is easier to work with values.
+
+        .. code:: python
+
+          >>> from returns.context import RequiresContextIOResult
+          >>> from returns.io import IOSuccess, IOFailure
+
+          >>> success = RequiresContextIOResult.from_value(1)
+          >>> failure = RequiresContextIOResult.from_failure(1)
+
+          >>> assert success.swap()(...) == IOFailure(1)
+          >>> assert failure.swap()(...) == IOSuccess(1)
+
+        """
+        return RequiresContextIOResult(lambda deps: self(deps).swap())
+
     def map(  # noqa: WPS125
         self, function: Callable[[_ValueType], _NewValueType],
     ) -> 'RequiresContextIOResult[_NewValueType, _ErrorType, _EnvType]':
