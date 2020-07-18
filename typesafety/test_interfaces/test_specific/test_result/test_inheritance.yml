@@ -17,6 +17,9 @@
         Kind2['MyClass', _ValueType, _ErrorType],
         ResultBased2[_ValueType, _ErrorType],
     ):
+        def swap(self) -> MyClass[_ErrorType, _ValueType]:
+            ...
+
         def bind_result(
             self,
             function: Callable[
@@ -60,7 +63,7 @@
 
     MyClass()
   out: |
-    main:11: error: Cannot instantiate abstract class 'MyClass' with abstract attributes 'apply', 'bind', ... and 'rescue' (5 methods suppressed)
+    main:11: error: Cannot instantiate abstract class 'MyClass' with abstract attributes 'apply', 'bind', ... and 'swap' (6 methods suppressed)
 
 
 - case: result_inheritance_wrong
@@ -82,6 +85,9 @@
         Kind2['MyClass', _ValueType, _ErrorType],
         ResultBased2[_ValueType, _ErrorType],
     ):
+        def swap(self) -> MyClass[_ValueType, _ErrorType]:
+            ...
+
         def bind_result(
             self,
             function: Callable[
@@ -102,9 +108,10 @@
         ) -> MyClass[_NewErrorType, _NewErrorType]:
             ...
   out: |
-    main:17: error: Argument 1 of "bind_result" is incompatible with supertype "ResultBasedN"; supertype defines the argument type as "Callable[[_ValueType], Result[_UpdatedType, _ErrorType]]"
-    main:17: error: Return type "MyClass[_ValueType, _ErrorType]" of "bind_result" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType], _UpdatedType, _ErrorType, NoReturn]" in supertype "ResultBasedN"
-    main:17: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
-    main:17: note: This violates the Liskov substitution principle
-    main:26: error: Signature of "from_result" incompatible with supertype "ResultBasedN"
-    main:32: error: Signature of "from_failure" incompatible with supertype "ResultBasedN"
+    main:17: error: Return type "MyClass[_ValueType, _ErrorType]" of "swap" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType], _ErrorType, _ValueType, NoReturn]" in supertype "ResultBasedN"
+    main:20: error: Argument 1 of "bind_result" is incompatible with supertype "ResultBasedN"; supertype defines the argument type as "Callable[[_ValueType], Result[_UpdatedType, _ErrorType]]"
+    main:20: error: Return type "MyClass[_ValueType, _ErrorType]" of "bind_result" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType], _UpdatedType, _ErrorType, NoReturn]" in supertype "ResultBasedN"
+    main:20: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:20: note: This violates the Liskov substitution principle
+    main:29: error: Signature of "from_result" incompatible with supertype "ResultBasedN"
+    main:35: error: Signature of "from_failure" incompatible with supertype "ResultBasedN"
