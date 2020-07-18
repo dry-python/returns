@@ -3,10 +3,10 @@ from typing import Callable, TypeVar
 from returns.interfaces.mappable import MappableN
 from returns.primitives.hkt import KindN, debound, kinded
 
-_FirstType = TypeVar('_FirstType', contravariant=True)
+_FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')
-_ThirdType = TypeVar('_ThirdType', contravariant=True)
-_UpdatedType = TypeVar('_UpdatedType', covariant=True)
+_ThirdType = TypeVar('_ThirdType')
+_UpdatedType = TypeVar('_UpdatedType')
 
 _MappableKind = TypeVar('_MappableKind', bound=MappableN)
 

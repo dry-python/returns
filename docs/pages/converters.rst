@@ -55,76 +55,11 @@ to merge nested containers together:
   >>> assert flatten(Success(Success(1))) == Success(1)
 
 
-swap
-----
-
-You can use :func:`swap <returns.converters.swap>`
-to swap value and error types in ``Result`` and ``IOResult`` containers.
-
-In other words: ``swap(Result[a, b]) == Result[b, a]``.
-
-This is useful for error handling and composition.
-Here's an example of how ``swap`` works:
-
-.. code:: python
-
-  >>> from returns.converters import swap
-  >>> from returns.io import IOSuccess, IOFailure
-  >>> from returns.result import Success, Failure
-
-  >>> assert swap(IOSuccess(1)) == IOFailure(1)
-  >>> assert swap(Failure(2)) == Success(2)
-
-You can use ``swap`` twice to get the same object back!
-
-.. code:: python
-
-  >>> from returns.converters import swap
-  >>> from returns.io import IOSuccess
-
-  >>> assert swap(swap(IOSuccess(1))) == IOSuccess(1)
-
-
-coalesce
---------
-
-You can use
-:func:`coalesce_result <returns.converters.coalesce_result>`,
-:func:`coalesce_ioresult <returns.converters.coalesce_ioresult>`,
-and :func:`coalesce_maybe <returns.converters.coalesce_maybe>`
-converters to convert containers to a regular value.
-
-These functions accept two functions:
-one for successful case, one for failing case.
-
-.. code:: python
-
-  >>> from returns.converters import coalesce_result
-  >>> from returns.result import Success, Failure
-
-  >>> def handle_success(state: int) -> float:
-  ...     return state / 2
-
-  >>> def handle_failure(state: str) -> float:
-  ...     return 0.0
-
-  >>> assert coalesce_result(handle_success, handle_failure)(Success(1)) == 0.5
-  >>> assert coalesce_result(handle_success, handle_failure)(Failure(1)) == 0.0
-
-
-
 API Reference
 -------------
-
-.. autofunction:: returns.converters.swap
 
 .. autofunction:: returns.converters.flatten
 
 .. automodule:: returns.converters
    :members:
 
-.. autofunction:: returns.converters.coalesce_maybe
-
-.. autofunction:: returns.converters.coalesce_result
-
-.. autofunction:: returns.converters.coalesce_ioresult

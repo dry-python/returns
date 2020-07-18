@@ -1,7 +1,5 @@
 from typing import TypeVar
 
-from returns._generated.converters import coalesce
-from returns._generated.converters.swap import _swap as swap  # noqa: F401
 from returns.maybe import Maybe
 from returns.pipeline import is_successful
 from returns.result import Failure, Result, Success
@@ -13,11 +11,6 @@ from returns._generated.converters.flatten import (  # isort:skip # noqa: F401
 # Contianer internals:
 _ValueType = TypeVar('_ValueType')
 _ErrorType = TypeVar('_ErrorType')
-
-# Re-export from generated:
-coalesce_maybe = coalesce._coalesce_maybe  # noqa: WPS437
-coalesce_result = coalesce._coalesce_result  # noqa: WPS437
-coalesce_ioresult = coalesce._coalesce_ioresult  # noqa: WPS437
 
 
 def result_to_maybe(

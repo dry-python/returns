@@ -20,7 +20,7 @@ def _reducer(acc, current):
 
 
 def iterable_kind(
-    cls,  # TODO: type as `Union[_ApplicativeKind, _IterableKind]` after #474
+    cls,
     sequence: Iterable[
         KindN[_IterableKind, _FirstType, _SecondType, _ThirdType],
     ],

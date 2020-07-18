@@ -16,21 +16,8 @@ def identity(instance: _FirstType) -> _FirstType:
       >>> assert identity(1) == 1
       >>> assert identity([1, 2, 3]) == [1, 2, 3]
 
-    Why do we even need this?
-    Identity functions help us with the composition.
-
-    Imagine, that you want to use :func:`returns.converters.coalesce_result`
-    like so:
-
-    .. code:: python
-
-      from returns.result import Result
-      from returns.converters import coalesce_result
-
-      numbers: Result[int, float]
-      # Now you want to coalesce `number` into `int` type:
-      number: int = coalesce_result(identity, int)(numbers)
-      # Done!
+    This function is really helpful for some composition.
+    It is also useful for "do nothing" use-case.
 
     See also:
         - https://en.wikipedia.org/wiki/Identity_function

@@ -37,10 +37,10 @@ or we can fix the situation.
        F6 --> F8
 
        S1 -- Fail --> F2
-       F2 -- Fix --> S3
+       F2 -- Rescue --> S3
        S3 -- Fail --> F4
        S5 -- Fail --> F6
-       F6 -- Fix --> S7
+       F6 -- Rescue --> S7
 
        style S1 fill:green
        style S3 fill:green
@@ -112,13 +112,10 @@ inner state of containers into a regular types:
   >>> from returns.result import Failure, Success
   >>> from returns.maybe import Some, Nothing
 
-  >>> Success(1).value_or(None)
-  1
-  >>> Some(0).unwrap()
-  0
+  >>> assert Success(1).value_or(None) == 1
+  >>> assert Some(0).unwrap() == 0
 
-  >>> Failure(1).value_or(100)
-  100
+  >>> assert Failure(1).value_or(100) == 100
 
 .. code:: pycon
 

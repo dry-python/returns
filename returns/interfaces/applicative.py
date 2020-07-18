@@ -7,6 +7,7 @@ _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')
 _ThirdType = TypeVar('_ThirdType')
 _UpdatedType = TypeVar('_UpdatedType')
+
 _ApplicativeType = TypeVar('_ApplicativeType', bound='ApplicativeN')
 
 
