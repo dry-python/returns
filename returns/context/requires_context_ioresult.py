@@ -559,7 +559,7 @@ class RequiresContextIOResult(
             ],
         ],
     ) -> 'RequiresContextIOResult[_NewValueType, _ErrorType, _EnvType]':
-        """"
+        """
         Composes inner ``Result`` with ``ReaderIOResult`` returning function.
 
         Can be useful when you need an access to both states of the result.
@@ -584,7 +584,9 @@ class RequiresContextIOResult(
 
         """
         return RequiresContextIOResult(
-            lambda deps: dekind(function(self(deps)._inner_value))(deps),
+            lambda deps: dekind(
+                function(self(deps)._inner_value),  # noqa: WPS437
+            )(deps),
         )
 
     @classmethod

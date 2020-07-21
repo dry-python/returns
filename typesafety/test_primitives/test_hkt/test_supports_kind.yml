@@ -1,0 +1,19 @@
+- case: supports_kind_getattr_existing
+  disable_cache: true
+  main: |
+    from returns.primitives.hkt import SupportsKind1
+    from typing import List
+
+    container: SupportsKind1[List, int]
+    container.pop  # E: "SupportsKindN[List[Any], int, NoReturn, NoReturn]" has no attribute "pop"
+
+
+- case: supports_kind_getattr_missing
+  disable_cache: true
+  main: |
+    from returns.primitives.hkt import SupportsKindN
+
+    container: SupportsKindN[object, int, str, bool]
+    container.missing
+  out: |
+    main:4: error: "SupportsKindN[object, int, str, bool]" has no attribute "missing"

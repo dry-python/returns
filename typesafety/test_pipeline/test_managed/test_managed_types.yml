@@ -1,0 +1,133 @@
+- case: managed_with_ioresult
+  disable_cache: true
+  main: |
+    from returns.io import IOResult
+    from returns.pipeline import managed
+    from returns.result import Result
+
+    def use(acquired_value: int) -> IOResult[float, str]:
+        ...
+
+    def release(
+        acquired_value: int,
+        use_value: Result[float, str],
+    ) -> IOResult[None, str]:
+        ...
+
+    x: IOResult[int, str]
+    reveal_type(managed(use, release)(x))  # N: Revealed type is 'returns.io.IOResult*[builtins.float*, builtins.str*]'
+
+
+- case: managed_with_future_result
+  disable_cache: true
+  main: |
+    from returns.future import FutureResult
+    from returns.pipeline import managed
+    from returns.result import Result
+
+    def use(acquired_value: int) -> FutureResult[float, str]:
+        ...
+
+    def release(
+        acquired_value: int,
+        use_value: Result[float, str],
+    ) -> FutureResult[None, str]:
+        ...
+
+    x: FutureResult[int, str]
+    reveal_type(managed(use, release)(x))  # N: Revealed type is 'returns.future.FutureResult*[builtins.float*, builtins.str*]'
+
+
+- case: managed_with_reader_ioresult
+  disable_cache: true
+  main: |
+    from returns.context import ReaderIOResult
+    from returns.pipeline import managed
+    from returns.result import Result
+
+    def use(acquired_value: int) -> ReaderIOResult[float, str, bool]:
+        ...
+
+    def release(
+        acquired_value: int,
+        use_value: Result[float, str],
+    ) -> ReaderIOResult[None, str, bool]:
+        ...
+
+    x: ReaderIOResult[int, str, bool]
+    reveal_type(managed(use, release)(x))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult*[builtins.float*, builtins.str*, builtins.bool*]'
+
+
+- case: managed_with_reader_future_result
+  disable_cache: true
+  main: |
+    from returns.context import ReaderFutureResult
+    from returns.pipeline import managed
+    from returns.result import Result
+
+    def use(acquired_value: int) -> ReaderFutureResult[float, str, bool]:
+        ...
+
+    def release(
+        acquired_value: int,
+        use_value: Result[float, str],
+    ) -> ReaderFutureResult[None, str, bool]:
+        ...
+
+    x: ReaderFutureResult[int, str, bool]
+    reveal_type(managed(use, release)(x))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult*[builtins.float*, builtins.str*, builtins.bool*]'
+
+
+- case: managed_custom_type
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar, Any
+    from returns.interfaces.specific.ioresult import IOResultBased2
+    from returns.primitives.hkt import SupportsKind2
+    from returns.io import IO, IOResult
+    from returns.pipeline import managed
+    from returns.result import Result
+
+    _ValueType = TypeVar('_ValueType')
+    _NewValueType = TypeVar('_NewValueType')
+
+    # Result related:
+    _ErrorType = TypeVar('_ErrorType')
+    _NewErrorType = TypeVar('_NewErrorType')
+
+    class MyClass(
+        SupportsKind2['MyClass', _ValueType, _ErrorType],
+        IOResultBased2[_ValueType, _ErrorType],
+    ):
+        def bind_ioresult(
+            self,
+            function: Callable[
+                [_ValueType],
+                IOResult[_NewValueType, _ErrorType],
+            ],
+        ) -> MyClass[_NewValueType, _ErrorType]:
+            ...
+
+        @classmethod
+        def from_ioresult(
+            self, inner_value: IOResult[_NewValueType, _NewErrorType],
+        ) -> MyClass[_NewValueType, _NewErrorType]:
+            ...
+
+        @classmethod
+        def from_failed_io(
+            cls, inner_value: IO[_NewErrorType],
+        ) -> MyClass[Any, _NewErrorType]:
+            ...
+
+    def use(acquired_value: int) -> MyClass[float, str]:
+        ...
+
+    def release(
+        acquired_value: int,
+        use_value: Result[float, str],
+    ) -> MyClass[None, str]:
+        ...
+
+    x: MyClass[int, str]
+    reveal_type(managed(use, release)(x))  # N: Revealed type is 'main.MyClass*[builtins.float*, builtins.str*]'

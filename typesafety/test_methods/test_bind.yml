@@ -182,7 +182,7 @@
   disable_cache: true
   main: |
     from returns.methods import bind
-    from returns.primitives.hkt import Kind1, dekind
+    from returns.primitives.hkt import SupportsKind1, Kind1, dekind
     from returns.interfaces.bindable import Bindable1
     from typing import Callable, TypeVar
 
@@ -190,7 +190,7 @@
     N = TypeVar('N')
 
     class MyOwn(
-        Kind1['MyOwn', T],
+        SupportsKind1['MyOwn', T],
         Bindable1[T],
     ):
         def __init__(self, value: T) -> None:

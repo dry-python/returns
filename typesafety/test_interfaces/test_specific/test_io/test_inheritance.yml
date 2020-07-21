@@ -3,14 +3,14 @@
   main: |
     from typing import Callable, TypeVar
     from returns.interfaces.specific.io import IOBased1
-    from returns.primitives.hkt import Kind1
+    from returns.primitives.hkt import SupportsKind1
     from returns.io import IO
 
     _ValueType = TypeVar('_ValueType')
     _NewValueType = TypeVar('_NewValueType')
 
     class MyClass(
-        Kind1['MyClass', _ValueType],
+        SupportsKind1['MyClass', _ValueType],
         IOBased1[_ValueType],
     ):
         def bind_io(
@@ -37,14 +37,14 @@
   main: |
     from typing import Callable, TypeVar
     from returns.interfaces.specific.io import IOBased1
-    from returns.primitives.hkt import Kind1
+    from returns.primitives.hkt import SupportsKind1
     from returns.io import IO
 
     _ValueType = TypeVar('_ValueType')
     _NewValueType = TypeVar('_NewValueType')
 
     class MyClass(
-        Kind1['MyClass', _ValueType],
+        SupportsKind1['MyClass', _ValueType],
         IOBased1[_ValueType],
     ):
         ...
@@ -59,14 +59,14 @@
   main: |
     from typing import Callable, TypeVar
     from returns.interfaces.specific.io import IOBased1
-    from returns.primitives.hkt import Kind1
+    from returns.primitives.hkt import SupportsKind1
     from returns.io import IO
 
     _ValueType = TypeVar('_ValueType')
     _NewValueType = TypeVar('_NewValueType')
 
     class MyClass(
-        Kind1['MyClass', _ValueType],
+        SupportsKind1['MyClass', _ValueType],
         IOBased1[_ValueType],
     ):
         def bind_io(

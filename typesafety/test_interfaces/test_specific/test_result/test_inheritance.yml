@@ -3,7 +3,7 @@
   main: |
     from typing import Callable, TypeVar, Any
     from returns.interfaces.specific.result import ResultBased2
-    from returns.primitives.hkt import Kind2
+    from returns.primitives.hkt import Kind2, SupportsKind2
     from returns.result import Result
 
     _ValueType = TypeVar('_ValueType')
@@ -14,7 +14,7 @@
     _NewErrorType = TypeVar('_NewErrorType')
 
     class MyClass(
-        Kind2['MyClass', _ValueType, _ErrorType],
+        SupportsKind2['MyClass', _ValueType, _ErrorType],
         ResultBased2[_ValueType, _ErrorType],
     ):
         def swap(self) -> MyClass[_ErrorType, _ValueType]:
@@ -53,12 +53,12 @@
   main: |
     from typing import Callable, TypeVar
     from returns.interfaces.specific.result import ResultBased2
-    from returns.primitives.hkt import Kind2
+    from returns.primitives.hkt import SupportsKind2
 
     V = TypeVar('V')
     N = TypeVar('N')
 
-    class MyClass(Kind2['MyClass', V, N], ResultBased2[V, N]):
+    class MyClass(SupportsKind2['MyClass', V, N], ResultBased2[V, N]):
         ...
 
     MyClass()
@@ -71,7 +71,7 @@
   main: |
     from typing import Callable, TypeVar
     from returns.interfaces.specific.result import ResultBased2
-    from returns.primitives.hkt import Kind2
+    from returns.primitives.hkt import SupportsKind2
     from returns.result import Result
 
     _ValueType = TypeVar('_ValueType', covariant=True)
@@ -82,7 +82,7 @@
     _NewErrorType = TypeVar('_NewErrorType')
 
     class MyClass(
-        Kind2['MyClass', _ValueType, _ErrorType],
+        SupportsKind2['MyClass', _ValueType, _ErrorType],
         ResultBased2[_ValueType, _ErrorType],
     ):
         def swap(self) -> MyClass[_ValueType, _ErrorType]:

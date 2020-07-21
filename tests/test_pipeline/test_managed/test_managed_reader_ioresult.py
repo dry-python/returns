@@ -108,7 +108,7 @@ class _ReleaseFailure(object):
 def test_all_success(acquire, use, release, final_result, log):
     """Ensures that managed works as intended."""
     pipeline_logs: List[Tuple[str, Result[str, str]]] = []
-    pipeline_result = managed(  # type: ignore
+    pipeline_result = managed(
         use,
         release(pipeline_logs),
     )(acquire)

@@ -41,12 +41,12 @@
   disable_cache: true
   main: |
     from typing import Callable, TypeVar
-    from returns.primitives.hkt import Kind1, dekind
+    from returns.primitives.hkt import SupportsKind1, Kind1, dekind
 
     _ValueType = TypeVar('_ValueType')
     _NewValueType = TypeVar('_NewValueType')
 
-    class IO(Kind1['IO', _ValueType]):
+    class IO(SupportsKind1['IO', _ValueType]):
         def apply(
             self,
             container: Kind1[

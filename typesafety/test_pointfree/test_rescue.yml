@@ -100,3 +100,33 @@
 
     x: FutureResult[int, float]
     reveal_type(rescue(test)(x))  # N: Revealed type is 'returns.future.FutureResult*[builtins.int*, builtins.str*]'
+
+
+- case: rescue_custom_type
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar
+    from returns.pointfree import rescue
+    from returns.interfaces.rescuable import Rescuable2
+    from returns.primitives.hkt import SupportsKind2, Kind2, dekind
+
+    V = TypeVar('V')
+    E = TypeVar('E')
+    N = TypeVar('N')
+
+    class MyClass(SupportsKind2['MyClass', V, E], Rescuable2[V, E]):
+        def __init__(self, value: V, error: E) -> None:
+            self.value = value
+            self.error = error
+
+        def rescue(
+            self,
+            function: Callable[[E], Kind2['MyClass', V, N]],
+        ) -> 'MyClass[V, N]':
+            return dekind(function(self.error))
+
+    def test(arg: str) -> MyClass[int, int]:
+        ...
+
+    x: MyClass[int, str]
+    reveal_type(rescue(test)(x))  # N: Revealed type is 'main.MyClass*[builtins.int*, builtins.int*]'

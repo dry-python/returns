@@ -202,31 +202,31 @@
     reveal_type(map_(test)(x))  # N: Revealed type is 'returns.future.FutureResult*[builtins.int, builtins.str*]'
 
 
-- case: bind_custom_type
+- case: map_custom_type
   disable_cache: true
   main: |
-    from returns.pointfree import bind
-    from returns.primitives.hkt import Kind1, dekind
-    from returns.interfaces.bindable import Bindable1
+    from returns.pointfree import map_
+    from returns.primitives.hkt import SupportsKind1, dekind
+    from returns.interfaces.mappable import Mappable1
     from typing import Callable, TypeVar
 
     T = TypeVar('T')
     N = TypeVar('N')
 
     class MyOwn(
-        Kind1['MyOwn', T],
-        Bindable1[T],
+        SupportsKind1['MyOwn', T],
+        Mappable1[T],
     ):
         def __init__(self, value: T) -> None:
             self.value = value
 
-        def bind(
-            self, function: Callable[[T], Kind1['MyOwn', N]],
+        def map(
+            self, function: Callable[[T], N],
         ) -> 'MyOwn[N]':
-            return dekind(function(self.value))
+            return MyOwn(function(self.value))
 
-    def test(arg: float) -> MyOwn[int]:
+    def test(arg: float) -> int:
         ...
 
     x: MyOwn[float]
-    reveal_type(bind(test)(x))  # N: Revealed type is 'main.MyOwn*[builtins.int*]'
+    reveal_type(map_(test)(x))  # N: Revealed type is 'main.MyOwn*[builtins.int]'

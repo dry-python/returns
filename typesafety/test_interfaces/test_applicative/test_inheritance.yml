@@ -3,12 +3,12 @@
   main: |
     from typing import Callable, TypeVar
     from returns.interfaces.applicative import Applicative1
-    from returns.primitives.hkt import Kind1, dekind
+    from returns.primitives.hkt import Kind1, SupportsKind1, dekind
 
     V = TypeVar('V')
     N = TypeVar('N')
 
-    class MyClass(Kind1['MyClass', V], Applicative1[V]):
+    class MyClass(SupportsKind1['MyClass', V], Applicative1[V]):
         def __init__(self, value: V) -> None:
             self.value = value
 
@@ -30,13 +30,13 @@
   main: |
     from typing import Any, Callable, TypeVar
     from returns.interfaces.applicative import Applicative2
-    from returns.primitives.hkt import Kind2, dekind
+    from returns.primitives.hkt import Kind2, SupportsKind2, dekind
 
     V = TypeVar('V')
     E = TypeVar('E')
     N = TypeVar('N')
 
-    class MyClass(Kind2['MyClass', V, E], Applicative2[V, E]):
+    class MyClass(SupportsKind2['MyClass', V, E], Applicative2[V, E]):
         def __init__(self, value: V, error: E) -> None:
             self.value = value
             self.error = error
@@ -59,14 +59,14 @@
   main: |
     from typing import Any, Callable, TypeVar
     from returns.interfaces.applicative import Applicative3
-    from returns.primitives.hkt import Kind3, dekind
+    from returns.primitives.hkt import Kind3, SupportsKind3, dekind
 
     V = TypeVar('V')
     E = TypeVar('E')
     T = TypeVar('T')
     N = TypeVar('N')
 
-    class MyClass(Kind3['MyClass', V, E, T], Applicative3[V, E, T]):
+    class MyClass(SupportsKind3['MyClass', V, E, T], Applicative3[V, E, T]):
         def __init__(self, value: V, error: E, last: T) -> None:
             self.value = value
             self.error = error
@@ -90,12 +90,12 @@
   main: |
     from typing import Callable, TypeVar
     from returns.interfaces.applicative import Applicative1
-    from returns.primitives.hkt import Kind1
+    from returns.primitives.hkt import Kind1, SupportsKind1
 
     V = TypeVar('V')
     N = TypeVar('N')
 
-    class MyClass(Kind1['MyClass', V], Applicative1[V]):
+    class MyClass(SupportsKind1['MyClass', V], Applicative1[V]):
         def __init__(self, value: V) -> None:
             self.value = value
 
@@ -110,12 +110,12 @@
   main: |
     from typing import Callable, TypeVar
     from returns.interfaces.applicative import Applicative1
-    from returns.primitives.hkt import Kind1, dekind
+    from returns.primitives.hkt import Kind1, SupportsKind1, dekind
 
     V = TypeVar('V')
     N = TypeVar('N')
 
-    class MyClass(Kind1['MyClass', V], Applicative1[V]):
+    class MyClass(SupportsKind1['MyClass', V], Applicative1[V]):
         def __init__(self, value: V) -> None:
             self.value = value
 

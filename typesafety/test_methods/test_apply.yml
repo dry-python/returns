@@ -152,3 +152,34 @@
     x: FutureResult[float, str]
 
     reveal_type(apply(x, test))  # N: Revealed type is 'returns.future.FutureResult[builtins.int*, builtins.str]'
+
+
+- case: apply_custom_type
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar
+    from returns.methods import apply
+    from returns.interfaces.applicative import Applicative1
+    from returns.primitives.hkt import Kind1, SupportsKind1, dekind
+
+    V = TypeVar('V')
+    N = TypeVar('N')
+
+    class MyClass(SupportsKind1['MyClass', V], Applicative1[V]):
+        def __init__(self, value: V) -> None:
+            self.value = value
+
+        def apply(
+            self,
+            container: Kind1['MyClass', Callable[[V], N]],
+        ) -> 'MyClass[N]':
+            return MyClass(dekind(container).value(self.value))
+
+        @classmethod
+        def from_value(cls, inner_value: N) -> MyClass[N]:
+            return MyClass(inner_value)
+
+    test: MyClass[Callable[[float], int]]
+    x: MyClass[float]
+
+    reveal_type(apply(x, test))  # N: Revealed type is 'main.MyClass[builtins.int*]'

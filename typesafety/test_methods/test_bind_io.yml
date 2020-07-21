@@ -133,7 +133,7 @@
   main: |
     from typing import Callable, TypeVar
     from returns.interfaces.specific.io import IOBased1
-    from returns.primitives.hkt import Kind1
+    from returns.primitives.hkt import SupportsKind1
     from returns.io import IO
     from returns.methods import bind_io
 
@@ -141,7 +141,7 @@
     _NewValueType = TypeVar('_NewValueType')
 
     class MyClass(
-        Kind1['MyClass', _ValueType],
+        SupportsKind1['MyClass', _ValueType],
         IOBased1[_ValueType],
     ):
         def bind_io(

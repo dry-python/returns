@@ -625,7 +625,7 @@ class IOResult(
             Kind2['IOResult', _NewValueType, _ErrorType],
         ],
     ) -> 'IOResult[_NewValueType, _ErrorType]':
-        """"
+        """
         Composes inner ``Result`` with ``IOResult`` returning function.
 
         Can be useful when you need an access to both states of the result.

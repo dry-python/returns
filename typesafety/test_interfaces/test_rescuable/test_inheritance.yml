@@ -3,13 +3,13 @@
   main: |
     from typing import Callable, TypeVar
     from returns.interfaces.rescuable import Rescuable2
-    from returns.primitives.hkt import Kind2, dekind
+    from returns.primitives.hkt import SupportsKind2, Kind2, dekind
 
     V = TypeVar('V')
     E = TypeVar('E')
     N = TypeVar('N')
 
-    class MyClass(Kind2['MyClass', V, E], Rescuable2[V, E]):
+    class MyClass(SupportsKind2['MyClass', V, E], Rescuable2[V, E]):
         def __init__(self, value: V, error: E) -> None:
             self.value = value
             self.error = error
@@ -31,14 +31,14 @@
   main: |
     from typing import Callable, TypeVar
     from returns.interfaces.rescuable import Rescuable3
-    from returns.primitives.hkt import Kind3, dekind
+    from returns.primitives.hkt import SupportsKind3, Kind3, dekind
 
     V = TypeVar('V')
     T = TypeVar('T')
     K = TypeVar('K')
     N = TypeVar('N')
 
-    class MyClass(Kind3['MyClass', V, T, K], Rescuable3[V, T, K]):
+    class MyClass(SupportsKind3['MyClass', V, T, K], Rescuable3[V, T, K]):
         def __init__(self, value: V, other: T, last: K) -> None:
             self.value = value
             self.other = other
@@ -61,12 +61,12 @@
   main: |
     from typing import Callable, TypeVar
     from returns.interfaces.rescuable import Rescuable2
-    from returns.primitives.hkt import Kind2, dekind
+    from returns.primitives.hkt import SupportsKind2, Kind2, dekind
 
     V = TypeVar('V')
     N = TypeVar('N')
 
-    class MyClass(Kind2['MyClass', V], Rescuable2[V]):
+    class MyClass(SupportsKind2['MyClass', V], Rescuable2[V]):
         def __init__(self, value: V) -> None:
             self.value = value
 
@@ -83,13 +83,13 @@
   main: |
     from typing import Callable, TypeVar
     from returns.interfaces.rescuable import Rescuable2
-    from returns.primitives.hkt import Kind2, dekind
+    from returns.primitives.hkt import SupportsKind2, Kind2, dekind
 
     V = TypeVar('V')
     N = TypeVar('N')
     E = TypeVar('E')
 
-    class MyClass(Kind2['MyClass', V, E], Rescuable2[V, E]):
+    class MyClass(SupportsKind2['MyClass', V, E], Rescuable2[V, E]):
         def __init__(self, value: V, error: E) -> None:
             self.value = value
             self.error = error
