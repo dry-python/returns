@@ -1,7 +1,7 @@
 from typing import Callable, TypeVar
 
 from returns.interfaces.applicative import ApplicativeN
-from returns.primitives.hkt import KindN, debound, kinded
+from returns.primitives.hkt import KindN, kinded
 
 _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')
@@ -51,8 +51,7 @@ def internal_apply(
     for more info.
 
     """
-    new_instance, rebound = debound(container)
-    return rebound(new_instance.apply(other))
+    return container.apply(other)
 
 
 #: Kinded version of :func:`~internal_apply`, use it to infer real return type.

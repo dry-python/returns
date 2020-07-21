@@ -1,4 +1,4 @@
-from typing import Callable, Generic, NoReturn, Tuple, TypeVar
+from typing import TYPE_CHECKING, Callable, Generic, NoReturn, Tuple, TypeVar
 
 from typing_extensions import Protocol
 
@@ -23,15 +23,8 @@ _UpdatedType = TypeVar('_UpdatedType')
 _FirstKind = TypeVar('_FirstKind')
 _SecondKind = TypeVar('_SecondKind')
 
-# Used fore debound:
-_T1 = TypeVar('_T1')
-_T2 = TypeVar('_T2')
-_T3 = TypeVar('_T3')
 
-
-class KindN(
-    Generic[_InstanceType, _TypeArgType1, _TypeArgType2, _TypeArgType3],
-):
+class KindN(Generic[_InstanceType, _TypeArgType1, _TypeArgType2, _TypeArgType3]):
     """
     Emulation support for Higher Kinded Types.
 
@@ -83,9 +76,7 @@ class KindN(
     Current API allows you to mix ``KindN`` anywhere.
 
     We allow ``_InstanceType`` of ``KindN``
-    to be ``Instance`` type or ``TypeVarType`` with ``upper_bound``.
-    To work with ``Instance`` types use ``dekind``.
-    To work with ``TypeVarType`` types use ``debound``.
+    to be ``Instance`` type or ``TypeVarType`` with ``bound=...``.
 
     See also:
         - https://arrow-kt.io/docs/0.10/patterns/glossary/#higher-kinds
@@ -96,6 +87,15 @@ class KindN(
 
     __slots__ = ()
 
+    if TYPE_CHECKING:
+        def __getattr__(self, attrname: str):
+            """
+            This function is required for ``get_attribute_hook`` in mypy plugin.
+
+            It is never called in real-life, because ``KindN`` is abstract.
+            It only exists during the type-checking phase.
+            """
+
 
 #: Type alias for kinds with one type argument.
 Kind1 = KindN[_InstanceType, _TypeArgType1, NoReturn, NoReturn]
@@ -105,6 +105,66 @@ Kind2 = KindN[_InstanceType, _TypeArgType1, _TypeArgType2, NoReturn]
 
 #: Type alias for kinds with three type arguments.
 Kind3 = KindN[_InstanceType, _TypeArgType1, _TypeArgType2, _TypeArgType3]
+
+
+class SupportsKindN(
+    KindN[_InstanceType, _TypeArgType1, _TypeArgType2, _TypeArgType3],
+):
+    """
+    Base class for your containers.
+
+    Use it when your type has ``KindN`` annotations inside:
+
+    .. code:: python
+
+      >>> from typing import TypeVar, Callable
+      >>> from returns.primitives.hkt import Kind1, SupportsKind1
+      >>> from returns.interfaces.bindable import Bindable1
+
+      >>> _ValueType = TypeVar('_ValueType')
+      >>> _NewValueType = TypeVar('_NewValueType')
+
+      >>> class MyKindedType(
+      ...     SupportsKind1['MyKindedType', _ValueType],
+      ...     Bindable1[_ValueType],
+      ... ):
+      ...     def bind(
+      ...        self,
+      ...        function: Callable[
+      ...           [_ValueType],
+      ...           Kind1['MyKindedType', _NewValueType],
+      ...        ],
+      ...     ) -> 'MyKindedType[_NewValueType]':
+      ...        ...
+
+    Notice, that we use ``KindN`` / ``Kind1`` to annotate values,
+    but we use ``SupportsKindN`` / ``SupportsKind1`` to inherit from.
+
+    Implementation details
+    ~~~~~~~~~~~~~~~~~~~~~~
+    The only thing this class does is: making sure that the resulting classes
+    won't have ``__getattr__`` available during the typecheking phase.
+
+    Needless to say, that ``__getattr__`` during runtime - never exists at all.
+    """
+
+    __getattr__: None  # type: ignore
+
+
+#: Type alias used for inheritance with one type argument.
+SupportsKind1 = SupportsKindN[
+    _InstanceType, _TypeArgType1, NoReturn, NoReturn,
+]
+
+#: Type alias used for inheritance with two type arguments.
+SupportsKind2 = SupportsKindN[
+    _InstanceType, _TypeArgType1, _TypeArgType2, NoReturn,
+]
+
+#: Type alias used for inheritance with three type arguments.
+SupportsKind3 = SupportsKindN[
+    _InstanceType, _TypeArgType1, _TypeArgType2, _TypeArgType3,
+]
 
 
 def dekind(
@@ -215,75 +275,3 @@ def kinded(function: _FunctionType) -> Kinded[_FunctionType]:
     You must use this decorator for your own kinded functions as well.
     """
     return function  # type: ignore
-
-
-def debound(
-    instance: KindN[_FirstKind, _TypeArgType1, _TypeArgType2, _TypeArgType3],
-) -> Tuple[
-    _FirstKind,
-    Callable[
-        [KindN[_SecondKind, _T1, _T2, _T3]],
-        KindN[_FirstKind, _T1, _T2, _T3],
-    ],
-]:
-    """
-    Helper function to simplify work with ``KindN`` inside the kinded context.
-
-    Here's the problem:
-
-    .. code:: python
-
-      from typing import TypeVar
-      from returns.primitives.hkt import KindN, kinded
-      from returns.interfaces.mappable import MappableN
-
-      _Maps = TypeVar('_Maps', bound=MappableN)
-
-      @kinded
-      def map_int(
-          container: KindN[_Maps, _T1, _T2, _T3],
-      ) -> KindN[_Maps, int, _T2, _T3]:
-          return container.map(int)  # won't work!
-
-    In this example, ``container.map(int)`` will fail with the type error,
-    because ``KindN`` does not have ``.map`` method.
-
-    But, ``_Maps`` type has! Because it is bound to ``MappableN`` typeclass.
-    It means, that we have to debound ``container``
-    to ``MappableN`` instead of ``KindN```:
-
-    .. code:: python
-
-      from returns.primitives.hkt import debound
-
-      @kinded
-      def map_int(
-          container: KindN[_Maps, _T1, _T2, _T3],
-      ) -> KindN[_Maps, int, _T2, _T3]:
-          new_instance, _ = debound(container)
-          reveal_type(new_instance)  # It is correct now!
-          # => MappableN[_T1, _T2, _T3]
-
-          # But this line won't work just yet:
-          return new_instance.map(int)
-          # Because it has type 'KindN[MappableN, int, _T2, _T3]'
-          # But, expected type: 'KindN[_Maps, int, _T2, _T3]'
-
-    We now need to somehow turn our type back to the initial one.
-    This is where the second element of the tuple becomes useful:
-
-    .. code:: python
-
-      from returns.primitives.hkt import debound
-
-      @kinded
-      def map_int(
-          container: KindN[_Maps, _T1, _T2, _T3],
-      ) -> KindN[_Maps, int, _T2, _T3]:
-          new_instance, rebound = debound(container)
-          return rebound(new_instance.map(int))  # Now it works!
-          # Turns the return type to: 'KindN[_Maps, int, _T2, _T3]'
-
-    And this will work corretly both in runtime and typechecking.
-    """
-    return instance, identity  # type: ignore

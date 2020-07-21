@@ -20,7 +20,13 @@ from returns._generated.iterable import iterable_kind
 from returns.interfaces import iterable, unwrappable
 from returns.interfaces.specific import io, ioresult
 from returns.primitives.container import BaseContainer
-from returns.primitives.hkt import Kind1, Kind2, dekind
+from returns.primitives.hkt import (
+    Kind1,
+    Kind2,
+    SupportsKind1,
+    SupportsKind2,
+    dekind,
+)
 from returns.result import Failure, Result, Success
 
 _ValueType = TypeVar('_ValueType', covariant=True)
@@ -37,7 +43,7 @@ _SecondType = TypeVar('_SecondType')
 
 class IO(
     BaseContainer,
-    Kind1['IO', _ValueType],
+    SupportsKind1['IO', _ValueType],
     io.IOBased1[_ValueType],
     iterable.Iterable1[_ValueType],
 ):
@@ -262,7 +268,7 @@ def impure(
 
 class IOResult(
     BaseContainer,
-    Kind2['IOResult', _ValueType, _ErrorType],
+    SupportsKind2['IOResult', _ValueType, _ErrorType],
     ioresult.IOResultBased2[_ValueType, _ErrorType],
     unwrappable.Unwrappable[IO[_ValueType], IO[_ErrorType]],
     iterable.Iterable2[_ValueType, _ErrorType],
@@ -611,6 +617,34 @@ class IOResult(
 
         """
         return IO(self._inner_value.failure())
+
+    def compose_result(
+        self,
+        function: Callable[
+            [Result[_ValueType, _ErrorType]],
+            Kind2['IOResult', _NewValueType, _ErrorType],
+        ],
+    ) -> 'IOResult[_NewValueType, _ErrorType]':
+        """"
+        Composes inner ``Result`` with ``IOResult`` returning function.
+
+        Can be useful when you need an access to both states of the result.
+
+        .. code:: python
+
+          >>> from returns.io import IOResult, IOSuccess, IOFailure
+          >>> from returns.result import Result
+
+          >>> def count(container: Result[int, int]) -> IOResult[int, int]:
+          ...     return IOResult.from_result(
+          ...         container.map(lambda x: x + 1).alt(abs),
+          ...     )
+
+          >>> assert IOSuccess(1).compose_result(count) == IOSuccess(2)
+          >>> assert IOFailure(-1).compose_result(count) == IOFailure(1)
+
+        """
+        return dekind(function(self._inner_value))
 
     @classmethod
     def from_typecast(

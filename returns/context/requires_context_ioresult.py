@@ -18,7 +18,7 @@ from returns.interfaces import iterable
 from returns.interfaces.specific import ioresult
 from returns.io import IO, IOFailure, IOResult, IOSuccess
 from returns.primitives.container import BaseContainer
-from returns.primitives.hkt import Kind3, dekind
+from returns.primitives.hkt import Kind3, SupportsKind3, dekind
 from returns.primitives.types import Immutable
 from returns.result import Result
 
@@ -42,7 +42,7 @@ _FirstType = TypeVar('_FirstType')
 @final
 class RequiresContextIOResult(
     BaseContainer,
-    Kind3['RequiresContextIOResult', _ValueType, _ErrorType, _EnvType],
+    SupportsKind3['RequiresContextIOResult', _ValueType, _ErrorType, _EnvType],
     ioresult.IOResultBased3[_ValueType, _ErrorType, _EnvType],
     iterable.Iterable3[_ValueType, _ErrorType, _EnvType],
 ):
@@ -545,6 +545,46 @@ class RequiresContextIOResult(
             lambda deps: self(deps).rescue(
                 lambda inner: function(inner)(deps),  # type: ignore
             ),
+        )
+
+    def compose_result(
+        self,
+        function: Callable[
+            [Result[_ValueType, _ErrorType]],
+            Kind3[
+                'RequiresContextIOResult',
+                _NewValueType,
+                _ErrorType,
+                _EnvType,
+            ],
+        ],
+    ) -> 'RequiresContextIOResult[_NewValueType, _ErrorType, _EnvType]':
+        """"
+        Composes inner ``Result`` with ``ReaderIOResult`` returning function.
+
+        Can be useful when you need an access to both states of the result.
+
+        .. code:: python
+
+          >>> from returns.context import ReaderIOResult, NoDeps
+          >>> from returns.io import IOSuccess, IOFailure
+          >>> from returns.result import Result
+
+          >>> def count(
+          ...    container: Result[int, int],
+          ... ) -> ReaderIOResult[int, int, NoDeps]:
+          ...     return ReaderIOResult.from_result(
+          ...         container.map(lambda x: x + 1).alt(abs),
+          ...     )
+
+          >>> success = ReaderIOResult.from_value(1)
+          >>> failure = ReaderIOResult.from_failure(-1)
+          >>> assert success.compose_result(count)(...) == IOSuccess(2)
+          >>> assert failure.compose_result(count)(...) == IOFailure(1)
+
+        """
+        return RequiresContextIOResult(
+            lambda deps: dekind(function(self(deps)._inner_value))(deps),
         )
 
     @classmethod

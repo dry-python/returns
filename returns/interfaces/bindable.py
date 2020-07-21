@@ -20,7 +20,7 @@ class BindableN(Generic[_FirstType, _SecondType, _ThirdType]):
     the context of that specific container.
 
     In contrast to :class:`returns.interfaces.rescuable.RescuableN`,
-    works with the first type value.
+    works with the first type argument.
     """
 
     @abstractmethod

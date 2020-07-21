@@ -2,7 +2,7 @@ from typing import TypeVar
 
 from returns.functions import identity
 from returns.interfaces.bindable import BindableN
-from returns.primitives.hkt import KindN, debound, kinded
+from returns.primitives.hkt import KindN, kinded
 
 _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')
@@ -57,5 +57,4 @@ def _flatten(container: KindN[
         https://bit.ly/2sIviUr
 
     """
-    new_instance, rebound = debound(container)
-    return rebound(new_instance.bind(identity))
+    return container.bind(identity)

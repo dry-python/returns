@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Callable, TypeVar
 
 from returns.interfaces.specific.ioresult import IOResultBasedN
-from returns.primitives.hkt import KindN, debound, kinded
+from returns.primitives.hkt import KindN, kinded
 
 if TYPE_CHECKING:
     from returns.io import IOResult  # noqa: WPS433
@@ -56,8 +56,7 @@ def internal_bind_ioresult(
     for more info.
 
     """
-    new_instance, rebound = debound(container)
-    return rebound(new_instance.bind_ioresult(function))
+    return container.bind_ioresult(function)
 
 
 #: Kinded version of :func:`~internal_bind_ioresult`,

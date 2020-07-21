@@ -22,7 +22,7 @@ from returns.interfaces import iterable, unwrappable
 from returns.interfaces.specific import result
 from returns.primitives.container import BaseContainer
 from returns.primitives.exceptions import UnwrapFailedError
-from returns.primitives.hkt import Kind2, dekind
+from returns.primitives.hkt import Kind2, SupportsKind2, dekind
 
 # Definitions:
 _ValueType = TypeVar('_ValueType', covariant=True)
@@ -37,7 +37,7 @@ _SecondType = TypeVar('_SecondType')
 
 class Result(
     BaseContainer,
-    Kind2['Result', _ValueType, _ErrorType],
+    SupportsKind2['Result', _ValueType, _ErrorType],
     result.ResultBased2[_ValueType, _ErrorType],
     unwrappable.Unwrappable[_ValueType, _ErrorType],
     iterable.Iterable2[_ValueType, _ErrorType],
