@@ -1,0 +1,28 @@
+- case: kind_existing_getattr
+  disable_cache: true
+  main: |
+    from returns.primitives.hkt import Kind1
+    from typing import List
+
+    container: Kind1[List, int]
+    reveal_type(container.pop)  # N: Revealed type is 'def (builtins.int =) -> builtins.int*'
+
+
+- case: kind_missing_getattr
+  disable_cache: true
+  main: |
+    from returns.primitives.hkt import Kind1
+    from typing import List
+
+    container: Kind1[List, int]
+    container.missing  # E: "List[Any]" has no attribute "missing"
+
+
+- case: kind_any_getattr
+  disable_cache: true
+  main: |
+    from returns.primitives.hkt import Kind1
+    from typing import Any
+
+    container: Kind1[Any, int]
+    reveal_type(container.missing)  # N: Revealed type is 'Any'

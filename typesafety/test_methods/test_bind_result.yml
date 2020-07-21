@@ -114,7 +114,7 @@
   main: |
     from typing import Callable, TypeVar, Any
     from returns.interfaces.specific.result import ResultBased2
-    from returns.primitives.hkt import Kind2
+    from returns.primitives.hkt import SupportsKind2
     from returns.result import Result
     from returns.methods import bind_result
 
@@ -126,7 +126,7 @@
     _NewErrorType = TypeVar('_NewErrorType')
 
     class MyClass(
-        Kind2['MyClass', _ValueType, _ErrorType],
+        SupportsKind2['MyClass', _ValueType, _ErrorType],
         ResultBased2[_ValueType, _ErrorType],
     ):
         def bind_result(

@@ -3,13 +3,13 @@
   main: |
     from typing import TypeVar, Iterable, Sequence
     from returns.interfaces.iterable import Iterable1
-    from returns.primitives.hkt import Kind1, dekind
+    from returns.primitives.hkt import Kind1, SupportsKind1, dekind
     from returns._generated.iterable import iterable_kind
 
     V = TypeVar('V')
     N = TypeVar('N')
 
-    class MyClass(Kind1['MyClass', V], Iterable1[V]):
+    class MyClass(SupportsKind1['MyClass', V], Iterable1[V]):
         @classmethod
         def from_iterable(
             cls, inner_value: Iterable[Kind1['MyClass', N]],
@@ -25,14 +25,14 @@
   main: |
     from typing import TypeVar, Iterable, Sequence
     from returns.interfaces.iterable import Iterable2
-    from returns.primitives.hkt import Kind2, dekind
+    from returns.primitives.hkt import SupportsKind2, Kind2, dekind
     from returns._generated.iterable import iterable_kind
 
     V = TypeVar('V')
     E = TypeVar('E')
     N = TypeVar('N')
 
-    class MyClass(Kind2['MyClass', V, E], Iterable2[V, E]):
+    class MyClass(SupportsKind2['MyClass', V, E], Iterable2[V, E]):
         @classmethod
         def from_iterable(
             cls, inner_value: Iterable[Kind2['MyClass', N, E]],
@@ -48,7 +48,7 @@
   main: |
     from typing import TypeVar, Iterable, Sequence
     from returns.interfaces.iterable import Iterable3
-    from returns.primitives.hkt import Kind3, dekind
+    from returns.primitives.hkt import SupportsKind3, Kind3, dekind
     from returns._generated.iterable import iterable_kind
 
     V = TypeVar('V')
@@ -56,7 +56,7 @@
     T = TypeVar('T')
     N = TypeVar('N')
 
-    class MyClass(Kind3['MyClass', V, E, T], Iterable3[V, E, T]):
+    class MyClass(SupportsKind3['MyClass', V, E, T], Iterable3[V, E, T]):
         @classmethod
         def from_iterable(
             cls, inner_value: Iterable[Kind3['MyClass', N, E, T]],
@@ -72,11 +72,11 @@
   main: |
     from typing import TypeVar
     from returns.interfaces.iterable import Iterable1
-    from returns.primitives.hkt import Kind1
+    from returns.primitives.hkt import SupportsKind1
 
     V = TypeVar('V')
 
-    class MyClass(Kind1['MyClass', V], Iterable1[V]):
+    class MyClass(SupportsKind1['MyClass', V], Iterable1[V]):
         ...
 
     MyClass()
@@ -89,12 +89,12 @@
   main: |
     from typing import TypeVar, Iterable, Sequence
     from returns.interfaces.iterable import Iterable1
-    from returns.primitives.hkt import Kind1, dekind
+    from returns.primitives.hkt import SupportsKind1, Kind1, dekind
 
     V = TypeVar('V')
     N = TypeVar('N')
 
-    class MyClass(Kind1['MyClass', V], Iterable1[V]):
+    class MyClass(SupportsKind1['MyClass', V], Iterable1[V]):
         @classmethod
         def from_iterable(
             cls, inner_value: Iterable[Kind1['MyClass', N]],

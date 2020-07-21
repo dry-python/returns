@@ -1,0 +1,58 @@
+- case: managed_with_non_none_release
+  disable_cache: true
+  main: |
+    from returns.io import IOResult
+    from returns.pipeline import managed
+    from returns.result import Result
+
+    def use(acquired_value: int) -> IOResult[float, str]:
+        ...
+
+    def release(
+        acquired_value: int,
+        use_value: Result[float, str],
+    ) -> IOResult[float, str]:
+        ...
+
+    x: IOResult[int, str]
+    managed(use, release)(x)  # E: Argument 2 to "managed" has incompatible type "Callable[[int, Result[float, str]], IOResult[float, str]]"; expected "Callable[[int, Result[float, str]], KindN[IOResult[Any, Any], None, str, NoReturn]]"
+
+
+- case: managed_with_non_matching_use_release_types
+  disable_cache: true
+  main: |
+    from returns.io import IOResult
+    from returns.pipeline import managed
+    from returns.result import Result
+
+    def use(acquired_value: int) -> IOResult[float, str]:
+        ...
+
+    def release(
+        acquired_value: int,
+        use_value: Result[str, str],
+    ) -> IOResult[None, str]:
+        ...
+
+    x: IOResult[int, str]
+    managed(use, release)(x)  # E: Cannot infer type argument 3 of "managed"
+
+
+- case: managed_with_wrong_container_input
+  disable_cache: true
+  main: |
+    from returns.io import IOResult
+    from returns.pipeline import managed
+    from returns.result import Result
+
+    def use(acquired_value: int) -> IOResult[float, str]:
+        ...
+
+    def release(
+        acquired_value: int,
+        use_value: Result[float, str],
+    ) -> IOResult[None, str]:
+        ...
+
+    x: IOResult[str, str]
+    managed(use, release)(x)  # E: Argument 1 has incompatible type "IOResult[str, str]"; expected "KindN[IOResult[Any, Any], int, str, NoReturn]"

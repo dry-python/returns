@@ -1,8 +1,6 @@
-from typing import TYPE_CHECKING, Callable, Generic, NoReturn, Tuple, TypeVar
+from typing import TYPE_CHECKING, Callable, Generic, NoReturn, TypeVar
 
 from typing_extensions import Protocol
-
-from returns.functions import identity
 
 _InstanceType = TypeVar('_InstanceType', covariant=True)
 _TypeArgType1 = TypeVar('_TypeArgType1', covariant=True)
@@ -24,7 +22,9 @@ _FirstKind = TypeVar('_FirstKind')
 _SecondKind = TypeVar('_SecondKind')
 
 
-class KindN(Generic[_InstanceType, _TypeArgType1, _TypeArgType2, _TypeArgType3]):
+class KindN(
+    Generic[_InstanceType, _TypeArgType1, _TypeArgType2, _TypeArgType3],
+):
     """
     Emulation support for Higher Kinded Types.
 
@@ -87,7 +87,7 @@ class KindN(Generic[_InstanceType, _TypeArgType1, _TypeArgType2, _TypeArgType3])
 
     __slots__ = ()
 
-    if TYPE_CHECKING:
+    if TYPE_CHECKING:  # noqa: WPS604 # pragma: no cover
         def __getattr__(self, attrname: str):
             """
             This function is required for ``get_attribute_hook`` in mypy plugin.
@@ -112,30 +112,6 @@ class SupportsKindN(
 ):
     """
     Base class for your containers.
-
-    Use it when your type has ``KindN`` annotations inside:
-
-    .. code:: python
-
-      >>> from typing import TypeVar, Callable
-      >>> from returns.primitives.hkt import Kind1, SupportsKind1
-      >>> from returns.interfaces.bindable import Bindable1
-
-      >>> _ValueType = TypeVar('_ValueType')
-      >>> _NewValueType = TypeVar('_NewValueType')
-
-      >>> class MyKindedType(
-      ...     SupportsKind1['MyKindedType', _ValueType],
-      ...     Bindable1[_ValueType],
-      ... ):
-      ...     def bind(
-      ...        self,
-      ...        function: Callable[
-      ...           [_ValueType],
-      ...           Kind1['MyKindedType', _NewValueType],
-      ...        ],
-      ...     ) -> 'MyKindedType[_NewValueType]':
-      ...        ...
 
     Notice, that we use ``KindN`` / ``Kind1`` to annotate values,
     but we use ``SupportsKindN`` / ``SupportsKind1`` to inherit from.

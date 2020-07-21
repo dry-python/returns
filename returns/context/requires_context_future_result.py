@@ -13,7 +13,7 @@ from typing import (
 
 from typing_extensions import final
 
-from returns._generated.futures import _future_result, _reader_future_result
+from returns._generated.futures import _reader_future_result
 from returns._generated.iterable import iterable_kind
 from returns.context import NoDeps
 from returns.future import Future, FutureResult
@@ -858,8 +858,8 @@ class RequiresContextFutureResult(
             ],
         ],
     ) -> 'RequiresContextFutureResult[_NewValueType, _ErrorType, _EnvType]':
-        """"
-        Composes inner ``Result`` with ``ReaderIOResult`` returning function.
+        """
+        Composes inner ``Result`` with ``ReaderFutureResult`` returning func.
 
         Can be useful when you need an access to both states of the result.
 
@@ -893,7 +893,7 @@ class RequiresContextFutureResult(
                 _reader_future_result.async_compose_result(
                     function, self, deps,
                 ),
-            )
+            ),
         )
 
     @classmethod

@@ -1056,7 +1056,7 @@ class FutureResult(
             Kind2['FutureResult', _NewValueType, _ErrorType],
         ],
     ) -> 'FutureResult[_NewValueType, _ErrorType]':
-        """"
+        """
         Composes inner ``Result`` with ``FutureResult`` returning function.
 
         Can be useful when you need an access to both states of the result.

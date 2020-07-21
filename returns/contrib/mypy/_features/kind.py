@@ -1,5 +1,5 @@
 from enum import Enum, unique
-from typing import cast, List
+from typing import List, Optional, Sequence
 
 from mypy.checker import detach_callable
 from mypy.checkmember import analyze_member_access
@@ -10,7 +10,7 @@ from mypy.plugin import (
     MethodSigContext,
 )
 from mypy.typeops import erase_to_bound
-from mypy.types import AnyType, CallableType, Instance, TupleType
+from mypy.types import AnyType, CallableType, Instance
 from mypy.types import Type as MypyType
 from mypy.types import TypeOfAny, TypeVarType, get_proper_type
 
@@ -41,9 +41,13 @@ def attribute_access(ctx: AttributeContext) -> MypyType:
     if isinstance(instance, TypeVarType):
         bound = get_proper_type(instance.upper_bound)
         assert isinstance(bound, Instance)
-        accessed = bound.copy_modified(args=_crop_kind_args(ctx.type))
+        accessed = bound.copy_modified(
+            args=_crop_kind_args(ctx.type, bound.args),
+        )
     elif isinstance(instance, Instance):
         accessed = instance.copy_modified(args=_crop_kind_args(ctx.type))
+    else:
+        return ctx.default_attr_type
 
     exprchecker = ctx.api.expr_checker  # type: ignore
     member_type = analyze_member_access(
@@ -71,7 +75,7 @@ def dekind(ctx: FunctionContext) -> MypyType:
     The only limitation is that it works with
     only ``Instance`` type in the first type argument position.
 
-    So, ``dekind(Kind[T, int])`` will fail.
+    So, ``dekind(KindN[T, int])`` will fail.
     """
     kind = get_proper_type(ctx.arg_types[0][0])
     correct_args = (
@@ -126,9 +130,14 @@ class _KindErrors(str, Enum):  # noqa: WPS600
     )
 
 
-def _crop_kind_args(kind: Instance) -> List[MypyType]:
+def _crop_kind_args(
+    kind: Instance,
+    limit: Optional[Sequence[MypyType]] = None,
+) -> List[MypyType]:
     """Returns the correct amount of type arguments for a kind."""
-    return kind.args[1:len(kind.args[0].args) + 1]  # type: ignore
+    if limit is None:
+        limit = kind.args[0].args  # type: ignore
+    return kind.args[1:len(limit) + 1]
 
 
 def _process_kinded_type(kind: MypyType) -> MypyType:

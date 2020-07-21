@@ -119,7 +119,7 @@
   main: |
     from typing import Callable, TypeVar, Any
     from returns.interfaces.specific.ioresult import IOResultBased2
-    from returns.primitives.hkt import Kind2
+    from returns.primitives.hkt import SupportsKind2
     from returns.io import IO, IOResult
     from returns.pointfree import bind_ioresult
 
@@ -131,7 +131,7 @@
     _NewErrorType = TypeVar('_NewErrorType')
 
     class MyClass(
-        Kind2['MyClass', _ValueType, _ErrorType],
+        SupportsKind2['MyClass', _ValueType, _ErrorType],
         IOResultBased2[_ValueType, _ErrorType],
     ):
         def bind_ioresult(

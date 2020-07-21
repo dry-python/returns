@@ -3,12 +3,12 @@
   main: |
     from typing import Callable, TypeVar
     from returns.interfaces.bindable import Bindable1
-    from returns.primitives.hkt import Kind1, dekind
+    from returns.primitives.hkt import Kind1, SupportsKind1, dekind
 
     V = TypeVar('V')
     N = TypeVar('N')
 
-    class MyClass(Kind1['MyClass', V], Bindable1[V]):
+    class MyClass(SupportsKind1['MyClass', V], Bindable1[V]):
         def __init__(self, value: V) -> None:
             self.value = value
 
@@ -29,13 +29,13 @@
   main: |
     from typing import Callable, TypeVar
     from returns.interfaces.bindable import Bindable2
-    from returns.primitives.hkt import Kind2, dekind
+    from returns.primitives.hkt import Kind2, SupportsKind2, dekind
 
     V = TypeVar('V')
     T = TypeVar('T')
     N = TypeVar('N')
 
-    class MyClass(Kind2['MyClass', V, T], Bindable2[V, T]):
+    class MyClass(SupportsKind2['MyClass', V, T], Bindable2[V, T]):
         def __init__(self, value: V, other: T) -> None:
             self.value = value
             self.other = other
@@ -57,14 +57,14 @@
   main: |
     from typing import Callable, TypeVar
     from returns.interfaces.bindable import Bindable3
-    from returns.primitives.hkt import Kind3, dekind
+    from returns.primitives.hkt import Kind3, SupportsKind3, dekind
 
     V = TypeVar('V')
     T = TypeVar('T')
     K = TypeVar('K')
     N = TypeVar('N')
 
-    class MyClass(Kind3['MyClass', V, T, K], Bindable3[V, T, K]):
+    class MyClass(SupportsKind3['MyClass', V, T, K], Bindable3[V, T, K]):
         def __init__(self, value: V, other: T, last: K) -> None:
             self.value = value
             self.other = other
@@ -87,12 +87,12 @@
   main: |
     from typing import Callable, TypeVar
     from returns.interfaces.bindable import Bindable1
-    from returns.primitives.hkt import Kind1, dekind
+    from returns.primitives.hkt import Kind1, SupportsKind1, dekind
 
     V = TypeVar('V')
     N = TypeVar('N')
 
-    class MyClass(Kind1['MyClass', V], Bindable1[V]):
+    class MyClass(SupportsKind1['MyClass', V], Bindable1[V]):
         def __init__(self, value: V) -> None:
             self.value = value
 
@@ -107,12 +107,12 @@
   main: |
     from typing import Callable, TypeVar
     from returns.interfaces.bindable import Bindable1
-    from returns.primitives.hkt import Kind1, dekind
+    from returns.primitives.hkt import Kind1, SupportsKind1, dekind
 
     V = TypeVar('V')
     N = TypeVar('N')
 
-    class MyClass(Kind1['MyClass', V], Bindable1[V]):
+    class MyClass(SupportsKind1['MyClass', V], Bindable1[V]):
         def __init__(self, value: V) -> None:
             self.value = value
 
