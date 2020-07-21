@@ -166,3 +166,14 @@ async def async_from_failure(
 ) -> Result[Any, _NewErrorType]:
     """Async failure unit factory."""
     return Failure((await container)._inner_value)
+
+
+async def async_compose_result(
+    function: Callable[
+        [Result[_ValueType, _ErrorType]],
+        Kind2['FutureResult', _NewValueType, _ErrorType],
+    ],
+    inner_value: Awaitable[Result[_ValueType, _ErrorType]],
+) -> Result[_NewValueType, _ErrorType]:
+    """Async composes ``Result`` based function."""
+    return (await dekind(function(await inner_value)))._inner_value

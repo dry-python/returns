@@ -1,7 +1,7 @@
 from typing import Callable, TypeVar
 
 from returns.interfaces.mappable import MappableN
-from returns.primitives.hkt import KindN, debound, kinded
+from returns.primitives.hkt import KindN, kinded
 
 _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')
@@ -45,8 +45,7 @@ def internal_map(
     See :class:`returns.primitives.interfaces.mappable.MappableN` for more info.
 
     """
-    new_instance, rebound = debound(container)
-    return rebound(new_instance.map(function))
+    return container.map(function)
 
 
 #: Kinded version of :func:`~internal_map`, use it to infer real return type.

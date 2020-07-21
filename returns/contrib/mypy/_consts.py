@@ -29,6 +29,7 @@ TYPED_PIPE_FUNCTION: Final = 'returns._generated.pipeline.pipe._pipe'
 TYPED_PIPE_METHOD: Final = 'returns._generated.pipeline.pipe._Pipe.__call__'
 
 #: Used for HKT emulation.
+TYPED_KINDN: Final = 'returns.primitives.hkt.KindN'
+TYPED_KINDN_ACCESS: Final = '{0}.'.format(TYPED_KINDN)
 TYPED_KIND_DEKIND: Final = 'returns.primitives.hkt.dekind'
-TYPED_KIND_DEBOUND: Final = 'returns.primitives.hkt.debound'
 TYPED_KIND_KINDED: Final = 'returns.primitives.hkt.Kinded.__call__'

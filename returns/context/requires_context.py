@@ -18,7 +18,7 @@ from returns.future import FutureResult
 from returns.interfaces import applicative, bindable, iterable, mappable
 from returns.io import IOResult
 from returns.primitives.container import BaseContainer
-from returns.primitives.hkt import Kind2, dekind
+from returns.primitives.hkt import Kind2, SupportsKind2, dekind
 from returns.primitives.types import Immutable
 from returns.result import Result
 
@@ -53,7 +53,7 @@ NoDeps = Any
 @final
 class RequiresContext(
     BaseContainer,
-    Kind2['RequiresContext', _ReturnType, _EnvType],
+    SupportsKind2['RequiresContext', _ReturnType, _EnvType],
     mappable.Mappable2[_ReturnType, _EnvType],
     bindable.Bindable2[_ReturnType, _EnvType],
     applicative.Applicative2[_ReturnType, _EnvType],

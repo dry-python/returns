@@ -25,7 +25,7 @@ from returns.interfaces import (
 )
 from returns.primitives.container import BaseContainer
 from returns.primitives.exceptions import UnwrapFailedError
-from returns.primitives.hkt import Kind1, dekind
+from returns.primitives.hkt import Kind1, SupportsKind1, dekind
 
 # Definitions:
 _ValueType = TypeVar('_ValueType', covariant=True)
@@ -38,7 +38,7 @@ _SecondType = TypeVar('_SecondType')
 
 class Maybe(
     BaseContainer,
-    Kind1['Maybe', _ValueType],
+    SupportsKind1['Maybe', _ValueType],
     mappable.Mappable1[_ValueType],
     bindable.Bindable1[_ValueType],
     applicative.Applicative1[_ValueType],

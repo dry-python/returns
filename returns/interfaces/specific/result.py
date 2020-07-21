@@ -11,6 +11,7 @@ _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')
 _ThirdType = TypeVar('_ThirdType')
 _UpdatedType = TypeVar('_UpdatedType')
+
 _ResultBasedType = TypeVar('_ResultBasedType', bound='ResultBasedN')
 
 

@@ -17,7 +17,7 @@ from returns.context import NoDeps
 from returns.interfaces import iterable
 from returns.interfaces.specific import result
 from returns.primitives.container import BaseContainer
-from returns.primitives.hkt import Kind3, dekind
+from returns.primitives.hkt import Kind3, SupportsKind3, dekind
 from returns.primitives.types import Immutable
 from returns.result import Failure, Result, Success
 
@@ -40,7 +40,7 @@ _FirstType = TypeVar('_FirstType')
 @final
 class RequiresContextResult(
     BaseContainer,
-    Kind3['RequiresContextResult', _ValueType, _ErrorType, _EnvType],
+    SupportsKind3['RequiresContextResult', _ValueType, _ErrorType, _EnvType],
     result.ResultBased3[_ValueType, _ErrorType, _EnvType],
     iterable.Iterable3[_ValueType, _ErrorType, _EnvType],
 ):

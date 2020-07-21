@@ -3,6 +3,7 @@ from typing import Generic, TypeVar
 
 _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')
+
 _UnwrappableType = TypeVar('_UnwrappableType', bound='Unwrappable')
 
 

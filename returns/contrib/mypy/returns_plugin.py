@@ -12,7 +12,13 @@ https://github.com/mkurnikov/pytest-mypy-plugins
 """
 from typing import Callable, ClassVar, Mapping, Optional, Type
 
-from mypy.plugin import FunctionContext, MethodContext, MethodSigContext, Plugin
+from mypy.plugin import (
+    AttributeContext,
+    FunctionContext,
+    MethodContext,
+    MethodSigContext,
+    Plugin,
+)
 from mypy.types import CallableType
 from mypy.types import Type as MypyType
 from typing_extensions import final
@@ -32,6 +38,9 @@ from returns.contrib.mypy._features import (
 
 #: Type for a function hook.
 _FunctionCallback = Callable[[FunctionContext], MypyType]
+
+#: Type for attribute hook.
+_AttributeCallback = Callable[[AttributeContext], MypyType]
 
 #: Type for a method hook.
 _MethodCallback = Callable[[MethodContext], MypyType]
@@ -53,7 +62,6 @@ class _ReturnsPlugin(Plugin):
         _consts.TYPED_FLOW_FUNCTION: flow.analyze,
         _consts.TYPED_PIPE_FUNCTION: pipe.analyze,
         _consts.TYPED_KIND_DEKIND: kind.dekind,
-        _consts.TYPED_KIND_DEBOUND: kind.debound,
         **dict.fromkeys(_consts.TYPED_DECORATORS, decorators.analyze),
     }
 
@@ -81,6 +89,15 @@ class _ReturnsPlugin(Plugin):
         Otherwise, we return ``None``.
         """
         return self._function_hook_plugins.get(fullname)
+
+    def get_attribute_hook(
+        self,
+        fullname: str,
+    ) -> Optional[_AttributeCallback]:
+        """Called for any exiting or ``__getattr__`` aatribute access."""
+        if fullname.startswith(_consts.TYPED_KINDN_ACCESS):
+            return kind.attribute_access
+        return None
 
     def get_method_signature_hook(
         self,

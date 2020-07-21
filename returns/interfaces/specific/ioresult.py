@@ -6,11 +6,13 @@ from returns.primitives.hkt import KindN
 
 if TYPE_CHECKING:
     from returns.io import IO, IOResult  # noqa: WPS433
+    from returns.result import Result  # noqa: WPS433
 
 _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')
 _ThirdType = TypeVar('_ThirdType')
 _UpdatedType = TypeVar('_UpdatedType')
+
 _IOResultBasedType = TypeVar('_IOResultBasedType', bound='IOResultBasedN')
 
 
@@ -30,6 +32,16 @@ class IOResultBasedN(
         function: Callable[[_FirstType], 'IOResult[_UpdatedType, _SecondType]'],
     ) -> KindN[_IOResultBasedType, _UpdatedType, _SecondType, _ThirdType]:
         """Runs ``IOResult`` returning function over a container."""
+
+    @abstractmethod
+    def compose_result(
+        self: _IOResultBasedType,
+        function: Callable[
+            ['Result[_FirstType, _SecondType]'],
+            KindN[_IOResultBasedType, _UpdatedType, _SecondType, _ThirdType],
+        ],
+    ) -> KindN[_IOResultBasedType, _UpdatedType, _SecondType, _ThirdType]:
+        """Allows to compose the unrelying ``Result`` with a function."""
 
     @classmethod
     @abstractmethod

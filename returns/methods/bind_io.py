@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Callable, TypeVar
 
 from returns.interfaces.specific.io import IOBasedN
-from returns.primitives.hkt import KindN, debound, kinded
+from returns.primitives.hkt import KindN, kinded
 
 if TYPE_CHECKING:
     from returns.io import IO  # noqa: WPS433§
@@ -46,8 +46,7 @@ def internal_bind_io(
     for more info.
 
     """
-    new_instance, rebound = debound(container)
-    return rebound(new_instance.bind_io(function))
+    return container.bind_io(function)
 
 
 #: Kinded version of :func:`~internal_bind_io`,

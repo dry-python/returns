@@ -1,7 +1,7 @@
 from typing import Callable, TypeVar
 
 from returns.interfaces.bindable import BindableN
-from returns.primitives.hkt import KindN, debound, kinded
+from returns.primitives.hkt import KindN, kinded
 
 _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')
@@ -48,8 +48,7 @@ def internal_bind(
     See :class:`returns.primitives.interfaces.bindable.BindableN` for more info.
 
     """
-    new_instance, rebound = debound(container)
-    return rebound(new_instance.bind(function))
+    return container.bind(function)
 
 
 #: Kinded version of :func:`~internal_bind`, use it to infer real return type.

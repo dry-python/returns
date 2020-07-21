@@ -57,7 +57,7 @@ class _ReleaseFailure(object):
         _acquire_success,
         _use_success,
         _ReleaseFailure,
-        IOSuccess('use success'),
+        IOFailure('release failure'),
         [],
     ),
     (
@@ -71,7 +71,7 @@ class _ReleaseFailure(object):
         _acquire_success,
         _use_failure,
         _ReleaseFailure,
-        IOFailure('use failure'),
+        IOFailure('release failure'),
         [],
     ),
 

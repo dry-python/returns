@@ -21,7 +21,13 @@ from returns.interfaces import iterable
 from returns.interfaces.specific import io, ioresult
 from returns.io import IO, IOResult
 from returns.primitives.container import BaseContainer
-from returns.primitives.hkt import Kind1, Kind2, dekind
+from returns.primitives.hkt import (
+    Kind1,
+    Kind2,
+    SupportsKind1,
+    SupportsKind2,
+    dekind,
+)
 from returns.result import Failure, Result, Success
 
 # Definitions:
@@ -60,7 +66,7 @@ async def async_identity(instance: _FirstType) -> _FirstType:
 @final
 class Future(
     BaseContainer,
-    Kind1['Future', _ValueType],
+    SupportsKind1['Future', _ValueType],
     io.IOBased1[_ValueType],
     iterable.Iterable1[_ValueType],
 ):
@@ -491,7 +497,7 @@ def asyncify(function: Callable[..., _ValueType]) -> Callable[
 @final
 class FutureResult(
     BaseContainer,
-    Kind2['FutureResult', _ValueType, _ErrorType],
+    SupportsKind2['FutureResult', _ValueType, _ErrorType],
     ioresult.IOResultBased2[_ValueType, _ErrorType],
     iterable.Iterable2[_ValueType, _ErrorType],
 ):
@@ -1041,6 +1047,43 @@ class FutureResult(
         """
         return FutureResult(_future_result.async_rescue(
             function, self._inner_value,
+        ))
+
+    def compose_result(
+        self,
+        function: Callable[
+            [Result[_ValueType, _ErrorType]],
+            Kind2['FutureResult', _NewValueType, _ErrorType],
+        ],
+    ) -> 'FutureResult[_NewValueType, _ErrorType]':
+        """"
+        Composes inner ``Result`` with ``FutureResult`` returning function.
+
+        Can be useful when you need an access to both states of the result.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.future import FutureResult
+          >>> from returns.io import IOSuccess, IOFailure
+          >>> from returns.result import Result
+
+          >>> def count(container: Result[int, int]) -> FutureResult[int, int]:
+          ...     return FutureResult.from_result(
+          ...         container.map(lambda x: x + 1).alt(abs),
+          ...     )
+
+          >>> assert anyio.run(
+          ...    FutureResult.from_value(1).compose_result, count,
+          ... ) == IOSuccess(2)
+          >>> assert anyio.run(
+          ...    FutureResult.from_failure(-1).compose_result, count,
+          ... ) == IOFailure(1)
+
+        """
+        return FutureResult(_future_result.async_compose_result(
+            function,
+            self._inner_value,
         ))
 
     @classmethod

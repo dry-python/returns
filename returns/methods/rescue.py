@@ -1,7 +1,7 @@
 from typing import Callable, TypeVar
 
 from returns.interfaces.rescuable import RescuableN
-from returns.primitives.hkt import KindN, debound, kinded
+from returns.primitives.hkt import KindN, kinded
 
 _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')
@@ -46,8 +46,7 @@ def internal_rescue(
     for more info.
 
     """
-    new_instance, rebound = debound(container)
-    return rebound(new_instance.rescue(function))
+    return container.rescue(function)
 
 
 #: Kinded version of :func:`~internal_rescue`, use it to infer real return type.

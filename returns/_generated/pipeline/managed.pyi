@@ -1,79 +1,28 @@
-from typing import Callable, TypeVar, overload
+from typing import Callable, TypeVar
 
-from returns.context import ReaderFutureResult, ReaderIOResult
-from returns.future import FutureResult
-from returns.io import IOResult
+from returns.interfaces.specific.ioresult import IOResultBasedN
+from returns.primitives.hkt import Kinded, KindN
 from returns.result import Result
 
-_ValueType = TypeVar('_ValueType')
-_NewValueType = TypeVar('_NewValueType')
-_ErrorType = TypeVar('_ErrorType', covariant=True)
-_EnvType = TypeVar('_EnvType', contravariant=True)
+_FirstType = TypeVar('_FirstType')
+_SecondType = TypeVar('_SecondType')
+_ThirdType = TypeVar('_ThirdType')
+_UpdatedType = TypeVar('_UpdatedType')
+
+_IOResultBasedType = TypeVar('_IOResultBasedType', bound=IOResultBasedN)
 
 
-@overload
 def _managed(
     use: Callable[
-        [_ValueType],
-        IOResult[_NewValueType, _ErrorType],
+        [_FirstType],
+        KindN[_IOResultBasedType, _UpdatedType, _SecondType, _ThirdType],
     ],
     release: Callable[
-        [_ValueType, Result[_NewValueType, _ErrorType]],
-        IOResult[None, _ErrorType],
+        [_FirstType, Result[_UpdatedType, _SecondType]],
+        KindN[_IOResultBasedType, None, _SecondType, _ThirdType],
     ],
-) -> Callable[
-    [IOResult[_ValueType, _ErrorType]],
-    IOResult[_NewValueType, _ErrorType],
-]:
-    ...
-
-
-@overload
-def _managed(
-    use: Callable[
-        [_ValueType],
-        FutureResult[_NewValueType, _ErrorType],
-    ],
-    release: Callable[
-        [_ValueType, Result[_NewValueType, _ErrorType]],
-        FutureResult[None, _ErrorType],
-    ],
-) -> Callable[
-    [FutureResult[_ValueType, _ErrorType]],
-    FutureResult[_NewValueType, _ErrorType],
-]:
-    ...
-
-
-@overload
-def _managed(
-    use: Callable[
-        [_ValueType],
-        ReaderIOResult[_NewValueType, _ErrorType, _EnvType],
-    ],
-    release: Callable[
-        [_ValueType, Result[_NewValueType, _ErrorType]],
-        ReaderIOResult[None, _ErrorType, _EnvType],
-    ],
-) -> Callable[
-    [ReaderIOResult[_ValueType, _ErrorType, _EnvType]],
-    ReaderIOResult[_NewValueType, _ErrorType, _EnvType],
-]:
-    ...
-
-
-@overload
-def _managed(
-    use: Callable[
-        [_ValueType],
-        ReaderFutureResult[_NewValueType, _ErrorType, _EnvType],
-    ],
-    release: Callable[
-        [_ValueType, Result[_NewValueType, _ErrorType]],
-        ReaderFutureResult[None, _ErrorType, _EnvType],
-    ],
-) -> Callable[
-    [ReaderFutureResult[_ValueType, _ErrorType, _EnvType]],
-    ReaderFutureResult[_NewValueType, _ErrorType, _EnvType],
-]:
+) -> Kinded[Callable[
+    [KindN[_IOResultBasedType, _FirstType, _SecondType, _ThirdType]],
+    KindN[_IOResultBasedType, _UpdatedType, _SecondType, _ThirdType],
+]]:
     ...
