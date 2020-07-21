@@ -8,6 +8,15 @@
     reveal_type(second)  # N: Revealed type is 'returns.maybe.Maybe[builtins.Exception]'
 
 
+- case: maybe_getattr
+  disable_cache: true
+  main: |
+    from returns.maybe import Maybe
+
+    x: Maybe[int]
+    x.missing  # E: "Maybe[int]" has no attribute "missing"
+
+
 - case: maybe_some_constructor
   disable_cache: true
   main: |

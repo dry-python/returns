@@ -16,3 +16,12 @@
     x: IOResult[int, str]
 
     reveal_type(IO.from_ioresult(x))  # N: Revealed type is 'returns.io.IO[returns.result.Result[builtins.int*, builtins.str*]]'
+
+
+- case: io_getattr
+  disable_cache: true
+  main: |
+    from returns.io import IO
+
+    x: IO[int]
+    x.missing  # E: "IO[int]" has no attribute "missing"
