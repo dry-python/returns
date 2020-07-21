@@ -17,3 +17,23 @@
     container.missing
   out: |
     main:4: error: "SupportsKindN[object, int, str, bool]" has no attribute "missing"
+
+
+- case: supports_kind_getattr_subclass
+  disable_cache: true
+  main: |
+    from returns.primitives.hkt import SupportsKind1
+    from typing import TypeVar
+
+    T = TypeVar('T')
+
+    class Custom(SupportsKind1['Custom', T]):
+        existing: T
+
+    container: Custom[int]
+    reveal_type(container.existing)
+    reveal_type(container.missing)
+  out: |
+    main:10: note: Revealed type is 'builtins.int*'
+    main:11: error: "Custom[int]" has no attribute "missing"
+    main:11: note: Revealed type is 'Any'
