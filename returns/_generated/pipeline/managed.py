@@ -110,7 +110,7 @@ def _use(
     [_FirstType],
     KindN[_IOResultBasedType, _UpdatedType, _SecondType, _ThirdType],
 ]:
-    """Uses the resource after it is acquired succesfully."""
+    """Uses the resource after it is acquired successfully."""
     return lambda initial: use(initial).compose_result(
         _release(acquire, initial, release),
     )
