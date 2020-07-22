@@ -1,6 +1,10 @@
 import pytest
 
-from returns.context import RequiresContextIOResult, RequiresContextResult
+from returns.context import (
+    RequiresContextFutureResult,
+    RequiresContextIOResult,
+    RequiresContextResult,
+)
 from returns.functions import identity
 from returns.future import FutureResult
 from returns.io import IOFailure, IOSuccess
@@ -24,6 +28,8 @@ def _under_test(
     IOFailure(1),
     RequiresContextIOResult.from_value(1),
     RequiresContextIOResult.from_failure(1),
+    RequiresContextFutureResult.from_value(1),
+    RequiresContextFutureResult.from_failure(1),
     RequiresContextResult.from_value(1),
     RequiresContextResult.from_failure(1),
     FutureResult.from_value(1),
@@ -48,6 +54,8 @@ def test_error_handled(container, returns, kwargs):
     IOFailure(1),
     RequiresContextIOResult.from_value(1),
     RequiresContextIOResult.from_failure(1),
+    RequiresContextFutureResult.from_value(1),
+    RequiresContextFutureResult.from_failure(1),
     RequiresContextResult.from_value(1),
     RequiresContextResult.from_failure(1),
 ])
@@ -65,6 +73,8 @@ def test_error_not_handled(container, returns):
 @pytest.mark.parametrize('container', [
     FutureResult.from_value(1),
     FutureResult.from_failure(1),
+    RequiresContextFutureResult.from_value(1),
+    RequiresContextFutureResult.from_failure(1),
 ])
 async def test_error_not_handled_async(container, returns):
     """Demo on how to use ``pytest`` helpers to work with error handling."""

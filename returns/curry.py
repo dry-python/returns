@@ -122,7 +122,7 @@ def curry(function: Callable[..., _ReturnType]) -> Callable[..., _ReturnType]:
 
 
 def _eager_curry(
-    function: Callable,
+    function: Callable[..., _ReturnType],
     argspec,
     args: tuple,
     kwargs: dict,

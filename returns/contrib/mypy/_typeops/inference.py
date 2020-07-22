@@ -79,7 +79,7 @@ class CallableInference(object):
             [arg.name for arg in applied_args],
             self._fallback.arg_kinds,
             self._fallback.arg_names,
-            lambda index: checker.accept(exprs[index]),
+            lambda index: checker.accept(exprs[index]),  # type: ignore
         )
         constraints = infer_constraints_for_callable(
             self._fallback,

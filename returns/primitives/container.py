@@ -29,7 +29,9 @@ class BaseContainer(Immutable, metaclass=ABCMeta):
         """Used to compare two 'Container' objects."""
         if not isinstance(self, type(other)):
             return False
-        return self._inner_value == other._inner_value  # noqa: WPS437
+        return (  # type: ignore[no-any-return]
+            self._inner_value == other._inner_value  # noqa: WPS437
+        )
 
     def __hash__(self) -> int:
         """Used to use this value as a key."""

@@ -22,7 +22,7 @@ class _ReturnsAsserts(object):
 
     def is_error_handled(self, container) -> bool:
         """Ensures that container has its error handled in the end."""
-        return getattr(container, _ERROR_FIELD, False)
+        return bool(getattr(container, _ERROR_FIELD, False))
 
 
 @pytest.fixture(scope='session')
@@ -67,6 +67,7 @@ class _PatchedContainer(object):
         from returns.context import (
             RequiresContextIOResult,
             RequiresContextResult,
+            RequiresContextFutureResult,
         )
         from returns.future import FutureResult
         from returns.io import _IOFailure, _IOSuccess
@@ -79,6 +80,7 @@ class _PatchedContainer(object):
             _IOFailure,
             RequiresContextResult,
             RequiresContextIOResult,
+            RequiresContextFutureResult,
             FutureResult,
         )
 
