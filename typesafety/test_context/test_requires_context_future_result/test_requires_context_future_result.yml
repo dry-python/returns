@@ -8,6 +8,15 @@
     reveal_type(x('a'))  # N: Revealed type is 'returns.future.FutureResult[builtins.int*, builtins.float*]'
 
 
+- case: requires_context_future_result_getattr
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextFutureResult
+
+    x: RequiresContextFutureResult[int, str, bool]
+    x.missing  # E: "RequiresContextFutureResult[int, str, bool]" has no attribute "missing"
+
+
 - case: requires_context_future_result_swap
   disable_cache: true
   main: |

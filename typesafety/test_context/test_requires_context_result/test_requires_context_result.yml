@@ -8,6 +8,15 @@
     reveal_type(x('a'))  # N: Revealed type is 'returns.result.Result[builtins.int*, builtins.Exception*]'
 
 
+- case: requires_context_result_getattr
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextResult
+
+    x: RequiresContextResult[int, str, bool]
+    x.missing  # E: "RequiresContextResult[int, str, bool]" has no attribute "missing"
+
+
 - case: requires_context_result_swap
   disable_cache: true
   main: |

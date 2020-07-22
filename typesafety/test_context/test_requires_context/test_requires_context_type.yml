@@ -8,6 +8,15 @@
     reveal_type(first(1))  # N: Revealed type is 'builtins.str*'
 
 
+- case: requires_context_getattr
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContext
+
+    x: RequiresContext[int, str]
+    x.missing  # E: "RequiresContext[int, str]" has no attribute "missing"
+
+
 - case: requires_context_map_correct
   disable_cache: true
   main: |
