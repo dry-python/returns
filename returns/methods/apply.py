@@ -34,17 +34,14 @@ def internal_apply(
 
     .. code:: python
 
-      >>> from returns.methods.apply import internal_apply, apply
+      >>> from returns.methods import apply
       >>> from returns.maybe import Some, Nothing
 
       >>> def example(argument: int) -> int:
       ...     return argument + 1
 
-      >>> applied = apply(Some(1), Some(example))
-      >>> assert applied == internal_apply(Some(1), Some(example)) == Some(2)
-
-      >>> applied = apply(Nothing, Some(example))
-      >>> assert applied == internal_apply(Nothing, Some(example)) == Nothing
+      >>> assert apply(Some(1), Some(example)) == Some(2)
+      >>> assert apply(Nothing, Some(example)) == Nothing
 
     Note, that this function works for all containers with ``.apply`` method.
     See :class:`returns.primitives.interfaces.Applicative.ApplicativeN`

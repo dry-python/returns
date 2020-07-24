@@ -32,17 +32,14 @@ def internal_bind(
 
     .. code:: python
 
-      >>> from returns.methods.bind import internal_bind, bind
+      >>> from returns.methods import bind
       >>> from returns.maybe import Maybe, Some, Nothing
 
       >>> def example(argument: int) -> Maybe[int]:
       ...     return Some(argument + 1)
 
-      >>> bound = bind(Some(1), example)
-      >>> assert bound == internal_bind(Some(1), example) == Some(2)
-
-      >>> bound = bind(Nothing, example)
-      >>> assert bound == internal_bind(Nothing, example) == Nothing
+      >>> assert bind(Some(1), example) == Some(2)
+      >>> assert bind(Nothing, example) == Nothing
 
     Note, that this function works for all containers with ``.bind`` method.
     See :class:`returns.primitives.interfaces.bindable.BindableN` for more info.
