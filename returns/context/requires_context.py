@@ -33,6 +33,7 @@ if TYPE_CHECKING:
 
 # Context:
 _EnvType = TypeVar('_EnvType', contravariant=True)
+_NewEnvType = TypeVar('_NewEnvType')
 _ReturnType = TypeVar('_ReturnType', covariant=True)
 _NewReturnType = TypeVar('_NewReturnType')
 
@@ -216,6 +217,25 @@ class RequiresContext(
 
     #: Alias for `bind_context` method, it is the same as `bind` here.
     bind_context = bind
+
+    def modify_env(
+        self,
+        function: Callable[[_NewEnvType], _EnvType],
+    ) -> 'RequiresContext[_ReturnType, _NewEnvType]':
+        """
+        Allows to modify the environment type.
+
+        .. code:: python
+
+          >>> from returns.context import RequiresContext
+
+          >>> def mul(arg: int) -> RequiresContext[float, int]:
+          ...     return RequiresContext(lambda deps: arg * deps)
+
+          >>> assert mul(3).modify_env(int)('2') == 6
+
+        """
+        return RequiresContext(lambda deps: self(function(deps)))
 
     @classmethod
     def ask(cls) -> 'RequiresContext[_EnvType, _EnvType]':

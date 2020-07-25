@@ -21,15 +21,6 @@ def internal_bind_ioresult(
     """
     Bind a ``IOResult`` returning function over a container.
 
-    It is not marked as ``@kinded``, because this function is intended
-    to be used inside a kinded context:
-    like in :func:`returns.pointfree.bind.bind`.
-    It returns ``KindN[]`` instance, not a real type.
-
-    If you wish to use the user-facing ``bind_ioresult``
-    that infers the return type correctly,
-    use :func:`~bind_ioresult` function instead.
-
     .. code:: python
 
       >>> import anyio

@@ -155,3 +155,12 @@
         ...
 
     reveal_type(x.alt(test))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int, builtins.bool*, builtins.str]'
+
+
+- case: requires_context_ioresult_modify_env
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextIOResult
+
+    first: RequiresContextIOResult[float, bool, int]
+    reveal_type(first.modify_env(int)('1'))  # N: Revealed type is 'returns.io.IOResult[builtins.float*, builtins.bool*]'

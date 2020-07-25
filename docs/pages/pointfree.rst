@@ -231,6 +231,12 @@ API Reference
 
 .. autofunction:: returns.pointfree.bind_context
 
+.. autofunction:: returns.pointfree.modify_env2
+
+.. autofunction:: returns.pointfree.modify_env3
+
+.. autofunction:: returns.pointfree.modify_env
+
 .. autofunction:: returns.pointfree.bind_context_result
 
 .. autofunction:: returns.pointfree.bind_context_ioresult

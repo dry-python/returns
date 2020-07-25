@@ -69,6 +69,7 @@
     from returns.pointfree import bind_context2
 
     _EnvType = TypeVar('_EnvType', contravariant=True)
+    _NewEnvType = TypeVar('_NewEnvType')
     _ReturnType = TypeVar('_ReturnType', covariant=True)
     _NewReturnType = TypeVar('_NewReturnType')
 
@@ -88,6 +89,16 @@
                 Reader[_NewReturnType, _EnvType],
             ],
         ) -> MyClass[_NewReturnType, _EnvType]:
+            ...
+
+        def modify_env(
+            self,
+            function: Callable[[_NewEnvType], _EnvType],
+        ) -> MyClass[_ReturnType, _NewEnvType]:
+            ...
+
+        @classmethod
+        def ask(cls) -> MyClass[_EnvType, _EnvType]:
             ...
 
         @classmethod

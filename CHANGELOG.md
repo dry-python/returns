@@ -47,6 +47,7 @@ See [0Ver](https://0ver.org/).
   and other result based containers
 - Adds `collect_trace` helper function for better development experience
 - Adds missing `from_requires_context_future_result` to `RequiresContext`
+- Adds `.modify_env` method to all `RequiresContext*` types
 - Adds `@abstractmethod` to abstract methods in abstract containers
   like `Result`, `Maybe`, and `IOResult`
 - Adds `__slots__` to `UnwrapFailedError` with `halted_container`

@@ -21,15 +21,6 @@ def internal_rescue(
     """
     Bind a function over a container. Works for the second type argument.
 
-    It is not marked as ``@kinded``, because this function is intended
-    to be used inside a kinded context:
-    like in :func:`returns.pointfree.bind.bind`.
-    It returns ``KindN[]`` instance, not a real type.
-
-    If you wish to use the user-facing ``rescue``
-    that infers the return type correctly,
-    use :func:`~rescue` function instead.
-
     .. code:: python
 
       >>> from returns.methods.rescue import rescue

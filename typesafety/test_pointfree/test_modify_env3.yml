@@ -1,0 +1,153 @@
+- case: modify_env_wrong_env
+  disable_cache: true
+  main: |
+    from returns.pointfree import modify_env
+    from returns.context import RequiresContextResult
+
+    def test(arg: float) -> int:
+        ...
+
+    x: RequiresContextResult[float, bool, str]
+    modify_env(test)(x)
+  out: |
+    main:8: error: Argument 1 has incompatible type "RequiresContextResult[float, bool, str]"; expected "KindN[RequiresContextResult[Any, Any, Any], float, bool, int]"
+
+
+- case: modify_env_wrong_type
+  disable_cache: true
+  main: |
+    from returns.pointfree import modify_env
+    from returns.context import RequiresContext
+
+    def test(arg: str) -> int:
+        ...
+
+    x: RequiresContext[float, int]
+    modify_env(test)(x)
+  out: |
+    main:8: error: Value of type variable "_Reader3Kind" of function cannot be "RequiresContext[Any, Any]"
+
+
+- case: modify_env_alias
+  disable_cache: true
+  main: |
+    from returns.pointfree import modify_env3
+    from returns.context import RequiresContextResult
+
+    def test(arg: str) -> int:
+        ...
+
+    x: RequiresContextResult[float, Exception, int]
+    reveal_type(modify_env3(test)(x))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult*[builtins.float*, builtins.Exception*, builtins.str]'
+
+
+- case: modify_env_and_flow
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextResult
+    from returns.pointfree import modify_env, bind
+    from returns.pipeline import flow
+
+    def modify(str) -> int:
+        ...
+
+    def test(arg: int) -> RequiresContextResult[float, Exception, str]:
+        ...
+
+    r: RequiresContextResult[int, Exception, int]
+    reveal_type(flow(r, modify_env(modify), bind(test)))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.float, builtins.Exception, builtins.str]'
+
+
+- case: modify_env_requires_context_result
+  disable_cache: true
+  main: |
+    from returns.pointfree import modify_env
+    from returns.context import RequiresContextResult
+
+    def test(arg: str) -> int:
+        ...
+
+    x: RequiresContextResult[float, Exception, int]
+    reveal_type(modify_env(test)(x))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult*[builtins.float*, builtins.Exception*, builtins.str]'
+
+
+- case: modify_env_requires_context_ioresult
+  disable_cache: true
+  main: |
+    from returns.pointfree import modify_env
+    from returns.context import RequiresContextIOResult
+
+    def test(arg: str) -> int:
+        ...
+
+    x: RequiresContextIOResult[float, Exception, int]
+    reveal_type(modify_env(test)(x))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult*[builtins.float*, builtins.Exception*, builtins.str]'
+
+
+- case: modify_env_requires_context_future_result
+  disable_cache: true
+  main: |
+    from returns.pointfree import modify_env
+    from returns.context import RequiresContextFutureResult
+
+    def test(arg: str) -> int:
+        ...
+
+    x: RequiresContextFutureResult[float, Exception, int]
+    reveal_type(modify_env(test)(x))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult*[builtins.float*, builtins.Exception*, builtins.str]'
+
+
+- case: modify_env_custom_type
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar, ClassVar, Union, Any
+    from returns.interfaces.specific.reader import ReaderBased3
+    from returns.primitives.hkt import SupportsKind3
+    from returns.context import Reader, NoDeps
+    from returns.pointfree import modify_env
+
+    _EnvType = TypeVar('_EnvType', contravariant=True)
+    _NewEnvType = TypeVar('_NewEnvType')
+    _ValueType = TypeVar('_ValueType', covariant=True)
+    _NewValueType = TypeVar('_NewValueType')
+    _ErrorType = TypeVar('_ErrorType', covariant=True)
+
+    class MyClass(
+        SupportsKind3['MyClass', _ValueType, _ErrorType, _EnvType],
+        ReaderBased3[_ValueType, _ErrorType, _EnvType],
+    ):
+        empty: ClassVar[NoDeps] = object()
+
+        def __call__(self, deps: _EnvType) -> Union[_ValueType, _ErrorType]:
+            ...
+
+        def bind_context(
+            self,
+            function: Callable[
+                [_ValueType],
+                Reader[_NewValueType, _EnvType],
+            ],
+        ) -> MyClass[_NewValueType, _ErrorType, _EnvType]:
+            ...
+
+        def modify_env(
+            self,
+            function: Callable[[_NewEnvType], _EnvType],
+        ) -> 'MyClass[_ValueType, _ErrorType, _NewEnvType]':
+            ...
+
+        @classmethod
+        def ask(cls) -> 'MyClass[_EnvType, _ErrorType, _EnvType]':
+            ...
+
+        @classmethod
+        def from_context(
+            self, inner_value: Reader[_ValueType, _EnvType],
+        ) -> MyClass[_ValueType, Any, _EnvType]:
+            ...
+
+    def test(arg: str) -> int:
+        ...
+
+    x: MyClass[int, Exception, int]
+    reveal_type(modify_env(test)(x))  # N: Revealed type is 'main.MyClass*[builtins.int*, builtins.Exception*, builtins.str]'

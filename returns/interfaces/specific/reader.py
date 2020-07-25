@@ -71,6 +71,13 @@ class ReaderBased2(
     ) -> Kind2[_ReaderBased2Type, _UpdatedType, _SecondType]:
         """Allows to apply a wrapped function over a ``Reader`` container."""
 
+    @abstractmethod
+    def modify_env(
+        self: _ReaderBased2Type,
+        function: Callable[[_UpdatedType], _SecondType],
+    ) -> Kind2[_ReaderBased2Type, _FirstType, _UpdatedType]:
+        """Transforms the environment before calling the container."""
+
     @classmethod
     @abstractmethod
     def ask(
@@ -123,6 +130,13 @@ class ReaderBased3(
         ],
     ) -> Kind3[_ReaderBased3Type, _UpdatedType, _SecondType, _ThirdType]:
         """Allows to apply a wrapped function over a ``Reader`` container."""
+
+    @abstractmethod
+    def modify_env(
+        self: _ReaderBased3Type,
+        function: Callable[[_UpdatedType], _ThirdType],
+    ) -> Kind3[_ReaderBased3Type, _FirstType, _SecondType, _UpdatedType]:
+        """Transforms the environment before calling the container."""
 
     @classmethod
     @abstractmethod

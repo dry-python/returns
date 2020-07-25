@@ -23,15 +23,6 @@ def internal_apply(
     """
     Calls a wrapped function in a container on the first container.
 
-    It is not marked as ``@kinded``, because this function is intended
-    to be used inside a kinded context:
-    like in :func:`returns.pointfree.apply.apply`.
-    It returns ``KindN[]`` instance, not a real type.
-
-    If you wish to use the user-facing ``apply``
-    that infers the return type correctly,
-    use :func:`~bind` function instead.
-
     .. code:: python
 
       >>> from returns.methods import apply

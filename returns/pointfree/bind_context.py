@@ -5,7 +5,7 @@ from returns.methods.bind_context import (
     internal_bind_context2,
     internal_bind_context3,
 )
-from returns.primitives.hkt import Kinded, KindN, kinded
+from returns.primitives.hkt import Kind2, Kind3, Kinded, kinded
 
 if TYPE_CHECKING:
     from returns.context import RequiresContext  # noqa: WPS433
@@ -25,8 +25,8 @@ def bind_context2(
         'RequiresContext[_UpdatedType, _SecondType]',
     ],
 ) -> Kinded[Callable[
-    [KindN[_Reader2Kind, _FirstType, _SecondType, _ThirdType]],
-    KindN[_Reader2Kind, _UpdatedType, _SecondType, _ThirdType],
+    [Kind2[_Reader2Kind, _FirstType, _SecondType]],
+    Kind2[_Reader2Kind, _UpdatedType, _SecondType],
 ]]:
     """
     Composes successful container with a function that returns a container.
@@ -53,8 +53,8 @@ def bind_context2(
     """
     @kinded
     def factory(
-        container: KindN[_Reader2Kind, _FirstType, _SecondType, _ThirdType],
-    ) -> KindN[_Reader2Kind, _UpdatedType, _SecondType, _ThirdType]:
+        container: Kind2[_Reader2Kind, _FirstType, _SecondType],
+    ) -> Kind2[_Reader2Kind, _UpdatedType, _SecondType]:
         return internal_bind_context2(container, function)
     return factory
 
@@ -65,8 +65,8 @@ def bind_context3(
         'RequiresContext[_UpdatedType, _ThirdType]',
     ],
 ) -> Kinded[Callable[
-    [KindN[_Reader3Kind, _FirstType, _SecondType, _ThirdType]],
-    KindN[_Reader3Kind, _UpdatedType, _SecondType, _ThirdType],
+    [Kind3[_Reader3Kind, _FirstType, _SecondType, _ThirdType]],
+    Kind3[_Reader3Kind, _UpdatedType, _SecondType, _ThirdType],
 ]]:
     """
     Composes successful container with a function that returns a container.
@@ -99,8 +99,8 @@ def bind_context3(
     """
     @kinded
     def factory(
-        container: KindN[_Reader3Kind, _FirstType, _SecondType, _ThirdType],
-    ) -> KindN[_Reader3Kind, _UpdatedType, _SecondType, _ThirdType]:
+        container: Kind3[_Reader3Kind, _FirstType, _SecondType, _ThirdType],
+    ) -> Kind3[_Reader3Kind, _UpdatedType, _SecondType, _ThirdType]:
         return internal_bind_context3(container, function)
     return factory
 

@@ -249,3 +249,12 @@
         ...
 
     reveal_type(x.alt(test))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.int, builtins.bool*, builtins.str]'
+
+
+- case: requires_context_future_result_modify_env
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextFutureResult
+
+    first: RequiresContextFutureResult[float, bool, int]
+    reveal_type(first.modify_env(int)('1'))  # N: Revealed type is 'returns.future.FutureResult[builtins.float*, builtins.bool*]'

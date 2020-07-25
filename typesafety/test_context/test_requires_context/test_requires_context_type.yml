@@ -65,6 +65,15 @@
     reveal_type(first.bind_context(function))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[builtins.float*, builtins.int]'
 
 
+- case: requires_context_modify_env
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContext
+
+    first: RequiresContext[float, int]
+    reveal_type(first.modify_env(int)('1'))  # N: Revealed type is 'builtins.float*'
+
+
 - case: requires_context_call_wrong
   disable_cache: true
   main: |

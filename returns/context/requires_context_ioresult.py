@@ -25,6 +25,7 @@ if TYPE_CHECKING:
 
 # Context:
 _EnvType = TypeVar('_EnvType', contravariant=True)
+_NewEnvType = TypeVar('_NewEnvType')
 
 # Result:
 _ValueType = TypeVar('_ValueType', covariant=True)
@@ -586,6 +587,29 @@ class RequiresContextIOResult(
                 function(self(deps)._inner_value),  # noqa: WPS437
             )(deps),
         )
+
+    def modify_env(
+        self,
+        function: Callable[[_NewEnvType], _EnvType],
+    ) -> 'RequiresContextIOResult[_ValueType, _ErrorType, _NewEnvType]':
+        """
+        Allows to modify the environment type.
+
+        .. code:: python
+
+          >>> from returns.context import RequiresContextIOResultE
+          >>> from returns.io import IOSuccess, impure_safe
+
+          >>> def div(arg: int) -> RequiresContextIOResultE[float, int]:
+          ...     return RequiresContextIOResultE(
+          ...         impure_safe(lambda deps: arg / deps),
+          ...     )
+
+          >>> assert div(3).modify_env(int)('2') == IOSuccess(1.5)
+          >>> assert div(3).modify_env(int)('0').failure()
+
+        """
+        return RequiresContextIOResult(lambda deps: self(function(deps)))
 
     @classmethod
     def ask(cls) -> 'RequiresContextIOResult[_EnvType, _ErrorType, _EnvType]':

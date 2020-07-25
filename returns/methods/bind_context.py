@@ -2,7 +2,7 @@ from typing import Callable, TypeVar
 
 from returns.context import RequiresContext
 from returns.interfaces.specific.reader import ReaderBased2, ReaderBased3
-from returns.primitives.hkt import KindN, kinded
+from returns.primitives.hkt import Kind2, Kind3, kinded
 
 _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')
@@ -14,23 +14,14 @@ _Reader3Kind = TypeVar('_Reader3Kind', bound=ReaderBased3)
 
 
 def internal_bind_context2(
-    container: KindN[_Reader2Kind, _FirstType, _SecondType, _ThirdType],
+    container: Kind2[_Reader2Kind, _FirstType, _SecondType],
     function: Callable[
         [_FirstType],
         'RequiresContext[_UpdatedType, _SecondType]',
     ],
-) -> KindN[_Reader2Kind, _UpdatedType, _SecondType, _ThirdType]:
+) -> Kind2[_Reader2Kind, _UpdatedType, _SecondType]:
     """
     Bind a ``RequiresContext`` returning function over a container.
-
-    It is not marked as ``@kinded``, because this function is intended
-    to be used inside a kinded context:
-    like in :func:`returns.pointfree.bind.bind_context`.
-    It returns ``Kind2[]`` instance, not a real type.
-
-    If you wish to use the user-facing ``bind_context2``
-    that infers the return type correctly,
-    use :func:`~bind_context2` function instead.
 
     .. code:: python
 
@@ -57,23 +48,14 @@ bind_context2 = kinded(internal_bind_context2)
 
 
 def internal_bind_context3(
-    container: KindN[_Reader3Kind, _FirstType, _SecondType, _ThirdType],
+    container: Kind3[_Reader3Kind, _FirstType, _SecondType, _ThirdType],
     function: Callable[
         [_FirstType],
         'RequiresContext[_UpdatedType, _ThirdType]',
     ],
-) -> KindN[_Reader3Kind, _UpdatedType, _SecondType, _ThirdType]:
+) -> Kind3[_Reader3Kind, _UpdatedType, _SecondType, _ThirdType]:
     """
     Bind a ``RequiresContext`` returning function over a container.
-
-    It is not marked as ``@kinded``, because this function is intended
-    to be used inside a kinded context:
-    like in :func:`returns.pointfree.bind.bind_context`.
-    It returns ``Kind3[]`` instance, not a real type.
-
-    If you wish to use the user-facing ``bind_context3``
-    that infers the return type correctly,
-    use :func:`~bind_context3` function instead.
 
     .. code:: python
 
@@ -104,6 +86,5 @@ def internal_bind_context3(
 #: use it to infer real return type.
 bind_context3 = kinded(internal_bind_context3)
 
-#: Kinded version of :func:`~internal_bind_context3`,
-#: use it to infer real return type.
+#: Useful alias for :func:`~bind_context3`.
 bind_context = bind_context3

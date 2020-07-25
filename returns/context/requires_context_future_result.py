@@ -31,6 +31,7 @@ if TYPE_CHECKING:
 
 # Context:
 _EnvType = TypeVar('_EnvType', contravariant=True)
+_NewEnvType = TypeVar('_NewEnvType')
 
 # Result:
 _ValueType = TypeVar('_ValueType', covariant=True)
@@ -894,8 +895,35 @@ class RequiresContextFutureResult(
             ),
         )
 
+    def modify_env(
+        self,
+        function: Callable[[_NewEnvType], _EnvType],
+    ) -> 'RequiresContextFutureResult[_ValueType, _ErrorType, _NewEnvType]':
+        """
+        Allows to modify the environment type.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.future import future_safe, asyncify
+          >>> from returns.context import RequiresContextFutureResultE
+          >>> from returns.io import IOSuccess
+
+          >>> def div(arg: int) -> RequiresContextFutureResultE[float, int]:
+          ...     return RequiresContextFutureResultE(
+          ...         future_safe(asyncify(lambda deps: arg / deps)),
+          ...     )
+
+          >>> assert anyio.run(div(3).modify_env(int), '2') == IOSuccess(1.5)
+          >>> assert anyio.run(div(3).modify_env(int), '0').failure()
+
+        """
+        return RequiresContextFutureResult(lambda deps: self(function(deps)))
+
     @classmethod
-    def ask(cls) -> 'RequiresContextFutureResult[_EnvType, Any, _EnvType]':
+    def ask(
+        cls,
+    ) -> 'RequiresContextFutureResult[_EnvType, _ErrorType, _EnvType]':
         """
         Is used to get the current dependencies inside the call stack.
 

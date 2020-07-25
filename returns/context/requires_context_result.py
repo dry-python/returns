@@ -23,6 +23,7 @@ if TYPE_CHECKING:
 
 # Context:
 _EnvType = TypeVar('_EnvType', contravariant=True)
+_NewEnvType = TypeVar('_NewEnvType')
 
 # Result:
 _ValueType = TypeVar('_ValueType', covariant=True)
@@ -412,8 +413,31 @@ class RequiresContextResult(
             ),
         )
 
+    def modify_env(
+        self,
+        function: Callable[[_NewEnvType], _EnvType],
+    ) -> 'RequiresContextResult[_ValueType, _ErrorType, _NewEnvType]':
+        """
+        Allows to modify the environment type.
+
+        .. code:: python
+
+          >>> from returns.context import RequiresContextResultE
+          >>> from returns.result import Success, safe
+
+          >>> def div(arg: int) -> RequiresContextResultE[float, int]:
+          ...     return RequiresContextResultE(
+          ...         safe(lambda deps: arg / deps),
+          ...     )
+
+          >>> assert div(3).modify_env(int)('2') == Success(1.5)
+          >>> assert div(3).modify_env(int)('0').failure()
+
+        """
+        return RequiresContextResult(lambda deps: self(function(deps)))
+
     @classmethod
-    def ask(cls) -> 'RequiresContextResult[_EnvType, Any, _EnvType]':
+    def ask(cls) -> 'RequiresContextResult[_EnvType, _ErrorType, _EnvType]':
         """
         Is used to get the current dependencies inside the call stack.
 

@@ -1,55 +1,47 @@
-- case: bind_context2_wrong_env
+- case: modify_env2_wrong_env
   disable_cache: true
   main: |
-    from returns.methods import bind_context2
+    from returns.methods import modify_env2
     from returns.context import RequiresContext
 
-    def test(arg: float) -> RequiresContext[str, int]:
-        ...
-
     x: RequiresContext[float, str]
-    bind_context2(x, test)
+    modify_env2(x, int)
   out: |
-    main:8: error: Argument 2 to "internal_bind_context2" has incompatible type "Callable[[float], RequiresContext[str, int]]"; expected "Callable[[float], RequiresContext[str, str]]"
+    main:5: error: Argument 2 to "internal_modify_env2" has incompatible type "Type[int]"; expected "Callable[[Union[str, SupportsInt, _SupportsIndex]], str]"
 
 
-- case: bind_context2_wrong_type
+- case: modify_env2_wrong_type
   disable_cache: true
   main: |
-    from returns.methods import bind_context2
-    from returns.context import RequiresContext, RequiresContextResult
-
-    def test(arg: float) -> RequiresContext[str, int]:
-        ...
+    from returns.methods import modify_env2
+    from returns.context import RequiresContextResult
 
     x: RequiresContextResult[float, str, int]
-    bind_context2(x, test)
+    modify_env2(x, int)
   out: |
-    main:8: error: Argument 2 to "internal_bind_context2" has incompatible type "Callable[[float], RequiresContext[str, int]]"; expected "Callable[[float], RequiresContext[str, str]]"
-    main:8: error: Value of type variable "_Reader2Kind" of "internal_bind_context2" cannot be "RequiresContextResult[Any, Any, Any]"
+    main:5: error: Argument 1 to "internal_modify_env2" has incompatible type "RequiresContextResult[float, str, int]"; expected "KindN[RequiresContextResult[Any, Any, Any], float, str, NoReturn]"
+    main:5: error: Argument 2 to "internal_modify_env2" has incompatible type "Type[int]"; expected "Callable[[Union[str, SupportsInt, _SupportsIndex]], str]"
+    main:5: error: Value of type variable "_Reader2Kind" of "internal_modify_env2" cannot be "RequiresContextResult[Any, Any, Any]"
 
 
-- case: bind_context2_requires_context
+- case: modify_env2_requires_context
   disable_cache: true
   main: |
-    from returns.methods import bind_context2
+    from returns.methods import modify_env2
     from returns.context import RequiresContext
 
-    def test(arg: float) -> RequiresContext[int, str]:
-        ...
-
-    x: RequiresContext[float, str]
-    reveal_type(bind_context2(x, test))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[builtins.int*, builtins.str]'
+    x: RequiresContext[float, int]
+    reveal_type(modify_env2(x, int))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[builtins.float, Union[builtins.str, typing.SupportsInt, builtins._SupportsIndex]]'
 
 
-- case: bind_context2_custom_type
+- case: modify_env2_custom_type
   disable_cache: true
   main: |
     from typing import Callable, TypeVar, ClassVar
     from returns.interfaces.specific.reader import ReaderBased2
     from returns.primitives.hkt import SupportsKind2
     from returns.context import Reader, NoDeps
-    from returns.methods import bind_context2
+    from returns.methods import modify_env2
 
     _EnvType = TypeVar('_EnvType', contravariant=True)
     _NewEnvType = TypeVar('_NewEnvType')
@@ -90,8 +82,5 @@
         ) -> MyClass[_ReturnType, _EnvType]:
             ...
 
-    def test(a: int) -> Reader[float, str]:
-        ...
-
-    x: MyClass[int, str]
-    reveal_type(bind_context2(x, test))  # N: Revealed type is 'main.MyClass[builtins.float*, builtins.str]'
+    x: MyClass[float, int]
+    reveal_type(modify_env2(x, int))  # N: Revealed type is 'main.MyClass[builtins.float, Union[builtins.str, typing.SupportsInt, builtins._SupportsIndex]]'
