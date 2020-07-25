@@ -15,7 +15,7 @@ from typing_extensions import final
 from returns._generated.iterable import iterable_kind
 from returns.context import NoDeps
 from returns.interfaces import iterable
-from returns.interfaces.specific import result
+from returns.interfaces.specific import reader, result
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind3, SupportsKind3, dekind
 from returns.primitives.types import Immutable
@@ -41,6 +41,7 @@ _FirstType = TypeVar('_FirstType')
 class RequiresContextResult(
     BaseContainer,
     SupportsKind3['RequiresContextResult', _ValueType, _ErrorType, _EnvType],
+    reader.ReaderBased3[_ValueType, _ErrorType, _EnvType],
     result.ResultBased3[_ValueType, _ErrorType, _EnvType],
     iterable.Iterable3[_ValueType, _ErrorType, _EnvType],
 ):

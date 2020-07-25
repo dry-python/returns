@@ -1,0 +1,108 @@
+- case: reader_inheritance_correct
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar, ClassVar
+    from returns.interfaces.specific.reader import ReaderBased2
+    from returns.primitives.hkt import SupportsKind2
+    from returns.context import Reader, NoDeps
+
+    _EnvType = TypeVar('_EnvType', contravariant=True)
+    _ReturnType = TypeVar('_ReturnType', covariant=True)
+    _NewReturnType = TypeVar('_NewReturnType')
+
+    class MyClass(
+        SupportsKind2['MyClass', _ReturnType, _EnvType],
+        ReaderBased2[_ReturnType, _EnvType],
+    ):
+        empty: ClassVar[NoDeps] = object()
+
+        def __call__(self, deps: _EnvType) -> _ReturnType:
+            ...
+
+        def bind_context(
+            self,
+            function: Callable[
+                [_ReturnType],
+                Reader[_NewReturnType, _EnvType],
+            ],
+        ) -> MyClass[_NewReturnType, _EnvType]:
+            ...
+
+        @classmethod
+        def from_context(
+            self, inner_value: Reader[_ReturnType, _EnvType],
+        ) -> MyClass[_ReturnType, _EnvType]:
+            ...
+
+    def test(a: int) -> Reader[float, str]:
+        ...
+
+    x: Reader[int, str]
+    reveal_type(MyClass.from_context(x).bind_context(test))  # N: Revealed type is 'main.MyClass[builtins.float*, builtins.str]'
+
+
+- case: reader_inheritance_missing
+  disable_cache: true
+  main: |
+    from typing import TypeVar
+    from returns.interfaces.specific.reader import ReaderBased2
+    from returns.primitives.hkt import SupportsKind2
+
+    _EnvType = TypeVar('_EnvType')
+    _ReturnType = TypeVar('_ReturnType')
+
+    class MyClass(
+        SupportsKind2['MyClass', _ReturnType, _EnvType],
+        ReaderBased2[_ReturnType, _EnvType],
+    ):
+        ...
+
+    MyClass()
+  out: |
+    main:14: error: Cannot instantiate abstract class 'MyClass' with abstract attributes '__call__', 'apply', ... and 'map' (5 methods suppressed)
+
+
+- case: reader_inheritance_wrong
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar, ClassVar
+    from returns.interfaces.specific.reader import ReaderBased2
+    from returns.primitives.hkt import SupportsKind2
+    from returns.context import Reader, NoDeps
+
+    _EnvType = TypeVar('_EnvType', contravariant=True)
+    _ReturnType = TypeVar('_ReturnType', covariant=True)
+    _NewReturnType = TypeVar('_NewReturnType')
+
+    class MyClass(
+        SupportsKind2['MyClass', _ReturnType, _EnvType],
+        ReaderBased2[_ReturnType, _EnvType],
+    ):
+        def __call__(self, deps: _ReturnType) -> _EnvType:
+            ...
+
+        def bind_context(
+            self,
+            function: Callable[
+                [_ReturnType],
+                Reader[_NewReturnType, _EnvType],
+            ],
+        ) -> MyClass[_ReturnType, _EnvType]:
+            ...
+
+        @classmethod
+        def from_context(
+            self, inner_value: Reader[_EnvType, _EnvType],
+        ) -> MyClass[_ReturnType, _EnvType]:
+            ...
+  out: |
+    main:14: error: Argument 1 of "__call__" is incompatible with supertype "ReaderBased2"; supertype defines the argument type as "_EnvType"
+    main:14: error: Cannot use a contravariant type variable as return type
+    main:14: error: Cannot use a covariant type variable as a parameter
+    main:14: error: Return type "_EnvType" of "__call__" incompatible with return type "_ReturnType" in supertype "ReaderBased2"
+    main:14: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:14: note: This violates the Liskov substitution principle
+    main:17: error: Return type "MyClass[_ReturnType, _EnvType]" of "bind_context" incompatible with return type "KindN[MyClass[_ReturnType, _EnvType], _UpdatedType, _EnvType, NoReturn]" in supertype "ReaderBased2"
+    main:27: error: Argument 1 of "from_context" is incompatible with supertype "ReaderBased2"; supertype defines the argument type as "RequiresContext[_ReturnType, _EnvType]"
+    main:27: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:27: note: This violates the Liskov substitution principle

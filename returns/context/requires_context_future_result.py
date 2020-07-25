@@ -18,7 +18,7 @@ from returns._generated.iterable import iterable_kind
 from returns.context import NoDeps
 from returns.future import Future, FutureResult
 from returns.interfaces import iterable
-from returns.interfaces.specific import ioresult
+from returns.interfaces.specific import ioresult, reader
 from returns.io import IO, IOResult
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind3, SupportsKind3, dekind
@@ -52,6 +52,7 @@ class RequiresContextFutureResult(
         'RequiresContextFutureResult', _ValueType, _ErrorType, _EnvType,
     ],
     ioresult.IOResultBased3[_ValueType, _ErrorType, _EnvType],
+    reader.ReaderBased3[_ValueType, _ErrorType, _EnvType],
     iterable.Iterable3[_ValueType, _ErrorType, _EnvType],
 ):
     """

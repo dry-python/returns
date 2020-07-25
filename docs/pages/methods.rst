@@ -48,3 +48,12 @@ bind_ioresult methods
 
 .. autofunction:: returns.methods.bind_ioresult.internal_bind_ioresult
 .. autofunction:: returns.methods.bind_ioresult.bind_ioresult
+
+bind_context methods
+~~~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: returns.methods.bind_context.internal_bind_context2
+.. autofunction:: returns.methods.bind_context.bind_context2
+.. autofunction:: returns.methods.bind_context.internal_bind_context3
+.. autofunction:: returns.methods.bind_context.bind_context3
+.. autofunction:: returns.methods.bind_context.bind_context

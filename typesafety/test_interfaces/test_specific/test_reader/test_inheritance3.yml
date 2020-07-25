@@ -1,0 +1,110 @@
+- case: reader_inheritance_correct
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar, ClassVar, Union, Any
+    from returns.interfaces.specific.reader import ReaderBased3
+    from returns.primitives.hkt import SupportsKind3
+    from returns.context import Reader, NoDeps
+
+    _EnvType = TypeVar('_EnvType', contravariant=True)
+    _ValueType = TypeVar('_ValueType', covariant=True)
+    _NewValueType = TypeVar('_NewValueType')
+    _ErrorType = TypeVar('_ErrorType', covariant=True)
+
+    class MyClass(
+        SupportsKind3['MyClass', _ValueType, _ErrorType, _EnvType],
+        ReaderBased3[_ValueType, _ErrorType, _EnvType],
+    ):
+        empty: ClassVar[NoDeps] = object()
+
+        def __call__(self, deps: _EnvType) -> Union[_ValueType, _ErrorType]:
+            ...
+
+        def bind_context(
+            self,
+            function: Callable[
+                [_ValueType],
+                Reader[_NewValueType, _EnvType],
+            ],
+        ) -> MyClass[_NewValueType, _ErrorType, _EnvType]:
+            ...
+
+        @classmethod
+        def from_context(
+            self, inner_value: Reader[_ValueType, _EnvType],
+        ) -> MyClass[_ValueType, Any, _EnvType]:
+            ...
+
+    def test(a: int) -> Reader[float, str]:
+        ...
+
+    x: Reader[int, str]
+    reveal_type(MyClass.from_context(x).bind_context(test))  # N: Revealed type is 'main.MyClass[builtins.float*, Any, builtins.str]'
+
+
+- case: reader_inheritance_missing
+  disable_cache: true
+  main: |
+    from typing import TypeVar
+    from returns.interfaces.specific.reader import ReaderBased3
+    from returns.primitives.hkt import SupportsKind3
+
+    _EnvType = TypeVar('_EnvType')
+    _ValueType = TypeVar('_ValueType')
+    _ErrorType = TypeVar('_ErrorType')
+
+    class MyClass(
+        SupportsKind3['MyClass', _ValueType, _ErrorType, _EnvType],
+        ReaderBased3[_ValueType, _ErrorType, _EnvType],
+    ):
+        ...
+
+    MyClass()
+  out: |
+    main:15: error: Cannot instantiate abstract class 'MyClass' with abstract attributes '__call__', 'apply', ... and 'map' (5 methods suppressed)
+
+
+- case: reader_inheritance_wrong
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar, ClassVar, Any
+    from returns.interfaces.specific.reader import ReaderBased3
+    from returns.primitives.hkt import SupportsKind3
+    from returns.context import Reader
+
+    _EnvType = TypeVar('_EnvType', contravariant=True)
+    _ValueType = TypeVar('_ValueType', covariant=True)
+    _NewValueType = TypeVar('_NewValueType')
+    _ErrorType = TypeVar('_ErrorType', covariant=True)
+
+    class MyClass(
+        SupportsKind3['MyClass', _ValueType, _ErrorType, _EnvType],
+        ReaderBased3[_ValueType, _ErrorType, _EnvType],
+    ):
+        def __call__(self, deps: _ValueType) -> Any:
+            ...
+
+        def bind_context(
+            self,
+            function: Callable[
+                [_ValueType],
+                Reader[_ValueType, _EnvType],
+            ],
+        ) -> MyClass[_ValueType, _ErrorType, _EnvType]:
+            ...
+
+        @classmethod
+        def from_context(
+            self, inner_value: Reader[_ValueType, _EnvType],
+        ) -> MyClass[_ValueType, Exception, _EnvType]:
+            ...
+  out: |
+    main:15: error: Argument 1 of "__call__" is incompatible with supertype "ReaderBased3"; supertype defines the argument type as "_EnvType"
+    main:15: error: Cannot use a covariant type variable as a parameter
+    main:15: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:15: note: This violates the Liskov substitution principle
+    main:18: error: Argument 1 of "bind_context" is incompatible with supertype "ReaderBased3"; supertype defines the argument type as "Callable[[_ValueType], RequiresContext[_UpdatedType, _EnvType]]"
+    main:18: error: Return type "MyClass[_ValueType, _ErrorType, _EnvType]" of "bind_context" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType, _EnvType], _UpdatedType, _ErrorType, _EnvType]" in supertype "ReaderBased3"
+    main:18: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:18: note: This violates the Liskov substitution principle
+    main:28: error: Return type "MyClass[_ValueType, Exception, _EnvType]" of "from_context" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType, _EnvType], _ValueType, _ErrorType, _EnvType]" in supertype "ReaderBased3"

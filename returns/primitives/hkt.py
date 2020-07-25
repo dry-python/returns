@@ -149,7 +149,7 @@ def dekind(
     """
     Turns ``Kind1[IO, int]`` type into real ``IO[int]`` type.
 
-    Should be used when you are left with accidential ``Kind`` instance
+    Should be used when you are left with accidential ``KindN`` instance
     when you really want to have the real type.
 
     Works with type arguments of any length.

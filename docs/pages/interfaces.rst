@@ -56,3 +56,9 @@ IOResult specific
 
 .. automodule:: returns.interfaces.specific.ioresult
   :members:
+
+Reader specific
+~~~~~~~~~~~~~~~
+
+.. automodule:: returns.interfaces.specific.reader
+  :members:

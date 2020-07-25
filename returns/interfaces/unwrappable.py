@@ -13,6 +13,9 @@ class Unwrappable(Generic[_FirstType, _SecondType]):
 
     There are no aliases or ``UnwrappableN`` for ``Unwrappable`` interface.
     Because it always uses two and just two types.
+
+    Not all types can be ``Unwrappable`` because we do require
+    to raise ``UnwrapFailedError`` if unwrap is not possible.
     """
 
     @abstractmethod

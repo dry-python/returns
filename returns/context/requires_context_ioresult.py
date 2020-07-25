@@ -15,7 +15,7 @@ from typing_extensions import final
 from returns._generated.iterable import iterable_kind
 from returns.context import NoDeps
 from returns.interfaces import iterable
-from returns.interfaces.specific import ioresult
+from returns.interfaces.specific import ioresult, reader
 from returns.io import IO, IOFailure, IOResult, IOSuccess
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind3, SupportsKind3, dekind
@@ -43,6 +43,7 @@ _FirstType = TypeVar('_FirstType')
 class RequiresContextIOResult(
     BaseContainer,
     SupportsKind3['RequiresContextIOResult', _ValueType, _ErrorType, _EnvType],
+    reader.ReaderBased3[_ValueType, _ErrorType, _EnvType],
     ioresult.IOResultBased3[_ValueType, _ErrorType, _EnvType],
     iterable.Iterable3[_ValueType, _ErrorType, _EnvType],
 ):

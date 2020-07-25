@@ -3,7 +3,7 @@
   main: |
     from typing import Callable, TypeVar, Any
     from returns.interfaces.specific.result import ResultBased2
-    from returns.primitives.hkt import Kind2, SupportsKind2
+    from returns.primitives.hkt import SupportsKind2
     from returns.result import Result
 
     _ValueType = TypeVar('_ValueType')

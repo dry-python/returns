@@ -225,6 +225,10 @@ API Reference
 
 .. autofunction:: returns.pointfree.bind_async_future_result
 
+.. autofunction:: returns.pointfree.bind_context2
+
+.. autofunction:: returns.pointfree.bind_context3
+
 .. autofunction:: returns.pointfree.bind_context
 
 .. autofunction:: returns.pointfree.bind_context_result

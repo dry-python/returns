@@ -15,7 +15,8 @@ from typing_extensions import final
 from returns._generated.iterable import iterable_kind
 from returns.functions import identity
 from returns.future import FutureResult
-from returns.interfaces import applicative, bindable, iterable, mappable
+from returns.interfaces import iterable
+from returns.interfaces.specific import reader
 from returns.io import IOResult
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind2, SupportsKind2, dekind
@@ -54,9 +55,7 @@ NoDeps = Any
 class RequiresContext(
     BaseContainer,
     SupportsKind2['RequiresContext', _ReturnType, _EnvType],
-    mappable.Mappable2[_ReturnType, _EnvType],
-    bindable.Bindable2[_ReturnType, _EnvType],
-    applicative.Applicative2[_ReturnType, _EnvType],
+    reader.ReaderBased2[_ReturnType, _EnvType],
     iterable.Iterable2[_ReturnType, _EnvType],
 ):
     """
@@ -218,6 +217,9 @@ class RequiresContext(
         """
         return RequiresContext(lambda deps: dekind(function(self(deps)))(deps))
 
+    #: Alias for `bind_context` method, it is the same as `bind` here.
+    bind_context = bind
+
     @classmethod
     def from_value(
         cls, inner_value: _FirstType,
@@ -239,6 +241,24 @@ class RequiresContext(
         Might be used with or without direct type hint.
         """
         return RequiresContext(lambda _: inner_value)
+
+    @classmethod
+    def from_context(
+        cls, inner_value: 'RequiresContext[_ReturnType, _EnvType]',
+    ) -> 'RequiresContext[_ReturnType, _EnvType]':
+        """
+        Used to create new containers from existing ones.
+
+        Used as a part of ``ReaderBased2`` interface.
+
+        .. code:: python
+
+          >>> from returns.context import RequiresContext
+          >>> unit = RequiresContext.from_value(5)
+          >>> assert RequiresContext.from_context(unit)(...) == unit(...)
+
+        """
+        return inner_value
 
     @classmethod
     def from_iterable(
