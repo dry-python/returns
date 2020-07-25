@@ -2,14 +2,8 @@ from copy import copy, deepcopy
 
 import pytest
 
-from returns.context import ContextIOResult, RequiresContextIOResult
+from returns.context import RequiresContextIOResult
 from returns.primitives.exceptions import ImmutableStateError
-
-
-def test_context_ioresult_immutable():
-    """Ensures that helper is immutable."""
-    with pytest.raises(ImmutableStateError):
-        ContextIOResult().abc = 1
 
 
 def test_requires_context_result_immutable():
@@ -20,7 +14,7 @@ def test_requires_context_result_immutable():
 
 def test_requires_context_result_immutable_copy():
     """Ensures that helper returns it self when passed to copy function."""
-    context_ioresult: ContextIOResult = ContextIOResult()
+    context_ioresult = RequiresContextIOResult.from_value(1)
     assert context_ioresult is copy(context_ioresult)
 
 

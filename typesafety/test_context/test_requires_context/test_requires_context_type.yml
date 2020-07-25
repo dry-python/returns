@@ -52,6 +52,19 @@
     reveal_type(first.bind(function))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[builtins.float*, builtins.int]'
 
 
+- case: requires_context_bind_context_correct
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContext
+
+    first: RequiresContext[str, int]
+
+    def function(arg: str) -> RequiresContext[float, int]:
+        return RequiresContext.from_value(1.5)
+
+    reveal_type(first.bind_context(function))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[builtins.float*, builtins.int]'
+
+
 - case: requires_context_call_wrong
   disable_cache: true
   main: |

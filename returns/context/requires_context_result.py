@@ -1,10 +1,8 @@
-from abc import ABCMeta
 from typing import (
     TYPE_CHECKING,
     Any,
     Callable,
     ClassVar,
-    Generic,
     Iterable,
     Sequence,
     TypeVar,
@@ -18,7 +16,6 @@ from returns.interfaces import iterable
 from returns.interfaces.specific import reader, result
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind3, SupportsKind3, dekind
-from returns.primitives.types import Immutable
 from returns.result import Failure, Result, Success
 
 if TYPE_CHECKING:
@@ -416,6 +413,31 @@ class RequiresContextResult(
         )
 
     @classmethod
+    def ask(cls) -> 'RequiresContextResult[_EnvType, Any, _EnvType]':
+        """
+        Is used to get the current dependencies inside the call stack.
+
+        Similar to :meth:`returns.context.requires_context.RequiresContext.ask`,
+        but returns ``Result`` instead of a regular value.
+
+        Please, refer to the docs there to learn how to use it.
+
+        One important note that is worth duplicating here:
+        you might need to provide ``_EnvType`` explicitly,
+        so ``mypy`` will know about it statically.
+
+        .. code:: python
+
+          >>> from returns.context import RequiresContextResultE
+          >>> from returns.result import Success
+          >>> assert RequiresContextResultE[int, int].ask().map(
+          ...    str,
+          ... )(1) == Success('1')
+
+        """
+        return RequiresContextResult(Success)
+
+    @classmethod
     def from_result(
         cls, inner_value: Result[_ValueType, _ErrorType],
     ) -> 'RequiresContextResult[_ValueType, _ErrorType, NoDeps]':
@@ -577,40 +599,6 @@ class RequiresContextResult(
 
         """
         return dekind(iterable_kind(cls, inner_value))
-
-
-@final
-class ContextResult(Immutable, Generic[_EnvType], metaclass=ABCMeta):
-    """
-    Helpers that can be used to work with ``RequiresContextResult`` container.
-
-    Related to :class:`returns.context.Context`, refer there for the docs.
-    """
-
-    __slots__ = ()
-
-    @classmethod
-    def ask(cls) -> RequiresContextResult[_EnvType, Any, _EnvType]:
-        """
-        Is used to get the current dependencies inside the call stack.
-
-        Similar to :meth:`returns.context.Context.ask`,
-        but returns ``Result`` instead of a regular value.
-
-        Please, refer to the docs there to learn how to use it.
-
-        One important note that is worth duplicating here:
-        you might need to provide ``_EnvType`` explicitly,
-        so ``mypy`` will know about it statically.
-
-        .. code:: python
-
-          >>> from returns.context import ContextResult
-          >>> from returns.result import Success
-          >>> assert ContextResult[int].ask().map(str)(1) == Success('1')
-
-        """
-        return RequiresContextResult(Success)
 
 
 # Aliases:

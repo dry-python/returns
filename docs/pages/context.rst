@@ -155,11 +155,11 @@ How can we do that with our existing function?
 
 We are already using ``RequiresContext``,
 but its dependencies are just hidden from us!
-We have a special helper for this case: :meth:`returns.context.Context.ask()`,
+We have a special helper for this case: ``.ask()``,
 which returns us current dependencies.
 
 The only thing we need to is to properly
-annotate the type for our case: ``Context[_Deps].ask()``
+annotate the type for our case: ``RequiresContext[int, _Deps].ask()``
 Sadly, currently ``mypy`` is not able to infer the dependency type
 out of the context and we need to explicitly provide it.
 
@@ -167,7 +167,7 @@ Let's see the final result:
 
 .. code:: python
 
-  from returns.context import Context, RequiresContext
+  from returns.context import RequiresContext, RequiresContext
 
   class _Deps(Protocol):  # we rely on abstractions, not direct values or types
       WORD_THRESHOLD: int
@@ -180,7 +180,7 @@ Let's see the final result:
           ])
           return _award_points_for_letters(guessed_letters_count)
 
-      return Context[_Deps].ask().bind(factory)
+      return RequiresContext[int, _Deps].ask().bind(factory)
 
 And now we access the current context from any place in our callstack.
 Isn't it convenient?
@@ -314,7 +314,7 @@ Here's how it should be used:
   import httpx  # you wound need to `pip install httpx`
   from typing_extensions import Final, TypedDict
 
-  from returns.context import ContextFutureResult, RequiresContextFutureResultE
+  from returns.context import RequiresContextFutureResultE
   from returns.functions import tap
   from returns.future import FutureResultE, future_safe
   from returns.pipeline import managed
@@ -335,7 +335,10 @@ Here's how it should be used:
   def _fetch_post(
       post_id: int,
   ) -> RequiresContextFutureResultE[_Post, httpx.AsyncClient]:
-      return ContextFutureResult[httpx.AsyncClient].ask().bind_future_result(
+      return RequresContextFutureResultE[
+          _Post,
+          httpx.AsyncClient,
+      ].ask().bind_future_result(
           lambda client: future_safe(client.get)(_URL.format(post_id)),
       ).bind_result(
           safe(tap(httpx.Response.raise_for_status)),
@@ -597,12 +600,12 @@ So, using this technique is better:
 
 .. code:: python
 
-  from returns.context import Context, RequiresContext
+  from returns.context import RequiresContext
 
   def some_context(*args, **kwargs) -> RequiresContext[str, int]:
       def factory(deps: int) -> RequiresContext[str, int]:
           ...
-      return Context[int].ask().bind(factory)
+      return RequiresContext[str, int].ask().bind(factory)
 
 What is the difference between DI and RequiresContext?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

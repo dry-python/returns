@@ -1,11 +1,9 @@
-from abc import ABCMeta
 from typing import (
     TYPE_CHECKING,
     Any,
     Awaitable,
     Callable,
     ClassVar,
-    Generic,
     Iterable,
     Sequence,
     TypeVar,
@@ -22,7 +20,6 @@ from returns.interfaces.specific import ioresult, reader
 from returns.io import IO, IOResult
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind3, SupportsKind3, dekind
-from returns.primitives.types import Immutable
 from returns.result import Result
 
 if TYPE_CHECKING:
@@ -898,6 +895,35 @@ class RequiresContextFutureResult(
         )
 
     @classmethod
+    def ask(cls) -> 'RequiresContextFutureResult[_EnvType, Any, _EnvType]':
+        """
+        Is used to get the current dependencies inside the call stack.
+
+        Similar to
+        :meth:`returns.context.requires_context.RequiresContext.ask`,
+        but returns ``FutureResult`` instead of a regular value.
+
+        Please, refer to the docs there to learn how to use it.
+
+        One important note that is worth duplicating here:
+        you might need to provide type annotations explicitly,
+        so ``mypy`` will know about it statically.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.context import RequiresContextFutureResultE
+          >>> from returns.io import IOSuccess
+
+          >>> assert anyio.run(
+          ...     RequiresContextFutureResultE[int, int].ask().map(str),
+          ...     1,
+          ... ) == IOSuccess('1')
+
+        """
+        return RequiresContextFutureResult(FutureResult.from_value)
+
+    @classmethod
     def from_result(
         cls, inner_value: Result[_ValueType, _ErrorType],
     ) -> 'RequiresContextFutureResult[_ValueType, _ErrorType, NoDeps]':
@@ -1327,47 +1353,6 @@ class RequiresContextFutureResult(
 
         """
         return dekind(iterable_kind(cls, inner_value))
-
-
-@final
-class ContextFutureResult(Immutable, Generic[_EnvType], metaclass=ABCMeta):
-    """
-    Helpers that can be used to work with ``ReaderFutureResult`` container.
-
-    Related to :class:`returns.context.requires_context.Context`
-    and :class:`returns.context.requires_context_result.ContextResult`,
-    refer there for the docs.
-    """
-
-    __slots__ = ()
-
-    @classmethod
-    def ask(cls) -> RequiresContextFutureResult[_EnvType, Any, _EnvType]:
-        """
-        Is used to get the current dependencies inside the call stack.
-
-        Similar to :meth:`returns.context.requires_context.Context.ask`,
-        but returns ``IOResult`` instead of a regular value.
-
-        Please, refer to the docs there to learn how to use it.
-
-        One important note that is worth duplicating here:
-        you might need to provide ``_EnvType`` explicitly,
-        so ``mypy`` will know about it statically.
-
-        .. code:: python
-
-          >>> import anyio
-          >>> from returns.context import ContextFutureResult
-          >>> from returns.io import IOSuccess
-
-          >>> assert anyio.run(
-          ...     ContextFutureResult[int].ask().map(str),
-          ...     1,
-          ... ) == IOSuccess('1')
-
-        """
-        return RequiresContextFutureResult(FutureResult.from_value)
 
 
 # Aliases:

@@ -1,10 +1,10 @@
-from returns.context import Context, RequiresContext
+from returns.context import RequiresContext
 
 
 def test_context_ask():
     """Ensures that ``ask`` method works correctly."""
-    assert Context[int].ask()(1) == 1
-    assert Context[str].ask()('a') == 'a'
+    assert RequiresContext[str, int].ask()(1) == 1
+    assert RequiresContext[int, str].ask()('a') == 'a'
 
 
 def test_requires_context_from_value():

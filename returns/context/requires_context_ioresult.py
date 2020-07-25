@@ -1,10 +1,8 @@
-from abc import ABCMeta
 from typing import (
     TYPE_CHECKING,
     Any,
     Callable,
     ClassVar,
-    Generic,
     Iterable,
     Sequence,
     TypeVar,
@@ -19,7 +17,6 @@ from returns.interfaces.specific import ioresult, reader
 from returns.io import IO, IOFailure, IOResult, IOSuccess
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind3, SupportsKind3, dekind
-from returns.primitives.types import Immutable
 from returns.result import Result
 
 if TYPE_CHECKING:
@@ -591,6 +588,31 @@ class RequiresContextIOResult(
         )
 
     @classmethod
+    def ask(cls) -> 'RequiresContextIOResult[_EnvType, _ErrorType, _EnvType]':
+        """
+        Is used to get the current dependencies inside the call stack.
+
+        Similar to :meth:`returns.context.requires_context.RequiresContext.ask`,
+        but returns ``IOResult`` instead of a regular value.
+
+        Please, refer to the docs there to learn how to use it.
+
+        One important note that is worth duplicating here:
+        you might need to provide ``_EnvType`` explicitly,
+        so ``mypy`` will know about it statically.
+
+        .. code:: python
+
+          >>> from returns.context import RequiresContextIOResultE
+          >>> from returns.io import IOSuccess
+          >>> assert RequiresContextIOResultE[int, int].ask().map(
+          ...     str,
+          ... )(1) == IOSuccess('1')
+
+        """
+        return RequiresContextIOResult(IOSuccess)
+
+    @classmethod
     def from_result(
         cls, inner_value: 'Result[_ValueType, _ErrorType]',
     ) -> 'RequiresContextIOResult[_ValueType, _ErrorType, NoDeps]':
@@ -863,42 +885,6 @@ class RequiresContextIOResult(
 
         """
         return dekind(iterable_kind(cls, inner_value))
-
-
-@final
-class ContextIOResult(Immutable, Generic[_EnvType], metaclass=ABCMeta):
-    """
-    Helpers that can be used to work with ``RequiresContextIOResult`` container.
-
-    Related to :class:`returns.context.requires_context.Context`
-    and :class:`returns.context.requires_context_result.ContextResult`,
-    refer there for the docs.
-    """
-
-    __slots__ = ()
-
-    @classmethod
-    def ask(cls) -> RequiresContextIOResult[_EnvType, Any, _EnvType]:
-        """
-        Is used to get the current dependencies inside the call stack.
-
-        Similar to :meth:`returns.context.requires_context.Context.ask`,
-        but returns ``IOResult`` instead of a regular value.
-
-        Please, refer to the docs there to learn how to use it.
-
-        One important note that is worth duplicating here:
-        you might need to provide ``_EnvType`` explicitly,
-        so ``mypy`` will know about it statically.
-
-        .. code:: python
-
-          >>> from returns.context import ContextIOResult
-          >>> from returns.io import IOSuccess
-          >>> assert ContextIOResult[int].ask().map(str)(1) == IOSuccess('1')
-
-        """
-        return RequiresContextIOResult(IOSuccess)
 
 
 # Aliases:

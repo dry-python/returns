@@ -18,13 +18,17 @@ for ``bind_context`` composition: one for each interface.
 
 Furthermore, ``Reader`` cannot have ``ReaderBased1`` type,
 because we need both ``value`` and ``env`` types at all cases.
+
+See also:
+    https://github.com/dry-python/returns/issues/485
+
 """
 
 from abc import abstractmethod, abstractproperty
 from typing import TYPE_CHECKING, Any, Callable, NoReturn, Type, TypeVar
 
 from returns.interfaces import applicative, bindable, mappable
-from returns.primitives.hkt import KindN
+from returns.primitives.hkt import Kind2, Kind3
 
 if TYPE_CHECKING:
     from returns.context import RequiresContext, NoDeps  # noqa: WPS433
@@ -64,15 +68,22 @@ class ReaderBased2(
             [_FirstType],
             'RequiresContext[_UpdatedType, _SecondType]',
         ],
-    ) -> KindN[_ReaderBased2Type, _UpdatedType, _SecondType, NoReturn]:
+    ) -> Kind2[_ReaderBased2Type, _UpdatedType, _SecondType]:
         """Allows to apply a wrapped function over a ``Reader`` container."""
+
+    @classmethod
+    @abstractmethod
+    def ask(
+        cls: Type[_ReaderBased2Type],
+    ) -> Kind2[_ReaderBased2Type, _SecondType, _SecondType]:
+        """Returns the depedencies inside the container."""
 
     @classmethod
     @abstractmethod
     def from_context(
         cls: Type[_ReaderBased2Type],  # noqa: N805
         inner_value: 'RequiresContext[_FirstType, _SecondType]',
-    ) -> KindN[_ReaderBased2Type, _FirstType, _SecondType, _ThirdType]:
+    ) -> Kind2[_ReaderBased2Type, _FirstType, _SecondType]:
         """Unit method to create new containers from successful ``Reader``."""
 
 
@@ -110,13 +121,20 @@ class ReaderBased3(
             [_FirstType],
             'RequiresContext[_UpdatedType, _ThirdType]',
         ],
-    ) -> KindN[_ReaderBased3Type, _UpdatedType, _SecondType, _ThirdType]:
+    ) -> Kind3[_ReaderBased3Type, _UpdatedType, _SecondType, _ThirdType]:
         """Allows to apply a wrapped function over a ``Reader`` container."""
+
+    @classmethod
+    @abstractmethod
+    def ask(
+        cls: Type[_ReaderBased3Type],
+    ) -> Kind3[_ReaderBased3Type, _ThirdType, _SecondType, _ThirdType]:
+        """Returns the depedencies inside the container."""
 
     @classmethod
     @abstractmethod
     def from_context(
         cls: Type[_ReaderBased3Type],  # noqa: N805
         inner_value: 'RequiresContext[_FirstType, _ThirdType]',
-    ) -> KindN[_ReaderBased3Type, _FirstType, _SecondType, _ThirdType]:
+    ) -> Kind3[_ReaderBased3Type, _FirstType, _SecondType, _ThirdType]:
         """Unit method to create new containers from successful ``Reader``."""

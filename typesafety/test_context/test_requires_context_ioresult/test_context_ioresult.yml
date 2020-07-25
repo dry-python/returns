@@ -1,14 +1,14 @@
 - case: context_result_io_ask1
   disable_cache: true
   main: |
-    from returns.context import ContextIOResult
+    from returns.context import RequiresContextIOResult
 
-    reveal_type(ContextIOResult.ask())  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[<nothing>, Any, <nothing>]'
+    reveal_type(RequiresContextIOResult.ask())  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[<nothing>, <nothing>, <nothing>]'
 
 
 - case: context_result_io_ask2
   disable_cache: true
   main: |
-    from returns.context import ContextIOResult
+    from returns.context import RequiresContextIOResult
 
-    reveal_type(ContextIOResult[str].ask())  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.str*, Any, builtins.str*]'
+    reveal_type(RequiresContextIOResult[int, bool, str].ask())  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.str*, builtins.bool*, builtins.str*]'

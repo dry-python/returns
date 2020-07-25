@@ -1,10 +1,8 @@
-from abc import ABCMeta
 from typing import (
     TYPE_CHECKING,
     Any,
     Callable,
     ClassVar,
-    Generic,
     Iterable,
     Sequence,
     TypeVar,
@@ -20,7 +18,6 @@ from returns.interfaces.specific import reader
 from returns.io import IOResult
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind2, SupportsKind2, dekind
-from returns.primitives.types import Immutable
 from returns.result import Result
 
 if TYPE_CHECKING:
@@ -221,6 +218,88 @@ class RequiresContext(
     bind_context = bind
 
     @classmethod
+    def ask(cls) -> 'RequiresContext[_EnvType, _EnvType]':
+        """
+        Get current context to use the dependencies.
+
+        It is a common scenario when you need to use the environment.
+        For example, you want to do some context-related computation,
+        but you don't have the context instance at your disposal.
+        That's where ``.ask()`` becomes useful!
+
+        .. code:: python
+
+          >>> from typing_extensions import TypedDict
+          >>> class Deps(TypedDict):
+          ...     message: str
+
+          >>> def first(lg: bool) -> RequiresContext[int, Deps]:
+          ...     # `deps` has `Deps` type here:
+          ...     return RequiresContext(
+          ...         lambda deps: deps['message'] if lg else 'error',
+          ...     )
+
+          >>> def second(text: str) -> RequiresContext[int, int]:
+          ...     return first(len(text) > 3)
+
+          >>> assert second('abc')({'message': 'ok'}) == 'error'
+          >>> assert second('abcd')({'message': 'ok'}) == 'ok'
+
+        And now imagine that you have to change this ``3`` limit.
+        And you want to be able to set it via environment as well.
+        Ok, let's fix it with the power of ``RequiresContext.ask()``!
+
+        .. code:: python
+
+          >>> from typing_extensions import TypedDict
+          >>> class Deps(TypedDict):
+          ...     message: str
+          ...     limit: int   # note this new field!
+
+          >>> def new_first(lg: bool) -> RequiresContext[int, Deps]:
+          ...     # `deps` has `Deps` type here:
+          ...     return RequiresContext(
+          ...         lambda deps: deps['message'] if lg else 'err',
+          ...     )
+
+          >>> def new_second(text: str) -> RequiresContext[int, int]:
+          ...     return RequiresContext[int, Deps].ask().bind(
+          ...         lambda deps: new_first(len(text) > deps.get('limit', 3)),
+          ...     )
+
+          >>> assert new_second('abc')({'message': 'ok', 'limit': 2}) == 'ok'
+          >>> assert new_second('abcd')({'message': 'ok'}) == 'ok'
+          >>> assert new_second('abcd')({'message': 'ok', 'limit': 5}) == 'err'
+
+        That's how ``ask`` works.
+
+        This class contains methods that require
+        to explicitly set type annotations. Why?
+        Because it is impossible to figure out the type without them.
+        So, here's how you should use them:
+
+        .. code:: python
+
+            RequiresContext[int, Dict[str, str]].ask()
+
+        Otherwise, your ``.ask()`` method
+        will return ``RequiresContext[<nothing>, <nothing>]``,
+        which is unusable:
+
+        .. code:: python
+
+            env = RequiresContext.ask()
+            env(some_deps)
+
+        And ``mypy`` will warn you: ``error: Need type annotation for '...'``
+
+        See also:
+            https://dev.to/gcanti/getting-started-with-fp-ts-reader-1ie5
+
+        """
+        return RequiresContext(identity)
+
+    @classmethod
     def from_value(
         cls, inner_value: _FirstType,
     ) -> 'RequiresContext[_FirstType, NoDeps]':
@@ -363,101 +442,6 @@ class RequiresContext(
 
         """
         return RequiresContext(inner_value)
-
-
-@final
-class Context(Immutable, Generic[_EnvType], metaclass=ABCMeta):
-    """
-    Helpers that can be used to work with ``RequiresContext`` container.
-
-    Some of them require an explicit type to be specified.
-
-    This class contains methods that require
-    to explicitly set type annotations. Why?
-    Because it is impossible to figure out the type without them.
-
-    So, here's how you should use them:
-
-    .. code:: python
-
-      Context[Dict[str, str]].ask()
-
-    Otherwise, your ``.ask()`` method
-    will return ``RequiresContext[<nothing>, <nothing>]``,
-    which is unusable:
-
-    .. code:: python
-
-      env = Context.ask()
-      env(some_deps)
-
-    And ``mypy`` will warn you: ``error: Need type annotation for 'a'``
-
-    """
-
-    __slots__ = ()
-
-    @classmethod
-    def ask(cls) -> RequiresContext[_EnvType, _EnvType]:
-        """
-        Get current context to use the dependencies.
-
-        It is a common scenario when you need to use the environment.
-        For example, you want to do some context-related computation,
-        but you don't have the context instance at your disposal.
-        That's where ``.ask()`` becomes useful!
-
-        .. code:: python
-
-          >>> from typing_extensions import TypedDict
-          >>> class Deps(TypedDict):
-          ...     message: str
-
-          >>> def first(lg: bool) -> RequiresContext[int, Deps]:
-          ...     # `deps` has `Deps` type here:
-          ...     return RequiresContext(
-          ...         lambda deps: deps['message'] if lg else 'error',
-          ...     )
-
-          >>> def second(text: str) -> RequiresContext[int, int]:
-          ...     return first(len(text) > 3)
-
-          >>> assert second('abc')({'message': 'ok'}) == 'error'
-          >>> assert second('abcd')({'message': 'ok'}) == 'ok'
-
-        And now imagine that you have to change this ``3`` limit.
-        And you want to be able to set it via environment as well.
-        Ok, let's fix it with the power of ``Context.ask()``!
-
-        .. code:: python
-
-          >>> from typing_extensions import TypedDict
-          >>> class Deps(TypedDict):
-          ...     message: str
-          ...     limit: int   # note this new field!
-
-          >>> def new_first(lg: bool) -> RequiresContext[int, Deps]:
-          ...     # `deps` has `Deps` type here:
-          ...     return RequiresContext(
-          ...         lambda deps: deps['message'] if lg else 'err',
-          ...     )
-
-          >>> def new_second(text: str) -> RequiresContext[int, int]:
-          ...     return Context[Deps].ask().bind(
-          ...         lambda deps: new_first(len(text) > deps.get('limit', 3)),
-          ...     )
-
-          >>> assert new_second('abc')({'message': 'ok', 'limit': 2}) == 'ok'
-          >>> assert new_second('abcd')({'message': 'ok'}) == 'ok'
-          >>> assert new_second('abcd')({'message': 'ok', 'limit': 5}) == 'err'
-
-        That's how ``ask`` works.
-
-        See also:
-            https://dev.to/gcanti/getting-started-with-fp-ts-reader-1ie5
-
-        """
-        return RequiresContext(identity)
 
 
 # Aliases
