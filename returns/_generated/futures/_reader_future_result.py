@@ -16,7 +16,12 @@ async def async_bind_async(
     function: Callable[
         [_ValueType],
         Awaitable[
-            'RequiresContextFutureResult[_NewValueType, _ErrorType, _EnvType]',
+            Kind3[
+                'RequiresContextFutureResult',
+                _NewValueType,
+                _ErrorType,
+                _EnvType,
+            ],
         ],
     ],
     container: 'RequiresContextFutureResult[_ValueType, _ErrorType, _EnvType]',
@@ -25,7 +30,9 @@ async def async_bind_async(
     """Async binds a coroutine with container over a value."""
     inner_value = await container(deps)._inner_value
     if isinstance(inner_value, Result.success_type):
-        return await (await function(inner_value.unwrap()))(deps)._inner_value
+        return await dekind(
+            await function(inner_value.unwrap()),
+        )(deps)._inner_value
     return inner_value  # type: ignore[return-value]
 
 

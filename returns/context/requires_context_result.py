@@ -40,7 +40,7 @@ class RequiresContextResult(
     BaseContainer,
     SupportsKind3['RequiresContextResult', _ValueType, _ErrorType, _EnvType],
     reader.ReaderBased3[_ValueType, _ErrorType, _EnvType],
-    result.ResultBased3[_ValueType, _ErrorType, _EnvType],
+    result.ResultLike3[_ValueType, _ErrorType, _EnvType],
     iterable.Iterable3[_ValueType, _ErrorType, _EnvType],
 ):
     """

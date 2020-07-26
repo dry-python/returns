@@ -43,11 +43,14 @@ async def async_bind_awaitable(
 
 
 async def async_bind_async(
-    function: Callable[[_ValueType], Awaitable['Future[_NewValueType]']],
+    function: Callable[
+        [_ValueType],
+        Awaitable[Kind1['Future', _NewValueType]],
+    ],
     inner_value: Awaitable[_ValueType],
 ) -> _NewValueType:
     """Async binds a coroutine with container over a value."""
-    inner_io = (await function(await inner_value))._inner_value
+    inner_io = dekind(await function(await inner_value))._inner_value
     return await inner_io
 
 

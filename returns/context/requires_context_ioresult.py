@@ -42,7 +42,7 @@ class RequiresContextIOResult(
     BaseContainer,
     SupportsKind3['RequiresContextIOResult', _ValueType, _ErrorType, _EnvType],
     reader.ReaderBased3[_ValueType, _ErrorType, _EnvType],
-    ioresult.IOResultBased3[_ValueType, _ErrorType, _EnvType],
+    ioresult.IOResultLike3[_ValueType, _ErrorType, _EnvType],
     iterable.Iterable3[_ValueType, _ErrorType, _EnvType],
 ):
     """

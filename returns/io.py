@@ -270,7 +270,6 @@ class IOResult(
     BaseContainer,
     SupportsKind2['IOResult', _ValueType, _ErrorType],
     ioresult.IOResultBased2[_ValueType, _ErrorType],
-    unwrappable.Unwrappable[IO[_ValueType], IO[_ErrorType]],
     iterable.Iterable2[_ValueType, _ErrorType],
     metaclass=ABCMeta,
 ):

@@ -18,7 +18,7 @@ from typing import (
 from typing_extensions import final
 
 from returns._generated.iterable import iterable_kind
-from returns.interfaces import iterable, unwrappable
+from returns.interfaces import iterable
 from returns.interfaces.specific import result
 from returns.primitives.container import BaseContainer
 from returns.primitives.exceptions import UnwrapFailedError
@@ -39,7 +39,6 @@ class Result(
     BaseContainer,
     SupportsKind2['Result', _ValueType, _ErrorType],
     result.ResultBased2[_ValueType, _ErrorType],
-    unwrappable.Unwrappable[_ValueType, _ErrorType],
     iterable.Iterable2[_ValueType, _ErrorType],
     metaclass=ABCMeta,
 ):
