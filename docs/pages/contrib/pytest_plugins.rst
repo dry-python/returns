@@ -60,6 +60,32 @@ This is how it works internally:
   It does not affect production code.
 
 
+has_trace
+~~~~~~~~~
+
+Sometimes we have to know if a container is created correctly in a specific
+point of our flow.
+
+``has_trace`` helps us to check exactly this by identifying when a container is
+created and looking for the desired function.
+
+.. code:: python
+
+  >>> from returns.result import Result, Success, Failure
+
+  >>> def desired_function(arg: str) -> Result[int, str]:
+  ...     if arg.isnumeric():
+  ...         return Success(int(arg))
+  ...     return Failure('"{0}" is not a number'.format(arg))
+
+  >>> def test_if_failure_is_created_at_convert_function(returns):
+  ...     with returns.has_trace(Failure, desired_function):
+  ...         Success('not a number').bind(desired_function)
+
+  >>> def test_if_success_is_created_at_convert_function(returns):
+  ...     with returns.has_trace(Success, desired_function):
+  ...         Success('42').bind(desired_function)
+
 Further reading
 ---------------
 
