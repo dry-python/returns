@@ -111,11 +111,11 @@ user: Optional[User]
 # Type hint here is optional, it only helps the reader here:
 discount_program: Maybe['DiscountProgram'] = Maybe.from_value(
     user,
-).map(  # This won't be called if `user is None`
+).bind(  # This won't be called if `user is None`
     lambda real_user: real_user.get_balance(),
-).map(  # This won't be called if `real_user.get_balance()` returns None
+).bind(  # This won't be called if `real_user.get_balance()` returns None
     lambda balance: balance.credit_amount(),
-).map(  # And so on!
+).bind(  # And so on!
     lambda credit: choose_discount(credit) if credit > 0 else None,
 )
 ```
