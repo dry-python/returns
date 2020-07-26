@@ -56,7 +56,7 @@ Make sure you know how to get started, [check out our docs](https://returns.read
 - [Result container](#result-container) that let's you to get rid of exceptions
 - [IO container](#io-container) and [IOResult](#troublesome-io) that marks all impure operations and structures them
 - [Future container](#future-container) and [FutureResult](#async-code-without-exceptions) to work with `async` code
-- Write your own! You would still have all the features for your own types (including full existing code reuse and type-safety)
+- Write your own container! You would still have all the features for your own types (including full existing code reuse and type-safety)
 
 
 ## Maybe container
@@ -269,9 +269,12 @@ to use inside our complex business logic?
 
 We really can not be sure!
 We will have to create **lots** of `try` and `except` cases
-just to catch the expected exceptions.
+just to catch the expected exceptions. Our code will become complex and unreadable with all this mess!
 
-Our code will become complex and unreadable with all this mess!
+Or we can go with the top level `except Exception:` case
+to catch literally everything.
+And this way we would end up with catching unwanted ones.
+This approach can hide serious problems from us for a long time.
 
 ### Pipe example
 
@@ -375,19 +378,19 @@ and composing business logic together.
 As it was already said, we use `IO` when we handle functions that do not fail.
 
 What if our function can fail and is impure?
-Like `requests.get()` we had earlier in your example.
+Like `requests.get()` we had earlier in our example.
 
-Then we have to use `IOResult` instead of a regular `Result`.
+Then we have to use a special `IOResult` type instead of a regular `Result`.
 Let's find the difference:
 
 - Our `_parse_json` function always return
   the same result (hopefully) for the same input:
   you can either parse valid `json` or fail on invalid one.
-  That's why we return pure `Result`
+  That's why we return pure `Result`, there's no `IO` inside
 - Our `_make_request` function is impure and can fail.
   Try to send two similar requests with and without internet connection.
   The result will be different for the same input.
-  That's why we must use `IOResult` here
+  That's why we must use `IOResult` here: it can fail and has `IO`
 
 So, in order to fulfill our requirement and separate pure code from impure one,
 we have to refactor our example.
@@ -399,7 +402,7 @@ explicit!
 
 ```python
 import requests
-from returns.io import IO, IOResult, impure_safe
+from returns.io import IOResult, impure_safe
 from returns.result import safe
 from returns.pipeline import flow
 from returns.pointfree import bind_result
@@ -426,14 +429,14 @@ def _parse_json(response: requests.Response) -> 'UserProfile':
     return response.json()
 ```
 
-And latter we can [unsafe_perform_io](https://returns.readthedocs.io/en/latest/pages/io.html#unsafe-perform-io)
-somewhere at the top level of our program to get the pure value.
+And later we can use [unsafe_perform_io](https://returns.readthedocs.io/en/latest/pages/io.html#unsafe-perform-io)
+somewhere at the top level of our program to get the pure (or "real") value.
 
 As a result of this refactoring session, we know everything about our code:
 
 - Which parts can fail,
 - Which parts are impure,
-- How to compose them in a smart manner.
+- How to compose them in a smart, readable, and typesafe manner.
 
 
 ## Future container
@@ -460,7 +463,7 @@ async def first() -> int:
     return 1
 
 def second():  # How can we call `first()` from here?
-    return first() + 1  # Boom! Don't do this, this is wrong. Just an example.
+    return first() + 1  # Boom! Don't do this. We illustrate a problem here.
 ```
 
 If we try to just run `first()`, we will just create an unawaited coroutine.
@@ -496,17 +499,20 @@ assert anyio.run(second().awaitable) == 2
 As you can see `Future` allows you
 to work with async functions from a sync context.
 And to mix these two realms together.
-Use raw `Future` for operations that cannot raise exceptions.
+Use raw `Future` for operations that cannot fail or raise exceptions.
+Pretty much the same logic we had with our `IO` container.
 
 ### Async code without exceptions
 
-We have already covered how [`Result` works](#result-container).
+We have already covered how [`Result` works](#result-container)
+for both pure and impure code.
 The main idea is: we don't raise exceptions, we return them.
 It is **especially** critical in async code,
 because a single exception can ruin
 all our coroutines running in a single eventloop.
 
 We have a handy combination of `Future` and `Result` containers: `FutureResult`.
+Again, this is exactly like `IOResult`, but for impure async code.
 Use it when your `Future` might have problems:
 like HTTP requests or filesystem operations.
 
@@ -516,15 +522,13 @@ You can easily turn any wild throwing coroutine into a calm `FutureResult`:
 import anyio
 from returns.future import future_safe
 from returns.io import IOFailure
-from returns.pipeline import is_successful
 
 @future_safe
 async def raising():
     raise ValueError('Not so fast!')
 
 ioresult = anyio.run(raising.awaitable)  # all `Future`s return IO containers
-assert not is_successful(ioresult)  # True
-assert ioresult == IOFailure(ValueError('Not so fast!'))  # Also True
+assert ioresult == IOFailure(ValueError('Not so fast!'))  # True
 ```
 
 Using `FutureResult` will keep your code safe from exceptions.
@@ -607,6 +611,9 @@ def main(user_id: int) -> FutureResultE[bool]:
         bind(ensure_allowed),
     )
 ```
+
+Later we can also refactor our logical functions to be sync
+and to return `FutureResult`.
 
 Lovely, isn't it?
 

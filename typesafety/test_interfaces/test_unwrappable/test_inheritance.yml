@@ -40,10 +40,9 @@
         Kind2['MyOwn', T, N],
         Unwrappable[T, N],
     ):
-        def __init__(self, value: T, error: N) -> None:
-            ...
+      ...
 
-    x = MyOwn(1, 'a')  # E: Cannot instantiate abstract class 'MyOwn' with abstract attributes 'failure' and 'unwrap'
+    MyOwn()  # E: Cannot instantiate abstract class 'MyOwn' with abstract attributes 'failure' and 'unwrap'
 
 
 - case: unwrappable_wrong_inheritance

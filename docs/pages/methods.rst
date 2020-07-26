@@ -64,6 +64,12 @@ apply methods
 .. autofunction:: returns.methods.apply.internal_apply
 .. autofunction:: returns.methods.apply.apply
 
+alt methods
+~~~~~~~~~~~
+
+.. autofunction:: returns.methods.alt.internal_alt
+.. autofunction:: returns.methods.alt.alt
+
 rescue methods
 ~~~~~~~~~~~~~~
 

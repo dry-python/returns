@@ -87,9 +87,9 @@
 - case: iterable_inheritance_wrong
   disable_cache: true
   main: |
-    from typing import TypeVar, Iterable, Sequence
+    from typing import TypeVar, Iterable
     from returns.interfaces.iterable import Iterable1
-    from returns.primitives.hkt import SupportsKind1, Kind1, dekind
+    from returns.primitives.hkt import SupportsKind1, Kind1
 
     V = TypeVar('V')
     N = TypeVar('N')

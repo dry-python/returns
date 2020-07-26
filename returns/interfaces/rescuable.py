@@ -38,9 +38,6 @@ class RescuableN(Generic[_FirstType, _SecondType, _ThirdType]):
         """
 
 
-#: Type alias for kinds with one type argument.
-Rescuable1 = RescuableN[_FirstType, NoReturn, NoReturn]
-
 #: Type alias for kinds with two type arguments.
 Rescuable2 = RescuableN[_FirstType, _SecondType, NoReturn]
 

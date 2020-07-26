@@ -48,17 +48,12 @@
 - case: ioresult_inheritance_missing
   disable_cache: true
   main: |
-    from typing import Callable, TypeVar, Any
+    from typing import TypeVar
     from returns.interfaces.specific.ioresult import IOResultBased2
     from returns.primitives.hkt import SupportsKind2
-    from returns.io import IO, IOResult
 
     _ValueType = TypeVar('_ValueType')
-    _NewValueType = TypeVar('_NewValueType')
-
-    # Result related:
     _ErrorType = TypeVar('_ErrorType')
-    _NewErrorType = TypeVar('_NewErrorType')
 
     class MyClass(
         SupportsKind2['MyClass', _ValueType, _ErrorType],
@@ -68,7 +63,7 @@
 
     MyClass()
   out: |
-    main:19: error: Cannot instantiate abstract class 'MyClass' with abstract attributes 'apply', 'bind', ... and 'swap' (12 methods suppressed)
+    main:14: error: Cannot instantiate abstract class 'MyClass' with abstract attributes 'alt', 'apply', ... and 'swap' (13 methods suppressed)
 
 
 - case: ioresult_inheritance_wrong

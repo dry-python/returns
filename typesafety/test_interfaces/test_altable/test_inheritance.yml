@@ -1,0 +1,123 @@
+- case: altable_inheritance_correct2
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar
+    from returns.interfaces.altable import Altable2
+    from returns.primitives.hkt import SupportsKind2
+
+    V = TypeVar('V')
+    E = TypeVar('E')
+    N = TypeVar('N')
+
+    class MyClass(SupportsKind2['MyClass', V, E], Altable2[V, E]):
+        def __init__(self, value: V, error: E) -> None:
+            self.value = value
+            self.error = error
+
+        def alt(
+            self,
+            function: Callable[[E], N],
+        ) -> 'MyClass[V, N]':
+            return MyClass(self.value, function(self.error))
+
+    def test(arg: str) -> int:
+        ...
+
+    reveal_type(MyClass(1, '1').alt(test))  # N: Revealed type is 'main.MyClass[builtins.int, builtins.int*]'
+
+
+- case: altable_inheritance_correct3
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar
+    from returns.interfaces.altable import Altable3
+    from returns.primitives.hkt import SupportsKind3
+
+    V = TypeVar('V')
+    T = TypeVar('T')
+    K = TypeVar('K')
+    N = TypeVar('N')
+
+    class MyClass(SupportsKind3['MyClass', V, T, K], Altable3[V, T, K]):
+        def __init__(self, value: V, other: T, last: K) -> None:
+            self.value = value
+            self.other = other
+            self.last = last
+
+        def alt(
+            self,
+            function: Callable[[T], N],
+        ) -> 'MyClass[V, N, K]':
+            return MyClass(self.value, function(self.other), self.last)
+
+    def test(arg: str) -> float:
+        ...
+
+    reveal_type(MyClass(1, 'a', True).alt(test))  # N: Revealed type is 'main.MyClass[builtins.int, builtins.float*, builtins.bool]'
+
+
+- case: altable_inheritance_missing
+  disable_cache: true
+  main: |
+    from typing import TypeVar
+    from returns.interfaces.altable import Altable2
+    from returns.primitives.hkt import SupportsKind2
+
+    V = TypeVar('V')
+    N = TypeVar('N')
+
+    class MyClass(SupportsKind2['MyClass', V, N], Altable2[V, N]):
+        ...
+
+    MyClass()
+  out: |
+    main:11: error: Cannot instantiate abstract class 'MyClass' with abstract attribute 'alt'
+
+
+- case: altable_inheritance_wrong2
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar
+    from returns.interfaces.altable import Altable2
+    from returns.primitives.hkt import SupportsKind2
+
+    V = TypeVar('V')
+    N = TypeVar('N')
+    E = TypeVar('E')
+
+    class MyClass(SupportsKind2['MyClass', V, E], Altable2[V, E]):
+        def alt(
+            self,
+            function: Callable[[V], N],
+        ) -> 'MyClass[N, E]':
+            ...
+  out: |
+    main:10: error: Argument 1 of "alt" is incompatible with supertype "AltableN"; supertype defines the argument type as "Callable[[E], _UpdatedType]"
+    main:10: error: Return type "MyClass[N, E]" of "alt" incompatible with return type "KindN[MyClass[V, E], V, _UpdatedType, NoReturn]" in supertype "AltableN"
+    main:10: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:10: note: This violates the Liskov substitution principle
+
+
+- case: altable_inheritance_wrong3
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar
+    from returns.interfaces.altable import Altable3
+    from returns.primitives.hkt import SupportsKind3
+
+    V = TypeVar('V')
+    N = TypeVar('N')
+    E = TypeVar('E')
+    T = TypeVar('T')
+
+    class MyClass(SupportsKind3['MyClass', V, E, T], Altable3[V, E, T]):
+        def alt(
+            self,
+            function: Callable[[V], N],
+        ) -> 'MyClass[N, E, T]':
+            ...
+  out: |
+    main:11: error: Argument 1 of "alt" is incompatible with supertype "AltableN"; supertype defines the argument type as "Callable[[E], _UpdatedType]"
+    main:11: error: Return type "MyClass[N, E, T]" of "alt" incompatible with return type "KindN[MyClass[V, E, T], V, _UpdatedType, T]" in supertype "AltableN"
+    main:11: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:11: note: This violates the Liskov substitution principle

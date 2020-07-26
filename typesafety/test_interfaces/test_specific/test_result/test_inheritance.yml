@@ -51,7 +51,7 @@
 - case: result_inheritance_missing
   disable_cache: true
   main: |
-    from typing import Callable, TypeVar
+    from typing import TypeVar
     from returns.interfaces.specific.result import ResultBased2
     from returns.primitives.hkt import SupportsKind2
 
@@ -63,7 +63,7 @@
 
     MyClass()
   out: |
-    main:11: error: Cannot instantiate abstract class 'MyClass' with abstract attributes 'apply', 'bind', ... and 'swap' (6 methods suppressed)
+    main:11: error: Cannot instantiate abstract class 'MyClass' with abstract attributes 'alt', 'apply', ... and 'swap' (7 methods suppressed)
 
 
 - case: result_inheritance_wrong

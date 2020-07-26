@@ -1,0 +1,104 @@
+- case: alt_result
+  disable_cache: true
+  main: |
+    from returns.methods import alt
+    from returns.result import Result
+
+    def test(arg: float) -> int:
+        ...
+
+    x: Result[str, float]
+    reveal_type(alt(x, test))  # N: Revealed type is 'returns.result.Result[builtins.str, builtins.int*]'
+
+
+- case: alt_ioresult
+  disable_cache: true
+  main: |
+    from returns.methods import alt
+    from returns.io import IOResult
+
+    def test(arg: float) -> int:
+        ...
+
+    x: IOResult[str, float]
+    reveal_type(alt(x, test))  # N: Revealed type is 'returns.io.IOResult[builtins.str, builtins.int*]'
+
+
+- case: alt_requires_context_result
+  disable_cache: true
+  main: |
+    from returns.methods import alt
+    from returns.context import RequiresContextResult
+
+    def test(arg: float) -> int:
+        ...
+
+    x: RequiresContextResult[str, float, bool]
+    reveal_type(alt(x, test))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.str, builtins.int*, builtins.bool]'
+
+
+- case: alt_requires_context_ioresult
+  disable_cache: true
+  main: |
+    from returns.methods import alt
+    from returns.context import RequiresContextIOResult
+
+    def test(arg: float) -> int:
+        ...
+
+    x: RequiresContextIOResult[str, float, bool]
+    reveal_type(alt(x, test))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.str, builtins.int*, builtins.bool]'
+
+
+- case: alt_requires_context_future_result
+  disable_cache: true
+  main: |
+    from returns.methods import alt
+    from returns.context import RequiresContextFutureResult
+
+    def test(arg: float) -> int:
+        ...
+
+    x: RequiresContextFutureResult[str, float, bool]
+    reveal_type(alt(x, test))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.str, builtins.int*, builtins.bool]'
+
+
+- case: alt_future_result
+  disable_cache: true
+  main: |
+    from returns.methods import alt
+    from returns.future import FutureResult
+
+    def test(arg: float) -> int:
+        ...
+
+    x: FutureResult[str, float]
+    reveal_type(alt(x, test))  # N: Revealed type is 'returns.future.FutureResult[builtins.str, builtins.int*]'
+
+
+- case: alt_custom_type
+  disable_cache: true
+  main: |
+    from returns.methods import alt
+    from returns.primitives.hkt import SupportsKind2
+    from returns.interfaces.altable import Altable2
+    from typing import Callable, TypeVar
+
+    T = TypeVar('T')
+    E = TypeVar('E')
+    N = TypeVar('N')
+
+    class MyOwn(
+        SupportsKind2['MyOwn', T, E],
+        Altable2[T, E],
+    ):
+        def alt(
+            self, function: Callable[[E], N],
+        ) -> 'MyOwn[T, N]':
+            ...
+
+    def test(arg: float) -> int:
+        ...
+
+    x: MyOwn[str, float]
+    reveal_type(alt(x, test))  # N: Revealed type is 'main.MyOwn[builtins.str, builtins.int*]'

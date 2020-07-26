@@ -23,7 +23,7 @@ def internal_bind_io(
 
     .. code:: python
 
-      >>> from returns.methods.bind_io import bind_io
+      >>> from returns.methods import bind_io
       >>> from returns.io import IO
 
       >>> def example(argument: int) -> IO[int]:

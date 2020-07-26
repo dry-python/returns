@@ -11,3 +11,4 @@ from returns.methods.modify_env import modify_env as modify_env
 from returns.methods.modify_env import modify_env2 as modify_env2
 from returns.methods.modify_env import modify_env3 as modify_env3
 from returns.methods.rescue import rescue as rescue
+from returns.methods.alt import alt as alt

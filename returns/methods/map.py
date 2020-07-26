@@ -20,17 +20,14 @@ def internal_map(
 
     .. code:: python
 
-      >>> from returns.methods.map import internal_map, map_
+      >>> from returns.methods import map_
       >>> from returns.maybe import Some, Nothing
 
       >>> def example(argument: int) -> int:
       ...     return argument + 1
 
-      >>> bound = map_(Some(1), example)
-      >>> assert bound == internal_map(Some(1), example) == Some(2)
-
-      >>> bound = map_(Nothing, example)
-      >>> assert bound == internal_map(Nothing, example) == Nothing
+      >>> assert map_(Some(1), example) == Some(2)
+      >>> assert map_(Nothing, example) == Nothing
 
     Note, that this function works for all containers with ``.map`` method.
     See :class:`returns.primitives.interfaces.mappable.MappableN` for more info.

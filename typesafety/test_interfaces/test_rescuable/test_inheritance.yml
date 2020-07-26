@@ -59,46 +59,65 @@
 - case: rescuable_inheritance_missing
   disable_cache: true
   main: |
-    from typing import Callable, TypeVar
+    from typing import TypeVar
     from returns.interfaces.rescuable import Rescuable2
-    from returns.primitives.hkt import SupportsKind2, Kind2, dekind
+    from returns.primitives.hkt import SupportsKind2
 
     V = TypeVar('V')
     N = TypeVar('N')
 
-    class MyClass(SupportsKind2['MyClass', V], Rescuable2[V]):
-        def __init__(self, value: V) -> None:
-            self.value = value
+    class MyClass(SupportsKind2['MyClass', V, N], Rescuable2[V, N]):
+        ...
 
-    reveal_type(MyClass('1'))
+    MyClass()
   out: |
-    main:8: error: Bad number of arguments for type alias, expected: 2, given: 1
-    main:8: error: Bad number of arguments for type alias, expected: 3, given: 2
-    main:12: error: Cannot instantiate abstract class 'MyClass' with abstract attribute 'rescue'
-    main:12: note: Revealed type is 'main.MyClass[builtins.str*]'
+    main:11: error: Cannot instantiate abstract class 'MyClass' with abstract attribute 'rescue'
 
 
-- case: rescuable_inheritance_wrong
+- case: rescuable_inheritance_wrong2
   disable_cache: true
   main: |
     from typing import Callable, TypeVar
     from returns.interfaces.rescuable import Rescuable2
-    from returns.primitives.hkt import SupportsKind2, Kind2, dekind
+    from returns.primitives.hkt import SupportsKind2, Kind2
 
     V = TypeVar('V')
     N = TypeVar('N')
     E = TypeVar('E')
 
     class MyClass(SupportsKind2['MyClass', V, E], Rescuable2[V, E]):
-        def __init__(self, value: V, error: E) -> None:
-            self.value = value
-            self.error = error
-
         def rescue(
             self,
-            function: Callable[[E], Kind2['MyClass', N, N]],
-        ) -> 'MyClass[N, E]':
-            return dekind(function(self.error))
+            function: Callable[[E], Kind2['MyClass', V, V]],
+        ) -> MyClass[N, E]:
+            ...
   out: |
-    main:14: error: Return type "MyClass[N, E]" of "rescue" incompatible with return type "KindN[MyClass[V, E], V, _UpdatedType, NoReturn]" in supertype "RescuableN"
-    main:18: error: Incompatible return value type (got "MyClass[N, N]", expected "MyClass[N, E]")
+    main:10: error: Argument 1 of "rescue" is incompatible with supertype "RescuableN"; supertype defines the argument type as "Callable[[E], KindN[MyClass[V, E], V, _UpdatedType, NoReturn]]"
+    main:10: error: Return type "MyClass[N, E]" of "rescue" incompatible with return type "KindN[MyClass[V, E], V, _UpdatedType, NoReturn]" in supertype "RescuableN"
+    main:10: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:10: note: This violates the Liskov substitution principle
+
+
+- case: rescuable_inheritance_wrong3
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar
+    from returns.interfaces.rescuable import Rescuable3
+    from returns.primitives.hkt import SupportsKind3, Kind3
+
+    V = TypeVar('V')
+    N = TypeVar('N')
+    E = TypeVar('E')
+    T = TypeVar('T')
+
+    class MyClass(SupportsKind3['MyClass', V, E, T], Rescuable3[V, E, T]):
+        def rescue(
+            self,
+            function: Callable[[E], Kind3['MyClass', V, V, V]],
+        ) -> MyClass[N, E, T]:
+            ...
+  out: |
+    main:11: error: Argument 1 of "rescue" is incompatible with supertype "RescuableN"; supertype defines the argument type as "Callable[[E], KindN[MyClass[V, E, T], V, _UpdatedType, T]]"
+    main:11: error: Return type "MyClass[N, E, T]" of "rescue" incompatible with return type "KindN[MyClass[V, E, T], V, _UpdatedType, T]" in supertype "RescuableN"
+    main:11: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:11: note: This violates the Liskov substitution principle

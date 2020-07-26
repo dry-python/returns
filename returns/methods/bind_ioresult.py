@@ -24,7 +24,7 @@ def internal_bind_ioresult(
     .. code:: python
 
       >>> import anyio
-      >>> from returns.methods.bind_ioresult import bind_ioresult
+      >>> from returns.methods import bind_ioresult
       >>> from returns.io import IOResult, IOSuccess, IOFailure
       >>> from returns.future import FutureResult
 

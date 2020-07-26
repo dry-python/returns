@@ -28,18 +28,13 @@ def map_(
 
     .. code:: python
 
-        >>> import anyio
-        >>> from returns.future import Future
         >>> from returns.io import IO
         >>> from returns.pointfree import map_
 
         >>> def example(argument: int) -> float:
         ...     return argument / 2
 
-        >>> async def main() -> Future[float]:
-        ...     return await map_(example)(Future.from_value(1))
-
-        >>> assert anyio.run(main) == IO(0.5)
+        >>> assert map_(example)(IO(1)) == IO(0.5)
 
     Note, that this function works for all containers with ``.map`` method.
     See :class:`returns.primitives.interfaces.mappable.MappableN` for more info.

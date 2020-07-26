@@ -27,6 +27,12 @@ Applicative
 .. automodule:: returns.interfaces.applicative
   :members:
 
+Altable
+~~~~~~~
+
+.. automodule:: returns.interfaces.altable
+  :members:
+
 Rescuable
 ~~~~~~~~~
 

@@ -23,7 +23,7 @@ def internal_bind_result(
 
     .. code:: python
 
-      >>> from returns.methods.bind_result import bind_result
+      >>> from returns.methods import bind_result
       >>> from returns.result import Result, Success
       >>> from returns.io import IOSuccess, IOFailure
 
