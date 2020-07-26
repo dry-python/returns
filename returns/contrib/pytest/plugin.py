@@ -3,10 +3,13 @@ import sys
 from contextlib import contextmanager
 from functools import partial, wraps
 from types import FrameType
-from typing import Any, Callable, Iterator, TypeVar
+from typing import TYPE_CHECKING, Any, Callable, Iterator, TypeVar
 
 import pytest
 from typing_extensions import Final, final
+
+if TYPE_CHECKING:
+    from returns.interfaces.specific.result import ResultBasedN
 
 _ERROR_FIELD: Final = '_error_handled'
 _ERROR_HANDLERS: Final = (
@@ -18,11 +21,9 @@ _ERRORS_COPIERS: Final = (
 )
 
 _FunctionType = TypeVar('_FunctionType', bound=Callable)
-# _ResultBasedType represents `Callable[[Any], ResultBasedN[Any, Any, Any]]`
-# but we cannot import `ResultBasedN` here because we're omitting this file from
-# the coverage report and `coverage.py` will exclude the class' coverage
-# information if we import it here.
-_ResultBasedType = TypeVar('_ResultBasedType', bound=Callable)
+_ResultBasedType = TypeVar(
+    '_ResultBasedType', bound=Callable[..., 'ResultBasedN'],
+)
 
 
 class _DesiredFunctionFound(RuntimeError):
