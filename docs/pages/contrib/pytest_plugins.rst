@@ -73,6 +73,8 @@ created and looking for the desired function.
 
   >>> from returns.result import Result, Success, Failure
 
+  >>> returns_fixture = getfixture('returns')
+
   >>> def desired_function(arg: str) -> Result[int, str]:
   ...     if arg.isnumeric():
   ...         return Success(int(arg))
@@ -85,6 +87,9 @@ created and looking for the desired function.
   >>> def test_if_success_is_created_at_convert_function(returns):
   ...     with returns.has_trace(Success, desired_function):
   ...         Success('42').bind(desired_function)
+
+  >>> test_if_failure_is_created_at_convert_function(returns_fixture)
+  >>> test_if_success_is_created_at_convert_function(returns_fixture)
 
 Further reading
 ---------------
