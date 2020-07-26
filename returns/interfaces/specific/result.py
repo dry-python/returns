@@ -1,7 +1,13 @@
 from abc import abstractmethod
 from typing import TYPE_CHECKING, Callable, NoReturn, Type, TypeVar
 
-from returns.interfaces import applicative, bindable, mappable, rescuable, altable
+from returns.interfaces import (
+    altable,
+    applicative,
+    bindable,
+    mappable,
+    rescuable,
+)
 from returns.primitives.hkt import KindN
 
 if TYPE_CHECKING:

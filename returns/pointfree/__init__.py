@@ -1,3 +1,4 @@
+from returns.pointfree.alt import alt as alt
 from returns.pointfree.apply import apply as apply
 from returns.pointfree.bind import bind as bind
 from returns.pointfree.bind_context import bind_context as bind_context
@@ -11,4 +12,3 @@ from returns.pointfree.modify_env import modify_env as modify_env
 from returns.pointfree.modify_env import modify_env2 as modify_env2
 from returns.pointfree.modify_env import modify_env3 as modify_env3
 from returns.pointfree.rescue import rescue as rescue
-from returns.pointfree.alt import alt as alt
