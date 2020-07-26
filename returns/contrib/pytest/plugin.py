@@ -21,8 +21,8 @@ _ERRORS_COPIERS: Final = (
 )
 
 _FunctionType = TypeVar('_FunctionType', bound=Callable)
-_ResultBasedType = TypeVar(
-    '_ResultBasedType', bound=Callable[..., 'ResultBasedN'],
+_ResultCallableType = TypeVar(
+    '_ResultCallableType', bound=Callable[..., 'ResultBasedN'],
 )
 
 
@@ -42,7 +42,9 @@ class _ReturnsAsserts(object):
 
     @contextmanager
     def has_trace(
-        self, trace_type: _ResultBasedType, function_to_search: _FunctionType,
+        self,
+        trace_type: _ResultCallableType,
+        function_to_search: _FunctionType,
     ) -> Iterator[None]:
         old_tracer = sys.gettrace()
         sys.settrace(partial(_trace_function, trace_type, function_to_search))
@@ -90,7 +92,7 @@ def _patch_error_handling(methods, patch_handler) -> None:
 
 
 def _trace_function(
-    trace_type: _ResultBasedType,
+    trace_type: _ResultCallableType,
     function_to_search: _FunctionType,
     frame: FrameType,
     event: str,
