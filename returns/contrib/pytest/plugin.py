@@ -1,8 +1,15 @@
-from functools import wraps
-from inspect import iscoroutinefunction
+import inspect
+import sys
+from contextlib import contextmanager
+from functools import partial, wraps
+from types import FrameType
+from typing import TYPE_CHECKING, Any, Callable, Iterator, TypeVar
 
 import pytest
 from typing_extensions import Final, final
+
+if TYPE_CHECKING:
+    from returns.interfaces.specific.result import ResultBasedN
 
 _ERROR_FIELD: Final = '_error_handled'
 _ERROR_HANDLERS: Final = (
@@ -12,6 +19,15 @@ _ERRORS_COPIERS: Final = (
     'map',
     'alt',
 )
+
+_FunctionType = TypeVar('_FunctionType', bound=Callable)
+_ResultCallableType = TypeVar(
+    '_ResultCallableType', bound=Callable[..., 'ResultBasedN'],
+)
+
+
+class _DesiredFunctionFound(RuntimeError):
+    """Exception to raise when expected function is found."""
 
 
 @final
@@ -23,6 +39,26 @@ class _ReturnsAsserts(object):
     def is_error_handled(self, container) -> bool:
         """Ensures that container has its error handled in the end."""
         return bool(getattr(container, _ERROR_FIELD, False))
+
+    @contextmanager
+    def has_trace(
+        self,
+        trace_type: _ResultCallableType,
+        function_to_search: _FunctionType,
+    ) -> Iterator[None]:
+        old_tracer = sys.gettrace()
+        sys.settrace(partial(_trace_function, trace_type, function_to_search))
+
+        try:
+            yield
+        except _DesiredFunctionFound:
+            pass  # noqa: WPS420
+        else:
+            pytest.fail(
+                'No container {0} was created'.format(trace_type.__name__),
+            )
+        finally:
+            sys.settrace(old_tracer)
 
 
 @pytest.fixture(scope='session')
@@ -53,6 +89,24 @@ def _patch_error_handling(methods, patch_handler) -> None:
             original = getattr(container, method, None)
             if original:
                 setattr(container, method, patch_handler(original))
+
+
+def _trace_function(
+    trace_type: _ResultCallableType,
+    function_to_search: _FunctionType,
+    frame: FrameType,
+    event: str,
+    arg: Any,
+) -> None:
+    is_desired_type_call = (
+        event == 'call' and frame.f_code is trace_type.__code__
+    )
+    if is_desired_type_call:
+        current_call_stack = inspect.stack()
+        function_to_search_code = getattr(function_to_search, '__code__', None)
+        for frame_info in current_call_stack:
+            if function_to_search_code is frame_info.frame.f_code:
+                raise _DesiredFunctionFound()
 
 
 @final
@@ -86,7 +140,7 @@ class _PatchedContainer(object):
 
     @classmethod
     def error_handler(cls, original):
-        if iscoroutinefunction(original):
+        if inspect.iscoroutinefunction(original):
             async def factory(self, *args, **kwargs):
                 original_result = await original(self, *args, **kwargs)
                 object.__setattr__(
@@ -104,7 +158,7 @@ class _PatchedContainer(object):
 
     @classmethod
     def copy_handler(cls, original):
-        if iscoroutinefunction(original):
+        if inspect.iscoroutinefunction(original):
             async def factory(self, *args, **kwargs):
                 original_result = await original(self, *args, **kwargs)
                 object.__setattr__(
