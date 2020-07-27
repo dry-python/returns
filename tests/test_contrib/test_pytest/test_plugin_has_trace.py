@@ -9,9 +9,9 @@ def _create_container_function(container_type, container_value):
 
 
 def _create_container_function_intermediate(container_type, container_value):
-    return _create_container_function(
+    return _create_container_function(  # type: ignore
         container_type, container_value,
-    )  # type: ignore
+    )
 
 
 @pytest.mark.parametrize('container_type', [  # noqa: WPS118
@@ -20,9 +20,7 @@ def _create_container_function_intermediate(container_type, container_value):
     IOSuccess,
     IOFailure,
 ])
-def test_has_trace_with_one_function_call_in_the_call_stack(  # noqa: WPS118
-    container_type, returns,
-):
+def test_has_trace1(container_type, returns):
     """Test if our plugin will identify the container creation correctly."""
     with returns.has_trace(container_type, _create_container_function):
         _create_container_function(container_type, 1)  # type: ignore
@@ -34,47 +32,37 @@ def test_has_trace_with_one_function_call_in_the_call_stack(  # noqa: WPS118
     IOSuccess,
     IOFailure,
 ])
-def test_has_trace_with_two_functions_call_in_the_call_stack(  # noqa: WPS118
-    container_type, returns,
-):
+def test_has_trace2(container_type, returns):
     """Test if our plugin will identify the container creation correctly."""
     with returns.has_trace(container_type, _create_container_function):
-        _create_container_function_intermediate(
+        _create_container_function_intermediate(  # type: ignore
             container_type, 1,
-        )  # type: ignore
+        )
 
 
-@pytest.mark.parametrize(('desired_container_type', 'wrong_container_type'), [  # noqa: E501, WPS118
+@pytest.mark.parametrize(('desired_type', 'wrong_type'), [
     (Success, Failure),
     (Failure, Success),
     (IOSuccess, IOFailure),
     (IOFailure, IOSuccess),
 ])
-def test_failed_has_trace_with_one_function_call_in_the_call_stack(  # noqa: E501, WPS118
-    desired_container_type, wrong_container_type, returns,
-):
+def test_failed_has_trace1(desired_type, wrong_type, returns):
     """Test if our plugin will identify the conainter was not created."""
     with pytest.raises(pytest.fail.Exception):  # noqa: PT012
-        with returns.has_trace(
-            desired_container_type, _create_container_function,
-        ):
-            _create_container_function(wrong_container_type, 1)  # type: ignore
+        with returns.has_trace(desired_type, _create_container_function):
+            _create_container_function(wrong_type, 1)  # type: ignore
 
 
-@pytest.mark.parametrize(('desired_container_type', 'wrong_container_type'), [  # noqa: E501, WPS118
+@pytest.mark.parametrize(('desired_type', 'wrong_type'), [
     (Success, Failure),
     (Failure, Success),
     (IOSuccess, IOFailure),
     (IOFailure, IOSuccess),
 ])
-def test_failed_has_trace_with_two_functions_call_in_the_call_stack(  # noqa: E501, WPS118
-    desired_container_type, wrong_container_type, returns,
-):
+def test_failed_has_trace2(desired_type, wrong_type, returns):
     """Test if our plugin will identify the conainter was not created."""
     with pytest.raises(pytest.fail.Exception):  # noqa: PT012
-        with returns.has_trace(
-            desired_container_type, _create_container_function,
-        ):
-            _create_container_function_intermediate(
-                wrong_container_type, 1,
-            )  # type: ignore
+        with returns.has_trace(desired_type, _create_container_function):
+            _create_container_function_intermediate(  # type: ignore
+                wrong_type, 1,
+            )

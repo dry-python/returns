@@ -32,6 +32,12 @@
         ) -> MyClass[N]:
             ...
 
+        def bind_async_future(
+            self,
+            function: Callable[[T], Awaitable[Future[N]]],
+        ) -> MyClass[N]:
+            ...
+
         @classmethod
         def from_future(
             cls,
@@ -42,11 +48,14 @@
     def test1(arg: int) -> Future[float]:
         ...
 
-    async def test2(arg: float) -> MyClass[str]:
+    async def test2(arg: float) -> Future[bool]:
+        ...
+
+    async def test3(arg: bool) -> MyClass[str]:
         ...
 
     x: Future[int]
-    reveal_type(MyClass.from_future(x).bind_future(test1).bind_async(test2))  # N: Revealed type is 'main.MyClass[builtins.str*]'
+    reveal_type(MyClass.from_future(x).bind_future(test1).bind_async_future(test2).bind_async(test3))  # N: Revealed type is 'main.MyClass[builtins.str*]'
 
 
 - case: future_inheritance_correct2
@@ -84,6 +93,12 @@
         ) -> MyClass[N, E]:
             ...
 
+        def bind_async_future(
+            self,
+            function: Callable[[T], Awaitable[Future[N]]],
+        ) -> MyClass[N, E]:
+            ...
+
         @classmethod
         def from_future(
             cls,
@@ -94,11 +109,14 @@
     def test1(arg: int) -> Future[float]:
         ...
 
-    async def test2(arg: float) -> MyClass[str, bool]:
+    async def test2(arg: float) -> Future[bool]:
+        ...
+
+    async def test3(arg: bool) -> MyClass[str, bool]:
         ...
 
     x: MyClass[int, bool]
-    reveal_type(x.bind_future(test1).bind_async(test2))  # N: Revealed type is 'main.MyClass[builtins.str*, builtins.bool]'
+    reveal_type(x.bind_future(test1).bind_async_future(test2).bind_async(test3))  # N: Revealed type is 'main.MyClass[builtins.str*, builtins.bool]'
 
 
 - case: future_inheritance_missing
@@ -116,7 +134,7 @@
     ):
         ...
 
-    MyClass()  # E: Cannot instantiate abstract class 'MyClass' with abstract attributes '__await__', 'apply', ... and 'map' (8 methods suppressed)
+    MyClass()  # E: Cannot instantiate abstract class 'MyClass' with abstract attributes '__await__', 'apply', ... and 'map' (9 methods suppressed)
 
 
 - case: future_inheritance_wrong

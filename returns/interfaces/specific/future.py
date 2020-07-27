@@ -47,9 +47,16 @@ class FutureLikeN(io.IOBasedN[_FirstType, _SecondType, _ThirdType]):
         self: _FutureLikeType,
         function: Callable[[_FirstType], 'Future[_UpdatedType]'],
     ) -> KindN[_FutureLikeType, _UpdatedType, _SecondType, _ThirdType]:
-        """Allows to apply a wrapped function over a container."""
+        """Allows to bind ``Future`` returning function over a container."""
 
-    @abstractmethod  # TODO: add bind_async_future
+    @abstractmethod
+    def bind_async_future(
+        self: _FutureLikeType,
+        function: Callable[[_FirstType], Awaitable['Future[_UpdatedType]']],
+    ) -> KindN[_FutureLikeType, _UpdatedType, _SecondType, _ThirdType]:
+        """Allows to bind async ``Future`` returning function over container."""
+
+    @abstractmethod
     def bind_async(
         self: _FutureLikeType,
         function: Callable[
@@ -59,7 +66,7 @@ class FutureLikeN(io.IOBasedN[_FirstType, _SecondType, _ThirdType]):
             ],
         ],
     ) -> KindN[_FutureLikeType, _UpdatedType, _SecondType, _ThirdType]:
-        """Binds async function returning the same type of container object."""
+        """Binds async function returning the same type of container."""
 
     @classmethod
     @abstractmethod

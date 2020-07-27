@@ -281,6 +281,9 @@ class Future(
         """
         return Future(_future.async_bind_async(function, self._inner_value))
 
+    #: Alias for `bind_async` method. Part of the `FutureBasedN` interface.
+    bind_async_future = bind_async
+
     def bind_awaitable(
         self,
         function: Callable[[_ValueType], 'Awaitable[_NewValueType]'],

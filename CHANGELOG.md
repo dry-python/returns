@@ -10,7 +10,6 @@ See [0Ver](https://0ver.org/).
 
 ### Features
 
-- Adds a helper to test traces to our pytest plugin
 - Adds Higher Kinded Types partial support
 - **Breaking**: makes our `mypy` plugin not optional, but required!
 - **Breaking**: changes all `RequiresContext`-based type arguments order,
@@ -55,6 +54,7 @@ See [0Ver](https://0ver.org/).
 - Changes `flatten` to work with `KindN` and any possible container
 - Changes `iterable` helper function to be `iterable_kind`,
   now it works with any `KindN`
+- Adds a helper to test traces to our `pytest` plugin
 
 ### Bugfixes
 

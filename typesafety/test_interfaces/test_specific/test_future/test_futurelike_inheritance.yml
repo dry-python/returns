@@ -26,6 +26,12 @@
         ) -> MyClass[N]:
             ...
 
+        def bind_async_future(
+            self,
+            function: Callable[[T], Awaitable[Future[N]]],
+        ) -> MyClass[N]:
+            ...
+
         @classmethod
         def from_future(
             cls,
@@ -36,11 +42,14 @@
     def test1(arg: int) -> Future[float]:
         ...
 
-    async def test2(arg: float) -> MyClass[str]:
+    async def test2(arg: float) -> Future[bool]:
+        ...
+
+    async def test3(arg: bool) -> MyClass[str]:
         ...
 
     x: Future[int]
-    reveal_type(MyClass.from_future(x).bind_future(test1).bind_async(test2))  # N: Revealed type is 'main.MyClass[builtins.str*]'
+    reveal_type(MyClass.from_future(x).bind_future(test1).bind_async_future(test2).bind_async(test3))  # N: Revealed type is 'main.MyClass[builtins.str*]'
 
 
 - case: future_inheritance_correct2
@@ -72,6 +81,12 @@
         ) -> MyClass[N, E]:
             ...
 
+        def bind_async_future(
+            self,
+            function: Callable[[T], Awaitable[Future[N]]],
+        ) -> MyClass[N, E]:
+            ...
+
         @classmethod
         def from_future(
             cls,
@@ -82,11 +97,14 @@
     def test1(arg: int) -> Future[float]:
         ...
 
-    async def test2(arg: float) -> MyClass[str, bool]:
+    async def test2(arg: float) -> Future[bool]:
+        ...
+
+    async def test3(arg: bool) -> MyClass[str, bool]:
         ...
 
     x: MyClass[int, bool]
-    reveal_type(x.bind_future(test1).bind_async(test2))  # N: Revealed type is 'main.MyClass[builtins.str*, builtins.bool]'
+    reveal_type(x.bind_future(test1).bind_async_future(test2).bind_async(test3))  # N: Revealed type is 'main.MyClass[builtins.str*, builtins.bool]'
 
 
 - case: future_inheritance_missing
@@ -104,7 +122,7 @@
     ):
         ...
 
-    MyClass()  # E: Cannot instantiate abstract class 'MyClass' with abstract attributes 'apply', 'bind', ... and 'map' (6 methods suppressed)
+    MyClass()  # E: Cannot instantiate abstract class 'MyClass' with abstract attributes 'apply', 'bind', ... and 'map' (7 methods suppressed)
 
 
 - case: future_inheritance_wrong
@@ -134,6 +152,12 @@
         ) -> MyClass[T]:
             ...
 
+        def bind_async_future(
+            self,
+            function: Callable[[T], Awaitable[Future[T]]],
+        ) -> MyClass[T]:
+            ...
+
         def from_future(
             cls,
             inner_value: Future[T],
@@ -145,4 +169,8 @@
     main:19: error: Return type "MyClass[T]" of "bind_async" incompatible with return type "KindN[MyClass[T], _UpdatedType, NoReturn, NoReturn]" in supertype "FutureLikeN"
     main:19: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
     main:19: note: This violates the Liskov substitution principle
-    main:25: error: Signature of "from_future" incompatible with supertype "FutureLikeN"
+    main:25: error: Argument 1 of "bind_async_future" is incompatible with supertype "FutureLikeN"; supertype defines the argument type as "Callable[[T], Awaitable[Future[_UpdatedType]]]"
+    main:25: error: Return type "MyClass[T]" of "bind_async_future" incompatible with return type "KindN[MyClass[T], _UpdatedType, NoReturn, NoReturn]" in supertype "FutureLikeN"
+    main:25: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:25: note: This violates the Liskov substitution principle
+    main:31: error: Signature of "from_future" incompatible with supertype "FutureLikeN"
