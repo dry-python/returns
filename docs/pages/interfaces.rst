@@ -57,6 +57,12 @@ Unwrappable
 .. automodule:: returns.interfaces.unwrappable
   :members:
 
+Iterable
+~~~~~~~~
+
+.. automodule:: returns.interfaces.iterable
+  :members:
+
 Result specific
 ~~~~~~~~~~~~~~~
 

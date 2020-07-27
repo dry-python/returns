@@ -9,6 +9,7 @@ from returns.methods.bind_awaitable import bind_awaitable as bind_awaitable
 from returns.methods.bind_context import bind_context as bind_context
 from returns.methods.bind_context import bind_context2 as bind_context2
 from returns.methods.bind_context import bind_context3 as bind_context3
+from returns.methods.bind_future import bind_future as bind_future
 from returns.methods.bind_io import bind_io as bind_io
 from returns.methods.bind_ioresult import bind_ioresult as bind_ioresult
 from returns.methods.bind_result import bind_result as bind_result

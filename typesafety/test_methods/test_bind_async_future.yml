@@ -1,0 +1,105 @@
+- case: bind_async_future_wrong_value
+  disable_cache: true
+  main: |
+    from returns.methods import bind_async_future
+    from returns.future import Future
+
+    async def test(arg: str) -> Future[int]:
+        ...
+
+    x: Future[float]
+    bind_async_future(x, test)  # E: Argument 2 to "internal_bind_async_future" has incompatible type "Callable[[str], Coroutine[Any, Any, Future[int]]]"; expected "Callable[[float], Awaitable[Future[int]]]"
+
+
+- case: bind_async_future_requires_context_future_result
+  disable_cache: true
+  main: |
+    from returns.methods import bind_async_future
+    from returns.context import RequiresContextFutureResult
+    from returns.future import Future
+
+    async def test(arg: float) -> Future[int]:
+        ...
+
+    x: RequiresContextFutureResult[float, bool, str]
+    reveal_type(bind_async_future(x, test))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.int*, builtins.bool, builtins.str]'
+
+
+- case: bind_async_future_future
+  disable_cache: true
+  main: |
+    from returns.methods import bind_async_future
+    from returns.future import Future
+
+    async def test(arg: float) -> Future[int]:
+        ...
+
+    x: Future[float]
+    reveal_type(bind_async_future(x, test))  # N: Revealed type is 'returns.future.Future[builtins.int*]'
+
+
+- case: bind_async_future_future_result
+  disable_cache: true
+  main: |
+    from returns.methods import bind_async_future
+    from returns.future import FutureResult, Future
+
+    async def test(arg: float) -> Future[int]:
+        ...
+
+    x: FutureResult[float, str]
+    reveal_type(bind_async_future(x, test))  # N: Revealed type is 'returns.future.FutureResult[builtins.int*, builtins.str]'
+
+
+- case: bind_async_future_custom_type
+  disable_cache: true
+  main: |
+    from returns.methods import bind_async_future
+    from returns.primitives.hkt import SupportsKind1, Kind1
+    from returns.interfaces.specific.future import FutureLike1
+    from returns.future import Future
+    from typing import Callable, TypeVar, Awaitable
+
+    T = TypeVar('T')
+    N = TypeVar('N')
+
+    class MyClass(
+        SupportsKind1['MyClass', T],
+        FutureLike1[T],
+    ):
+        def bind_future(
+            self,
+            function: Callable[[T], Future[N]],
+        ) -> MyClass[N]:
+            ...
+
+        def bind_async(
+            self,
+            function: Callable[[T], Awaitable[Kind1['MyClass', N]]],
+        ) -> MyClass[N]:
+            ...
+
+        def bind_async_future(
+            self,
+            function: Callable[[T], Awaitable[Future[N]]],
+        ) -> MyClass[N]:
+            ...
+
+        def bind_awaitable(
+            self,
+            function: Callable[[T], Awaitable[N]],
+        ) -> MyClass[N]:
+            ...
+
+        @classmethod
+        def from_future(
+            cls,
+            inner_value: Future[T],
+        ) -> MyClass[T]:
+            ...
+
+    async def test(arg: float) -> Future[int]:
+        ...
+
+    x: MyClass[float]
+    reveal_type(bind_async_future(x, test))  # N: Revealed type is 'main.MyClass[builtins.int*]'
