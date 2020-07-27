@@ -10,6 +10,7 @@ See [0Ver](https://0ver.org/).
 
 ### Features
 
+- Adds a helper to test traces to our pytest plugin
 - Adds Higher Kinded Types partial support
 - **Breaking**: makes our `mypy` plugin not optional, but required!
 - **Breaking**: changes all `RequiresContext`-based type arguments order,
