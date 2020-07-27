@@ -32,6 +32,12 @@
         ) -> MyClass[N]:
             ...
 
+        def bind_awaitable(
+            self,
+            function: Callable[[T], Awaitable[N]],
+        ) -> MyClass[N]:
+            ...
+
         @classmethod
         def from_future(
             cls,
@@ -87,6 +93,12 @@
         ) -> MyClass[N, E]:
             ...
 
+        def bind_awaitable(
+            self,
+            function: Callable[[T], Awaitable[N]],
+        ) -> MyClass[N, E]:
+            ...
+
         @classmethod
         def from_future(
             cls,
@@ -122,7 +134,7 @@
     ):
         ...
 
-    MyClass()  # E: Cannot instantiate abstract class 'MyClass' with abstract attributes 'apply', 'bind', ... and 'map' (7 methods suppressed)
+    MyClass()  # E: Cannot instantiate abstract class 'MyClass' with abstract attributes 'apply', 'bind', ... and 'map' (8 methods suppressed)
 
 
 - case: future_inheritance_wrong
@@ -152,6 +164,12 @@
         ) -> MyClass[T]:
             ...
 
+        def bind_awaitable(
+            self,
+            function: Callable[[T], Awaitable[int]],
+        ) -> MyClass[N]:
+            ...
+
         def bind_async_future(
             self,
             function: Callable[[T], Awaitable[Future[T]]],
@@ -169,8 +187,11 @@
     main:19: error: Return type "MyClass[T]" of "bind_async" incompatible with return type "KindN[MyClass[T], _UpdatedType, NoReturn, NoReturn]" in supertype "FutureLikeN"
     main:19: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
     main:19: note: This violates the Liskov substitution principle
-    main:25: error: Argument 1 of "bind_async_future" is incompatible with supertype "FutureLikeN"; supertype defines the argument type as "Callable[[T], Awaitable[Future[_UpdatedType]]]"
-    main:25: error: Return type "MyClass[T]" of "bind_async_future" incompatible with return type "KindN[MyClass[T], _UpdatedType, NoReturn, NoReturn]" in supertype "FutureLikeN"
+    main:25: error: Argument 1 of "bind_awaitable" is incompatible with supertype "FutureLikeN"; supertype defines the argument type as "Callable[[T], Awaitable[_UpdatedType]]"
     main:25: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
     main:25: note: This violates the Liskov substitution principle
-    main:31: error: Signature of "from_future" incompatible with supertype "FutureLikeN"
+    main:31: error: Argument 1 of "bind_async_future" is incompatible with supertype "FutureLikeN"; supertype defines the argument type as "Callable[[T], Awaitable[Future[_UpdatedType]]]"
+    main:31: error: Return type "MyClass[T]" of "bind_async_future" incompatible with return type "KindN[MyClass[T], _UpdatedType, NoReturn, NoReturn]" in supertype "FutureLikeN"
+    main:31: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:31: note: This violates the Liskov substitution principle
+    main:37: error: Signature of "from_future" incompatible with supertype "FutureLikeN"

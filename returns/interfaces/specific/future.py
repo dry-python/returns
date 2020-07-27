@@ -68,6 +68,13 @@ class FutureLikeN(io.IOBasedN[_FirstType, _SecondType, _ThirdType]):
     ) -> KindN[_FutureLikeType, _UpdatedType, _SecondType, _ThirdType]:
         """Binds async function returning the same type of container."""
 
+    @abstractmethod
+    def bind_awaitable(
+        self: _FutureLikeType,
+        function: Callable[[_FirstType], Awaitable[_UpdatedType]],
+    ) -> KindN[_FutureLikeType, _UpdatedType, _SecondType, _ThirdType]:
+        """Allows to bind async function over container."""
+
     @classmethod
     @abstractmethod
     def from_future(

@@ -134,7 +134,7 @@
     ):
         ...
 
-    MyClass()  # E: Cannot instantiate abstract class 'MyClass' with abstract attributes '__await__', 'apply', ... and 'map' (9 methods suppressed)
+    MyClass()  # E: Cannot instantiate abstract class 'MyClass' with abstract attributes '__await__', 'apply', ... and 'map' (10 methods suppressed)
 
 
 - case: future_inheritance_wrong

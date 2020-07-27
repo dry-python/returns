@@ -1,6 +1,11 @@
 from returns.methods.alt import alt as alt
 from returns.methods.apply import apply as apply
 from returns.methods.bind import bind as bind
+from returns.methods.bind_async import bind_async as bind_async
+from returns.methods.bind_async_future import (
+    bind_async_future as bind_async_future,
+)
+from returns.methods.bind_awaitable import bind_awaitable as bind_awaitable
 from returns.methods.bind_context import bind_context as bind_context
 from returns.methods.bind_context import bind_context2 as bind_context2
 from returns.methods.bind_context import bind_context3 as bind_context3
