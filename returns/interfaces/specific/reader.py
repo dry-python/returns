@@ -25,9 +25,9 @@ See also:
 """
 
 from abc import abstractmethod, abstractproperty
-from typing import TYPE_CHECKING, Any, Callable, NoReturn, Type, TypeVar
+from typing import TYPE_CHECKING, Any, Callable, Type, TypeVar
 
-from returns.interfaces import applicative, bindable, mappable
+from returns.interfaces.aliases import container
 from returns.primitives.hkt import Kind2, Kind3
 
 if TYPE_CHECKING:
@@ -42,11 +42,7 @@ _ReaderBased2Type = TypeVar('_ReaderBased2Type', bound='ReaderBased2')
 _ReaderBased3Type = TypeVar('_ReaderBased3Type', bound='ReaderBased3')
 
 
-class ReaderBased2(
-    mappable.MappableN[_FirstType, _SecondType, NoReturn],
-    bindable.BindableN[_FirstType, _SecondType, NoReturn],
-    applicative.ApplicativeN[_FirstType, _SecondType, NoReturn],
-):
+class ReaderBased2(container.Container2[_FirstType, _SecondType]):
     """
     Reader interface for ``Kind2`` based types.
 
@@ -94,11 +90,7 @@ class ReaderBased2(
         """Unit method to create new containers from successful ``Reader``."""
 
 
-class ReaderBased3(
-    mappable.MappableN[_FirstType, _SecondType, _ThirdType],
-    bindable.BindableN[_FirstType, _SecondType, _ThirdType],
-    applicative.ApplicativeN[_FirstType, _SecondType, _ThirdType],
-):
+class ReaderBased3(container.Container3[_FirstType, _SecondType, _ThirdType]):
     """
     Reader interface for ``Kind3`` based types.
 

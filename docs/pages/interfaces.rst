@@ -3,8 +3,20 @@
 Interfaces
 ==========
 
-On inheritance
---------------
+Naming convention
+-----------------
+
+FAQ
+---
+
+Why do you have general and specific interfaces?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Why some interfaces do not have type alias for 1 type argument?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+What is the difference between ResultLikeN and ResultBasedN?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 API Reference
 -------------

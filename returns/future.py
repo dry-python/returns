@@ -18,7 +18,7 @@ from typing_extensions import final
 from returns._generated.futures import _future, _future_result
 from returns._generated.iterable import iterable_kind
 from returns.interfaces import iterable
-from returns.interfaces.specific import io, ioresult
+from returns.interfaces.specific import ioresult
 from returns.interfaces.specific.future import FutureBased1, FutureBased2
 from returns.io import IO, IOResult
 from returns.primitives.container import BaseContainer
@@ -248,6 +248,7 @@ class Future(
         """
         return Future(_future.async_bind(function, self._inner_value))
 
+    #: Alias for `bind` method. Part of the `FutureBasedN` interface.
     bind_future = bind
 
     def bind_async(
@@ -361,6 +362,20 @@ class Future(
     def from_future(
         cls, inner_value: 'Future[_ValueType]',
     ) -> 'Future[_ValueType]':
+        """
+        Creates a new ``Future`` from the existing one.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.future import Future
+          >>> from returns.io import IO
+
+          >>> future = Future.from_value(1)
+          >>> assert anyio.run(Future.from_future(future).awaitable) == IO(1)
+
+        Part of the ``FutureBasedN`` interface.
+        """
         return inner_value
 
     @classmethod

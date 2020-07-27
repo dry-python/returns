@@ -1,14 +1,15 @@
+"""
+An interface that represents a pure computation result.
+
+For impure result see
+:class:`returns.interfaces.specific.ioresult.IOResultLikeN` type.
+"""
+
 from abc import abstractmethod
 from typing import TYPE_CHECKING, Callable, NoReturn, Type, TypeVar
 
-from returns.interfaces import (
-    altable,
-    applicative,
-    bindable,
-    mappable,
-    rescuable,
-    unwrappable,
-)
+from returns.interfaces import altable, rescuable, unwrappable
+from returns.interfaces.aliases import container
 from returns.primitives.hkt import KindN
 
 if TYPE_CHECKING:
@@ -26,17 +27,14 @@ _ResultLikeType = TypeVar('_ResultLikeType', bound='ResultLikeN')
 
 
 class ResultLikeN(
-    mappable.MappableN[_FirstType, _SecondType, _ThirdType],
-    bindable.BindableN[_FirstType, _SecondType, _ThirdType],
-    applicative.ApplicativeN[_FirstType, _SecondType, _ThirdType],
+    container.ContainerN[_FirstType, _SecondType, _ThirdType],
     altable.AltableN[_FirstType, _SecondType, _ThirdType],
     rescuable.RescuableN[_FirstType, _SecondType, _ThirdType],
 ):
     """
-    An interface that represents a pure computation result.
+    Base types for types that looks like ``Result`` but cannot be unwrapped.
 
-    For impure result see
-    :class:`returns.interfaces.specific.ioresult.IOResultLikeN` type.
+    Like ``RequiresContextResult`` or ``FutureResult``.
     """
 
     @abstractmethod
@@ -80,7 +78,12 @@ class UnwrappableResult(
     ResultLikeN[_FirstType, _SecondType, _ThirdType],
     unwrappable.Unwrappable[_FirstUnwrappableType, _SecondUnwrappableType],
 ):
-    ...
+    """
+    Intermediate type with 5 type arguments that represents unwrappable result.
+
+    It is a raw type and should not be used directly.
+    Use ``ResultBasedN`` and ``IOResultBasedN`` instead.
+    """
 
 
 class ResultBasedN(
@@ -93,7 +96,11 @@ class ResultBasedN(
         _SecondType,
     ],
 ):
-    ...
+    """
+    Base type for real ``Result`` types.
+
+    Can be unwrapped.
+    """
 
 
 #: Type alias for kinds with two type arguments.

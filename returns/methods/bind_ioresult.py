@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Callable, TypeVar
 
-from returns.interfaces.specific.ioresult import IOResultBasedN
+from returns.interfaces.specific.ioresult import IOResultLikeN
 from returns.primitives.hkt import KindN, kinded
 
 if TYPE_CHECKING:
@@ -11,13 +11,13 @@ _SecondType = TypeVar('_SecondType')
 _ThirdType = TypeVar('_ThirdType')
 _UpdatedType = TypeVar('_UpdatedType')
 
-_IOResultBasedKind = TypeVar('_IOResultBasedKind', bound=IOResultBasedN)
+_IOResultLikeKind = TypeVar('_IOResultLikeKind', bound=IOResultLikeN)
 
 
 def internal_bind_ioresult(
-    container: KindN[_IOResultBasedKind, _FirstType, _SecondType, _ThirdType],
+    container: KindN[_IOResultLikeKind, _FirstType, _SecondType, _ThirdType],
     function: Callable[[_FirstType], 'IOResult[_UpdatedType, _SecondType]'],
-) -> KindN[_IOResultBasedKind, _UpdatedType, _SecondType, _ThirdType]:
+) -> KindN[_IOResultLikeKind, _UpdatedType, _SecondType, _ThirdType]:
     """
     Bind a ``IOResult`` returning function over a container.
 
@@ -43,7 +43,7 @@ def internal_bind_ioresult(
 
     Note, that this function works
     for all containers with ``.bind_ioresult`` method.
-    See :class:`returns.primitives.interfaces.specific.ioresult.IOResultBasedN`
+    See :class:`returns.primitives.interfaces.specific.ioresult.IOResultLikeN`
     for more info.
 
     """

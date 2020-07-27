@@ -16,13 +16,8 @@ from typing import (
 from typing_extensions import final
 
 from returns._generated.iterable import iterable_kind
-from returns.interfaces import (
-    applicative,
-    bindable,
-    iterable,
-    mappable,
-    unwrappable,
-)
+from returns.interfaces import iterable, unwrappable
+from returns.interfaces.aliases.container import Container1
 from returns.primitives.container import BaseContainer
 from returns.primitives.exceptions import UnwrapFailedError
 from returns.primitives.hkt import Kind1, SupportsKind1, dekind
@@ -39,9 +34,7 @@ _SecondType = TypeVar('_SecondType')
 class Maybe(
     BaseContainer,
     SupportsKind1['Maybe', _ValueType],
-    mappable.Mappable1[_ValueType],
-    bindable.Bindable1[_ValueType],
-    applicative.Applicative1[_ValueType],
+    Container1[_ValueType],
     unwrappable.Unwrappable[_ValueType, None],
     iterable.Iterable1[_ValueType],
     metaclass=ABCMeta,

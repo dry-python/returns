@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Callable, TypeVar
 
-from returns.interfaces.specific.result import ResultBasedN
+from returns.interfaces.specific.result import ResultLikeN
 from returns.methods.bind_result import internal_bind_result
 from returns.primitives.hkt import Kinded, KindN, kinded
 
@@ -12,14 +12,14 @@ _SecondType = TypeVar('_SecondType')
 _ThirdType = TypeVar('_ThirdType')
 _UpdatedType = TypeVar('_UpdatedType')
 
-_ResultBasedKind = TypeVar('_ResultBasedKind', bound=ResultBasedN)
+_ResultLikeKind = TypeVar('_ResultLikeKind', bound=ResultLikeN)
 
 
 def bind_result(
     function: Callable[[_FirstType], 'Result[_UpdatedType, _SecondType]'],
 ) -> Kinded[Callable[
-    [KindN[_ResultBasedKind, _FirstType, _SecondType, _ThirdType]],
-    KindN[_ResultBasedKind, _UpdatedType, _SecondType, _ThirdType],
+    [KindN[_ResultLikeKind, _FirstType, _SecondType, _ThirdType]],
+    KindN[_ResultLikeKind, _UpdatedType, _SecondType, _ThirdType],
 ]]:
     """
     Composes successful container with a function that returns a container.
@@ -45,7 +45,7 @@ def bind_result(
     """
     @kinded
     def factory(
-        container: KindN[_ResultBasedKind, _FirstType, _SecondType, _ThirdType],
-    ) -> KindN[_ResultBasedKind, _UpdatedType, _SecondType, _ThirdType]:
+        container: KindN[_ResultLikeKind, _FirstType, _SecondType, _ThirdType],
+    ) -> KindN[_ResultLikeKind, _UpdatedType, _SecondType, _ThirdType]:
         return internal_bind_result(container, function)
     return factory

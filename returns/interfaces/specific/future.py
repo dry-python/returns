@@ -1,7 +1,24 @@
-from abc import abstractmethod
-from typing import TYPE_CHECKING, Any, Callable, NoReturn, Type, TypeVar, Generator, Awaitable, Coroutine
+"""
+Represents the base interfaces for types that do fearless async operations.
 
-from returns.interfaces.async_ import AsyncLikeN
+This type means that ``Future`` cannot fail.
+Don't use this type for async that can. Instead, use
+:class:`returns.interfaces.specific.future_result.FutureResultBasedN` type.
+"""
+
+from abc import abstractmethod
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Awaitable,
+    Callable,
+    Generator,
+    Generic,
+    NoReturn,
+    Type,
+    TypeVar,
+)
+
 from returns.interfaces.specific import io
 from returns.primitives.hkt import KindN
 
@@ -14,17 +31,15 @@ _ThirdType = TypeVar('_ThirdType')
 _UpdatedType = TypeVar('_UpdatedType')
 
 _FutureLikeType = TypeVar('_FutureLikeType', bound='FutureLikeN')
+_AsyncFutureType = TypeVar('_AsyncFutureType', bound='AsyncFutureN')
 _FutureBasedType = TypeVar('_FutureBasedType', bound='FutureBasedN')
 
 
 class FutureLikeN(io.IOBasedN[_FirstType, _SecondType, _ThirdType]):
     """
-    Represents the base interfaces for types that do fearless async operations.
+    Base type for ones that does look like ``Future``.
 
-    This type means that ``Future`` cannot fail.
-    Don't use this type for async that can. Instead, use
-    :class:`returns.interfaces.specific.future_result.FutureResultBasedN` type.
-
+    But at the time this is not a real ``Future`` and cannot be awaited.
     """
 
     @abstractmethod
@@ -44,7 +59,7 @@ class FutureLikeN(io.IOBasedN[_FirstType, _SecondType, _ThirdType]):
             ],
         ],
     ) -> KindN[_FutureLikeType, _UpdatedType, _SecondType, _ThirdType]:
-        ...
+        """Binds async function returning the same type of container object."""
 
     @classmethod
     @abstractmethod
@@ -65,11 +80,45 @@ FutureLike2 = FutureLikeN[_FirstType, _SecondType, NoReturn]
 FutureLike3 = FutureLikeN[_FirstType, _SecondType, _ThirdType]
 
 
+class AsyncFutureN(Generic[_FirstType, _SecondType, _ThirdType]):
+    """
+    Type that provides the required API for ``Future`` to be async.
+
+    Should not be used directly. Use ``FutureBasedN`` instead.
+    """
+
+    @abstractmethod
+    def __await__(self: _AsyncFutureType) -> Generator[
+        Any, Any, io.IOBasedN[_FirstType, _SecondType, _ThirdType],
+    ]:
+        """Magic method to allow ``await`` expression."""
+
+    @abstractmethod
+    async def awaitable(
+        self: _AsyncFutureType,
+    ) -> io.IOBasedN[_FirstType, _SecondType, _ThirdType]:
+        """Underling logic under ``await`` expression."""
+
+
+#: Type alias for kinds with one type argument.
+AsyncFuture1 = AsyncFutureN[_FirstType, NoReturn, NoReturn]
+
+#: Type alias for kinds with two type arguments.
+AsyncFuture2 = AsyncFutureN[_FirstType, _SecondType, NoReturn]
+
+#: Type alias for kinds with three type arguments.
+AsyncFuture3 = AsyncFutureN[_FirstType, _SecondType, _ThirdType]
+
+
 class FutureBasedN(
     FutureLikeN[_FirstType, _SecondType, _ThirdType],
-    AsyncLikeN[_FirstType, _SecondType, _ThirdType],
+    AsyncFutureN[_FirstType, _SecondType, _ThirdType],
 ):
-    ...
+    """
+    Base type for real ``Future`` objects.
+
+    They can be awaited.
+    """
 
 
 #: Type alias for kinds with one type argument.

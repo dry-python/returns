@@ -17,7 +17,7 @@ from typing import (
 from typing_extensions import final
 
 from returns._generated.iterable import iterable_kind
-from returns.interfaces import iterable, unwrappable
+from returns.interfaces import iterable
 from returns.interfaces.specific import io, ioresult
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import (

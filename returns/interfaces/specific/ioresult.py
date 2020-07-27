@@ -1,8 +1,13 @@
+"""
+An interface for types that do ``IO`` and can fail.
+
+It is a base interface for both sync and async ``IO`` stacks.
+"""
+
 from abc import abstractmethod
 from typing import TYPE_CHECKING, Callable, NoReturn, Type, TypeVar
 
 from returns.interfaces.specific import io, result
-from returns.interfaces import unwrappable
 from returns.primitives.hkt import KindN
 
 if TYPE_CHECKING:
@@ -22,9 +27,9 @@ class IOResultLikeN(
     result.ResultLikeN[_FirstType, _SecondType, _ThirdType],
 ):
     """
-    An interface for types that do ``IO`` and can fail.
+    Base type for types that look like ``IOResult`` but cannot be unwrapped.
 
-    It is a base interface for both sync and async ``IO`` stacks.
+    Like ``FutureResult`` or ``RequiresContextIOResult``.
     """
 
     @abstractmethod
@@ -74,11 +79,16 @@ class IOResultBasedN(
         _FirstType,
         _SecondType,
         _ThirdType,
+        # Unwraps:
         'IO[_FirstType]',
         'IO[_SecondType]',
     ],
 ):
-    ...
+    """
+    Base type for real ``IOResult`` types.
+
+    Can be unwrapped.
+    """
 
 
 #: Type alias for kinds with two type arguments.
