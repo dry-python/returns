@@ -26,6 +26,19 @@
     bind_result(x, test)  # E: Argument 2 to "internal_bind_result" has incompatible type "Callable[[float], Result[int, str]]"; expected "Callable[[float], Result[int, int]]"
 
 
+- case: bind_result_wrong
+  disable_cache: true
+  main: |
+    from returns.methods import bind_result
+    from returns.maybe import Maybe
+
+    def test(arg: float) -> Maybe[str]:
+        ...
+
+    x: Maybe[str]
+    bind_result(x, test)  # E: Value of type variable "_ResultLikeKind" of "internal_bind_result" cannot be "Maybe[Any]"
+
+
 - case: bind_result_result
   disable_cache: true
   main: |

@@ -148,41 +148,11 @@
         SupportsKind2['MyClass', _ValueType, _ErrorType],
         ResultBased2[_ValueType, _ErrorType],
     ):
-        def swap(self) -> MyClass[_ValueType, _ErrorType]:
-            ...
-
-        def bind_result(
-            self,
-            function: Callable[
-                [_ValueType],
-                Result[_ValueType, _ErrorType],
-            ],
-        ) -> MyClass[_ValueType, _ErrorType]:
-            ...
-
         def unwrap(self) -> _ErrorType:
             ...
 
         def failure(self) -> _ValueType:
             ...
-
-        def from_result(
-            self, inner_value: Result[_NewValueType, _NewErrorType],
-        ) -> MyClass[_NewValueType, _NewErrorType]:
-            ...
-
-        @classmethod
-        def from_failure(
-            cls, inner_value: _NewErrorType,
-        ) -> MyClass[_NewErrorType, _NewErrorType]:
-            ...
   out: |
-    main:17: error: Return type "MyClass[_ValueType, _ErrorType]" of "swap" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType], _ErrorType, _ValueType, NoReturn]" in supertype "ResultLikeN"
-    main:20: error: Argument 1 of "bind_result" is incompatible with supertype "ResultLikeN"; supertype defines the argument type as "Callable[[_ValueType], Result[_UpdatedType, _ErrorType]]"
-    main:20: error: Return type "MyClass[_ValueType, _ErrorType]" of "bind_result" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType], _UpdatedType, _ErrorType, NoReturn]" in supertype "ResultLikeN"
-    main:20: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
-    main:20: note: This violates the Liskov substitution principle
-    main:29: error: Return type "_ErrorType" of "unwrap" incompatible with return type "_ValueType" in supertype "Unwrappable"
-    main:32: error: Return type "_ValueType" of "failure" incompatible with return type "_ErrorType" in supertype "Unwrappable"
-    main:35: error: Signature of "from_result" incompatible with supertype "ResultLikeN"
-    main:41: error: Signature of "from_failure" incompatible with supertype "ResultLikeN"
+    main:17: error: Return type "_ErrorType" of "unwrap" incompatible with return type "_ValueType" in supertype "Unwrappable"
+    main:20: error: Return type "_ValueType" of "failure" incompatible with return type "_ErrorType" in supertype "Unwrappable"

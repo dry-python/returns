@@ -1,0 +1,148 @@
+- case: future_inheritance_correct1
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar, Generator, Awaitable
+    from returns.interfaces.specific.future import FutureLike1
+    from returns.primitives.hkt import SupportsKind1, Kind1
+    from returns.io import IO
+    from returns.future import Future
+
+    T = TypeVar('T')
+    N = TypeVar('N')
+
+    class MyClass(
+        SupportsKind1['MyClass', T],
+        FutureLike1[T],
+    ):
+        def bind_future(
+            self,
+            function: Callable[[T], Future[N]],
+        ) -> MyClass[N]:
+            ...
+
+        def bind_async(
+            self,
+            function: Callable[[T], Awaitable[Kind1['MyClass', N]]],
+        ) -> MyClass[N]:
+            ...
+
+        @classmethod
+        def from_future(
+            cls,
+            inner_value: Future[T],
+        ) -> MyClass[T]:
+            ...
+
+    def test1(arg: int) -> Future[float]:
+        ...
+
+    async def test2(arg: float) -> MyClass[str]:
+        ...
+
+    x: Future[int]
+    reveal_type(MyClass.from_future(x).bind_future(test1).bind_async(test2))  # N: Revealed type is 'main.MyClass[builtins.str*]'
+
+
+- case: future_inheritance_correct2
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar, Generator, Any, Awaitable
+    from returns.interfaces.specific.future import FutureLike2
+    from returns.primitives.hkt import SupportsKind2, Kind2
+    from returns.io import IOResult
+    from returns.future import Future
+
+    T = TypeVar('T')
+    E = TypeVar('E')
+    N = TypeVar('N')
+
+    class MyClass(
+        SupportsKind2['MyClass', T, E],
+        FutureLike2[T, E],
+    ):
+        def bind_future(
+            self,
+            function: Callable[[T], Future[N]],
+        ) -> MyClass[N, E]:
+            ...
+
+        def bind_async(
+            self,
+            function: Callable[[T], Awaitable[Kind2['MyClass', N, E]]],
+        ) -> MyClass[N, E]:
+            ...
+
+        @classmethod
+        def from_future(
+            cls,
+            inner_value: Future[T],
+        ) -> MyClass[T, Any]:
+            ...
+
+    def test1(arg: int) -> Future[float]:
+        ...
+
+    async def test2(arg: float) -> MyClass[str, bool]:
+        ...
+
+    x: MyClass[int, bool]
+    reveal_type(x.bind_future(test1).bind_async(test2))  # N: Revealed type is 'main.MyClass[builtins.str*, builtins.bool]'
+
+
+- case: future_inheritance_missing
+  disable_cache: true
+  main: |
+    from typing import TypeVar
+    from returns.interfaces.specific.future import FutureLike1
+    from returns.primitives.hkt import SupportsKind1
+
+    T = TypeVar('T')
+
+    class MyClass(
+        SupportsKind1['MyClass', T],
+        FutureLike1[T],
+    ):
+        ...
+
+    MyClass()  # E: Cannot instantiate abstract class 'MyClass' with abstract attributes 'apply', 'bind', ... and 'map' (6 methods suppressed)
+
+
+- case: future_inheritance_wrong
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar, Generator, Awaitable
+    from returns.interfaces.specific.future import FutureLike1
+    from returns.primitives.hkt import SupportsKind1, Kind1
+    from returns.future import Future
+
+    T = TypeVar('T')
+    N = TypeVar('N')
+
+    class MyClass(
+        SupportsKind1['MyClass', T],
+        FutureLike1[T],
+    ):
+        def bind_future(
+            self,
+            function: Callable[[T], Future[N]],
+        ) -> MyClass[T]:
+            ...
+
+        def bind_async(
+            self,
+            function: Callable[[T], Awaitable[Kind1['MyClass', T]]],
+        ) -> MyClass[T]:
+            ...
+
+        def from_future(
+            cls,
+            inner_value: Future[T],
+        ) -> MyClass[T]:
+            ...
+  out: |
+    main:13: error: Return type "MyClass[T]" of "bind_future" incompatible with return type "KindN[MyClass[T], _UpdatedType, NoReturn, NoReturn]" in supertype "FutureLikeN"
+    main:19: error: Argument 1 of "bind_async" is incompatible with supertype "FutureLikeN"; supertype defines the argument type as "Callable[[T], Awaitable[KindN[MyClass[T], _UpdatedType, NoReturn, NoReturn]]]"
+    main:19: error: Return type "MyClass[T]" of "bind_async" incompatible with return type "KindN[MyClass[T], _UpdatedType, NoReturn, NoReturn]" in supertype "FutureLikeN"
+    main:19: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:19: note: This violates the Liskov substitution principle
+    main:25: error: Signature of "from_future" incompatible with supertype "FutureLikeN"

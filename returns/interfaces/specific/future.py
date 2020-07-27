@@ -49,7 +49,7 @@ class FutureLikeN(io.IOBasedN[_FirstType, _SecondType, _ThirdType]):
     ) -> KindN[_FutureLikeType, _UpdatedType, _SecondType, _ThirdType]:
         """Allows to apply a wrapped function over a container."""
 
-    @abstractmethod
+    @abstractmethod  # TODO: add bind_async_future
     def bind_async(
         self: _FutureLikeType,
         function: Callable[

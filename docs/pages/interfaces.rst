@@ -75,6 +75,12 @@ IOResult specific
 .. automodule:: returns.interfaces.specific.ioresult
   :members:
 
+Future specific
+~~~~~~~~~~~~~~~
+
+.. automodule:: returns.interfaces.specific.future
+  :members:
+
 Reader specific
 ~~~~~~~~~~~~~~~
 

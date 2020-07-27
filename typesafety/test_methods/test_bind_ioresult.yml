@@ -37,7 +37,7 @@
         ...
 
     x: RequiresContextResult[float, str, bool]
-    bind_ioresult(x, test)  # E: Value of type variable "_IOResultBasedKind" of "internal_bind_ioresult" cannot be "RequiresContextResult[Any, Any, Any]"
+    bind_ioresult(x, test)  # E: Value of type variable "_IOResultLikeKind" of "internal_bind_ioresult" cannot be "RequiresContextResult[Any, Any, Any]"
 
 
 - case: bind_ioresult_ioresult
