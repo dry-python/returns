@@ -208,7 +208,7 @@
     from returns.pointfree import map_
     from returns.primitives.hkt import SupportsKind1
     from returns.interfaces.mappable import Mappable1
-    from typing import Callable, TypeVar
+    from typing import TypeVar
 
     T = TypeVar('T')
     N = TypeVar('N')
@@ -217,10 +217,7 @@
         SupportsKind1['MyOwn', T],
         Mappable1[T],
     ):
-        def map(
-            self, function: Callable[[T], N],
-        ) -> 'MyOwn[N]':
-            ...
+        ...
 
     def test(arg: float) -> int:
         ...

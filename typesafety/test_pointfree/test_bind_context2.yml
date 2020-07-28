@@ -62,50 +62,21 @@
 - case: bind_context2_custom_type
   disable_cache: true
   main: |
-    from typing import Callable, TypeVar, ClassVar
+    from typing import TypeVar
     from returns.interfaces.specific.reader import ReaderBased2
     from returns.primitives.hkt import SupportsKind2
-    from returns.context import Reader, NoDeps
+    from returns.context import Reader
     from returns.pointfree import bind_context2
 
-    _EnvType = TypeVar('_EnvType', contravariant=True)
-    _NewEnvType = TypeVar('_NewEnvType')
-    _ReturnType = TypeVar('_ReturnType', covariant=True)
+    _EnvType = TypeVar('_EnvType')
+    _ReturnType = TypeVar('_ReturnType')
     _NewReturnType = TypeVar('_NewReturnType')
 
     class MyClass(
         SupportsKind2['MyClass', _ReturnType, _EnvType],
         ReaderBased2[_ReturnType, _EnvType],
     ):
-        empty: ClassVar[NoDeps] = object()
-
-        def __call__(self, deps: _EnvType) -> _ReturnType:
-            ...
-
-        def bind_context(
-            self,
-            function: Callable[
-                [_ReturnType],
-                Reader[_NewReturnType, _EnvType],
-            ],
-        ) -> MyClass[_NewReturnType, _EnvType]:
-            ...
-
-        def modify_env(
-            self,
-            function: Callable[[_NewEnvType], _EnvType],
-        ) -> MyClass[_ReturnType, _NewEnvType]:
-            ...
-
-        @classmethod
-        def ask(cls) -> MyClass[_EnvType, _EnvType]:
-            ...
-
-        @classmethod
-        def from_context(
-            self, inner_value: Reader[_ReturnType, _EnvType],
-        ) -> MyClass[_ReturnType, _EnvType]:
-            ...
+        ...
 
     def test(a: int) -> Reader[float, str]:
         ...

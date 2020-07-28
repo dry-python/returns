@@ -166,24 +166,17 @@
   disable_cache: true
   main: |
     from returns.methods import map_
-    from returns.primitives.hkt import SupportsKind1, dekind
+    from returns.primitives.hkt import SupportsKind1
     from returns.interfaces.mappable import Mappable1
-    from typing import Callable, TypeVar
+    from typing import TypeVar
 
     T = TypeVar('T')
-    N = TypeVar('N')
 
     class MyOwn(
         SupportsKind1['MyOwn', T],
         Mappable1[T],
     ):
-        def __init__(self, value: T) -> None:
-            self.value = value
-
-        def map(
-            self, function: Callable[[T], N],
-        ) -> 'MyOwn[N]':
-            return MyOwn(function(self.value))
+        ...
 
     def test(arg: float) -> int:
         ...

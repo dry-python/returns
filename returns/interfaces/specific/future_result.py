@@ -72,9 +72,6 @@ class FutureResultLikeN(
         """Creates container from ``FutureResult`` instance."""
 
 
-#: Type alias for kinds with one type argument.
-FutureResultLike1 = FutureResultLikeN[_FirstType, NoReturn, NoReturn]
-
 #: Type alias for kinds with two type arguments.
 FutureResultLike2 = FutureResultLikeN[_FirstType, _SecondType, NoReturn]
 
@@ -93,9 +90,6 @@ class FutureResultBasedN(
     Still cannot be unwrapped.
     """
 
-
-#: Type alias for kinds with one type argument.
-FutureResultBased1 = FutureResultBasedN[_FirstType, NoReturn, NoReturn]
 
 #: Type alias for kinds with two type arguments.
 FutureResultBased2 = FutureResultBasedN[_FirstType, _SecondType, NoReturn]

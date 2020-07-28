@@ -145,30 +145,19 @@
 - case: bind_io_custom_type
   disable_cache: true
   main: |
-    from typing import Callable, TypeVar
+    from typing import TypeVar
     from returns.interfaces.specific.io import IOBased1
     from returns.primitives.hkt import SupportsKind1
     from returns.io import IO
     from returns.pointfree import bind_io
 
     _ValueType = TypeVar('_ValueType')
-    _NewValueType = TypeVar('_NewValueType')
 
     class MyClass(
         SupportsKind1['MyClass', _ValueType],
         IOBased1[_ValueType],
     ):
-        def bind_io(
-            self,
-            function: Callable[[_ValueType], IO[_NewValueType]],
-        ) -> MyClass[_NewValueType]:
-            ...
-
-        @classmethod
-        def from_io(
-            self, inner_value: IO[_NewValueType],
-        ) -> MyClass[_NewValueType]:
-            ...
+        ...
 
     def test(arg: float) -> IO[int]:
         ...
