@@ -4,7 +4,7 @@ from returns.maybe import Nothing, Some
 def test_map_some():
     """Ensures that map works for Some container."""
     assert Some(5).map(str) == Some('5')
-    assert Some(5).map(lambda num: None) == Nothing
+    assert Some(5).map(lambda num: None) == Some(None)
 
 
 def test_map_nothing():

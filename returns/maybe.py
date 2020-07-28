@@ -66,7 +66,7 @@ class Maybe(
 
     def map(  # noqa: WPS125
         self,
-        function: Callable[[_ValueType], Optional[_NewValueType]],
+        function: Callable[[_ValueType], [_NewValueType]],
     ) -> 'Maybe[_NewValueType]':
         """
         Composes successful container with a pure function.
@@ -342,7 +342,7 @@ class _Some(Maybe[_ValueType]):
 
     def map(self, function):  # noqa: WPS125
         """Composes current container with a pure function."""
-        return Maybe.from_value(function(self._inner_value))
+        return _Some(function(self._inner_value))
 
     def apply(self, container):
         """Calls a wrapped function in a container on this container."""
@@ -352,7 +352,12 @@ class _Some(Maybe[_ValueType]):
 
     def bind(self, function):
         """Binds current container to a function that returns container."""
-        return function(self._inner_value)
+        result = function(self._inner_value) 
+        if isinstance(result, self.success_type) or isinstance(result, self.failure_type):
+            return result
+        else:
+            return Maybe.from_value(result)
+        return 
 
     def rescue(self, function):
         """Does nothing for ``Some``."""
@@ -379,21 +384,21 @@ Maybe.success_type = _Some
 Maybe.failure_type = _Nothing
 
 
-def Some(inner_value: Optional[_ValueType]) -> Maybe[_ValueType]:  # noqa: N802
+def Some(inner_value: _ValueType) -> Maybe[_ValueType]:  # noqa: N802
     """
     Public unit function of protected :class:`~_Some` type.
 
-    Can return ``Nothing`` for passed ``None`` argument.
-    Because ``Some(None)`` does not make sence.
+    Can return ``Some(None)`` for passed ``None`` argument.
+    Because ``Some(None)`` does make sense.
 
     .. code:: python
 
       >>> from returns.maybe import Some
       >>> assert str(Some(1)) == '<Some: 1>'
-      >>> assert str(Some(None)) == '<Nothing>'
+      >>> assert str(Some(None)) == '<Some: None>'
 
     """
-    return Maybe.from_value(inner_value)
+    return _Some(inner_value)
 
 
 #: Public unit value of protected :class:`~_Nothing` type.
