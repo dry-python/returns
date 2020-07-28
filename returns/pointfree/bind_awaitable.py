@@ -27,6 +27,8 @@ def bind_awaitable(
     signature from: ``a -> Awaitable[b]``
     to: ``Container[a] -> Container[b]``
 
+    This is how it should be used:
+
     .. code:: python
 
         >>> import anyio

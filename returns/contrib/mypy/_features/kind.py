@@ -14,6 +14,8 @@ from mypy.types import AnyType, CallableType, Instance
 from mypy.types import Type as MypyType
 from mypy.types import TypeOfAny, TypeVarType, get_proper_type
 
+from returns.contrib.mypy._typeops.fallback import asserts_fallback_to_any
+
 # TODO: probably we can validate `KindN[]` creation during `get_analtype`
 
 
@@ -92,6 +94,7 @@ def dekind(ctx: FunctionContext) -> MypyType:
     return kind.args[0].copy_modified(args=_crop_kind_args(kind))
 
 
+@asserts_fallback_to_any
 def kinded_signature(ctx: MethodSigContext) -> CallableType:
     """
     Returns the internal function wrapped as ``Kinded[def]``.

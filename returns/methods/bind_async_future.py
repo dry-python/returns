@@ -20,7 +20,7 @@ def internal_bind_async_future(
     ],
 ) -> KindN[_FutureKind, _UpdatedType, _SecondType, _ThirdType]:
     """
-    Bind an async function over a container.
+    Bind an async function returning ``Future`` over a container.
 
     .. code:: python
 

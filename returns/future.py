@@ -18,8 +18,8 @@ from typing_extensions import final
 from returns._generated.futures import _future, _future_result
 from returns._generated.iterable import iterable_kind
 from returns.interfaces import iterable
-from returns.interfaces.specific import ioresult
-from returns.interfaces.specific.future import FutureBased1, FutureBased2
+from returns.interfaces.specific.future import FutureBased1
+from returns.interfaces.specific.future_result import FutureResultBased2
 from returns.io import IO, IOResult
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import (
@@ -527,8 +527,7 @@ def asyncify(function: Callable[..., _ValueType]) -> Callable[
 class FutureResult(
     BaseContainer,
     SupportsKind2['FutureResult', _ValueType, _ErrorType],
-    FutureBased2[_ValueType, _ErrorType],
-    ioresult.IOResultLike2[_ValueType, _ErrorType],
+    FutureResultBased2[_ValueType, _ErrorType],
     iterable.Iterable2[_ValueType, _ErrorType],
 ):
     """
@@ -772,6 +771,10 @@ class FutureResult(
             function, self._inner_value,
         ))
 
+    #: Alias for `bind` method.
+    #: Part of the `FutureResultBasedN` interface.
+    bind_future_result = bind
+
     def bind_async(
         self,
         function: Callable[
@@ -806,6 +809,10 @@ class FutureResult(
         return FutureResult(_future_result.async_bind_async(
             function, self._inner_value,
         ))
+
+    #: Alias for `bind_async` method.
+    #: Part of the `FutureResultBasedN` interface.
+    bind_async_future_result = bind_async
 
     def bind_awaitable(
         self,
@@ -1191,6 +1198,31 @@ class FutureResult(
 
         """
         return FutureResult(_future_result.async_from_failure(inner_value))
+
+    @classmethod
+    def from_future_result(
+        cls,
+        inner_value: 'FutureResult[_ValueType, _ErrorType]',
+    ) -> 'FutureResult[_ValueType, _ErrorType]':
+        """
+        Creates new ``FutureResult`` from existing one.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.io import IOSuccess
+          >>> from returns.future import FutureResult
+
+          >>> async def main():
+          ...     assert await FutureResult.from_future_result(
+          ...         FutureResult.from_value(1),
+          ...     ) == IOSuccess(1)
+
+          >>> anyio.run(main)
+
+        Part of the ``FutureResultLikeN`` interface.
+        """
+        return inner_value
 
     @classmethod
     def from_io(
