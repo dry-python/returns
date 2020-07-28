@@ -36,7 +36,6 @@ See [0Ver](https://0ver.org/).
   users can write their own `unify` poinfree function now
 - **Breaking**: Removes `coalesce` function,
   because it is impossible to properly type it
-- **Breaking**: Removes `swap` converter, because it was impossible to type
 - **Breaking**: Removes all `Context*` based types with `.ask()` method,
   use new `.ask()` methods on the `Reader`-based containers
 - Adds new public interfaces: see `returns.interfaces`

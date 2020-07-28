@@ -58,8 +58,6 @@ to merge nested containers together:
 API Reference
 -------------
 
-.. autofunction:: returns.converters.flatten
-
 .. automodule:: returns.converters
    :members:
 

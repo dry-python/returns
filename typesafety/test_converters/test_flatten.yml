@@ -15,7 +15,7 @@
             ...
 
     x: Functor[Functor[int]]
-    flatten(x)  # E: Value of type variable "_BindableKind" of "_flatten" cannot be "Functor[Any]"
+    flatten(x)  # E: Value of type variable "_BindableKind" of "flatten" cannot be "Functor[Any]"
 
 
 - case: flatten_wrong_error_type
@@ -60,7 +60,7 @@
 
     flatten(returns_result())
   out: |
-    main:7: error: Argument 1 to "_flatten" has incompatible type "Result[int, Result[int, str]]"; expected "KindN[Result[Any, Any], KindN[Result[Any, Any], <nothing>, Result[int, str], NoReturn], Result[int, str], NoReturn]"
+    main:7: error: Argument 1 to "flatten" has incompatible type "Result[int, Result[int, str]]"; expected "KindN[Result[Any, Any], KindN[Result[Any, Any], <nothing>, Result[int, str], NoReturn], Result[int, str], NoReturn]"
 
 
 - case: flatten_io
@@ -138,18 +138,29 @@
     reveal_type(flatten(x))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult*[builtins.str*, builtins.int*, builtins.float*]'
 
 
-- case: flatten_future
+- case: flatten_context_ioresult
   disable_cache: true
   main: |
     from returns.converters import flatten
-    from returns.future import Future
+    from returns.context import RequiresContextIOResult
 
-    x: Future[Future[int]]
+    x: RequiresContextIOResult[RequiresContextIOResult[str, int, float], int, float]
 
-    reveal_type(flatten(x))  # N: Revealed type is 'returns.future.Future*[builtins.int*]'
+    reveal_type(flatten(x))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult*[builtins.str*, builtins.int*, builtins.float*]'
 
 
-- case: flatten_future_result1
+- case: flatten_future_result
+  disable_cache: true
+  main: |
+    from returns.converters import flatten
+    from returns.context import ReaderFutureResult
+
+    x: ReaderFutureResult[ReaderFutureResult[int, bool, str], bool, str]
+
+    reveal_type(flatten(x))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult*[builtins.int*, builtins.bool*, builtins.str*]'
+
+
+- case: flatten_future_result
   disable_cache: true
   main: |
     from returns.converters import flatten

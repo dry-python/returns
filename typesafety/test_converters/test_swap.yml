@@ -1,0 +1,134 @@
+- case: swap_wrong_type
+  disable_cache: true
+  main: |
+    from returns.converters import swap
+    from returns.maybe import Maybe
+
+    r: Maybe[str]
+
+    swap(r)  # E: Value of type variable "_ResultLikeKind" of "swap" cannot be "Maybe[Any]"
+
+
+- case: swap_result1
+  disable_cache: true
+  main: |
+    from returns.converters import swap
+    from returns.result import Result
+
+    r: Result[int, str]
+
+    reveal_type(swap(r))  # N: Revealed type is 'returns.result.Result*[builtins.str*, builtins.int*]'
+
+
+- case: swap_result2
+  disable_cache: true
+  main: |
+    from returns.converters import swap
+    from returns.result import Result
+
+    r: Result[int, str]
+
+    reveal_type(swap(swap(r)))  # N: Revealed type is 'returns.result.Result*[builtins.int*, builtins.str*]'
+
+
+- case: swap_ioresult
+  disable_cache: true
+  main: |
+    from returns.converters import swap
+    from returns.io import IOResult
+
+    r: IOResult[int, str]
+
+    reveal_type(swap(r))  # N: Revealed type is 'returns.io.IOResult*[builtins.str*, builtins.int*]'
+
+
+- case: swap_future_result
+  disable_cache: true
+  main: |
+    from returns.converters import swap
+    from returns.future import FutureResult
+
+    r: FutureResult[int, str]
+
+    reveal_type(swap(r))  # N: Revealed type is 'returns.future.FutureResult*[builtins.str*, builtins.int*]'
+
+
+- case: swap_reader_result
+  disable_cache: true
+  main: |
+    from returns.converters import swap
+    from returns.context import ReaderResult
+
+    r: ReaderResult[int, str, bool]
+
+    reveal_type(swap(r))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult*[builtins.str*, builtins.int*, builtins.bool*]'
+
+
+- case: swap_reader_ioresult
+  disable_cache: true
+  main: |
+    from returns.converters import swap
+    from returns.context import ReaderIOResult
+
+    r: ReaderIOResult[int, str, bool]
+
+    reveal_type(swap(r))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult*[builtins.str*, builtins.int*, builtins.bool*]'
+
+
+- case: swap_reader_future_result
+  disable_cache: true
+  main: |
+    from returns.converters import swap
+    from returns.context import ReaderFutureResult
+
+    r: ReaderFutureResult[int, str, bool]
+
+    reveal_type(swap(r))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult*[builtins.str*, builtins.int*, builtins.bool*]'
+
+
+- case: swap_custom_type
+  disable_cache: true
+  main: |
+    from returns.converters import swap
+    from typing import Callable, TypeVar, Any
+    from returns.interfaces.specific.result import ResultLike2
+    from returns.primitives.hkt import SupportsKind2
+    from returns.result import Result
+
+    _ValueType = TypeVar('_ValueType')
+    _NewValueType = TypeVar('_NewValueType')
+
+    # Result related:
+    _ErrorType = TypeVar('_ErrorType')
+    _NewErrorType = TypeVar('_NewErrorType')
+
+    class MyClass(
+        SupportsKind2['MyClass', _ValueType, _ErrorType],
+        ResultLike2[_ValueType, _ErrorType],
+    ):
+        def swap(self) -> MyClass[_ErrorType, _ValueType]:
+            ...
+
+        def bind_result(
+            self,
+            function: Callable[
+                [_ValueType],
+                Result[_NewValueType, _ErrorType],
+            ],
+        ) -> MyClass[_NewValueType, _ErrorType]:
+            ...
+
+        @classmethod
+        def from_result(
+            self, inner_value: Result[_NewValueType, _NewErrorType],
+        ) -> MyClass[_NewValueType, _NewErrorType]:
+            ...
+
+        @classmethod
+        def from_failure(
+            cls, inner_value: _NewErrorType,
+        ) -> MyClass[Any, _NewErrorType]:
+            ...
+
+    x: MyClass[int, str]
+    reveal_type(swap(x))  # N: Revealed type is 'main.MyClass*[builtins.str*, builtins.int*]'
