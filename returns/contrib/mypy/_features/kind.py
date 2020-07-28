@@ -19,6 +19,7 @@ from returns.contrib.mypy._typeops.fallback import asserts_fallback_to_any
 # TODO: probably we can validate `KindN[]` creation during `get_analtype`
 
 
+@asserts_fallback_to_any
 def attribute_access(ctx: AttributeContext) -> MypyType:
     """
     Ensures that attribute access to ``KindN`` is correct.

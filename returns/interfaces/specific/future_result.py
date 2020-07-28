@@ -1,9 +1,9 @@
 """
-Represents the base interfaces for types that do fearless async operations.
+Represents the base interfaces for types that do fear-some async operations.
 
-This type means that ``Future`` cannot fail.
-Don't use this type for async that can. Instead, use
-:class:`returns.interfaces.specific.future_result.FutureResultBasedN` type.
+This type means that ``FutureResult`` can (and will!) fail with exceptions.
+
+Use this type to mark that this specific async opetaion can fail.
 """
 
 from abc import abstractmethod
@@ -33,7 +33,7 @@ class FutureResultLikeN(
     Base type for ones that does look like ``FutureResult``.
 
     But at the time this is not a real ``Future`` and cannot be awaited.
-    It is also cannot be unwrapped.
+    It is also cannot be unwrapped, because it is not a real ``IOResult``.
     """
 
     @abstractmethod
@@ -89,7 +89,8 @@ class FutureResultBasedN(
     """
     Base type for real ``FutureResult`` objects.
 
-    They can be awaited. Cannot be unwrapped.
+    They can be awaited.
+    Still cannot be unwrapped.
     """
 
 
