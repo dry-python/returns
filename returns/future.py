@@ -18,7 +18,8 @@ from typing_extensions import final
 from returns._generated.futures import _future, _future_result
 from returns._generated.iterable import iterable_kind
 from returns.interfaces import iterable
-from returns.interfaces.specific import io, ioresult
+from returns.interfaces.specific import ioresult
+from returns.interfaces.specific.future import FutureBased1, FutureBased2
 from returns.io import IO, IOResult
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import (
@@ -67,7 +68,7 @@ async def async_identity(instance: _FirstType) -> _FirstType:
 class Future(
     BaseContainer,
     SupportsKind1['Future', _ValueType],
-    io.IOBased1[_ValueType],
+    FutureBased1[_ValueType],
     iterable.Iterable1[_ValueType],
 ):
     """
@@ -121,7 +122,7 @@ class Future(
         """
         super().__init__(inner_value)
 
-    def __await__(self) -> Generator[Any, Any, IO[_ValueType]]:
+    def __await__(self) -> Generator[None, None, IO[_ValueType]]:
         """
         By defining this magic method we make ``Future`` awaitable.
 
@@ -247,9 +248,15 @@ class Future(
         """
         return Future(_future.async_bind(function, self._inner_value))
 
+    #: Alias for `bind` method. Part of the `FutureBasedN` interface.
+    bind_future = bind
+
     def bind_async(
         self,
-        function: Callable[[_ValueType], Awaitable['Future[_NewValueType]']],
+        function: Callable[
+            [_ValueType],
+            Awaitable[Kind1['Future', _NewValueType]],
+        ],
     ) -> 'Future[_NewValueType]':
         """
         Compose a container and ``async`` function returning a container.
@@ -273,6 +280,9 @@ class Future(
 
         """
         return Future(_future.async_bind_async(function, self._inner_value))
+
+    #: Alias for `bind_async` method. Part of the `FutureBasedN` interface.
+    bind_async_future = bind_async
 
     def bind_awaitable(
         self,
@@ -352,9 +362,28 @@ class Future(
         return Future(async_identity(inner_value))
 
     @classmethod
+    def from_future(
+        cls, inner_value: 'Future[_ValueType]',
+    ) -> 'Future[_ValueType]':
+        """
+        Creates a new ``Future`` from the existing one.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.future import Future
+          >>> from returns.io import IO
+
+          >>> future = Future.from_value(1)
+          >>> assert anyio.run(Future.from_future(future).awaitable) == IO(1)
+
+        Part of the ``FutureBasedN`` interface.
+        """
+        return inner_value
+
+    @classmethod
     def from_iterable(
-        cls,
-        inner_value: Iterable[Kind1['Future', _ValueType]],
+        cls, inner_value: Iterable[Kind1['Future', _ValueType]],
     ) -> 'Future[Sequence[_ValueType]]':
         """
         Transforms an iterable of ``Future`` containers into a single container.
@@ -498,7 +527,8 @@ def asyncify(function: Callable[..., _ValueType]) -> Callable[
 class FutureResult(
     BaseContainer,
     SupportsKind2['FutureResult', _ValueType, _ErrorType],
-    ioresult.IOResultBased2[_ValueType, _ErrorType],
+    FutureBased2[_ValueType, _ErrorType],
+    ioresult.IOResultLike2[_ValueType, _ErrorType],
     iterable.Iterable2[_ValueType, _ErrorType],
 ):
     """
@@ -560,7 +590,7 @@ class FutureResult(
         super().__init__(inner_value)
 
     def __await__(self) -> Generator[
-        Any, Any, IOResult[_ValueType, _ErrorType],
+        None, None, IOResult[_ValueType, _ErrorType],
     ]:
         """
         By defining this magic method we make ``FutureResult`` awaitable.
@@ -746,7 +776,7 @@ class FutureResult(
         self,
         function: Callable[
             [_ValueType],
-            Awaitable['FutureResult[_NewValueType, _ErrorType]'],
+            Awaitable[Kind2['FutureResult', _NewValueType, _ErrorType]],
         ],
     ) -> 'FutureResult[_NewValueType, _ErrorType]':
         """

@@ -1,0 +1,228 @@
+- case: ioresult_inheritance_correct2
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar, Any
+    from returns.interfaces.specific.ioresult import IOResultBased2
+    from returns.primitives.hkt import SupportsKind2
+    from returns.io import IO, IOResult
+
+    _ValueType = TypeVar('_ValueType')
+    _NewValueType = TypeVar('_NewValueType')
+
+    # Result related:
+    _ErrorType = TypeVar('_ErrorType')
+    _NewErrorType = TypeVar('_NewErrorType')
+
+    class MyClass(
+        SupportsKind2['MyClass', _ValueType, _ErrorType],
+        IOResultBased2[_ValueType, _ErrorType],
+    ):
+        def bind_ioresult(
+            self,
+            function: Callable[
+                [_ValueType],
+                IOResult[_NewValueType, _ErrorType],
+            ],
+        ) -> MyClass[_NewValueType, _ErrorType]:
+            ...
+
+        def unwrap(self) -> IO[_ValueType]:
+            ...
+
+        def failure(self) -> IO[_ErrorType]:
+            ...
+
+        @classmethod
+        def from_ioresult(
+            self, inner_value: IOResult[_NewValueType, _NewErrorType],
+        ) -> MyClass[_NewValueType, _NewErrorType]:
+            ...
+
+        @classmethod
+        def from_failed_io(
+            cls, inner_value: IO[_NewErrorType],
+        ) -> MyClass[Any, _NewErrorType]:
+            ...
+
+    def test(a: int) -> IOResult[float, str]:
+        ...
+
+    x: IOResult[int, str]
+    reveal_type(MyClass.from_ioresult(x).bind_ioresult(test))  # N: Revealed type is 'main.MyClass[builtins.float*, builtins.str]'
+
+
+- case: ioresult_inheritance_correct3
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar, Any
+    from returns.interfaces.specific.ioresult import IOResultBased3
+    from returns.primitives.hkt import SupportsKind3
+    from returns.io import IO, IOResult
+
+    _ValueType = TypeVar('_ValueType')
+    _NewValueType = TypeVar('_NewValueType')
+    _T = TypeVar('_T')
+
+    # Result related:
+    _ErrorType = TypeVar('_ErrorType')
+    _NewErrorType = TypeVar('_NewErrorType')
+
+    class MyClass(
+        SupportsKind3['MyClass', _ValueType, _ErrorType, _T],
+        IOResultBased3[_ValueType, _ErrorType, _T],
+    ):
+        def bind_ioresult(
+            self,
+            function: Callable[
+                [_ValueType],
+                IOResult[_NewValueType, _ErrorType],
+            ],
+        ) -> MyClass[_NewValueType, _ErrorType, _T]:
+            ...
+
+        def unwrap(self) -> IO[_ValueType]:
+            ...
+
+        def failure(self) -> IO[_ErrorType]:
+            ...
+
+        @classmethod
+        def from_ioresult(
+            self, inner_value: IOResult[_NewValueType, _NewErrorType],
+        ) -> MyClass[_NewValueType, _NewErrorType, Any]:
+            ...
+
+        @classmethod
+        def from_failed_io(
+            cls, inner_value: IO[_NewErrorType],
+        ) -> MyClass[Any, _NewErrorType, Any]:
+            ...
+
+    def test(a: int) -> IOResult[float, str]:
+        ...
+
+    x: IOResult[int, str]
+    reveal_type(MyClass.from_ioresult(x).bind_ioresult(test))  # N: Revealed type is 'main.MyClass[builtins.float*, builtins.str, Any]'
+
+
+- case: ioresult_inheritance_missing
+  disable_cache: true
+  main: |
+    from typing import TypeVar
+    from returns.interfaces.specific.ioresult import IOResultBased2
+    from returns.primitives.hkt import SupportsKind2
+
+    _ValueType = TypeVar('_ValueType')
+    _ErrorType = TypeVar('_ErrorType')
+
+    class MyClass(
+        SupportsKind2['MyClass', _ValueType, _ErrorType],
+        IOResultBased2[_ValueType, _ErrorType],
+    ):
+        ...
+
+    MyClass()
+  out: |
+    main:14: error: Cannot instantiate abstract class 'MyClass' with abstract attributes 'alt', 'apply', ... and 'unwrap' (15 methods suppressed)
+
+
+- case: ioresult_inheritance_wrong2
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar, Any
+    from returns.interfaces.specific.ioresult import IOResultBased2
+    from returns.primitives.hkt import SupportsKind2
+    from returns.io import IO, IOResult
+    from returns.result import Result
+
+    _ValueType = TypeVar('_ValueType')
+    _NewValueType = TypeVar('_NewValueType')
+
+    # Result related:
+    _ErrorType = TypeVar('_ErrorType')
+    _NewErrorType = TypeVar('_NewErrorType')
+
+    class MyClass(
+        SupportsKind2['MyClass', _ValueType, _ErrorType],
+        IOResultBased2[_ValueType, _ErrorType],
+    ):
+        def bind_ioresult(
+            self,
+            function: Callable[
+                [_ValueType],
+                Result[_NewValueType, _ErrorType],
+            ],
+        ) -> int:
+            ...
+
+        def from_ioresult(
+            self, inner_value: IOResult[_NewValueType, _NewErrorType],
+        ) -> MyClass[_NewValueType, _NewErrorType]:
+            ...
+
+        @classmethod
+        def from_failed_io(
+            cls, inner_value: IO[_NewErrorType],
+        ) -> MyClass[_NewErrorType, Any]:
+            ...
+  out: |
+    main:18: error: Argument 1 of "bind_ioresult" is incompatible with supertype "IOResultLikeN"; supertype defines the argument type as "Callable[[_ValueType], IOResult[_UpdatedType, _ErrorType]]"
+    main:18: error: Return type "int" of "bind_ioresult" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType], _UpdatedType, _ErrorType, NoReturn]" in supertype "IOResultLikeN"
+    main:18: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:18: note: This violates the Liskov substitution principle
+    main:27: error: Signature of "from_ioresult" incompatible with supertype "IOResultLikeN"
+    main:33: error: Signature of "from_failed_io" incompatible with supertype "IOResultLikeN"
+
+
+- case: ioresult_inheritance_wrong3
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar, Any
+    from returns.interfaces.specific.ioresult import IOResultBased3
+    from returns.primitives.hkt import SupportsKind3
+    from returns.io import IO, IOResult
+
+    _ValueType = TypeVar('_ValueType')
+    _NewValueType = TypeVar('_NewValueType')
+    _T = TypeVar('_T')
+
+    # Result related:
+    _ErrorType = TypeVar('_ErrorType')
+    _NewErrorType = TypeVar('_NewErrorType')
+
+    class MyClass(
+        SupportsKind3['MyClass', _ValueType, _ErrorType, _T],
+        IOResultBased3[_ValueType, _ErrorType, _T],
+    ):
+        def bind_ioresult(
+            self,
+            function: Callable[
+                [_ValueType],
+                IOResult[_NewValueType, _ErrorType],
+            ],
+        ) -> MyClass[_NewValueType, _ErrorType, int]:
+            ...
+
+        def unwrap(self) -> IO[_ErrorType]:
+            ...
+
+        def failure(self) -> IO[_ValueType]:
+            ...
+
+        @classmethod
+        def from_ioresult(
+            self, inner_value: IOResult[_NewValueType, _NewErrorType],
+        ) -> MyClass[_NewValueType, _NewErrorType, str]:
+            ...
+
+        @classmethod
+        def from_failed_io(
+            cls, inner_value: IO[_NewErrorType],
+        ) -> MyClass[Any, _NewErrorType, Exception]:
+            ...
+  out: |
+    main:18: error: Return type "MyClass[_NewValueType, _ErrorType, int]" of "bind_ioresult" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType, _T], _UpdatedType, _ErrorType, _T]" in supertype "IOResultLikeN"
+    main:27: error: Return type "IO[_ErrorType]" of "unwrap" incompatible with return type "IO[_ValueType]" in supertype "Unwrappable"
+    main:30: error: Return type "IO[_ValueType]" of "failure" incompatible with return type "IO[_ErrorType]" in supertype "Unwrappable"
+    main:34: error: Return type "MyClass[_NewValueType, _NewErrorType, str]" of "from_ioresult" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType, _T], _ValueType, _ErrorType, _T]" in supertype "IOResultLikeN"
+    main:40: error: Return type "MyClass[Any, _NewErrorType, Exception]" of "from_failed_io" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType, _T], _ValueType, _ErrorType, _T]" in supertype "IOResultLikeN"

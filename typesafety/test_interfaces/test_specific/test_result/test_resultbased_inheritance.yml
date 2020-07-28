@@ -1,4 +1,4 @@
-- case: result_inheritance_correct
+- case: result_inheritance_correct2
   disable_cache: true
   main: |
     from typing import Callable, TypeVar, Any
@@ -29,6 +29,12 @@
         ) -> MyClass[_NewValueType, _ErrorType]:
             ...
 
+        def unwrap(self) -> _ValueType:
+            ...
+
+        def failure(self) -> _ErrorType:
+            ...
+
         @classmethod
         def from_result(
             self, inner_value: Result[_NewValueType, _NewErrorType],
@@ -48,6 +54,63 @@
     reveal_type(MyClass.from_result(x).bind_result(test))  # N: Revealed type is 'main.MyClass[builtins.float*, builtins.str]'
 
 
+- case: result_inheritance_correct3
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar, Any
+    from returns.interfaces.specific.result import ResultBased3
+    from returns.primitives.hkt import SupportsKind3
+    from returns.result import Result
+
+    _ValueType = TypeVar('_ValueType')
+    _NewValueType = TypeVar('_NewValueType')
+    _T = TypeVar('_T')
+
+    # Result related:
+    _ErrorType = TypeVar('_ErrorType')
+    _NewErrorType = TypeVar('_NewErrorType')
+
+    class MyClass(
+        SupportsKind3['MyClass', _ValueType, _ErrorType, _T],
+        ResultBased3[_ValueType, _ErrorType, _T],
+    ):
+        def swap(self) -> MyClass[_ErrorType, _ValueType, _T]:
+            ...
+
+        def bind_result(
+            self,
+            function: Callable[
+                [_ValueType],
+                Result[_NewValueType, _ErrorType],
+            ],
+        ) -> MyClass[_NewValueType, _ErrorType, _T]:
+            ...
+
+        def unwrap(self) -> _ValueType:
+            ...
+
+        def failure(self) -> _ErrorType:
+            ...
+
+        @classmethod
+        def from_result(
+            self, inner_value: Result[_NewValueType, _NewErrorType],
+        ) -> MyClass[_NewValueType, _NewErrorType, Any]:
+            ...
+
+        @classmethod
+        def from_failure(
+            cls, inner_value: _NewErrorType,
+        ) -> MyClass[Any, _NewErrorType, Any]:
+            ...
+
+    def test(a: int) -> Result[float, str]:
+        ...
+
+    x: Result[int, str]
+    reveal_type(MyClass.from_result(x).bind_result(test))  # N: Revealed type is 'main.MyClass[builtins.float*, builtins.str, Any]'
+
+
 - case: result_inheritance_missing
   disable_cache: true
   main: |
@@ -63,7 +126,7 @@
 
     MyClass()
   out: |
-    main:11: error: Cannot instantiate abstract class 'MyClass' with abstract attributes 'alt', 'apply', ... and 'swap' (7 methods suppressed)
+    main:11: error: Cannot instantiate abstract class 'MyClass' with abstract attributes 'alt', 'apply', ... and 'unwrap' (9 methods suppressed)
 
 
 - case: result_inheritance_wrong
@@ -85,33 +148,11 @@
         SupportsKind2['MyClass', _ValueType, _ErrorType],
         ResultBased2[_ValueType, _ErrorType],
     ):
-        def swap(self) -> MyClass[_ValueType, _ErrorType]:
+        def unwrap(self) -> _ErrorType:
             ...
 
-        def bind_result(
-            self,
-            function: Callable[
-                [_ValueType],
-                Result[_ValueType, _ErrorType],
-            ],
-        ) -> MyClass[_ValueType, _ErrorType]:
-            ...
-
-        def from_result(
-            self, inner_value: Result[_NewValueType, _NewErrorType],
-        ) -> MyClass[_NewValueType, _NewErrorType]:
-            ...
-
-        @classmethod
-        def from_failure(
-            cls, inner_value: _NewErrorType,
-        ) -> MyClass[_NewErrorType, _NewErrorType]:
+        def failure(self) -> _ValueType:
             ...
   out: |
-    main:17: error: Return type "MyClass[_ValueType, _ErrorType]" of "swap" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType], _ErrorType, _ValueType, NoReturn]" in supertype "ResultBasedN"
-    main:20: error: Argument 1 of "bind_result" is incompatible with supertype "ResultBasedN"; supertype defines the argument type as "Callable[[_ValueType], Result[_UpdatedType, _ErrorType]]"
-    main:20: error: Return type "MyClass[_ValueType, _ErrorType]" of "bind_result" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType], _UpdatedType, _ErrorType, NoReturn]" in supertype "ResultBasedN"
-    main:20: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
-    main:20: note: This violates the Liskov substitution principle
-    main:29: error: Signature of "from_result" incompatible with supertype "ResultBasedN"
-    main:35: error: Signature of "from_failure" incompatible with supertype "ResultBasedN"
+    main:17: error: Return type "_ErrorType" of "unwrap" incompatible with return type "_ValueType" in supertype "Unwrappable"
+    main:20: error: Return type "_ValueType" of "failure" incompatible with return type "_ErrorType" in supertype "Unwrappable"

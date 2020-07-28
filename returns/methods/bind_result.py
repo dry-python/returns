@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Callable, TypeVar
 
-from returns.interfaces.specific.result import ResultBasedN
+from returns.interfaces.specific.result import ResultLikeN
 from returns.primitives.hkt import KindN, kinded
 
 if TYPE_CHECKING:
@@ -11,13 +11,13 @@ _SecondType = TypeVar('_SecondType')
 _ThirdType = TypeVar('_ThirdType')
 _UpdatedType = TypeVar('_UpdatedType')
 
-_ResultBasedKind = TypeVar('_ResultBasedKind', bound=ResultBasedN)
+_ResultLikeKind = TypeVar('_ResultLikeKind', bound=ResultLikeN)
 
 
 def internal_bind_result(
-    container: KindN[_ResultBasedKind, _FirstType, _SecondType, _ThirdType],
+    container: KindN[_ResultLikeKind, _FirstType, _SecondType, _ThirdType],
     function: Callable[[_FirstType], 'Result[_UpdatedType, _SecondType]'],
-) -> KindN[_ResultBasedKind, _UpdatedType, _SecondType, _ThirdType]:
+) -> KindN[_ResultLikeKind, _UpdatedType, _SecondType, _ThirdType]:
     """
     Bind a ``Result`` returning function over a container.
 
@@ -35,7 +35,7 @@ def internal_bind_result(
 
     Note, that this function works
     for all containers with ``.bind_result`` method.
-    See :class:`returns.primitives.interfaces.specific.result.ResultBasedN`
+    See :class:`returns.primitives.interfaces.specific.result.ResultLikeN`
     for more info.
 
     """

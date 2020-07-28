@@ -1,3 +1,9 @@
+"""
+An interface for types that do ``IO`` and can fail.
+
+It is a base interface for both sync and async ``IO`` stacks.
+"""
+
 from abc import abstractmethod
 from typing import TYPE_CHECKING, Callable, NoReturn, Type, TypeVar
 
@@ -13,55 +19,77 @@ _SecondType = TypeVar('_SecondType')
 _ThirdType = TypeVar('_ThirdType')
 _UpdatedType = TypeVar('_UpdatedType')
 
-_IOResultBasedType = TypeVar('_IOResultBasedType', bound='IOResultBasedN')
+_IOResultLikeType = TypeVar('_IOResultLikeType', bound='IOResultLikeN')
 
 
-class IOResultBasedN(
+class IOResultLikeN(
     io.IOBasedN[_FirstType, _SecondType, _ThirdType],
-    result.ResultBasedN[_FirstType, _SecondType, _ThirdType],
+    result.ResultLikeN[_FirstType, _SecondType, _ThirdType],
 ):
     """
-    An interface for types that do ``IO`` and can fail.
+    Base type for types that look like ``IOResult`` but cannot be unwrapped.
 
-    It is a base interface for both sync and async ``IO`` stacks.
+    Like ``FutureResult`` or ``RequiresContextIOResult``.
     """
 
     @abstractmethod
     def bind_ioresult(
-        self: _IOResultBasedType,
+        self: _IOResultLikeType,
         function: Callable[[_FirstType], 'IOResult[_UpdatedType, _SecondType]'],
-    ) -> KindN[_IOResultBasedType, _UpdatedType, _SecondType, _ThirdType]:
+    ) -> KindN[_IOResultLikeType, _UpdatedType, _SecondType, _ThirdType]:
         """Runs ``IOResult`` returning function over a container."""
 
     @abstractmethod
     def compose_result(
-        self: _IOResultBasedType,
+        self: _IOResultLikeType,
         function: Callable[
             ['Result[_FirstType, _SecondType]'],
-            KindN[_IOResultBasedType, _UpdatedType, _SecondType, _ThirdType],
+            KindN[_IOResultLikeType, _UpdatedType, _SecondType, _ThirdType],
         ],
-    ) -> KindN[_IOResultBasedType, _UpdatedType, _SecondType, _ThirdType]:
+    ) -> KindN[_IOResultLikeType, _UpdatedType, _SecondType, _ThirdType]:
         """Allows to compose the unrelying ``Result`` with a function."""
 
     @classmethod
     @abstractmethod
     def from_ioresult(
-        cls: Type[_IOResultBasedType],  # noqa: N805
+        cls: Type[_IOResultLikeType],  # noqa: N805
         inner_value: 'IOResult[_FirstType, _SecondType]',
-    ) -> KindN[_IOResultBasedType, _FirstType, _SecondType, _ThirdType]:
+    ) -> KindN[_IOResultLikeType, _FirstType, _SecondType, _ThirdType]:
         """Unit method to create new containers from ``IOResult`` type."""
 
     @classmethod
     @abstractmethod
     def from_failed_io(
-        cls: Type[_IOResultBasedType],  # noqa: N805
+        cls: Type[_IOResultLikeType],  # noqa: N805
         inner_value: 'IO[_SecondType]',
-    ) -> KindN[_IOResultBasedType, _FirstType, _SecondType, _ThirdType]:
+    ) -> KindN[_IOResultLikeType, _FirstType, _SecondType, _ThirdType]:
         """Unit method to create new containers from failed ``IO``."""
 
 
-#: Type alias for kinds with one type argument.
-IOResultBased1 = IOResultBasedN[_FirstType, NoReturn, NoReturn]
+#: Type alias for kinds with two type arguments.
+IOResultLike2 = IOResultLikeN[_FirstType, _SecondType, NoReturn]
+
+#: Type alias for kinds with three type arguments.
+IOResultLike3 = IOResultLikeN[_FirstType, _SecondType, _ThirdType]
+
+
+class IOResultBasedN(
+    IOResultLikeN[_FirstType, _SecondType, _ThirdType],
+    result.UnwrappableResult[
+        _FirstType,
+        _SecondType,
+        _ThirdType,
+        # Unwraps:
+        'IO[_FirstType]',
+        'IO[_SecondType]',
+    ],
+):
+    """
+    Base type for real ``IOResult`` types.
+
+    Can be unwrapped.
+    """
+
 
 #: Type alias for kinds with two type arguments.
 IOResultBased2 = IOResultBasedN[_FirstType, _SecondType, NoReturn]

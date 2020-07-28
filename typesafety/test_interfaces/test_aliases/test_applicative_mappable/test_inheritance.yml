@@ -1,0 +1,17 @@
+- case: applicative_mappable_inheritance_missing
+  disable_cache: true
+  main: |
+    from typing import TypeVar
+    from returns.interfaces.aliases.applicative_mappable import (
+        ApplicativeMappable1,
+    )
+    from returns.primitives.hkt import SupportsKind1
+
+    V = TypeVar('V')
+
+    class MyClass(SupportsKind1['MyClass', V], ApplicativeMappable1[V]):
+        ...
+
+    MyClass()
+  out: |
+    main:12: error: Cannot instantiate abstract class 'MyClass' with abstract attributes 'apply', 'from_value' and 'map'

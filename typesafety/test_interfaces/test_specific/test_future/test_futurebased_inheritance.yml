@@ -1,0 +1,161 @@
+- case: future_inheritance_correct1
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar, Generator, Awaitable
+    from returns.interfaces.specific.future import FutureBased1
+    from returns.primitives.hkt import SupportsKind1, Kind1
+    from returns.io import IO
+    from returns.future import Future
+
+    T = TypeVar('T')
+    N = TypeVar('N')
+
+    class MyClass(
+        SupportsKind1['MyClass', T],
+        FutureBased1[T],
+    ):
+        def __await__(self) -> Generator[None, None, IO[T]]:
+            ...
+
+        async def awaitable(self) -> IO[T]:
+            ...
+
+        def bind_future(
+            self,
+            function: Callable[[T], Future[N]],
+        ) -> MyClass[N]:
+            ...
+
+        def bind_async(
+            self,
+            function: Callable[[T], Awaitable[Kind1['MyClass', N]]],
+        ) -> MyClass[N]:
+            ...
+
+        def bind_async_future(
+            self,
+            function: Callable[[T], Awaitable[Future[N]]],
+        ) -> MyClass[N]:
+            ...
+
+        @classmethod
+        def from_future(
+            cls,
+            inner_value: Future[T],
+        ) -> MyClass[T]:
+            ...
+
+    def test1(arg: int) -> Future[float]:
+        ...
+
+    async def test2(arg: float) -> Future[bool]:
+        ...
+
+    async def test3(arg: bool) -> MyClass[str]:
+        ...
+
+    x: Future[int]
+    reveal_type(MyClass.from_future(x).bind_future(test1).bind_async_future(test2).bind_async(test3))  # N: Revealed type is 'main.MyClass[builtins.str*]'
+
+
+- case: future_inheritance_correct2
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar, Generator, Any, Awaitable
+    from returns.interfaces.specific.future import FutureBased2
+    from returns.primitives.hkt import SupportsKind2, Kind2
+    from returns.io import IOResult
+    from returns.future import Future
+
+    T = TypeVar('T')
+    E = TypeVar('E')
+    N = TypeVar('N')
+
+    class MyClass(
+        SupportsKind2['MyClass', T, E],
+        FutureBased2[T, E],
+    ):
+        def __await__(self) -> Generator[None, None, IOResult[T, E]]:
+            ...
+
+        async def awaitable(self) -> IOResult[T, E]:
+            ...
+
+        def bind_future(
+            self,
+            function: Callable[[T], Future[N]],
+        ) -> MyClass[N, E]:
+            ...
+
+        def bind_async(
+            self,
+            function: Callable[[T], Awaitable[Kind2['MyClass', N, E]]],
+        ) -> MyClass[N, E]:
+            ...
+
+        def bind_async_future(
+            self,
+            function: Callable[[T], Awaitable[Future[N]]],
+        ) -> MyClass[N, E]:
+            ...
+
+        @classmethod
+        def from_future(
+            cls,
+            inner_value: Future[T],
+        ) -> MyClass[T, Any]:
+            ...
+
+    def test1(arg: int) -> Future[float]:
+        ...
+
+    async def test2(arg: float) -> Future[bool]:
+        ...
+
+    async def test3(arg: bool) -> MyClass[str, bool]:
+        ...
+
+    x: MyClass[int, bool]
+    reveal_type(x.bind_future(test1).bind_async_future(test2).bind_async(test3))  # N: Revealed type is 'main.MyClass[builtins.str*, builtins.bool]'
+
+
+- case: future_inheritance_missing
+  disable_cache: true
+  main: |
+    from typing import TypeVar
+    from returns.interfaces.specific.future import FutureBased1
+    from returns.primitives.hkt import SupportsKind1
+
+    T = TypeVar('T')
+
+    class MyClass(
+        SupportsKind1['MyClass', T],
+        FutureBased1[T],
+    ):
+        ...
+
+    MyClass()  # E: Cannot instantiate abstract class 'MyClass' with abstract attributes '__await__', 'apply', ... and 'map' (10 methods suppressed)
+
+
+- case: future_inheritance_wrong
+  disable_cache: true
+  main: |
+    from typing import TypeVar, Generator
+    from returns.interfaces.specific.future import FutureBased1
+    from returns.primitives.hkt import SupportsKind1
+
+    T = TypeVar('T')
+    N = TypeVar('N')
+
+    class MyClass(
+        SupportsKind1['MyClass', T],
+        FutureBased1[T],
+    ):
+        def __await__(self) -> Generator[None, None, T]:
+            ...
+
+        async def awaitable(self) -> None:
+            ...
+  out: |
+    main:12: error: Return type "Generator[None, None, T]" of "__await__" incompatible with return type "Generator[Any, Any, IOBasedN[T, NoReturn, NoReturn]]" in supertype "AsyncFutureN"
+    main:15: error: Return type "Coroutine[Any, Any, None]" of "awaitable" incompatible with return type "Coroutine[Any, Any, IOBasedN[T, NoReturn, NoReturn]]" in supertype "AsyncFutureN"

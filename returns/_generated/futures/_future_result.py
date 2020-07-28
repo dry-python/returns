@@ -66,14 +66,14 @@ async def async_bind_awaitable(
 async def async_bind_async(
     function: Callable[
         [_ValueType],
-        Awaitable['FutureResult[_NewValueType, _ErrorType]'],
+        Awaitable[Kind2['FutureResult', _NewValueType, _ErrorType]],
     ],
     inner_value: Awaitable[Result[_ValueType, _ErrorType]],
 ) -> Result[_NewValueType, _ErrorType]:
     """Async binds a coroutine with container over a value."""
     container = await inner_value
     if isinstance(container, Result.success_type):
-        return await (await function(container.unwrap()))._inner_value
+        return await dekind(await function(container.unwrap()))._inner_value
     return container  # type: ignore[return-value]
 
 

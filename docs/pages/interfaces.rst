@@ -3,8 +3,20 @@
 Interfaces
 ==========
 
-On inheritance
---------------
+Naming convention
+-----------------
+
+FAQ
+---
+
+Why do you have general and specific interfaces?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Why some interfaces do not have type alias for 1 type argument?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+What is the difference between ResultLikeN and ResultBasedN?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 API Reference
 -------------
@@ -45,6 +57,12 @@ Unwrappable
 .. automodule:: returns.interfaces.unwrappable
   :members:
 
+Iterable
+~~~~~~~~
+
+.. automodule:: returns.interfaces.iterable
+  :members:
+
 Result specific
 ~~~~~~~~~~~~~~~
 
@@ -61,6 +79,12 @@ IOResult specific
 ~~~~~~~~~~~~~~~~~
 
 .. automodule:: returns.interfaces.specific.ioresult
+  :members:
+
+Future specific
+~~~~~~~~~~~~~~~
+
+.. automodule:: returns.interfaces.specific.future
   :members:
 
 Reader specific
