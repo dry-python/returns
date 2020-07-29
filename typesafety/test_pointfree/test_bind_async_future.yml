@@ -59,10 +59,10 @@
   disable_cache: true
   main: |
     from returns.pointfree import bind_async_future
-    from returns.primitives.hkt import SupportsKind1, Kind1
+    from returns.primitives.hkt import SupportsKind1
     from returns.interfaces.specific.future import FutureLike1
     from returns.future import Future
-    from typing import Callable, TypeVar, Awaitable
+    from typing import TypeVar
 
     T = TypeVar('T')
     N = TypeVar('N')
@@ -71,36 +71,7 @@
         SupportsKind1['MyClass', T],
         FutureLike1[T],
     ):
-        def bind_future(
-            self,
-            function: Callable[[T], Future[N]],
-        ) -> MyClass[N]:
-            ...
-
-        def bind_async(
-            self,
-            function: Callable[[T], Awaitable[Kind1['MyClass', N]]],
-        ) -> MyClass[N]:
-            ...
-
-        def bind_async_future(
-            self,
-            function: Callable[[T], Awaitable[Future[N]]],
-        ) -> MyClass[N]:
-            ...
-
-        def bind_awaitable(
-            self,
-            function: Callable[[T], Awaitable[N]],
-        ) -> MyClass[N]:
-            ...
-
-        @classmethod
-        def from_future(
-            cls,
-            inner_value: Future[T],
-        ) -> MyClass[T]:
-            ...
+        ...
 
     async def test(arg: float) -> Future[int]:
         ...

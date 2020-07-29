@@ -1,0 +1,98 @@
+- case: future_result_inheritance_correct2
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar, Any, Awaitable, Generator
+    from returns.interfaces.specific.future_result import FutureResultBased2
+    from returns.primitives.hkt import SupportsKind2
+    from returns.future import FutureResult, Future
+    from returns.io import IOResult
+
+    T = TypeVar('T')
+    E = TypeVar('E')
+    N = TypeVar('N')
+
+    class MyClass(
+        SupportsKind2['MyClass', T, E],
+        FutureResultBased2[T, E],
+    ):
+        def __await__(self) -> Generator[None, None, IOResult[T, E]]:
+            ...
+
+        async def awaitable(self) -> IOResult[T, E]:
+            ...
+
+        def bind_future_result(
+            self, function: Callable[[T], FutureResult[N, E]],
+        ) -> MyClass[N, E]:
+            ...
+
+        def bind_async_future_result(
+            self, function: Callable[[T], Awaitable[FutureResult[N, E]]],
+        ) -> MyClass[N, E]:
+            ...
+
+        @classmethod
+        def from_future_result(
+            cls, inner_value: FutureResult[T, E],
+        ) -> MyClass[T, E]:
+            ...
+
+        @classmethod
+        def from_failed_future(
+            cls, inner_value: Future[E],
+        ) -> MyClass[Any, E]:
+            ...
+
+    def test(a: int) -> FutureResult[float, str]:
+        ...
+
+    x: MyClass[int, str]
+    reveal_type(x.bind_future_result(test))  # N: Revealed type is 'main.MyClass[builtins.float*, builtins.str]'
+
+
+- case: future_result_inheritance_missing
+  disable_cache: true
+  main: |
+    from typing import TypeVar
+    from typing_extensions import final
+    from returns.interfaces.specific.future_result import FutureResultBased2
+    from returns.primitives.hkt import SupportsKind2
+
+    T = TypeVar('T')
+    E = TypeVar('E')
+
+    @final
+    class MyClass(
+        SupportsKind2['MyClass', T, E],
+        FutureResultBased2[T, E],
+    ):
+        ...
+  out: |
+    main:10: error: Final class main.MyClass has abstract attributes "__await__", "alt", "apply", "awaitable", "bind", "bind_async", "bind_async_future", "bind_async_future_result", "bind_awaitable", "bind_future", "bind_future_result", "bind_io", "bind_ioresult", "bind_result", "compose_result", "from_failed_future", "from_failed_io", "from_failure", "from_future", "from_io", "from_ioresult", "from_result", "from_value", "map", "rescue", "swap"
+
+
+- case: future_result_inheritance_wrong2
+  disable_cache: true
+  main: |
+    from typing import TypeVar, Generator
+    from returns.interfaces.specific.future_result import FutureResultBased2
+    from returns.primitives.hkt import SupportsKind2
+    from returns.io import IOResult
+    from returns.result import Result
+
+    T = TypeVar('T')
+    E = TypeVar('E')
+    N = TypeVar('N')
+
+    class MyClass(
+        SupportsKind2['MyClass', T, E],
+        FutureResultBased2[T, E],
+    ):
+        def __await__(self) -> Generator[None, None, Result[T, E]]:
+            ...
+
+        async def awaitable(self) -> IOResult[int, E]:
+            ...
+  out: |
+    main:15: error: Return type "Generator[None, None, Result[T, E]]" of "__await__" incompatible with return type "Generator[Any, Any, IOBasedN[T, E, NoReturn]]" in supertype "AsyncFutureN"
+    main:18: error: Return type "Coroutine[Any, Any, IOResult[int, E]]" of "awaitable" incompatible with return type "Coroutine[Any, Any, IOBasedN[T, E, NoReturn]]" in supertype "AsyncFutureN"

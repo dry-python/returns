@@ -87,6 +87,12 @@ Future specific
 .. automodule:: returns.interfaces.specific.future
   :members:
 
+FutureResult specific
+~~~~~~~~~~~~~~~~~~~~~
+
+.. automodule:: returns.interfaces.specific.future_result
+  :members:
+
 Reader specific
 ~~~~~~~~~~~~~~~
 

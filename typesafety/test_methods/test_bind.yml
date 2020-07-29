@@ -182,24 +182,17 @@
   disable_cache: true
   main: |
     from returns.methods import bind
-    from returns.primitives.hkt import SupportsKind1, Kind1, dekind
+    from returns.primitives.hkt import SupportsKind1
     from returns.interfaces.bindable import Bindable1
-    from typing import Callable, TypeVar
+    from typing import TypeVar
 
     T = TypeVar('T')
-    N = TypeVar('N')
 
     class MyOwn(
         SupportsKind1['MyOwn', T],
         Bindable1[T],
     ):
-        def __init__(self, value: T) -> None:
-            self.value = value
-
-        def bind(
-            self, function: Callable[[T], Kind1['MyOwn', N]],
-        ) -> 'MyOwn[N]':
-            return dekind(function(self.value))
+        ...
 
     def test(arg: float) -> MyOwn[int]:
         ...

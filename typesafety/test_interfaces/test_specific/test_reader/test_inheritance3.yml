@@ -57,6 +57,7 @@
   disable_cache: true
   main: |
     from typing import TypeVar
+    from typing_extensions import final
     from returns.interfaces.specific.reader import ReaderBased3
     from returns.primitives.hkt import SupportsKind3
 
@@ -64,15 +65,14 @@
     _ValueType = TypeVar('_ValueType')
     _ErrorType = TypeVar('_ErrorType')
 
+    @final
     class MyClass(
         SupportsKind3['MyClass', _ValueType, _ErrorType, _EnvType],
         ReaderBased3[_ValueType, _ErrorType, _EnvType],
     ):
         ...
-
-    MyClass()
   out: |
-    main:15: error: Cannot instantiate abstract class 'MyClass' with abstract attributes '__call__', 'apply', ... and 'modify_env' (7 methods suppressed)
+    main:11: error: Final class main.MyClass has abstract attributes "__call__", "apply", "ask", "bind", "bind_context", "empty", "from_context", "from_value", "map", "modify_env"
 
 
 - case: reader_inheritance_wrong

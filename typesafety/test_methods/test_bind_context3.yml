@@ -83,51 +83,21 @@
 - case: bind_context_custom_type
   disable_cache: true
   main: |
-    from typing import Callable, TypeVar, ClassVar, Union, Any
+    from typing import TypeVar
     from returns.interfaces.specific.reader import ReaderBased3
     from returns.primitives.hkt import SupportsKind3
-    from returns.context import Reader, NoDeps
+    from returns.context import Reader
     from returns.methods import bind_context
 
-    _EnvType = TypeVar('_EnvType', contravariant=True)
-    _NewEnvType = TypeVar('_NewEnvType')
-    _ValueType = TypeVar('_ValueType', covariant=True)
-    _NewValueType = TypeVar('_NewValueType')
-    _ErrorType = TypeVar('_ErrorType', covariant=True)
+    _EnvType = TypeVar('_EnvType')
+    _ValueType = TypeVar('_ValueType')
+    _ErrorType = TypeVar('_ErrorType')
 
     class MyClass(
         SupportsKind3['MyClass', _ValueType, _ErrorType, _EnvType],
         ReaderBased3[_ValueType, _ErrorType, _EnvType],
     ):
-        empty: ClassVar[NoDeps] = object()
-
-        def __call__(self, deps: _EnvType) -> Union[_ValueType, _ErrorType]:
-            ...
-
-        def bind_context(
-            self,
-            function: Callable[
-                [_ValueType],
-                Reader[_NewValueType, _EnvType],
-            ],
-        ) -> MyClass[_NewValueType, _ErrorType, _EnvType]:
-            ...
-
-        def modify_env(
-            self,
-            function: Callable[[_NewEnvType], _EnvType],
-        ) -> 'MyClass[_ValueType, _ErrorType, _NewEnvType]':
-            ...
-
-        @classmethod
-        def ask(cls) -> 'MyClass[_EnvType, _ErrorType, _EnvType]':
-            ...
-
-        @classmethod
-        def from_context(
-            self, inner_value: Reader[_ValueType, _EnvType],
-        ) -> MyClass[_ValueType, Any, _EnvType]:
-            ...
+        ...
 
     def test(a: int) -> Reader[float, str]:
         ...

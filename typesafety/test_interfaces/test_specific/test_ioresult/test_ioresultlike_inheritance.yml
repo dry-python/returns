@@ -97,21 +97,21 @@
   disable_cache: true
   main: |
     from typing import TypeVar
+    from typing_extensions import final
     from returns.interfaces.specific.ioresult import IOResultLike2
     from returns.primitives.hkt import SupportsKind2
 
     _ValueType = TypeVar('_ValueType')
     _ErrorType = TypeVar('_ErrorType')
 
+    @final
     class MyClass(
         SupportsKind2['MyClass', _ValueType, _ErrorType],
         IOResultLike2[_ValueType, _ErrorType],
     ):
         ...
-
-    MyClass()
   out: |
-    main:14: error: Cannot instantiate abstract class 'MyClass' with abstract attributes 'alt', 'apply', ... and 'swap' (13 methods suppressed)
+    main:10: error: Final class main.MyClass has abstract attributes "alt", "apply", "bind", "bind_io", "bind_ioresult", "bind_result", "compose_result", "from_failed_io", "from_failure", "from_io", "from_ioresult", "from_result", "from_value", "map", "rescue", "swap"
 
 
 - case: ioresult_inheritance_wrong

@@ -94,6 +94,36 @@ bind_ioresult methods
 .. autofunction:: returns.methods.bind_ioresult.internal_bind_ioresult
 .. autofunction:: returns.methods.bind_ioresult.bind_ioresult
 
+bind_async methods
+~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: returns.methods.bind_async.internal_bind_async
+.. autofunction:: returns.methods.bind_async.bind_async
+
+bind_future methods
+~~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: returns.methods.bind_future.internal_bind_future
+.. autofunction:: returns.methods.bind_future.bind_future
+
+bind_async_future methods
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: returns.methods.bind_async_future.internal_bind_async_future
+.. autofunction:: returns.methods.bind_async_future.bind_async_future
+
+bind_future_result methods
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: returns.methods.bind_future_result.internal_bind_future_result
+.. autofunction:: returns.methods.bind_future_result.bind_future_result
+
+bind_async_future_result methods
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: returns.methods.bind_async_future_result.internal_bind_async_future_result
+.. autofunction:: returns.methods.bind_async_future_result.bind_async_future_result
+
 bind_context methods
 ~~~~~~~~~~~~~~~~~~~~
 

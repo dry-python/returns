@@ -123,18 +123,20 @@
   disable_cache: true
   main: |
     from typing import TypeVar
+    from typing_extensions import final
     from returns.interfaces.specific.future import FutureLike1
     from returns.primitives.hkt import SupportsKind1
 
     T = TypeVar('T')
 
+    @final
     class MyClass(
         SupportsKind1['MyClass', T],
         FutureLike1[T],
     ):
         ...
-
-    MyClass()  # E: Cannot instantiate abstract class 'MyClass' with abstract attributes 'apply', 'bind', ... and 'map' (8 methods suppressed)
+  out: |
+    main:9: error: Final class main.MyClass has abstract attributes "apply", "bind", "bind_async", "bind_async_future", "bind_awaitable", "bind_future", "bind_io", "from_future", "from_io", "from_value", "map"
 
 
 - case: future_inheritance_wrong

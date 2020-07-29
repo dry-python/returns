@@ -53,50 +53,19 @@
 - case: modify_env2_custom_type
   disable_cache: true
   main: |
-    from typing import Callable, TypeVar, ClassVar
+    from typing import TypeVar
     from returns.interfaces.specific.reader import ReaderBased2
     from returns.primitives.hkt import SupportsKind2
-    from returns.context import Reader, NoDeps
     from returns.pointfree import modify_env2
 
-    _EnvType = TypeVar('_EnvType', contravariant=True)
-    _NewEnvType = TypeVar('_NewEnvType')
-    _ReturnType = TypeVar('_ReturnType', covariant=True)
-    _NewReturnType = TypeVar('_NewReturnType')
+    _EnvType = TypeVar('_EnvType')
+    _ReturnType = TypeVar('_ReturnType')
 
     class MyClass(
         SupportsKind2['MyClass', _ReturnType, _EnvType],
         ReaderBased2[_ReturnType, _EnvType],
     ):
-        empty: ClassVar[NoDeps] = object()
-
-        def __call__(self, deps: _EnvType) -> _ReturnType:
-            ...
-
-        def bind_context(
-            self,
-            function: Callable[
-                [_ReturnType],
-                Reader[_NewReturnType, _EnvType],
-            ],
-        ) -> MyClass[_NewReturnType, _EnvType]:
-            ...
-
-        def modify_env(
-            self,
-            function: Callable[[_NewEnvType], _EnvType],
-        ) -> MyClass[_ReturnType, _NewEnvType]:
-            ...
-
-        @classmethod
-        def ask(cls) -> MyClass[_EnvType, _EnvType]:
-            ...
-
-        @classmethod
-        def from_context(
-            self, inner_value: Reader[_ReturnType, _EnvType],
-        ) -> MyClass[_ReturnType, _EnvType]:
-            ...
+        ...
 
     x: MyClass[float, int]
     reveal_type(modify_env2(int)(x))  # N: Revealed type is 'main.MyClass*[builtins.float*, Union[builtins.str, typing.SupportsInt, builtins._SupportsIndex]]'

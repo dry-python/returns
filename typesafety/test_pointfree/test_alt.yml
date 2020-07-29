@@ -99,20 +99,16 @@
     from returns.pointfree import alt
     from returns.primitives.hkt import SupportsKind2
     from returns.interfaces.altable import Altable2
-    from typing import Callable, TypeVar
+    from typing import TypeVar
 
     T = TypeVar('T')
     E = TypeVar('E')
-    N = TypeVar('N')
 
     class MyOwn(
         SupportsKind2['MyOwn', T, E],
         Altable2[T, E],
     ):
-        def alt(
-            self, function: Callable[[E], N],
-        ) -> 'MyOwn[T, N]':
-            ...
+        ...
 
     def test(arg: float) -> int:
         ...

@@ -90,45 +90,18 @@
   disable_cache: true
   main: |
     from returns.converters import swap
-    from typing import Callable, TypeVar, Any
+    from typing import TypeVar
     from returns.interfaces.specific.result import ResultLike2
     from returns.primitives.hkt import SupportsKind2
-    from returns.result import Result
 
     _ValueType = TypeVar('_ValueType')
-    _NewValueType = TypeVar('_NewValueType')
-
-    # Result related:
     _ErrorType = TypeVar('_ErrorType')
-    _NewErrorType = TypeVar('_NewErrorType')
 
     class MyClass(
         SupportsKind2['MyClass', _ValueType, _ErrorType],
         ResultLike2[_ValueType, _ErrorType],
     ):
-        def swap(self) -> MyClass[_ErrorType, _ValueType]:
-            ...
-
-        def bind_result(
-            self,
-            function: Callable[
-                [_ValueType],
-                Result[_NewValueType, _ErrorType],
-            ],
-        ) -> MyClass[_NewValueType, _ErrorType]:
-            ...
-
-        @classmethod
-        def from_result(
-            self, inner_value: Result[_NewValueType, _NewErrorType],
-        ) -> MyClass[_NewValueType, _NewErrorType]:
-            ...
-
-        @classmethod
-        def from_failure(
-            cls, inner_value: _NewErrorType,
-        ) -> MyClass[Any, _NewErrorType]:
-            ...
+        ...
 
     x: MyClass[int, str]
     reveal_type(swap(x))  # N: Revealed type is 'main.MyClass*[builtins.str*, builtins.int*]'

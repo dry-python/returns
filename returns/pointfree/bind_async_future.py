@@ -29,8 +29,6 @@ def bind_async_future(
     signature from: ``a -> Awaitable[Future[b]]``
     to: ``Container[a] -> Container[b]``
 
-    Similar to :func:`returns.pointfree.rescue`,
-    but works for successful containers.
     This is how it should be used:
 
     .. code:: python

@@ -32,18 +32,15 @@
 - case: flatten_custom_type
   disable_cache: true
   main: |
-    from typing import Callable, TypeVar
+    from typing import TypeVar
     from returns.converters import flatten
     from returns.interfaces.bindable import Bindable1
-    from returns.primitives.hkt import Kind1, SupportsKind1
-    from returns.result import Result
+    from returns.primitives.hkt import SupportsKind1
 
     V = TypeVar('V')
-    N = TypeVar('N')
 
     class MyClass(SupportsKind1['MyClass', V], Bindable1[V]):
-        def bind(self, function: Callable[[V], Kind1['MyClass', N]]) -> MyClass[N]:
-            ...
+        ...
 
     x: MyClass[MyClass[int]]
     reveal_type(flatten(x))  # N: Revealed type is 'main.MyClass*[builtins.int*]'
