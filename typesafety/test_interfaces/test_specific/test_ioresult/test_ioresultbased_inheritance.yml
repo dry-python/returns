@@ -109,19 +109,19 @@
   disable_cache: true
   main: |
     from typing import TypeVar
+    from typing_extensions import final
     from returns.interfaces.specific.ioresult import IOResultBased2
     from returns.primitives.hkt import SupportsKind2
 
     _ValueType = TypeVar('_ValueType')
     _ErrorType = TypeVar('_ErrorType')
 
+    @final
     class MyClass(
         SupportsKind2['MyClass', _ValueType, _ErrorType],
         IOResultBased2[_ValueType, _ErrorType],
     ):
         ...
-
-    MyClass()
   out: |
     main:14: error: Cannot instantiate abstract class 'MyClass' with abstract attributes 'alt', 'apply', ... and 'unwrap' (15 methods suppressed)
 

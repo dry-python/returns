@@ -1,0 +1,19 @@
+- case: future_result_inheritance_missing
+  disable_cache: true
+  main: |
+    from typing import TypeVar
+    from typing_extensions import final
+    from returns.interfaces.specific.future_result import FutureResultLike2
+    from returns.primitives.hkt import SupportsKind2
+
+    T = TypeVar('T')
+    E = TypeVar('E')
+
+    @final
+    class MyClass(
+        SupportsKind2['MyClass', T, E],
+        FutureResultLike2[T, E],
+    ):
+        ...
+  out: |
+    main:10: error: Final class main.MyClass has abstract attributes "alt", "apply", "bind", "bind_async", "bind_async_future", "bind_async_future_result", "bind_awaitable", "bind_future", "bind_future_result", "bind_io", "bind_ioresult", "bind_result", "compose_result", "from_failed_future", "from_failed_io", "from_failure", "from_future", "from_io", "from_ioresult", "from_result", "from_value", "map", "rescue", "swap"

@@ -35,21 +35,19 @@
 - case: io_inheritance_missing
   disable_cache: true
   main: |
-    from typing import Callable, TypeVar
+    from typing import TypeVar
+    from typing_extensions import final
     from returns.interfaces.specific.io import IOBased1
     from returns.primitives.hkt import SupportsKind1
-    from returns.io import IO
 
     _ValueType = TypeVar('_ValueType')
-    _NewValueType = TypeVar('_NewValueType')
 
+    @final
     class MyClass(
         SupportsKind1['MyClass', _ValueType],
         IOBased1[_ValueType],
     ):
         ...
-
-    MyClass()
   out: |
     main:15: error: Cannot instantiate abstract class 'MyClass' with abstract attributes 'apply', 'bind', ... and 'map' (3 methods suppressed)
 

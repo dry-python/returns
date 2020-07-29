@@ -56,19 +56,19 @@
   disable_cache: true
   main: |
     from typing import TypeVar
+    from typing_extensions import final
     from returns.interfaces.specific.reader import ReaderBased2
     from returns.primitives.hkt import SupportsKind2
 
     _EnvType = TypeVar('_EnvType')
     _ReturnType = TypeVar('_ReturnType')
 
+    @final
     class MyClass(
         SupportsKind2['MyClass', _ReturnType, _EnvType],
         ReaderBased2[_ReturnType, _EnvType],
     ):
         ...
-
-    MyClass()
   out: |
     main:14: error: Cannot instantiate abstract class 'MyClass' with abstract attributes '__call__', 'apply', ... and 'modify_env' (7 methods suppressed)
 
