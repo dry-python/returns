@@ -112,7 +112,7 @@ user: Optional[User]
 discount_program: Maybe['DiscountProgram'] = Maybe.from_value(
     user,
 ).map(  # This won't be called if `user is None`
-    lambda real_user: real_user.get_balance(),  # `Some(None)` is just `Nothing`
+    lambda real_user: real_user.get_balance(),
 ).map(  # This won't be called if `real_user.get_balance()` returns None
     lambda balance: balance.credit_amount(),
 ).map(  # And so on!

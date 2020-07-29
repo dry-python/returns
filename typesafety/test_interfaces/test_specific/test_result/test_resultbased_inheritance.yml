@@ -126,7 +126,7 @@
     class MyClass(SupportsKind2['MyClass', V, N], ResultBased2[V, N]):
         ...
   out: |
-    main:11: error: Cannot instantiate abstract class 'MyClass' with abstract attributes 'alt', 'apply', ... and 'unwrap' (9 methods suppressed)
+    main:10: error: Final class main.MyClass has abstract attributes "alt", "apply", "bind", "bind_result", "failure", "from_failure", "from_result", "from_value", "map", "rescue", "swap", "unwrap"
 
 
 - case: result_inheritance_wrong

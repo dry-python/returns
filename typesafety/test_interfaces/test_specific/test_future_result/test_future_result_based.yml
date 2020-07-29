@@ -94,5 +94,5 @@
         async def awaitable(self) -> IOResult[int, E]:
             ...
   out: |
-    main:16: error: Return type "Generator[None, None, Result[T, E]]" of "__await__" incompatible with return type "Generator[Any, Any, IOBasedN[T, E, NoReturn]]" in supertype "AsyncFutureN"
-    main:19: error: Return type "Coroutine[Any, Any, IOResult[int, E]]" of "awaitable" incompatible with return type "Coroutine[Any, Any, IOBasedN[T, E, NoReturn]]" in supertype "AsyncFutureN"
+    main:15: error: Return type "Generator[None, None, Result[T, E]]" of "__await__" incompatible with return type "Generator[Any, Any, IOBasedN[T, E, NoReturn]]" in supertype "AsyncFutureN"
+    main:18: error: Return type "Coroutine[Any, Any, IOResult[int, E]]" of "awaitable" incompatible with return type "Coroutine[Any, Any, IOBasedN[T, E, NoReturn]]" in supertype "AsyncFutureN"
