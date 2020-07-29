@@ -1,0 +1,76 @@
+- case: bind_future_result_wrong_value
+  disable_cache: true
+  main: |
+    from returns.pointfree import bind_future_result
+    from returns.future import FutureResult
+
+    def test(arg: str) -> FutureResult[int, str]:
+        ...
+
+    x: FutureResult[float, str]
+    bind_future_result(test)(x)  # E: Argument 1 has incompatible type "FutureResult[float, str]"; expected "KindN[FutureResult[Any, Any], str, str, NoReturn]"
+
+
+- case: bind_future_result_wrong_error
+  disable_cache: true
+  main: |
+    from returns.pointfree import bind_future_result
+    from returns.future import FutureResult
+
+    def test(arg: float) -> FutureResult[int, str]:
+        ...
+
+    x: FutureResult[float, bool]
+    bind_future_result(test)(x)  # E: Argument 1 has incompatible type "FutureResult[float, bool]"; expected "KindN[FutureResult[Any, Any], float, str, NoReturn]"
+
+
+- case: bind_future_result_requires_context_future_result
+  disable_cache: true
+  main: |
+    from returns.pointfree import bind_future_result
+    from returns.context import RequiresContextFutureResult
+    from returns.future import FutureResult
+
+    def test(arg: float) -> FutureResult[int, bool]:
+        ...
+
+    x: RequiresContextFutureResult[float, bool, str]
+    reveal_type(bind_future_result(test)(x))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult*[builtins.int, builtins.bool, builtins.str*]'
+
+
+- case: bind_future_result_future_result
+  disable_cache: true
+  main: |
+    from returns.pointfree import bind_future_result
+    from returns.future import FutureResult
+
+    def test(arg: float) -> FutureResult[int, str]:
+        ...
+
+    x: FutureResult[float, str]
+    reveal_type(bind_future_result(test)(x))  # N: Revealed type is 'returns.future.FutureResult*[builtins.int, builtins.str]'
+
+
+- case: bind_future_result_custom_type
+  disable_cache: true
+  main: |
+    from returns.pointfree import bind_future_result
+    from returns.primitives.hkt import SupportsKind2
+    from returns.interfaces.specific.future_result import FutureResultLike2
+    from returns.future import FutureResult
+    from typing import TypeVar
+
+    T = TypeVar('T')
+    N = TypeVar('N')
+
+    class MyClass(
+        SupportsKind2['MyClass', T, N],
+        FutureResultLike2[T, N],
+    ):
+        ...
+
+    def test(arg: float) -> FutureResult[int, str]:
+        ...
+
+    x: MyClass[float, str]
+    reveal_type(bind_future_result(test)(x))  # N: Revealed type is 'main.MyClass*[builtins.int, builtins.str]'
