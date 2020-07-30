@@ -48,11 +48,11 @@ that implements the ``Mappable`` interface:
 
   >>> from returns.maybe import Maybe, Some
 
-  >>> def mappable(string: str) -> str:
+  >>> def can_be_mapped(string: str) -> str:
   ...     return string + '!'
 
   >>> maybe_str: Maybe[str] = Some('example')
-  >>> assert maybe_str.map(mappable) == Some('example!')
+  >>> assert maybe_str.map(can_be_mapped) == Some('example!')
 
 :class:`Mappable <returns.interfaces.mappable.MappableN>` interface help us to
 create our own mappable container like :class:`Maybe <returns.maybe.Maybe>`.
@@ -62,13 +62,13 @@ create our own mappable container like :class:`Maybe <returns.maybe.Maybe>`.
   >>> from typing import Any, Callable, TypeVar
 
   >>> from returns.interfaces.mappable import Mappable1
-  >>> from returns.primitives.hkt import Kind1
+  >>> from returns.primitives.hkt import SupportsKind1
 
   >>> _NumberType = TypeVar('_NumberType')
   >>> _NewNumberType = TypeVar('_NewNumberType')
 
   >>> class Number(
-  ...     Kind1['Number', _NumberType],
+  ...     SupportsKind1['Number', _NumberType],
   ...     Mappable1[_NumberType],
   ... ):
   ...     def __init__(self, inner_value: _NumberType):
@@ -111,11 +111,13 @@ the mappable has to be the same, unaltered.
   >>> mappable_number: Number[int] = Number(1)
   >>> assert mappable_number.map(identity) == Number(1)
 
-2. **Associative Law**: Given two functions, `x` and `y`, calling the map
-method with `x` function and after that calling with `y` function must have the
+2. **Associative Law**: Given two functions, ``x`` and ``y``, calling the map
+method with ``x`` function and after that calling with ``y`` function must have the
 same result if we compose them together.
 
 .. code:: python
+
+  >>> from returns.functions import compose
 
   >>> def add_one(number: int) -> int:
   ...     return number + 1
@@ -124,7 +126,7 @@ same result if we compose them together.
   ...     return number * 10
 
   >>> mappable_number: Number[int] = Number(9)
-  >>> assert mappable_number.map(add_one).map(multiply_by_ten) == mappable_number.map(lambda value: multiply_by_ten(add_one(value)))
+  >>> assert mappable_number.map(add_one).map(multiply_by_ten) == mappable_number.map(compose(add_one, multiply_by_ten))
 
 Bindable
 --------
