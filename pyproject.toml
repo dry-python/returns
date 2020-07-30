@@ -64,7 +64,7 @@ nitpick = "^0.22"
 
 # TODO: remove after
 # https://github.com/gforcada/flake8-isort/issues/88
-isort = "<5.0"
+isort = "<6.0"
 
 anyio = "^1.4"
 curio = "^1.2"
