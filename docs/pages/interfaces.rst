@@ -126,6 +126,116 @@ same result if we compose them together.
   >>> mappable_number: Number[int] = Number(9)
   >>> assert mappable_number.map(add_one).map(multiply_by_ten) == mappable_number.map(lambda value: multiply_by_ten(add_one(value)))
 
+Bindable
+--------
+
+Bindable is something that we can bind it with a function, like
+:class:`Maybe <returns.maybe.Maybe>`, so
+:class:`Bindable <returns.interfaces.bindable.BindableN>` interface will help
+us to create our custom bindable.
+
+.. code:: python
+
+  >>> from typing import Any, Callable, TypeVar
+
+  >>> from returns.interfaces.bindable import Bindable1
+  >>> from returns.primitives.hkt import SupportsKind1
+
+  >>> _BagContentType = TypeVar('_BagContentType')
+  >>> _NewBagContentType = TypeVar('_NewBagContentType')
+
+  >>> class Bag(
+  ...     SupportsKind1['Bag', int],
+  ...     Bindable1[_BagContentType],
+  ... ):
+  ...     def __init__(self, inner_value: _BagContentType):
+  ...         self._inner_value = inner_value
+  ...
+  ...     def bind(
+  ...         self,
+  ...         function: Callable[[_BagContentType], 'Bag[_NewBagContentType]']
+  ...     ) -> 'Bag[_NewBagContentType]':
+  ...         return function(self._inner_value)
+  ...
+  ...     def __eq__(self, other: Any) -> bool:
+  ...         if not isinstance(self, type(other)):
+  ...             return False
+  ...         return self._inner_value == other._inner_value
+
+  >>> class Peanuts:
+  ...     def __init__(self, quantity: int) -> None:
+  ...         self.quantity = quantity
+  ...
+  ...     def __eq__(self, other: Any) -> bool:
+  ...         if not isinstance(self, type(other)):
+  ...             return False
+  ...         return self.quantity == other.quantity
+
+  >>> def get_half(peanuts: Peanuts) -> Bag[Peanuts]:
+  ...     return Bag(Peanuts(peanuts.quantity // 2))
+
+  >>> bag_of_peanuts: Bag[Peanuts] = Bag(Peanuts(10))
+  >>> assert bag_of_peanuts.bind(get_half) == Bag(Peanuts(5))
+
+Laws
+~~~~
+
+To make sure other people will be able to use your implementation, it should
+respect three laws.
+
+1. **Left Identity:** If we ``bind`` a function to our bindable must have to be
+the same result as passing the value directly to the function.
+
+.. code:: python
+
+  >>> def can_be_bound(value: int) -> Bag[Peanuts]:
+  ...     return Bag(Peanuts(value))
+
+  >>> assert Bag(5).bind(can_be_bound) == can_be_bound(5)
+
+2. **Right Identity:** If we pass the bindable constructor through ``bind`` must
+have to be the same result as instantiating the bindable on our own.
+
+.. code:: python
+
+  >>> bag = Bag(Peanuts(2))
+  >>> assert bag.bind(Bag) == Bag(Peanuts(2))
+
+3. **Associative Law:** Given two functions, ``x`` and ``y``, calling the bind
+method with ``x`` function and after that calling with ``y`` function must have the
+same result if we bind with a function that passes the value to ``x`` and then
+bind the result with ``y``.
+
+.. code:: python
+
+  >>> def minus_one(peanuts: Peanuts) -> Bag[Peanuts]:
+  ...     return Bag(Peanuts(peanuts.quantity - 1))
+
+  >>> def half(peanuts: Peanuts) -> Bag[Peanuts]:
+  ...     return Bag(Peanuts(peanuts.quantity // 2))
+
+  >>> bag = Bag(Peanuts(9))
+  >>> assert bag.bind(minus_one).bind(half) == bag.bind(lambda value: minus_one(value).bind(half))
+
+What's the difference between ``Mappable`` and ``Bindable``?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+While Mappable you have to pass a pure function, like:
+
+.. code:: python
+
+  >>> def can_be_mapped(string: str) -> str:
+  ...     return string
+
+with Bindable we have to pass a function that returns another container:
+
+.. code:: python
+
+  >>> from returns.maybe import Maybe
+
+  >>> def can_be_bound(string: str) -> Maybe[str]:
+  ...     return Some(string + '!')
+
 Naming convention
 -----------------
 
