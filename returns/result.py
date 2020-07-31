@@ -207,9 +207,9 @@ class Result(
 
         .. code:: python
 
-          >>> from returns.result import Result, Failure, Success
+          >>> from returns.result import Failure, Success
 
-          >>> def altable(arg: str) -> Result[str, str]:
+          >>> def altable(arg: str) -> str:
           ...      return arg + 'b'
 
           >>> assert Success('a').alt(altable) == Success('a')
