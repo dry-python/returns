@@ -6,7 +6,9 @@ from returns.primitives.hkt import KindN
 _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')
 _ThirdType = TypeVar('_ThirdType')
-_UpdatedType = TypeVar('_UpdatedType')
+_NewFirstType = TypeVar('_NewFirstType')
+_NewSecondType = TypeVar('_NewSecondType')
+_NewThirdType = TypeVar('_NewThirdType')
 
 _IterableType = TypeVar('_IterableType', bound='IterableN')
 
@@ -23,9 +25,11 @@ class IterableN(Generic[_FirstType, _SecondType, _ThirdType]):
     def from_iterable(
         cls: Type[_IterableType],  # noqa: N805
         inner_value: Iterable[
-            KindN[_IterableType, _FirstType, _SecondType, _ThirdType],
+            KindN[_IterableType, _NewFirstType, _NewSecondType, _NewThirdType],
         ],
-    ) -> KindN[_IterableType, Sequence[_FirstType], _SecondType, _ThirdType]:
+    ) -> KindN[
+        _IterableType, Sequence[_NewFirstType], _NewSecondType, _NewThirdType,
+    ]:
         """Unit method to create a new container from iterable of containers."""
 
 

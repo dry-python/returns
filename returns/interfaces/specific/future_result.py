@@ -20,6 +20,9 @@ _SecondType = TypeVar('_SecondType')
 _ThirdType = TypeVar('_ThirdType')
 _UpdatedType = TypeVar('_UpdatedType')
 
+_ValueType = TypeVar('_ValueType')
+_ErrorType = TypeVar('_ErrorType')
+
 _FutureResultLikeType = TypeVar(
     '_FutureResultLikeType', bound='FutureResultLikeN',
 )
@@ -60,15 +63,15 @@ class FutureResultLikeN(
     @abstractmethod
     def from_failed_future(
         cls: Type[_FutureResultLikeType],  # noqa: N805
-        inner_value: 'Future[_SecondType]',
-    ) -> KindN[_FutureResultLikeType, _FirstType, _SecondType, _ThirdType]:
+        inner_value: 'Future[_ErrorType]',
+    ) -> KindN[_FutureResultLikeType, _FirstType, _ErrorType, _ThirdType]:
         """Creates new container from a failed ``Future``."""
 
     @classmethod
     def from_future_result(
         cls: Type[_FutureResultLikeType],  # noqa: N805
-        inner_value: 'FutureResult[_FirstType, _SecondType]',
-    ) -> KindN[_FutureResultLikeType, _FirstType, _SecondType, _ThirdType]:
+        inner_value: 'FutureResult[_ValueType, _ErrorType]',
+    ) -> KindN[_FutureResultLikeType, _ValueType, _ErrorType, _ThirdType]:
         """Creates container from ``FutureResult`` instance."""
 
 

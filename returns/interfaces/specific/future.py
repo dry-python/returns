@@ -79,8 +79,8 @@ class FutureLikeN(io.IOBasedN[_FirstType, _SecondType, _ThirdType]):
     @abstractmethod
     def from_future(
         cls: Type[_FutureLikeType],  # noqa: N805
-        inner_value: 'Future[_FirstType]',
-    ) -> KindN[_FutureLikeType, _FirstType, _SecondType, _ThirdType]:
+        inner_value: 'Future[_UpdatedType]',
+    ) -> KindN[_FutureLikeType, _UpdatedType, _SecondType, _ThirdType]:
         """Unit method to create new containers from successful ``Future``."""
 
 
