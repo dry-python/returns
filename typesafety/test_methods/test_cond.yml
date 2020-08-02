@@ -1,0 +1,7 @@
+- case: cond_1
+  disable_cache: true
+  main: |
+    from returns.methods import cond
+    from returns.result import Result
+
+    reveal_type(cond(Result, True, 42, '42'))  # N: Revealed type is 'returns.result.Result*[builtins.int*, builtins.str*]'
