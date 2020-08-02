@@ -42,6 +42,33 @@ That's illustrates pretty well, why do we have both.
 Use ``internal_`` method while working in kinded context.
 Use user-facing methods when working with real types.
 
+cond
+----
+
+When we're working with ``ResultLikeN`` containers is common to write pieces of
+code like this:
+
+.. code:: python
+
+  >>> from returns.result import Success, Result, Failure
+
+  >>> def is_positive(number: int) -> Result[int, str]:
+  ...     if number >= 0:
+  ...         return Success(number)
+  ...     return Failure('Negative number')
+
+Using ``cond`` you can reduce this ``if`` pattern, see the same function above
+written using ``cond``:
+
+.. code:: python
+
+  >>> from returns.methods import cond
+
+  >>> def is_positive(number: int) -> Result[int, str]:
+  ...     return cond(Result, number >= 0, number, 'Negative number')
+
+  >>> assert is_positive(10) == Success(10)
+  >>> assert is_positive(-10) == Failure('Negative number')
 
 API Reference
 -------------
@@ -132,6 +159,12 @@ bind_context methods
 .. autofunction:: returns.methods.bind_context.internal_bind_context3
 .. autofunction:: returns.methods.bind_context.bind_context3
 .. autofunction:: returns.methods.bind_context.bind_context
+
+cond
+~~~~
+
+.. autofunction:: returns.methods.cond.internal_cond
+.. autofunction:: returns.methods.cond.cond
 
 modify_env methods
 ~~~~~~~~~~~~~~~~~~
