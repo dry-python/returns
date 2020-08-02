@@ -1,4 +1,4 @@
-from abc import ABCMeta, abstractmethod
+from abc import ABCMeta
 from functools import wraps
 from inspect import FrameInfo
 from typing import (
@@ -320,7 +320,7 @@ class IOResult(
     Implementation
     ~~~~~~~~~~~~~~
     This class contains all the methods that can be delegated to ``Result``.
-    But, some methods are ``@abstractmethod`` which means
+    But, some methods are not implemented which means
     that we have to use special :class:`~_IOSuccess` and :class:`~_IOFailure`
     implementation details to correctly handle these callbacks.
 
@@ -420,7 +420,6 @@ class IOResult(
             )
         return container  # type: ignore
 
-    @abstractmethod
     def bind(
         self,
         function: Callable[
@@ -448,7 +447,6 @@ class IOResult(
     #: Alias for `bind_ioresult` method. Part of the `IOResultBasedN` interface.
     bind_ioresult = bind
 
-    @abstractmethod
     def bind_result(
         self,
         function: Callable[
@@ -479,7 +477,6 @@ class IOResult(
 
         """
 
-    @abstractmethod
     def bind_io(
         self,
         function: Callable[[_ValueType], IO[_NewValueType]],
@@ -542,7 +539,6 @@ class IOResult(
         """
         return self.from_result(self._inner_value.alt(function))
 
-    @abstractmethod
     def rescue(
         self,
         function: Callable[
