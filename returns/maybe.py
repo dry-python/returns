@@ -1,4 +1,4 @@
-from abc import ABCMeta, abstractmethod
+from abc import ABCMeta
 from functools import wraps
 from typing import (
     Any,
@@ -60,7 +60,6 @@ class Maybe(
     #: Failure type that is used to represent the failed computation.
     failure_type: ClassVar[Type['_Nothing']]
 
-    @abstractmethod  # noqa: WPS125
     def map(  # noqa: WPS125
         self,
         function: Callable[[_ValueType], Optional[_NewValueType]],
@@ -79,7 +78,6 @@ class Maybe(
 
         """
 
-    @abstractmethod
     def apply(
         self,
         function: Kind1['Maybe', Callable[[_ValueType], _NewValueType]],
@@ -101,7 +99,6 @@ class Maybe(
 
         """
 
-    @abstractmethod
     def bind(
         self,
         function: Callable[[_ValueType], Kind1['Maybe', _NewValueType]],
@@ -135,7 +132,6 @@ class Maybe(
 
         """
 
-    @abstractmethod
     def or_else_call(
         self,
         function: Callable[[], _NewValueType],
@@ -171,7 +167,6 @@ class Maybe(
 
         """
 
-    @abstractmethod
     def unwrap(self) -> _ValueType:
         """
         Get value from successful container or raise exception for failed one.
@@ -188,7 +183,6 @@ class Maybe(
 
         """
 
-    @abstractmethod
     def failure(self) -> None:
         """
         Get failed value from failed container or raise exception from success.
