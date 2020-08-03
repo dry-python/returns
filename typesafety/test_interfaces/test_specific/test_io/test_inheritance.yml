@@ -49,7 +49,7 @@
     ):
         ...
   out: |
-    main:9: error: Final class main.MyClass has abstract attributes "apply", "bind", "bind_io", "from_io", "from_value", "map"
+    main:9: error: Final class main.MyClass has abstract attributes "apply", "bind", "bind_io", "from_io", "from_iterable", "from_value", "map"
 
 
 - case: io_inheritance_wrong

@@ -31,12 +31,13 @@
     V = TypeVar('V')
     E = TypeVar('E')
     N = TypeVar('N')
+    I = TypeVar('I')
 
     class MyClass(SupportsKind2['MyClass', V, E], Iterable2[V, E]):
         @classmethod
         def from_iterable(
-            cls, inner_value: Iterable[Kind2['MyClass', N, E]],
-        ) -> MyClass[Sequence[N], E]:
+            cls, inner_value: Iterable[Kind2['MyClass', N, I]],
+        ) -> MyClass[Sequence[N], I]:
             return dekind(iterable_kind(cls, inner_value))
 
     x: Iterable[MyClass[str, int]]
@@ -55,12 +56,14 @@
     E = TypeVar('E')
     T = TypeVar('T')
     N = TypeVar('N')
+    I = TypeVar('I')
+    U = TypeVar('U')
 
     class MyClass(SupportsKind3['MyClass', V, E, T], Iterable3[V, E, T]):
         @classmethod
         def from_iterable(
-            cls, inner_value: Iterable[Kind3['MyClass', N, E, T]],
-        ) -> MyClass[Sequence[N], E, T]:
+            cls, inner_value: Iterable[Kind3['MyClass', N, I, U]],
+        ) -> MyClass[Sequence[N], I, U]:
             return dekind(iterable_kind(cls, inner_value))
 
     x: Iterable[MyClass[str, int, bool]]
@@ -84,7 +87,7 @@
     main:10: error: Cannot instantiate abstract class 'MyClass' with abstract attribute 'from_iterable'
 
 
-- case: iterable_inheritance_wrong
+- case: iterable_inheritance_wrong1
   disable_cache: true
   main: |
     from typing import TypeVar, Iterable
@@ -102,3 +105,28 @@
             ...
   out: |
     main:10: error: Signature of "from_iterable" incompatible with supertype "IterableN"
+
+
+- case: iterable_inheritance_wrong2
+  disable_cache: true
+  main: |
+    from typing import TypeVar, Iterable, Sequence
+    from returns.interfaces.iterable import Iterable2
+    from returns.primitives.hkt import SupportsKind2, Kind2
+
+    V = TypeVar('V')
+    N = TypeVar('N')
+    E = TypeVar('E')
+    I = TypeVar('I')
+
+    class MyClass(SupportsKind2['MyClass', V, E], Iterable2[V, E]):
+        @classmethod
+        def from_iterable(
+            cls, inner_value: Iterable[Kind2['MyClass', V, E]],
+        ) -> MyClass[Sequence[V], E]:
+            ...
+  out: |
+    main:12: error: Argument 1 of "from_iterable" is incompatible with supertype "IterableN"; supertype defines the argument type as "Iterable[KindN[MyClass[V, E], _NewFirstType, _NewSecondType, _NewThirdType]]"
+    main:12: error: Return type "MyClass[Sequence[V], E]" of "from_iterable" incompatible with return type "KindN[MyClass[V, E], Sequence[_NewFirstType], _NewSecondType, _NewThirdType]" in supertype "IterableN"
+    main:12: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:12: note: This violates the Liskov substitution principle

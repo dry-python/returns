@@ -25,7 +25,6 @@
     x: RequiresContextResult[float, str, int]
     bind_context2(x, test)
   out: |
-    main:8: error: Argument 1 to "internal_bind_context2" has incompatible type "RequiresContextResult[float, str, int]"; expected "KindN[RequiresContextResult[Any, Any, Any], float, str, NoReturn]"
     main:8: error: Argument 2 to "internal_bind_context2" has incompatible type "Callable[[float], RequiresContext[str, int]]"; expected "Callable[[float], RequiresContext[str, str]]"
     main:8: error: Value of type variable "_Reader2Kind" of "internal_bind_context2" cannot be "RequiresContextResult[Any, Any, Any]"
 

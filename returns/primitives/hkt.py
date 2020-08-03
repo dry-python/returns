@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Callable, Generic, NoReturn, TypeVar
+from typing import TYPE_CHECKING, Any, Callable, Generic, NoReturn, TypeVar
 
 from typing_extensions import Protocol
 
@@ -98,10 +98,10 @@ class KindN(
 
 
 #: Type alias for kinds with one type argument.
-Kind1 = KindN[_InstanceType, _TypeArgType1, NoReturn, NoReturn]
+Kind1 = KindN[_InstanceType, _TypeArgType1, Any, Any]
 
 #: Type alias for kinds with two type arguments.
-Kind2 = KindN[_InstanceType, _TypeArgType1, _TypeArgType2, NoReturn]
+Kind2 = KindN[_InstanceType, _TypeArgType1, _TypeArgType2, Any]
 
 #: Type alias for kinds with three type arguments.
 Kind3 = KindN[_InstanceType, _TypeArgType1, _TypeArgType2, _TypeArgType3]

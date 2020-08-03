@@ -41,8 +41,8 @@
 
         @classmethod
         def from_context(
-            self, inner_value: Reader[_ReturnType, _EnvType],
-        ) -> MyClass[_ReturnType, _EnvType]:
+            self, inner_value: Reader[_NewReturnType, _NewEnvType],
+        ) -> MyClass[_NewReturnType, _NewEnvType]:
             ...
 
     def test(a: int) -> Reader[float, str]:
@@ -70,7 +70,7 @@
     ):
         ...
   out: |
-    main:10: error: Final class main.MyClass has abstract attributes "__call__", "apply", "ask", "bind", "bind_context", "empty", "from_context", "from_value", "map", "modify_env"
+    main:10: error: Final class main.MyClass has abstract attributes "__call__", "apply", "ask", "bind", "bind_context", "empty", "from_context", "from_iterable", "from_value", "map", "modify_env"
 
 
 - case: reader_inheritance_wrong
@@ -114,7 +114,7 @@
 
         @classmethod
         def from_context(
-            self, inner_value: Reader[_EnvType, _EnvType],
+            self, inner_value: Reader[_ReturnType, _EnvType],
         ) -> MyClass[_ReturnType, _EnvType]:
             ...
   out: |
@@ -124,11 +124,12 @@
     main:15: error: Return type "_EnvType" of "__call__" incompatible with return type "_ReturnType" in supertype "ReaderBased2"
     main:15: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
     main:15: note: This violates the Liskov substitution principle
-    main:18: error: Return type "MyClass[_ReturnType, _EnvType]" of "bind_context" incompatible with return type "KindN[MyClass[_ReturnType, _EnvType], _UpdatedType, _EnvType, NoReturn]" in supertype "ReaderBased2"
+    main:18: error: Return type "MyClass[_ReturnType, _EnvType]" of "bind_context" incompatible with return type "KindN[MyClass[_ReturnType, _EnvType], _UpdatedType, _EnvType, Any]" in supertype "ReaderBased2"
     main:27: error: Argument 1 of "modify_env" is incompatible with supertype "ReaderBased2"; supertype defines the argument type as "Callable[[_UpdatedType], _EnvType]"
     main:27: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
     main:27: note: This violates the Liskov substitution principle
-    main:34: error: Return type "MyClass[_ReturnType, _ReturnType]" of "ask" incompatible with return type "KindN[MyClass[_ReturnType, _EnvType], _EnvType, _EnvType, NoReturn]" in supertype "ReaderBased2"
-    main:38: error: Argument 1 of "from_context" is incompatible with supertype "ReaderBased2"; supertype defines the argument type as "RequiresContext[_ReturnType, _EnvType]"
+    main:34: error: Return type "MyClass[_ReturnType, _ReturnType]" of "ask" incompatible with return type "KindN[MyClass[_ReturnType, _EnvType], _EnvType, _EnvType, Any]" in supertype "ReaderBased2"
+    main:38: error: Argument 1 of "from_context" is incompatible with supertype "ReaderBased2"; supertype defines the argument type as "RequiresContext[_ValueType, _EnvType]"
+    main:38: error: Return type "MyClass[_ReturnType, _EnvType]" of "from_context" incompatible with return type "KindN[MyClass[_ReturnType, _EnvType], _ValueType, _EnvType, Any]" in supertype "ReaderBased2"
     main:38: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
     main:38: note: This violates the Liskov substitution principle

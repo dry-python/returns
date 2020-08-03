@@ -27,6 +27,7 @@ See also:
 from abc import abstractmethod, abstractproperty
 from typing import TYPE_CHECKING, Any, Callable, Type, TypeVar
 
+from returns.interfaces import iterable
 from returns.interfaces.aliases import container
 from returns.primitives.hkt import Kind2, Kind3
 
@@ -38,11 +39,18 @@ _SecondType = TypeVar('_SecondType')
 _ThirdType = TypeVar('_ThirdType')
 _UpdatedType = TypeVar('_UpdatedType')
 
+_ValueType = TypeVar('_ValueType')
+_ErrorType = TypeVar('_ErrorType')
+_EnvType = TypeVar('_EnvType')
+
 _ReaderBased2Type = TypeVar('_ReaderBased2Type', bound='ReaderBased2')
 _ReaderBased3Type = TypeVar('_ReaderBased3Type', bound='ReaderBased3')
 
 
-class ReaderBased2(container.Container2[_FirstType, _SecondType]):
+class ReaderBased2(
+    container.Container2[_FirstType, _SecondType],
+    iterable.Iterable2[_FirstType, _SecondType],
+):
     """
     Reader interface for ``Kind2`` based types.
 
@@ -85,12 +93,15 @@ class ReaderBased2(container.Container2[_FirstType, _SecondType]):
     @abstractmethod
     def from_context(
         cls: Type[_ReaderBased2Type],  # noqa: N805
-        inner_value: 'RequiresContext[_FirstType, _SecondType]',
-    ) -> Kind2[_ReaderBased2Type, _FirstType, _SecondType]:
+        inner_value: 'RequiresContext[_ValueType, _EnvType]',
+    ) -> Kind2[_ReaderBased2Type, _ValueType, _EnvType]:
         """Unit method to create new containers from successful ``Reader``."""
 
 
-class ReaderBased3(container.Container3[_FirstType, _SecondType, _ThirdType]):
+class ReaderBased3(
+    container.Container3[_FirstType, _SecondType, _ThirdType],
+    iterable.Iterable3[_FirstType, _SecondType, _ThirdType],
+):
     """
     Reader interface for ``Kind3`` based types.
 
@@ -141,6 +152,6 @@ class ReaderBased3(container.Container3[_FirstType, _SecondType, _ThirdType]):
     @abstractmethod
     def from_context(
         cls: Type[_ReaderBased3Type],  # noqa: N805
-        inner_value: 'RequiresContext[_FirstType, _ThirdType]',
-    ) -> Kind3[_ReaderBased3Type, _FirstType, _SecondType, _ThirdType]:
+        inner_value: 'RequiresContext[_ValueType, _EnvType]',
+    ) -> Kind3[_ReaderBased3Type, _ValueType, _SecondType, _EnvType]:
         """Unit method to create new containers from successful ``Reader``."""

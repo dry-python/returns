@@ -13,7 +13,6 @@ from typing_extensions import final
 from returns._generated.iterable import iterable_kind
 from returns.functions import identity
 from returns.future import FutureResult
-from returns.interfaces import iterable
 from returns.interfaces.specific import reader
 from returns.io import IOResult
 from returns.primitives.container import BaseContainer
@@ -54,7 +53,6 @@ class RequiresContext(
     BaseContainer,
     SupportsKind2['RequiresContext', _ReturnType, _EnvType],
     reader.ReaderBased2[_ReturnType, _EnvType],
-    iterable.Iterable2[_ReturnType, _EnvType],
 ):
     """
     The ``RequiresContext`` container.
@@ -343,8 +341,8 @@ class RequiresContext(
 
     @classmethod
     def from_context(
-        cls, inner_value: 'RequiresContext[_ReturnType, _EnvType]',
-    ) -> 'RequiresContext[_ReturnType, _EnvType]':
+        cls, inner_value: 'RequiresContext[_NewReturnType, _NewEnvType]',
+    ) -> 'RequiresContext[_NewReturnType, _NewEnvType]':
         """
         Used to create new containers from existing ones.
 
@@ -362,8 +360,10 @@ class RequiresContext(
     @classmethod
     def from_iterable(
         cls,
-        inner_value: Iterable[Kind2['RequiresContext', _ValueType, _EnvType]],
-    ) -> 'RequiresContext[Sequence[_ValueType], _EnvType]':
+        inner_value: Iterable[
+            Kind2['RequiresContext', _NewReturnType, _NewEnvType],
+        ],
+    ) -> 'RequiresContext[Sequence[_NewReturnType], _NewEnvType]':
         """
         Transforms an iterable of ``RequiresContext`` containers.
 

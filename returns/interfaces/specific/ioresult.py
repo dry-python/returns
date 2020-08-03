@@ -19,6 +19,9 @@ _SecondType = TypeVar('_SecondType')
 _ThirdType = TypeVar('_ThirdType')
 _UpdatedType = TypeVar('_UpdatedType')
 
+_ValueType = TypeVar('_ValueType')
+_ErrorType = TypeVar('_ErrorType')
+
 _IOResultLikeType = TypeVar('_IOResultLikeType', bound='IOResultLikeN')
 
 
@@ -53,16 +56,16 @@ class IOResultLikeN(
     @abstractmethod
     def from_ioresult(
         cls: Type[_IOResultLikeType],  # noqa: N805
-        inner_value: 'IOResult[_FirstType, _SecondType]',
-    ) -> KindN[_IOResultLikeType, _FirstType, _SecondType, _ThirdType]:
+        inner_value: 'IOResult[_ValueType, _ErrorType]',
+    ) -> KindN[_IOResultLikeType, _ValueType, _ErrorType, _ThirdType]:
         """Unit method to create new containers from ``IOResult`` type."""
 
     @classmethod
     @abstractmethod
     def from_failed_io(
         cls: Type[_IOResultLikeType],  # noqa: N805
-        inner_value: 'IO[_SecondType]',
-    ) -> KindN[_IOResultLikeType, _FirstType, _SecondType, _ThirdType]:
+        inner_value: 'IO[_ErrorType]',
+    ) -> KindN[_IOResultLikeType, _FirstType, _ErrorType, _ThirdType]:
         """Unit method to create new containers from failed ``IO``."""
 
 

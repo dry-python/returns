@@ -112,7 +112,7 @@
 
     first.bind(function)
   out: |
-    main:8: error: Argument 1 to "bind" of "RequiresContext" has incompatible type "Callable[[float], RequiresContext[float, int]]"; expected "Callable[[str], KindN[RequiresContext[Any, Any], float, int, NoReturn]]"
+    main:8: error: Argument 1 to "bind" of "RequiresContext" has incompatible type "Callable[[float], RequiresContext[float, int]]"; expected "Callable[[str], KindN[RequiresContext[Any, Any], float, int, Any]]"
 
 
 - case: requires_context_bind_wrong2
@@ -127,4 +127,4 @@
 
     first.bind(function)
   out: |
-    main:8: error: Argument 1 to "bind" of "RequiresContext" has incompatible type "Callable[[str], RequiresContext[float, str]]"; expected "Callable[[str], KindN[RequiresContext[Any, Any], float, int, NoReturn]]"
+    main:8: error: Argument 1 to "bind" of "RequiresContext" has incompatible type "Callable[[str], RequiresContext[float, str]]"; expected "Callable[[str], KindN[RequiresContext[Any, Any], float, int, Any]]"

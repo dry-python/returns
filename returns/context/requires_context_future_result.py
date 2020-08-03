@@ -15,7 +15,6 @@ from returns._generated.futures import _reader_future_result
 from returns._generated.iterable import iterable_kind
 from returns.context import NoDeps
 from returns.future import Future, FutureResult
-from returns.interfaces import iterable
 from returns.interfaces.specific import future_result, reader
 from returns.io import IO, IOResult
 from returns.primitives.container import BaseContainer
@@ -26,6 +25,7 @@ if TYPE_CHECKING:
     from returns.context.requires_context import RequiresContext
     from returns.context.requires_context_ioresult import (
         RequiresContextIOResult,
+        ReaderIOResult,
     )
     from returns.context.requires_context_result import RequiresContextResult
 
@@ -51,7 +51,6 @@ class RequiresContextFutureResult(
     ],
     reader.ReaderBased3[_ValueType, _ErrorType, _EnvType],
     future_result.FutureResultLike3[_ValueType, _ErrorType, _EnvType],
-    iterable.Iterable3[_ValueType, _ErrorType, _EnvType],
 ):
     """
     The ``RequiresContextFutureResult`` combinator.
@@ -66,7 +65,7 @@ class RequiresContextFutureResult(
 
     This is just a handy wrapper around
     ``RequiresContext[env, FutureResult[a, b]]``
-    which represents a context-dependent impure operation that might fail.
+    which represents a context-dependent impure async operation that might fail.
 
     So, this is a thin wrapper, without any changes in logic.
     Why do we need this wrapper? That's just for better usability!
@@ -957,8 +956,8 @@ class RequiresContextFutureResult(
 
     @classmethod
     def from_result(
-        cls, inner_value: Result[_ValueType, _ErrorType],
-    ) -> 'RequiresContextFutureResult[_ValueType, _ErrorType, NoDeps]':
+        cls, inner_value: Result[_NewValueType, _NewErrorType],
+    ) -> 'RequiresContextFutureResult[_NewValueType, _NewErrorType, NoDeps]':
         """
         Creates new container with ``Result`` as a unit value.
 
@@ -1034,8 +1033,8 @@ class RequiresContextFutureResult(
 
     @classmethod
     def from_ioresult(
-        cls, inner_value: IOResult[_ValueType, _ErrorType],
-    ) -> 'RequiresContextFutureResult[_ValueType, _ErrorType, NoDeps]':
+        cls, inner_value: IOResult[_NewValueType, _NewErrorType],
+    ) -> 'RequiresContextFutureResult[_NewValueType, _NewErrorType, NoDeps]':
         """
         Creates new container with ``IOResult`` as a unit value.
 
@@ -1063,8 +1062,8 @@ class RequiresContextFutureResult(
     @classmethod
     def from_future(
         cls,
-        inner_value: Future[_ValueType],
-    ) -> 'RequiresContextFutureResult[_ValueType, Any, NoDeps]':
+        inner_value: Future[_NewValueType],
+    ) -> 'RequiresContextFutureResult[_NewValueType, Any, NoDeps]':
         """
         Creates new container with successful ``Future`` as a unit value.
 
@@ -1088,8 +1087,8 @@ class RequiresContextFutureResult(
     @classmethod
     def from_failed_future(
         cls,
-        inner_value: Future[_ErrorType],
-    ) -> 'RequiresContextFutureResult[Any, _ErrorType, NoDeps]':
+        inner_value: Future[_NewErrorType],
+    ) -> 'RequiresContextFutureResult[Any, _NewErrorType, NoDeps]':
         """
         Creates new container with failed ``Future`` as a unit value.
 
@@ -1115,8 +1114,8 @@ class RequiresContextFutureResult(
     @classmethod
     def from_future_result(
         cls,
-        inner_value: FutureResult[_ValueType, _ErrorType],
-    ) -> 'RequiresContextFutureResult[_ValueType, _ErrorType, NoDeps]':
+        inner_value: FutureResult[_NewValueType, _NewErrorType],
+    ) -> 'RequiresContextFutureResult[_NewValueType, _NewErrorType, NoDeps]':
         """
         Creates new container with ``FutureResult`` as a unit value.
 
@@ -1184,8 +1183,8 @@ class RequiresContextFutureResult(
 
     @classmethod
     def from_context(
-        cls, inner_value: 'RequiresContext[_FirstType, _EnvType]',
-    ) -> 'RequiresContextFutureResult[_FirstType, Any, _EnvType]':
+        cls, inner_value: 'RequiresContext[_NewValueType, _NewEnvType]',
+    ) -> 'RequiresContextFutureResult[_NewValueType, Any, _NewEnvType]':
         """
         Creates new container from ``RequiresContext`` as a success unit.
 
@@ -1209,8 +1208,8 @@ class RequiresContextFutureResult(
 
     @classmethod
     def from_failed_context(
-        cls, inner_value: 'RequiresContext[_FirstType, _EnvType]',
-    ) -> 'RequiresContextFutureResult[Any, _FirstType, _EnvType]':
+        cls, inner_value: 'RequiresContext[_NewValueType, _NewEnvType]',
+    ) -> 'RequiresContextFutureResult[Any, _NewValueType, _NewEnvType]':
         """
         Creates new container from ``RequiresContext`` as a failure unit.
 
@@ -1269,8 +1268,8 @@ class RequiresContextFutureResult(
     def from_ioresult_context(
         cls,
         inner_value:
-            'RequiresContextIOResult[_ValueType, _ErrorType, _EnvType]',
-    ) -> 'RequiresContextFutureResult[_ValueType, _ErrorType, _EnvType]':
+            'ReaderIOResult[_NewValueType, _NewErrorType, _NewEnvType]',
+    ) -> 'ReaderFutureResult[_NewValueType, _NewErrorType, _NewEnvType]':
         """
         Creates new container from ``RequiresContextIOResult`` as a unit value.
 
@@ -1350,12 +1349,12 @@ class RequiresContextFutureResult(
             Iterable[
                 Kind3[
                     'RequiresContextFutureResult',
-                    _ValueType,
-                    _ErrorType,
-                    _EnvType,
+                    _FirstType,
+                    _NewErrorType,
+                    _NewEnvType,
                 ],
             ],
-    ) -> 'ReaderFutureResult[Sequence[_ValueType], _ErrorType, _EnvType]':
+    ) -> 'ReaderFutureResult[Sequence[_FirstType], _NewErrorType, _NewEnvType]':
         """
         Transforms an iterable of ``RequiresContextFutureResult`` containers.
 

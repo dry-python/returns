@@ -19,7 +19,6 @@
     x: RequiresContextResult[float, str, int]
     modify_env2(x, int)
   out: |
-    main:5: error: Argument 1 to "internal_modify_env2" has incompatible type "RequiresContextResult[float, str, int]"; expected "KindN[RequiresContextResult[Any, Any, Any], float, str, NoReturn]"
     main:5: error: Argument 2 to "internal_modify_env2" has incompatible type "Type[int]"; expected "Callable[[Union[str, SupportsInt, _SupportsIndex]], str]"
     main:5: error: Value of type variable "_Reader2Kind" of "internal_modify_env2" cannot be "RequiresContextResult[Any, Any, Any]"
 

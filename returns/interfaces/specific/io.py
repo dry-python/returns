@@ -1,6 +1,7 @@
 from abc import abstractmethod
 from typing import TYPE_CHECKING, Callable, NoReturn, Type, TypeVar
 
+from returns.interfaces import iterable
 from returns.interfaces.aliases import container
 from returns.primitives.hkt import KindN
 
@@ -15,7 +16,10 @@ _UpdatedType = TypeVar('_UpdatedType')
 _IOBasedType = TypeVar('_IOBasedType', bound='IOBasedN')
 
 
-class IOBasedN(container.ContainerN[_FirstType, _SecondType, _ThirdType]):
+class IOBasedN(
+    container.ContainerN[_FirstType, _SecondType, _ThirdType],
+    iterable.IterableN[_FirstType, _SecondType, _ThirdType],
+):
     """
     Represents the base interfaces for types that do fearless ``IO``.
 
@@ -36,8 +40,8 @@ class IOBasedN(container.ContainerN[_FirstType, _SecondType, _ThirdType]):
     @abstractmethod
     def from_io(
         cls: Type[_IOBasedType],  # noqa: N805
-        inner_value: 'IO[_FirstType]',
-    ) -> KindN[_IOBasedType, _FirstType, _SecondType, _ThirdType]:
+        inner_value: 'IO[_UpdatedType]',
+    ) -> KindN[_IOBasedType, _UpdatedType, _SecondType, _ThirdType]:
         """Unit method to create new containers from successful ``IO``."""
 
 

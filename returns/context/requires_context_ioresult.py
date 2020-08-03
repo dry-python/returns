@@ -12,7 +12,6 @@ from typing_extensions import final
 
 from returns._generated.iterable import iterable_kind
 from returns.context import NoDeps
-from returns.interfaces import iterable
 from returns.interfaces.specific import ioresult, reader
 from returns.io import IO, IOFailure, IOResult, IOSuccess
 from returns.primitives.container import BaseContainer
@@ -43,7 +42,6 @@ class RequiresContextIOResult(
     SupportsKind3['RequiresContextIOResult', _ValueType, _ErrorType, _EnvType],
     reader.ReaderBased3[_ValueType, _ErrorType, _EnvType],
     ioresult.IOResultLike3[_ValueType, _ErrorType, _EnvType],
-    iterable.Iterable3[_ValueType, _ErrorType, _EnvType],
 ):
     """
     The ``RequiresContextIOResult`` combinator.
@@ -638,8 +636,8 @@ class RequiresContextIOResult(
 
     @classmethod
     def from_result(
-        cls, inner_value: 'Result[_ValueType, _ErrorType]',
-    ) -> 'RequiresContextIOResult[_ValueType, _ErrorType, NoDeps]':
+        cls, inner_value: 'Result[_NewValueType, _NewErrorType]',
+    ) -> 'RequiresContextIOResult[_NewValueType, _NewErrorType, NoDeps]':
         """
         Creates new container with ``Result`` as a unit value.
 
@@ -709,8 +707,8 @@ class RequiresContextIOResult(
 
     @classmethod
     def from_ioresult(
-        cls, inner_value: IOResult[_ValueType, _ErrorType],
-    ) -> 'RequiresContextIOResult[_ValueType, _ErrorType, NoDeps]':
+        cls, inner_value: IOResult[_NewValueType, _NewErrorType],
+    ) -> 'RequiresContextIOResult[_NewValueType, _NewErrorType, NoDeps]':
         """
         Creates new container with ``IOResult`` as a unit value.
 
@@ -763,8 +761,8 @@ class RequiresContextIOResult(
 
     @classmethod
     def from_context(
-        cls, inner_value: 'RequiresContext[_FirstType, _EnvType]',
-    ) -> 'RequiresContextIOResult[_FirstType, Any, _EnvType]':
+        cls, inner_value: 'RequiresContext[_NewValueType, _NewEnvType]',
+    ) -> 'RequiresContextIOResult[_NewValueType, Any, _NewEnvType]':
         """
         Creates new container from ``RequiresContext`` as a success unit.
 
@@ -784,8 +782,8 @@ class RequiresContextIOResult(
 
     @classmethod
     def from_failed_context(
-        cls, inner_value: 'RequiresContext[_FirstType, _EnvType]',
-    ) -> 'RequiresContextIOResult[Any, _FirstType, _EnvType]':
+        cls, inner_value: 'RequiresContext[_NewValueType, _NewEnvType]',
+    ) -> 'RequiresContextIOResult[Any, _NewValueType, _NewEnvType]':
         """
         Creates new container from ``RequiresContext`` as a failure unit.
 
@@ -876,12 +874,12 @@ class RequiresContextIOResult(
             Iterable[
                 Kind3[
                     'RequiresContextIOResult',
-                    _ValueType,
-                    _ErrorType,
-                    _EnvType,
+                    _NewValueType,
+                    _NewErrorType,
+                    _NewEnvType,
                 ],
             ],
-    ) -> 'RequiresContextIOResult[Sequence[_ValueType], _ErrorType, _EnvType]':
+    ) -> 'ReaderIOResult[Sequence[_NewValueType], _NewErrorType, _NewEnvType]':
         """
         Transforms an iterable of ``RequiresContextIOResult`` containers.
 

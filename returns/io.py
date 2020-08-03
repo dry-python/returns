@@ -17,7 +17,6 @@ from typing import (
 from typing_extensions import final
 
 from returns._generated.iterable import iterable_kind
-from returns.interfaces import iterable
 from returns.interfaces.specific import io, ioresult
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import (
@@ -45,7 +44,6 @@ class IO(
     BaseContainer,
     SupportsKind1['IO', _ValueType],
     io.IOBased1[_ValueType],
-    iterable.Iterable1[_ValueType],
 ):
     """
     Explicit container for impure function results.
@@ -194,8 +192,8 @@ class IO(
     @classmethod
     def from_iterable(
         cls,
-        inner_value: Iterable[Kind1['IO', _ValueType]],
-    ) -> 'IO[Sequence[_ValueType]]':
+        inner_value: Iterable[Kind1['IO', _NewValueType]],
+    ) -> 'IO[Sequence[_NewValueType]]':
         """
         Transforms an iterable of ``IO`` containers into a single container.
 
@@ -214,8 +212,8 @@ class IO(
     @classmethod
     def from_ioresult(
         cls,
-        inner_value: 'IOResult[_NewValueType, _ErrorType]',
-    ) -> 'IO[Result[_NewValueType, _ErrorType]]':
+        inner_value: 'IOResult[_NewValueType, _NewErrorType]',
+    ) -> 'IO[Result[_NewValueType, _NewErrorType]]':
         """
         Converts ``IOResult[a, b]`` back to ``IO[Result[a, b]]``.
 
@@ -270,7 +268,6 @@ class IOResult(
     BaseContainer,
     SupportsKind2['IOResult', _ValueType, _ErrorType],
     ioresult.IOResultBased2[_ValueType, _ErrorType],
-    iterable.Iterable2[_ValueType, _ErrorType],
     metaclass=ABCMeta,
 ):
     """
@@ -779,8 +776,8 @@ class IOResult(
     @classmethod
     def from_iterable(
         cls,
-        inner_value: Iterable[Kind2['IOResult', _ValueType, _ErrorType]],
-    ) -> 'IOResult[Sequence[_ValueType], _ErrorType]':
+        inner_value: Iterable[Kind2['IOResult', _NewValueType, _NewErrorType]],
+    ) -> 'IOResult[Sequence[_NewValueType], _NewErrorType]':
         """
         Transforms an iterable of ``IOResult`` containers into a single one.
 

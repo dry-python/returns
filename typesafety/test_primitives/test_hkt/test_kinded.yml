@@ -17,6 +17,85 @@
     reveal_type(test(container))  # N: Revealed type is 'Any'
 
 
+- case: kinded_with_kind1
+  disable_cache: true
+  main: |
+    from returns.primitives.hkt import Kind1, kinded
+    from returns.io import IO
+    from typing import Any, TypeVar, Sequence
+
+    T1 = TypeVar('T1')
+    I = TypeVar('I')
+
+    @kinded
+    def test(arg: Kind1[I, T1]) -> Kind1[I, T1]:
+        ...
+
+    container: IO[str]
+    reveal_type(test(container))  # N: Revealed type is 'returns.io.IO*[builtins.str*]'
+
+
+- case: kinded_with_kind2
+  disable_cache: true
+  main: |
+    from returns.primitives.hkt import Kind2, kinded
+    from returns.io import IOResult
+    from typing import Any, TypeVar, Sequence
+
+    T1 = TypeVar('T1')
+    T2 = TypeVar('T2')
+    I = TypeVar('I')
+
+    @kinded
+    def test(arg: Kind2[I, T1, T2]) -> Kind2[I, T1, T2]:
+        ...
+
+    container: IOResult[int, str]
+    reveal_type(test(container))  # N: Revealed type is 'returns.io.IOResult*[builtins.int*, builtins.str*]'
+
+
+- case: kinded_with_kind3
+  disable_cache: true
+  main: |
+    from returns.primitives.hkt import Kind3, kinded
+    from returns.context import ReaderIOResult
+    from typing import Any, TypeVar, Sequence
+
+    T1 = TypeVar('T1')
+    T2 = TypeVar('T2')
+    T3 = TypeVar('T3')
+    I = TypeVar('I')
+
+    @kinded
+    def test(arg: Kind3[I, T1, T2, T3]) -> Kind3[I, T1, T2, T3]:
+        ...
+
+    container: ReaderIOResult[int, str, bool]
+    reveal_type(test(container))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult*[builtins.int*, builtins.str*, builtins.bool*]'
+
+
+- case: kinded_regression521
+  disable_cache: true
+  main: |
+    from returns.primitives.hkt import KindN, kinded
+    from returns.context import ReaderIOResult
+    from typing import Any, TypeVar, Sequence, Iterable
+
+    T1 = TypeVar('T1')
+    T2 = TypeVar('T2')
+    T3 = TypeVar('T3')
+    I = TypeVar('I')
+
+    @kinded
+    def test(
+        arg: Iterable[KindN[I, T1, T2, T3]],
+    ) -> KindN[I, Sequence[T1], T2, T3]:
+        ...
+
+    container: Iterable[ReaderIOResult[int, str, bool]]
+    reveal_type(test(container))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult*[typing.Sequence[builtins.int*], builtins.str*, builtins.bool*]'
+
+
 - case: kinded_with_container1
   disable_cache: true
   main: |

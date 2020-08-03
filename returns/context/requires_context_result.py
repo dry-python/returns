@@ -12,7 +12,6 @@ from typing_extensions import final
 
 from returns._generated.iterable import iterable_kind
 from returns.context import NoDeps
-from returns.interfaces import iterable
 from returns.interfaces.specific import reader, result
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind3, SupportsKind3, dekind
@@ -41,7 +40,6 @@ class RequiresContextResult(
     SupportsKind3['RequiresContextResult', _ValueType, _ErrorType, _EnvType],
     reader.ReaderBased3[_ValueType, _ErrorType, _EnvType],
     result.ResultLike3[_ValueType, _ErrorType, _EnvType],
-    iterable.Iterable3[_ValueType, _ErrorType, _EnvType],
 ):
     """
     The ``RequiresContextResult`` combinator.
@@ -463,8 +461,8 @@ class RequiresContextResult(
 
     @classmethod
     def from_result(
-        cls, inner_value: Result[_ValueType, _ErrorType],
-    ) -> 'RequiresContextResult[_ValueType, _ErrorType, NoDeps]':
+        cls, inner_value: Result[_NewValueType, _NewErrorType],
+    ) -> 'RequiresContextResult[_NewValueType, _NewErrorType, NoDeps]':
         """
         Creates new container with ``Result`` as a unit value.
 
@@ -517,8 +515,8 @@ class RequiresContextResult(
 
     @classmethod
     def from_context(
-        cls, inner_value: 'RequiresContext[_FirstType, _EnvType]',
-    ) -> 'RequiresContextResult[_FirstType, Any, _EnvType]':
+        cls, inner_value: 'RequiresContext[_NewValueType, _NewEnvType]',
+    ) -> 'RequiresContextResult[_NewValueType, Any, _NewEnvType]':
         """
         Creates new container from ``RequiresContext`` as a success unit.
 
@@ -535,8 +533,8 @@ class RequiresContextResult(
 
     @classmethod
     def from_failed_context(
-        cls, inner_value: 'RequiresContext[_FirstType, _EnvType]',
-    ) -> 'RequiresContextResult[Any, _FirstType, _EnvType]':
+        cls, inner_value: 'RequiresContext[_NewValueType, _NewEnvType]',
+    ) -> 'RequiresContextResult[Any, _NewValueType, _NewEnvType]':
         """
         Creates new container from ``RequiresContext`` as a failure unit.
 
@@ -590,12 +588,12 @@ class RequiresContextResult(
             Iterable[
                 Kind3[
                     'RequiresContextResult',
-                    _ValueType,
-                    _ErrorType,
-                    _EnvType,
+                    _NewValueType,
+                    _NewErrorType,
+                    _NewEnvType,
                 ],
             ],
-    ) -> 'RequiresContextResult[Sequence[_ValueType], _ErrorType, _EnvType]':
+    ) -> 'ReaderResult[Sequence[_NewValueType], _NewErrorType, _NewEnvType]':
         """
         Transforms an iterable of ``RequiresContextResult`` containers.
 

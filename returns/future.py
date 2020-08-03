@@ -17,7 +17,6 @@ from typing_extensions import final
 
 from returns._generated.futures import _future, _future_result
 from returns._generated.iterable import iterable_kind
-from returns.interfaces import iterable
 from returns.interfaces.specific.future import FutureBased1
 from returns.interfaces.specific.future_result import FutureResultBased2
 from returns.io import IO, IOResult
@@ -69,7 +68,6 @@ class Future(
     BaseContainer,
     SupportsKind1['Future', _ValueType],
     FutureBased1[_ValueType],
-    iterable.Iterable1[_ValueType],
 ):
     """
     Container to easily compose ``async`` functions.
@@ -363,8 +361,8 @@ class Future(
 
     @classmethod
     def from_future(
-        cls, inner_value: 'Future[_ValueType]',
-    ) -> 'Future[_ValueType]':
+        cls, inner_value: 'Future[_NewValueType]',
+    ) -> 'Future[_NewValueType]':
         """
         Creates a new ``Future`` from the existing one.
 
@@ -383,8 +381,8 @@ class Future(
 
     @classmethod
     def from_iterable(
-        cls, inner_value: Iterable[Kind1['Future', _ValueType]],
-    ) -> 'Future[Sequence[_ValueType]]':
+        cls, inner_value: Iterable[Kind1['Future', _NewValueType]],
+    ) -> 'Future[Sequence[_NewValueType]]':
         """
         Transforms an iterable of ``Future`` containers into a single container.
 
@@ -424,8 +422,8 @@ class Future(
     @classmethod
     def from_future_result(
         cls,
-        inner_value: 'FutureResult[_ValueType, _ErrorType]',
-    ) -> 'Future[Result[_ValueType, _ErrorType]]':
+        inner_value: 'FutureResult[_NewValueType, _NewErrorType]',
+    ) -> 'Future[Result[_NewValueType, _NewErrorType]]':
         """
         Creates ``Future[Result[a, b]]`` instance from ``FutureResult[a, b]``.
 
@@ -528,7 +526,6 @@ class FutureResult(
     BaseContainer,
     SupportsKind2['FutureResult', _ValueType, _ErrorType],
     FutureResultBased2[_ValueType, _ErrorType],
-    iterable.Iterable2[_ValueType, _ErrorType],
 ):
     """
     Container to easily compose ``async`` functions.
@@ -1202,8 +1199,8 @@ class FutureResult(
     @classmethod
     def from_future_result(
         cls,
-        inner_value: 'FutureResult[_ValueType, _ErrorType]',
-    ) -> 'FutureResult[_ValueType, _ErrorType]':
+        inner_value: 'FutureResult[_NewValueType, _NewErrorType]',
+    ) -> 'FutureResult[_NewValueType, _NewErrorType]':
         """
         Creates new ``FutureResult`` from existing one.
 
@@ -1378,8 +1375,10 @@ class FutureResult(
     @classmethod
     def from_iterable(
         cls,
-        inner_value: Iterable[Kind2['FutureResult', _ValueType, _ErrorType]],
-    ) -> 'FutureResult[Sequence[_ValueType], _ErrorType]':
+        inner_value: Iterable[
+            Kind2['FutureResult', _NewValueType, _NewErrorType],
+        ],
+    ) -> 'FutureResult[Sequence[_NewValueType], _NewErrorType]':
         """
         Transforms an iterable of ``FutureResult`` containers.
 

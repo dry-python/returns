@@ -41,8 +41,8 @@
         @classmethod
         def from_future(
             cls,
-            inner_value: Future[T],
-        ) -> MyClass[T]:
+            inner_value: Future[N],
+        ) -> MyClass[N]:
             ...
 
     def test1(arg: int) -> Future[float]:
@@ -102,8 +102,8 @@
         @classmethod
         def from_future(
             cls,
-            inner_value: Future[T],
-        ) -> MyClass[T, Any]:
+            inner_value: Future[N],
+        ) -> MyClass[N, Any]:
             ...
 
     def test1(arg: int) -> Future[float]:
@@ -136,7 +136,7 @@
     ):
         ...
   out: |
-    main:9: error: Final class main.MyClass has abstract attributes "apply", "bind", "bind_async", "bind_async_future", "bind_awaitable", "bind_future", "bind_io", "from_future", "from_io", "from_value", "map"
+    main:9: error: Final class main.MyClass has abstract attributes "apply", "bind", "bind_async", "bind_async_future", "bind_awaitable", "bind_future", "bind_io", "from_future", "from_io", "from_iterable", "from_value", "map"
 
 
 - case: future_inheritance_wrong
@@ -196,4 +196,7 @@
     main:31: error: Return type "MyClass[T]" of "bind_async_future" incompatible with return type "KindN[MyClass[T], _UpdatedType, NoReturn, NoReturn]" in supertype "FutureLikeN"
     main:31: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
     main:31: note: This violates the Liskov substitution principle
-    main:37: error: Signature of "from_future" incompatible with supertype "FutureLikeN"
+    main:37: error: Argument 1 of "from_future" is incompatible with supertype "FutureLikeN"; supertype defines the argument type as "Future[_UpdatedType]"
+    main:37: error: Return type "MyClass[T]" of "from_future" incompatible with return type "KindN[MyClass[T], _UpdatedType, NoReturn, NoReturn]" in supertype "FutureLikeN"
+    main:37: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:37: note: This violates the Liskov substitution principle

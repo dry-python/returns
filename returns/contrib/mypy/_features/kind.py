@@ -1,7 +1,6 @@
 from enum import Enum, unique
 from typing import List, Optional, Sequence
 
-from mypy.checker import detach_callable
 from mypy.checkmember import analyze_member_access
 from mypy.plugin import (
     AttributeContext,
@@ -14,6 +13,7 @@ from mypy.types import AnyType, CallableType, Instance
 from mypy.types import Type as MypyType
 from mypy.types import TypeOfAny, TypeVarType, get_proper_type
 
+from returns.contrib.mypy._consts import TYPED_KINDN
 from returns.contrib.mypy._typeops.fallback import asserts_fallback_to_any
 
 # TODO: probably we can validate `KindN[]` creation during `get_analtype`
@@ -53,7 +53,7 @@ def attribute_access(ctx: AttributeContext) -> MypyType:
         return ctx.default_attr_type
 
     exprchecker = ctx.api.expr_checker  # type: ignore
-    member_type = analyze_member_access(
+    return analyze_member_access(
         ctx.context.name,  # type: ignore
         accessed,
         ctx.context,
@@ -65,9 +65,6 @@ def attribute_access(ctx: AttributeContext) -> MypyType:
         chk=ctx.api,  # type: ignore
         in_literal_context=exprchecker.is_literal_context(),
     )
-    if isinstance(member_type, CallableType):
-        return detach_callable(member_type)
-    return member_type
 
 
 def dekind(ctx: FunctionContext) -> MypyType:
@@ -144,20 +141,19 @@ def _crop_kind_args(
     return kind.args[1:len(limit) + 1]
 
 
-def _process_kinded_type(kind: MypyType) -> MypyType:
+def _process_kinded_type(instance: MypyType) -> MypyType:
     """Recursively process all type arguments in a kind."""
-    kind = get_proper_type(kind)
+    kind = get_proper_type(instance)
     if not isinstance(kind, Instance) or not kind.args:
-        return kind
+        return instance
 
-    real_type = kind.args[0]
+    if kind.type.fullname != TYPED_KINDN:  # this is some other instance
+        return instance
+
+    real_type = get_proper_type(kind.args[0])
     if isinstance(real_type, TypeVarType):
         return erase_to_bound(real_type)
-    elif isinstance(real_type, AnyType):
-        return real_type
-
-    real_type = get_proper_type(real_type)
-    if isinstance(real_type, Instance):
+    elif isinstance(real_type, Instance):
         return real_type.copy_modified(args=[
             # Let's check if there are any nested `KindN[]` instance,
             # if so, it would be dekinded into a regular type following
@@ -165,4 +161,5 @@ def _process_kinded_type(kind: MypyType) -> MypyType:
             _process_kinded_type(type_arg)
             for type_arg in kind.args[1:len(real_type.args) + 1]
         ])
-    return kind
+    # This should never happen, probably can be an exception:
+    return AnyType(TypeOfAny.implementation_artifact)
