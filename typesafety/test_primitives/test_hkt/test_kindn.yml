@@ -15,7 +15,7 @@
     main:3: error: Bad number of arguments for type alias, expected: {{ expected }}, given: 5
 
 
-- case: kindn_regression522
+- case: kindn_regression522_1
   disable_cache: true
   main: |
     from returns.primitives.hkt import KindN, kinded
@@ -37,3 +37,22 @@
     ) -> KindN[I, N1, T2, T3]:
         reveal_type(arg.map(example)) # N: Revealed type is 'returns.primitives.hkt.KindN[I`-1, N1`-2, T2`-3, T3`-4]'
         return arg.map(example)
+
+
+- case: kindn_regression522_2
+  disable_cache: true
+  main: |
+    from returns.primitives.hkt import KindN, kinded
+    from returns.interfaces.specific.result import ResultLikeN
+    from typing import TypeVar
+
+    T1 = TypeVar('T1')
+    T2 = TypeVar('T2')
+    T3 = TypeVar('T3')
+    I = TypeVar('I', bound=ResultLikeN)
+
+    @kinded
+    def test(arg: KindN[I, T1, T2, T3]):
+        reveal_type(arg.from_result)
+  out: |
+    main:12: note: Revealed type is 'def [_ValueType, _ErrorType] (inner_value: returns.result.Result[_ValueType`56, _ErrorType`57]) -> returns.primitives.hkt.KindN[I`-1, _ValueType`56, _ErrorType`57, T3`-4]'
