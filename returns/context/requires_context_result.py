@@ -41,6 +41,7 @@ class RequiresContextResult(
     SupportsKind3['RequiresContextResult', _ValueType, _ErrorType, _EnvType],
     reader.ReaderBased3[_ValueType, _ErrorType, _EnvType],
     result.ResultLike3[_ValueType, _ErrorType, _EnvType],
+    iterable.IterableN[_ValueType, _ErrorType, _EnvType],
 ):
     """
     The ``RequiresContextResult`` combinator.
@@ -594,7 +595,7 @@ class RequiresContextResult(
                     _NewEnvType,
                 ],
             ],
-    ) -> 'RequiresContextResult[Sequence[_NewValueType], _NewErrorType, _NewEnvType]':
+    ) -> 'ReaderResult[Sequence[_NewValueType], _NewErrorType, _NewEnvType]':
         """
         Transforms an iterable of ``RequiresContextResult`` containers.
 

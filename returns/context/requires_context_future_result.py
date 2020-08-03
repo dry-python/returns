@@ -15,6 +15,7 @@ from returns._generated.futures import _reader_future_result
 from returns._generated.iterable import iterable_kind
 from returns.context import NoDeps
 from returns.future import Future, FutureResult
+from returns.interfaces import iterable
 from returns.interfaces.specific import future_result, reader
 from returns.io import IO, IOResult
 from returns.primitives.container import BaseContainer
@@ -25,6 +26,7 @@ if TYPE_CHECKING:
     from returns.context.requires_context import RequiresContext
     from returns.context.requires_context_ioresult import (
         RequiresContextIOResult,
+        ReaderIOResult,
     )
     from returns.context.requires_context_result import RequiresContextResult
 
@@ -50,6 +52,7 @@ class RequiresContextFutureResult(
     ],
     reader.ReaderBased3[_ValueType, _ErrorType, _EnvType],
     future_result.FutureResultLike3[_ValueType, _ErrorType, _EnvType],
+    iterable.IterableN[_ValueType, _ErrorType, _EnvType],
 ):
     """
     The ``RequiresContextFutureResult`` combinator.
@@ -1267,8 +1270,8 @@ class RequiresContextFutureResult(
     def from_ioresult_context(
         cls,
         inner_value:
-            'RequiresContextIOResult[_NewValueType, _NewErrorType, _NewEnvType]',
-    ) -> 'RequiresContextFutureResult[_NewValueType, _NewErrorType, _NewEnvType]':
+            'ReaderIOResult[_NewValueType, _NewErrorType, _NewEnvType]',
+    ) -> 'ReaderFutureResult[_NewValueType, _NewErrorType, _NewEnvType]':
         """
         Creates new container from ``RequiresContextIOResult`` as a unit value.
 
@@ -1348,12 +1351,12 @@ class RequiresContextFutureResult(
             Iterable[
                 Kind3[
                     'RequiresContextFutureResult',
-                    _NewValueType,
+                    _FirstType,
                     _NewErrorType,
                     _NewEnvType,
                 ],
             ],
-    ) -> 'ReaderFutureResult[Sequence[_NewValueType], _NewErrorType, _NewEnvType]':
+    ) -> 'ReaderFutureResult[Sequence[_FirstType], _NewErrorType, _NewEnvType]':
         """
         Transforms an iterable of ``RequiresContextFutureResult`` containers.
 

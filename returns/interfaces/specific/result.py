@@ -8,7 +8,7 @@ For impure result see
 from abc import abstractmethod
 from typing import TYPE_CHECKING, Callable, NoReturn, Type, TypeVar
 
-from returns.interfaces import altable, rescuable, unwrappable, iterable
+from returns.interfaces import altable, iterable, rescuable, unwrappable
 from returns.interfaces.aliases import container
 from returns.primitives.hkt import KindN
 

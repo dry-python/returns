@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Callable, Generic, NoReturn, TypeVar, Any
+from typing import TYPE_CHECKING, Any, Callable, Generic, NoReturn, TypeVar
 
 from typing_extensions import Protocol
 

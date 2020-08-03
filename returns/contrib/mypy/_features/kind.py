@@ -1,7 +1,6 @@
 from enum import Enum, unique
 from typing import List, Optional, Sequence
 
-from mypy.checker import detach_callable
 from mypy.checkmember import analyze_member_access
 from mypy.plugin import (
     AttributeContext,
@@ -151,14 +150,10 @@ def _process_kinded_type(instance: MypyType) -> MypyType:
     if kind.type.fullname != TYPED_KINDN:  # this is some other instance
         return instance
 
-    real_type = kind.args[0]
+    real_type = get_proper_type(kind.args[0])
     if isinstance(real_type, TypeVarType):
         return erase_to_bound(real_type)
-    elif isinstance(real_type, AnyType):
-        return real_type
-
-    real_type = get_proper_type(real_type)
-    if isinstance(real_type, Instance):
+    elif isinstance(real_type, Instance):
         return real_type.copy_modified(args=[
             # Let's check if there are any nested `KindN[]` instance,
             # if so, it would be dekinded into a regular type following
@@ -166,4 +161,5 @@ def _process_kinded_type(instance: MypyType) -> MypyType:
             _process_kinded_type(type_arg)
             for type_arg in kind.args[1:len(real_type.args) + 1]
         ])
-    return kind
+    # This should never happen, probably can be an exception:
+    return AnyType(TypeOfAny.implementation_artifact)

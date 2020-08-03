@@ -129,5 +129,5 @@ def _release(
 ]:
     """Release handler. Does its job after resource is acquired and used."""
     return lambda updated: release(initial, updated).bind(
-        lambda _: acquire.from_result(updated),
+        lambda _: acquire.from_result(updated),  # noqa: WPS430
     )
