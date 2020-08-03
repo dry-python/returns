@@ -10,6 +10,7 @@
     T = TypeVar('T')
     E = TypeVar('E')
     N = TypeVar('N')
+    I = TypeVar('I')
 
     class MyClass(
         SupportsKind2['MyClass', T, E],
@@ -33,14 +34,14 @@
 
         @classmethod
         def from_future_result(
-            cls, inner_value: FutureResult[T, E],
-        ) -> MyClass[T, E]:
+            cls, inner_value: FutureResult[N, I],
+        ) -> MyClass[N, I]:
             ...
 
         @classmethod
         def from_failed_future(
-            cls, inner_value: Future[E],
-        ) -> MyClass[Any, E]:
+            cls, inner_value: Future[I],
+        ) -> MyClass[Any, I]:
             ...
 
     def test(a: int) -> FutureResult[float, str]:
@@ -68,7 +69,7 @@
     ):
         ...
   out: |
-    main:10: error: Final class main.MyClass has abstract attributes "__await__", "alt", "apply", "awaitable", "bind", "bind_async", "bind_async_future", "bind_async_future_result", "bind_awaitable", "bind_future", "bind_future_result", "bind_io", "bind_ioresult", "bind_result", "compose_result", "from_failed_future", "from_failed_io", "from_failure", "from_future", "from_io", "from_ioresult", "from_result", "from_value", "map", "rescue", "swap"
+    main:10: error: Final class main.MyClass has abstract attributes "__await__", "alt", "apply", "awaitable", "bind", "bind_async", "bind_async_future", "bind_async_future_result", "bind_awaitable", "bind_future", "bind_future_result", "bind_io", "bind_ioresult", "bind_result", "compose_result", "from_failed_future", "from_failed_io", "from_failure", "from_future", "from_io", "from_ioresult", "from_iterable", "from_result", "from_value", "map", "rescue", "swap"
 
 
 - case: future_result_inheritance_wrong2

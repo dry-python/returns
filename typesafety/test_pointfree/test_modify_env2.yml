@@ -7,7 +7,7 @@
     x: RequiresContext[float, str]
     modify_env2(int)(x)
   out: |
-    main:5: error: Argument 1 has incompatible type "RequiresContext[float, str]"; expected "KindN[RequiresContext[Any, Any], float, int, NoReturn]"
+    main:5: error: Argument 1 has incompatible type "RequiresContext[float, str]"; expected "KindN[RequiresContext[Any, Any], float, int, Any]"
 
 
 - case: modify_env2_wrong_type
@@ -19,7 +19,7 @@
     x: RequiresContextResult[float, str, int]
     modify_env2(int)(x)
   out: |
-    main:5: error: Argument 1 has incompatible type "RequiresContextResult[float, str, int]"; expected "KindN[RequiresContextResult[Any, Any, Any], float, int, NoReturn]"
+    main:5: error: Argument 1 has incompatible type "RequiresContextResult[float, str, int]"; expected "KindN[RequiresContextResult[Any, Any, Any], float, int, Any]"
     main:5: error: Value of type variable "_Reader2Kind" of function cannot be "RequiresContextResult[Any, Any, Any]"
 
 
