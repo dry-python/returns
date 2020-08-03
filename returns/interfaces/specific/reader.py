@@ -27,8 +27,8 @@ See also:
 from abc import abstractmethod, abstractproperty
 from typing import TYPE_CHECKING, Any, Callable, Type, TypeVar
 
-from returns.interfaces.aliases import container
 from returns.interfaces import iterable
+from returns.interfaces.aliases import container
 from returns.primitives.hkt import Kind2, Kind3
 
 if TYPE_CHECKING:
