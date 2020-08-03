@@ -1,4 +1,4 @@
-- case: cond_1
+- case: cond_result
   disable_cache: true
   main: |
     from returns.methods import cond
