@@ -28,6 +28,7 @@ from abc import abstractmethod, abstractproperty
 from typing import TYPE_CHECKING, Any, Callable, Type, TypeVar
 
 from returns.interfaces.aliases import container
+from returns.interfaces import iterable
 from returns.primitives.hkt import Kind2, Kind3
 
 if TYPE_CHECKING:
@@ -46,7 +47,10 @@ _ReaderBased2Type = TypeVar('_ReaderBased2Type', bound='ReaderBased2')
 _ReaderBased3Type = TypeVar('_ReaderBased3Type', bound='ReaderBased3')
 
 
-class ReaderBased2(container.Container2[_FirstType, _SecondType]):
+class ReaderBased2(
+    container.Container2[_FirstType, _SecondType],
+    iterable.Iterable2[_FirstType, _SecondType],
+):
     """
     Reader interface for ``Kind2`` based types.
 
@@ -94,7 +98,10 @@ class ReaderBased2(container.Container2[_FirstType, _SecondType]):
         """Unit method to create new containers from successful ``Reader``."""
 
 
-class ReaderBased3(container.Container3[_FirstType, _SecondType, _ThirdType]):
+class ReaderBased3(
+    container.Container3[_FirstType, _SecondType, _ThirdType],
+    iterable.Iterable3[_FirstType, _SecondType, _ThirdType],
+):
     """
     Reader interface for ``Kind3`` based types.
 

@@ -12,7 +12,6 @@ from typing_extensions import final
 
 from returns._generated.iterable import iterable_kind
 from returns.context import NoDeps
-from returns.interfaces import iterable
 from returns.interfaces.specific import ioresult, reader
 from returns.io import IO, IOFailure, IOResult, IOSuccess
 from returns.primitives.container import BaseContainer
@@ -43,7 +42,6 @@ class RequiresContextIOResult(
     SupportsKind3['RequiresContextIOResult', _ValueType, _ErrorType, _EnvType],
     reader.ReaderBased3[_ValueType, _ErrorType, _EnvType],
     ioresult.IOResultLike3[_ValueType, _ErrorType, _EnvType],
-    iterable.IterableN[_ValueType, _ErrorType, _EnvType],
 ):
     """
     The ``RequiresContextIOResult`` combinator.

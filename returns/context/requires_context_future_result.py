@@ -15,7 +15,6 @@ from returns._generated.futures import _reader_future_result
 from returns._generated.iterable import iterable_kind
 from returns.context import NoDeps
 from returns.future import Future, FutureResult
-from returns.interfaces import iterable
 from returns.interfaces.specific import future_result, reader
 from returns.io import IO, IOResult
 from returns.primitives.container import BaseContainer
@@ -52,7 +51,6 @@ class RequiresContextFutureResult(
     ],
     reader.ReaderBased3[_ValueType, _ErrorType, _EnvType],
     future_result.FutureResultLike3[_ValueType, _ErrorType, _EnvType],
-    iterable.IterableN[_ValueType, _ErrorType, _EnvType],
 ):
     """
     The ``RequiresContextFutureResult`` combinator.

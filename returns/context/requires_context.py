@@ -13,7 +13,6 @@ from typing_extensions import final
 from returns._generated.iterable import iterable_kind
 from returns.functions import identity
 from returns.future import FutureResult
-from returns.interfaces import iterable
 from returns.interfaces.specific import reader
 from returns.io import IOResult
 from returns.primitives.container import BaseContainer
@@ -54,7 +53,6 @@ class RequiresContext(
     BaseContainer,
     SupportsKind2['RequiresContext', _ReturnType, _EnvType],
     reader.ReaderBased2[_ReturnType, _EnvType],
-    iterable.Iterable2[_ReturnType, _EnvType],
 ):
     """
     The ``RequiresContext`` container.

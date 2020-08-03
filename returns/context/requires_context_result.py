@@ -12,7 +12,6 @@ from typing_extensions import final
 
 from returns._generated.iterable import iterable_kind
 from returns.context import NoDeps
-from returns.interfaces import iterable
 from returns.interfaces.specific import reader, result
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind3, SupportsKind3, dekind
@@ -41,7 +40,6 @@ class RequiresContextResult(
     SupportsKind3['RequiresContextResult', _ValueType, _ErrorType, _EnvType],
     reader.ReaderBased3[_ValueType, _ErrorType, _EnvType],
     result.ResultLike3[_ValueType, _ErrorType, _EnvType],
-    iterable.IterableN[_ValueType, _ErrorType, _EnvType],
 ):
     """
     The ``RequiresContextResult`` combinator.
