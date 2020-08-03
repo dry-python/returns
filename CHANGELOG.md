@@ -54,6 +54,7 @@ See [0Ver](https://0ver.org/).
 - Changes `iterable` helper function to be `iterable_kind`,
   now it works with any `KindN`
 - Adds a helper to test traces to our `pytest` plugin
+- Adds `cond` method to `methods` package
 
 ### Bugfixes
 
