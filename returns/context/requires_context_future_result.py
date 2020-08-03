@@ -67,7 +67,7 @@ class RequiresContextFutureResult(
 
     This is just a handy wrapper around
     ``RequiresContext[env, FutureResult[a, b]]``
-    which represents a context-dependent impure operation that might fail.
+    which represents a context-dependent impure async operation that might fail.
 
     So, this is a thin wrapper, without any changes in logic.
     Why do we need this wrapper? That's just for better usability!
