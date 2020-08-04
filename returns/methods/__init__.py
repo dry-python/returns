@@ -19,6 +19,7 @@ from returns.methods.bind_future_result import (
 from returns.methods.bind_io import bind_io as bind_io
 from returns.methods.bind_ioresult import bind_ioresult as bind_ioresult
 from returns.methods.bind_result import bind_result as bind_result
+from returns.methods.cond import cond as cond
 from returns.methods.map import map_ as map_
 from returns.methods.modify_env import modify_env as modify_env
 from returns.methods.modify_env import modify_env2 as modify_env2

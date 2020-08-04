@@ -1,4 +1,4 @@
-from abc import ABCMeta, abstractmethod
+from abc import ABCMeta
 from functools import wraps
 from inspect import FrameInfo
 from typing import (
@@ -68,7 +68,6 @@ class Result(
         """Returns a list with stack trace when :func:`~Failure` was called."""
         return self._trace
 
-    @abstractmethod
     def swap(self) -> 'Result[_ErrorType, _ValueType]':
         """
         Swaps value and error types.
@@ -86,7 +85,6 @@ class Result(
 
         """
 
-    @abstractmethod  # noqa: WPS125
     def map(  # noqa: WPS125
         self,
         function: Callable[[_ValueType], _NewValueType],
@@ -106,7 +104,6 @@ class Result(
 
         """
 
-    @abstractmethod
     def apply(
         self,
         container: Kind2[
@@ -133,7 +130,6 @@ class Result(
 
         """
 
-    @abstractmethod
     def bind(
         self,
         function: Callable[
@@ -195,7 +191,6 @@ class Result(
         """
         return self.bind(function)  # type: ignore
 
-    @abstractmethod
     def alt(
         self,
         function: Callable[[_ErrorType], _NewErrorType],
@@ -215,7 +210,6 @@ class Result(
 
         """
 
-    @abstractmethod
     def rescue(
         self,
         function: Callable[
@@ -240,7 +234,6 @@ class Result(
 
         """
 
-    @abstractmethod
     def value_or(
         self,
         default_value: _NewValueType,
@@ -256,7 +249,6 @@ class Result(
 
         """
 
-    @abstractmethod
     def unwrap(self) -> _ValueType:
         """
         Get value or raise exception.
@@ -273,7 +265,6 @@ class Result(
 
         """
 
-    @abstractmethod
     def failure(self) -> _ErrorType:
         """
         Get failed value or raise exception.
