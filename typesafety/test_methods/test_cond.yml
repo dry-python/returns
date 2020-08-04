@@ -28,7 +28,7 @@
     from returns.methods import cond
     from returns.context import ReaderIOResult
 
-    reveal_type(cond(ReaderIOResult, True, 1.0, False))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult*[builtins.float*, builtins.bool*, <nothing>]'
+    reveal_type(cond(ReaderIOResult, True, 1.0, False))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult*[builtins.float*, builtins.bool*, Any]'
 
 - case: cond_reader_future_result
   disable_cache: true
@@ -36,7 +36,7 @@
     from returns.methods import cond
     from returns.context import ReaderFutureResult
 
-    reveal_type(cond(ReaderFutureResult, True, 1, 1.0))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult*[builtins.int*, builtins.float*, <nothing>]'
+    reveal_type(cond(ReaderFutureResult, True, 1, 1.0))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult*[builtins.int*, builtins.float*, Any]'
 
 - case: cond_custom_type
   disable_cache: true
