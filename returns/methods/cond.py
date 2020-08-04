@@ -1,11 +1,10 @@
 from typing import Type, TypeVar
 
 from returns.interfaces.specific.result import ResultLikeN
-from returns.primitives.hkt import KindN, kinded
+from returns.primitives.hkt import Kind2, kinded
 
 _ValueType = TypeVar('_ValueType')
 _ErrorType = TypeVar('_ErrorType')
-_ThirdType = TypeVar('_ThirdType')
 
 _ResultKind = TypeVar('_ResultKind', bound=ResultLikeN)
 
@@ -15,7 +14,7 @@ def internal_cond(
     is_success: bool,
     success_value: _ValueType,
     error_value: _ErrorType,
-) -> KindN[_ResultKind, _ValueType, _ErrorType, _ThirdType]:
+) -> Kind2[_ResultKind, _ValueType, _ErrorType]:
     """
     Help us to reduce the boilerplate when choosing paths with ``ResultLikeN``.
 
