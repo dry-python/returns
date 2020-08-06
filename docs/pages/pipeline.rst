@@ -248,7 +248,7 @@ is_successful
 
 :func:`is_successful <returns.functions.is_successful>` is used to
 tell whether or not your result is a success.
-We treat only treat types that does not throw as a successful ones,
+We treat only three types that do not throw as successful ones,
 basically: :func:`Success <returns.result.Success>`,
 :func:`IOSuccess <returns.io.IOSuccess>`,
 and :func:`Some <returns.maybe.Some>`
