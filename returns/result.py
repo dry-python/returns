@@ -47,8 +47,8 @@ class Result(
     Use :func:`~Success` and :func:`~Failure` to construct the needed values.
 
     See also:
-        https://bit.ly/361qQhi
-        https://hackernoon.com/the-throw-keyword-was-a-mistake-l9e532di
+        - https://bit.ly/361qQhi
+        - https://hackernoon.com/the-throw-keyword-was-a-mistake-l9e532di
 
     """
 
