@@ -256,13 +256,13 @@ What is the difference between ResultLikeN and ResultBasedN?
 ``ResultLikeN`` is just an intention of having a result
 (e.g. :class:`FutureResult <returns.future.FutureResult>`),
 it's not the result yet. While ``ResultBasedN`` is a concret result
-(e.g. :class:`Result <returns.result.Result>`),
+(e.g. :class:`IOResult <returns.io.IOResult>`),
 it's has the desired result value.
 
 Because of this difference between them is why we can't unwrap a ``ResultLikeN``
 container, it does not have the real result yet.
 
-See the example below using ``FutureResult`` to get a ``Result``:
+See the example below using ``FutureResult`` to get a ``IOResult``:
 
 .. code:: python
 
@@ -270,7 +270,7 @@ See the example below using ``FutureResult`` to get a ``Result``:
   >>> from returns.future import FutureResult
   >>> from returns.interfaces.specific.ioresult import IOResultBasedN
   >>> from returns.interfaces.specific.result import ResultLikeN
-  >>> from returns.io import IOSuccess
+  >>> from returns.io import IOSuccess, IOResult
   >>> from returns.result import Success, Result
 
   >>> async def coro(arg: int) -> Result[int, str]:
@@ -281,7 +281,7 @@ See the example below using ``FutureResult`` to get a ``Result``:
   >>> result_like: FutureResult[int, str] = FutureResult(coro(1))
   >>> assert isinstance(result_like, ResultLikeN)
   >>> # `anyio.run(...)` will await our coroutine and give the real result to us
-  >>> result: Result[int, str] = anyio.run(result_like.awaitable)
+  >>> result: IOResult[int, str] = anyio.run(result_like.awaitable)
   >>> assert isinstance(result, IOResultBasedN)
 
 .. note::
