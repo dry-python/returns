@@ -253,6 +253,42 @@ Why some interfaces do not have type alias for 1 type argument?
 What is the difference between ResultLikeN and ResultBasedN?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+``ResultLikeN`` is just an intention of having a result
+(e.g. :class:`FutureResult <returns.future.FutureResult>`),
+it's not the result yet. While ``ResultBasedN`` is a concret result
+(e.g. :class:`IOResult <returns.io.IOResult>`),
+it's has the desired result value.
+
+Because of this difference between them is why we can't unwrap a ``ResultLikeN``
+container, it does not have the real result yet.
+
+See the example below using ``FutureResult`` to get a ``IOResult``:
+
+.. code:: python
+
+  >>> import anyio
+  >>> from returns.future import FutureResult
+  >>> from returns.interfaces.specific.ioresult import IOResultBasedN
+  >>> from returns.interfaces.specific.result import ResultLikeN
+  >>> from returns.io import IOSuccess, IOResult
+  >>> from returns.result import Success, Result
+
+  >>> async def coro(arg: int) -> Result[int, str]:
+  ...     return Success(arg + 1)
+
+  >>> # `result_like` does not have the result we want (Result[int, str])
+  >>> # it's just the intention of having one, we have to await it to get the real result
+  >>> result_like: FutureResult[int, str] = FutureResult(coro(1))
+  >>> assert isinstance(result_like, ResultLikeN)
+  >>> # `anyio.run(...)` will await our coroutine and give the real result to us
+  >>> result: IOResult[int, str] = anyio.run(result_like.awaitable)
+  >>> assert isinstance(result, IOResultBasedN)
+
+.. note::
+
+  The same difference applies to all ``*ResultLikeN`` vs ``*ResultBasedN``
+  (e.g. ``IOResultLikeN`` and ``IOResultBasedN``)
+
 API Reference
 -------------
 
