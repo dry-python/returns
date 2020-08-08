@@ -19,7 +19,7 @@ from typing_extensions import final
 
 from returns._generated.iterable import iterable_kind
 from returns.interfaces.specific import result
-from returns.primitives.container import BaseContainer
+from returns.primitives.container import BaseContainer, container_equality
 from returns.primitives.exceptions import UnwrapFailedError
 from returns.primitives.hkt import Kind2, SupportsKind2
 from returns.primitives.iterables import BaseIterableStrategyN, FailFast
@@ -63,6 +63,9 @@ class Result(
     success_type: ClassVar[Type['_Success']]
     #: Failure type that is used to represent the failed computation.
     failure_type: ClassVar[Type['_Failure']]
+
+    #: Typesafe equality comparision with other `Result` objects.
+    equals = container_equality
 
     @property
     def trace(self) -> Optional[List[FrameInfo]]:

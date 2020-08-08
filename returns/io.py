@@ -18,7 +18,7 @@ from typing_extensions import final
 
 from returns._generated.iterable import iterable_kind
 from returns.interfaces.specific import io, ioresult
-from returns.primitives.container import BaseContainer
+from returns.primitives.container import BaseContainer, container_equality
 from returns.primitives.hkt import (
     Kind1,
     Kind2,
@@ -334,6 +334,9 @@ class IOResult(
     success_type: ClassVar[Type['_IOSuccess']]
     #: Failure type that is used to represent the failed computation.
     failure_type: ClassVar[Type['_IOFailure']]
+
+    #: Typesafe equality comparision with other `IOResult` objects.
+    equals = container_equality
 
     def __init__(self, inner_value: Result[_ValueType, _ErrorType]) -> None:
         """
