@@ -245,6 +245,8 @@ API Reference
 
 .. autofunction:: returns.pointfree.bind_awaitable
 
+.. autofunction:: returns.pointfree.cond
+
 .. autofunction:: returns.pointfree.rescue
 
 .. autofunction:: returns.pointfree.apply
