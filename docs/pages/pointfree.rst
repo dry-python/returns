@@ -196,6 +196,33 @@ Or with function as the first parameter:
   ...     Some(3).apply,
   ... ) == Some(5)
 
+cond
+----
+
+Sometimes we need to create ``ResultLikeN`` containers based on a boolean
+expression, ``cond`` can help us.
+
+See the example below:
+
+.. code:: python
+
+  >>> from returns.pipeline import flow
+  >>> from returns.pointfree import cond
+  >>> from returns.result import Failure, Success
+
+  >>> def returns_boolean(arg: int) -> bool:
+  ...     return bool(arg)
+
+  >>> assert flow(
+  ...     returns_boolean(1),
+  ...     cond(Result, 'success', 'failure')
+  ... ) == Success('success')
+
+  >>> assert flow(
+  ...     returns_boolean(0),
+  ...     cond(Result, 'success', 'failure')
+  ... ) == Failure('failure')
+
 
 Further reading
 ---------------
