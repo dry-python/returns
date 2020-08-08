@@ -55,6 +55,7 @@ See [0Ver](https://0ver.org/).
   now it works with any `KindN`
 - Adds a helper to test traces to our `pytest` plugin
 - Adds `cond` method to `methods` package
+- Adds `cond` function to `pointfree` package
 
 ### Bugfixes
 
