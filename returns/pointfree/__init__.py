@@ -19,6 +19,7 @@ from returns.pointfree.bind_future_result import (
 from returns.pointfree.bind_io import bind_io as bind_io
 from returns.pointfree.bind_ioresult import bind_ioresult as bind_ioresult
 from returns.pointfree.bind_result import bind_result as bind_result
+from returns.pointfree.cond import cond as cond
 from returns.pointfree.map import map_ as map_
 from returns.pointfree.modify_env import modify_env as modify_env
 from returns.pointfree.modify_env import modify_env2 as modify_env2
