@@ -1,18 +1,18 @@
 - case: swap_wrong_type
   disable_cache: true
   main: |
-    from returns.converters import swap
+    from returns.methods import swap
     from returns.maybe import Maybe
 
     r: Maybe[str]
 
-    swap(r)  # E: Value of type variable "_ResultLikeKind" of "swap" cannot be "Maybe[Any]"
+    swap(r)  # E: Value of type variable "_ResultLikeKind" of "internal_swap" cannot be "Maybe[Any]"
 
 
 - case: swap_result1
   disable_cache: true
   main: |
-    from returns.converters import swap
+    from returns.methods import swap
     from returns.result import Result
 
     r: Result[int, str]
@@ -23,7 +23,7 @@
 - case: swap_result2
   disable_cache: true
   main: |
-    from returns.converters import swap
+    from returns.methods import swap
     from returns.result import Result
 
     r: Result[int, str]
@@ -34,7 +34,7 @@
 - case: swap_ioresult
   disable_cache: true
   main: |
-    from returns.converters import swap
+    from returns.methods import swap
     from returns.io import IOResult
 
     r: IOResult[int, str]
@@ -45,7 +45,7 @@
 - case: swap_future_result
   disable_cache: true
   main: |
-    from returns.converters import swap
+    from returns.methods import swap
     from returns.future import FutureResult
 
     r: FutureResult[int, str]
@@ -56,7 +56,7 @@
 - case: swap_reader_result
   disable_cache: true
   main: |
-    from returns.converters import swap
+    from returns.methods import swap
     from returns.context import ReaderResult
 
     r: ReaderResult[int, str, bool]
@@ -67,7 +67,7 @@
 - case: swap_reader_ioresult
   disable_cache: true
   main: |
-    from returns.converters import swap
+    from returns.methods import swap
     from returns.context import ReaderIOResult
 
     r: ReaderIOResult[int, str, bool]
@@ -78,7 +78,7 @@
 - case: swap_reader_future_result
   disable_cache: true
   main: |
-    from returns.converters import swap
+    from returns.methods import swap
     from returns.context import ReaderFutureResult
 
     r: ReaderFutureResult[int, str, bool]
@@ -89,7 +89,7 @@
 - case: swap_custom_type
   disable_cache: true
   main: |
-    from returns.converters import swap
+    from returns.methods import swap
     from typing import TypeVar
     from returns.interfaces.specific.result import ResultLike2
     from returns.primitives.hkt import SupportsKind2

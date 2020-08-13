@@ -174,3 +174,9 @@ modify_env methods
 .. autofunction:: returns.methods.modify_env.modify_env3
 .. autofunction:: returns.methods.modify_env.internal_modify_env3
 .. autofunction:: returns.methods.modify_env.modify_env
+
+swap
+~~~~
+
+.. autofunction:: returns.methods.swap.internal_swap
+.. autofunction:: returns.methods.swap.swap
