@@ -2,7 +2,6 @@ from typing import TypeVar
 
 from returns.functions import identity
 from returns.interfaces.bindable import BindableN
-from returns.interfaces.specific.result import ResultLikeN
 from returns.maybe import Maybe
 from returns.pipeline import is_successful
 from returns.primitives.hkt import KindN, kinded
@@ -13,7 +12,6 @@ _SecondType = TypeVar('_SecondType')
 _ThirdType = TypeVar('_ThirdType')
 
 _BindableKind = TypeVar('_BindableKind', bound=BindableN)
-_ResultLikeKind = TypeVar('_ResultLikeKind', bound=ResultLikeN)
 
 
 @kinded
