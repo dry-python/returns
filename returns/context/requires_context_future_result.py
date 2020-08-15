@@ -1347,15 +1347,14 @@ class RequiresContextFutureResult(
     @classmethod
     def from_iterable(
         cls,
-        inner_value:
-            Iterable[
-                Kind3[
-                    'RequiresContextFutureResult',
-                    _FirstType,
-                    _NewErrorType,
-                    _NewEnvType,
-                ],
+        inner_value: Iterable[
+            Kind3[
+                'RequiresContextFutureResult',
+                _FirstType,
+                _NewErrorType,
+                _NewEnvType,
             ],
+        ],
         strategy: Type[
             BaseIterableStrategyN[_FirstType, _NewErrorType, _NewEnvType],
         ] = FailFast,

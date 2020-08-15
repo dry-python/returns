@@ -8,7 +8,7 @@ and
 """
 
 from abc import abstractmethod
-from typing import Callable, Generic, NoReturn, Type, TypeVar
+from typing import NoReturn, Type, TypeVar
 
 from returns.interfaces.aliases import container
 from returns.primitives.hkt import KindN

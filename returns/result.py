@@ -22,7 +22,7 @@ from returns.interfaces.specific import result
 from returns.iterables import BaseIterableStrategyN, FailFast
 from returns.primitives.container import BaseContainer
 from returns.primitives.exceptions import UnwrapFailedError
-from returns.primitives.hkt import Kind2, SupportsKind2, dekind
+from returns.primitives.hkt import Kind2, SupportsKind2
 
 # Definitions:
 _ValueType = TypeVar('_ValueType', covariant=True)
@@ -353,7 +353,7 @@ class Result(
 
         .. code:: python
 
-          >>> from returns.result import Result, Success, Failure
+          >>> from returns.result import Result, Success
 
           >>> assert Result.from_iterable([
           ...    Success(1),

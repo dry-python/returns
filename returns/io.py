@@ -800,7 +800,7 @@ class IOResult(
 
         .. code:: python
 
-          >>> from returns.io import IOResult, IOSuccess, IOFailure
+          >>> from returns.io import IOResult, IOSuccess
 
           >>> assert IOResult.from_iterable([
           ...    IOSuccess(1),

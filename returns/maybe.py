@@ -21,7 +21,7 @@ from returns.interfaces.aliases.container import Container1
 from returns.iterables import BaseIterableStrategyN, FailFast
 from returns.primitives.container import BaseContainer
 from returns.primitives.exceptions import UnwrapFailedError
-from returns.primitives.hkt import Kind1, SupportsKind1, dekind
+from returns.primitives.hkt import Kind1, SupportsKind1
 
 # Definitions:
 _ValueType = TypeVar('_ValueType', covariant=True)
@@ -230,7 +230,7 @@ class Maybe(
 
         .. code:: python
 
-          >>> from returns.maybe import Maybe, Some, Nothing
+          >>> from returns.maybe import Maybe, Some
 
           >>> assert Maybe.from_iterable([
           ...    Some(1),

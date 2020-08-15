@@ -1,16 +1,26 @@
 from abc import abstractmethod
 from functools import reduce
-from typing import Callable, Generic, Iterable, Optional, Sequence, TypeVar
+from typing import (
+    TYPE_CHECKING,
+    Callable,
+    Generic,
+    Iterable,
+    Optional,
+    Sequence,
+    TypeVar,
+)
 
-from returns.interfaces.aliases.container import ContainerN
 from returns.interfaces.rescuable import RescuableN
 from returns.primitives.hkt import KindN
+
+if TYPE_CHECKING:
+    from returns.interfaces.aliases.container import ContainerN  # noqa: F401
 
 _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')
 _ThirdType = TypeVar('_ThirdType')
 
-_ContainerKind = TypeVar('_ContainerKind', bound=ContainerN)
+_ContainerKind = TypeVar('_ContainerKind', bound='ContainerN')
 
 
 class BaseIterableStrategyN(Generic[_FirstType, _SecondType, _ThirdType]):
@@ -50,7 +60,7 @@ class BaseIterableStrategyN(Generic[_FirstType, _SecondType, _ThirdType]):
         inner_acc: Sequence[_FirstType],
     ) -> Callable[[_FirstType], Sequence[_FirstType]]:
         """Helper to combine two sequences together."""
-        # We actually use `Tuple` (not `Sequence`) inside:
+        # We actually use `Tuple` (not just `Sequence`) inside:
         # TODO: we can probably need to fix this type
         return lambda current: inner_acc + (current,)  # type: ignore
 

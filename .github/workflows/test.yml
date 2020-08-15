@@ -39,11 +39,12 @@ jobs:
 
         poetry run flake8 .
         poetry run mypy returns ./tests/**/*.py
-        poetry run pytest . docs/pages
+        poetry run pytest returns docs/pages tests
         poetry run doc8 -q docs
         poetry run poetry check
         poetry run pip check
         poetry run safety check --full-report
+        poetry run pytest typesafety
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1

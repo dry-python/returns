@@ -872,15 +872,14 @@ class RequiresContextIOResult(
     @classmethod
     def from_iterable(
         cls,
-        inner_value:
-            Iterable[
-                Kind3[
-                    'RequiresContextIOResult',
-                    _NewValueType,
-                    _NewErrorType,
-                    _NewEnvType,
-                ],
+        inner_value: Iterable[
+            Kind3[
+                'RequiresContextIOResult',
+                _NewValueType,
+                _NewErrorType,
+                _NewEnvType,
             ],
+        ],
         strategy: Type[
             BaseIterableStrategyN[_NewValueType, _NewErrorType, _NewEnvType],
         ] = FailFast,
@@ -893,7 +892,7 @@ class RequiresContextIOResult(
         .. code:: python
 
           >>> from returns.context import RequiresContextIOResult
-          >>> from returns.io import IOSuccess, IOFailure
+          >>> from returns.io import IOSuccess
 
           >>> assert RequiresContextIOResult.from_iterable([
           ...    RequiresContextIOResult.from_value(1),
