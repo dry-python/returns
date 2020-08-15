@@ -18,10 +18,10 @@ from typing_extensions import final
 from returns._generated.iterable import iterable_kind
 from returns.interfaces import unwrappable
 from returns.interfaces.aliases.container import Container1
+from returns.iterables import BaseIterableStrategyN, FailFast
 from returns.primitives.container import BaseContainer
 from returns.primitives.exceptions import UnwrapFailedError
 from returns.primitives.hkt import Kind1, SupportsKind1, dekind
-from returns.iterables import BaseIterableStrategyN, FailFast
 
 # Definitions:
 _ValueType = TypeVar('_ValueType', covariant=True)
@@ -238,7 +238,7 @@ class Maybe(
           ... ]) == Some((1, 2))
 
         """
-        return dekind(iterable_kind(cls, inner_value, strategy))
+        return iterable_kind(cls, inner_value, strategy)
 
 
 @final

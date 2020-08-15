@@ -3,7 +3,7 @@ from typing import Iterable, Sequence, Type, TypeVar
 
 from returns.interfaces.aliases.container import ContainerN
 from returns.iterables import BaseIterableStrategyN
-from returns.primitives.hkt import KindN
+from returns.primitives.hkt import KindN, kinded
 
 _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')
@@ -12,7 +12,7 @@ _ThirdType = TypeVar('_ThirdType')
 _ContainerKind = TypeVar('_ContainerKind', bound=ContainerN)
 
 
-
+@kinded
 def iterable_kind(
     cls,
     sequence: Iterable[

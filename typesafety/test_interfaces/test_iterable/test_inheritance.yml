@@ -14,7 +14,7 @@
         def from_iterable(
             cls, inner_value: Iterable[Kind1['MyClass', N]],
         ) -> MyClass[Sequence[N]]:
-            return dekind(iterable_kind(cls, inner_value))
+            return iterable_kind(cls, inner_value, strategy)
 
     x: Iterable[MyClass[str]]
     reveal_type(MyClass.from_iterable(x))  # N: Revealed type is 'main.MyClass[typing.Sequence[builtins.str*]]'
@@ -38,7 +38,7 @@
         def from_iterable(
             cls, inner_value: Iterable[Kind2['MyClass', N, I]],
         ) -> MyClass[Sequence[N], I]:
-            return dekind(iterable_kind(cls, inner_value))
+            return iterable_kind(cls, inner_value, strategy)
 
     x: Iterable[MyClass[str, int]]
     reveal_type(MyClass.from_iterable(x))  # N: Revealed type is 'main.MyClass[typing.Sequence[builtins.str*], builtins.int*]'
@@ -64,7 +64,7 @@
         def from_iterable(
             cls, inner_value: Iterable[Kind3['MyClass', N, I, U]],
         ) -> MyClass[Sequence[N], I, U]:
-            return dekind(iterable_kind(cls, inner_value))
+            return iterable_kind(cls, inner_value, strategy)
 
     x: Iterable[MyClass[str, int, bool]]
     reveal_type(MyClass.from_iterable(x))  # N: Revealed type is 'main.MyClass[typing.Sequence[builtins.str*], builtins.int*, builtins.bool*]'

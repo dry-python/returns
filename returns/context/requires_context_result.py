@@ -5,6 +5,7 @@ from typing import (
     ClassVar,
     Iterable,
     Sequence,
+    Type,
     TypeVar,
 )
 
@@ -13,6 +14,7 @@ from typing_extensions import final
 from returns._generated.iterable import iterable_kind
 from returns.context import NoDeps
 from returns.interfaces.specific import reader, result
+from returns.iterables import BaseIterableStrategyN, FailFast
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind3, SupportsKind3, dekind
 from returns.result import Failure, Result, Success
@@ -593,6 +595,9 @@ class RequiresContextResult(
                     _NewEnvType,
                 ],
             ],
+        strategy: Type[
+            BaseIterableStrategyN[_NewValueType, _NewErrorType, _NewEnvType],
+        ] = FailFast,
     ) -> 'ReaderResult[Sequence[_NewValueType], _NewErrorType, _NewEnvType]':
         """
         Transforms an iterable of ``RequiresContextResult`` containers.
@@ -609,18 +614,8 @@ class RequiresContextResult(
           ...    RequiresContextResult.from_value(2),
           ... ])(...) == Success((1, 2))
 
-          >>> assert RequiresContextResult.from_iterable([
-          ...    RequiresContextResult.from_value(1),
-          ...    RequiresContextResult.from_failure('a'),
-          ... ])(...) == Failure('a')
-
-          >>> assert RequiresContextResult.from_iterable([
-          ...    RequiresContextResult.from_failure('a'),
-          ...    RequiresContextResult.from_value(1),
-          ... ])(...) == Failure('a')
-
         """
-        return dekind(iterable_kind(cls, inner_value))
+        return iterable_kind(cls, inner_value, strategy)
 
 
 # Aliases:

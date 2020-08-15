@@ -18,6 +18,7 @@ from typing_extensions import final
 
 from returns._generated.iterable import iterable_kind
 from returns.interfaces.specific import io, ioresult
+from returns.iterables import BaseIterableStrategyN, FailFast
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import (
     Kind1,
@@ -193,6 +194,9 @@ class IO(
     def from_iterable(
         cls,
         inner_value: Iterable[Kind1['IO', _NewValueType]],
+        strategy: Type[
+            BaseIterableStrategyN[_NewValueType, Any, Any],
+        ] = FailFast,
     ) -> 'IO[Sequence[_NewValueType]]':
         """
         Transforms an iterable of ``IO`` containers into a single container.
@@ -207,7 +211,7 @@ class IO(
           ... ]) == IO((1, 2))
 
         """
-        return dekind(iterable_kind(cls, inner_value))
+        return iterable_kind(cls, inner_value, strategy)
 
     @classmethod
     def from_ioresult(
@@ -341,6 +345,20 @@ class IOResult(
         Or :meth:`~IOResult.from_result` factory.
         """
         super().__init__(inner_value)
+
+    def __str__(self) -> str:
+        """
+        Custom ``str`` representation for better readability.
+
+        .. code:: python
+
+          >>> from returns.io import IOSuccess, IOFailure
+          >>> assert str(IOSuccess(1)) == '<IOResult: <Success: 1>>'
+          >>> str(IOFailure(ValueError('wrong!')))
+          '<IOResult: <Failure: wrong!>>'
+
+        """
+        return '<IOResult: {0}>'.format(str(self._inner_value))
 
     @property
     def trace(self) -> Optional[List[FrameInfo]]:
@@ -773,6 +791,9 @@ class IOResult(
     def from_iterable(
         cls,
         inner_value: Iterable[Kind2['IOResult', _NewValueType, _NewErrorType]],
+        strategy: Type[
+            BaseIterableStrategyN[_NewValueType, _NewErrorType, Any],
+        ] = FailFast,
     ) -> 'IOResult[Sequence[_NewValueType], _NewErrorType]':
         """
         Transforms an iterable of ``IOResult`` containers into a single one.
@@ -786,32 +807,8 @@ class IOResult(
           ...    IOSuccess(2),
           ... ]) == IOSuccess((1, 2))
 
-          >>> assert IOResult.from_iterable([
-          ...     IOSuccess(1),
-          ...     IOFailure('a'),
-          ... ]) == IOFailure('a')
-
-          >>> assert IOResult.from_iterable([
-          ...     IOFailure('a'),
-          ...     IOSuccess(1),
-          ... ]) == IOFailure('a')
-
         """
-        return dekind(iterable_kind(cls, inner_value))
-
-    def __str__(self) -> str:
-        """
-        Custom ``str`` representation for better readability.
-
-        .. code:: python
-
-          >>> from returns.io import IOSuccess, IOFailure
-          >>> assert str(IOSuccess(1)) == '<IOResult: <Success: 1>>'
-          >>> str(IOFailure(ValueError('wrong!')))
-          '<IOResult: <Failure: wrong!>>'
-
-        """
-        return '<IOResult: {0}>'.format(str(self._inner_value))
+        return iterable_kind(cls, inner_value, strategy)
 
 
 @final

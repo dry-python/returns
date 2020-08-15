@@ -361,7 +361,7 @@ class Result(
           ... ]) == Success((1, 2))
 
         """
-        return dekind(iterable_kind(cls, inner_value, strategy))
+        return iterable_kind(cls, inner_value, strategy)
 
 
 @final

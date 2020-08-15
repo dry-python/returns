@@ -20,6 +20,7 @@ from returns._generated.iterable import iterable_kind
 from returns.interfaces.specific.future import FutureBased1
 from returns.interfaces.specific.future_result import FutureResultBased2
 from returns.io import IO, IOResult
+from returns.iterables import BaseIterableStrategyN, FailFast
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import (
     Kind1,
@@ -29,7 +30,6 @@ from returns.primitives.hkt import (
     dekind,
 )
 from returns.result import Failure, Result, Success
-from returns.iterables import FailFast, BaseIterableStrategyN
 
 # Definitions:
 _ValueType = TypeVar('_ValueType', covariant=True)
@@ -403,7 +403,7 @@ class Future(
           ... ]).awaitable) == IO((1, 2))
 
         """
-        return dekind(iterable_kind(cls, inner_value, strategy))
+        return iterable_kind(cls, inner_value, strategy)
 
     @classmethod
     def from_io(cls, inner_value: IO[_NewValueType]) -> 'Future[_NewValueType]':
@@ -1406,7 +1406,7 @@ class FutureResult(
 
 
         """
-        return dekind(iterable_kind(cls, inner_value, strategy))
+        return iterable_kind(cls, inner_value, strategy)
 
 
 def FutureSuccess(  # noqa: N802
