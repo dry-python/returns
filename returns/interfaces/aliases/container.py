@@ -1,6 +1,6 @@
 from typing import NoReturn, TypeVar
 
-from returns.interfaces import bindable
+from returns.interfaces import bindable, iterable
 from returns.interfaces.aliases.applicative_mappable import ApplicativeMappableN
 
 _FirstType = TypeVar('_FirstType')
@@ -11,6 +11,7 @@ _ThirdType = TypeVar('_ThirdType')
 class ContainerN(
     ApplicativeMappableN[_FirstType, _SecondType, _ThirdType],
     bindable.BindableN[_FirstType, _SecondType, _ThirdType],
+    iterable.IterableN[_FirstType, _SecondType, _ThirdType],
 ):
     """
     Handy alias for types with ``.bind``, ``.map``, and ``.apply`` methods.

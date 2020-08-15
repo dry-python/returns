@@ -2,6 +2,7 @@ from abc import abstractmethod
 from typing import Generic, Iterable, NoReturn, Sequence, Type, TypeVar
 
 from returns.primitives.hkt import KindN
+from returns.iterables import BaseIterableStrategyN
 
 _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')
@@ -27,6 +28,9 @@ class IterableN(Generic[_FirstType, _SecondType, _ThirdType]):
         inner_value: Iterable[
             KindN[_IterableType, _NewFirstType, _NewSecondType, _NewThirdType],
         ],
+        strategy: Type[BaseIterableStrategyN[
+            _NewFirstType, _NewSecondType, _NewThirdType,
+        ]],
     ) -> KindN[
         _IterableType, Sequence[_NewFirstType], _NewSecondType, _NewThirdType,
     ]:

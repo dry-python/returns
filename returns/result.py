@@ -19,6 +19,7 @@ from typing_extensions import final
 
 from returns._generated.iterable import iterable_kind
 from returns.interfaces.specific import result
+from returns.iterables import BaseIterableStrategyN, FailFast
 from returns.primitives.container import BaseContainer
 from returns.primitives.exceptions import UnwrapFailedError
 from returns.primitives.hkt import Kind2, SupportsKind2, dekind
@@ -343,6 +344,9 @@ class Result(
     def from_iterable(
         cls,
         inner_value: Iterable[Kind2['Result', _NewValueType, _NewErrorType]],
+        strategy: Type[
+            BaseIterableStrategyN[_NewValueType, _NewErrorType, Any],
+        ] = FailFast,
     ) -> 'Result[Sequence[_NewValueType], _NewErrorType]':
         """
         Transforms an iterable of ``Result`` containers into a single container.
@@ -356,18 +360,8 @@ class Result(
           ...    Success(2),
           ... ]) == Success((1, 2))
 
-          >>> assert Result.from_iterable([
-          ...     Success(1),
-          ...     Failure('a'),
-          ... ]) == Failure('a')
-
-          >>> assert Result.from_iterable([
-          ...     Failure('a'),
-          ...     Success(1),
-          ... ]) == Failure('a')
-
         """
-        return dekind(iterable_kind(cls, inner_value))
+        return dekind(iterable_kind(cls, inner_value, strategy))
 
 
 @final

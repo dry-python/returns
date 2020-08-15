@@ -1,7 +1,6 @@
 from abc import abstractmethod
 from typing import TYPE_CHECKING, Callable, NoReturn, Type, TypeVar
 
-from returns.interfaces import iterable
 from returns.interfaces.aliases import container
 from returns.primitives.hkt import KindN
 
@@ -16,10 +15,7 @@ _UpdatedType = TypeVar('_UpdatedType')
 _IOBasedType = TypeVar('_IOBasedType', bound='IOBasedN')
 
 
-class IOBasedN(
-    container.ContainerN[_FirstType, _SecondType, _ThirdType],
-    iterable.IterableN[_FirstType, _SecondType, _ThirdType],
-):
+class IOBasedN(container.ContainerN[_FirstType, _SecondType, _ThirdType]):
     """
     Represents the base interfaces for types that do fearless ``IO``.
 

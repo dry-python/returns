@@ -29,6 +29,7 @@ from returns.primitives.hkt import (
     dekind,
 )
 from returns.result import Failure, Result, Success
+from returns.iterables import FailFast, BaseIterableStrategyN
 
 # Definitions:
 _ValueType = TypeVar('_ValueType', covariant=True)
@@ -381,7 +382,11 @@ class Future(
 
     @classmethod
     def from_iterable(
-        cls, inner_value: Iterable[Kind1['Future', _NewValueType]],
+        cls,
+        inner_value: Iterable[Kind1['Future', _NewValueType]],
+        strategy: Type[
+            BaseIterableStrategyN[_NewValueType, Any, Any],
+        ] = FailFast,
     ) -> 'Future[Sequence[_NewValueType]]':
         """
         Transforms an iterable of ``Future`` containers into a single container.
@@ -398,7 +403,7 @@ class Future(
           ... ]).awaitable) == IO((1, 2))
 
         """
-        return dekind(iterable_kind(cls, inner_value))
+        return dekind(iterable_kind(cls, inner_value, strategy))
 
     @classmethod
     def from_io(cls, inner_value: IO[_NewValueType]) -> 'Future[_NewValueType]':
@@ -1378,6 +1383,9 @@ class FutureResult(
         inner_value: Iterable[
             Kind2['FutureResult', _NewValueType, _NewErrorType],
         ],
+        strategy: Type[
+            BaseIterableStrategyN[_NewValueType, _NewErrorType, Any],
+        ] = FailFast,
     ) -> 'FutureResult[Sequence[_NewValueType], _NewErrorType]':
         """
         Transforms an iterable of ``FutureResult`` containers.
@@ -1388,7 +1396,7 @@ class FutureResult(
 
           >>> import anyio
           >>> from returns.future import FutureResult
-          >>> from returns.io import IOSuccess, IOFailure
+          >>> from returns.io import IOSuccess
 
           >>> all_success = FutureResult.from_iterable([
           ...    FutureResult.from_value(1),
@@ -1396,20 +1404,9 @@ class FutureResult(
           ... ])
           >>> assert anyio.run(all_success.awaitable) == IOSuccess((1, 2))
 
-          >>> mixed = FutureResult.from_iterable([
-          ...     FutureResult.from_value(1),
-          ...     FutureResult.from_failure('a'),
-          ... ])
-          >>> assert anyio.run(mixed.awaitable) == IOFailure('a')
-
-          >>> mixed = FutureResult.from_iterable([
-          ...     FutureResult.from_failure('a'),
-          ...     FutureResult.from_value(1),
-          ... ])
-          >>> assert anyio.run(mixed.awaitable) == IOFailure('a')
 
         """
-        return dekind(iterable_kind(cls, inner_value))
+        return dekind(iterable_kind(cls, inner_value, strategy))
 
 
 def FutureSuccess(  # noqa: N802

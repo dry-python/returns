@@ -16,11 +16,12 @@ from typing import (
 from typing_extensions import final
 
 from returns._generated.iterable import iterable_kind
-from returns.interfaces import iterable, unwrappable
+from returns.interfaces import unwrappable
 from returns.interfaces.aliases.container import Container1
 from returns.primitives.container import BaseContainer
 from returns.primitives.exceptions import UnwrapFailedError
 from returns.primitives.hkt import Kind1, SupportsKind1, dekind
+from returns.iterables import BaseIterableStrategyN, FailFast
 
 # Definitions:
 _ValueType = TypeVar('_ValueType', covariant=True)
@@ -36,7 +37,6 @@ class Maybe(
     SupportsKind1['Maybe', _ValueType],
     Container1[_ValueType],
     unwrappable.Unwrappable[_ValueType, None],
-    iterable.Iterable1[_ValueType],
     metaclass=ABCMeta,
 ):
     """
@@ -221,6 +221,9 @@ class Maybe(
     def from_iterable(
         cls,
         inner_value: Iterable[Kind1['Maybe', _NewValueType]],
+        strategy: Type[
+            BaseIterableStrategyN[_NewValueType, Any, Any],
+        ] = FailFast,
     ) -> 'Maybe[Sequence[_NewValueType]]':
         """
         Transforms an iterable of ``Maybe`` containers into a single container.
@@ -234,18 +237,8 @@ class Maybe(
           ...    Some(2),
           ... ]) == Some((1, 2))
 
-          >>> assert Maybe.from_iterable([
-          ...     Some(1),
-          ...     Nothing,
-          ... ]) == Nothing
-
-          >>> assert Maybe.from_iterable([
-          ...     Nothing,
-          ...     Some(1),
-          ... ]) == Nothing
-
         """
-        return dekind(iterable_kind(cls, inner_value))
+        return dekind(iterable_kind(cls, inner_value, strategy))
 
 
 @final
