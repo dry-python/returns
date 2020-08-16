@@ -24,6 +24,19 @@
     rescue(test)(x)  # E: Argument 1 has incompatible type "RequiresContextIOResult[str, float, str]"; expected "KindN[RequiresContextIOResult[Any, Any, Any], float, float, int]"
 
 
+- case: rescue_maybe
+  disable_cache: true
+  main: |
+    from returns.pointfree import rescue
+    from returns.maybe import Maybe
+
+    def test(arg=None) -> Maybe[int]:
+        ...
+
+    x: Maybe[int]
+    reveal_type(rescue(test)(x))  # N: Revealed type is 'returns.maybe.Maybe*[builtins.int*]'
+
+
 - case: rescue_result
   disable_cache: true
   main: |

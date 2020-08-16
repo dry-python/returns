@@ -35,15 +35,11 @@ def test_collect_all_result(iterable, sequence):
     ([], Some(())),
     ([Some(1)], Some((1,))),
     ([Some(1), Some(2)], Some((1, 2))),
-    ([Nothing, Some(1), Some(2)], Nothing),
-    ([Nothing], Nothing),
+    ([Nothing, Some(1), Some(2)], Some((1, 2))),
+    ([Nothing], Some(())),
 ])
 def test_collect_all_maybe(iterable, sequence):
-    """
-    Iterable for ``Maybe`` and ``CollectAll``.
-
-    Maybe does not have ``rescue`` method.
-    """
+    """Iterable for ``Maybe`` and ``CollectAll``."""
     assert Maybe.from_iterable(iterable, CollectAll) == sequence
 
 

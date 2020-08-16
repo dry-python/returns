@@ -24,6 +24,19 @@
     rescue(x, test)  # E: Argument 2 to "internal_rescue" has incompatible type "Callable[[float], RequiresContextIOResult[float, str, int]]"; expected "Callable[[float], KindN[RequiresContextIOResult[Any, Any, Any], str, str, str]]"
 
 
+- case: rescue_maybe
+  disable_cache: true
+  main: |
+    from returns.methods import rescue
+    from returns.maybe import Maybe
+
+    def test(arg=None) -> Maybe[int]:
+        ...
+
+    x: Maybe[int]
+    reveal_type(rescue(x, test))  # N: Revealed type is 'returns.maybe.Maybe[builtins.int]'
+
+
 - case: rescue_result
   disable_cache: true
   main: |
