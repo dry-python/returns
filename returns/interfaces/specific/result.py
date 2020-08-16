@@ -9,7 +9,7 @@ from abc import abstractmethod
 from typing import TYPE_CHECKING, Callable, NoReturn, Type, TypeVar
 
 from returns.interfaces import altable, rescuable, unwrappable
-from returns.interfaces.aliases import failable
+from returns.interfaces.aliases import container
 from returns.primitives.hkt import KindN
 
 if TYPE_CHECKING:
@@ -30,7 +30,7 @@ _ResultLikeType = TypeVar('_ResultLikeType', bound='ResultLikeN')
 
 
 class ResultLikeN(
-    failable.FailableN[_FirstType, _SecondType, _ThirdType],
+    container.ContainerN[_FirstType, _SecondType, _ThirdType],
     altable.AltableN[_FirstType, _SecondType, _ThirdType],
     rescuable.RescuableN[_FirstType, _SecondType, _ThirdType],
 ):
@@ -59,6 +59,14 @@ class ResultLikeN(
         cls: Type[_ResultLikeType],  # noqa: N805
         inner_value: 'Result[_ValueType, _ErrorType]',
     ) -> KindN[_ResultLikeType, _ValueType, _ErrorType, _ThirdType]:
+        """Unit method to create new containers from any raw value."""
+
+    @classmethod
+    @abstractmethod
+    def from_failure(
+        cls: Type[_FailableType],  # noqa: N805
+        inner_value: _ErrorType,
+    ) -> KindN[_FailableType, _FirstType, _ErrorType, _ThirdType]:
         """Unit method to create new containers from any raw value."""
 
 
