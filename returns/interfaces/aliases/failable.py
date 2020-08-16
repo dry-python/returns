@@ -25,7 +25,7 @@ _FailableType = TypeVar('_FailableType', bound='FailableN')
 class FailableN(container.ContainerN[_FirstType, _SecondType, _ThirdType]):
     """Base types for types that looks can fail."""
 
-    @classmethod
+    @classmethod  # TODO: delete
     @abstractmethod
     def from_failure(
         cls: Type[_FailableType],  # noqa: N805

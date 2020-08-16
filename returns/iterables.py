@@ -1,14 +1,6 @@
 from abc import abstractmethod
 from functools import reduce
-from typing import (
-    TYPE_CHECKING,
-    Callable,
-    Generic,
-    Iterable,
-    Optional,
-    Sequence,
-    TypeVar,
-)
+from typing import TYPE_CHECKING, Callable, Generic, Iterable, Sequence, TypeVar
 
 from returns.interfaces.rescuable import RescuableN
 from returns.primitives.hkt import KindN
@@ -21,6 +13,9 @@ _SecondType = TypeVar('_SecondType')
 _ThirdType = TypeVar('_ThirdType')
 
 _ContainerKind = TypeVar('_ContainerKind', bound='ContainerN')
+
+#: We use this value to filter out temporary values.
+_sentinel = object()
 
 
 class BaseIterableStrategyN(Generic[_FirstType, _SecondType, _ThirdType]):
@@ -57,12 +52,14 @@ class BaseIterableStrategyN(Generic[_FirstType, _SecondType, _ThirdType]):
 
     def _concat(
         self,
-        inner_acc: Sequence[_FirstType],
+        inner: Sequence[_FirstType],
     ) -> Callable[[_FirstType], Sequence[_FirstType]]:
         """Helper to combine two sequences together."""
         # We actually use `Tuple` (not just `Sequence`) inside:
         # TODO: we can probably need to fix this type
-        return lambda current: inner_acc + (current,)  # type: ignore
+        return lambda cur: (
+            inner + (cur,) if cur is not _sentinel else inner  # type: ignore
+        )
 
     @abstractmethod
     def _do_reduce(
@@ -153,43 +150,9 @@ class CollectAll(BaseIterableStrategyN[_FirstType, _SecondType, _ThirdType]):
       >>> assert Result.from_iterable(
       ...    has_failure, CollectAll,
       ... ) == Success((1, 3))
-      >>> assert Result.from_iterable(all_failures, CollectAll) == Failure('b')
-
-    One more interesting thing about this class is that
-    it is using side-effects together with functional composition
-    to make the logic way easier. Side-effects are locked into this class,
-    there's no way they can harm other pieces of code.
+      >>> assert Result.from_iterable(all_failures, CollectAll) == Success(())
 
     """
-
-    __slots__ = ('_at_least_one', '_last_failure')
-
-    def __init__(
-        self,
-        iterable: Iterable[
-            KindN[_ContainerKind, _FirstType, _SecondType, _ThirdType],
-        ],
-        initial_value: KindN[
-            _ContainerKind, Sequence[_FirstType], _SecondType, _ThirdType,
-        ],
-    ) -> None:
-        """We also track that we have at least one value and a last failure."""
-        super().__init__(iterable, initial_value)
-        self._at_least_one: bool = False
-        self._last_failure: Optional[KindN[
-            _ContainerKind, Sequence[_FirstType], _SecondType, _ThirdType,
-        ]] = None
-
-    def __call__(self) -> KindN[
-        _ContainerKind, Sequence[_FirstType], _SecondType, _ThirdType,
-    ]:
-        """We need to override the base method to add post-processing."""
-        parent_value: KindN[
-            _ContainerKind, Sequence[_FirstType], _SecondType, _ThirdType,
-        ] = super().__call__()
-        if self._last_failure and not self._at_least_one:
-            return self._last_failure
-        return parent_value
 
     def _do_reduce(
         self,
@@ -200,27 +163,24 @@ class CollectAll(BaseIterableStrategyN[_FirstType, _SecondType, _ThirdType]):
             _ContainerKind, _FirstType, _SecondType, _ThirdType,
         ],
     ) -> KindN[_ContainerKind, Sequence[_FirstType], _SecondType, _ThirdType]:
-        new_acc = acc.bind(
-            lambda inner_acc: current.map(self._concat(inner_acc)),
-        ).map(self._mark_success)
-        if isinstance(new_acc, RescuableN):
-            # This is a hack we use for ignroing failues, if any:
-            return new_acc.rescue(  # type: ignore
-                lambda _: self._save_last_failure(new_acc),  # type: ignore
-            ).rescue(lambda _: acc)  # type: ignore
-        return new_acc
+        return acc.bind(self._try_concat(acc, current))
 
-    def _save_last_failure(
+    def _try_concat(
         self,
-        failed: KindN[
+        acc: KindN[
             _ContainerKind, Sequence[_FirstType], _SecondType, _ThirdType,
         ],
-    ) -> KindN[_ContainerKind, Sequence[_FirstType], _SecondType, _ThirdType]:
-        self._last_failure = failed  # this is actually a side effect
-        return failed
-
-    def _mark_success(
-        self, inner_value: Sequence[_FirstType],
-    ) -> Sequence[_FirstType]:
-        self._at_least_one = True  # this is actually a side effect
-        return inner_value
+        current: KindN[
+            _ContainerKind, _FirstType, _SecondType, _ThirdType,
+        ],
+    ):
+        def factory(inner: Sequence[_FirstType]) -> KindN[
+            _ContainerKind, Sequence[_FirstType], _SecondType, _ThirdType,
+        ]:
+            local = current
+            if isinstance(current, RescuableN):
+                local = current.rescue(  # type: ignore
+                    lambda _: current.from_value(_sentinel),  # type: ignore
+                )
+            return local.map(self._concat(inner))
+        return factory
