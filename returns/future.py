@@ -384,9 +384,7 @@ class Future(
     def from_iterable(
         cls,
         inner_value: Iterable[Kind1['Future', _NewValueType]],
-        strategy: Type[
-            BaseIterableStrategyN[_NewValueType, Any, Any],
-        ] = FailFast,
+        strategy: Type[BaseIterableStrategyN] = FailFast,
     ) -> 'Future[Sequence[_NewValueType]]':
         """
         Transforms an iterable of ``Future`` containers into a single container.
@@ -1383,9 +1381,7 @@ class FutureResult(
         inner_value: Iterable[
             Kind2['FutureResult', _NewValueType, _NewErrorType],
         ],
-        strategy: Type[
-            BaseIterableStrategyN[_NewValueType, _NewErrorType, Any],
-        ] = FailFast,
+        strategy: Type[BaseIterableStrategyN] = FailFast,
     ) -> 'FutureResult[Sequence[_NewValueType], _NewErrorType]':
         """
         Transforms an iterable of ``FutureResult`` containers.

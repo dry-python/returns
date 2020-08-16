@@ -344,9 +344,7 @@ class Result(
     def from_iterable(
         cls,
         inner_value: Iterable[Kind2['Result', _NewValueType, _NewErrorType]],
-        strategy: Type[
-            BaseIterableStrategyN[_NewValueType, _NewErrorType, Any],
-        ] = FailFast,
+        strategy: Type[BaseIterableStrategyN] = FailFast,
     ) -> 'Result[Sequence[_NewValueType], _NewErrorType]':
         """
         Transforms an iterable of ``Result`` containers into a single container.

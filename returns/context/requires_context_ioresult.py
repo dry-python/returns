@@ -880,10 +880,8 @@ class RequiresContextIOResult(
                 _NewEnvType,
             ],
         ],
-        strategy: Type[
-            BaseIterableStrategyN[_NewValueType, _NewErrorType, _NewEnvType],
-        ] = FailFast,
-    ) -> 'ReaderIOResult[Sequence[_NewValueType], _NewErrorType, _NewEnvType]':
+        strategy: Type[BaseIterableStrategyN] = FailFast,
+    ) -> 'RequiresContextIOResult[Sequence[_NewValueType], _NewErrorType, _NewEnvType]':
         """
         Transforms an iterable of ``RequiresContextIOResult`` containers.
 

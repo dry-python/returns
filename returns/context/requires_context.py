@@ -365,9 +365,7 @@ class RequiresContext(
         inner_value: Iterable[
             Kind2['RequiresContext', _NewReturnType, _NewEnvType],
         ],
-        strategy: Type[
-            BaseIterableStrategyN[_NewReturnType, _NewEnvType, Any],
-        ] = FailFast,
+        strategy: Type[BaseIterableStrategyN] = FailFast,
     ) -> 'RequiresContext[Sequence[_NewReturnType], _NewEnvType]':
         """
         Transforms an iterable of ``RequiresContext`` containers.

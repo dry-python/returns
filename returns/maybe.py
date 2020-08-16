@@ -246,9 +246,7 @@ class Maybe(
     def from_iterable(
         cls,
         inner_value: Iterable[Kind1['Maybe', _NewValueType]],
-        strategy: Type[
-            BaseIterableStrategyN[_NewValueType, Any, Any],
-        ] = FailFast,
+        strategy: Type[BaseIterableStrategyN] = FailFast,
     ) -> 'Maybe[Sequence[_NewValueType]]':
         """
         Transforms an iterable of ``Maybe`` containers into a single container.

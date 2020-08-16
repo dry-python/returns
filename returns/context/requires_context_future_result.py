@@ -1355,9 +1355,7 @@ class RequiresContextFutureResult(
                 _NewEnvType,
             ],
         ],
-        strategy: Type[
-            BaseIterableStrategyN[_FirstType, _NewErrorType, _NewEnvType],
-        ] = FailFast,
+        strategy: Type[BaseIterableStrategyN] = FailFast,
     ) -> 'ReaderFutureResult[Sequence[_FirstType], _NewErrorType, _NewEnvType]':
         """
         Transforms an iterable of ``RequiresContextFutureResult`` containers.

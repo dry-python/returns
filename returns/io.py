@@ -194,9 +194,7 @@ class IO(
     def from_iterable(
         cls,
         inner_value: Iterable[Kind1['IO', _NewValueType]],
-        strategy: Type[
-            BaseIterableStrategyN[_NewValueType, Any, Any],
-        ] = FailFast,
+        strategy: Type[BaseIterableStrategyN] = FailFast,
     ) -> 'IO[Sequence[_NewValueType]]':
         """
         Transforms an iterable of ``IO`` containers into a single container.
@@ -791,9 +789,7 @@ class IOResult(
     def from_iterable(
         cls,
         inner_value: Iterable[Kind2['IOResult', _NewValueType, _NewErrorType]],
-        strategy: Type[
-            BaseIterableStrategyN[_NewValueType, _NewErrorType, Any],
-        ] = FailFast,
+        strategy: Type[BaseIterableStrategyN] = FailFast,
     ) -> 'IOResult[Sequence[_NewValueType], _NewErrorType]':
         """
         Transforms an iterable of ``IOResult`` containers into a single one.
