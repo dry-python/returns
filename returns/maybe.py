@@ -16,7 +16,7 @@ from typing import (
 from typing_extensions import final
 
 from returns._generated.iterable import iterable_kind
-from returns.interfaces import rescuable, unwrappable
+from returns.interfaces import unwrappable
 from returns.interfaces.aliases.container import Container1
 from returns.iterables import BaseIterableStrategyN, FailFast
 from returns.primitives.container import BaseContainer
@@ -36,7 +36,6 @@ class Maybe(
     BaseContainer,
     SupportsKind1['Maybe', _ValueType],
     Container1[_ValueType],
-    rescuable.Rescuable2[_ValueType, None],
     unwrappable.Unwrappable[_ValueType, None],
     metaclass=ABCMeta,
 ):
@@ -115,25 +114,6 @@ class Maybe(
 
           >>> assert Some('a').bind(bindable) == Some('ab')
           >>> assert Nothing.bind(bindable) == Nothing
-
-        """
-
-    def rescue(
-        self,
-        function: Callable[[None], Kind1['Maybe', _ValueType]],
-    ) -> 'Maybe[_ValueType]':
-        """
-        Composes failed container with a function that returns a container.
-
-        .. code:: python
-
-          >>> from returns.maybe import Maybe, Some, Nothing
-
-          >>> def rescuable(arg) -> Maybe[str]:
-          ...      return Some('b')
-
-          >>> assert Some('a').rescue(rescuable) == Some('a')
-          >>> assert Nothing.rescue(rescuable) == Some('b')
 
         """
 
@@ -296,10 +276,6 @@ class _Nothing(Maybe[Any]):
         """Does nothing for ``Nothing``."""
         return self
 
-    def rescue(self, function):
-        """Composes this container with a function returning container."""
-        return function(None)
-
     def value_or(self, default_value):
         """Returns default value."""
         return default_value
@@ -349,10 +325,6 @@ class _Some(Maybe[_ValueType]):
     def bind(self, function):
         """Binds current container to a function that returns container."""
         return function(self._inner_value)
-
-    def rescue(self, function):
-        """Does nothing for ``Some``."""
-        return self
 
     def value_or(self, default_value):
         """Returns inner value for successful container."""

@@ -57,7 +57,7 @@
     reveal_type(FutureFailure(1))  # N: Revealed type is 'returns.future.FutureResult[Any, builtins.int*]'
 
 
-- case: future_result_from_iterable
+- case: future_result_from_iterable1
   disable_cache: true
   main: |
     from returns.future import FutureResult
@@ -66,6 +66,18 @@
     x: Iterable[FutureResult[int, str]]
 
     reveal_type(FutureResult.from_iterable(x))  # N: Revealed type is 'returns.future.FutureResult[typing.Sequence[builtins.int*], builtins.str*]'
+
+
+- case: future_result_from_iterable2
+  disable_cache: true
+  main: |
+    from returns.future import FutureResult
+    from returns.iterables import CollectAll
+    from typing import Iterable
+
+    x: Iterable[FutureResult[int, str]]
+
+    reveal_type(FutureResult.from_iterable(x, CollectAll))  # N: Revealed type is 'returns.future.FutureResult[typing.Sequence[builtins.int*], builtins.str*]'
 
 
 - case: future_result_from_result

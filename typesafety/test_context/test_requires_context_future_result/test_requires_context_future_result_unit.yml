@@ -14,7 +14,7 @@
     reveal_type(RequiresContextFutureResult.from_failure(1))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[Any, builtins.int*, Any]'
 
 
-- case: requires_context_future_result_from_iterable
+- case: requires_context_future_result_from_iterable1
   disable_cache: true
   main: |
     from returns.context import RequiresContextFutureResult
@@ -23,6 +23,18 @@
     x: Iterable[RequiresContextFutureResult[int, float, str]]
 
     reveal_type(RequiresContextFutureResult.from_iterable(x))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[typing.Sequence[builtins.int*], builtins.float*, builtins.str*]'
+
+
+- case: requires_context_future_result_from_iterable2
+  disable_cache: true
+  main: |
+    from returns.context import RequiresContextFutureResult
+    from returns.iterables import CollectAll
+    from typing import Iterable
+
+    x: Iterable[RequiresContextFutureResult[int, float, str]]
+
+    reveal_type(RequiresContextFutureResult.from_iterable(x, CollectAll))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[typing.Sequence[builtins.int*], builtins.float*, builtins.str*]'
 
 
 - case: requires_context_future_result_result

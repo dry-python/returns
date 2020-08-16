@@ -64,9 +64,9 @@ class ResultLikeN(
     @classmethod
     @abstractmethod
     def from_failure(
-        cls: Type[_FailableType],  # noqa: N805
+        cls: Type[_ResultLikeType],  # noqa: N805
         inner_value: _ErrorType,
-    ) -> KindN[_FailableType, _FirstType, _ErrorType, _ThirdType]:
+    ) -> KindN[_ResultLikeType, _FirstType, _ErrorType, _ThirdType]:
         """Unit method to create new containers from any raw value."""
 
 
