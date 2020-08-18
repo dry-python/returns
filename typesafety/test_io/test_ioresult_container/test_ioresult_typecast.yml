@@ -74,7 +74,7 @@
   disable_cache: true
   main: |
     from returns.io import IOResult
-    from returns.iterables import CollectAll
+    from returns.primitives.iterables import CollectAll
     from typing import Iterable
 
     x: Iterable[IOResult[int, str]]

@@ -72,7 +72,7 @@
   disable_cache: true
   main: |
     from returns.future import FutureResult
-    from returns.iterables import CollectAll
+    from returns.primitives.iterables import CollectAll
     from typing import Iterable
 
     x: Iterable[FutureResult[int, str]]

@@ -18,7 +18,6 @@ from typing_extensions import final
 
 from returns._generated.iterable import iterable_kind
 from returns.interfaces.specific import io, ioresult
-from returns.iterables import BaseIterableStrategyN, FailFast
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import (
     Kind1,
@@ -27,6 +26,7 @@ from returns.primitives.hkt import (
     SupportsKind2,
     dekind,
 )
+from returns.primitives.iterables import BaseIterableStrategyN, FailFast
 from returns.result import Failure, Result, Success
 
 _ValueType = TypeVar('_ValueType', covariant=True)

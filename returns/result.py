@@ -19,10 +19,10 @@ from typing_extensions import final
 
 from returns._generated.iterable import iterable_kind
 from returns.interfaces.specific import result
-from returns.iterables import BaseIterableStrategyN, FailFast
 from returns.primitives.container import BaseContainer
 from returns.primitives.exceptions import UnwrapFailedError
 from returns.primitives.hkt import Kind2, SupportsKind2
+from returns.primitives.iterables import BaseIterableStrategyN, FailFast
 
 # Definitions:
 _ValueType = TypeVar('_ValueType', covariant=True)

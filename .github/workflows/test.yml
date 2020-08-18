@@ -44,7 +44,7 @@ jobs:
         poetry run poetry check
         poetry run pip check
         poetry run safety check --full-report
-        poetry run pytest typesafety
+        poetry run pytest typesafety --cov-fail-under=0
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1

@@ -100,7 +100,7 @@
   disable_cache: true
   main: |
     from returns.result import Result
-    from returns.iterables import CollectAll
+    from returns.primitives.iterables import CollectAll
     from typing import Iterable
 
     x: Iterable[Result[int, str]]

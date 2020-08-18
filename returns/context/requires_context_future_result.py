@@ -18,9 +18,9 @@ from returns.context import NoDeps
 from returns.future import Future, FutureResult
 from returns.interfaces.specific import future_result, reader
 from returns.io import IO, IOResult
-from returns.iterables import BaseIterableStrategyN, FailFast
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind3, SupportsKind3, dekind
+from returns.primitives.iterables import BaseIterableStrategyN, FailFast
 from returns.result import Result
 
 if TYPE_CHECKING:

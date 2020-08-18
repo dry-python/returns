@@ -29,7 +29,7 @@
   disable_cache: true
   main: |
     from returns.context import RequiresContextResult
-    from returns.iterables import CollectAll
+    from returns.primitives.iterables import CollectAll
     from typing import Iterable
 
     x: Iterable[RequiresContextResult[int, float, str]]

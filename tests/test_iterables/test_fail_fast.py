@@ -11,8 +11,8 @@ from returns.context import (
 )
 from returns.future import Future, FutureFailure, FutureResult, FutureSuccess
 from returns.io import IO, IOFailure, IOResult, IOSuccess
-from returns.iterables import FailFast
 from returns.maybe import Maybe, Nothing, Some
+from returns.primitives.iterables import FailFast
 from returns.result import Failure, Result, Success
 
 

@@ -15,9 +15,9 @@ from returns._generated.iterable import iterable_kind
 from returns.context import NoDeps
 from returns.interfaces.specific import ioresult, reader
 from returns.io import IO, IOFailure, IOResult, IOSuccess
-from returns.iterables import BaseIterableStrategyN, FailFast
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind3, SupportsKind3, dekind
+from returns.primitives.iterables import BaseIterableStrategyN, FailFast
 from returns.result import Result
 
 if TYPE_CHECKING:

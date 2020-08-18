@@ -85,7 +85,7 @@ class FailFast(BaseIterableStrategyN[_FirstType, _SecondType, _ThirdType]):
     .. code:: python
 
       >>> from returns.result import Result, Success, Failure
-      >>> from returns.iterables import FailFast
+      >>> from returns.primitives.iterables import FailFast
 
       >>> empty = []
       >>> all_success = [Success(1), Success(2), Success(3)]
@@ -136,7 +136,7 @@ class CollectAll(BaseIterableStrategyN[_FirstType, _SecondType, _ThirdType]):
     .. code:: python
 
       >>> from returns.result import Result, Success, Failure
-      >>> from returns.iterables import CollectAll
+      >>> from returns.primitives.iterables import CollectAll
 
       >>> empty = []
       >>> all_success = [Success(1), Success(2), Success(3)]

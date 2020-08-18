@@ -32,7 +32,7 @@
   disable_cache: true
   main: |
     from returns.maybe import Maybe
-    from returns.iterables import CollectAll
+    from returns.primitives.iterables import CollectAll
     from typing import Iterable
 
     x: Iterable[Maybe[int]]

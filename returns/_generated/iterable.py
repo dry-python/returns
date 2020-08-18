@@ -2,8 +2,8 @@
 from typing import Iterable, Sequence, Type, TypeVar
 
 from returns.interfaces.aliases.container import ContainerN
-from returns.iterables import BaseIterableStrategyN
 from returns.primitives.hkt import KindN, kinded
+from returns.primitives.iterables import BaseIterableStrategyN
 
 _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')

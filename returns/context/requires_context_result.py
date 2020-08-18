@@ -14,9 +14,9 @@ from typing_extensions import final
 from returns._generated.iterable import iterable_kind
 from returns.context import NoDeps
 from returns.interfaces.specific import reader, result
-from returns.iterables import BaseIterableStrategyN, FailFast
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind3, SupportsKind3, dekind
+from returns.primitives.iterables import BaseIterableStrategyN, FailFast
 from returns.result import Failure, Result, Success
 
 if TYPE_CHECKING:
