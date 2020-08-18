@@ -6,7 +6,7 @@
 
     @asyncify
     def test(
-         first: int, second: Optional[str] = None, *, kw: bool = True,
+        first: int, second: Optional[str] = None, *, kw: bool = True,
     ) -> int:
         return 1
 

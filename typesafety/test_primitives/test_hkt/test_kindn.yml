@@ -56,4 +56,4 @@
     def test(arg: KindN[I, T1, T2, T3]):
         reveal_type(arg.from_result)
   out: |
-    main:12: note: Revealed type is 'def [_ValueType, _ErrorType] (inner_value: returns.result.Result[_ValueType`56, _ErrorType`57]) -> returns.primitives.hkt.KindN[I`-1, _ValueType`56, _ErrorType`57, T3`-4]'
+    main:12: note: Revealed type is 'def [_ValueType, _ErrorType] (inner_value: returns.result.Result[_ValueType`91, _ErrorType`92]) -> returns.primitives.hkt.KindN[I`-1, _ValueType`91, _ErrorType`92, T3`-4]'
