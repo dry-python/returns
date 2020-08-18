@@ -1,10 +1,11 @@
 - case: iterable_inheritance_correct1
   disable_cache: true
   main: |
-    from typing import TypeVar, Iterable, Sequence
+    from typing import Any, Type, TypeVar, Iterable, Sequence
     from returns.interfaces.iterable import Iterable1
     from returns.primitives.hkt import Kind1, SupportsKind1, dekind
     from returns._generated.iterable import iterable_kind
+    from returns.primitives.iterables import BaseIterableStrategyN, FailFast
 
     V = TypeVar('V')
     N = TypeVar('N')
@@ -12,9 +13,11 @@
     class MyClass(SupportsKind1['MyClass', V], Iterable1[V]):
         @classmethod
         def from_iterable(
-            cls, inner_value: Iterable[Kind1['MyClass', N]],
+            cls,
+            inner_value: Iterable[Kind1['MyClass', N]],
+            strategy: Type[BaseIterableStrategyN[N, Any, Any]] = FailFast,
         ) -> MyClass[Sequence[N]]:
-            return dekind(iterable_kind(cls, inner_value))
+            ...
 
     x: Iterable[MyClass[str]]
     reveal_type(MyClass.from_iterable(x))  # N: Revealed type is 'main.MyClass[typing.Sequence[builtins.str*]]'
@@ -23,10 +26,11 @@
 - case: iterable_inheritance_correct2
   disable_cache: true
   main: |
-    from typing import TypeVar, Iterable, Sequence
+    from typing import Any, Type, TypeVar, Iterable, Sequence
     from returns.interfaces.iterable import Iterable2
     from returns.primitives.hkt import SupportsKind2, Kind2, dekind
     from returns._generated.iterable import iterable_kind
+    from returns.primitives.iterables import BaseIterableStrategyN, FailFast
 
     V = TypeVar('V')
     E = TypeVar('E')
@@ -36,21 +40,24 @@
     class MyClass(SupportsKind2['MyClass', V, E], Iterable2[V, E]):
         @classmethod
         def from_iterable(
-            cls, inner_value: Iterable[Kind2['MyClass', N, I]],
+            cls,
+            inner_value: Iterable[Kind2['MyClass', N, I]],
+            strategy: Type[BaseIterableStrategyN],
         ) -> MyClass[Sequence[N], I]:
-            return dekind(iterable_kind(cls, inner_value))
+            ...
 
     x: Iterable[MyClass[str, int]]
-    reveal_type(MyClass.from_iterable(x))  # N: Revealed type is 'main.MyClass[typing.Sequence[builtins.str*], builtins.int*]'
+    reveal_type(MyClass.from_iterable(x, FailFast))  # N: Revealed type is 'main.MyClass[typing.Sequence[builtins.str*], builtins.int*]'
 
 
 - case: iterable_inheritance_correct3
   disable_cache: true
   main: |
-    from typing import TypeVar, Iterable, Sequence
+    from typing import Any, Type, TypeVar, Iterable, Sequence
     from returns.interfaces.iterable import Iterable3
     from returns.primitives.hkt import SupportsKind3, Kind3, dekind
     from returns._generated.iterable import iterable_kind
+    from returns.primitives.iterables import BaseIterableStrategyN, CollectAll
 
     V = TypeVar('V')
     E = TypeVar('E')
@@ -62,9 +69,11 @@
     class MyClass(SupportsKind3['MyClass', V, E, T], Iterable3[V, E, T]):
         @classmethod
         def from_iterable(
-            cls, inner_value: Iterable[Kind3['MyClass', N, I, U]],
+            cls,
+            inner_value: Iterable[Kind3['MyClass', N, I, U]],
+            strategy: Type[BaseIterableStrategyN[N, I, U]] = CollectAll,
         ) -> MyClass[Sequence[N], I, U]:
-            return dekind(iterable_kind(cls, inner_value))
+            ...
 
     x: Iterable[MyClass[str, int, bool]]
     reveal_type(MyClass.from_iterable(x))  # N: Revealed type is 'main.MyClass[typing.Sequence[builtins.str*], builtins.int*, builtins.bool*]'
@@ -100,7 +109,8 @@
     class MyClass(SupportsKind1['MyClass', V], Iterable1[V]):
         @classmethod
         def from_iterable(
-            cls, inner_value: Iterable[Kind1['MyClass', N]],
+            cls,
+            inner_value: Iterable[Kind1['MyClass', N]],
         ) -> MyClass[N]:
             ...
   out: |
@@ -110,9 +120,10 @@
 - case: iterable_inheritance_wrong2
   disable_cache: true
   main: |
-    from typing import TypeVar, Iterable, Sequence
+    from typing import Any, Type, TypeVar, Iterable, Sequence
     from returns.interfaces.iterable import Iterable2
     from returns.primitives.hkt import SupportsKind2, Kind2
+    from returns.primitives.iterables import BaseIterableStrategyN
 
     V = TypeVar('V')
     N = TypeVar('N')
@@ -122,11 +133,14 @@
     class MyClass(SupportsKind2['MyClass', V, E], Iterable2[V, E]):
         @classmethod
         def from_iterable(
-            cls, inner_value: Iterable[Kind2['MyClass', V, E]],
+            cls,
+            inner_value: Iterable[Kind2['MyClass', V, E]],
+            strategy: Type[BaseIterableStrategyN[V, E, Any]],
         ) -> MyClass[Sequence[V], E]:
             ...
   out: |
-    main:12: error: Argument 1 of "from_iterable" is incompatible with supertype "IterableN"; supertype defines the argument type as "Iterable[KindN[MyClass[V, E], _NewFirstType, _NewSecondType, _NewThirdType]]"
-    main:12: error: Return type "MyClass[Sequence[V], E]" of "from_iterable" incompatible with return type "KindN[MyClass[V, E], Sequence[_NewFirstType], _NewSecondType, _NewThirdType]" in supertype "IterableN"
-    main:12: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
-    main:12: note: This violates the Liskov substitution principle
+    main:13: error: Argument 1 of "from_iterable" is incompatible with supertype "IterableN"; supertype defines the argument type as "Iterable[KindN[MyClass[V, E], _NewFirstType, _NewSecondType, _NewThirdType]]"
+    main:13: error: Argument 2 of "from_iterable" is incompatible with supertype "IterableN"; supertype defines the argument type as "Type[BaseIterableStrategyN[_NewFirstType, _NewSecondType, _NewThirdType]]"
+    main:13: error: Return type "MyClass[Sequence[V], E]" of "from_iterable" incompatible with return type "KindN[MyClass[V, E], Sequence[_NewFirstType], _NewSecondType, _NewThirdType]" in supertype "IterableN"
+    main:13: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:13: note: This violates the Liskov substitution principle

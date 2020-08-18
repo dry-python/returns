@@ -5,6 +5,7 @@ from typing import (
     ClassVar,
     Iterable,
     Sequence,
+    Type,
     TypeVar,
 )
 
@@ -16,6 +17,7 @@ from returns.interfaces.specific import ioresult, reader
 from returns.io import IO, IOFailure, IOResult, IOSuccess
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind3, SupportsKind3, dekind
+from returns.primitives.iterables import BaseIterableStrategyN, FailFast
 from returns.result import Result
 
 if TYPE_CHECKING:
@@ -870,15 +872,15 @@ class RequiresContextIOResult(
     @classmethod
     def from_iterable(
         cls,
-        inner_value:
-            Iterable[
-                Kind3[
-                    'RequiresContextIOResult',
-                    _NewValueType,
-                    _NewErrorType,
-                    _NewEnvType,
-                ],
+        inner_value: Iterable[
+            Kind3[
+                'RequiresContextIOResult',
+                _NewValueType,
+                _NewErrorType,
+                _NewEnvType,
             ],
+        ],
+        strategy: Type[BaseIterableStrategyN] = FailFast,
     ) -> 'ReaderIOResult[Sequence[_NewValueType], _NewErrorType, _NewEnvType]':
         """
         Transforms an iterable of ``RequiresContextIOResult`` containers.
@@ -888,25 +890,15 @@ class RequiresContextIOResult(
         .. code:: python
 
           >>> from returns.context import RequiresContextIOResult
-          >>> from returns.io import IOSuccess, IOFailure
+          >>> from returns.io import IOSuccess
 
           >>> assert RequiresContextIOResult.from_iterable([
           ...    RequiresContextIOResult.from_value(1),
           ...    RequiresContextIOResult.from_value(2),
           ... ])(...) == IOSuccess((1, 2))
 
-          >>> assert RequiresContextIOResult.from_iterable([
-          ...    RequiresContextIOResult.from_value(1),
-          ...    RequiresContextIOResult.from_failure('a'),
-          ... ])(...) == IOFailure('a')
-
-          >>> assert RequiresContextIOResult.from_iterable([
-          ...    RequiresContextIOResult.from_failure('a'),
-          ...    RequiresContextIOResult.from_value(1),
-          ... ])(...) == IOFailure('a')
-
         """
-        return dekind(iterable_kind(cls, inner_value))
+        return iterable_kind(cls, inner_value, strategy)
 
 
 # Aliases:

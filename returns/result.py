@@ -21,7 +21,8 @@ from returns._generated.iterable import iterable_kind
 from returns.interfaces.specific import result
 from returns.primitives.container import BaseContainer
 from returns.primitives.exceptions import UnwrapFailedError
-from returns.primitives.hkt import Kind2, SupportsKind2, dekind
+from returns.primitives.hkt import Kind2, SupportsKind2
+from returns.primitives.iterables import BaseIterableStrategyN, FailFast
 
 # Definitions:
 _ValueType = TypeVar('_ValueType', covariant=True)
@@ -343,31 +344,22 @@ class Result(
     def from_iterable(
         cls,
         inner_value: Iterable[Kind2['Result', _NewValueType, _NewErrorType]],
+        strategy: Type[BaseIterableStrategyN] = FailFast,
     ) -> 'Result[Sequence[_NewValueType], _NewErrorType]':
         """
         Transforms an iterable of ``Result`` containers into a single container.
 
         .. code:: python
 
-          >>> from returns.result import Result, Success, Failure
+          >>> from returns.result import Result, Success
 
           >>> assert Result.from_iterable([
           ...    Success(1),
           ...    Success(2),
           ... ]) == Success((1, 2))
 
-          >>> assert Result.from_iterable([
-          ...     Success(1),
-          ...     Failure('a'),
-          ... ]) == Failure('a')
-
-          >>> assert Result.from_iterable([
-          ...     Failure('a'),
-          ...     Success(1),
-          ... ]) == Failure('a')
-
         """
-        return dekind(iterable_kind(cls, inner_value))
+        return iterable_kind(cls, inner_value, strategy)
 
 
 @final

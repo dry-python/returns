@@ -6,6 +6,7 @@ from typing import (
     ClassVar,
     Iterable,
     Sequence,
+    Type,
     TypeVar,
 )
 
@@ -19,6 +20,7 @@ from returns.interfaces.specific import future_result, reader
 from returns.io import IO, IOResult
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind3, SupportsKind3, dekind
+from returns.primitives.iterables import BaseIterableStrategyN, FailFast
 from returns.result import Result
 
 if TYPE_CHECKING:
@@ -1345,15 +1347,15 @@ class RequiresContextFutureResult(
     @classmethod
     def from_iterable(
         cls,
-        inner_value:
-            Iterable[
-                Kind3[
-                    'RequiresContextFutureResult',
-                    _FirstType,
-                    _NewErrorType,
-                    _NewEnvType,
-                ],
+        inner_value: Iterable[
+            Kind3[
+                'RequiresContextFutureResult',
+                _FirstType,
+                _NewErrorType,
+                _NewEnvType,
             ],
+        ],
+        strategy: Type[BaseIterableStrategyN] = FailFast,
     ) -> 'ReaderFutureResult[Sequence[_FirstType], _NewErrorType, _NewEnvType]':
         """
         Transforms an iterable of ``RequiresContextFutureResult`` containers.
@@ -1364,7 +1366,7 @@ class RequiresContextFutureResult(
 
           >>> import anyio
           >>> from returns.context import RequiresContextFutureResult
-          >>> from returns.io import IOSuccess, IOFailure
+          >>> from returns.io import IOSuccess
 
           >>> assert anyio.run(
           ...    RequiresContextFutureResult.from_iterable([
@@ -1374,16 +1376,8 @@ class RequiresContextFutureResult(
           ...    RequiresContextFutureResult.empty,
           ... ) == IOSuccess((1, 2))
 
-          >>> assert anyio.run(
-          ...    RequiresContextFutureResult.from_iterable([
-          ...        RequiresContextFutureResult.from_value(1),
-          ...        RequiresContextFutureResult.from_failure('a'),
-          ...    ]),
-          ...    RequiresContextFutureResult.empty,
-          ... ) == IOFailure('a')
-
         """
-        return dekind(iterable_kind(cls, inner_value))
+        return iterable_kind(cls, inner_value, strategy)
 
 
 # Aliases:

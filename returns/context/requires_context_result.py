@@ -5,6 +5,7 @@ from typing import (
     ClassVar,
     Iterable,
     Sequence,
+    Type,
     TypeVar,
 )
 
@@ -15,6 +16,7 @@ from returns.context import NoDeps
 from returns.interfaces.specific import reader, result
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind3, SupportsKind3, dekind
+from returns.primitives.iterables import BaseIterableStrategyN, FailFast
 from returns.result import Failure, Result, Success
 
 if TYPE_CHECKING:
@@ -584,15 +586,15 @@ class RequiresContextResult(
     @classmethod
     def from_iterable(
         cls,
-        inner_value:
-            Iterable[
-                Kind3[
-                    'RequiresContextResult',
-                    _NewValueType,
-                    _NewErrorType,
-                    _NewEnvType,
-                ],
+        inner_value: Iterable[
+            Kind3[
+                'RequiresContextResult',
+                _NewValueType,
+                _NewErrorType,
+                _NewEnvType,
             ],
+        ],
+        strategy: Type[BaseIterableStrategyN] = FailFast,
     ) -> 'ReaderResult[Sequence[_NewValueType], _NewErrorType, _NewEnvType]':
         """
         Transforms an iterable of ``RequiresContextResult`` containers.
@@ -602,25 +604,15 @@ class RequiresContextResult(
         .. code:: python
 
           >>> from returns.context import RequiresContextResult
-          >>> from returns.result import Success, Failure
+          >>> from returns.result import Success
 
           >>> assert RequiresContextResult.from_iterable([
           ...    RequiresContextResult.from_value(1),
           ...    RequiresContextResult.from_value(2),
           ... ])(...) == Success((1, 2))
 
-          >>> assert RequiresContextResult.from_iterable([
-          ...    RequiresContextResult.from_value(1),
-          ...    RequiresContextResult.from_failure('a'),
-          ... ])(...) == Failure('a')
-
-          >>> assert RequiresContextResult.from_iterable([
-          ...    RequiresContextResult.from_failure('a'),
-          ...    RequiresContextResult.from_value(1),
-          ... ])(...) == Failure('a')
-
         """
-        return dekind(iterable_kind(cls, inner_value))
+        return iterable_kind(cls, inner_value, strategy)
 
 
 # Aliases:

@@ -22,7 +22,7 @@
     reveal_type(IO.from_io(IO(1)))  # N: Revealed type is 'returns.io.IO[builtins.int*]'
 
 
-- case: io_from_iterable
+- case: io_from_iterable1
   disable_cache: true
   main: |
     from returns.io import IO
@@ -31,6 +31,18 @@
     x: Iterable[IO[int]]
 
     reveal_type(IO.from_iterable(x))  # N: Revealed type is 'returns.io.IO[typing.Sequence[builtins.int*]]'
+
+
+- case: io_from_iterable2
+  disable_cache: true
+  main: |
+    from returns.io import IO
+    from returns.primitives.iterables import CollectAll
+    from typing import Iterable
+
+    x: Iterable[IO[int]]
+
+    reveal_type(IO.from_iterable(x, CollectAll))  # N: Revealed type is 'returns.io.IO[typing.Sequence[builtins.int*]]'
 
 
 - case: io_bind

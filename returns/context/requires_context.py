@@ -5,6 +5,7 @@ from typing import (
     ClassVar,
     Iterable,
     Sequence,
+    Type,
     TypeVar,
 )
 
@@ -17,6 +18,7 @@ from returns.interfaces.specific import reader
 from returns.io import IOResult
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind2, SupportsKind2, dekind
+from returns.primitives.iterables import BaseIterableStrategyN, FailFast
 from returns.result import Result
 
 if TYPE_CHECKING:
@@ -363,6 +365,7 @@ class RequiresContext(
         inner_value: Iterable[
             Kind2['RequiresContext', _NewReturnType, _NewEnvType],
         ],
+        strategy: Type[BaseIterableStrategyN] = FailFast,
     ) -> 'RequiresContext[Sequence[_NewReturnType], _NewEnvType]':
         """
         Transforms an iterable of ``RequiresContext`` containers.
@@ -379,7 +382,7 @@ class RequiresContext(
           ... ])(...) == (1, 2)
 
         """
-        return dekind(iterable_kind(cls, inner_value))
+        return iterable_kind(cls, inner_value, strategy)
 
     @classmethod
     def from_requires_context_result(

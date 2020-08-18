@@ -8,7 +8,7 @@ For impure result see
 from abc import abstractmethod
 from typing import TYPE_CHECKING, Callable, NoReturn, Type, TypeVar
 
-from returns.interfaces import altable, iterable, rescuable, unwrappable
+from returns.interfaces import altable, rescuable, unwrappable
 from returns.interfaces.aliases import container
 from returns.primitives.hkt import KindN
 
@@ -33,7 +33,6 @@ class ResultLikeN(
     container.ContainerN[_FirstType, _SecondType, _ThirdType],
     altable.AltableN[_FirstType, _SecondType, _ThirdType],
     rescuable.RescuableN[_FirstType, _SecondType, _ThirdType],
-    iterable.IterableN[_FirstType, _SecondType, _ThirdType],
 ):
     """
     Base types for types that looks like ``Result`` but cannot be unwrapped.

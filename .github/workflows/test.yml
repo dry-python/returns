@@ -39,11 +39,13 @@ jobs:
 
         poetry run flake8 .
         poetry run mypy returns ./tests/**/*.py
-        poetry run pytest . docs/pages
+        poetry run pytest returns docs/pages tests
         poetry run doc8 -q docs
         poetry run poetry check
         poetry run pip check
         poetry run safety check --full-report
+        # We do this to speed up the build:
+        poetry run pytest typesafety -p no:cov -o addopts="" --mypy-ini-file=setup.cfg
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
