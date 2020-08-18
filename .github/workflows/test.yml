@@ -44,7 +44,6 @@ jobs:
         poetry run poetry check
         poetry run pip check
         poetry run safety check --full-report
-        # We do this to speed up the build:
         poetry run pytest typesafety -p no:cov -o ad
 dopts="" --mypy-ini-file=setup.cfg
 
