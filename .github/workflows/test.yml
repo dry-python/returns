@@ -44,7 +44,9 @@ jobs:
         poetry run poetry check
         poetry run pip check
         poetry run safety check --full-report
-        poetry run pytest typesafety --cov-fail-under=0
+        # We do this to speed up the build:
+        poetry run pytest typesafety -p no:cov -o ad
+dopts="" --mypy-ini-file=setup.cfg
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
