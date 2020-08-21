@@ -37,13 +37,13 @@ We also use `wemake_python_styleguide` to enforce the code quality.
 To run all tests:
 
 ```bash
-pytest . docs/pages
+poetry run pytest returns docs/pages tests
 ```
 
 To run linting:
 
 ```bash
-flake8 .
+poetry run flake8 .
 ```
 Keep in mind: default virtual environment folder excluded by flake8 style checking is `.venv`.
 If you want to customize this parameter, you should do this in `setup.cfg`.
@@ -63,7 +63,7 @@ We use `mypy` to run type checks on our code.
 To use it:
 
 ```bash
-mypy returns tests/**/*.py
+poetry run mypy returns tests/**/*.py
 ```
 
 This step is mandatory during the CI.
