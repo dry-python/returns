@@ -4,21 +4,21 @@ from returns.interfaces.specific.ioresult import IOResultLikeN
 from returns.primitives.hkt import Kind3, kinded
 from returns.result import Result
 
-_ValueType = TypeVar('_ValueType')
-_NewValueType = TypeVar('_NewValueType')
-_ErrorType = TypeVar('_ErrorType')
+_FirstType = TypeVar('_FirstType')
+_NewFirstType = TypeVar('_NewFirstType')
+_SecondType = TypeVar('_SecondType')
 _ThirdType = TypeVar('_ThirdType')
 
 _IOResultLikeKind = TypeVar('_IOResultLikeKind', bound=IOResultLikeN)
 
 
 def internal_compose_result(
-    container: Kind3[_IOResultLikeKind, _ValueType, _ErrorType, _ThirdType],
+    container: Kind3[_IOResultLikeKind, _FirstType, _SecondType, _ThirdType],
     function: Callable[
-        [Result[_ValueType, _ErrorType]],
-        Kind3[_IOResultLikeKind, _NewValueType, _ErrorType, _ThirdType],
+        [Result[_FirstType, _SecondType]],
+        Kind3[_IOResultLikeKind, _NewFirstType, _SecondType, _ThirdType],
     ],
-) -> Kind3[_IOResultLikeKind, _NewValueType, _ErrorType, _ThirdType]:
+) -> Kind3[_IOResultLikeKind, _NewFirstType, _SecondType, _ThirdType]:
     """
     Composes inner ``Result`` with ``IOResultLike`` returning function.
 

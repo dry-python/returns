@@ -5,9 +5,9 @@ from returns.methods.compose_result import internal_compose_result
 from returns.primitives.hkt import Kind3, Kinded, kinded
 from returns.result import Result
 
-_ValueType = TypeVar('_ValueType')
-_NewValueType = TypeVar('_NewValueType')
-_ErrorType = TypeVar('_ErrorType')
+_FirstType = TypeVar('_FirstType')
+_NewFirstType = TypeVar('_NewFirstType')
+_SecondType = TypeVar('_SecondType')
 _ThirdType = TypeVar('_ThirdType')
 
 _IOResultLikeKind = TypeVar('_IOResultLikeKind', bound=IOResultLikeN)
@@ -15,12 +15,12 @@ _IOResultLikeKind = TypeVar('_IOResultLikeKind', bound=IOResultLikeN)
 
 def compose_result(
     function: Callable[
-        [Result[_ValueType, _ErrorType]],  # noqa: DAR101, DAR201
-        Kind3[_IOResultLikeKind, _NewValueType, _ErrorType, _ThirdType],
+        [Result[_FirstType, _SecondType]],  # noqa: DAR101, DAR201
+        Kind3[_IOResultLikeKind, _NewFirstType, _SecondType, _ThirdType],
     ],
 ) -> Kinded[Callable[
-    [Kind3[_IOResultLikeKind, _ValueType, _ErrorType, _ThirdType]],
-    Kind3[_IOResultLikeKind, _NewValueType, _ErrorType, _ThirdType],
+    [Kind3[_IOResultLikeKind, _FirstType, _SecondType, _ThirdType]],
+    Kind3[_IOResultLikeKind, _NewFirstType, _SecondType, _ThirdType],
 ]]:
     """
     Composes inner ``Result`` with ``IOResultLike`` returning function.
@@ -46,7 +46,9 @@ def compose_result(
     """
     @kinded
     def factory(
-        container: Kind3[_IOResultLikeKind, _ValueType, _ErrorType, _ThirdType],
-    ) -> Kind3[_IOResultLikeKind, _NewValueType, _ErrorType, _ThirdType]:
+        container: Kind3[
+            _IOResultLikeKind, _FirstType, _SecondType, _ThirdType,
+        ],
+    ) -> Kind3[_IOResultLikeKind, _NewFirstType, _SecondType, _ThirdType]:
         return internal_compose_result(container, function)
     return factory
