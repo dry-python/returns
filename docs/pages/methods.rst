@@ -160,6 +160,12 @@ bind_context methods
 .. autofunction:: returns.methods.bind_context.bind_context3
 .. autofunction:: returns.methods.bind_context.bind_context
 
+compose_result
+~~~~~~~~~~~~~~
+
+.. autofunction:: returns.methods.compose_result.internal_compose_result
+.. autofunction:: returns.methods.compose_result.compose_result
+
 cond
 ~~~~
 
