@@ -15,7 +15,7 @@ _IOResultLikeKind = TypeVar('_IOResultLikeKind', bound=IOResultLikeN)
 
 def compose_result(
     function: Callable[
-        [Result[_FirstType, _SecondType]],  # noqa: DAR101, DAR201
+        [Result[_FirstType, _SecondType]],
         Kind3[_IOResultLikeKind, _NewFirstType, _SecondType, _ThirdType],
     ],
 ) -> Kinded[Callable[
@@ -38,10 +38,12 @@ def compose_result(
       ...         container.map(str.upper).alt(str.lower),
       ...     )
 
-      >>> assert compose_result(modify_string)(IOSuccess('success')) == IOSuccess('SUCCESS')
-      >>> assert compose_result(modify_string)(IOFailure('FAILURE')) == IOFailure('failure')
-
-      # doctest: # noqa: E501
+      >>> assert compose_result(modify_string)(
+      ...     IOSuccess('success')
+      ... ) == IOSuccess('SUCCESS')
+      >>> assert compose_result(modify_string)(
+      ...     IOFailure('FAILURE')
+      ... ) == IOFailure('failure')
 
     """
     @kinded
