@@ -1,7 +1,7 @@
 from typing import NoReturn, TypeVar
 
 from returns.interfaces import bindable, iterable
-from returns.interfaces.aliases.applicative_mappable import ApplicativeMappableN
+from returns.interfaces.applicative_mappable import ApplicativeMappableN
 
 _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')

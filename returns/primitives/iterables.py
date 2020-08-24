@@ -6,7 +6,7 @@ from returns.interfaces.rescuable import RescuableN
 from returns.primitives.hkt import KindN
 
 if TYPE_CHECKING:
-    from returns.interfaces.aliases.container import ContainerN  # noqa: F401
+    from returns.interfaces.container import ContainerN  # noqa: F401
 
 _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')

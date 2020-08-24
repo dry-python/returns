@@ -1,7 +1,7 @@
 
 from typing import Iterable, Sequence, Type, TypeVar
 
-from returns.interfaces.aliases.container import ContainerN
+from returns.interfaces.container import ContainerN
 from returns.primitives.hkt import KindN, kinded
 from returns.primitives.iterables import BaseIterableStrategyN
 

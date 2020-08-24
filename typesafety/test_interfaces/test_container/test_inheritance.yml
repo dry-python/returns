@@ -2,7 +2,7 @@
   disable_cache: true
   main: |
     from typing import TypeVar
-    from returns.interfaces.aliases.container import Container1
+    from returns.interfaces.container import Container1
     from returns.primitives.hkt import SupportsKind1
 
     V = TypeVar('V')
