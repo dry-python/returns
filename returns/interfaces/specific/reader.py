@@ -24,7 +24,7 @@ See also:
 
 """
 
-from abc import abstractmethod, abstractproperty
+from abc import abstractmethod
 from typing import TYPE_CHECKING, Any, Callable, Type, TypeVar
 
 from returns.interfaces import container, iterable
@@ -57,7 +57,8 @@ class ReaderBased2(container.Container2[_FirstType, _SecondType]):
     def __call__(self, deps: _SecondType) -> _FirstType:
         """Calls the reader with the env to get the result back."""
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def empty(self: _ReaderBased2Type) -> 'NoDeps':
         """Is required to call ``Reader`` with explicit empty argument."""
 
@@ -116,7 +117,8 @@ class ReaderBased3(
         Or any other type.
         """
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def empty(self: _ReaderBased3Type) -> 'NoDeps':
         """Is required to call ``Reader`` with explicit empty argument."""
 
