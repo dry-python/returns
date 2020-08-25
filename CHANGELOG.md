@@ -55,6 +55,8 @@ See [0Ver](https://0ver.org/).
 - Adds a helper to test traces to our `pytest` plugin
 - Adds `cond` method to `methods` package
 - Adds `cond` function to `pointfree` package
+- Adds `compose_result` HKT method
+- Adds `compose_result` pointfree function
 
 ### Bugfixes
 

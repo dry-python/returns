@@ -2,7 +2,7 @@
   disable_cache: true
   main: |
     from typing import TypeVar
-    from returns.interfaces.aliases.applicative_mappable import (
+    from returns.interfaces.applicative_mappable import (
         ApplicativeMappable1,
     )
     from returns.primitives.hkt import SupportsKind1

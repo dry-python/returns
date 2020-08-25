@@ -196,6 +196,25 @@ Or with function as the first parameter:
   ...     Some(3).apply,
   ... ) == Some(5)
 
+compose_result
+--------------
+
+Sometimes we need to manipulate the inner ``Result`` of some containers like
+``IOResult`` or ``FutureResult``, with ``compose_result`` we're able to do this
+kind of manipulation.
+
+.. code:: python
+
+  >>> from returns.pointfree import compose_result
+  >>> from returns.io import IOResult, IOSuccess, IOFailure
+  >>> from returns.result import Result
+
+  >>> def cast_to_str(container: Result[float, int]) -> IOResult[str, int]:
+  ...     return IOResult.from_result(container.map(str))
+
+  >>> assert compose_result(cast_to_str)(IOSuccess(42.0)) == IOSuccess('42.0')
+  >>> assert compose_result(cast_to_str)(IOFailure(1)) == IOFailure(1)
+
 cond
 ----
 
@@ -271,6 +290,8 @@ API Reference
 .. autofunction:: returns.pointfree.bind_async
 
 .. autofunction:: returns.pointfree.bind_awaitable
+
+.. autofunction:: returns.pointfree.compose_result
 
 .. autofunction:: returns.pointfree.cond
 
