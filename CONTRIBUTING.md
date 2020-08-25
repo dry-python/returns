@@ -57,7 +57,7 @@ These steps are mandatory during CI.
 We also use `pytest-mypy-plugins`. Tests cases are located inside `./typesafety`
 If you create new types or typed functions, it is required to test their types.
 
-The full suite including tests for type-safety can be run with the following:
+The type-safety tests can be run with the following:
 
 ```bash
 poetry run pytest typesafety
