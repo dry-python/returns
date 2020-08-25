@@ -40,6 +40,8 @@ To run all tests:
 poetry run pytest returns docs/pages tests
 ```
 
+**NOTE:** The full suite including tests for type-safety can be run with `poetry run pytest . docs/pages`. This can take upwards of 20 minutes and is not normally recommended for local development.
+
 To run linting:
 
 ```bash
