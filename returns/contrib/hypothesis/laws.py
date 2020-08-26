@@ -1,15 +1,15 @@
 import inspect
 import uuid
 from contextlib import contextmanager
-from typing import Any, Callable, Dict, List, Optional, Type, Iterator
+from typing import Any, Callable, Dict, Iterator, List, Optional, Type
 
 import pytest
 from hypothesis import given, settings
 from hypothesis import strategies as st
 from hypothesis.strategies._internal import types
 
-from returns.interfaces.specific.result import ResultLikeN
 from returns.interfaces.applicative import ApplicativeN
+from returns.interfaces.specific.result import ResultLikeN
 from returns.primitives.laws import Law, Law1, Law2, Law3, Lawful
 
 

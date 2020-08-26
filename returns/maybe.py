@@ -16,7 +16,7 @@ from typing import (
 from typing_extensions import final
 
 from returns._internal.iterable import iterable_kind
-from returns.interfaces import rescuable, iterable, unwrappable, container
+from returns.interfaces import container, iterable, rescuable, unwrappable
 from returns.primitives.container import BaseContainer
 from returns.primitives.exceptions import UnwrapFailedError
 from returns.primitives.hkt import Kind1, SupportsKind1

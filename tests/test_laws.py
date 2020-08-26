@@ -1,8 +1,13 @@
+from returns.context import (
+    Reader,
+    ReaderFutureResult,
+    ReaderIOResult,
+    ReaderResult,
+)
 from returns.contrib.hypothesis.laws import check_all_laws
-from returns.result import Result
-from returns.io import IO, IOResult
-from returns.context import Reader, ReaderResult, ReaderIOResult, ReaderFutureResult
 from returns.future import Future, FutureResult
+from returns.io import IO, IOResult
+from returns.result import Result
 
 # TODO: add maybe
 check_all_laws(Result)

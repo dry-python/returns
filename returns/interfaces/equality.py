@@ -7,10 +7,17 @@ _EqualType = TypeVar('_EqualType', bound='SupportsEquality')
 
 
 class _LawSpec(LawSpecDef):
+    """
+    Equality laws.
+
+    Description: https://bit.ly/34D40iT
+    """
+
     @staticmethod
     def reflexive_law(
         first: _EqualType,
     ) -> None:
+        """Value should be equal to itself."""
         assert first.equals(first)
 
     @staticmethod
@@ -18,6 +25,7 @@ class _LawSpec(LawSpecDef):
         first: _EqualType,
         second: _EqualType,
     ) -> None:
+        """If ``A == B`` then ``B == A``."""
         if first.equals(second):
             assert second.equals(first)
 
@@ -27,11 +35,21 @@ class _LawSpec(LawSpecDef):
         second: _EqualType,
         third: _EqualType,
     ) -> None:
+        """If ``A == B`` and ``B == C`` then ``A == C``."""
         if first.equals(second) and second.equals(third):
             assert first.equals(third)
 
 
 class SupportsEquality(Lawful['SupportsEquality']):
+    """
+    Interface for types that can be compared with real values.
+
+    Not all types can, because some don't have the value at a time:
+    - ``Future`` has to be awaited to get the value
+    - ``Reader`` has to be called to get the value
+
+    """
+
     _laws: ClassVar[Sequence[Law]] = (
         Law1(_LawSpec.reflexive_law),
         Law2(_LawSpec.symmetry_law),
@@ -40,4 +58,4 @@ class SupportsEquality(Lawful['SupportsEquality']):
 
     @abstractmethod
     def equals(self: _EqualType, other: _EqualType) -> bool:
-        ...
+        """Type-safe equality check for values of the same type."""
