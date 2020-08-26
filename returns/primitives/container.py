@@ -1,8 +1,8 @@
 from abc import ABCMeta
 from typing import Any, TypeVar
 
-from returns.primitives.types import Immutable
 from returns.interfaces.equality import SupportsEquality
+from returns.primitives.types import Immutable
 
 _EqualType = TypeVar('_EqualType', bound=SupportsEquality)
 

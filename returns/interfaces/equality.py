@@ -1,11 +1,12 @@
-from returns.primitives.laws import Lawful, Law1, Law2, Law3
-from typing import TypeVar
 from abc import abstractmethod
+from typing import ClassVar, Sequence, TypeVar
+
+from returns.primitives.laws import Law, Law1, Law2, Law3, Lawful, LawSpecDef
 
 _EqualType = TypeVar('_EqualType', bound='SupportsEquality')
 
 
-class _LawSpec(object):
+class _LawSpec(LawSpecDef):
     @staticmethod
     def reflexive_law(
         first: _EqualType,
@@ -17,7 +18,8 @@ class _LawSpec(object):
         first: _EqualType,
         second: _EqualType,
     ) -> None:
-        assert first.equals(second) is second.equals(first)
+        if first.equals(second):
+            assert second.equals(first)
 
     @staticmethod
     def transitivity_law(
@@ -30,7 +32,7 @@ class _LawSpec(object):
 
 
 class SupportsEquality(Lawful['SupportsEquality']):
-    _laws = (
+    _laws: ClassVar[Sequence[Law]] = (
         Law1(_LawSpec.reflexive_law),
         Law2(_LawSpec.symmetry_law),
         Law3(_LawSpec.transitivity_law),

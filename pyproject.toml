@@ -48,6 +48,9 @@ classifiers = [
 [tool.poetry.plugins.pytest11]
 returns = "returns.contrib.pytest.plugin"
 
+[tool.poetry.plugins.hypothesis]
+_ = "returns.contrib.hypothesis._entrypoint:hypothesis_setup_hook"
+
 
 [tool.poetry.dependencies]
 python = "^3.6"
@@ -73,6 +76,7 @@ pytest-cov = "^2.10"
 pytest-randomly = "^3.4"
 pytest-mypy-plugins = "^1.4"
 pytest-subtests = "^0.3"
+hypothesis = "^5.29.0"
 
 sphinx = "^3.1"
 sphinx-autodoc-typehints = "^1.11"

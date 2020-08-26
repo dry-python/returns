@@ -15,9 +15,15 @@ from typing import (
 
 from typing_extensions import final
 
+<<<<<<< HEAD
 from returns._generated.iterable import iterable_kind
 from returns.interfaces import rescuable, unwrappable
 from returns.interfaces.container import Container1
+=======
+from returns._internal.iterable import iterable_kind
+from returns.interfaces import iterable, unwrappable
+from returns.interfaces.aliases.container import Container1
+>>>>>>> WIP: typing and tests do pass
 from returns.primitives.container import BaseContainer
 from returns.primitives.exceptions import UnwrapFailedError
 from returns.primitives.hkt import Kind1, SupportsKind1

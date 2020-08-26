@@ -1,8 +1,8 @@
 from typing import ClassVar
 
-from returns._generated.pipeline.flow import _flow as flow
-from returns._generated.pipeline.managed import managed as managed
-from returns._generated.pipeline.pipe import _pipe as pipe
+from returns._internal.pipeline.flow import _flow as flow
+from returns._internal.pipeline.managed import managed as managed
+from returns._internal.pipeline.pipe import _pipe as pipe
 from returns.interfaces.unwrappable import Unwrappable
 from returns.primitives.exceptions import UnwrapFailedError
 

@@ -30,7 +30,7 @@ Only works with regular functions (not async).
   In these cases ``mypy`` will fail to infer
   the types of the resulting function.
 
-  In this case, use :func:`pipe <returns._generated.pipeline.pipe._pipe>`
+  In this case, use :func:`pipe <returns._internal.pipeline.pipe._pipe>`
   it does the same thing, but has pretty good type inference.
   Or use manual annotations with ``Callable`` type.
 

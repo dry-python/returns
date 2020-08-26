@@ -17,7 +17,7 @@ from typing import (
 
 from typing_extensions import final
 
-from returns._generated.iterable import iterable_kind
+from returns._internal.iterable import iterable_kind
 from returns.interfaces.specific import result
 from returns.primitives.container import BaseContainer, container_equality
 from returns.primitives.exceptions import UnwrapFailedError

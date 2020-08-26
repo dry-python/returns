@@ -1,7 +1,9 @@
-from typing import Generic, ClassVar, Sequence, TypeVar, Callable
 from itertools import chain
+from typing import Callable, ClassVar, Generic, Sequence, TypeVar
 
 from typing_extensions import final
+
+from returns.primitives.types import Immutable
 
 _Caps = TypeVar('_Caps')
 _ReturnType = TypeVar('_ReturnType')
@@ -10,51 +12,58 @@ _TypeArgType2 = TypeVar('_TypeArgType2')
 _TypeArgType3 = TypeVar('_TypeArgType3')
 
 
-class Law(object):
+class Law(Immutable):
+
+    __slots__ = ('definition', )
+    definition: Callable
+
+    @final
     @property
     def name(self) -> str:
-        return self._function.__name__  # type: ignore
+        return self.definition.__name__
 
 
+@final
 class Law1(
     Law,
     Generic[_TypeArgType1, _ReturnType],
 ):
+
+    definition: Callable[['Law1', _TypeArgType1], _ReturnType]
+
     def __init__(
         self,
         function: Callable[[_TypeArgType1], _ReturnType],
     ) -> None:
-        self._function = function
-
-    def run(
-        self,
-        arg1: _TypeArgType1,
-    ) -> _ReturnType:
-        return self._function(arg1)
+        object.__setattr__(self, 'definition', function)
 
 
+@final
 class Law2(
     Law,
     Generic[_TypeArgType1, _TypeArgType2, _ReturnType],
 ):
+
+    definition: Callable[['Law2', _TypeArgType1, _TypeArgType2], _ReturnType]
+
     def __init__(
         self,
         function: Callable[[_TypeArgType1, _TypeArgType2], _ReturnType],
     ) -> None:
-        self._function = function
-
-    def run(
-        self,
-        arg1: _TypeArgType1,
-        arg2: _TypeArgType2,
-    ) -> _ReturnType:
-        return self._function(arg1, arg2)
+        object.__setattr__(self, 'definition', function)
 
 
+@final
 class Law3(
     Law,
     Generic[_TypeArgType1, _TypeArgType2, _TypeArgType3, _ReturnType],
 ):
+
+    definition: Callable[
+        ['Law3', _TypeArgType1, _TypeArgType2, _TypeArgType3],
+        _ReturnType,
+    ]
+
     def __init__(
         self,
         function: Callable[
@@ -62,15 +71,7 @@ class Law3(
             _ReturnType,
         ],
     ) -> None:
-        self._function = function
-
-    def run(
-        self,
-        arg1: _TypeArgType1,
-        arg2: _TypeArgType2,
-        arg3: _TypeArgType3,
-    ) -> _ReturnType:
-        return self._function(arg1, arg2, arg3)
+        object.__setattr__(self, 'definition', function)
 
 
 class Lawful(Generic[_Caps]):
@@ -79,7 +80,15 @@ class Lawful(Generic[_Caps]):
     @final
     @classmethod
     def laws(cls) -> Sequence[Law]:
+        seen = {}
+        for parent in cls.__mro__:
+            if parent.__qualname__ not in seen:
+                seen[parent.__qualname__] = parent
         return tuple(chain.from_iterable(
-            getattr(klass, '_laws', ())
-            for klass in cls.__mro__
+            klass.__dict__.get('_laws', ())
+            for klass in seen.values()
         ))
+
+
+class LawSpecDef(object):
+    __slots__ = ()

@@ -1,44 +1,71 @@
-from hypothesis import strategies as st
-from hypothesis import given, settings
-from typing import Callable, Optional, Dict, Any
+import inspect
+import uuid
+from contextlib import contextmanager
+from typing import Any, Callable, Dict, List, Optional
 
 import pytest
-import inspect
-from returns.primitives.laws import Law, Lawful, Law1, Law2, Law3
+from hypothesis import given, settings
+from hypothesis import strategies as st
+from hypothesis.strategies._internal import types
 
-_default_strategy = st.integers()
+from returns.interfaces.specific.result import ResultLikeN
+from returns.primitives.laws import Law, Law1, Law2, Law3, Lawful
+
+
+@contextmanager
+def _temp_container_strategies(container_type):
+    def factory(type_):
+        strategies: List[st.SearchStrategy[Any]] = [
+            st.builds(container_type.from_value),
+        ]
+        if isinstance(container_type, ResultLikeN):
+            strategies.append(st.builds(container_type.from_failure))
+        return st.one_of(*strategies)
+
+    interfaces = {
+        base_type
+        for base_type in container_type.__mro__
+        if getattr(base_type, '__module__', '').startswith('returns.')
+    }
+    for interface in interfaces:
+        st.register_type_strategy(interface, factory)
+
+    yield
+
+    for interface in interfaces:
+        types._global_type_lookup.pop(interface)
+
+
+@contextmanager
+def pure_functions():
+    def factory(thing):
+        like = (lambda: None) if len(
+            thing.__args__,
+        ) == 1 else (lambda *a, **k: None)
+
+        return st.functions(
+            like=like,
+            returns=st.from_type(thing.__args__[-1]),
+            pure=True,
+        )
+
+    previous = types._global_type_lookup[Callable]  # type: ignore
+    st.register_type_strategy(Callable, factory)  # type: ignore
+
+    yield
+
+    types._global_type_lookup.pop(Callable)  # type: ignore
+    st.register_type_strategy(Callable, previous)  # type: ignore
 
 
 def _run_law(
     container_type,
     law: Law,
-    *,
-    strategy: Optional[st.SearchStrategy],
 ) -> Callable[[st.DataObject], None]:
-    strategy_to_use = strategy or _default_strategy
-
     def factory(source: st.DataObject) -> None:
-        arg1 = source.draw(strategy_to_use)
-        arg2 = source.draw(strategy_to_use)
-        arg3 = source.draw(strategy_to_use)
-
-        if isinstance(law, Law1):
-            law.run(
-                container_type.from_value(arg1),
-            )
-        elif isinstance(law, Law2):
-            law.run(
-                container_type.from_value(arg1),
-                container_type.from_value(arg2),
-            )
-        elif isinstance(law, Law3):
-            law.run(
-                container_type.from_value(arg1),
-                container_type.from_value(arg2),
-                container_type.from_value(arg3),
-            )
-        else:
-            assert False, 'Type {0} is not valid as a Law'.format(type(law))
+        with pure_functions():
+            with _temp_container_strategies(container_type):
+                source.draw(st.builds(law.definition))
     return factory
 
 
@@ -46,7 +73,6 @@ def _create_law_test_case(
     container_type: Lawful,
     law: Law,
     *,
-    strategy: Optional[st.SearchStrategy],
     settings_kwargs: Optional[Dict[str, Any]],
 ) -> None:
     if settings_kwargs is None:
@@ -54,16 +80,17 @@ def _create_law_test_case(
 
     test_function = given(st.data())(
         settings(**settings_kwargs)(
-            _run_law(container_type, law, strategy=strategy),
+            _run_law(container_type, law),
         ),
     )
 
     called_from = inspect.stack()[2]
     module = inspect.getmodule(called_from[0])
 
-    test_function.__name__ = 'test_{container}_{name}'.format(
+    test_function.__name__ = 'test_{container}_{name}_{uuid}'.format(
         container=container_type.__qualname__.lower(),  # type: ignore
         name=law.name,
+        uuid=str(uuid.uuid4()),
     )
 
     setattr(module, test_function.__name__, test_function)
@@ -72,13 +99,11 @@ def _create_law_test_case(
 def check_all_laws(
     container_type: Lawful,
     *,
-    strategy: Optional[st.SearchStrategy] = None,
     settings_kwargs: Optional[Dict[str, Any]] = None,
 ) -> None:
     for law in container_type.laws():
         _create_law_test_case(
             container_type,
             law,
-            strategy=strategy,
             settings_kwargs=settings_kwargs,
         )

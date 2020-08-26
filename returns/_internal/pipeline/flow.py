@@ -28,7 +28,7 @@ def _flow(instance, *functions):
        >>> assert flow('1', int, float, str) == '1.0'
 
     This function is closely related
-    to :func:`pipe <returns._generated.pipeline.pipe._pipe>`:
+    to :func:`pipe <returns._internal.pipeline.pipe._pipe>`:
 
     .. code:: python
 
