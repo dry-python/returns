@@ -2,6 +2,7 @@ from typing import Any, Callable, ClassVar, NoReturn, Sequence, Type, TypeVar
 
 from typing_extensions import final
 
+from returns.primitives.hkt import KindN
 from returns.interfaces import bindable, iterable
 from returns.interfaces.applicative_mappable import ApplicativeMappableN
 from returns.primitives.asserts import assert_equal
@@ -31,7 +32,7 @@ class _LawSpec(LawSpecDef):
         container: 'ContainerN[_FirstType, _SecondType, _ThirdType]',
         function: Callable[
             [_FirstType],
-            'ContainerN[_FirstType, _SecondType, _ThirdType]',
+            KindN['ContainerN', _NewType1, _SecondType, _ThirdType],
         ],
     ) -> None:
         """
@@ -69,11 +70,11 @@ class _LawSpec(LawSpecDef):
         container: 'ContainerN[_FirstType, _SecondType, _ThirdType]',
         first: Callable[
             [_FirstType],
-            'ContainerN[_NewType1, _SecondType, _ThirdType]',
+            KindN['ContainerN', _NewType1, _SecondType, _ThirdType],
         ],
         second: Callable[
             [_NewType1],
-            'ContainerN[_NewType2, _SecondType, _ThirdType]',
+            KindN['ContainerN', _NewType2, _SecondType, _ThirdType],
         ],
     ) -> None:
         """

@@ -38,6 +38,7 @@ def check_all_laws(
     Note:
         Cannot be used inside doctests because of the magic we use inside.
 
+    See: https://mmhaskell.com/blog/2017/3/13/obey-the-type-laws
     """
     for interface, laws in container_type.laws().items():
         for law in laws:

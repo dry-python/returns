@@ -1,3 +1,7 @@
+import sys
+
+import pytest
+
 from returns.context import (
     Reader,
     ReaderFutureResult,
@@ -8,6 +12,9 @@ from returns.contrib.hypothesis.laws import check_all_laws
 from returns.future import Future, FutureResult
 from returns.io import IO, IOResult
 from returns.result import Result
+
+if sys.version_info < (3, 7):
+    pytest.skip('Python 3.6 does not support many hypothesis features')
 
 # TODO: add maybe
 check_all_laws(Result)
