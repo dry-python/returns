@@ -69,7 +69,7 @@ This happens due to `mypy issue <https://github.com/python/mypy/issues/3157>`_.
 safe
 ~~~~
 
-:func:`safe <returns.functions.safe>` is used to convert
+:func:`safe <returns.result.safe>` is used to convert
 regular functions that can throw exceptions to functions
 that return :class:`Result <returns.result.Result>` type.
 

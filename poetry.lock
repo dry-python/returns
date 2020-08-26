@@ -1080,6 +1080,14 @@ type_comments = ["typed-ast (>=1.4.0)"]
 
 [[package]]
 category = "dev"
+description = "Sphinx extension to embed content in a tooltip on xref hover"
+name = "sphinx-hoverxref"
+optional = false
+python-versions = "*"
+version = "0.5b1"
+
+[[package]]
+category = "dev"
 description = "A typlog Sphinx theme"
 name = "sphinx-typlog-theme"
 optional = false
@@ -1325,7 +1333,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "41034dc138521429bfad9a7824c6b88ea57425c0840fc8fe7960175fcca1c10d"
+content-hash = "8fd430c5fae6d0b357b379bb1d0b132735631eea44fcfe0c11f1e71a606767ba"
 python-versions = "^3.6"
 
 [metadata.files]
@@ -1821,6 +1829,10 @@ sphinx = [
 sphinx-autodoc-typehints = [
     {file = "sphinx-autodoc-typehints-1.11.0.tar.gz", hash = "sha256:bbf0b203f1019b0f9843ee8eef0cff856dc04b341f6dbe1113e37f2ebf243e11"},
     {file = "sphinx_autodoc_typehints-1.11.0-py3-none-any.whl", hash = "sha256:89e19370a55db4aef1be2094d8fb1fb500ca455c55b3fcc8d2600ff805227e04"},
+]
+sphinx-hoverxref = [
+    {file = "sphinx-hoverxref-0.5b1.tar.gz", hash = "sha256:ac427f9110385f895e075888bf640e0539412f4982c2d705896b8d2f954324b3"},
+    {file = "sphinx_hoverxref-0.5b1-py3-none-any.whl", hash = "sha256:e1f37e0b32e20d6e13ec44dabf079d43c5025021ded1f2c06d55742c67cc2c72"},
 ]
 sphinx-typlog-theme = [
     {file = "sphinx_typlog_theme-0.8.0-py2.py3-none-any.whl", hash = "sha256:b0ab728ab31d071523af0229bcb6427a13493958b3fc2bb7db381520fab77de4"},
