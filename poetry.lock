@@ -163,7 +163,7 @@ description = "Curio"
 name = "curio"
 optional = false
 python-versions = ">= 3.6"
-version = "1.2"
+version = "1.4"
 
 [package.extras]
 test = ["pytest", "sphinx"]
@@ -1325,7 +1325,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "6aa0a69ed76a6c07cf404c43a643be7463ca8c3b736ddc758e485f34a4f8d182"
+content-hash = "41034dc138521429bfad9a7824c6b88ea57425c0840fc8fe7960175fcca1c10d"
 python-versions = "^3.6"
 
 [metadata.files]
@@ -1447,7 +1447,7 @@ coverage = [
     {file = "coverage-5.2.1.tar.gz", hash = "sha256:a34cb28e0747ea15e82d13e14de606747e9e484fb28d63c999483f5d5188e89b"},
 ]
 curio = [
-    {file = "curio-1.2.tar.gz", hash = "sha256:90f320fafb3f5b791f25ffafa7b561cc980376de173afd575a2114380de7939b"},
+    {file = "curio-1.4.tar.gz", hash = "sha256:57edce81c837f3c2cf42fbb346dee26e537d1659e6605269fb13bd179e068744"},
 ]
 darglint = [
     {file = "darglint-1.5.2-py3-none-any.whl", hash = "sha256:049a98cf3aec8cf6ea344a863c68112d80b7f8de214459b5fa6853371f89c3e7"},
