@@ -1,11 +1,14 @@
 from abc import abstractmethod
 from typing import ClassVar, Sequence, TypeVar
 
+from typing_extensions import final
+
 from returns.primitives.laws import Law, Law1, Law2, Law3, Lawful, LawSpecDef
 
 _EqualType = TypeVar('_EqualType', bound='SupportsEquality')
 
 
+@final
 class _LawSpec(LawSpecDef):
     """
     Equality laws.

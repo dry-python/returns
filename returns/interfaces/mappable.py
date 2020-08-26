@@ -1,6 +1,8 @@
 from abc import abstractmethod
 from typing import Callable, ClassVar, Generic, NoReturn, Sequence, TypeVar
 
+from typing_extensions import final
+
 from returns.functions import compose, identity
 from returns.primitives.asserts import assert_equal
 from returns.primitives.hkt import KindN
@@ -18,12 +20,19 @@ _NewType1 = TypeVar('_NewType1')
 _NewType2 = TypeVar('_NewType2')
 
 
+@final
 class _LawSpec(LawSpecDef):
+    """
+    Mappable or functor laws.
+
+    https://en.wikibooks.org/wiki/Haskell/The_Functor_class#The_functor_laws
+    """
 
     @staticmethod
     def identity_law(
         mappable: 'MappableN[_FirstType, _SecondType, _ThirdType]',
     ) -> None:
+        """Mapping identity over a value must return the value unchanged."""
         assert_equal(mappable.map(identity), mappable)
 
     @staticmethod
@@ -32,6 +41,7 @@ class _LawSpec(LawSpecDef):
         first: Callable[[_FirstType], _NewType1],
         second: Callable[[_NewType1], _NewType2],
     ) -> None:
+        """Mapping twice or mapping a composition is the same thing."""
         assert_equal(
             mappable.map(first).map(second),
             mappable.map(compose(first, second)),
@@ -40,7 +50,7 @@ class _LawSpec(LawSpecDef):
 
 class MappableN(
     Generic[_FirstType, _SecondType, _ThirdType],
-    Lawful['MappableN'],
+    Lawful['MappableN[_FirstType, _SecondType, _ThirdType]'],
 ):
     """
     Allows to chain wrapped values in containers with regular functions.

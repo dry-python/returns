@@ -39,6 +39,8 @@ def _temp_container_strategies(container_type: Type[Lawful]) -> Iterator[None]:
 
 @contextmanager
 def pure_functions() -> Iterator[None]:
+    # TODO: support Any by default
+    # TODO: rewrite as `overrides({type: strat})`
     def factory(thing) -> st.SearchStrategy:
         like = (lambda: None) if len(
             thing.__args__,
@@ -91,7 +93,7 @@ def _create_law_test_case(
     test_function.__name__ = 'test_{container}_{name}_{uuid}'.format(
         container=container_type.__qualname__.lower(),
         name=law.name,
-        uuid=str(uuid.uuid4()),
+        uuid=1,  # TODO: do we need `uuid`?
     )
 
     setattr(module, test_function.__name__, test_function)
