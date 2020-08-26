@@ -20,7 +20,7 @@ Here are some practical examples of what we are doing here:
 
 We use [`poetry`](https://github.com/python-poetry/poetry) to manage the dependencies.
 
-To install them you would need to run `install` command:
+To install them you would need to run the `install` command:
 
 ```bash
 poetry install
@@ -32,29 +32,41 @@ To activate your `virtualenv` run `poetry shell`.
 ## Tests
 
 We use `pytest` and `flake8` for quality control.
-We also use `wemake_python_styleguide` to enforce the code quality.
+We also use `wemake_python_styleguide` to enforce code quality.
 
-To run all tests:
+To run standard tests:
 
 ```bash
-pytest . docs/pages
+poetry run pytest returns docs/pages tests
 ```
+
+**NOTE:** type-safety tests not included, see section on type tests below
 
 To run linting:
 
 ```bash
-flake8 .
+poetry run flake8 .
 ```
 Keep in mind: default virtual environment folder excluded by flake8 style checking is `.venv`.
 If you want to customize this parameter, you should do this in `setup.cfg`.
 
-These steps are mandatory during the CI.
+These steps are mandatory during CI.
 
 ### Type tests
 
-We also `pytest-mypy-plugins`. Tests cases are located inside `./typesafety`
+We also use `pytest-mypy-plugins`. Tests cases are located inside `./typesafety`
 If you create new types or typed functions, it is required to test their types.
-Here's [a tutorial](https://sobolevn.me/2019/08/testing-mypy-types) on how to do that.
+
+The type-safety tests can be run with the following:
+
+```bash
+poetry run pytest typesafety
+```
+
+**NOTE:** This can take upwards of 20 minutes, only recommended to run if necessary.
+
+Here's [a helpful tutorial](https://sobolevn.me/2019/08/testing-mypy-types) if you are looking 
+for more information.
 
 
 ## Type checks
@@ -63,10 +75,10 @@ We use `mypy` to run type checks on our code.
 To use it:
 
 ```bash
-mypy returns tests/**/*.py
+poetry run mypy returns tests/**/*.py
 ```
 
-This step is mandatory during the CI.
+This step is mandatory during CI.
 
 
 ## Submitting your code
@@ -110,3 +122,6 @@ You can contribute by spreading a word about this library.
 It would also be a huge contribution to write
 a short article on how you are using this project.
 You can also share your best practices with us.
+
+Join in the conversation with us on our Telegram. 
+[![Telegram chat](https://img.shields.io/badge/chat-join-blue?logo=telegram)](https://t.me/drypython)
