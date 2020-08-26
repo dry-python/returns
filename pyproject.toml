@@ -63,7 +63,7 @@ flake8-pyi = "^20.5"
 nitpick = "^0.22"
 
 anyio = "^1.4"
-curio = "^1.2"
+curio = "^1.4"
 trio = "^0.16"
 
 safety = "^1.8"
