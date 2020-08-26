@@ -37,10 +37,8 @@ jobs:
       run: |
         source "$HOME/.poetry/env"
 
-        # TODO: enable all checks once again
-        # poetry run flake8 .
+        poetry run flake8 .
         poetry run mypy returns ./tests/**/*.py
-<<<<<<< HEAD
         poetry run pytest returns docs/pages tests
         poetry run doc8 -q docs
         poetry run poetry check
@@ -48,13 +46,6 @@ jobs:
         poetry run safety check --full-report
         # We do this to speed up the build:
         poetry run pytest typesafety -p no:cov -o addopts="" --mypy-ini-file=setup.cfg
-=======
-        poetry run pytest returns tests docs/pages
-        # poetry run doc8 -q docs
-        # poetry run poetry check
-        # poetry run pip check
-        # poetry run safety check --full-report
->>>>>>> WIP: typing and tests do pass
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1

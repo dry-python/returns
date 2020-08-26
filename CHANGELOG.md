@@ -11,6 +11,7 @@ See [0Ver](https://0ver.org/).
 ### Features
 
 - Adds Higher Kinded Types partial support
+
 - **Breaking**: makes our `mypy` plugin not optional, but required!
 - **Breaking**: changes all `RequiresContext`-based type arguments order,
   previously we used to specify `_EnvType` as the first type argument,
@@ -38,15 +39,20 @@ See [0Ver](https://0ver.org/).
   because it is impossible to properly type it
 - **Breaking**: Removes all `Context*` based types with `.ask()` method,
   use new `.ask()` methods on the `Reader`-based containers
+- **Breaking**: Now `Future` and `FutureResult` can be awaited multiple times
+
 - Adds new public interfaces: see `returns.interfaces`
 - Adds `methods` package with all the composition methods we support
+- Adds better `from_iterable` support,
+  now it receives a custom strategy with how to handle iterable
+- Adds two predefined iterable strategies: `FailFast` and `CollectAll`
+
 - Adds `FutureSuccess` and `FutureFailure` unit functions
   to be similar to `Result` and `IOResult`
 - Adds `.swap` method to `Result`, `IOResult`, `FutureResult`,
   and other result based containers
 - Adds `.modify_env` method to all `RequiresContext*` types
 - Adds `.rescue` to `Maybe`
-- Adds `collect_trace` helper function for better development experience
 - Adds missing `from_requires_context_future_result` to `RequiresContext`
 - Adds `__slots__` to `UnwrapFailedError` with `halted_container`
 - Changes `flatten` to work with `KindN` and any possible container
@@ -55,8 +61,10 @@ See [0Ver](https://0ver.org/).
 - Adds a helper to test traces to our `pytest` plugin
 - Adds `cond` method to `methods` package
 - Adds `cond` function to `pointfree` package
-- Adds `compose_result` HKT method
-- Adds `compose_result` pointfree function
+- Adds `compose_result` HKT method and pointfree function
+
+- Adds `collect_trace` helper function for better development experience
+- Adds `hypothesis` intergration and pre-defined "monad laws as values"
 
 ### Bugfixes
 

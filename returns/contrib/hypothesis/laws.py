@@ -1,7 +1,7 @@
 import inspect
 import uuid
 from contextlib import contextmanager
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Callable, Dict, List, Optional, Type, Iterator
 
 import pytest
 from hypothesis import given, settings
@@ -9,16 +9,17 @@ from hypothesis import strategies as st
 from hypothesis.strategies._internal import types
 
 from returns.interfaces.specific.result import ResultLikeN
+from returns.interfaces.applicative import ApplicativeN
 from returns.primitives.laws import Law, Law1, Law2, Law3, Lawful
 
 
 @contextmanager
-def _temp_container_strategies(container_type):
-    def factory(type_):
-        strategies: List[st.SearchStrategy[Any]] = [
-            st.builds(container_type.from_value),
-        ]
-        if isinstance(container_type, ResultLikeN):
+def _temp_container_strategies(container_type: Type[Lawful]) -> Iterator[None]:
+    def factory(type_) -> st.SearchStrategy:
+        strategies: List[st.SearchStrategy[Any]] = []
+        if issubclass(container_type, ApplicativeN):
+            strategies.append(st.builds(container_type.from_value))
+        if issubclass(container_type, ResultLikeN):
             strategies.append(st.builds(container_type.from_failure))
         return st.one_of(*strategies)
 
@@ -37,8 +38,8 @@ def _temp_container_strategies(container_type):
 
 
 @contextmanager
-def pure_functions():
-    def factory(thing):
+def pure_functions() -> Iterator[None]:
+    def factory(thing) -> st.SearchStrategy:
         like = (lambda: None) if len(
             thing.__args__,
         ) == 1 else (lambda *a, **k: None)
@@ -59,7 +60,7 @@ def pure_functions():
 
 
 def _run_law(
-    container_type,
+    container_type: Type[Lawful],
     law: Law,
 ) -> Callable[[st.DataObject], None]:
     def factory(source: st.DataObject) -> None:
@@ -70,7 +71,7 @@ def _run_law(
 
 
 def _create_law_test_case(
-    container_type: Lawful,
+    container_type: Type[Lawful],
     law: Law,
     *,
     settings_kwargs: Optional[Dict[str, Any]],
@@ -88,7 +89,7 @@ def _create_law_test_case(
     module = inspect.getmodule(called_from[0])
 
     test_function.__name__ = 'test_{container}_{name}_{uuid}'.format(
-        container=container_type.__qualname__.lower(),  # type: ignore
+        container=container_type.__qualname__.lower(),
         name=law.name,
         uuid=str(uuid.uuid4()),
     )
@@ -97,7 +98,7 @@ def _create_law_test_case(
 
 
 def check_all_laws(
-    container_type: Lawful,
+    container_type: Type[Lawful],
     *,
     settings_kwargs: Optional[Dict[str, Any]] = None,
 ) -> None:

@@ -28,11 +28,8 @@ from returns.primitives.hkt import (
     SupportsKind2,
     dekind,
 )
-<<<<<<< HEAD
 from returns.primitives.iterables import BaseIterableStrategyN, FailFast
-=======
 from returns.primitives.reawaitable import ReAwaitable
->>>>>>> WIP: typing and tests do pass
 from returns.result import Failure, Result, Success
 
 # Definitions:
