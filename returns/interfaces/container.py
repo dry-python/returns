@@ -1,11 +1,11 @@
-from typing import NoReturn, TypeVar, ClassVar, Sequence, Any, Type, Callable
+from typing import Any, Callable, ClassVar, NoReturn, Sequence, Type, TypeVar
 
 from typing_extensions import final
 
 from returns.interfaces import bindable, iterable
 from returns.interfaces.applicative_mappable import ApplicativeMappableN
-from returns.primitives.laws import LawSpecDef, Lawful, Law, Law1, Law2, Law3
 from returns.primitives.asserts import assert_equal
+from returns.primitives.laws import Law, Law1, Law2, Law3, Lawful, LawSpecDef
 
 _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')
@@ -19,9 +19,10 @@ _NewType2 = TypeVar('_NewType2')
 @final
 class _LawSpec(LawSpecDef):
     """
-    Bindable laws.
+    Container laws.
 
-    https://wiki.haskell.org/Monad_laws
+    Definition: https://wiki.haskell.org/Monad_laws
+    Good explanation: https://bit.ly/2Qsi5re
     """
 
     @staticmethod
@@ -33,7 +34,13 @@ class _LawSpec(LawSpecDef):
             'ContainerN[_FirstType, _SecondType, _ThirdType]',
         ],
     ) -> None:
-        """TODO."""
+        """
+        Left identity.
+
+        The first law states that if we take a value, put it in a default
+        context with return and then feed it to a function by using ``bind``,
+        it's the same as just taking the value and applying the function to it.
+        """
         assert_equal(
             container.from_value(raw_value).bind(function),
             function(raw_value),
@@ -43,7 +50,13 @@ class _LawSpec(LawSpecDef):
     def right_identity(
         container: 'ContainerN[_FirstType, _SecondType, _ThirdType]',
     ) -> None:
-        """TODO."""
+        """
+        Right identity.
+
+        The second law states that if we have a container value
+        and we use ``bind`` to feed it to ``.from_value``,
+        the result is our original container value.
+        """
         assert_equal(
             container,
             container.bind(
@@ -59,11 +72,17 @@ class _LawSpec(LawSpecDef):
             'ContainerN[_NewType1, _SecondType, _ThirdType]',
         ],
         second: Callable[
-            [_FirstType],
+            [_NewType1],
             'ContainerN[_NewType2, _SecondType, _ThirdType]',
         ],
     ) -> None:
-        """TODO"""
+        """
+        Associativity law.
+
+        The final monad law says that when
+        we have a chain of container functions applications with ``bind``,
+        it shouldn’t matter how they’re nested.
+        """
         assert_equal(
             container.bind(first).bind(second),
             container.bind(lambda inner: first(inner).bind(second)),

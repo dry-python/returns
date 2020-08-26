@@ -1,5 +1,5 @@
 from itertools import chain
-from typing import Callable, ClassVar, Generic, Sequence, TypeVar
+from typing import Callable, ClassVar, Dict, Generic, Sequence, Type, TypeVar
 
 from typing_extensions import final
 
@@ -90,26 +90,29 @@ class Lawful(Generic[_Caps]):
 
     @final
     @classmethod
-    def laws(cls) -> Sequence[Law]:
+    def laws(cls) -> Dict[Type['Lawful'], Sequence[Law]]:
         """
         Collects all laws from all parent classes.
 
         Algorithm:
         1. First, we collect all unique parents in ``__mro__`
         2. Then we get the laws definition from each of them
-        3. Then we flatten the result iterable
+        3. Then we structure them in a ``type: its_laws`` way
 
         """
         seen = {}
         for parent in cls.__mro__:
-            if parent.__qualname__ not in seen:
-                seen[parent.__qualname__] = parent
-        return tuple(chain.from_iterable(
-            # We use __dict__ here because we don't want to triger
-            # attribute access, which can resolve laws from parent classes.
-            klass.__dict__.get('_laws', ())
-            for klass in seen.values()
-        ))
+            fullname = '{0}.{1}'.format(parent.__module__, parent.__qualname__)
+            if fullname not in seen:
+                seen[fullname] = parent
+
+        laws = {}
+        for klass in seen.values():
+            current_laws = klass.__dict__.get('_laws', ())
+            if not current_laws:
+                continue
+            laws[klass] = current_laws
+        return laws
 
 
 class LawSpecDef(object):
