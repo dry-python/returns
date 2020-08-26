@@ -4,12 +4,8 @@
     from typing import Any, Type, TypeVar, Iterable, Sequence
     from returns.interfaces.iterable import Iterable1
     from returns.primitives.hkt import Kind1, SupportsKind1, dekind
-<<<<<<< HEAD
-    from returns._generated.iterable import iterable_kind
     from returns.primitives.iterables import BaseIterableStrategyN, FailFast
-=======
     from returns._internal.iterable import iterable_kind
->>>>>>> WIP: typing and tests do pass
 
     V = TypeVar('V')
     N = TypeVar('N')
@@ -33,12 +29,8 @@
     from typing import Any, Type, TypeVar, Iterable, Sequence
     from returns.interfaces.iterable import Iterable2
     from returns.primitives.hkt import SupportsKind2, Kind2, dekind
-<<<<<<< HEAD
-    from returns._generated.iterable import iterable_kind
     from returns.primitives.iterables import BaseIterableStrategyN, FailFast
-=======
     from returns._internal.iterable import iterable_kind
->>>>>>> WIP: typing and tests do pass
 
     V = TypeVar('V')
     E = TypeVar('E')
@@ -64,12 +56,8 @@
     from typing import Any, Type, TypeVar, Iterable, Sequence
     from returns.interfaces.iterable import Iterable3
     from returns.primitives.hkt import SupportsKind3, Kind3, dekind
-<<<<<<< HEAD
-    from returns._generated.iterable import iterable_kind
     from returns.primitives.iterables import BaseIterableStrategyN, CollectAll
-=======
     from returns._internal.iterable import iterable_kind
->>>>>>> WIP: typing and tests do pass
 
     V = TypeVar('V')
     E = TypeVar('E')
