@@ -117,14 +117,13 @@ class Lawful(Generic[_Caps]):
         3. Then we structure them in a ``type: its_laws`` way
 
         """
-        seen = {}
-        for parent in cls.__mro__:
-            fullname = '{0}.{1}'.format(
+        seen = {
+            '{0}.{1}'.format(
                 parent.__module__,  # noqa: WPS609
                 parent.__qualname__,
-            )
-            if fullname not in seen:
-                seen[fullname] = parent
+            ): parent
+            for parent in cls.__mro__
+        }
 
         laws = {}
         for klass in seen.values():
