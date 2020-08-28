@@ -1,4 +1,3 @@
-from itertools import chain
 from typing import Callable, ClassVar, Dict, Generic, Sequence, Type, TypeVar
 
 from typing_extensions import final
@@ -13,14 +12,26 @@ _TypeArgType3 = TypeVar('_TypeArgType3')
 
 
 class Law(Immutable):
-    """Base class for all laws. Does not have an attached signature."""
+    """
+    Base class for all laws. Does not have an attached signature.
+
+    Should not be used directly.
+    Use ``Law1``, ``Law2`` or ``Law3`` instead.
+    """
 
     __slots__ = ('definition', )
+
+    #: Function used to define this law.
     definition: Callable
+
+    def __init__(self, function) -> None:
+        """Saves function to the inner state."""
+        object.__setattr__(self, 'definition', function)  # noqa: WPS609
 
     @final
     @property
     def name(self) -> str:
+        """Returns a name of the given law. Basically a name of the function."""
         return self.definition.__name__
 
 
@@ -37,7 +48,8 @@ class Law1(
         self,
         function: Callable[[_TypeArgType1], _ReturnType],
     ) -> None:
-        object.__setattr__(self, 'definition', function)
+        """Saves function of one argument to the inner state."""
+        super().__init__(function)
 
 
 @final
@@ -53,7 +65,8 @@ class Law2(
         self,
         function: Callable[[_TypeArgType1, _TypeArgType2], _ReturnType],
     ) -> None:
-        object.__setattr__(self, 'definition', function)
+        """Saves function of two arguments to the inner state."""
+        super().__init__(function)
 
 
 @final
@@ -75,7 +88,8 @@ class Law3(
             _ReturnType,
         ],
     ) -> None:
-        object.__setattr__(self, 'definition', function)
+        """Saves function of three arguments to the inner state."""
+        super().__init__(function)
 
 
 class Lawful(Generic[_Caps]):
@@ -90,7 +104,7 @@ class Lawful(Generic[_Caps]):
 
     @final
     @classmethod
-    def laws(cls) -> Dict[Type['Lawful'], Sequence[Law]]:
+    def laws(cls) -> Dict[Type['Lawful'], Sequence[Law]]:  # noqa: WPS210
         """
         Collects all laws from all parent classes.
 
@@ -102,13 +116,16 @@ class Lawful(Generic[_Caps]):
         """
         seen = {}
         for parent in cls.__mro__:
-            fullname = '{0}.{1}'.format(parent.__module__, parent.__qualname__)
+            fullname = '{0}.{1}'.format(
+                parent.__module__,  # noqa: WPS609
+                parent.__qualname__,
+            )
             if fullname not in seen:
                 seen[fullname] = parent
 
         laws = {}
         for klass in seen.values():
-            current_laws = klass.__dict__.get('_laws', ())
+            current_laws = klass.__dict__.get('_laws', ())  # noqa: WPS609
             if not current_laws:
                 continue
             laws[klass] = current_laws

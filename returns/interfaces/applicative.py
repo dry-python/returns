@@ -1,12 +1,20 @@
 from abc import abstractmethod
-from typing import Callable, Generic, NoReturn, Type, TypeVar, ClassVar, Sequence
+from typing import (
+    Callable,
+    ClassVar,
+    Generic,
+    NoReturn,
+    Sequence,
+    Type,
+    TypeVar,
+)
 
 from typing_extensions import final
 
-from returns.primitives.hkt import KindN
-from returns.primitives.laws import LawSpecDef, Law, Lawful, Law1, Law3
+from returns.functions import compose, identity
 from returns.primitives.asserts import assert_equal
-from returns.functions import identity, compose
+from returns.primitives.hkt import KindN
+from returns.primitives.laws import Law, Law1, Law3, Lawful, LawSpecDef
 
 _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')

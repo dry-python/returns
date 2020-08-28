@@ -1,12 +1,12 @@
-from typing import Any, Callable, ClassVar, NoReturn, Sequence, Type, TypeVar
+from typing import Callable, ClassVar, NoReturn, Sequence, TypeVar
 
 from typing_extensions import final
 
-from returns.primitives.hkt import KindN
 from returns.interfaces import bindable, iterable
 from returns.interfaces.applicative_mappable import ApplicativeMappableN
 from returns.primitives.asserts import assert_equal
-from returns.primitives.laws import Law, Law1, Law2, Law3, Lawful, LawSpecDef
+from returns.primitives.hkt import KindN
+from returns.primitives.laws import Law, Law1, Law3, Lawful, LawSpecDef
 
 _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')
@@ -94,6 +94,7 @@ class ContainerN(
     ApplicativeMappableN[_FirstType, _SecondType, _ThirdType],
     bindable.BindableN[_FirstType, _SecondType, _ThirdType],
     iterable.IterableN[_FirstType, _SecondType, _ThirdType],
+    Lawful['ContainerN'],
 ):
     """
     Handy alias for types with ``.bind``, ``.map``, and ``.apply`` methods.

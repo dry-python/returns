@@ -2,6 +2,7 @@ from abc import ABCMeta
 from typing import Any, TypeVar
 
 from returns.interfaces.equality import SupportsEquality
+from returns.primitives.hkt import Kind1
 from returns.primitives.types import Immutable
 
 _EqualType = TypeVar('_EqualType', bound=SupportsEquality)
@@ -30,7 +31,7 @@ class BaseContainer(Immutable, metaclass=ABCMeta):
 
     def __eq__(self, other: Any) -> bool:
         """Used to compare two 'Container' objects."""
-        return container_equality(self, other)
+        return container_equality(self, other)  # type: ignore
 
     def __hash__(self) -> int:
         """Used to use this value as a key."""
@@ -46,9 +47,16 @@ class BaseContainer(Immutable, metaclass=ABCMeta):
 
 
 def container_equality(
-    self: _EqualType,
-    other: _EqualType,
+    self: Kind1[_EqualType, Any],
+    other: Kind1[_EqualType, Any],
 ) -> bool:
-    if type(self) != type(other):
+    """
+    Function to compare similar containers.
+
+    Compares both their types and their inner values.
+    """
+    if type(self) != type(other):  # noqa: WPS516
         return False
-    return self._inner_value == other._inner_value  # type: ignore
+    return bool(
+        self._inner_value == other._inner_value,  # type: ignore # noqa: WPS437
+    )

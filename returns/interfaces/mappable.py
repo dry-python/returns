@@ -6,7 +6,7 @@ from typing_extensions import final
 from returns.functions import compose, identity
 from returns.primitives.asserts import assert_equal
 from returns.primitives.hkt import KindN
-from returns.primitives.laws import Law, Law1, Law2, Law3, Lawful, LawSpecDef
+from returns.primitives.laws import Law, Law1, Law3, Lawful, LawSpecDef
 
 _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')

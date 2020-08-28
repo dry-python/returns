@@ -9,7 +9,7 @@ from hypothesis.strategies._internal import types
 
 from returns.interfaces.applicative import ApplicativeN
 from returns.interfaces.specific.result import ResultLikeN
-from returns.primitives.laws import Law, Law1, Law2, Law3, Lawful
+from returns.primitives.laws import Law, Lawful
 
 
 def check_all_laws(
@@ -69,8 +69,6 @@ def container_strategies(container_type: Type[Lawful]) -> Iterator[None]:
             strategies.append(st.builds(container_type.from_failure))
         return st.one_of(*strategies)
 
-    # TODO: also register `KindN` instance of a type:
-    # TODO: or register `KindN` inside an `entrypoint`? By inspecting type
     interfaces = {
         base_type
         for base_type in container_type.__mro__
@@ -82,7 +80,7 @@ def container_strategies(container_type: Type[Lawful]) -> Iterator[None]:
     yield
 
     for interface in interfaces:
-        types._global_type_lookup.pop(interface)
+        types._global_type_lookup.pop(interface)  # noqa: WPS441
 
 
 @contextmanager
@@ -95,7 +93,7 @@ def pure_functions() -> Iterator[None]:
     def factory(thing) -> st.SearchStrategy:
         like = (lambda: None) if len(
             thing.__args__,
-        ) == 1 else (lambda *a, **k: None)
+        ) == 1 else (lambda *args, **kwargs: None)
 
         return st.functions(
             like=like,
@@ -103,13 +101,13 @@ def pure_functions() -> Iterator[None]:
             pure=True,
         )
 
-    previous = types._global_type_lookup[Callable]  # type: ignore
+    used = types._global_type_lookup[Callable]  # type: ignore
     st.register_type_strategy(Callable, factory)  # type: ignore
 
     yield
 
     types._global_type_lookup.pop(Callable)  # type: ignore
-    st.register_type_strategy(Callable, previous)  # type: ignore
+    st.register_type_strategy(Callable, used)  # type: ignore
 
 
 def _run_law(
@@ -142,10 +140,17 @@ def _create_law_test_case(
     called_from = inspect.stack()[2]
     module = inspect.getmodule(called_from[0])
 
-    test_function.__name__ = 'test_{container}_{interface}_{name}'.format(
+    template = 'test_{container}_{interface}_{name}'
+    test_function.__name__ = template.format(  # noqa: WPS125
         container=container_type.__qualname__.lower(),
         interface=interface.__qualname__.lower(),
         name=law.name,
     )
 
-    setattr(module, test_function.__name__, test_function)
+    setattr(
+        module,
+        test_function.__name__,
+        # We mark all tests with `returns_lawful` marker,
+        # so users can easily skip them if needed.
+        pytest.mark.returns_lawful(test_function),
+    )

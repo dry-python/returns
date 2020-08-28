@@ -79,7 +79,7 @@ class ReAwaitable(object):
           Hello
 
         """
-        return self._awaitable().__await__()
+        return self._awaitable().__await__()  # noqa: WPS609
 
     def __repr__(self) -> str:
         """
