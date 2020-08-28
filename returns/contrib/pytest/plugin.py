@@ -26,6 +26,21 @@ _ResultCallableType = TypeVar(
 )
 
 
+def pytest_configure(config) -> None:
+    """
+    Hook to be executed on import.
+
+    We use it define custom markers.
+    """
+    config.addinivalue_line(
+        'markers',
+        """
+        returns_lawful: all tests under `check_all_laws` is marked this way,
+        use `-m "not returns_lawful"` to skip them.
+        """,
+    )
+
+
 class _DesiredFunctionFound(RuntimeError):
     """Exception to raise when expected function is found."""
 

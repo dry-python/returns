@@ -40,6 +40,7 @@ def check_all_laws(
 
     See: https://mmhaskell.com/blog/2017/3/13/obey-the-type-laws
     """
+    # TODO: raise on Python3.6
     for interface, laws in container_type.laws().items():
         for law in laws:
             _create_law_test_case(
