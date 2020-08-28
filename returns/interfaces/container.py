@@ -6,7 +6,14 @@ from returns.interfaces import bindable, iterable
 from returns.interfaces.applicative_mappable import ApplicativeMappableN
 from returns.primitives.asserts import assert_equal
 from returns.primitives.hkt import KindN
-from returns.primitives.laws import Law, Law1, Law3, Lawful, LawSpecDef
+from returns.primitives.laws import (
+    Law,
+    Law1,
+    Law3,
+    Lawful,
+    LawSpecDef,
+    law_definition,
+)
 
 _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')
@@ -26,7 +33,7 @@ class _LawSpec(LawSpecDef):
     Good explanation: https://bit.ly/2Qsi5re
     """
 
-    @staticmethod
+    @law_definition
     def left_identity(
         raw_value: _FirstType,
         container: 'ContainerN[_FirstType, _SecondType, _ThirdType]',
@@ -47,7 +54,7 @@ class _LawSpec(LawSpecDef):
             function(raw_value),
         )
 
-    @staticmethod
+    @law_definition
     def right_identity(
         container: 'ContainerN[_FirstType, _SecondType, _ThirdType]',
     ) -> None:
@@ -65,7 +72,7 @@ class _LawSpec(LawSpecDef):
             ),
         )
 
-    @staticmethod
+    @law_definition
     def associativity(
         container: 'ContainerN[_FirstType, _SecondType, _ThirdType]',
         first: Callable[

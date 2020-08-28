@@ -14,7 +14,14 @@ from typing_extensions import final
 from returns.functions import compose, identity
 from returns.primitives.asserts import assert_equal
 from returns.primitives.hkt import KindN
-from returns.primitives.laws import Law, Law1, Law3, Lawful, LawSpecDef
+from returns.primitives.laws import (
+    Law,
+    Law1,
+    Law3,
+    Lawful,
+    LawSpecDef,
+    law_definition,
+)
 
 _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')
@@ -37,7 +44,7 @@ class _LawSpec(LawSpecDef):
     Discussion: https://bit.ly/3jffz3L
     """
 
-    @staticmethod
+    @law_definition
     def identity(
         container: 'ApplicativeN[_FirstType, _SecondType, _ThirdType]',
     ) -> None:
@@ -52,7 +59,7 @@ class _LawSpec(LawSpecDef):
             container.apply(container.from_value(identity)),
         )
 
-    @staticmethod
+    @law_definition
     def interchange(
         raw_value: _FirstType,
         container: 'ApplicativeN[_FirstType, _SecondType, _ThirdType]',
@@ -75,7 +82,7 @@ class _LawSpec(LawSpecDef):
             ),
         )
 
-    @staticmethod
+    @law_definition
     def homomorphism(
         raw_value: _FirstType,
         container: 'ApplicativeN[_FirstType, _SecondType, _ThirdType]',
@@ -96,7 +103,7 @@ class _LawSpec(LawSpecDef):
             ),
         )
 
-    @staticmethod
+    @law_definition
     def composition(
         container: 'ApplicativeN[_FirstType, _SecondType, _ThirdType]',
         first: Callable[[_FirstType], _NewType1],

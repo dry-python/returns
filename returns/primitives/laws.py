@@ -10,6 +10,9 @@ _TypeArgType1 = TypeVar('_TypeArgType1')
 _TypeArgType2 = TypeVar('_TypeArgType2')
 _TypeArgType3 = TypeVar('_TypeArgType3')
 
+#: Special alias to define laws as functions even inside a class
+law_definition = staticmethod
+
 
 class Law(Immutable):
     """

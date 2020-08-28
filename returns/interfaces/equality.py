@@ -3,7 +3,15 @@ from typing import ClassVar, Sequence, TypeVar
 
 from typing_extensions import final
 
-from returns.primitives.laws import Law, Law1, Law2, Law3, Lawful, LawSpecDef
+from returns.primitives.laws import (
+    Law,
+    Law1,
+    Law2,
+    Law3,
+    Lawful,
+    LawSpecDef,
+    law_definition,
+)
 
 _EqualType = TypeVar('_EqualType', bound='SupportsEquality')
 
@@ -16,14 +24,14 @@ class _LawSpec(LawSpecDef):
     Description: https://bit.ly/34D40iT
     """
 
-    @staticmethod
+    @law_definition
     def reflexive_law(
         first: _EqualType,
     ) -> None:
         """Value should be equal to itself."""
         assert first.equals(first)
 
-    @staticmethod
+    @law_definition
     def symmetry_law(
         first: _EqualType,
         second: _EqualType,
@@ -31,7 +39,7 @@ class _LawSpec(LawSpecDef):
         """If ``A == B`` then ``B == A``."""
         assert first.equals(second) == second.equals(first)
 
-    @staticmethod
+    @law_definition
     def transitivity_law(
         first: _EqualType,
         second: _EqualType,

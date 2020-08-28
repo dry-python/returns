@@ -6,7 +6,14 @@ from typing_extensions import final
 from returns.functions import compose, identity
 from returns.primitives.asserts import assert_equal
 from returns.primitives.hkt import KindN
-from returns.primitives.laws import Law, Law1, Law3, Lawful, LawSpecDef
+from returns.primitives.laws import (
+    Law,
+    Law1,
+    Law3,
+    Lawful,
+    LawSpecDef,
+    law_definition,
+)
 
 _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')
@@ -28,14 +35,14 @@ class _LawSpec(LawSpecDef):
     https://en.wikibooks.org/wiki/Haskell/The_Functor_class#The_functor_laws
     """
 
-    @staticmethod
+    @law_definition
     def identity_law(
         mappable: 'MappableN[_FirstType, _SecondType, _ThirdType]',
     ) -> None:
         """Mapping identity over a value must return the value unchanged."""
         assert_equal(mappable.map(identity), mappable)
 
-    @staticmethod
+    @law_definition
     def associativity_law(
         mappable: 'MappableN[_FirstType, _SecondType, _ThirdType]',
         first: Callable[[_FirstType], _NewType1],
