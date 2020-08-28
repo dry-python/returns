@@ -181,6 +181,35 @@ Like so:
 
 So, that's a way to go, if you need this composition.
 
+map vs bind
+~~~~~~~~~~~
+
+We use the ``map`` method when we're working with pure functions, a function
+is pure if it doesn't produce any side-effect (e.g. Exceptions). On the other
+hand, we use the ``bind`` method if a function returns a ``Result`` instance
+which translates its potential side-effect into a raw value.
+See the example below:
+
+.. code:: python
+
+  >>> import json
+  >>> from typing import Dict
+
+  >>> from returns.result import Failure, Result, Success, safe
+
+  >>> # `cast_to_bool` doesn't produce any side-effect
+  >>> def cast_to_bool(arg: int) -> bool:
+  ...     return bool(arg)
+
+  >>> # `parse_json` can produce Exceptions, so we use the `safe` decorator
+  >>> # to prevent any kind of exceptions
+  >>> @safe
+  ... def parse_json(arg: str) -> Dict[str, str]:
+  ...     return json.loads(arg)
+
+  >>> assert Success(1).map(cast_to_bool) == Success(True)
+  >>> assert Success('{"example": "example"}').bind(parse_json) == Success({"example": "example"})
+  >>> assert Success('').bind(parse_json).alt(str) == Failure('Expecting value: line 1 column 1 (char 0)')
 
 Further reading
 ---------------
