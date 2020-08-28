@@ -29,8 +29,7 @@ class _LawSpec(LawSpecDef):
         second: _EqualType,
     ) -> None:
         """If ``A == B`` then ``B == A``."""
-        if first.equals(second):
-            assert second.equals(first)
+        assert first.equals(second) == second.equals(first)
 
     @staticmethod
     def transitivity_law(
