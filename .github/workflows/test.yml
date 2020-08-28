@@ -48,7 +48,7 @@ jobs:
         poetry run flake8 .
         poetry run mypy returns ./tests/**/*.py
         # Different python versions are covered differently:
-        poetry run pytest returns docs/pages tests --cov-fail-under=${{ coverage }}
+        poetry run pytest returns docs/pages tests --cov-fail-under=${{ matrix.coverage }}
         poetry run doc8 -q docs
         poetry run poetry check
         poetry run pip check
