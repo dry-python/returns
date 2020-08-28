@@ -13,8 +13,10 @@ from returns.future import Future, FutureResult
 from returns.io import IO, IOResult
 from returns.result import Result
 
-if sys.version_info < (3, 7):
-    pytest.skip('Python 3.6 does not support many hypothesis features')
+pytestmark = pytest.mark.skipif(
+    sys.version_info < (3, 7),
+    reason='Python 3.6 does not support many hypothesis features',
+)
 
 # TODO: add maybe
 check_all_laws(Result)
