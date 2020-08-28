@@ -102,7 +102,7 @@ class Lawful(Generic[_Caps]):
     #: Some classes and interfaces might have laws, some might not have any.
     _laws: ClassVar[Sequence[Law]]
 
-    @final
+    @final  # noqa: WPS210
     @classmethod
     def laws(cls) -> Dict[Type['Lawful'], Sequence[Law]]:  # noqa: WPS210
         """
