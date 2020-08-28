@@ -6,7 +6,25 @@ from returns.primitives.exceptions import ImmutableStateError
 from returns.result import Failure, Success
 
 
-def test_nonequality():
+def test_equals():
+    """Ensures that ``.equals`` method works correctly."""
+    inner_value = 1
+
+    assert Success(inner_value).equals(Success(inner_value))
+    assert Failure(inner_value).equals(Failure(inner_value))
+
+
+def test_not_equals():
+    """Ensures that ``.equals`` method works correctly."""
+    inner_value = 1
+
+    assert not Success(inner_value).equals(Failure(inner_value))
+    assert not Success(inner_value).equals(Success(0))
+    assert not Failure(inner_value).equals(Success(inner_value))
+    assert not Failure(inner_value).equals(Failure(0))
+
+
+def test_non_equality():
     """Ensures that containers are not compared to regular values."""
     input_value = 5
 

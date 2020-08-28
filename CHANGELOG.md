@@ -53,6 +53,8 @@ See [0Ver](https://0ver.org/).
   and other result based containers
 - Adds `.modify_env` method to all `RequiresContext*` types
 - Adds `.rescue` to `Maybe`
+- Adds `.equals` methods to types that can be compared directly:
+  `Result`, `Maybe`, `IO`, `IOResult`
 - Adds missing `from_requires_context_future_result` to `RequiresContext`
 - Adds `__slots__` to `UnwrapFailedError` with `halted_container`
 - Changes `flatten` to work with `KindN` and any possible container
@@ -77,6 +79,7 @@ See [0Ver](https://0ver.org/).
 ### Misc
 
 - Adds a lot of new typetests
+- Checks that now all math laws are checked for all types
 - Changes docs structure, adds new `Interfaces`, `HKT`, and `Methods` pages
 
 

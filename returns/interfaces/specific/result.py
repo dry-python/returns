@@ -11,7 +11,7 @@ from typing import TYPE_CHECKING, Callable, NoReturn, Type, TypeVar
 from returns.interfaces import (
     altable,
     container,
-    equality,
+    equable,
     rescuable,
     unwrappable,
 )
@@ -85,7 +85,7 @@ ResultLike3 = ResultLikeN[_FirstType, _SecondType, _ThirdType]
 class UnwrappableResult(
     ResultLikeN[_FirstType, _SecondType, _ThirdType],
     unwrappable.Unwrappable[_FirstUnwrappableType, _SecondUnwrappableType],
-    equality.SupportsEquality,
+    equable.SupportsEquality,
 ):
     """
     Intermediate type with 5 type arguments that represents unwrappable result.

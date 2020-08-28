@@ -44,7 +44,7 @@ _SecondType = TypeVar('_SecondType')
 class IO(
     BaseContainer,
     SupportsKind1['IO', _ValueType],
-    io.IOBased1[_ValueType],
+    io.IOLike1[_ValueType],
 ):
     """
     Explicit container for impure function results.
@@ -72,6 +72,9 @@ class IO(
     """
 
     _inner_value: _ValueType
+
+    #: Typesafe equality comparision with other `Result` objects.
+    equals = container_equality
 
     def __init__(self, inner_value: _ValueType) -> None:
         """
@@ -155,7 +158,7 @@ class IO(
         """
         return dekind(function(self._inner_value))
 
-    #: Alias for `bind` method. Part of the `IOBasedN` interface.
+    #: Alias for `bind` method. Part of the `IOLikeN` interface.
     bind_io = bind
 
     @classmethod
@@ -185,7 +188,7 @@ class IO(
           >>> from returns.io import IO
           >>> assert IO(1) == IO.from_io(IO(1))
 
-        Part of the :class:`returns.interfaces.specific.IO.IOBasedN` interface.
+        Part of the :class:`returns.interfaces.specific.IO.IOLikeN` interface.
 
         """
         return inner_value

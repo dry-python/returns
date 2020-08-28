@@ -562,8 +562,6 @@ class FutureResult(
 
     """
 
-    outer: ClassVar[Type[Future]] = Future
-
     _inner_value: Awaitable[Result[_ValueType, _ErrorType]]
 
     def __init__(

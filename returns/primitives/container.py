@@ -57,6 +57,4 @@ def container_equality(
     """
     if type(self) != type(other):  # noqa: WPS516
         return False
-    return bool(
-        self._inner_value == other._inner_value,  # type: ignore # noqa: WPS437
-    )
+    return bool(self._inner_value == other._inner_value)  # noqa: WPS437

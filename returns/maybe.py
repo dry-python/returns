@@ -18,7 +18,7 @@ from typing_extensions import final
 from returns._internal.iterable import iterable_kind
 from returns.interfaces import rescuable, unwrappable
 from returns.interfaces.container import Container1
-from returns.primitives.container import BaseContainer
+from returns.primitives.container import BaseContainer, container_equality
 from returns.primitives.exceptions import UnwrapFailedError
 from returns.primitives.hkt import Kind1, SupportsKind1
 from returns.primitives.iterables import BaseIterableStrategyN, FailFast
@@ -60,6 +60,9 @@ class Maybe(
     success_type: ClassVar[Type['_Some']]
     #: Failure type that is used to represent the failed computation.
     failure_type: ClassVar[Type['_Nothing']]
+
+    #: Typesafe equality comparision with other `Result` objects.
+    equals = container_equality
 
     def map(  # noqa: WPS125
         self,

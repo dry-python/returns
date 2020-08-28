@@ -35,7 +35,7 @@ _AsyncFutureType = TypeVar('_AsyncFutureType', bound='AsyncFutureN')
 _FutureBasedType = TypeVar('_FutureBasedType', bound='FutureBasedN')
 
 
-class FutureLikeN(io.IOBasedN[_FirstType, _SecondType, _ThirdType]):
+class FutureLikeN(io.IOLikeN[_FirstType, _SecondType, _ThirdType]):
     """
     Base type for ones that does look like ``Future``.
 
@@ -103,14 +103,14 @@ class AsyncFutureN(Generic[_FirstType, _SecondType, _ThirdType]):
 
     @abstractmethod
     def __await__(self: _AsyncFutureType) -> Generator[
-        Any, Any, io.IOBasedN[_FirstType, _SecondType, _ThirdType],
+        Any, Any, io.IOLikeN[_FirstType, _SecondType, _ThirdType],
     ]:
         """Magic method to allow ``await`` expression."""
 
     @abstractmethod
     async def awaitable(
         self: _AsyncFutureType,
-    ) -> io.IOBasedN[_FirstType, _SecondType, _ThirdType]:
+    ) -> io.IOLikeN[_FirstType, _SecondType, _ThirdType]:
         """Underling logic under ``await`` expression."""
 
 
