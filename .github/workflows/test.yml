@@ -12,9 +12,9 @@ jobs:
             # We need this, because python3.6 does not support hypothesis
             # checking of our laws. That's why we decrease our coverage.
             coverage: 97.5
-          - python-version:
+          - python-version: 3.7
             coverage: 100
-          - python-version:
+          - python-version: 3.8
             coverage: 100
 
     steps:
