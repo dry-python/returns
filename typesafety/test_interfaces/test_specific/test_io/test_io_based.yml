@@ -1,0 +1,18 @@
+- case: io_based_inheritance_missing
+  disable_cache: true
+  main: |
+    from typing import TypeVar
+    from typing_extensions import final
+    from returns.interfaces.specific.io import IOBased1
+    from returns.primitives.hkt import SupportsKind1
+
+    _ValueType = TypeVar('_ValueType')
+
+    @final
+    class MyClass(
+        SupportsKind1['MyClass', _ValueType],
+        IOBased1[_ValueType],
+    ):
+        ...
+  out: |
+    main:9: error: Final class main.MyClass has abstract attributes "apply", "bind", "bind_io", "equals", "from_io", "from_iterable", "from_value", "map"
