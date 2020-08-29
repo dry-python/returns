@@ -1,7 +1,7 @@
 from abc import ABCMeta
 from typing import Any, TypeVar
 
-from returns.interfaces.equality import SupportsEquality
+from returns.interfaces.equable import SupportsEquality
 from returns.primitives.hkt import Kind1
 from returns.primitives.types import Immutable
 
@@ -57,4 +57,6 @@ def container_equality(
     """
     if type(self) != type(other):  # noqa: WPS516
         return False
-    return bool(self._inner_value == other._inner_value)  # noqa: WPS437
+    return bool(
+        self._inner_value == other._inner_value,  # type: ignore # noqa: WPS437
+    )

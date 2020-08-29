@@ -3,7 +3,6 @@ from typing import (
     Any,
     Awaitable,
     Callable,
-    ClassVar,
     Coroutine,
     Generator,
     Iterable,

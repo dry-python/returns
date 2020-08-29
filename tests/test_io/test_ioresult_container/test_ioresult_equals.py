@@ -1,4 +1,4 @@
-from returns.io import IOSuccess, IOFailure
+from returns.io import IOFailure, IOSuccess
 
 
 def test_equals():
