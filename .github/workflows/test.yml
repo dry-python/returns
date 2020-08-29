@@ -35,7 +35,6 @@ jobs:
         path: .venv
         key: venv-${{ matrix.python-version }}-${{ hashFiles('poetry.lock') }}
     - name: Install dependencies
-      if: matrix.python-version == 3.8
       run: |
         source "$HOME/.poetry/env"
 
@@ -58,6 +57,7 @@ jobs:
         poetry run pytest typesafety -p no:cov -o addopts="" --mypy-ini-file=setup.cfg
 
     - name: Upload coverage to Codecov
+      if: matrix.python-version == 3.8
       uses: codecov/codecov-action@v1
       with:
         file: ./coverage.xml
