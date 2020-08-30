@@ -41,7 +41,7 @@
 
 - case: kindn_regression522_2
   disable_cache: true
-  skip: sys.version_info < (3, 8)
+  skip: sys.version_info[:2] != (3, 7)
   main: |
     from returns.primitives.hkt import KindN, kinded
     from returns.interfaces.specific.result import ResultLikeN

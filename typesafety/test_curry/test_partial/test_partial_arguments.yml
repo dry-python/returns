@@ -53,7 +53,7 @@
 
 - case: partial_pos_only_args
   disable_cache: true
-  skip: sys.version_info < (3, 8)
+  skip: sys.version_info[2:] < (3, 8)
   main: |
     from returns.curry import partial
 
