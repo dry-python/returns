@@ -3,6 +3,19 @@
 hypothesis plugin
 =================
 
+We provide several extra features for Hypothesis users.
+And encourage to use it together with ``returns``.
+
+
+Installation
+------------
+
+You will need to install ``hypothesis`` separately.
+It is not bundled with ``returns``.
+
+We also require ``anyio`` package for this plugin to work with async laws.
+
+
 hypothesis entrypoint
 ---------------------
 

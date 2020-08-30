@@ -12,6 +12,9 @@ and improve type-safety of things developers commonly use:
 Installation
 ------------
 
+You will need to install ``mypy`` separately.
+It is not bundled with ``returns``.
+
 To install any ``mypy`` plugin add it
 to the ``plugins`` section of the config file.
 

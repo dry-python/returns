@@ -11,6 +11,12 @@ Because otherwise, developers might forget to do it properly.
 It is impossible to fix with types, but is really simple to check with tests.
 
 
+Installation
+------------
+
+You will need to install ``pytest`` separately.
+
+
 Usage
 -----
 
@@ -90,6 +96,7 @@ created and looking for the desired function.
 
   >>> test_if_failure_is_created_at_convert_function(returns_fixture)
   >>> test_if_success_is_created_at_convert_function(returns_fixture)
+
 
 Further reading
 ---------------

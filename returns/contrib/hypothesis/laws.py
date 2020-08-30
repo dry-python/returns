@@ -1,4 +1,5 @@
 import inspect
+import sys
 from contextlib import contextmanager
 from typing import Any, Callable, Dict, Iterator, List, Optional, Type, TypeVar
 
@@ -40,7 +41,13 @@ def check_all_laws(
 
     See: https://mmhaskell.com/blog/2017/3/13/obey-the-type-laws
     """
-    # TODO: raise on Python3.6
+    if sys.version_info[:2] < (3, 7):  # pragma: no cover
+        raise RuntimeError(
+            'Hypothesis does not support several important ' +
+            'typing features on python3.6, and earlier versions ' +
+            'please update to at least python3.7',
+        )
+
     for interface, laws in container_type.laws().items():
         for law in laws:
             _create_law_test_case(
