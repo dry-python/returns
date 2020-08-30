@@ -51,6 +51,7 @@ Contents
   pages/development.rst
   pages/contrib/mypy_plugins.rst
   pages/contrib/pytest_plugins.rst
+  pages/contrib/hypothesis_plugins.rst
 
 .. toctree::
   :maxdepth: 1
