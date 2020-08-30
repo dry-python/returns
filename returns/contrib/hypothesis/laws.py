@@ -1,6 +1,6 @@
 import inspect
 from contextlib import contextmanager
-from typing import Any, Callable, Dict, Iterator, List, Optional, Type
+from typing import Any, Callable, Dict, Iterator, List, Optional, Type, TypeVar
 
 import pytest
 from hypothesis import given, settings
@@ -111,14 +111,46 @@ def pure_functions() -> Iterator[None]:
     st.register_type_strategy(Callable, used)  # type: ignore
 
 
+@contextmanager
+def type_vars() -> Iterator[None]:
+    """
+    Our custom ``TypeVar`` handling.
+
+    There are several noticable differences:
+
+    1. We add mutable types to the tests: like ``list`` and ``dict``
+    2. We ensure that values inside strategies are self-equal,
+       for example, ``nan`` does not work for us
+
+    """
+    used = types._global_type_lookup[TypeVar]  # type: ignore
+
+    def factory(thing):
+        type_strategies = [
+            types.resolve_TypeVar(thing),
+            # TODO: add mutable strategies
+        ]
+        return st.one_of(type_strategies).filter(
+            lambda inner: inner == inner,  # noqa: WPS312
+        )
+
+    st.register_type_strategy(TypeVar, factory)  # type: ignore
+
+    yield
+
+    types._global_type_lookup.pop(TypeVar)  # type: ignore
+    st.register_type_strategy(TypeVar, used)  # type: ignore
+
+
 def _run_law(
     container_type: Type[Lawful],
     law: Law,
 ) -> Callable[[st.DataObject], None]:
     def factory(source: st.DataObject) -> None:
-        with pure_functions():
-            with container_strategies(container_type):
-                source.draw(st.builds(law.definition))
+        with type_vars():
+            with pure_functions():
+                with container_strategies(container_type):
+                    source.draw(st.builds(law.definition))
     return factory
 
 
