@@ -12,6 +12,8 @@ from returns.interfaces.applicative import ApplicativeN
 from returns.interfaces.specific.result import ResultLikeN
 from returns.primitives.laws import Law, Lawful
 
+_pyversion = sys.version_info[:2]
+
 
 def check_all_laws(
     container_type: Type[Lawful],
@@ -41,7 +43,7 @@ def check_all_laws(
 
     See: https://mmhaskell.com/blog/2017/3/13/obey-the-type-laws
     """
-    if sys.version_info[:2] < (3, 7):  # pragma: no cover
+    if _pyversion < (3, 7):  # pragma: no cover
         raise RuntimeError(
             'Hypothesis does not support several important ' +
             'typing features on python3.6, and earlier versions ' +
