@@ -43,13 +43,6 @@ def check_all_laws(
 
     See: https://mmhaskell.com/blog/2017/3/13/obey-the-type-laws
     """
-    if _pyversion < (3, 7):  # pragma: no cover
-        raise RuntimeError(
-            'Hypothesis does not support several important ' +
-            'typing features on python3.6, and earlier versions ' +
-            'please update to at least python3.7',
-        )
-
     for interface, laws in container_type.laws().items():
         for law in laws:
             _create_law_test_case(
@@ -156,6 +149,13 @@ def _run_law(
     law: Law,
 ) -> Callable[[st.DataObject], None]:
     def factory(source: st.DataObject) -> None:
+        if _pyversion < (3, 7):  # pragma: no cover
+            raise RuntimeError(
+                'Hypothesis does not support several important ' +
+                'typing features on python3.6, and earlier versions ' +
+                'please update to at least python3.7',
+            )
+
         with type_vars():
             with pure_functions():
                 with container_strategies(container_type):
