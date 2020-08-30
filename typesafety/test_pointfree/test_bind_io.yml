@@ -58,7 +58,7 @@
     bind_io(test)(x)
   out: |
     main:9: error: Argument 1 has incompatible type "Maybe[str]"; expected "KindN[Maybe[Any], float, NoReturn, NoReturn]"
-    main:9: error: Value of type variable "_IOBasedKind" of function cannot be "Maybe[Any]"
+    main:9: error: Value of type variable "_IOLikeKind" of function cannot be "Maybe[Any]"
 
 
 - case: bind_io_io
@@ -146,7 +146,7 @@
   disable_cache: true
   main: |
     from typing import TypeVar
-    from returns.interfaces.specific.io import IOBased1
+    from returns.interfaces.specific.io import IOLike1
     from returns.primitives.hkt import SupportsKind1
     from returns.io import IO
     from returns.pointfree import bind_io
@@ -155,7 +155,7 @@
 
     class MyClass(
         SupportsKind1['MyClass', _ValueType],
-        IOBased1[_ValueType],
+        IOLike1[_ValueType],
     ):
         ...
 

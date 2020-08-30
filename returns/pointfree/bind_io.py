@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Callable, TypeVar
 
-from returns.interfaces.specific.io import IOBasedN
+from returns.interfaces.specific.io import IOLikeN
 from returns.methods.bind_io import internal_bind_io
 from returns.primitives.hkt import Kinded, KindN, kinded
 
@@ -12,14 +12,14 @@ _SecondType = TypeVar('_SecondType')
 _ThirdType = TypeVar('_ThirdType', contravariant=True)
 _UpdatedType = TypeVar('_UpdatedType', covariant=True)
 
-_IOBasedKind = TypeVar('_IOBasedKind', bound=IOBasedN)
+_IOLikeKind = TypeVar('_IOLikeKind', bound=IOLikeN)
 
 
 def bind_io(
     function: Callable[[_FirstType], 'IO[_UpdatedType]'],
 ) -> Kinded[Callable[
-    [KindN[_IOBasedKind, _FirstType, _SecondType, _ThirdType]],
-    KindN[_IOBasedKind, _UpdatedType, _SecondType, _ThirdType],
+    [KindN[_IOLikeKind, _FirstType, _SecondType, _ThirdType]],
+    KindN[_IOLikeKind, _UpdatedType, _SecondType, _ThirdType],
 ]]:
     """
     Composes successful container with a function that returns a container.
@@ -45,7 +45,7 @@ def bind_io(
     """
     @kinded
     def factory(
-        container: KindN[_IOBasedKind, _FirstType, _SecondType, _ThirdType],
-    ) -> KindN[_IOBasedKind, _UpdatedType, _SecondType, _ThirdType]:
+        container: KindN[_IOLikeKind, _FirstType, _SecondType, _ThirdType],
+    ) -> KindN[_IOLikeKind, _UpdatedType, _SecondType, _ThirdType]:
         return internal_bind_io(container, function)
     return factory

@@ -41,7 +41,7 @@
 
 - case: kindn_regression522_2
   disable_cache: true
-  skip: sys.version_info < (3, 8)
+  skip: sys.version_info[:2] != (3, 7)
   main: |
     from returns.primitives.hkt import KindN, kinded
     from returns.interfaces.specific.result import ResultLikeN
@@ -56,4 +56,4 @@
     def test(arg: KindN[I, T1, T2, T3]):
         reveal_type(arg.from_result)
   out: |
-    main:12: note: Revealed type is 'def [_ValueType, _ErrorType] (inner_value: returns.result.Result[_ValueType`91, _ErrorType`92]) -> returns.primitives.hkt.KindN[I`-1, _ValueType`91, _ErrorType`92, T3`-4]'
+    main:12: note: Revealed type is 'def [_ValueType, _ErrorType] (inner_value: returns.result.Result[_ValueType`755, _ErrorType`756]) -> returns.primitives.hkt.KindN[I`-1, _ValueType`755, _ErrorType`756, T3`-4]'

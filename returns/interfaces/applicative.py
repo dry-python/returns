@@ -1,7 +1,27 @@
 from abc import abstractmethod
-from typing import Callable, Generic, NoReturn, Type, TypeVar
+from typing import (
+    Callable,
+    ClassVar,
+    Generic,
+    NoReturn,
+    Sequence,
+    Type,
+    TypeVar,
+)
 
+from typing_extensions import final
+
+from returns.functions import compose, identity
+from returns.primitives.asserts import assert_equal
 from returns.primitives.hkt import KindN
+from returns.primitives.laws import (
+    Law,
+    Law1,
+    Law3,
+    Lawful,
+    LawSpecDef,
+    law_definition,
+)
 
 _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')
@@ -10,8 +30,105 @@ _UpdatedType = TypeVar('_UpdatedType')
 
 _ApplicativeType = TypeVar('_ApplicativeType', bound='ApplicativeN')
 
+# Only used in laws:
+_NewType1 = TypeVar('_NewType1')
+_NewType2 = TypeVar('_NewType2')
 
-class ApplicativeN(Generic[_FirstType, _SecondType, _ThirdType]):
+
+@final
+class _LawSpec(LawSpecDef):
+    """
+    Applicative mappable laws.
+
+    Definition: https://bit.ly/3hC8F8E
+    Discussion: https://bit.ly/3jffz3L
+    """
+
+    @law_definition
+    def identity(
+        container: 'ApplicativeN[_FirstType, _SecondType, _ThirdType]',
+    ) -> None:
+        """
+        Identity law.
+
+        If we apply wrapped ``identity`` function to a container,
+        nothing happens.
+        """
+        assert_equal(
+            container,
+            container.apply(container.from_value(identity)),
+        )
+
+    @law_definition
+    def interchange(
+        raw_value: _FirstType,
+        container: 'ApplicativeN[_FirstType, _SecondType, _ThirdType]',
+        function: Callable[[_FirstType], _NewType1],
+    ) -> None:
+        """
+        Interchange law.
+
+        Basically we check that we can start our composition
+        with both ``raw_value`` and ``function``.
+
+        Great explanation: https://stackoverflow.com/q/27285918/4842742
+        """
+        assert_equal(
+            container.from_value(raw_value).apply(
+                container.from_value(function),
+            ),
+            container.from_value(function).apply(
+                container.from_value(lambda inner: inner(raw_value)),
+            ),
+        )
+
+    @law_definition
+    def homomorphism(
+        raw_value: _FirstType,
+        container: 'ApplicativeN[_FirstType, _SecondType, _ThirdType]',
+        function: Callable[[_FirstType], _NewType1],
+    ) -> None:
+        """
+        Homomorphism law.
+
+        The homomorphism law says that
+        applying a wrapped function to a wrapped value is the same
+        as applying the function to the value in the normal way
+        and then using ``.from_value`` on the result.
+        """
+        assert_equal(
+            container.from_value(function(raw_value)),
+            container.from_value(raw_value).apply(
+                container.from_value(function),
+            ),
+        )
+
+    @law_definition
+    def composition(
+        container: 'ApplicativeN[_FirstType, _SecondType, _ThirdType]',
+        first: Callable[[_FirstType], _NewType1],
+        second: Callable[[_NewType1], _NewType2],
+    ) -> None:
+        """
+        Composition law.
+
+        Apply two functions twice is the same
+        as applying their composition once.
+        """
+        assert_equal(
+            container.apply(container.from_value(compose(first, second))),
+            container.apply(
+                container.from_value(first),
+            ).apply(
+                container.from_value(second),
+            ),
+        )
+
+
+class ApplicativeN(
+    Generic[_FirstType, _SecondType, _ThirdType],
+    Lawful['ApplicativeN'],
+):
     """
     Allows to create unit containers from raw values and to apply wrapped funcs.
 
@@ -20,6 +137,13 @@ class ApplicativeN(Generic[_FirstType, _SecondType, _ThirdType]):
         http://learnyouahaskell.com/functors-applicative-functors-and-monoids
 
     """
+
+    _laws: ClassVar[Sequence[Law]] = (
+        Law1(_LawSpec.identity),
+        Law3(_LawSpec.interchange),
+        Law3(_LawSpec.homomorphism),
+        Law3(_LawSpec.composition),
+    )
 
     @abstractmethod
     def apply(

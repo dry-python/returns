@@ -1,7 +1,11 @@
 from abc import ABCMeta
-from typing import Any
+from typing import Any, TypeVar
 
+from returns.interfaces.equable import SupportsEquality
+from returns.primitives.hkt import Kind1
 from returns.primitives.types import Immutable
+
+_EqualType = TypeVar('_EqualType', bound=SupportsEquality)
 
 
 class BaseContainer(Immutable, metaclass=ABCMeta):
@@ -27,11 +31,7 @@ class BaseContainer(Immutable, metaclass=ABCMeta):
 
     def __eq__(self, other: Any) -> bool:
         """Used to compare two 'Container' objects."""
-        if not isinstance(self, type(other)):
-            return False
-        return (  # type: ignore[no-any-return]
-            self._inner_value == other._inner_value  # noqa: WPS437
-        )
+        return container_equality(self, other)  # type: ignore
 
     def __hash__(self) -> int:
         """Used to use this value as a key."""
@@ -44,3 +44,19 @@ class BaseContainer(Immutable, metaclass=ABCMeta):
     def __setstate__(self, state: Any) -> None:
         """Loading state from pickled data."""
         object.__setattr__(self, '_inner_value', state)  # noqa: WPS609
+
+
+def container_equality(
+    self: Kind1[_EqualType, Any],
+    other: Kind1[_EqualType, Any],
+) -> bool:
+    """
+    Function to compare similar containers.
+
+    Compares both their types and their inner values.
+    """
+    if type(self) != type(other):  # noqa: WPS516
+        return False
+    return bool(
+        self._inner_value == other._inner_value,  # type: ignore # noqa: WPS437
+    )

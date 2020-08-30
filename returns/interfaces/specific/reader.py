@@ -46,7 +46,10 @@ _ReaderBased2Type = TypeVar('_ReaderBased2Type', bound='ReaderBased2')
 _ReaderBased3Type = TypeVar('_ReaderBased3Type', bound='ReaderBased3')
 
 
-class ReaderBased2(container.Container2[_FirstType, _SecondType]):
+class ReaderBased2(
+    container.Container2[_FirstType, _SecondType],
+    iterable.Iterable2[_FirstType, _SecondType],
+):
     """
     Reader interface for ``Kind2`` based types.
 

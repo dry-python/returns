@@ -6,6 +6,21 @@ from returns.maybe import Nothing, Some, _Nothing
 from returns.primitives.exceptions import ImmutableStateError
 
 
+def test_equals():
+    """Ensures that ``.equals`` method works correctly."""
+    inner_value = 1
+
+    assert Some(inner_value).equals(Some(inner_value))
+    assert Nothing.equals(Nothing)
+
+
+def test_not_equals():
+    """Ensures that ``.equals`` method works correctly."""
+    assert not Some(1).equals(Nothing)
+    assert not Some(1).equals(Some(0))
+    assert not Nothing.equals(Some(1))
+
+
 def test_equality():
     """Ensures that containers can be compared."""
     assert Nothing is Nothing  # noqa: WPS312

@@ -11,7 +11,7 @@ from typing import (
 
 from typing_extensions import final
 
-from returns._generated.iterable import iterable_kind
+from returns._internal.iterable import iterable_kind
 from returns.context import NoDeps
 from returns.interfaces.specific import reader, result
 from returns.primitives.container import BaseContainer

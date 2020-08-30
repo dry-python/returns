@@ -3,7 +3,6 @@ from typing import (
     Any,
     Awaitable,
     Callable,
-    ClassVar,
     Coroutine,
     Generator,
     Iterable,
@@ -15,8 +14,8 @@ from typing import (
 
 from typing_extensions import final
 
-from returns._generated.futures import _future, _future_result
-from returns._generated.iterable import iterable_kind
+from returns._internal.futures import _future, _future_result
+from returns._internal.iterable import iterable_kind
 from returns.interfaces.specific.future import FutureBased1
 from returns.interfaces.specific.future_result import FutureResultBased2
 from returns.io import IO, IOResult
@@ -29,6 +28,7 @@ from returns.primitives.hkt import (
     dekind,
 )
 from returns.primitives.iterables import BaseIterableStrategyN, FailFast
+from returns.primitives.reawaitable import ReAwaitable
 from returns.result import Failure, Result, Success
 
 # Definitions:
@@ -119,7 +119,7 @@ class Future(
           >>> assert anyio.run(container.awaitable) == IO(2)
 
         """
-        super().__init__(inner_value)
+        super().__init__(ReAwaitable(inner_value))
 
     def __await__(self) -> Generator[None, None, IO[_ValueType]]:
         """
@@ -466,7 +466,7 @@ def future(
       >>> @future
       ... async def test(x: int) -> int:
       ...     return x + 1
-      ...
+
       >>> assert anyio.run(test(1).awaitable) == IO(2)
 
     Requires our :ref:`mypy plugin <mypy-plugins>`.
@@ -561,8 +561,6 @@ class FutureResult(
 
     """
 
-    outer: ClassVar[Type[Future]] = Future
-
     _inner_value: Awaitable[Result[_ValueType, _ErrorType]]
 
     def __init__(
@@ -586,7 +584,7 @@ class FutureResult(
           >>> assert anyio.run(container.awaitable) == IOSuccess(2)
 
         """
-        super().__init__(inner_value)
+        super().__init__(ReAwaitable(inner_value))
 
     def __await__(self) -> Generator[
         None, None, IOResult[_ValueType, _ErrorType],

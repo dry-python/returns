@@ -26,7 +26,7 @@ _IOResultLikeType = TypeVar('_IOResultLikeType', bound='IOResultLikeN')
 
 
 class IOResultLikeN(
-    io.IOBasedN[_FirstType, _SecondType, _ThirdType],
+    io.IOLikeN[_FirstType, _SecondType, _ThirdType],
     result.ResultLikeN[_FirstType, _SecondType, _ThirdType],
 ):
     """
@@ -78,6 +78,7 @@ IOResultLike3 = IOResultLikeN[_FirstType, _SecondType, _ThirdType]
 
 class IOResultBasedN(
     IOResultLikeN[_FirstType, _SecondType, _ThirdType],
+    io.IOBasedN[_FirstType, _SecondType, _ThirdType],
     result.UnwrappableResult[
         _FirstType,
         _SecondType,

@@ -12,8 +12,8 @@ from typing import (
 
 from typing_extensions import final
 
-from returns._generated.futures import _reader_future_result
-from returns._generated.iterable import iterable_kind
+from returns._internal.futures import _reader_future_result
+from returns._internal.iterable import iterable_kind
 from returns.context import NoDeps
 from returns.future import Future, FutureResult
 from returns.interfaces.specific import future_result, reader

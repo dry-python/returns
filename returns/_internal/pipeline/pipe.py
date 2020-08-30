@@ -1,4 +1,4 @@
-from returns._generated.pipeline.flow import _flow
+from returns._internal.pipeline.flow import _flow
 
 
 def _pipe(*functions):
@@ -19,7 +19,7 @@ def _pipe(*functions):
        >>> assert pipe(int, float, str)('1') == '1.0'
 
     This function is closely related
-    to :func:`pipe <returns._generated.pipeline.flow._flow>`:
+    to :func:`pipe <returns._internal.pipeline.flow._flow>`:
 
     .. code:: python
 

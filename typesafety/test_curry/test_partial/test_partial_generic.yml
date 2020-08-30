@@ -81,7 +81,7 @@
 
 - case: partial_double_generic_complex37
   disable_cache: true
-  skip: sys.version_info >= (3, 8)
+  skip: sys.version_info[:2] >= (3, 8)
   main: |
     from returns.curry import partial
     from typing import List, TypeVar, Union
@@ -118,7 +118,7 @@
 # Python3.8+ sorts generic arguments differently:
 - case: partial_double_generic_complex38
   disable_cache: true
-  skip: sys.version_info < (3, 8)
+  skip: sys.version_info[:2] < (3, 8)
   main: |
     from returns.curry import partial
     from typing import List, TypeVar, Union

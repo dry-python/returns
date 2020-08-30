@@ -1,0 +1,34 @@
+- case: check_all_laws
+  disable_cache: true
+  parametrized:
+    - container: Result
+    - container: Maybe
+    - container: IO
+    - container: IOResult
+    - container: Reader
+    - container: ReaderResult
+    - container: ReaderIOResult
+    - container: ReaderFutureResult
+    - container: Future
+    - container: FutureResult
+  main: |
+    from returns.context import (
+        Reader, ReaderResult, ReaderIOResult, ReaderFutureResult,
+    )
+    from returns.future import Future, FutureResult
+    from returns.maybe import Maybe
+    from returns.result import Result
+    from returns.io import IO, IOResult
+
+    from returns.primitivies.laws import Lawful
+    from typing import Type
+
+    x: Type[Lawful] = {{ container }}
+
+
+- case: test_all_laws_sig
+  disable_cache: true
+  main: |
+    from returns.contrib.hypothesis.laws import check_all_laws
+
+    reveal_type(check_all_laws)  # N: Revealed type is 'def (container_type: Type[returns.primitives.laws.Lawful[Any]], *, settings_kwargs: Union[builtins.dict[builtins.str, Any], None] =)'

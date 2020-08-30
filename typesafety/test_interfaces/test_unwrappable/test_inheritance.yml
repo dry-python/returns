@@ -1,7 +1,7 @@
 - case: unwrappable_correct_inheritance
   disable_cache: true
   main: |
-    from returns.primitives.hkt import Kind2
+    from returns.primitives.hkt import SupportsKind2
     from returns.interfaces.unwrappable import Unwrappable
     from typing import TypeVar
 
@@ -9,7 +9,7 @@
     N = TypeVar('N')
 
     class MyOwn(
-        Kind2['MyOwn', T, N],
+        SupportsKind2['MyOwn', T, N],
         Unwrappable[T, N],
     ):
         def __init__(self, value: T, error: N) -> None:
@@ -29,7 +29,7 @@
 - case: unwrappable_missing_inheritance
   disable_cache: true
   main: |
-    from returns.primitives.hkt import Kind2
+    from returns.primitives.hkt import SupportsKind2
     from returns.interfaces.unwrappable import Unwrappable
     from typing import TypeVar
 
@@ -37,7 +37,7 @@
     N = TypeVar('N')
 
     class MyOwn(
-        Kind2['MyOwn', T, N],
+        SupportsKind2['MyOwn', T, N],
         Unwrappable[T, N],
     ):
       ...
@@ -48,7 +48,7 @@
 - case: unwrappable_wrong_inheritance
   disable_cache: true
   main: |
-    from returns.primitives.hkt import Kind2
+    from returns.primitives.hkt import SupportsKind2
     from returns.interfaces.unwrappable import Unwrappable
     from typing import TypeVar
 
@@ -56,7 +56,7 @@
     N = TypeVar('N')
 
     class MyOwn(
-        Kind2['MyOwn', T, N],
+        SupportsKind2['MyOwn', T, N],
         Unwrappable[T, N],
     ):
         def __init__(self, value: T, error: N) -> None:

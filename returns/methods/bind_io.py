@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Callable, TypeVar
 
-from returns.interfaces.specific.io import IOBasedN
+from returns.interfaces.specific.io import IOLikeN
 from returns.primitives.hkt import KindN, kinded
 
 if TYPE_CHECKING:
@@ -11,13 +11,13 @@ _SecondType = TypeVar('_SecondType')
 _ThirdType = TypeVar('_ThirdType')
 _UpdatedType = TypeVar('_UpdatedType')
 
-_IOBasedKind = TypeVar('_IOBasedKind', bound=IOBasedN)
+_IOLikeKind = TypeVar('_IOLikeKind', bound=IOLikeN)
 
 
 def internal_bind_io(
-    container: KindN[_IOBasedKind, _FirstType, _SecondType, _ThirdType],
+    container: KindN[_IOLikeKind, _FirstType, _SecondType, _ThirdType],
     function: Callable[[_FirstType], 'IO[_UpdatedType]'],
-) -> KindN[_IOBasedKind, _UpdatedType, _SecondType, _ThirdType]:
+) -> KindN[_IOLikeKind, _UpdatedType, _SecondType, _ThirdType]:
     """
     Bind a ``IO`` returning function over a container.
 
@@ -33,7 +33,7 @@ def internal_bind_io(
 
     Note, that this function works
     for all containers with ``.bind_io`` method.
-    See :class:`returns.primitives.interfaces.specific.io.IOBasedN`
+    See :class:`returns.primitives.interfaces.specific.io.IOLikeN`
     for more info.
 
     """

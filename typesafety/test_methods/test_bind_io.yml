@@ -44,7 +44,7 @@
     bind_io(x, test)
   out: |
     main:9: error: Argument 2 to "internal_bind_io" has incompatible type "Callable[[float], IO[int]]"; expected "Callable[[str], IO[int]]"
-    main:9: error: Value of type variable "_IOBasedKind" of "internal_bind_io" cannot be "Maybe[Any]"
+    main:9: error: Value of type variable "_IOLikeKind" of "internal_bind_io" cannot be "Maybe[Any]"
 
 
 - case: bind_io_io
@@ -132,7 +132,7 @@
   disable_cache: true
   main: |
     from typing import TypeVar
-    from returns.interfaces.specific.io import IOBased1
+    from returns.interfaces.specific.io import IOLike1
     from returns.primitives.hkt import SupportsKind1
     from returns.io import IO
     from returns.methods import bind_io
@@ -141,7 +141,7 @@
 
     class MyClass(
         SupportsKind1['MyClass', _ValueType],
-        IOBased1[_ValueType],
+        IOLike1[_ValueType],
     ):
         ...
 
