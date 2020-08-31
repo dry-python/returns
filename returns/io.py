@@ -73,7 +73,7 @@ class IO(
 
     _inner_value: _ValueType
 
-    #: Typesafe equality comparision with other `Result` objects.
+    #: Typesafe equality comparison with other `Result` objects.
     equals = container_equality
 
     def __init__(self, inner_value: _ValueType) -> None:
@@ -338,7 +338,7 @@ class IOResult(
     #: Failure type that is used to represent the failed computation.
     failure_type: ClassVar[Type['_IOFailure']]
 
-    #: Typesafe equality comparision with other `IOResult` objects.
+    #: Typesafe equality comparison with other `IOResult` objects.
     equals = container_equality
 
     def __init__(self, inner_value: Result[_ValueType, _ErrorType]) -> None:

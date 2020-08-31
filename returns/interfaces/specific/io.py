@@ -62,7 +62,7 @@ class IOBasedN(
     Don't use this type for ``IO`` that can. Instead, use
     :class:`returns.interfaces.specific.ioresult.IOResultBasedN` type.
 
-    This interface also supports direct comparision of two values.
+    This interface also supports direct comparison of two values.
     While ``IOLikeN`` is different. It can be lazy and cannot be compared.
 
     """

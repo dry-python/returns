@@ -61,7 +61,7 @@ class Maybe(
     #: Failure type that is used to represent the failed computation.
     failure_type: ClassVar[Type['_Nothing']]
 
-    #: Typesafe equality comparision with other `Result` objects.
+    #: Typesafe equality comparison with other `Result` objects.
     equals = container_equality
 
     def map(  # noqa: WPS125

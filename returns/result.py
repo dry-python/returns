@@ -64,7 +64,7 @@ class Result(
     #: Failure type that is used to represent the failed computation.
     failure_type: ClassVar[Type['_Failure']]
 
-    #: Typesafe equality comparision with other `Result` objects.
+    #: Typesafe equality comparison with other `Result` objects.
     equals = container_equality
 
     @property
