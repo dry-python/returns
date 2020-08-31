@@ -152,8 +152,8 @@ def _run_law(
         if _pyversion < (3, 7):  # pragma: no cover
             raise RuntimeError(
                 'Hypothesis does not support several important ' +
-                'typing features on python3.6, and earlier versions ' +
-                'please update to at least python3.7',
+                'typing features on python3.6, and earlier versions. ' +
+                'Please update to at least python3.7',
             )
 
         with type_vars():
