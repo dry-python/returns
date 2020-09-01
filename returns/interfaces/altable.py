@@ -57,7 +57,7 @@ class _LawSpec(LawSpecDef):
 
 class AltableN(
     Generic[_FirstType, _SecondType, _ThirdType],
-    Lawful['AltableN'],
+    Lawful['AltableN[_FirstType, _SecondType, _ThirdType]'],
 ):
     """Modifies the second type argument with a pure function."""
 

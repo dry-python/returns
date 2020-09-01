@@ -127,7 +127,7 @@ class _LawSpec(LawSpecDef):
 
 class ApplicativeN(
     Generic[_FirstType, _SecondType, _ThirdType],
-    Lawful['ApplicativeN'],
+    Lawful['ApplicativeN[_FirstType, _SecondType, _ThirdType]'],
 ):
     """
     Allows to create unit containers from raw values and to apply wrapped funcs.

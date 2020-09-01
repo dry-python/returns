@@ -101,7 +101,7 @@ class ContainerN(
     ApplicativeMappableN[_FirstType, _SecondType, _ThirdType],
     bindable.BindableN[_FirstType, _SecondType, _ThirdType],
     iterable.IterableN[_FirstType, _SecondType, _ThirdType],
-    Lawful['ContainerN'],
+    Lawful['ContainerN[_FirstType, _SecondType, _ThirdType]'],
 ):
     """
     Handy alias for types with ``.bind``, ``.map``, and ``.apply`` methods.
