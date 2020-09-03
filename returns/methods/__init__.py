@@ -27,3 +27,4 @@ from returns.methods.modify_env import modify_env2 as modify_env2
 from returns.methods.modify_env import modify_env3 as modify_env3
 from returns.methods.rescue import rescue as rescue
 from returns.methods.swap import swap as swap
+from returns.methods.unify import unify as unify

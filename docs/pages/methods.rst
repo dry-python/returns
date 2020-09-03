@@ -186,3 +186,9 @@ swap
 
 .. autofunction:: returns.methods.swap.internal_swap
 .. autofunction:: returns.methods.swap.swap
+
+unify
+~~~~~
+
+.. autofunction:: returns.methods.unify.internal_unify
+.. autofunction:: returns.methods.unify.unify
