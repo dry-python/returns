@@ -125,6 +125,11 @@ bind_context methods
 .. autofunction:: returns.methods.bind_context.bind_context3
 .. autofunction:: returns.methods.bind_context.bind_context
 
+bind_context_result methods
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: returns.methods.bind_context_result.bind_context_result
+
 compose_result method
 ~~~~~~~~~~~~~~~~~~~~~
 
