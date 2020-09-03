@@ -1,0 +1,83 @@
+- case: unify_result
+  disable_cache: true
+  main: |
+    from returns.pointfree import unify
+    from returns.result import Result
+
+    def test(arg: str) -> Result[str, int]:
+        ...
+
+    x: Result[str, AssertionError]
+    reveal_type(unify(test)(x))  # N: Revealed type is 'returns.result.Result[builtins.str, Union[builtins.AssertionError*, builtins.int]]'
+
+- case: unify_ioresult
+  disable_cache: true
+  main: |
+    from returns.io import IOResult
+    from returns.pointfree import unify
+
+    def test(arg: float) -> IOResult[str, bytes]:
+        ...
+
+    x: IOResult[float, bool]
+    reveal_type(unify(test)(x))  # N: Revealed type is 'returns.io.IOResult[builtins.str, Union[builtins.bool*, builtins.bytes]]'
+
+- case: unify_future_result
+  disable_cache: true
+  main: |
+    from returns.future import FutureResult
+    from returns.pointfree import unify
+
+    def test(arg: bool) -> FutureResult[bool, str]:
+        ...
+
+    x: FutureResult[bool, float]
+    reveal_type(unify(test)(x))  # N: Revealed type is 'returns.future.FutureResult[builtins.bool, Union[builtins.float*, builtins.str]]'
+
+- case: unify_reader_ioresult
+  disable_cache: true
+  main: |
+    from returns.pointfree import unify
+    from returns.context import ReaderIOResult
+
+    def test(arg: float) -> ReaderIOResult[bool, str, float]:
+        ...
+
+    x: ReaderIOResult[float, Exception, float]
+    reveal_type(unify(test)(x))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.bool, Union[builtins.Exception*, builtins.str], Any]'
+
+- case: unify_reader_future_result
+  disable_cache: true
+  main: |
+    from returns.pointfree import unify
+    from returns.context import ReaderFutureResult, NoDeps
+
+    def test(arg: int) -> ReaderFutureResult[int, bool, bool]:
+        ...
+
+    x: ReaderFutureResult[int, str, NoDeps]
+    reveal_type(unify(test)(x))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.int, Union[builtins.str*, builtins.bool], Any]'
+
+- case: unify_custom_type
+  disable_cache: true
+  main: |
+    from typing import TypeVar
+
+    from returns.interfaces.specific.result import ResultLike2
+    from returns.pointfree import unify
+    from returns.primitives.hkt import SupportsKind2
+
+    ValueType = TypeVar('ValueType')
+    ErrorType = TypeVar('ErrorType')
+
+    class MyOwn(
+        SupportsKind2['MyOwn', ValueType, ErrorType],
+        ResultLike2[ValueType, ErrorType]
+    ):
+        ...
+
+    def test(arg: str) -> MyOwn[str, bool]:
+        ...
+
+    x: MyOwn[str, ValueError]
+    reveal_type(unify(test)(x))  # N: Revealed type is 'main.MyOwn[builtins.str, Union[builtins.ValueError*, builtins.bool]]'

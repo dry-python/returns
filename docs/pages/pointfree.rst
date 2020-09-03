@@ -297,4 +297,6 @@ API Reference
 
 .. autofunction:: returns.pointfree.rescue
 
+.. autofunction:: returns.pointfree.unify
+
 .. autofunction:: returns.pointfree.apply
