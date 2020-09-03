@@ -8,7 +8,7 @@
         ...
 
     x: FutureResult[float, str]
-    bind_async_future_result(x, test)  # E: Argument 2 to "internal_bind_async_future_result" has incompatible type "Callable[[str], Coroutine[Any, Any, FutureResult[int, str]]]"; expected "Callable[[float], Awaitable[FutureResult[int, str]]]"
+    bind_async_future_result(x, test)  # E: Argument 2 to "bind_async_future_result" has incompatible type "Callable[[str], Coroutine[Any, Any, FutureResult[int, str]]]"; expected "Callable[[float], Awaitable[FutureResult[int, str]]]"
 
 
 - case: bind_async_future_result_wrong_error
@@ -21,7 +21,7 @@
         ...
 
     x: FutureResult[float, bool]
-    bind_async_future_result(x, test)  # E: Argument 2 to "internal_bind_async_future_result" has incompatible type "Callable[[float], Coroutine[Any, Any, FutureResult[int, str]]]"; expected "Callable[[float], Awaitable[FutureResult[int, bool]]]"
+    bind_async_future_result(x, test)  # E: Argument 2 to "bind_async_future_result" has incompatible type "Callable[[float], Coroutine[Any, Any, FutureResult[int, str]]]"; expected "Callable[[float], Awaitable[FutureResult[int, bool]]]"
 
 
 - case: bind_async_future_result_requires_context_future_result

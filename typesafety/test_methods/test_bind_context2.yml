@@ -10,7 +10,7 @@
     x: RequiresContext[float, str]
     bind_context2(x, test)
   out: |
-    main:8: error: Argument 2 to "internal_bind_context2" has incompatible type "Callable[[float], RequiresContext[str, int]]"; expected "Callable[[float], RequiresContext[str, str]]"
+    main:8: error: Argument 2 to "bind_context2" has incompatible type "Callable[[float], RequiresContext[str, int]]"; expected "Callable[[float], RequiresContext[str, str]]"
 
 
 - case: bind_context2_wrong_type
@@ -25,8 +25,8 @@
     x: RequiresContextResult[float, str, int]
     bind_context2(x, test)
   out: |
-    main:8: error: Argument 2 to "internal_bind_context2" has incompatible type "Callable[[float], RequiresContext[str, int]]"; expected "Callable[[float], RequiresContext[str, str]]"
-    main:8: error: Value of type variable "_Reader2Kind" of "internal_bind_context2" cannot be "RequiresContextResult[Any, Any, Any]"
+    main:8: error: Argument 2 to "bind_context2" has incompatible type "Callable[[float], RequiresContext[str, int]]"; expected "Callable[[float], RequiresContext[str, str]]"
+    main:8: error: Value of type variable "_Reader2Kind" of "bind_context2" cannot be "RequiresContextResult[Any, Any, Any]"
 
 
 - case: bind_context2_requires_context

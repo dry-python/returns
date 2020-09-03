@@ -27,7 +27,7 @@
     x: Result[float, str]
     reveal_type(bind(x, test))
   out: |
-    main:8: error: Argument 2 to "internal_bind" has incompatible type "Callable[[float], Result[int, Exception]]"; expected "Callable[[float], KindN[Result[Any, Any], int, str, NoReturn]]"
+    main:8: error: Argument 2 to "bind" has incompatible type "Callable[[float], Result[int, Exception]]"; expected "Callable[[float], KindN[Result[Any, Any], int, str, NoReturn]]"
     main:8: note: Revealed type is 'returns.result.Result[builtins.int*, builtins.str]'
 
 
@@ -44,7 +44,7 @@
     x: IOResult[float, str]
     reveal_type(bind(x, test))
   out: |
-    main:9: error: Argument 2 to "internal_bind" has incompatible type "Callable[[float], Result[int, str]]"; expected "Callable[[float], KindN[IOResult[Any, Any], int, str, NoReturn]]"
+    main:9: error: Argument 2 to "bind" has incompatible type "Callable[[float], Result[int, str]]"; expected "Callable[[float], KindN[IOResult[Any, Any], int, str, NoReturn]]"
     main:9: note: Revealed type is 'returns.io.IOResult[builtins.int*, builtins.str]'
 
 

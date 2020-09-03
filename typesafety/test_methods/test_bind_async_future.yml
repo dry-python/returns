@@ -8,7 +8,7 @@
         ...
 
     x: Future[float]
-    bind_async_future(x, test)  # E: Argument 2 to "internal_bind_async_future" has incompatible type "Callable[[str], Coroutine[Any, Any, Future[int]]]"; expected "Callable[[float], Awaitable[Future[int]]]"
+    bind_async_future(x, test)  # E: Argument 2 to "bind_async_future" has incompatible type "Callable[[str], Coroutine[Any, Any, Future[int]]]"; expected "Callable[[float], Awaitable[Future[int]]]"
 
 
 - case: bind_async_future_requires_context_future_result

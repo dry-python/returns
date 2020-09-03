@@ -9,7 +9,7 @@
         ...
 
     x: RequiresContextFutureResult[str, int, bool]
-    bind_result(x, test)  # E: Argument 2 to "internal_bind_result" has incompatible type "Callable[[float], Result[int, str]]"; expected "Callable[[str], Result[int, int]]"
+    bind_result(x, test)  # E: Argument 2 to "bind_result" has incompatible type "Callable[[float], Result[int, str]]"; expected "Callable[[str], Result[int, int]]"
 
 
 - case: bind_result_wrong_second_type
@@ -23,7 +23,7 @@
         ...
 
     x: RequiresContextFutureResult[float, int, bool]
-    bind_result(x, test)  # E: Argument 2 to "internal_bind_result" has incompatible type "Callable[[float], Result[int, str]]"; expected "Callable[[float], Result[int, int]]"
+    bind_result(x, test)  # E: Argument 2 to "bind_result" has incompatible type "Callable[[float], Result[int, str]]"; expected "Callable[[float], Result[int, int]]"
 
 
 - case: bind_result_wrong
@@ -37,7 +37,7 @@
         ...
 
     x: Maybe[float]
-    bind_result(x, test)  # E: Value of type variable "_ResultLikeKind" of "internal_bind_result" cannot be "Maybe[Any]"
+    bind_result(x, test)  # E: Value of type variable "_ResultLikeKind" of "bind_result" cannot be "Maybe[Any]"
 
 
 - case: bind_result_result

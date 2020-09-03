@@ -1,0 +1,123 @@
+- case: reader_inheritance_correct
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar, ClassVar
+    from returns.interfaces.specific.reader import ReaderLike2
+    from returns.primitives.hkt import SupportsKind2
+    from returns.context import Reader, NoDeps
+
+    _EnvType = TypeVar('_EnvType', contravariant=True)
+    _NewEnvType = TypeVar('_NewEnvType')
+    _ReturnType = TypeVar('_ReturnType', covariant=True)
+    _NewReturnType = TypeVar('_NewReturnType')
+
+    class MyClass(
+        SupportsKind2['MyClass', _ReturnType, _EnvType],
+        ReaderLike2[_ReturnType, _EnvType],
+    ):
+        empty: ClassVar[NoDeps] = object()
+
+        def bind_context(
+            self,
+            function: Callable[
+                [_ReturnType],
+                Reader[_NewReturnType, _EnvType],
+            ],
+        ) -> MyClass[_NewReturnType, _EnvType]:
+            ...
+
+        def modify_env(
+            self,
+            function: Callable[[_NewEnvType], _EnvType],
+        ) -> MyClass[_ReturnType, _NewEnvType]:
+            ...
+
+        @classmethod
+        def ask(cls) -> MyClass[_EnvType, _EnvType]:
+            ...
+
+        @classmethod
+        def from_context(
+            self, inner_value: Reader[_NewReturnType, _NewEnvType],
+        ) -> MyClass[_NewReturnType, _NewEnvType]:
+            ...
+
+    def test(a: int) -> Reader[float, str]:
+        ...
+
+    x: Reader[int, str]
+    reveal_type(MyClass.from_context(x).bind_context(test))  # N: Revealed type is 'main.MyClass[builtins.float*, builtins.str]'
+
+
+- case: reader_inheritance_missing
+  disable_cache: true
+  main: |
+    from typing import TypeVar
+    from typing_extensions import final
+    from returns.interfaces.specific.reader import ReaderLike2
+    from returns.primitives.hkt import SupportsKind2
+
+    _EnvType = TypeVar('_EnvType')
+    _ReturnType = TypeVar('_ReturnType')
+
+    @final
+    class MyClass(
+        SupportsKind2['MyClass', _ReturnType, _EnvType],
+        ReaderLike2[_ReturnType, _EnvType],
+    ):
+        ...
+  out: |
+    main:10: error: Final class main.MyClass has abstract attributes "apply", "ask", "bind", "bind_context", "empty", "from_context", "from_iterable", "from_value", "map", "modify_env"
+
+
+- case: reader_inheritance_wrong
+  disable_cache: true
+  main: |
+    from typing import Callable, TypeVar, ClassVar
+    from returns.interfaces.specific.reader import ReaderLike2
+    from returns.primitives.hkt import SupportsKind2
+    from returns.context import Reader, NoDeps
+
+    _EnvType = TypeVar('_EnvType', contravariant=True)
+    _NewEnvType = TypeVar('_NewEnvType')
+    _ReturnType = TypeVar('_ReturnType', covariant=True)
+    _NewReturnType = TypeVar('_NewReturnType')
+
+    class MyClass(
+        SupportsKind2['MyClass', _ReturnType, _EnvType],
+        ReaderLike2[_ReturnType, _EnvType],
+    ):
+        def bind_context(
+            self,
+            function: Callable[
+                [_ReturnType],
+                Reader[_NewReturnType, _EnvType],
+            ],
+        ) -> MyClass[_ReturnType, _EnvType]:
+            ...
+
+        def modify_env(
+            self,
+            function: Callable[[_EnvType], _NewEnvType],
+        ) -> MyClass[_ReturnType, _NewEnvType]:
+            ...
+
+        @classmethod
+        def ask(cls) -> MyClass[_ReturnType, _ReturnType]:
+            ...
+
+        @classmethod
+        def from_context(
+            self, inner_value: Reader[_ReturnType, _EnvType],
+        ) -> MyClass[_ReturnType, _EnvType]:
+            ...
+  out: |
+    main:15: error: Return type "MyClass[_ReturnType, _EnvType]" of "bind_context" incompatible with return type "KindN[MyClass[_ReturnType, _EnvType], _UpdatedType, _EnvType, Any]" in supertype "ReaderLike2"
+    main:24: error: Argument 1 of "modify_env" is incompatible with supertype "ReaderLike2"; supertype defines the argument type as "Callable[[_UpdatedType], _EnvType]"
+    main:24: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:24: note: This violates the Liskov substitution principle
+    main:31: error: Return type "MyClass[_ReturnType, _ReturnType]" of "ask" incompatible with return type "KindN[MyClass[_ReturnType, _EnvType], _EnvType, _EnvType, Any]" in supertype "ReaderLike2"
+    main:35: error: Argument 1 of "from_context" is incompatible with supertype "ReaderLike2"; supertype defines the argument type as "RequiresContext[_ValueType, _EnvType]"
+    main:35: error: Return type "MyClass[_ReturnType, _EnvType]" of "from_context" incompatible with return type "KindN[MyClass[_ReturnType, _EnvType], _ValueType, _EnvType, Any]" in supertype "ReaderLike2"
+    main:35: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:35: note: This violates the Liskov substitution principle

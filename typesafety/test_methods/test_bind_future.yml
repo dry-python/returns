@@ -8,7 +8,7 @@
         ...
 
     x: Future[float]
-    bind_future(x, test)  # E: Argument 2 to "internal_bind_future" has incompatible type "Callable[[str], Future[int]]"; expected "Callable[[float], Future[int]]"
+    bind_future(x, test)  # E: Argument 2 to "bind_future" has incompatible type "Callable[[str], Future[int]]"; expected "Callable[[float], Future[int]]"
 
 
 - case: bind_future_wrong_function
@@ -21,7 +21,7 @@
         ...
 
     x: Future[str]
-    bind_future(x, test)  # E: Argument 2 to "internal_bind_future" has incompatible type "Callable[[str], Coroutine[Any, Any, Future[int]]]"; expected "Callable[[str], Future[<nothing>]]"
+    bind_future(x, test)  # E: Argument 2 to "bind_future" has incompatible type "Callable[[str], Coroutine[Any, Any, Future[int]]]"; expected "Callable[[str], Future[<nothing>]]"
 
 
 - case: bind_future_requires_context_future_result

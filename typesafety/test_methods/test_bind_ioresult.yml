@@ -9,7 +9,7 @@
         ...
 
     x: RequiresContextFutureResult[str, str, bool]
-    bind_ioresult(x, test)  # E: Argument 2 to "internal_bind_ioresult" has incompatible type "Callable[[float], IOResult[int, str]]"; expected "Callable[[str], IOResult[int, str]]"
+    bind_ioresult(x, test)  # E: Argument 2 to "bind_ioresult" has incompatible type "Callable[[float], IOResult[int, str]]"; expected "Callable[[str], IOResult[int, str]]"
 
 
 - case: bind_ioresult_wrong_second_type
@@ -23,7 +23,7 @@
         ...
 
     x: RequiresContextFutureResult[float, int, bool]
-    bind_ioresult(x, test)  # E: Argument 2 to "internal_bind_ioresult" has incompatible type "Callable[[float], IOResult[int, str]]"; expected "Callable[[float], IOResult[int, int]]"
+    bind_ioresult(x, test)  # E: Argument 2 to "bind_ioresult" has incompatible type "Callable[[float], IOResult[int, str]]"; expected "Callable[[float], IOResult[int, int]]"
 
 
 - case: bind_ioresult_wrong_type
@@ -37,7 +37,7 @@
         ...
 
     x: RequiresContextResult[float, str, bool]
-    bind_ioresult(x, test)  # E: Value of type variable "_IOResultLikeKind" of "internal_bind_ioresult" cannot be "RequiresContextResult[Any, Any, Any]"
+    bind_ioresult(x, test)  # E: Value of type variable "_IOResultLikeKind" of "bind_ioresult" cannot be "RequiresContextResult[Any, Any, Any]"
 
 
 - case: bind_ioresult_ioresult

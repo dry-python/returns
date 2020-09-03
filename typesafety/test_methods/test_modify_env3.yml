@@ -10,7 +10,7 @@
     x: RequiresContextResult[float, bool, str]
     modify_env(x, test)
   out: |
-    main:8: error: Argument 2 to "internal_modify_env3" has incompatible type "Callable[[float], int]"; expected "Callable[[float], str]"
+    main:8: error: Argument 2 to "modify_env3" has incompatible type "Callable[[float], int]"; expected "Callable[[float], str]"
 
 
 - case: modify_env_wrong_type
@@ -25,7 +25,7 @@
     x: RequiresContext[float, int]
     modify_env(x, test)
   out: |
-    main:8: error: Value of type variable "_Reader3Kind" of "internal_modify_env3" cannot be "RequiresContext[Any, Any]"
+    main:8: error: Value of type variable "_Reader3Kind" of "modify_env3" cannot be "RequiresContext[Any, Any]"
 
 
 - case: modify_env_alias

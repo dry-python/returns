@@ -7,7 +7,7 @@
     x: RequiresContext[float, str]
     modify_env2(x, int)
   out: |
-    main:5: error: Argument 2 to "internal_modify_env2" has incompatible type "Type[int]"; expected "Callable[[Union[str, SupportsInt, _SupportsIndex]], str]"
+    main:5: error: Argument 2 to "modify_env2" has incompatible type "Type[int]"; expected "Callable[[Union[str, SupportsInt, _SupportsIndex]], str]"
 
 
 - case: modify_env2_wrong_type
@@ -19,8 +19,8 @@
     x: RequiresContextResult[float, str, int]
     modify_env2(x, int)
   out: |
-    main:5: error: Argument 2 to "internal_modify_env2" has incompatible type "Type[int]"; expected "Callable[[Union[str, SupportsInt, _SupportsIndex]], str]"
-    main:5: error: Value of type variable "_Reader2Kind" of "internal_modify_env2" cannot be "RequiresContextResult[Any, Any, Any]"
+    main:5: error: Argument 2 to "modify_env2" has incompatible type "Type[int]"; expected "Callable[[Union[str, SupportsInt, _SupportsIndex]], str]"
+    main:5: error: Value of type variable "_Reader2Kind" of "modify_env2" cannot be "RequiresContextResult[Any, Any, Any]"
 
 
 - case: modify_env2_requires_context

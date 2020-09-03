@@ -59,6 +59,10 @@ class ReaderResultLikeN(
         """Unit method to create new containers from failed ``Reader``."""
 
 
+#: Type alias for kinds with three type arguments.
+ReaderResultLike3 = ReaderResultLikeN[_FirstType, _SecondType, _ThirdType]
+
+
 class _LawSpec(LawSpecDef):
     """
     Concrete laws for ``ReaderResulBasedN``.
@@ -110,3 +114,7 @@ class ReaderResultBasedN(
         Law2(_LawSpec.purity_law),
         Law2(_LawSpec.asking_law),
     )
+
+
+#: Type alias for kinds with three type arguments.
+ReaderResultBased3 = ReaderResultBasedN[_FirstType, _SecondType, _ThirdType]
