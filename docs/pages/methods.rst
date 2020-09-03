@@ -3,9 +3,6 @@
 Methods
 =======
 
-Internal and external methods
------------------------------
-
 Methods are higher kinded functions
 that works with any container with the respect to its type.
 
