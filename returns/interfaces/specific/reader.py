@@ -25,7 +25,7 @@ See also:
 """
 
 from abc import abstractmethod
-from typing import TYPE_CHECKING, Any, Callable, Type, TypeVar
+from typing import TYPE_CHECKING, Any, Callable, Generic, Type, TypeVar
 
 from returns.interfaces import container
 from returns.primitives.hkt import Kind2, Kind3
@@ -45,8 +45,6 @@ _EnvType = TypeVar('_EnvType')
 _ReaderLike2Type = TypeVar('_ReaderLike2Type', bound='ReaderLike2')
 _ReaderLike3Type = TypeVar('_ReaderLike3Type', bound='ReaderLike3')
 
-
-from typing import Generic
 
 class CanBeCalled(Generic[_ValueType, _EnvType]):
     @abstractmethod
@@ -110,17 +108,6 @@ class ReaderLike3(
     It has three type arguments and treats the third type argument as env type.
     The second type argument is not used here.
     """
-
-    # @abstractmethod
-    # def __call__(self, deps: _ThirdType) -> Any:
-    #     """
-    #     Calls the reader with the env to get the result back.
-
-    #     Returns ``Any``, because we cannot know in advance
-    #     what combitation of ``_FirstType`` and ``_SecondType`` would be used.
-    #     It can be ``Union[_FirstType, _SecondType]`` or ``Tuple`` or ``Result``.
-    #     Or any other type.
-    #     """
 
     @property
     @abstractmethod

@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from typing import TYPE_CHECKING, Any, Callable, Type, TypeVar
 
-from returns.interfaces.specific import result, reader
+from returns.interfaces.specific import reader, result
 from returns.primitives.hkt import KindN
 
 if TYPE_CHECKING:
