@@ -84,7 +84,7 @@
   disable_cache: true
   main: |
     from typing import TypeVar
-    from returns.interfaces.specific.reader import ReaderBased3
+    from returns.interfaces.specific.reader import ReaderLike3
     from returns.primitives.hkt import SupportsKind3
     from returns.context import Reader
     from returns.methods import bind_context
@@ -95,7 +95,7 @@
 
     class MyClass(
         SupportsKind3['MyClass', _ValueType, _ErrorType, _EnvType],
-        ReaderBased3[_ValueType, _ErrorType, _EnvType],
+        ReaderLike3[_ValueType, _ErrorType, _EnvType],
     ):
         ...
 
