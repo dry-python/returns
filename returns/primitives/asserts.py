@@ -40,7 +40,8 @@ def _convert(container, *, deps, backend: str):
             deps=deps,
             backend=backend,
         )
-    if isinstance(container, reader.CanBeCalled):
+    # TODO: remove `callable`
+    if callable(container) or isinstance(container, reader.CanBeCalled):
         return _convert(
             container(deps),
             deps=deps,
