@@ -1,7 +1,6 @@
 from typing import Callable, TypeVar
 
 from returns.interfaces.mappable import MappableN
-from returns.methods.map import internal_map
 from returns.primitives.hkt import Kinded, KindN, kinded
 
 _FirstType = TypeVar('_FirstType')
@@ -47,5 +46,5 @@ def map_(
     def factory(
         container: KindN[_MappableKind, _FirstType, _SecondType, _ThirdType],
     ) -> KindN[_MappableKind, _UpdatedType, _SecondType, _ThirdType]:
-        return internal_map(container, function)
+        return container.map(function)
     return factory

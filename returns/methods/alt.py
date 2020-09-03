@@ -11,7 +11,8 @@ _UpdatedType = TypeVar('_UpdatedType')
 _AltableKind = TypeVar('_AltableKind', bound=AltableN)
 
 
-def internal_alt(
+@kinded
+def alt(
     container: KindN[_AltableKind, _FirstType, _SecondType, _ThirdType],
     function: Callable[[_SecondType], _UpdatedType],
 ) -> KindN[_AltableKind, _FirstType, _UpdatedType, _ThirdType]:
@@ -34,7 +35,3 @@ def internal_alt(
 
     """
     return container.alt(function)
-
-
-#: Kinded version of :func:`~internal_alt`, use it to infer real return type.
-alt = kinded(internal_alt)

@@ -51,7 +51,7 @@ class RequiresContextFutureResult(
     SupportsKind3[
         'RequiresContextFutureResult', _ValueType, _ErrorType, _EnvType,
     ],
-    reader.ReaderBased3[_ValueType, _ErrorType, _EnvType],
+    reader.ReaderLike3[_ValueType, _ErrorType, _EnvType],
     future_result.FutureResultLike3[_ValueType, _ErrorType, _EnvType],
 ):
     """

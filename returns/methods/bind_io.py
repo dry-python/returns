@@ -14,7 +14,8 @@ _UpdatedType = TypeVar('_UpdatedType')
 _IOLikeKind = TypeVar('_IOLikeKind', bound=IOLikeN)
 
 
-def internal_bind_io(
+@kinded
+def bind_io(
     container: KindN[_IOLikeKind, _FirstType, _SecondType, _ThirdType],
     function: Callable[[_FirstType], 'IO[_UpdatedType]'],
 ) -> KindN[_IOLikeKind, _UpdatedType, _SecondType, _ThirdType]:
@@ -38,8 +39,3 @@ def internal_bind_io(
 
     """
     return container.bind_io(function)
-
-
-#: Kinded version of :func:`~internal_bind_io`,
-#: use it to infer real return type.
-bind_io = kinded(internal_bind_io)

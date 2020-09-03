@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING, Callable, TypeVar
 
 from returns.interfaces.specific.ioresult import IOResultLikeN
-from returns.methods.bind_ioresult import internal_bind_ioresult
 from returns.primitives.hkt import Kinded, KindN, kinded
 
 if TYPE_CHECKING:
@@ -53,5 +52,5 @@ def bind_ioresult(
             _ThirdType,
         ],
     ) -> KindN[_IOResultLikeKind, _UpdatedType, _SecondType, _ThirdType]:
-        return internal_bind_ioresult(container, function)
+        return container.bind_ioresult(function)
     return factory

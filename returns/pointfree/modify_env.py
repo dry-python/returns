@@ -1,10 +1,6 @@
 from typing import Callable, TypeVar
 
-from returns.interfaces.specific.reader import ReaderBased2, ReaderBased3
-from returns.methods.modify_env import (
-    internal_modify_env2,
-    internal_modify_env3,
-)
+from returns.interfaces.specific.reader import ReaderLike2, ReaderLike3
 from returns.primitives.hkt import Kind2, Kind3, Kinded, kinded
 
 _FirstType = TypeVar('_FirstType')
@@ -12,8 +8,8 @@ _SecondType = TypeVar('_SecondType')
 _ThirdType = TypeVar('_ThirdType')
 _UpdatedType = TypeVar('_UpdatedType')
 
-_Reader2Kind = TypeVar('_Reader2Kind', bound=ReaderBased2)
-_Reader3Kind = TypeVar('_Reader3Kind', bound=ReaderBased3)
+_Reader2Kind = TypeVar('_Reader2Kind', bound=ReaderLike2)
+_Reader3Kind = TypeVar('_Reader3Kind', bound=ReaderLike3)
 
 
 def modify_env2(
@@ -23,7 +19,7 @@ def modify_env2(
     Kind2[_Reader2Kind, _FirstType, _UpdatedType],
 ]]:
     """
-    Modifies the second type argument of a ``ReaderBased2``.
+    Modifies the second type argument of a ``ReaderLike2``.
 
     In other words, it modifies the function's
     signature from: ``a -> b``
@@ -41,7 +37,7 @@ def modify_env2(
 
     Note, that this function works with only ``Kind2`` containers
     with ``.modify_env`` method.
-    See :class:`returns.primitives.interfaces.specific.reader.ReaderBased2`
+    See :class:`returns.primitives.interfaces.specific.reader.ReaderLike2`
     for more info.
 
     """
@@ -49,7 +45,7 @@ def modify_env2(
     def factory(
         container: Kind2[_Reader2Kind, _FirstType, _SecondType],
     ) -> Kind2[_Reader2Kind, _FirstType, _UpdatedType]:
-        return internal_modify_env2(container, function)
+        return container.modify_env(function)
     return factory
 
 
@@ -60,7 +56,7 @@ def modify_env3(
     Kind3[_Reader3Kind, _FirstType, _SecondType, _UpdatedType],
 ]]:
     """
-    Modifies the third type argument of a ``ReaderBased3``.
+    Modifies the third type argument of a ``ReaderLike3``.
 
     In other words, it modifies the function's
     signature from: ``a -> b``
@@ -80,7 +76,7 @@ def modify_env3(
 
     Note, that this function works with only ``Kind3`` containers
     with ``.modify_env`` method.
-    See :class:`returns.primitives.interfaces.specific.reader.ReaderBased3`
+    See :class:`returns.primitives.interfaces.specific.reader.ReaderLike3`
     for more info.
 
     """
@@ -88,7 +84,7 @@ def modify_env3(
     def factory(
         container: Kind3[_Reader3Kind, _FirstType, _SecondType, _ThirdType],
     ) -> Kind3[_Reader3Kind, _FirstType, _SecondType, _UpdatedType]:
-        return internal_modify_env3(container, function)
+        return container.modify_env(function)
     return factory
 
 

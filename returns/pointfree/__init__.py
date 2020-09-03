@@ -10,6 +10,7 @@ from returns.pointfree.bind_async_future_result import (
 )
 from returns.pointfree.bind_awaitable import bind_awaitable as bind_awaitable
 from returns.pointfree.bind_context import bind_context as bind_context
+from returns.pointfree.bind_context_result import bind_context_result as bind_context_result
 from returns.pointfree.bind_context import bind_context2 as bind_context2
 from returns.pointfree.bind_context import bind_context3 as bind_context3
 from returns.pointfree.bind_future import bind_future as bind_future

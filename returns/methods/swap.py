@@ -10,7 +10,8 @@ _ThirdType = TypeVar('_ThirdType')
 _ResultLikeKind = TypeVar('_ResultLikeKind', bound=ResultLikeN)
 
 
-def internal_swap(
+@kinded
+def swap(
     container: KindN[_ResultLikeKind, _FirstType, _SecondType, _ThirdType],
 ) -> KindN[_ResultLikeKind, _SecondType, _FirstType, _ThirdType]:
     """
@@ -54,7 +55,3 @@ def internal_swap(
     This method supports all ``ResultLikeN`` containers.
     """
     return container.swap()
-
-
-#: Kinded version of :func:`~internal_swap`, use it to infer real return type.
-swap = kinded(internal_swap)

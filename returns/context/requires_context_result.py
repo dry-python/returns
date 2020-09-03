@@ -13,7 +13,7 @@ from typing_extensions import final
 
 from returns._internal.iterable import iterable_kind
 from returns.context import NoDeps
-from returns.interfaces.specific import reader, result
+from returns.interfaces.specific import reader_result
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind3, SupportsKind3, dekind
 from returns.primitives.iterables import BaseIterableStrategyN, FailFast
@@ -40,8 +40,7 @@ _FirstType = TypeVar('_FirstType')
 class RequiresContextResult(
     BaseContainer,
     SupportsKind3['RequiresContextResult', _ValueType, _ErrorType, _EnvType],
-    reader.ReaderBased3[_ValueType, _ErrorType, _EnvType],
-    result.ResultLike3[_ValueType, _ErrorType, _EnvType],
+    reader_result.ReaderResultBasedN[_ValueType, _ErrorType, _EnvType],
 ):
     """
     The ``RequiresContextResult`` combinator.
@@ -279,6 +278,9 @@ class RequiresContextResult(
                 lambda inner: function(inner)(deps),  # type: ignore
             ),
         )
+
+    #: Alias for `bind_context_result` method, it is the same as `bind` here.
+    bind_context_result = bind
 
     def bind_result(
         self,

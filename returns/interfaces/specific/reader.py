@@ -1,7 +1,7 @@
 """
 This module is special.
 
-``Reader`` does not produce ``ReaderBasedN`` interface as other containers.
+``Reader`` does not produce ``ReaderLikeN`` interface as other containers.
 
 Because ``Reader`` can be used with two or three type arguments:
 - ``RequiresContext[value, env]``
@@ -10,13 +10,13 @@ Because ``Reader`` can be used with two or three type arguments:
 Because the second type argument changes its meaning
 based on the used ``KindN`` instance,
 we need to have two separate interfaces for two separate use-cases:
-- ``ReaderBased2`` is used for types where the second type argument is ``env``
-- ``ReaderBased3`` is used for types where the third type argument is ``env``
+- ``ReaderLike2`` is used for types where the second type argument is ``env``
+- ``ReaderLike3`` is used for types where the third type argument is ``env``
 
 We also have two methods and two poinfree helpers
 for ``bind_context`` composition: one for each interface.
 
-Furthermore, ``Reader`` cannot have ``ReaderBased1`` type,
+Furthermore, ``Reader`` cannot have ``ReaderLike1`` type,
 because we need both ``value`` and ``env`` types at all cases.
 
 See also:
@@ -27,7 +27,7 @@ See also:
 from abc import abstractmethod
 from typing import TYPE_CHECKING, Any, Callable, Type, TypeVar
 
-from returns.interfaces import container, iterable
+from returns.interfaces import container
 from returns.primitives.hkt import Kind2, Kind3
 
 if TYPE_CHECKING:
@@ -42,13 +42,20 @@ _ValueType = TypeVar('_ValueType')
 _ErrorType = TypeVar('_ErrorType')
 _EnvType = TypeVar('_EnvType')
 
-_ReaderBased2Type = TypeVar('_ReaderBased2Type', bound='ReaderBased2')
-_ReaderBased3Type = TypeVar('_ReaderBased3Type', bound='ReaderBased3')
+_ReaderLike2Type = TypeVar('_ReaderLike2Type', bound='ReaderLike2')
+_ReaderLike3Type = TypeVar('_ReaderLike3Type', bound='ReaderLike3')
 
 
-class ReaderBased2(
+from typing import Generic
+
+class CanBeCalled(Generic[_ValueType, _EnvType]):
+    @abstractmethod
+    def __call__(self, deps: _EnvType) -> _ValueType:
+        ...
+
+
+class ReaderLike2(
     container.Container2[_FirstType, _SecondType],
-    iterable.Iterable2[_FirstType, _SecondType],
 ):
     """
     Reader interface for ``Kind2`` based types.
@@ -56,51 +63,46 @@ class ReaderBased2(
     It has two type arguments and treats the second type argument as env type.
     """
 
-    @abstractmethod
-    def __call__(self, deps: _SecondType) -> _FirstType:
-        """Calls the reader with the env to get the result back."""
-
     @property
     @abstractmethod
-    def empty(self: _ReaderBased2Type) -> 'NoDeps':
+    def empty(self: _ReaderLike2Type) -> 'NoDeps':
         """Is required to call ``Reader`` with explicit empty argument."""
 
     @abstractmethod
     def bind_context(
-        self: _ReaderBased2Type,
+        self: _ReaderLike2Type,
         function: Callable[
             [_FirstType],
             'RequiresContext[_UpdatedType, _SecondType]',
         ],
-    ) -> Kind2[_ReaderBased2Type, _UpdatedType, _SecondType]:
+    ) -> Kind2[_ReaderLike2Type, _UpdatedType, _SecondType]:
         """Allows to apply a wrapped function over a ``Reader`` container."""
 
     @abstractmethod
     def modify_env(
-        self: _ReaderBased2Type,
+        self: _ReaderLike2Type,
         function: Callable[[_UpdatedType], _SecondType],
-    ) -> Kind2[_ReaderBased2Type, _FirstType, _UpdatedType]:
+    ) -> Kind2[_ReaderLike2Type, _FirstType, _UpdatedType]:
         """Transforms the environment before calling the container."""
 
     @classmethod
     @abstractmethod
     def ask(
-        cls: Type[_ReaderBased2Type],
-    ) -> Kind2[_ReaderBased2Type, _SecondType, _SecondType]:
+        cls: Type[_ReaderLike2Type],
+    ) -> Kind2[_ReaderLike2Type, _SecondType, _SecondType]:
         """Returns the depedencies inside the container."""
 
     @classmethod
     @abstractmethod
     def from_context(
-        cls: Type[_ReaderBased2Type],  # noqa: N805
+        cls: Type[_ReaderLike2Type],  # noqa: N805
         inner_value: 'RequiresContext[_ValueType, _EnvType]',
-    ) -> Kind2[_ReaderBased2Type, _ValueType, _EnvType]:
+    ) -> Kind2[_ReaderLike2Type, _ValueType, _EnvType]:
         """Unit method to create new containers from successful ``Reader``."""
 
 
-class ReaderBased3(
+class ReaderLike3(
     container.Container3[_FirstType, _SecondType, _ThirdType],
-    iterable.Iterable3[_FirstType, _SecondType, _ThirdType],
 ):
     """
     Reader interface for ``Kind3`` based types.
@@ -109,50 +111,69 @@ class ReaderBased3(
     The second type argument is not used here.
     """
 
-    @abstractmethod
-    def __call__(self, deps: _ThirdType) -> Any:
-        """
-        Calls the reader with the env to get the result back.
+    # @abstractmethod
+    # def __call__(self, deps: _ThirdType) -> Any:
+    #     """
+    #     Calls the reader with the env to get the result back.
 
-        Returns ``Any``, because we cannot know in advance
-        what combitation of ``_FirstType`` and ``_SecondType`` would be used.
-        It can be ``Union[_FirstType, _SecondType]`` or ``Tuple`` or ``Result``.
-        Or any other type.
-        """
+    #     Returns ``Any``, because we cannot know in advance
+    #     what combitation of ``_FirstType`` and ``_SecondType`` would be used.
+    #     It can be ``Union[_FirstType, _SecondType]`` or ``Tuple`` or ``Result``.
+    #     Or any other type.
+    #     """
 
     @property
     @abstractmethod
-    def empty(self: _ReaderBased3Type) -> 'NoDeps':
+    def empty(self: _ReaderLike3Type) -> 'NoDeps':
         """Is required to call ``Reader`` with explicit empty argument."""
 
     @abstractmethod
     def bind_context(
-        self: _ReaderBased3Type,
+        self: _ReaderLike3Type,
         function: Callable[
             [_FirstType],
             'RequiresContext[_UpdatedType, _ThirdType]',
         ],
-    ) -> Kind3[_ReaderBased3Type, _UpdatedType, _SecondType, _ThirdType]:
+    ) -> Kind3[_ReaderLike3Type, _UpdatedType, _SecondType, _ThirdType]:
         """Allows to apply a wrapped function over a ``Reader`` container."""
 
     @abstractmethod
     def modify_env(
-        self: _ReaderBased3Type,
+        self: _ReaderLike3Type,
         function: Callable[[_UpdatedType], _ThirdType],
-    ) -> Kind3[_ReaderBased3Type, _FirstType, _SecondType, _UpdatedType]:
+    ) -> Kind3[_ReaderLike3Type, _FirstType, _SecondType, _UpdatedType]:
         """Transforms the environment before calling the container."""
 
     @classmethod
     @abstractmethod
     def ask(
-        cls: Type[_ReaderBased3Type],
-    ) -> Kind3[_ReaderBased3Type, _ThirdType, _SecondType, _ThirdType]:
+        cls: Type[_ReaderLike3Type],
+    ) -> Kind3[_ReaderLike3Type, _ThirdType, _SecondType, _ThirdType]:
         """Returns the depedencies inside the container."""
 
     @classmethod
     @abstractmethod
     def from_context(
-        cls: Type[_ReaderBased3Type],  # noqa: N805
+        cls: Type[_ReaderLike3Type],  # noqa: N805
         inner_value: 'RequiresContext[_ValueType, _EnvType]',
-    ) -> Kind3[_ReaderBased3Type, _ValueType, _SecondType, _EnvType]:
+    ) -> Kind3[_ReaderLike3Type, _ValueType, _SecondType, _EnvType]:
         """Unit method to create new containers from successful ``Reader``."""
+
+
+class CallableReader2(
+    ReaderLike2[_FirstType, _SecondType],
+    CanBeCalled[_ValueType, _EnvType],
+):
+    ...
+
+
+class ReaderBased2(
+    CallableReader2[
+        _FirstType,
+        _SecondType,
+        # Used for call typing:
+        _FirstType,
+        _SecondType,
+    ],
+):
+    ...

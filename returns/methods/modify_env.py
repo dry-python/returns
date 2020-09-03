@@ -1,6 +1,6 @@
 from typing import Callable, TypeVar
 
-from returns.interfaces.specific.reader import ReaderBased2, ReaderBased3
+from returns.interfaces.specific.reader import ReaderLike2, ReaderLike3
 from returns.primitives.hkt import Kind2, Kind3, kinded
 
 _FirstType = TypeVar('_FirstType')
@@ -8,16 +8,17 @@ _SecondType = TypeVar('_SecondType')
 _ThirdType = TypeVar('_ThirdType')
 _UpdatedType = TypeVar('_UpdatedType')
 
-_Reader2Kind = TypeVar('_Reader2Kind', bound=ReaderBased2)
-_Reader3Kind = TypeVar('_Reader3Kind', bound=ReaderBased3)
+_Reader2Kind = TypeVar('_Reader2Kind', bound=ReaderLike2)
+_Reader3Kind = TypeVar('_Reader3Kind', bound=ReaderLike3)
 
 
-def internal_modify_env2(
+@kinded
+def modify_env2(
     container: Kind2[_Reader2Kind, _FirstType, _SecondType],
     function: Callable[[_UpdatedType], _SecondType],
 ) -> Kind2[_Reader2Kind, _FirstType, _UpdatedType]:
     """
-    Modifies the second type argument of a ``ReaderBased2``.
+    Modifies the second type argument of a ``ReaderLike2``.
 
     .. code:: python
 
@@ -31,24 +32,20 @@ def internal_modify_env2(
 
     Note, that this function works with only ``Kind2`` containers
     with ``.modify_env`` method.
-    See :class:`returns.primitives.interfaces.specific.reader.ReaderBased2`
+    See :class:`returns.primitives.interfaces.specific.reader.ReaderLike2`
     for more info.
 
     """
     return container.modify_env(function)
 
 
-#: Kinded version of :func:`~internal_modify_env2`,
-#: use it to infer real return type.
-modify_env2 = kinded(internal_modify_env2)
-
-
-def internal_modify_env3(
+@kinded
+def modify_env3(
     container: Kind3[_Reader3Kind, _FirstType, _SecondType, _ThirdType],
     function: Callable[[_UpdatedType], _ThirdType],
 ) -> Kind3[_Reader3Kind, _FirstType, _SecondType, _UpdatedType]:
     """
-    Modifies the third type argument of a ``ReaderBased3``.
+    Modifies the third type argument of a ``ReaderLike3``.
 
     .. code:: python
 
@@ -64,16 +61,12 @@ def internal_modify_env3(
 
     Note, that this function works with only ``Kind3`` containers
     with ``.modify_env`` method.
-    See :class:`returns.primitives.interfaces.specific.reader.ReaderBased3`
+    See :class:`returns.primitives.interfaces.specific.reader.ReaderLike3`
     for more info.
 
     """
     return container.modify_env(function)
 
-
-#: Kinded version of :func:`~internal_modify_env3`,
-#: use it to infer real return type.
-modify_env3 = kinded(internal_modify_env3)
 
 #: Useful alias for :func:`~modify_env3`.
 modify_env = modify_env3

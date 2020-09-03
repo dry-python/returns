@@ -12,7 +12,8 @@ _ThirdType = TypeVar('_ThirdType')
 _IOResultLikeKind = TypeVar('_IOResultLikeKind', bound=IOResultLikeN)
 
 
-def internal_compose_result(
+@kinded
+def compose_result(
     container: Kind3[_IOResultLikeKind, _FirstType, _SecondType, _ThirdType],
     function: Callable[
         [Result[_FirstType, _SecondType]],
@@ -40,8 +41,3 @@ def internal_compose_result(
 
     """
     return container.compose_result(function)
-
-
-#: Kinded version of :func:`~internal_compose_result`,
-# use it to infer real return type.
-compose_result = kinded(internal_compose_result)

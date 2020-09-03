@@ -12,7 +12,8 @@ _UpdatedType = TypeVar('_UpdatedType')
 _FutureKind = TypeVar('_FutureKind', bound=FutureLikeN)
 
 
-def internal_bind_async_future(
+@kinded
+def bind_async_future(
     container: KindN[_FutureKind, _FirstType, _SecondType, _ThirdType],
     function: Callable[
         [_FirstType],
@@ -43,8 +44,3 @@ def internal_bind_async_future(
 
     """
     return container.bind_async_future(function)
-
-
-#: Kinded version of :func:`~internal_bind_async_future`,
-#: use it to infer real return type.
-bind_async_future = kinded(internal_bind_async_future)

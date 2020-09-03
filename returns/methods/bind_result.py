@@ -14,7 +14,8 @@ _UpdatedType = TypeVar('_UpdatedType')
 _ResultLikeKind = TypeVar('_ResultLikeKind', bound=ResultLikeN)
 
 
-def internal_bind_result(
+@kinded
+def bind_result(
     container: KindN[_ResultLikeKind, _FirstType, _SecondType, _ThirdType],
     function: Callable[[_FirstType], 'Result[_UpdatedType, _SecondType]'],
 ) -> KindN[_ResultLikeKind, _UpdatedType, _SecondType, _ThirdType]:
@@ -40,8 +41,3 @@ def internal_bind_result(
 
     """
     return container.bind_result(function)
-
-
-#: Kinded version of :func:`~internal_bind_result`,
-#: use it to infer real return type.
-bind_result = kinded(internal_bind_result)
