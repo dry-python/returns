@@ -35,17 +35,19 @@ def bind_context_result(
 
     .. code:: python
 
-      >>> from returns.io import IOSuccess
-      >>> from returns.context import RequiresContextResult
-      >>> from returns.result import Result, Success
-      >>> from returns.pointfree import bind_result
+      >>> from returns.pointfree import bind_context_result
+      >>> from returns.context import ReaderIOResult, ReaderResult
+      >>> from returns.io import IOSuccess, IOFailure
 
-      >>> def returns_result(arg: int) -> Result[int, str]:
-      ...     return Success(arg + 1)
+      >>> def example(argument: int) -> ReaderResult[int, str, str]:
+      ...     return ReaderResult.from_value(argument + 1)
 
-      >>> bound = bind_result(returns_result)
-      >>> assert bound(IOSuccess(1)) == IOSuccess(2)
-      >>> assert bound(RequiresContextResult.from_value(1))(...) == Success(2)
+      >>> assert bind_context_result(example)(
+      ...     ReaderIOResult.from_value(1),
+      ... )(...) == IOSuccess(2)
+      >>> assert bind_context_result(example)(
+      ...     ReaderIOResult.from_failure('a'),
+      ... )(...) == IOFailure('a')
 
     """
     @kinded

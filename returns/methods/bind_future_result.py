@@ -26,18 +26,18 @@ def bind_future_result(
         >>> from returns.future import FutureResult
         >>> from returns.context import ReaderFutureResult
         >>> from returns.io import IOSuccess, IOFailure
-        >>> from returns.pointfree import bind_future_result
+        >>> from returns.methods import bind_future_result
 
         >>> def function(x: int) -> FutureResult[str, int]:
         ...    return FutureResult.from_value(str(x + 1))
 
-        >>> bound = bind_future_result(function)(
-        ...     ReaderFutureResult.from_value(1),
+        >>> bound = bind_future_result(
+        ...     ReaderFutureResult.from_value(1), function,
         ... )
         >>> assert anyio.run(bound, ReaderFutureResult.empty) == IOSuccess('2')
 
-        >>> bound = bind_future_result(function)(
-        ...     ReaderFutureResult.from_failure(1),
+        >>> bound = bind_future_result(
+        ...     ReaderFutureResult.from_failure(1), function,
         ... )
         >>> assert anyio.run(bound, ReaderFutureResult.empty) == IOFailure(1)
 
