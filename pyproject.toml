@@ -71,7 +71,8 @@ trio = "^0.16"
 
 safety = "^1.8"
 
-pytest = "^5.4"
+pytest = "^6.0"
+pytest-xdist = "^2.1"
 pytest-cov = "^2.10"
 pytest-randomly = "^3.4"
 pytest-mypy-plugins = "^1.4"

@@ -118,18 +118,18 @@
         ) -> MyClass[_ReturnType, _EnvType]:
             ...
   out: |
-    main:15: error: Argument 1 of "__call__" is incompatible with supertype "ReaderBased2"; supertype defines the argument type as "_EnvType"
+    main:15: error: Argument 1 of "__call__" is incompatible with supertype "CanBeCalled"; supertype defines the argument type as "_EnvType"
     main:15: error: Cannot use a contravariant type variable as return type
     main:15: error: Cannot use a covariant type variable as a parameter
-    main:15: error: Return type "_EnvType" of "__call__" incompatible with return type "_ReturnType" in supertype "ReaderBased2"
+    main:15: error: Return type "_EnvType" of "__call__" incompatible with return type "_ReturnType" in supertype "CanBeCalled"
     main:15: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
     main:15: note: This violates the Liskov substitution principle
-    main:18: error: Return type "MyClass[_ReturnType, _EnvType]" of "bind_context" incompatible with return type "KindN[MyClass[_ReturnType, _EnvType], _UpdatedType, _EnvType, Any]" in supertype "ReaderBased2"
-    main:27: error: Argument 1 of "modify_env" is incompatible with supertype "ReaderBased2"; supertype defines the argument type as "Callable[[_UpdatedType], _EnvType]"
+    main:18: error: Return type "MyClass[_ReturnType, _EnvType]" of "bind_context" incompatible with return type "KindN[MyClass[_ReturnType, _EnvType], _UpdatedType, _EnvType, Any]" in supertype "ReaderLike2"
+    main:27: error: Argument 1 of "modify_env" is incompatible with supertype "ReaderLike2"; supertype defines the argument type as "Callable[[_UpdatedType], _EnvType]"
     main:27: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
     main:27: note: This violates the Liskov substitution principle
-    main:34: error: Return type "MyClass[_ReturnType, _ReturnType]" of "ask" incompatible with return type "KindN[MyClass[_ReturnType, _EnvType], _EnvType, _EnvType, Any]" in supertype "ReaderBased2"
-    main:38: error: Argument 1 of "from_context" is incompatible with supertype "ReaderBased2"; supertype defines the argument type as "RequiresContext[_ValueType, _EnvType]"
-    main:38: error: Return type "MyClass[_ReturnType, _EnvType]" of "from_context" incompatible with return type "KindN[MyClass[_ReturnType, _EnvType], _ValueType, _EnvType, Any]" in supertype "ReaderBased2"
+    main:34: error: Return type "MyClass[_ReturnType, _ReturnType]" of "ask" incompatible with return type "KindN[MyClass[_ReturnType, _EnvType], _EnvType, _EnvType, Any]" in supertype "ReaderLike2"
+    main:38: error: Argument 1 of "from_context" is incompatible with supertype "ReaderLike2"; supertype defines the argument type as "RequiresContext[_ValueType, _EnvType]"
+    main:38: error: Return type "MyClass[_ReturnType, _EnvType]" of "from_context" incompatible with return type "KindN[MyClass[_ReturnType, _EnvType], _ValueType, _EnvType, Any]" in supertype "ReaderLike2"
     main:38: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
     main:38: note: This violates the Liskov substitution principle
