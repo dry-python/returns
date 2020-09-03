@@ -1,11 +1,10 @@
 from abc import abstractmethod
-from typing import TYPE_CHECKING, Any, Callable, Type, TypeVar
+from typing import TYPE_CHECKING, Callable, Type, TypeVar
 
 from returns.interfaces.specific import reader, result
 from returns.primitives.hkt import KindN
 
 if TYPE_CHECKING:
-    from returns.result import Result  # noqa: WPS433
     from returns.context import Reader, ReaderResult  # noqa: WPS433
 
 _FirstType = TypeVar('_FirstType')
@@ -24,9 +23,15 @@ _ReaderResultLikeType = TypeVar(
 
 
 class ReaderResultLikeN(
-    result.ResultLikeN[_FirstType, _SecondType, _ThirdType],
     reader.ReaderLike3[_FirstType, _SecondType, _ThirdType],
+    result.ResultLikeN[_FirstType, _SecondType, _ThirdType],
 ):
+    """
+    Base interface for all types that do look like ``ReaderResult`` instance.
+
+    Cannot be called.
+    """
+
     @abstractmethod
     def bind_context_result(
         self: _ReaderResultLikeType,
@@ -35,7 +40,7 @@ class ReaderResultLikeN(
             'ReaderResult[_UpdatedType, _SecondType, _ThirdType]',
         ],
     ) -> KindN[_ReaderResultLikeType, _UpdatedType, _SecondType, _ThirdType]:
-        ...
+        """Binds a ``ReaderResult`` returning function over a container."""
 
     @classmethod
     @abstractmethod
@@ -46,21 +51,22 @@ class ReaderResultLikeN(
         """Unit method to create new containers from failed ``Reader``."""
 
 
-class CallableReaderResultN(
-    ReaderResultLikeN[_FirstType, _SecondType, _ThirdType],
-    reader.CanBeCalled[_ValueType, _EnvType],
-):
-    ...
-
-
 class ReaderResultBasedN(
-    CallableReaderResultN[
+    ReaderResultLikeN[_FirstType, _SecondType, _ThirdType],
+    reader.CallableReader3[
         _FirstType,
         _SecondType,
         _ThirdType,
         # Calls:
         'Result[_FirstType, _SecondType]',
-        _ThirdType
-    ]
+        _ThirdType,
+    ],
 ):
-    ...
+    """
+    This interface is very specific to our ``ReaderResult`` type.
+
+    The only thing that differs from ``ReaderResultLikeN`` is that we know
+    the specific types for its ``__call__`` method.
+
+    In this case the return type of ``__call__`` is ``Result``.
+    """

@@ -47,7 +47,7 @@ class RequiresContextResult(
 
     See :class:`returns.context.requires_context.RequiresContext` for more docs.
 
-    This is just a handy wrapper around ``RequiresContext[env, Result[a, b]]``
+    This is just a handy wrapper around ``RequiresContext[Result[a, b], env]``
     which represents a context-dependent pure operation
     that might fail and return :class:`returns.result.Result`.
 

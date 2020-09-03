@@ -25,7 +25,7 @@ See also:
 """
 
 from abc import abstractmethod
-from typing import TYPE_CHECKING, Any, Callable, Generic, Type, TypeVar
+from typing import TYPE_CHECKING, Callable, Generic, Type, TypeVar
 
 from returns.interfaces import container
 from returns.primitives.hkt import Kind2, Kind3
@@ -47,9 +47,25 @@ _ReaderLike3Type = TypeVar('_ReaderLike3Type', bound='ReaderLike3')
 
 
 class CanBeCalled(Generic[_ValueType, _EnvType]):
+    """
+    Special type we use as a base one for all callble ``Reader`` instances.
+
+    It only has a single method.
+    And is a base type for every single one of them.
+
+    But, each ``Reader`` defines the return type differently.
+    For example:
+
+    - ``Reader`` has just ``_ReturnType``
+    - ``ReaderResult`` has ``Result[_FirstType, _SecondType]``
+    - ``ReaderIOResult`` has ``IOResult[_FirstType, _SecondType]``
+
+    And so on.
+    """
+
     @abstractmethod
     def __call__(self, deps: _EnvType) -> _ValueType:
-        ...
+        """Receives one parameter, returns a value. As simple as that."""
 
 
 class ReaderLike2(
@@ -97,6 +113,21 @@ class ReaderLike2(
         inner_value: 'RequiresContext[_ValueType, _EnvType]',
     ) -> Kind2[_ReaderLike2Type, _ValueType, _EnvType]:
         """Unit method to create new containers from successful ``Reader``."""
+
+
+class CallableReader2(
+    ReaderLike2[_FirstType, _SecondType],
+    CanBeCalled[_ValueType, _EnvType],
+):
+    """
+    Intermediate interface for ``ReaderLike2`` + ``__call__`` method.
+
+    Has 4 type variables to type ``Reader`` and ``__call__`` independently.
+    Since, we don't have any other fancy ways of doing it.
+
+    Should not be used directly
+    other than defining your own ``Reader`` interfaces.
+    """
 
 
 class ReaderLike3(
@@ -147,11 +178,19 @@ class ReaderLike3(
         """Unit method to create new containers from successful ``Reader``."""
 
 
-class CallableReader2(
-    ReaderLike2[_FirstType, _SecondType],
+class CallableReader3(
+    ReaderLike3[_FirstType, _SecondType, _ThirdType],
     CanBeCalled[_ValueType, _EnvType],
 ):
-    ...
+    """
+    Intermediate interface for ``ReaderLike3`` + ``__call__`` method.
+
+    Has 5 type variables to type ``Reader`` and ``__call__`` independently.
+    Since, we don't have any other fancy ways of doing it.
+
+    Should not be used directly
+    other than defining your own ``Reader`` interfaces.
+    """
 
 
 class ReaderBased2(
@@ -163,4 +202,9 @@ class ReaderBased2(
         _SecondType,
     ],
 ):
-    ...
+    """
+    This interface is very specific to our ``Reader`` type.
+
+    The only thing that differs from ``ReaderLike2`` is that we know
+    the specific types for its ``__call__`` method.
+    """

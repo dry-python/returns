@@ -50,7 +50,12 @@ def bind_context_result(
     """
     @kinded
     def factory(
-        container: KindN[_ReaderResultLikeKind, _FirstType, _SecondType, _ThirdType],
+        container: KindN[
+            _ReaderResultLikeKind,
+            _FirstType,
+            _SecondType,
+            _ThirdType,
+        ],
     ) -> KindN[_ReaderResultLikeKind, _UpdatedType, _SecondType, _ThirdType]:
         return container.bind_context_result(function)
     return factory

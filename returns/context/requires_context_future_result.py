@@ -16,7 +16,7 @@ from returns._internal.futures import _reader_future_result
 from returns._internal.iterable import iterable_kind
 from returns.context import NoDeps
 from returns.future import Future, FutureResult
-from returns.interfaces.specific import future_result, reader
+from returns.interfaces.specific import future_result, reader_result
 from returns.io import IO, IOResult
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind3, SupportsKind3, dekind
@@ -51,7 +51,7 @@ class RequiresContextFutureResult(
     SupportsKind3[
         'RequiresContextFutureResult', _ValueType, _ErrorType, _EnvType,
     ],
-    reader.ReaderLike3[_ValueType, _ErrorType, _EnvType],
+    reader_result.ReaderResultLikeN[_ValueType, _ErrorType, _EnvType],
     future_result.FutureResultLike3[_ValueType, _ErrorType, _EnvType],
 ):
     """
@@ -66,7 +66,7 @@ class RequiresContextFutureResult(
     for more docs.
 
     This is just a handy wrapper around
-    ``RequiresContext[env, FutureResult[a, b]]``
+    ``RequiresContext[FutureResult[a, b], env]``
     which represents a context-dependent impure async operation that might fail.
 
     So, this is a thin wrapper, without any changes in logic.
