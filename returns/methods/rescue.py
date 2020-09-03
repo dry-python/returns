@@ -11,7 +11,8 @@ _UpdatedType = TypeVar('_UpdatedType')
 _RescuableKind = TypeVar('_RescuableKind', bound=RescuableN)
 
 
-def internal_rescue(
+@kinded
+def rescue(
     container: KindN[_RescuableKind, _FirstType, _SecondType, _ThirdType],
     function: Callable[
         [_SecondType],
@@ -38,7 +39,3 @@ def internal_rescue(
 
     """
     return container.rescue(function)
-
-
-#: Kinded version of :func:`~internal_rescue`, use it to infer real return type.
-rescue = kinded(internal_rescue)

@@ -14,7 +14,8 @@ _UpdatedType = TypeVar('_UpdatedType')
 _IOResultLikeKind = TypeVar('_IOResultLikeKind', bound=IOResultLikeN)
 
 
-def internal_bind_ioresult(
+@kinded
+def bind_ioresult(
     container: KindN[_IOResultLikeKind, _FirstType, _SecondType, _ThirdType],
     function: Callable[[_FirstType], 'IOResult[_UpdatedType, _SecondType]'],
 ) -> KindN[_IOResultLikeKind, _UpdatedType, _SecondType, _ThirdType]:
@@ -48,8 +49,3 @@ def internal_bind_ioresult(
 
     """
     return container.bind_ioresult(function)
-
-
-#: Kinded version of :func:`~internal_bind_ioresult`,
-#: use it to infer real return type.
-bind_ioresult = kinded(internal_bind_ioresult)

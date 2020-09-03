@@ -1,7 +1,6 @@
 from typing import Callable, TypeVar
 
 from returns.interfaces.altable import AltableN
-from returns.methods.alt import internal_alt
 from returns.primitives.hkt import Kinded, KindN, kinded
 
 _FirstType = TypeVar('_FirstType')
@@ -45,5 +44,5 @@ def alt(
     def factory(
         container: KindN[_AltableKind, _FirstType, _SecondType, _ThirdType],
     ) -> KindN[_AltableKind, _FirstType, _UpdatedType, _ThirdType]:
-        return internal_alt(container, function)
+        return container.alt(function)
     return factory

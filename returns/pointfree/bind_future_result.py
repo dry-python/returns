@@ -2,7 +2,6 @@ from typing import Callable, TypeVar
 
 from returns.future import FutureResult
 from returns.interfaces.specific.future_result import FutureResultLikeN
-from returns.methods.bind_future_result import internal_bind_future_result
 from returns.primitives.hkt import Kinded, KindN, kinded
 
 _FirstType = TypeVar('_FirstType')
@@ -31,16 +30,24 @@ def bind_future_result(
     .. code:: python
 
       >>> import anyio
-      >>> from returns.pointfree import bind_async_future
-      >>> from returns.future import Future
-      >>> from returns.io import IO
+      >>> from returns.pointfree import bind_future_result
+      >>> from returns.future import FutureResult
+      >>> from returns.io import IOSuccess, IOFailure
 
-      >>> async def example(argument: int) -> Future[int]:
-      ...     return Future.from_value(argument + 1)
+      >>> def example(argument: int) -> FutureResult[int, str]:
+      ...     return FutureResult.from_value(argument + 1)
 
       >>> assert anyio.run(
-      ...     bind_async_future(example)(Future.from_value(1)).awaitable,
-      ... ) == IO(2)
+      ...     bind_future_result(example)(
+      ...         FutureResult.from_value(1),
+      ...     ).awaitable,
+      ... ) == IOSuccess(2)
+
+      >>> assert anyio.run(
+      ...     bind_future_result(example)(
+      ...         FutureResult.from_failure('a'),
+      ...     ).awaitable,
+      ... ) == IOFailure('a')
 
     .. currentmodule: returns.primitives.interfaces.specific.future_result
 
@@ -55,5 +62,5 @@ def bind_future_result(
             _FutureResultKind, _FirstType, _SecondType, _ThirdType,
         ],
     ) -> KindN[_FutureResultKind, _UpdatedType, _SecondType, _ThirdType]:
-        return internal_bind_future_result(container, function)
+        return container.bind_future_result(function)
     return factory

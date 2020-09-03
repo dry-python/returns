@@ -11,7 +11,8 @@ _UpdatedType = TypeVar('_UpdatedType')
 _BindableKind = TypeVar('_BindableKind', bound=BindableN)
 
 
-def internal_bind(
+@kinded
+def bind(
     container: KindN[_BindableKind, _FirstType, _SecondType, _ThirdType],
     function: Callable[
         [_FirstType],
@@ -37,7 +38,3 @@ def internal_bind(
 
     """
     return container.bind(function)
-
-
-#: Kinded version of :func:`~internal_bind`, use it to infer real return type.
-bind = kinded(internal_bind)

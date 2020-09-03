@@ -13,7 +13,7 @@ from typing_extensions import final
 
 from returns._internal.iterable import iterable_kind
 from returns.context import NoDeps
-from returns.interfaces.specific import ioresult, reader
+from returns.interfaces.specific import ioresult, reader_result
 from returns.io import IO, IOFailure, IOResult, IOSuccess
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind3, SupportsKind3, dekind
@@ -42,7 +42,7 @@ _FirstType = TypeVar('_FirstType')
 class RequiresContextIOResult(
     BaseContainer,
     SupportsKind3['RequiresContextIOResult', _ValueType, _ErrorType, _EnvType],
-    reader.ReaderBased3[_ValueType, _ErrorType, _EnvType],
+    reader_result.ReaderResultLikeN[_ValueType, _ErrorType, _EnvType],
     ioresult.IOResultLike3[_ValueType, _ErrorType, _EnvType],
 ):
     """
@@ -53,7 +53,7 @@ class RequiresContextIOResult(
     for more docs.
 
     This is just a handy wrapper around
-    ``RequiresContext[env, IOResult[a, b]]``
+    ``RequiresContext[IOResult[a, b], env]``
     which represents a context-dependent impure operation that might fail.
 
     It has several important differences from the regular ``Result`` classes.

@@ -1,0 +1,94 @@
+- case: reader_result_like_inheritance_correct
+  disable_cache: true
+  main: |
+    from typing import TypeVar, Callable
+    from returns.interfaces.specific.reader_result import ReaderResultLike3
+    from returns.primitives.hkt import SupportsKind3
+    from returns.context import Reader, ReaderResult
+
+    T = TypeVar('T')
+    V = TypeVar('V')
+    U = TypeVar('U')
+    N = TypeVar('N')
+
+    R1 = TypeVar('R1')
+    R2 = TypeVar('R2')
+
+    class MyClass(
+        SupportsKind3['MyClass', T, V, U],
+        ReaderResultLike3[T, V, U],
+    ):
+        def bind_context_result(
+            self,
+            function: Callable[[T], ReaderResult[N, V, U]],
+        ) -> MyClass[N, V, U]:
+            ...
+
+        @classmethod
+        def from_failed_context(
+            cls,
+            inner_value: 'Reader[R1, R2]',
+        ) -> MyClass[T, R1, R2]:
+            ...
+
+
+- case: reader_result_like_inheritance_missing
+  disable_cache: true
+  main: |
+    from typing import TypeVar
+    from typing_extensions import final
+    from returns.interfaces.specific.reader_result import ReaderResultLike3
+    from returns.primitives.hkt import SupportsKind3
+
+    T = TypeVar('T')
+    V = TypeVar('V')
+    U = TypeVar('U')
+
+    @final
+    class MyClass(
+        SupportsKind3['MyClass', T, V, U],
+        ReaderResultLike3[T, V, U],
+    ):
+        ...
+  out: |
+    main:11: error: Final class main.MyClass has abstract attributes "alt", "apply", "ask", "bind", "bind_context", "bind_context_result", "bind_result", "empty", "from_context", "from_failed_context", "from_failure", "from_iterable", "from_result", "from_value", "map", "modify_env", "rescue", "swap"
+
+
+- case: reader_result_like_inheritance_wrong
+  disable_cache: true
+  main: |
+    from typing import TypeVar, Callable
+    from returns.interfaces.specific.reader_result import ReaderResultLike3
+    from returns.primitives.hkt import SupportsKind3
+    from returns.context import Reader, ReaderResult
+
+    T = TypeVar('T')
+    V = TypeVar('V')
+    U = TypeVar('U')
+    N = TypeVar('N')
+
+    R1 = TypeVar('R1')
+    R2 = TypeVar('R2')
+
+    class MyClass(
+        SupportsKind3['MyClass', T, V, U],
+        ReaderResultLike3[T, V, U],
+    ):
+        def bind_context_result(
+            self,
+            function: Callable[[V], ReaderResult[N, V, U]],
+        ) -> MyClass[T, V, U]:
+            ...
+
+        @classmethod
+        def from_failed_context(
+            cls,
+            inner_value: 'Reader[R1, R1]',
+        ) -> MyClass[R1, R1, R1]:
+            ...
+  out: |
+    main:18: error: Argument 1 of "bind_context_result" is incompatible with supertype "ReaderResultLikeN"; supertype defines the argument type as "Callable[[T], RequiresContextResult[_UpdatedType, V, U]]"
+    main:18: error: Return type "MyClass[T, V, U]" of "bind_context_result" incompatible with return type "KindN[MyClass[T, V, U], _UpdatedType, V, U]" in supertype "ReaderResultLikeN"
+    main:18: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:18: note: This violates the Liskov substitution principle
+    main:25: error: Signature of "from_failed_context" incompatible with supertype "ReaderResultLikeN"

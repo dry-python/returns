@@ -12,7 +12,8 @@ _UpdatedType = TypeVar('_UpdatedType')
 _FutureResultKind = TypeVar('_FutureResultKind', bound=FutureResultLikeN)
 
 
-def internal_bind_future_result(
+@kinded
+def bind_future_result(
     container: KindN[_FutureResultKind, _FirstType, _SecondType, _ThirdType],
     function: Callable[[_FirstType], FutureResult[_UpdatedType, _SecondType]],
 ) -> KindN[_FutureResultKind, _UpdatedType, _SecondType, _ThirdType]:
@@ -25,18 +26,18 @@ def internal_bind_future_result(
         >>> from returns.future import FutureResult
         >>> from returns.context import ReaderFutureResult
         >>> from returns.io import IOSuccess, IOFailure
-        >>> from returns.pointfree import bind_future_result
+        >>> from returns.methods import bind_future_result
 
         >>> def function(x: int) -> FutureResult[str, int]:
         ...    return FutureResult.from_value(str(x + 1))
 
-        >>> bound = bind_future_result(function)(
-        ...     ReaderFutureResult.from_value(1),
+        >>> bound = bind_future_result(
+        ...     ReaderFutureResult.from_value(1), function,
         ... )
         >>> assert anyio.run(bound, ReaderFutureResult.empty) == IOSuccess('2')
 
-        >>> bound = bind_future_result(function)(
-        ...     ReaderFutureResult.from_failure(1),
+        >>> bound = bind_future_result(
+        ...     ReaderFutureResult.from_failure(1), function,
         ... )
         >>> assert anyio.run(bound, ReaderFutureResult.empty) == IOFailure(1)
 
@@ -47,8 +48,3 @@ def internal_bind_future_result(
 
     """
     return container.bind_future_result(function)
-
-
-#: Kinded version of :func:`~internal_bind_future_result`,
-#: use it to infer real return type.
-bind_future_result = kinded(internal_bind_future_result)

@@ -8,7 +8,7 @@
         ...
 
     x: FutureResult[float, str]
-    bind_future_result(x, test)  # E: Argument 2 to "internal_bind_future_result" has incompatible type "Callable[[str], FutureResult[int, str]]"; expected "Callable[[float], FutureResult[int, str]]"
+    bind_future_result(x, test)  # E: Argument 2 to "bind_future_result" has incompatible type "Callable[[str], FutureResult[int, str]]"; expected "Callable[[float], FutureResult[int, str]]"
 
 
 - case: bind_future_result_wrong_error
@@ -21,7 +21,7 @@
         ...
 
     x: FutureResult[float, bool]
-    bind_future_result(x, test)  # E: Argument 2 to "internal_bind_future_result" has incompatible type "Callable[[float], FutureResult[int, str]]"; expected "Callable[[float], FutureResult[int, bool]]"
+    bind_future_result(x, test)  # E: Argument 2 to "bind_future_result" has incompatible type "Callable[[float], FutureResult[int, str]]"; expected "Callable[[float], FutureResult[int, bool]]"
 
 
 - case: bind_future_result_requires_context_future_result

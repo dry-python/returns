@@ -8,7 +8,7 @@
         ...
 
     x: Future[float]
-    bind_async(x, test)  # E: Argument 2 to "internal_bind_async" has incompatible type "Callable[[str], Coroutine[Any, Any, Future[int]]]"; expected "Callable[[float], Awaitable[KindN[Future[Any], int, NoReturn, NoReturn]]]"
+    bind_async(x, test)  # E: Argument 2 to "bind_async" has incompatible type "Callable[[str], Coroutine[Any, Any, Future[int]]]"; expected "Callable[[float], Awaitable[KindN[Future[Any], int, NoReturn, NoReturn]]]"
 
 
 - case: bind_async_wrong_second_type
@@ -21,7 +21,7 @@
         ...
 
     x: FutureResult[str, bool]
-    bind_async(x, test)  # E: Argument 2 to "internal_bind_async" has incompatible type "Callable[[str], Coroutine[Any, Any, FutureResult[int, str]]]"; expected "Callable[[str], Awaitable[KindN[FutureResult[Any, Any], int, bool, NoReturn]]]"
+    bind_async(x, test)  # E: Argument 2 to "bind_async" has incompatible type "Callable[[str], Coroutine[Any, Any, FutureResult[int, str]]]"; expected "Callable[[str], Awaitable[KindN[FutureResult[Any, Any], int, bool, NoReturn]]]"
 
 
 - case: bind_async_wrong_instance_type
@@ -36,8 +36,8 @@
     x: IO[float]
     bind_async(x, test)
   out: |
-    main:8: error: Argument 2 to "internal_bind_async" has incompatible type "Callable[[str], Coroutine[Any, Any, IO[int]]]"; expected "Callable[[float], Awaitable[KindN[IO[Any], int, NoReturn, NoReturn]]]"
-    main:8: error: Value of type variable "_FutureKind" of "internal_bind_async" cannot be "IO[Any]"
+    main:8: error: Argument 2 to "bind_async" has incompatible type "Callable[[str], Coroutine[Any, Any, IO[int]]]"; expected "Callable[[float], Awaitable[KindN[IO[Any], int, NoReturn, NoReturn]]]"
+    main:8: error: Value of type variable "_FutureKind" of "bind_async" cannot be "IO[Any]"
 
 
 - case: bind_async_wrong_function_type
@@ -50,7 +50,7 @@
         ...
 
     x: Future[float]
-    bind_async(x, test)  # E: Argument 2 to "internal_bind_async" has incompatible type "Callable[[float], Future[int]]"; expected "Callable[[float], Awaitable[KindN[Future[Any], <nothing>, NoReturn, NoReturn]]]"
+    bind_async(x, test)  # E: Argument 2 to "bind_async" has incompatible type "Callable[[float], Future[int]]"; expected "Callable[[float], Awaitable[KindN[Future[Any], <nothing>, NoReturn, NoReturn]]]"
 
 
 - case: bind_async_requires_context_future_result

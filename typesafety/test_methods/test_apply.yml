@@ -8,7 +8,7 @@
     test: RequiresContextFutureResult[Callable[[float], int], str, str]
     x: RequiresContextFutureResult[float, float, float]
 
-    apply(x, test)  # E: Argument 2 to "internal_apply" has incompatible type "RequiresContextFutureResult[Callable[[float], int], str, str]"; expected "KindN[RequiresContextFutureResult[Any, Any, Any], Callable[[float], int], float, float]"
+    apply(x, test)  # E: Argument 2 to "apply" has incompatible type "RequiresContextFutureResult[Callable[[float], int], str, str]"; expected "KindN[RequiresContextFutureResult[Any, Any, Any], Callable[[float], int], float, float]"
 
 
 - case: apply_wrong_value_type
@@ -21,7 +21,7 @@
     test: RequiresContextFutureResult[Callable[[float], int], str, str]
     x: RequiresContextFutureResult[str, str, str]
 
-    apply(x, test)  # E: Argument 2 to "internal_apply" has incompatible type "RequiresContextFutureResult[Callable[[float], int], str, str]"; expected "KindN[RequiresContextFutureResult[Any, Any, Any], Callable[[str], int], str, str]"
+    apply(x, test)  # E: Argument 2 to "apply" has incompatible type "RequiresContextFutureResult[Callable[[float], int], str, str]"; expected "KindN[RequiresContextFutureResult[Any, Any, Any], Callable[[str], int], str, str]"
 
 
 - case: apply_io

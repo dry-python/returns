@@ -1,10 +1,6 @@
 from typing import TYPE_CHECKING, Callable, TypeVar
 
-from returns.interfaces.specific.reader import ReaderBased2, ReaderBased3
-from returns.methods.bind_context import (
-    internal_bind_context2,
-    internal_bind_context3,
-)
+from returns.interfaces.specific.reader import ReaderLike2, ReaderLike3
 from returns.primitives.hkt import Kind2, Kind3, Kinded, kinded
 
 if TYPE_CHECKING:
@@ -15,8 +11,8 @@ _SecondType = TypeVar('_SecondType')
 _ThirdType = TypeVar('_ThirdType')
 _UpdatedType = TypeVar('_UpdatedType')
 
-_Reader2Kind = TypeVar('_Reader2Kind', bound=ReaderBased2)
-_Reader3Kind = TypeVar('_Reader3Kind', bound=ReaderBased3)
+_Reader2Kind = TypeVar('_Reader2Kind', bound=ReaderLike2)
+_Reader3Kind = TypeVar('_Reader3Kind', bound=ReaderLike3)
 
 
 def bind_context2(
@@ -47,7 +43,7 @@ def bind_context2(
 
     Note, that this function works with only ``Kind2`` containers
     with ``.bind_context`` method.
-    See :class:`returns.primitives.interfaces.specific.reader.ReaderBased2`
+    See :class:`returns.primitives.interfaces.specific.reader.ReaderLike2`
     for more info.
 
     """
@@ -55,7 +51,7 @@ def bind_context2(
     def factory(
         container: Kind2[_Reader2Kind, _FirstType, _SecondType],
     ) -> Kind2[_Reader2Kind, _UpdatedType, _SecondType]:
-        return internal_bind_context2(container, function)
+        return container.bind_context(function)
     return factory
 
 
@@ -93,7 +89,7 @@ def bind_context3(
 
     Note, that this function works with only ``Kind3`` containers
     with ``.bind_context`` method.
-    See :class:`returns.primitives.interfaces.specific.reader.ReaderBased3`
+    See :class:`returns.primitives.interfaces.specific.reader.ReaderLike3`
     for more info.
 
     """
@@ -101,7 +97,7 @@ def bind_context3(
     def factory(
         container: Kind3[_Reader3Kind, _FirstType, _SecondType, _ThirdType],
     ) -> Kind3[_Reader3Kind, _UpdatedType, _SecondType, _ThirdType]:
-        return internal_bind_context3(container, function)
+        return container.bind_context(function)
     return factory
 
 

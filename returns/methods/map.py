@@ -11,7 +11,8 @@ _UpdatedType = TypeVar('_UpdatedType')
 _MappableKind = TypeVar('_MappableKind', bound=MappableN)
 
 
-def internal_map(
+@kinded
+def map_(
     container: KindN[_MappableKind, _FirstType, _SecondType, _ThirdType],
     function: Callable[[_FirstType], _UpdatedType],
 ) -> KindN[_MappableKind, _UpdatedType, _SecondType, _ThirdType]:
@@ -34,7 +35,3 @@ def internal_map(
 
     """
     return container.map(function)
-
-
-#: Kinded version of :func:`~internal_map`, use it to infer real return type.
-map_ = kinded(internal_map)

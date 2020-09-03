@@ -1,7 +1,6 @@
 from typing import Callable, TypeVar
 
 from returns.interfaces.rescuable import RescuableN
-from returns.methods.rescue import internal_rescue
 from returns.primitives.hkt import Kinded, KindN, kinded
 
 _FirstType = TypeVar('_FirstType')
@@ -50,5 +49,5 @@ def rescue(
     def factory(
         container: KindN[_RescuableKind, _FirstType, _SecondType, _ThirdType],
     ) -> KindN[_RescuableKind, _FirstType, _UpdatedType, _ThirdType]:
-        return internal_rescue(container, function)
+        return container.rescue(function)
     return factory

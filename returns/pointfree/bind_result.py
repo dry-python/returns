@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING, Callable, TypeVar
 
 from returns.interfaces.specific.result import ResultLikeN
-from returns.methods.bind_result import internal_bind_result
 from returns.primitives.hkt import Kinded, KindN, kinded
 
 if TYPE_CHECKING:
@@ -47,5 +46,5 @@ def bind_result(
     def factory(
         container: KindN[_ResultLikeKind, _FirstType, _SecondType, _ThirdType],
     ) -> KindN[_ResultLikeKind, _UpdatedType, _SecondType, _ThirdType]:
-        return internal_bind_result(container, function)
+        return container.bind_result(function)
     return factory

@@ -28,7 +28,7 @@
     x: IOResult[str, str]
     reveal_type(map_(x, test))
   out: |
-    main:9: error: Argument 2 to "internal_map" has incompatible type "Callable[[float], int]"; expected "Callable[[str], int]"
+    main:9: error: Argument 2 to "map_" has incompatible type "Callable[[float], int]"; expected "Callable[[str], int]"
     main:9: note: Revealed type is 'returns.io.IOResult[builtins.int*, builtins.str]'
 
 

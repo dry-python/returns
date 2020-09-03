@@ -27,7 +27,7 @@
     x: IO[str]
     bind_io(x, test)
   out: |
-    main:8: error: Argument 2 to "internal_bind_io" has incompatible type "Callable[[float], IO[int]]"; expected "Callable[[str], IO[int]]"
+    main:8: error: Argument 2 to "bind_io" has incompatible type "Callable[[float], IO[int]]"; expected "Callable[[str], IO[int]]"
 
 
 - case: bind_io_wrong_unsupported_type
@@ -43,8 +43,8 @@
     x: Maybe[str]
     bind_io(x, test)
   out: |
-    main:9: error: Argument 2 to "internal_bind_io" has incompatible type "Callable[[float], IO[int]]"; expected "Callable[[str], IO[int]]"
-    main:9: error: Value of type variable "_IOLikeKind" of "internal_bind_io" cannot be "Maybe[Any]"
+    main:9: error: Argument 2 to "bind_io" has incompatible type "Callable[[float], IO[int]]"; expected "Callable[[str], IO[int]]"
+    main:9: error: Value of type variable "_IOLikeKind" of "bind_io" cannot be "Maybe[Any]"
 
 
 - case: bind_io_io

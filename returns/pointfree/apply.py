@@ -1,7 +1,6 @@
 from typing import Callable, TypeVar
 
 from returns.interfaces.applicative import ApplicativeN
-from returns.methods.apply import internal_apply
 from returns.primitives.hkt import Kinded, KindN, kinded
 
 _FirstType = TypeVar('_FirstType')
@@ -52,5 +51,5 @@ def apply(
     def factory(
         other: KindN[_ApplicativeKind, _FirstType, _SecondType, _ThirdType],
     ) -> KindN[_ApplicativeKind, _UpdatedType, _SecondType, _ThirdType]:
-        return internal_apply(other, container)
+        return other.apply(container)
     return factory

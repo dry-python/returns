@@ -12,7 +12,8 @@ _UpdatedType = TypeVar('_UpdatedType')
 _FutureResultKind = TypeVar('_FutureResultKind', bound=FutureResultLikeN)
 
 
-def internal_bind_async_future_result(
+@kinded
+def bind_async_future_result(
     container: KindN[_FutureResultKind, _FirstType, _SecondType, _ThirdType],
     function: Callable[
         [_FirstType],
@@ -28,18 +29,18 @@ def internal_bind_async_future_result(
         >>> from returns.future import FutureResult
         >>> from returns.context import ReaderFutureResult
         >>> from returns.io import IOSuccess, IOFailure
-        >>> from returns.pointfree import bind_async_future_result
+        >>> from returns.methods import bind_async_future_result
 
         >>> async def coroutine(x: int) -> FutureResult[str, int]:
         ...    return FutureResult.from_value(str(x + 1))
 
-        >>> bound = bind_async_future_result(coroutine)(
-        ...     ReaderFutureResult.from_value(1),
+        >>> bound = bind_async_future_result(
+        ...     ReaderFutureResult.from_value(1), coroutine,
         ... )
         >>> assert anyio.run(bound, ReaderFutureResult.empty) == IOSuccess('2')
 
-        >>> bound = bind_async_future_result(coroutine)(
-        ...     ReaderFutureResult.from_failure(1),
+        >>> bound = bind_async_future_result(
+        ...     ReaderFutureResult.from_failure(1), coroutine,
         ... )
         >>> assert anyio.run(bound, ReaderFutureResult.empty) == IOFailure(1)
 
@@ -50,8 +51,3 @@ def internal_bind_async_future_result(
 
     """
     return container.bind_async_future_result(function)
-
-
-#: Kinded version of :func:`~internal_bind_async_future_result`,
-#: use it to infer real return type.
-bind_async_future_result = kinded(internal_bind_async_future_result)

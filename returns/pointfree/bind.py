@@ -1,7 +1,6 @@
 from typing import Callable, TypeVar
 
 from returns.interfaces.bindable import BindableN
-from returns.methods.bind import internal_bind
 from returns.primitives.hkt import Kinded, KindN, kinded
 
 _FirstType = TypeVar('_FirstType')
@@ -51,5 +50,5 @@ def bind(
     def factory(
         container: KindN[_BindableKind, _FirstType, _SecondType, _ThirdType],
     ) -> KindN[_BindableKind, _UpdatedType, _SecondType, _ThirdType]:
-        return internal_bind(container, function)
+        return container.bind(function)
     return factory

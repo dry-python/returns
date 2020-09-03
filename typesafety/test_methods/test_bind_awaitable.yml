@@ -8,7 +8,7 @@
         ...
 
     x: Future[float]
-    bind_awaitable(x, test)  # E: Argument 2 to "internal_bind_awaitable" has incompatible type "Callable[[str], Coroutine[Any, Any, int]]"; expected "Callable[[float], Awaitable[int]]"
+    bind_awaitable(x, test)  # E: Argument 2 to "bind_awaitable" has incompatible type "Callable[[str], Coroutine[Any, Any, int]]"; expected "Callable[[float], Awaitable[int]]"
 
 
 - case: bind_awaitable_wrong_instance_type
@@ -23,8 +23,8 @@
     x: IO[float]
     bind_awaitable(x, test)
   out: |
-    main:8: error: Argument 2 to "internal_bind_awaitable" has incompatible type "Callable[[str], Coroutine[Any, Any, int]]"; expected "Callable[[float], Awaitable[int]]"
-    main:8: error: Value of type variable "_FutureKind" of "internal_bind_awaitable" cannot be "IO[Any]"
+    main:8: error: Argument 2 to "bind_awaitable" has incompatible type "Callable[[str], Coroutine[Any, Any, int]]"; expected "Callable[[float], Awaitable[int]]"
+    main:8: error: Value of type variable "_FutureKind" of "bind_awaitable" cannot be "IO[Any]"
 
 
 - case: bind_awaitable_wrong_function_type
@@ -37,7 +37,7 @@
         ...
 
     x: Future[float]
-    bind_awaitable(x, test)  # E: Argument 2 to "internal_bind_awaitable" has incompatible type "Callable[[float], int]"; expected "Callable[[float], Awaitable[<nothing>]]"
+    bind_awaitable(x, test)  # E: Argument 2 to "bind_awaitable" has incompatible type "Callable[[float], int]"; expected "Callable[[float], Awaitable[<nothing>]]"
 
 
 - case: bind_awaitable_requires_context_future_result

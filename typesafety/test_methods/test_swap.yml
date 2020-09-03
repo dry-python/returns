@@ -6,7 +6,7 @@
 
     r: Maybe[str]
 
-    swap(r)  # E: Value of type variable "_ResultLikeKind" of "internal_swap" cannot be "Maybe[Any]"
+    swap(r)  # E: Value of type variable "_ResultLikeKind" of "swap" cannot be "Maybe[Any]"
 
 
 - case: swap_result1

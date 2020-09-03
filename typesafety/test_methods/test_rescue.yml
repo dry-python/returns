@@ -8,7 +8,7 @@
         ...
 
     x: RequiresContextIOResult[float, str, int]
-    rescue(x, test)  # E: Argument 2 to "internal_rescue" has incompatible type "Callable[[float], RequiresContextIOResult[float, str, int]]"; expected "Callable[[str], KindN[RequiresContextIOResult[Any, Any, Any], float, str, int]]"
+    rescue(x, test)  # E: Argument 2 to "rescue" has incompatible type "Callable[[float], RequiresContextIOResult[float, str, int]]"; expected "Callable[[str], KindN[RequiresContextIOResult[Any, Any, Any], float, str, int]]"
 
 
 - case: rescue_wrong_else_types
@@ -21,7 +21,7 @@
         ...
 
     x: RequiresContextIOResult[str, float, str]
-    rescue(x, test)  # E: Argument 2 to "internal_rescue" has incompatible type "Callable[[float], RequiresContextIOResult[float, str, int]]"; expected "Callable[[float], KindN[RequiresContextIOResult[Any, Any, Any], str, str, str]]"
+    rescue(x, test)  # E: Argument 2 to "rescue" has incompatible type "Callable[[float], RequiresContextIOResult[float, str, int]]"; expected "Callable[[float], KindN[RequiresContextIOResult[Any, Any, Any], str, str, str]]"
 
 
 - case: rescue_maybe

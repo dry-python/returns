@@ -11,7 +11,8 @@ _UpdatedType = TypeVar('_UpdatedType')
 _ApplicativeKind = TypeVar('_ApplicativeKind', bound=ApplicativeN)
 
 
-def internal_apply(
+@kinded
+def apply(
     container: KindN[_ApplicativeKind, _FirstType, _SecondType, _ThirdType],
     other: KindN[
         _ApplicativeKind,
@@ -40,7 +41,3 @@ def internal_apply(
 
     """
     return container.apply(other)
-
-
-#: Kinded version of :func:`~internal_apply`, use it to infer real return type.
-apply = kinded(internal_apply)

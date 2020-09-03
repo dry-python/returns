@@ -1,7 +1,6 @@
 from typing import Awaitable, Callable, TypeVar
 
 from returns.interfaces.specific.future import FutureLikeN
-from returns.methods.bind_async import internal_bind_async
 from returns.primitives.hkt import Kinded, KindN, kinded
 
 _FirstType = TypeVar('_FirstType')
@@ -53,5 +52,5 @@ def bind_async(
     def factory(
         container: KindN[_FutureKind, _FirstType, _SecondType, _ThirdType],
     ) -> KindN[_FutureKind, _UpdatedType, _SecondType, _ThirdType]:
-        return internal_bind_async(container, function)
+        return container.bind_async(function)
     return factory

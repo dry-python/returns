@@ -2,7 +2,6 @@ from typing import Callable, TypeVar
 
 from returns.future import Future
 from returns.interfaces.specific.future import FutureLikeN
-from returns.methods.bind_future import internal_bind_future
 from returns.primitives.hkt import Kinded, KindN, kinded
 
 _FirstType = TypeVar('_FirstType')
@@ -54,5 +53,5 @@ def bind_future(
     def factory(
         container: KindN[_FutureKind, _FirstType, _SecondType, _ThirdType],
     ) -> KindN[_FutureKind, _UpdatedType, _SecondType, _ThirdType]:
-        return internal_bind_future(container, function)
+        return container.bind_future(function)
     return factory

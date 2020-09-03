@@ -1,7 +1,6 @@
 from typing import Callable, TypeVar
 
 from returns.interfaces.specific.ioresult import IOResultLikeN
-from returns.methods.compose_result import internal_compose_result
 from returns.primitives.hkt import Kind3, Kinded, kinded
 from returns.result import Result
 
@@ -52,5 +51,5 @@ def compose_result(
             _IOResultLikeKind, _FirstType, _SecondType, _ThirdType,
         ],
     ) -> Kind3[_IOResultLikeKind, _NewFirstType, _SecondType, _ThirdType]:
-        return internal_compose_result(container, function)
+        return container.compose_result(function)
     return factory

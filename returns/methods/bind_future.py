@@ -12,7 +12,8 @@ _UpdatedType = TypeVar('_UpdatedType')
 _FutureKind = TypeVar('_FutureKind', bound=FutureLikeN)
 
 
-def internal_bind_future(
+@kinded
+def bind_future(
     container: KindN[_FutureKind, _FirstType, _SecondType, _ThirdType],
     function: Callable[[_FirstType], Future[_UpdatedType]],
 ) -> KindN[_FutureKind, _UpdatedType, _SecondType, _ThirdType]:
@@ -40,8 +41,3 @@ def internal_bind_future(
 
     """
     return container.bind_future(function)
-
-
-#: Kinded version of :func:`~internal_bind_future`,
-#: use it to infer real return type.
-bind_future = kinded(internal_bind_future)
