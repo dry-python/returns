@@ -64,6 +64,7 @@ See [0Ver](https://0ver.org/).
 - Adds `cond` method to `methods` package
 - Adds `cond` function to `pointfree` package
 - Adds `compose_result` HKT method and pointfree function
+- Adds `unify` HKT method and pointfree function
 
 - Adds `collect_trace` helper function for better development experience
 - Adds `hypothesis` intergration and pre-defined "monad laws as values"
