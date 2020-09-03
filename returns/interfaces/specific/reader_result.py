@@ -1,10 +1,18 @@
 from abc import abstractmethod
-from typing import TYPE_CHECKING, Callable, Type, TypeVar
+from typing import TYPE_CHECKING, Callable, ClassVar, Sequence, Type, TypeVar
 
 from returns.interfaces.specific import reader, result
 from returns.primitives.hkt import KindN
+from returns.primitives.laws import (
+    Law,
+    Law2,
+    Lawful,
+    LawSpecDef,
+    law_definition,
+)
 
 if TYPE_CHECKING:
+    from returns.result import Result  # noqa: F401, WPS433
     from returns.context import Reader, ReaderResult  # noqa: WPS433
 
 _FirstType = TypeVar('_FirstType')
@@ -51,6 +59,32 @@ class ReaderResultLikeN(
         """Unit method to create new containers from failed ``Reader``."""
 
 
+class _LawSpec(LawSpecDef):
+    """
+    Concrete laws for ``ReaderResulBasedN``.
+
+    See: https://github.com/haskell/mtl/pull/61/files
+    """
+
+    @law_definition
+    def purity_law(
+        container: 'ReaderResultBasedN[_FirstType, _SecondType, _ThirdType]',
+        env: _ThirdType,
+    ) -> None:
+        """Calling a ``Reader`` twice has the same result with the same env."""
+        assert container(env) == container(env)
+
+    @law_definition
+    def asking_law(
+        container: 'ReaderResultBasedN[_FirstType, _SecondType, _ThirdType]',
+        env: _ThirdType,
+    ) -> None:
+        """Asking for an env, always returns the env."""
+        assert container.ask().__call__(    # noqa: WPS609
+            env,
+        ) == container.from_value(env).__call__(env)  # noqa: WPS609
+
+
 class ReaderResultBasedN(
     ReaderResultLikeN[_FirstType, _SecondType, _ThirdType],
     reader.CallableReader3[
@@ -61,6 +95,7 @@ class ReaderResultBasedN(
         'Result[_FirstType, _SecondType]',
         _ThirdType,
     ],
+    Lawful['ReaderResultBasedN[_FirstType, _SecondType, _ThirdType]'],
 ):
     """
     This interface is very specific to our ``ReaderResult`` type.
@@ -70,3 +105,8 @@ class ReaderResultBasedN(
 
     In this case the return type of ``__call__`` is ``Result``.
     """
+
+    _laws: ClassVar[Sequence[Law]] = (
+        Law2(_LawSpec.purity_law),
+        Law2(_LawSpec.asking_law),
+    )

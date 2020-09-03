@@ -25,10 +25,25 @@ See also:
 """
 
 from abc import abstractmethod
-from typing import TYPE_CHECKING, Callable, Generic, Type, TypeVar
+from typing import (
+    TYPE_CHECKING,
+    Callable,
+    ClassVar,
+    Generic,
+    Sequence,
+    Type,
+    TypeVar,
+)
 
-from returns.interfaces import container
+from returns.interfaces.container import Container2, Container3
 from returns.primitives.hkt import Kind2, Kind3
+from returns.primitives.laws import (
+    Law,
+    Law2,
+    Lawful,
+    LawSpecDef,
+    law_definition,
+)
 
 if TYPE_CHECKING:
     from returns.context import RequiresContext, NoDeps  # noqa: WPS433
@@ -68,9 +83,7 @@ class CanBeCalled(Generic[_ValueType, _EnvType]):
         """Receives one parameter, returns a value. As simple as that."""
 
 
-class ReaderLike2(
-    container.Container2[_FirstType, _SecondType],
-):
+class ReaderLike2(Container2[_FirstType, _SecondType]):
     """
     Reader interface for ``Kind2`` based types.
 
@@ -130,9 +143,7 @@ class CallableReader2(
     """
 
 
-class ReaderLike3(
-    container.Container3[_FirstType, _SecondType, _ThirdType],
-):
+class ReaderLike3(Container3[_FirstType, _SecondType, _ThirdType]):
     """
     Reader interface for ``Kind3`` based types.
 
@@ -193,6 +204,32 @@ class CallableReader3(
     """
 
 
+class _LawSpec(LawSpecDef):
+    """
+    Concrete laws for ``ReaderBased2``.
+
+    See: https://github.com/haskell/mtl/pull/61/files
+    """
+
+    @law_definition
+    def purity_law(
+        container: 'ReaderBased2[_FirstType, _SecondType]',
+        env: _SecondType,
+    ) -> None:
+        """Calling a ``Reader`` twice has the same result with the same env."""
+        assert container(env) == container(env)
+
+    @law_definition
+    def asking_law(
+        container: 'ReaderBased2[_FirstType, _SecondType]',
+        env: _SecondType,
+    ) -> None:
+        """Asking for an env, always returns the env."""
+        assert container.ask().__call__(    # noqa: WPS609
+            env,
+        ) == container.from_value(env).__call__(env)  # noqa: WPS609
+
+
 class ReaderBased2(
     CallableReader2[
         _FirstType,
@@ -201,6 +238,7 @@ class ReaderBased2(
         _FirstType,
         _SecondType,
     ],
+    Lawful['ReaderBased2[_FirstType, _SecondType]'],
 ):
     """
     This interface is very specific to our ``Reader`` type.
@@ -208,3 +246,8 @@ class ReaderBased2(
     The only thing that differs from ``ReaderLike2`` is that we know
     the specific types for its ``__call__`` method.
     """
+
+    _laws: ClassVar[Sequence[Law]] = (
+        Law2(_LawSpec.purity_law),
+        Law2(_LawSpec.asking_law),
+    )
