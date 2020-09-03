@@ -8,7 +8,7 @@
 [![Python Version](https://img.shields.io/pypi/pyversions/returns.svg)](https://pypi.org/project/returns/)
 [![wemake-python-styleguide](https://img.shields.io/badge/style-wemake-000000.svg)](https://github.com/wemake-services/wemake-python-styleguide)
 [![Telegram chat](https://img.shields.io/badge/chat-join-blue?logo=telegram)](https://t.me/drypython)
-[![Demo](https://repl.it/badge/github/sobolevn/returns)](https://repl.it/@sobolevn/returns#example.py)
+[![Demo](https://repl.it/badge/github/sobolevn/returns)](https://repl.it/@sobolevn/returns#ex.py)
 
 -----
 
@@ -49,7 +49,7 @@ plugins =
 We also recommend to use the same `mypy` settings [we use](https://github.com/wemake-services/wemake-python-styleguide/blob/master/styles/mypy.toml).
 
 Make sure you know how to get started, [check out our docs](https://returns.readthedocs.io/en/latest/)!
-[Try our demo](https://repl.it/@sobolevn/returns#example.py).
+[Try our demo](https://repl.it/@sobolevn/returns#ex.py).
 
 
 ## Contents
@@ -625,7 +625,7 @@ Lovely, isn't it?
 
 Want more? 
 [Go to the docs!](https://returns.readthedocs.io)
-Or [try our demo](https://repl.it/@sobolevn/returns#example.py).
+Or [try our demo](https://repl.it/@sobolevn/returns#ex.py).
 Or read these articles:
 
 - [Python exceptions considered an anti-pattern](https://sobolevn.me/2019/02/python-exceptions-considered-an-antipattern)
