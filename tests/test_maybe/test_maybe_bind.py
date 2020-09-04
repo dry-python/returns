@@ -1,9 +1,10 @@
-from returns.maybe import Maybe, Nothing, Some
 from typing import Optional
+
+from returns.maybe import Maybe, Nothing, Some
 
 
 def test_bind_some():
-    """Ensures that left identity works for Some container."""
+    """Ensures that bind works correctly."""
     def factory(inner_value: int) -> Maybe[int]:
         return Some(inner_value * 2)
 
@@ -13,34 +14,12 @@ def test_bind_some():
     assert bound == factory(input_value)
     assert str(bound) == '<Some: 10>'
 
-def test_bind_nothing():
-    """Ensures that left identity works for Nothing container."""
-    def factory(inner_value) -> Maybe[int]:
-        return Some(1)
-
-    bound = Nothing.bind(factory)
-
-    assert bound == Nothing
-    assert str(bound) == '<Nothing>'
 
 def test_bind_optional():
-    """Ensures that left identity works for Some container."""
+    """Ensures that bind_optional works correctly."""
     def factory(inner_value: int) -> Optional[int]:
-        return inner_value * 2
+        return inner_value if inner_value else None
 
-    input_value = 5
-    bound = Some(input_value).bind(factory)
-
-    assert bound == factory(input_value)
-    assert str(bound) == '<Some: 10>'
-
-def test_bind_optional():
-    """Ensures that left identity works for Some container."""
-    def factory(inner_value: int) -> Optional[int]:
-        return None
-
-    input_value = 5
-    bound = Some(input_value).bind(factory)
-
-    assert bound == factory(input_value)
-    assert str(bound) == '<Nothing>'
+    assert Some(1).bind_optional(factory) == Some(1)
+    assert Some(0).bind_optional(factory) == Nothing
+    assert Nothing.bind_optional(factory) == Nothing

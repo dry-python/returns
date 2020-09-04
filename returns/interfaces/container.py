@@ -34,7 +34,7 @@ class _LawSpec(LawSpecDef):
     """
 
     @law_definition
-    def left_identity(
+    def left_identity_law(
         raw_value: _FirstType,
         container: 'ContainerN[_FirstType, _SecondType, _ThirdType]',
         function: Callable[
@@ -55,7 +55,7 @@ class _LawSpec(LawSpecDef):
         )
 
     @law_definition
-    def right_identity(
+    def right_identity_law(
         container: 'ContainerN[_FirstType, _SecondType, _ThirdType]',
     ) -> None:
         """
@@ -73,7 +73,7 @@ class _LawSpec(LawSpecDef):
         )
 
     @law_definition
-    def associativity(
+    def associativity_law(
         container: 'ContainerN[_FirstType, _SecondType, _ThirdType]',
         first: Callable[
             [_FirstType],
@@ -114,9 +114,9 @@ class ContainerN(
     """
 
     _laws: ClassVar[Sequence[Law]] = (
-        Law3(_LawSpec.left_identity),
-        Law1(_LawSpec.right_identity),
-        Law3(_LawSpec.associativity),
+        Law3(_LawSpec.left_identity_law),
+        Law1(_LawSpec.right_identity_law),
+        Law3(_LawSpec.associativity_law),
     )
 
 

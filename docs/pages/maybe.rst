@@ -18,8 +18,18 @@ based on just a single value:
 
   >>> from returns.maybe import Maybe
 
+  >>> assert str(Maybe.from_optional(1)) == '<Some: 1>'
+  >>> assert str(Maybe.from_optional(None)) == '<Nothing>'
+
+We also have another method called ``.from_value``
+that behaves a bit differently:
+
+.. code:: python
+
+  >>> from returns.maybe import Maybe
+
   >>> assert str(Maybe.from_value(1)) == '<Some: 1>'
-  >>> assert str(Maybe.from_value(None)) == '<Nothing>'
+  >>> assert str(Maybe.from_value(None)) == '<Some: None>'
 
 Usage
 ~~~~~
@@ -45,9 +55,9 @@ It might be very useful for complex operations like the following one:
   ...     user: Optional[User]
 
   >>> def get_street_address(order: Order) -> Maybe[str]:
-  ...     return Maybe.from_value(order.user).map(
+  ...     return Maybe.from_optional(order.user).bind_optional(
   ...         lambda user: user.address,
-  ...     ).map(
+  ...     ).bind_optional(
   ...         lambda address: address.street,
   ...     )
 
@@ -135,8 +145,8 @@ You can easily get one from your ``Maybe`` container at any point in time:
 .. code:: python
 
   >>> from returns.maybe import Maybe
-  >>> assert Maybe.from_value(1).value_or(None) == 1
-  >>> assert Maybe.from_value(None).value_or(None) is None
+  >>> assert Maybe.from_optional(1).value_or(None) == 1
+  >>> assert Maybe.from_optional(None).value_or(None) == None
 
 As you can see, revealed type of ``.value_or(None)`` is ``Optional[a]``.
 Use it a fallback.
@@ -144,35 +154,78 @@ Use it a fallback.
 How to model absence of value vs presence of None value?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Let's say you have this ``dict``: ``{'a': 1, 'b': None}``
-And you want to get ``Maybe[int]`` values by string keys from there.
-When trying both existing key ``'b'`` and missing key ``'c'``
-you will end up with ``Nothing`` for both values.
+Let's say you have this ``dict``: ``values = {'a': 1, 'b': None}``
+So, you can have two types of ``None`` here:
+
+- ``values.get('b')``
+- ``values.get('c')``
 
 But, they are different!
+The first has explicit ``None`` value,
+the second one has no given key and ``None`` is used as a default.
 You might need to know exactly which case you are dealing with.
+For example, in validation.
 
-In this case, it is better to switch to ``Result`` type.
-Let's see how to model this real-life situation:
+So, the first thing to remember is that:
 
 .. code:: python
 
-  >>> from returns.result import Success, Failure, safe
+  >>> assert Some(None) != Nothing
 
-  >>> source = {'a': 1, 'b': None}
-  >>> md = safe(lambda key: source[key])
+There's a special way to work with a type like this:
 
-  >>> assert md('a') == Success(1)
-  >>> assert md('b') == Success(None)
+.. code:: python
 
-  >>> # Is: Failure(KeyError('c'))
-  >>> assert md('c').failure().args == ('c',)
+  >>> values = {'a': 1, 'b': None}
 
-This way you can tell the difference
-between empty values (``None``) and missing keys.
+  >>> assert Maybe.from_value(values).map(lambda d: d.get('a')) == Some(1)
+  >>> assert Maybe.from_value(values).map(lambda d: d.get('b')) == Some(None)
 
-You can always use :func:`returns.converters.result_to_maybe`
-to convert ``Result`` to ``Maybe``.
+In contrast, you can ignore both ``None`` values easily:
+
+.. code:: python
+
+  >>> assert Maybe.from_value(values).bind_optional(
+  ...     lambda d: d.get('a'),
+  ... ) == Some(1)
+
+  >>> assert Maybe.from_value(values).bind_optional(
+  ...     lambda d: d.get('b'),
+  ... ) == Nothing
+
+So, how to write a complete check for a value: both present and missing?
+
+.. code:: python
+
+  >>> from typing import Optional, Dict, TypeVar
+  >>> from returns.maybe import Maybe, Some, Nothing
+
+  >>> _Key = TypeVar('_Key')
+  >>> _Value = TypeVar('_Value')
+
+  >>> def check_key(
+  ...    heystack: Dict[_Key, _Value],
+  ...    needle: _Key,
+  ... ) -> Maybe[_Value]:
+  ...     if needle not in heystack:
+  ...         return Nothing
+  ...     return Maybe.from_value(heystack[needle])  # try with `.from_optional`
+
+  >>> real_values = {'a': 1}
+  >>> opt_values = {'a': 1, 'b': None}
+
+  >>> assert check_key(real_values, 'a') == Some(1)
+  >>> assert check_key(real_values, 'b') == Nothing
+  >>> # Type revealed: returns.maybe.Maybe[builtins.int]
+
+  >>> assert check_key(opt_values, 'a') == Some(1)
+  >>> assert check_key(opt_values, 'b') == Some(None)
+  >>> assert check_key(opt_values, 'c') == Nothing
+  >>> # Type revealed: returns.maybe.Maybe[Union[builtins.int, None]]
+
+Choose wisely between ``.from_value`` and ``.map``,
+and ``.from_optional`` and ``.bind_optional``.
+They are similar, but do different things.
 
 See the
 `original issue about Some(None) <https://github.com/dry-python/returns/issues/314>`_
@@ -191,25 +244,13 @@ So, use ``Result`` instead, which can represent what happened to your ``IO``.
 You can convert ``Maybe`` to ``Result``
 and back again with special :ref:`converters`.
 
-Why Maybe does not have rescue, fix, and alt methods?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Why Maybe does not have alt method?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Well, because ``Maybe`` only has a single type argument: ``_ValueType``.
-And all these method implies that we also has ``_ErrorType``.
+Well, because ``Maybe`` only has a single failed value:
+``Nothing`` and it cannot be altered.
 
-We used to have them. There were several issues:
-
-1. If we leave their signature untouched (with the explicit ``None`` error type)
-   then we would have to write functions that always ignore the passed argument.
-   It is a bit ugly!
-2. If we change the signature of the passed function to have zero arguments,
-   then we would have a lot of problems with typing.
-   Because now different types would require different
-   callback functions for the same methods!
-
-We didn't like both options and dropped these methods in some early release.
-
-Now, ``Maybe`` has :meth:`returns.maybe.Maybe.or_else_call` method to call
+But, ``Maybe`` has :meth:`returns.maybe.Maybe.or_else_call` method to call
 a passed callback function with zero argument on failed container:
 
 .. code:: python

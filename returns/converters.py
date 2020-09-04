@@ -2,7 +2,7 @@ from typing import TypeVar
 
 from returns.functions import identity
 from returns.interfaces.bindable import BindableN
-from returns.maybe import Maybe
+from returns.maybe import Maybe, Nothing, Some
 from returns.pipeline import is_successful
 from returns.primitives.hkt import KindN, kinded
 from returns.result import Failure, Result, Success
@@ -61,12 +61,14 @@ def result_to_maybe(
       >>> from returns.result import Failure, Success
 
       >>> assert result_to_maybe(Success(1)) == Some(1)
+      >>> assert result_to_maybe(Success(None)) == Some(None)
       >>> assert result_to_maybe(Failure(1)) == Nothing
-      >>> assert result_to_maybe(Success(None)) == Nothing
       >>> assert result_to_maybe(Failure(None)) == Nothing
 
     """
-    return Maybe.from_value(result_container.value_or(None))
+    if is_successful(result_container):
+        return Some(result_container.unwrap())
+    return Nothing
 
 
 def maybe_to_result(
@@ -81,8 +83,8 @@ def maybe_to_result(
       >>> from returns.result import Failure, Success
 
       >>> assert maybe_to_result(Some(1)) == Success(1)
+      >>> assert maybe_to_result(Some(None)) == Success(None)
       >>> assert maybe_to_result(Nothing) == Failure(None)
-      >>> assert maybe_to_result(Some(None)) == Failure(None)
 
     """
     if is_successful(maybe_container):

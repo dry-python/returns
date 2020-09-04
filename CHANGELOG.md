@@ -18,6 +18,7 @@ See [0Ver](https://0ver.org/).
   now it is the last one. This is done to respect new HKT rules
 - **Breaking**: removes all old interfaces from `primitives/interfaces.py`,
   use new typeclasses instead
+- **Breaking**: ``Maybe`` is fully reworked to be lawful
 - **Breaking**: removes `value_or` pointfree method,
   because it is impossible to express with HKT
 - **Breaking**: removes `.value_or`, `.unwrap`, and `.failure` methods
@@ -56,6 +57,7 @@ See [0Ver](https://0ver.org/).
 - Adds `.equals` methods to types that can be compared directly:
   `Result`, `Maybe`, `IO`, `IOResult`
 - Adds missing `from_requires_context_future_result` to `RequiresContext`
+- Adds `.from_optional` and `.bind_optional` to `Maybe` container
 - Adds `__slots__` to `UnwrapFailedError` with `halted_container`
 - Changes `flatten` to work with `KindN` and any possible container
 - Changes `iterable` helper function to be `iterable_kind`,

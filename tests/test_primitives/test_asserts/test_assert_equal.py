@@ -25,6 +25,7 @@ _containers: Sequence[BaseContainer] = (
 
     Maybe.from_value(1),
     Maybe.from_value(None),
+    Maybe.from_optional(None),
 
     Future.from_value(1),
     FutureResult.from_value(1),

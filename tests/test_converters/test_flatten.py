@@ -20,10 +20,11 @@ from returns.result import Failure, Success
     (Success(Success({})), Success({})),
     (IOSuccess(IOSuccess(1)), IOSuccess(1)),
 
-    (Some(Some(None)), Nothing),
+    (Some(Some(None)), Some(None)),
     (Some(Some([])), Some([])),
 
     # Nope:
+    (Nothing, Nothing),
     (Failure(Failure('a')), Failure(Failure('a'))),
     (Failure(Success('a')), Failure(Success('a'))),
     (IOFailure(IOFailure('a')), IOFailure(IOFailure('a'))),
