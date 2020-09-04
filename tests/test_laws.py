@@ -11,6 +11,7 @@ from returns.context import (
 from returns.contrib.hypothesis.laws import check_all_laws
 from returns.future import Future, FutureResult
 from returns.io import IO, IOResult
+from returns.maybe import Maybe
 from returns.result import Result
 
 pytestmark = pytest.mark.skipif(
@@ -18,7 +19,7 @@ pytestmark = pytest.mark.skipif(
     reason='Python 3.6 does not support many hypothesis features',
 )
 
-# TODO: add maybe
+check_all_laws(Maybe)
 check_all_laws(Result)
 
 check_all_laws(IO)

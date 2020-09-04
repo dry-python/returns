@@ -14,7 +14,7 @@ from returns.result import Failure, Success
     (IOFailure('a'), False),
 
     (Some('a'), True),
-    (Some(None), False),
+    (Some(None), True),
     (Nothing, False),
 ])
 def test_is_successful(container, correct_result):

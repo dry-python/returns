@@ -1,4 +1,4 @@
-- case: maybe_type_regular1
+- case: maybe_from_value1
   disable_cache: true
   main: |
     from returns.maybe import Maybe
@@ -7,14 +7,34 @@
     reveal_type(Maybe.from_value(value))  # N: Revealed type is 'returns.maybe.Maybe[builtins.int*]'
 
 
-- case: maybe_type_regular2
+- case: maybe_from_value2
   disable_cache: true
   main: |
     from typing import Optional
     from returns.maybe import Maybe
 
     value: Optional[int]
-    reveal_type(Maybe.from_value(value))  # N: Revealed type is 'returns.maybe.Maybe[builtins.int*]'
+    reveal_type(Maybe.from_value(value))  # N: Revealed type is 'returns.maybe.Maybe[Union[builtins.int, None]]'
+
+
+- case: maybe_from_optional1
+  disable_cache: true
+  main: |
+    from typing import Optional
+    from returns.maybe import Maybe
+
+    value: int
+    reveal_type(Maybe.from_optional(value))  # N: Revealed type is 'returns.maybe.Maybe[builtins.int*]'
+
+
+- case: maybe_from_optional2
+  disable_cache: true
+  main: |
+    from typing import Optional
+    from returns.maybe import Maybe
+
+    value: Optional[int]
+    reveal_type(Maybe.from_optional(value))  # N: Revealed type is 'returns.maybe.Maybe[builtins.int*]'
 
 
 - case: maybe_from_iterable1
@@ -37,7 +57,7 @@
 
     x: Iterable[Maybe[int]]
 
-    reveal_type(Maybe.from_iterable(x))  # N: Revealed type is 'returns.maybe.Maybe[typing.Sequence[builtins.int*]]'
+    reveal_type(Maybe.from_iterable(x, CollectAll))  # N: Revealed type is 'returns.maybe.Maybe[typing.Sequence[builtins.int*]]'
 
 
 - case: maybe_map_regular
@@ -55,7 +75,7 @@
     from returns.maybe import Maybe
 
     result = Maybe.from_value({'a': 'b'}).map(lambda d: d.get('a', None))
-    reveal_type(result)  # N: Revealed type is 'returns.maybe.Maybe[builtins.str*]'
+    reveal_type(result)  # N: Revealed type is 'returns.maybe.Maybe[Union[builtins.str, None]]'
 
 
 - case: maybe_map_optional2
@@ -76,22 +96,39 @@
     reveal_type(result)  # N: Revealed type is 'returns.maybe.Maybe[builtins.float*]'
 
 
-- case: maybe_bind
+- case: maybe_bind1
   disable_cache: true
   main: |
     from returns.maybe import Maybe
 
-    result = Maybe.from_value(1).bind(lambda d: Maybe.from_value(str(d)))
-    reveal_type(result)  # N: Revealed type is 'returns.maybe.Maybe[builtins.str*]'
+    def test(arg: int) -> Maybe[str]:
+        ...
+
+    reveal_type(Maybe.from_value(1).bind(test))  # N: Revealed type is 'returns.maybe.Maybe[builtins.str*]'
+
+
+- case: maybe_bind2
+  disable_cache: true
+  main: |
+    from returns.maybe import Maybe
+    from typing import Optional
+
+    def test(arg: int) -> Maybe[Optional[str]]:
+        ...
+
+    reveal_type(Maybe.from_value(1).bind(test))  # N: Revealed type is 'returns.maybe.Maybe[Union[builtins.str, None]]'
 
 
 - case: maybe_bind_optional
   disable_cache: true
   main: |
     from returns.maybe import Maybe
+    from typing import Optional
 
-    result = Maybe.from_value({'a': 'b'}).bind(lambda d: Maybe.from_value(d.get('a', None)))
-    reveal_type(result)  # N: Revealed type is 'returns.maybe.Maybe[builtins.str*]'
+    def test(arg: int) -> Optional[str]:
+        ...
+
+    reveal_type(Maybe.from_value(1).bind_optional(test))  # N: Revealed type is 'returns.maybe.Maybe[builtins.str*]'
 
 
 - case: maybe_value_or

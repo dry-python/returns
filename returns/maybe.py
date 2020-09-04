@@ -16,8 +16,7 @@ from typing import (
 from typing_extensions import final
 
 from returns._internal.iterable import iterable_kind
-from returns.interfaces import rescuable, unwrappable
-from returns.interfaces.container import Container1
+from returns.interfaces.specific.maybe import MaybeBased2
 from returns.primitives.container import BaseContainer, container_equality
 from returns.primitives.exceptions import UnwrapFailedError
 from returns.primitives.hkt import Kind1, SupportsKind1
@@ -35,9 +34,7 @@ _SecondType = TypeVar('_SecondType')
 class Maybe(
     BaseContainer,
     SupportsKind1['Maybe', _ValueType],
-    Container1[_ValueType],
-    rescuable.Rescuable2[_ValueType, None],
-    unwrappable.Unwrappable[_ValueType, None],
+    MaybeBased2[_ValueType, None],
     metaclass=ABCMeta,
 ):
     """
@@ -66,7 +63,7 @@ class Maybe(
 
     def map(  # noqa: WPS125
         self,
-        function: Callable[[_ValueType], Optional[_NewValueType]],
+        function: Callable[[_ValueType], _NewValueType],
     ) -> 'Maybe[_NewValueType]':
         """
         Composes successful container with a pure function.
@@ -121,9 +118,29 @@ class Maybe(
 
         """
 
+    def bind_optional(
+        self,
+        function: Callable[[_ValueType], Optional[_NewValueType]],
+    ) -> 'Maybe[_NewValueType]':
+        """
+        Binds a function returning an optional value over a container.
+
+        .. code:: python
+
+          >>> from returns.maybe import Some, Nothing
+          >>> from typing import Optional
+
+          >>> def bindable(arg: str) -> Optional[int]:
+          ...     return len(arg) if arg else None
+
+          >>> assert Some('a').bind_optional(bindable) == Some(1)
+          >>> assert Some('').bind_optional(bindable) == Nothing
+
+        """
+
     def rescue(
         self,
-        function: Callable[[None], Kind1['Maybe', _ValueType]],
+        function: Callable[[Any], Kind1['Maybe', _ValueType]],
     ) -> 'Maybe[_ValueType]':
         """
         Composes failed container with a function that returns a container.
@@ -229,16 +246,32 @@ class Maybe(
 
     @classmethod
     def from_value(
-        cls, inner_value: Optional[_NewValueType],
+        cls, inner_value: _NewValueType,
     ) -> 'Maybe[_NewValueType]':
         """
         Creates new instance of ``Maybe`` container based on a value.
 
         .. code:: python
 
-          >>> from returns.maybe import Maybe, Some, Nothing
+          >>> from returns.maybe import Maybe, Some
           >>> assert Maybe.from_value(1) == Some(1)
-          >>> assert Maybe.from_value(None) == Nothing
+          >>> assert Maybe.from_value(None) == Some(None)
+
+        """
+        return _Some(inner_value)
+
+    @classmethod
+    def from_optional(
+        cls, inner_value: Optional[_NewValueType],
+    ) -> 'Maybe[_NewValueType]':
+        """
+        Creates new instance of ``Maybe`` container based on an optional value.
+
+        .. code:: python
+
+          >>> from returns.maybe import Maybe, Some, Nothing
+          >>> assert Maybe.from_optional(1) == Some(1)
+          >>> assert Maybe.from_optional(None) == Nothing
 
         """
         if inner_value is None:
@@ -300,6 +333,10 @@ class _Nothing(Maybe[Any]):
         """Does nothing for ``Nothing``."""
         return self
 
+    def bind_optional(self, function):
+        """Does nothing."""
+        return self
+
     def rescue(self, function):
         """Composes this container with a function returning container."""
         return function(None)
@@ -342,7 +379,7 @@ class _Some(Maybe[_ValueType]):
 
     def map(self, function):  # noqa: WPS125
         """Composes current container with a pure function."""
-        return Maybe.from_value(function(self._inner_value))
+        return _Some(function(self._inner_value))
 
     def apply(self, container):
         """Calls a wrapped function in a container on this container."""
@@ -353,6 +390,10 @@ class _Some(Maybe[_ValueType]):
     def bind(self, function):
         """Binds current container to a function that returns container."""
         return function(self._inner_value)
+
+    def bind_optional(self, function):
+        """Binds a function returning an optional value over a container."""
+        return Maybe.from_optional(function(self._inner_value))
 
     def rescue(self, function):
         """Does nothing for ``Some``."""
@@ -379,21 +420,21 @@ Maybe.success_type = _Some
 Maybe.failure_type = _Nothing
 
 
-def Some(inner_value: Optional[_ValueType]) -> Maybe[_ValueType]:  # noqa: N802
+def Some(inner_value: _NewValueType) -> Maybe[_NewValueType]:  # noqa: N802
     """
     Public unit function of protected :class:`~_Some` type.
 
-    Can return ``Nothing`` for passed ``None`` argument.
-    Because ``Some(None)`` does not make sence.
+    Can return ``Some(None)`` for passed ``None`` argument.
+    Because ``Some(None)`` does make sense.
 
     .. code:: python
 
       >>> from returns.maybe import Some
       >>> assert str(Some(1)) == '<Some: 1>'
-      >>> assert str(Some(None)) == '<Nothing>'
+      >>> assert str(Some(None)) == '<Some: None>'
 
     """
-    return Maybe.from_value(inner_value)
+    return _Some(inner_value)
 
 
 #: Public unit value of protected :class:`~_Nothing` type.
@@ -427,5 +468,5 @@ def maybe(
     """
     @wraps(function)
     def decorator(*args, **kwargs):
-        return Maybe.from_value(function(*args, **kwargs))
+        return Maybe.from_optional(function(*args, **kwargs))
     return decorator

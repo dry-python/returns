@@ -106,19 +106,22 @@ maybe_number: Maybe[float] = bad_function().map(
 You can be sure that `.map()` method won't be called for `Nothing`.
 Forget about `None`-related errors forever!
 
+We can also bind a `Optional`-returning function over a container.
+To achieve this, we are going to use `.bind_optional` method.
+
 And that's how your initial refactored code will look like:
 
 ```python
 user: Optional[User]
 
 # Type hint here is optional, it only helps the reader here:
-discount_program: Maybe['DiscountProgram'] = Maybe.from_value(
+discount_program: Maybe['DiscountProgram'] = Maybe.from_optional(
     user,
-).map(  # This won't be called if `user is None`
+).bind_optional(  # This won't be called if `user is None`
     lambda real_user: real_user.get_balance(),
-).map(  # This won't be called if `real_user.get_balance()` returns None
+).bind_optional(  # This won't be called if `real_user.get_balance()` is None
     lambda balance: balance.credit_amount(),
-).map(  # And so on!
+).bind_optional(  # And so on!
     lambda credit: choose_discount(credit) if credit > 0 else None,
 )
 ```
@@ -623,7 +626,7 @@ Lovely, isn't it?
 
 ## More!
 
-Want more? 
+Want more?
 [Go to the docs!](https://returns.readthedocs.io)
 Or [try our demo](https://repl.it/@sobolevn/returns#ex.py).
 Or read these articles:

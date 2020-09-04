@@ -45,7 +45,7 @@ class _LawSpec(LawSpecDef):
     """
 
     @law_definition
-    def identity(
+    def identity_law(
         container: 'ApplicativeN[_FirstType, _SecondType, _ThirdType]',
     ) -> None:
         """
@@ -60,7 +60,7 @@ class _LawSpec(LawSpecDef):
         )
 
     @law_definition
-    def interchange(
+    def interchange_law(
         raw_value: _FirstType,
         container: 'ApplicativeN[_FirstType, _SecondType, _ThirdType]',
         function: Callable[[_FirstType], _NewType1],
@@ -83,7 +83,7 @@ class _LawSpec(LawSpecDef):
         )
 
     @law_definition
-    def homomorphism(
+    def homomorphism_law(
         raw_value: _FirstType,
         container: 'ApplicativeN[_FirstType, _SecondType, _ThirdType]',
         function: Callable[[_FirstType], _NewType1],
@@ -104,7 +104,7 @@ class _LawSpec(LawSpecDef):
         )
 
     @law_definition
-    def composition(
+    def composition_law(
         container: 'ApplicativeN[_FirstType, _SecondType, _ThirdType]',
         first: Callable[[_FirstType], _NewType1],
         second: Callable[[_NewType1], _NewType2],
@@ -139,10 +139,10 @@ class ApplicativeN(
     """
 
     _laws: ClassVar[Sequence[Law]] = (
-        Law1(_LawSpec.identity),
-        Law3(_LawSpec.interchange),
-        Law3(_LawSpec.homomorphism),
-        Law3(_LawSpec.composition),
+        Law1(_LawSpec.identity_law),
+        Law3(_LawSpec.interchange_law),
+        Law3(_LawSpec.homomorphism_law),
+        Law3(_LawSpec.composition_law),
     )
 
     @abstractmethod
