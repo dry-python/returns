@@ -78,6 +78,11 @@ rescue method
 
 .. autofunction:: returns.methods.rescue.rescue
 
+bind_optional method
+~~~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: returns.methods.bind_optional.bind_optional
+
 bind_result method
 ~~~~~~~~~~~~~~~~~~
 
