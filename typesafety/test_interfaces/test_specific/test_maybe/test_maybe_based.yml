@@ -1,0 +1,56 @@
+- case: maybe_based_inheritance_correct
+  disable_cache: true
+  main: |
+    from typing import TypeVar, Callable, Union
+    from returns.interfaces.specific.maybe import MaybeBased2
+    from returns.primitives.hkt import SupportsKind2
+
+    V = TypeVar('V')
+    N = TypeVar('N')
+
+    class MyClass(SupportsKind2['MyClass', V, None], MaybeBased2[V, None]):
+        def or_else_call(
+            self,
+            function: Callable[[], N],
+        ) -> Union[V, N]:
+            ...
+
+
+- case: maybe_based_inheritance_missing
+  disable_cache: true
+  main: |
+    from typing import TypeVar
+    from typing_extensions import final
+    from returns.interfaces.specific.maybe import MaybeBased2
+    from returns.primitives.hkt import SupportsKind2
+
+    V = TypeVar('V')
+
+    @final
+    class MyClass(SupportsKind2['MyClass', V, None], MaybeBased2[V, None]):
+        ...
+  out: |
+    main:9: error: Final class main.MyClass has abstract attributes "apply", "bind", "bind_optional", "equals", "failure", "from_iterable", "from_optional", "from_value", "map", "or_else_call", "rescue", "unwrap"
+
+
+- case: maybe_based_inheritance_wrong
+  disable_cache: true
+  main: |
+    from typing import TypeVar, Callable, Union
+    from returns.interfaces.specific.maybe import MaybeBased2
+    from returns.primitives.hkt import SupportsKind2
+
+    V = TypeVar('V')
+    N = TypeVar('N')
+
+    class MyClass(SupportsKind2['MyClass', V, None], MaybeBased2[V, None]):
+        def or_else_call(
+            self,
+            function: Callable[[], V],
+        ) -> Union[None, V]:
+            ...
+  out: |
+    main:9: error: Argument 1 of "or_else_call" is incompatible with supertype "MaybeBasedN"; supertype defines the argument type as "Callable[[], _ValueType]"
+    main:9: error: Return type "Optional[V]" of "or_else_call" incompatible with return type "Union[V, _ValueType]" in supertype "MaybeBasedN"
+    main:9: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:9: note: This violates the Liskov substitution principle

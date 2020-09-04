@@ -1,0 +1,61 @@
+- case: maybe_like_inheritance_correct
+  disable_cache: true
+  main: |
+    from typing import TypeVar, Callable, Optional
+    from returns.interfaces.specific.maybe import MaybeLike2
+    from returns.primitives.hkt import SupportsKind2
+
+    V = TypeVar('V')
+    N = TypeVar('N')
+
+    class MyClass(SupportsKind2['MyClass', V, None], MaybeLike2[V, None]):
+        def bind_optional(
+            self,
+            function: Callable[[V], Optional[N]],
+        ) -> MyClass[N]:
+            ...
+
+        @classmethod
+        def from_optional(cls, inner_value: Optional[N]) -> MyClass[N]:
+            ...
+
+
+- case: maybe_like_inheritance_missing
+  disable_cache: true
+  main: |
+    from typing import TypeVar
+    from typing_extensions import final
+    from returns.interfaces.specific.maybe import MaybeLike2
+    from returns.primitives.hkt import SupportsKind2
+
+    V = TypeVar('V')
+
+    @final
+    class MyClass(SupportsKind2['MyClass', V, None], MaybeLike2[V, None]):
+        ...
+  out: |
+    main:9: error: Final class main.MyClass has abstract attributes "apply", "bind", "bind_optional", "from_iterable", "from_optional", "from_value", "map", "rescue"
+
+
+- case: maybe_like_inheritance_wrong
+  disable_cache: true
+  main: |
+    from typing import TypeVar, Callable, Optional
+    from returns.interfaces.specific.maybe import MaybeLike2
+    from returns.primitives.hkt import SupportsKind2
+
+    V = TypeVar('V')
+    N = TypeVar('N')
+
+    class MyClass(SupportsKind2['MyClass', V, None], MaybeLike2[V, None]):
+        def bind_optional(
+            self,
+            function: Callable[[V], N],
+        ) -> MyClass[Optional[N]]:
+            ...
+
+        def from_optional(self, inner_value: Optional[N]) -> MyClass[N]:
+            ...
+  out: |
+    main:9: error: Return type "MyClass[Optional[N]]" of "bind_optional" incompatible with return type "KindN[MyClass[V], _UpdatedType, None, NoReturn]" in supertype "MaybeLikeN"
+    main:15: error: Signature of "from_optional" incompatible with supertype "MaybeLikeN"
