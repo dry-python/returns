@@ -54,7 +54,7 @@ jobs:
         poetry run pip check
         poetry run safety check --full-report
         # We do this to speed up the build:
-        poetry run pytest typesafety -p no:cov -o addopts="" --mypy-ini-file=setup.cfg
+        poetry run pytest typesafety -p no:cov -o addopts="" -n=auto --mypy-ini-file=setup.cfg
 
     - name: Upload coverage to Codecov
       if: matrix.python-version == 3.8
