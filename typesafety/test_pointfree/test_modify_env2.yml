@@ -37,7 +37,7 @@
         ...
 
     r: RequiresContext[int, int]
-    reveal_type(flow(r, modify_env2(modify), bind(test)))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[builtins.float, builtins.str]'
+    reveal_type(flow(r, modify_env2(modify), bind(test)))  # N: Revealed type is 'returns.context.requires_context.RequiresContext*[builtins.float, builtins.str]'
 
 
 - case: modify_env2_requires_context

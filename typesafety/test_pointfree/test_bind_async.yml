@@ -70,7 +70,7 @@
         ...
 
     x: Future[float]
-    reveal_type(flow(x, bind_async(test1), bind_async(test2)))  # N: Revealed type is 'returns.future.Future[builtins.str]'
+    reveal_type(flow(x, bind_async(test1), bind_async(test2)))  # N: Revealed type is 'returns.future.Future*[builtins.str]'
 
 
 - case: bind_async_requires_context_future_result
