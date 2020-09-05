@@ -1,5 +1,5 @@
 - case: failure_rescue
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.result import ResultE, Success, Failure
 

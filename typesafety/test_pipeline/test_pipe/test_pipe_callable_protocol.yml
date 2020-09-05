@@ -1,5 +1,5 @@
 - case: pipe_regular_callable
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import Callable
     from returns.pipeline import pipe
@@ -15,7 +15,7 @@
 
 
 - case: pipe_generic_callable1
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import Callable, TypeVar
     from returns.pipeline import pipe
@@ -37,7 +37,7 @@
 
 
 - case: pipe_generic_callable2
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import Callable, TypeVar
     from returns.pipeline import pipe

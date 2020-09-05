@@ -1,5 +1,5 @@
 - case: unsafe_perform_io
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IO
     from returns.unsafe import unsafe_perform_io

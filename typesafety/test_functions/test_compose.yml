@@ -1,5 +1,5 @@
 - case: compose_two_correct_functions
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.functions import compose
 

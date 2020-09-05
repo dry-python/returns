@@ -1,5 +1,5 @@
 - case: flow_zero_args
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pipeline import flow
 
@@ -10,7 +10,7 @@
 
 
 - case: flow_one_arg
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pipeline import flow
 
@@ -21,7 +21,7 @@
 
 
 - case: flow_star_args
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pipeline import flow
     from returns.functions import identity

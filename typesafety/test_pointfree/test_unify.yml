@@ -1,5 +1,5 @@
 - case: unify_result
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import unify
     from returns.result import Result
@@ -11,7 +11,7 @@
     reveal_type(unify(test)(x))  # N: Revealed type is 'returns.result.Result[builtins.str, Union[builtins.AssertionError*, builtins.int]]'
 
 - case: unify_ioresult
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IOResult
     from returns.pointfree import unify
@@ -23,7 +23,7 @@
     reveal_type(unify(test)(x))  # N: Revealed type is 'returns.io.IOResult[builtins.str, Union[builtins.bool*, builtins.bytes]]'
 
 - case: unify_future_result
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.future import FutureResult
     from returns.pointfree import unify
@@ -35,7 +35,7 @@
     reveal_type(unify(test)(x))  # N: Revealed type is 'returns.future.FutureResult[builtins.bool, Union[builtins.float*, builtins.str]]'
 
 - case: unify_reader_ioresult
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import unify
     from returns.context import ReaderIOResult
@@ -47,7 +47,7 @@
     reveal_type(unify(test)(x))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.bool, Union[builtins.Exception*, builtins.str], Any]'
 
 - case: unify_reader_future_result
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import unify
     from returns.context import ReaderFutureResult, NoDeps
@@ -59,7 +59,7 @@
     reveal_type(unify(test)(x))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.int, Union[builtins.str*, builtins.bool], Any]'
 
 - case: unify_custom_type
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import TypeVar
 

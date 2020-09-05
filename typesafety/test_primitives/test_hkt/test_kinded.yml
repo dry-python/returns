@@ -1,5 +1,5 @@
 - case: kinded_with_any
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.primitives.hkt import KindN, kinded
     from typing import Any, TypeVar
@@ -18,7 +18,7 @@
 
 
 - case: kinded_with_kind1
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.primitives.hkt import Kind1, kinded
     from returns.io import IO
@@ -36,7 +36,7 @@
 
 
 - case: kinded_with_kind2
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.primitives.hkt import Kind2, kinded
     from returns.io import IOResult
@@ -55,7 +55,7 @@
 
 
 - case: kinded_with_kind3
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.primitives.hkt import Kind3, kinded
     from returns.context import ReaderIOResult
@@ -75,7 +75,7 @@
 
 
 - case: kinded_regression521
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.primitives.hkt import KindN, kinded
     from returns.context import ReaderIOResult
@@ -97,7 +97,7 @@
 
 
 - case: kinded_with_container1
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.primitives.hkt import KindN, kinded
     from returns.io import IO
@@ -117,7 +117,7 @@
 
 
 - case: kinded_with_container2
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.primitives.hkt import KindN, kinded
     from returns.io import IOResult
@@ -137,7 +137,7 @@
 
 
 - case: kinded_with_container3
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.primitives.hkt import KindN, kinded
     from returns.context import ReaderIOResult

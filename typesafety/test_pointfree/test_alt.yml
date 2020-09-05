@@ -1,5 +1,5 @@
 - case: alt_and_flow
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.result import Result
     from returns.pointfree import alt
@@ -16,7 +16,7 @@
 
 
 - case: alt_result
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import alt
     from returns.result import Result
@@ -29,7 +29,7 @@
 
 
 - case: alt_ioresult
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import alt
     from returns.io import IOResult
@@ -42,7 +42,7 @@
 
 
 - case: alt_requires_context_result
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import alt
     from returns.context import RequiresContextResult
@@ -55,7 +55,7 @@
 
 
 - case: alt_requires_context_ioresult
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import alt
     from returns.context import RequiresContextIOResult
@@ -68,7 +68,7 @@
 
 
 - case: alt_requires_context_future_result
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import alt
     from returns.context import RequiresContextFutureResult
@@ -81,7 +81,7 @@
 
 
 - case: alt_future_result
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import alt
     from returns.future import FutureResult
@@ -94,7 +94,7 @@
 
 
 - case: alt_custom_type
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import alt
     from returns.primitives.hkt import SupportsKind2

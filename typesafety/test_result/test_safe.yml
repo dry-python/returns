@@ -1,5 +1,5 @@
 - case: safe_decorator_no_params
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.result import safe
 
@@ -11,7 +11,7 @@
 
 
 - case: safe_composition_no_params
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.result import safe
 
@@ -22,7 +22,7 @@
 
 
 - case: safe_decorator_with_args
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import Optional
     from returns.result import safe
@@ -35,7 +35,7 @@
 
 
 - case: safe_composition_with_args
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import Optional
     from returns.result import safe
@@ -47,7 +47,7 @@
 
 
 - case: safe_regression333
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.result import safe
     from typing import Any
@@ -60,7 +60,7 @@
 
 
 - case: safe_decorator_with_args_kwargs
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.result import safe
 
@@ -72,7 +72,7 @@
 
 
 - case: safe_decorator_with_args_kwargs
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.result import safe
 
@@ -84,7 +84,7 @@
 
 
 - case: safe_decorator_composition
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import impure
     from returns.result import safe

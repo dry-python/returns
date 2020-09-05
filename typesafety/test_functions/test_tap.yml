@@ -1,5 +1,5 @@
 - case: tap_single_function
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.functions import tap
 
@@ -10,7 +10,7 @@
 
 
 - case: untap_single_function
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.functions import untap
 

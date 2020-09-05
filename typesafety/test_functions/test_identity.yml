@@ -1,5 +1,5 @@
 - case: identity_function
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.functions import identity
 

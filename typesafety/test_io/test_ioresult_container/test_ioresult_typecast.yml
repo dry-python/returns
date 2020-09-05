@@ -1,5 +1,5 @@
 - case: ioresult_success_cast
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IOResult, IOSuccess
 
@@ -8,7 +8,7 @@
 
 
 - case: ioresult_failure_cast1
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IOResult, IOFailure
 
@@ -17,7 +17,7 @@
 
 
 - case: ioresult_failure_cast2
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IOResult, IOFailure
 
@@ -26,7 +26,7 @@
 
 
 - case: ioresult_swap
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IOResult
 
@@ -35,7 +35,7 @@
 
 
 - case: ioresult_getattr
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IOResult
 
@@ -44,7 +44,7 @@
 
 
 - case: ioresult_from_value
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IOResult
 
@@ -52,7 +52,7 @@
 
 
 - case: ioresult_from_failure
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IOResult
 
@@ -60,7 +60,7 @@
 
 
 - case: ioresult_from_iterable1
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IOResult
     from typing import Iterable
@@ -71,7 +71,7 @@
 
 
 - case: ioresult_from_iterable2
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IOResult
     from returns.primitives.iterables import CollectAll
@@ -83,7 +83,7 @@
 
 
 - case: ioresult_covariant_cast
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IOResult
 
@@ -93,7 +93,7 @@
 
 
 - case: ioresult_success_bind_contra1
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IOResult, IOSuccess
 
@@ -105,7 +105,7 @@
 
 
 - case: ioresult_success_bind_contra2
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IOResult, IOSuccess
 
@@ -118,7 +118,7 @@
 
 
 - case: ioresult_correct_usage
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IOResult, IOSuccess, IOFailure
 
@@ -131,7 +131,7 @@
 
 
 - case: ioresulte_typecast1
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IOResult, IOResultE, IOSuccess, IOFailure
 
@@ -145,7 +145,7 @@
 
 
 - case: ioresulte_typecast2
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IOResult, IOResultE, IOSuccess, IOFailure
 

@@ -1,5 +1,5 @@
 - case: result_inheritance_correct2
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import Callable, TypeVar, Any
     from returns.interfaces.specific.result import ResultBased2
@@ -55,7 +55,7 @@
 
 
 - case: result_inheritance_correct3
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import Callable, TypeVar, Any
     from returns.interfaces.specific.result import ResultBased3
@@ -112,7 +112,7 @@
 
 
 - case: result_inheritance_missing
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import TypeVar
     from typing_extensions import final
@@ -130,7 +130,7 @@
 
 
 - case: result_inheritance_wrong
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import Callable, TypeVar
     from returns.interfaces.specific.result import ResultBased2

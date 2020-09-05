@@ -1,5 +1,5 @@
 - case: result_is_successful
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pipeline import is_successful
     from returns.result import Result
@@ -11,7 +11,7 @@
 
 
 - case: ioresult_is_successful
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pipeline import is_successful
     from returns.io import IOResult
@@ -23,7 +23,7 @@
 
 
 - case: maybe_is_successful
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pipeline import is_successful
     from returns.maybe import Maybe
@@ -32,7 +32,7 @@
 
 
 - case: custom_type_is_successful
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pipeline import is_successful
     from returns.primitives.hkt import Kind2

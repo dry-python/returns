@@ -1,5 +1,5 @@
 - case: curry_args
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.curry import curry
 
@@ -11,7 +11,7 @@
 
 
 - case: curry_kwargs
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.curry import curry
 
@@ -23,7 +23,7 @@
 
 
 - case: curry_args_kwargs
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.curry import curry
 

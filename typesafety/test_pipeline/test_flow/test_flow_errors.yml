@@ -1,5 +1,5 @@
 - case: flow_function_error
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pipeline import flow
 
@@ -13,7 +13,7 @@
 
 
 - case: flow_wrong_steps_error
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pipeline import flow
 
@@ -24,7 +24,7 @@
 
 
 - case: flow_function_first_arg_error
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pipeline import flow
 
@@ -38,7 +38,7 @@
 
 
 - case: flow_function_without_args_error
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pipeline import flow
 
@@ -52,7 +52,7 @@
 
 
 - case: flow_function_with_too_many_args_error
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pipeline import flow
 
