@@ -56,7 +56,7 @@
         ...
 
     x: Result[float, str]
-    reveal_type(flow(x, bind(test)))  # N: Revealed type is 'returns.result.Result*[builtins.int, builtins.str]'
+    reveal_type(flow(x, bind(test)))  # N: Revealed type is 'returns.result.Result*[builtins.int*, builtins.str]'
 
 
 - case: bind_io
