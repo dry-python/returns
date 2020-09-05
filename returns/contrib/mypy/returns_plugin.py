@@ -104,6 +104,7 @@ class _ReturnsPlugin(Plugin):
         fullname: str,
     ) -> Optional[_MethodSigCallback]:
         """Called for method signature from ``mypy``."""
+        # print(fullname)
         return self._method_sig_hook_plugins.get(fullname)
 
     def get_method_hook(
@@ -111,6 +112,7 @@ class _ReturnsPlugin(Plugin):
         fullname: str,
     ) -> Optional[_MethodCallback]:
         """Called for method return types from ``mypy``."""
+        # print(fullname)
         return self._method_hook_plugins.get(fullname)
 
 

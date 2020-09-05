@@ -1,7 +1,6 @@
 from typing import Callable, TypeVar, Union
 
 from returns.interfaces.specific.result import ResultLikeN
-from returns.methods.unify import internal_unify
 from returns.primitives.hkt import Kind2, Kinded, kinded
 
 _ValueType = TypeVar('_ValueType')
@@ -52,5 +51,5 @@ def unify(  # noqa: WPS234
     ) -> Kind2[
         _ResultLikeKind, _NewValueType, Union[_ErrorType, _NewErrorType],
     ]:
-        return internal_unify(container, function)
+        return container.bind(function)  # type: ignore
     return factory
