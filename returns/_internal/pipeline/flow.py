@@ -1,9 +1,17 @@
 from functools import reduce
+from typing import TypeVar
 
 from returns.functions import compose
 
+_InstanceType = TypeVar('_InstanceType')
+_PipelineStepType = TypeVar('_PipelineStepType')
+_ReturnType = TypeVar('_ReturnType')
 
-def _flow(instance, *functions):
+
+def _flow(
+    instance: _InstanceType,
+    *functions: _PipelineStepType,
+) -> _ReturnType:
     """
     Allows to compose a value and up to multiple functions that use this value.
 
@@ -41,4 +49,4 @@ def _flow(instance, *functions):
 
     Requires our :ref:`mypy plugin <mypy-plugins>`.
     """
-    return reduce(compose, functions)(instance)
+    return reduce(compose, functions)(instance)  # type: ignore

@@ -55,7 +55,7 @@
         ...
 
     r: RequiresContextResult[int, Exception, int]
-    reveal_type(flow(r, modify_env(modify), bind(test)))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.float, builtins.Exception, builtins.str]'
+    reveal_type(flow(r, modify_env(modify), bind(test)))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult*[builtins.float*, builtins.Exception*, builtins.str*]'
 
 
 - case: modify_env_requires_context_result
