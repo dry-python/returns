@@ -33,11 +33,14 @@ def analyze(ctx: FunctionContext) -> MypyType:
     """
     if not ctx.arg_types[0]:
         return ctx.default_return_type
+    if not ctx.arg_types[1]:  # We do require to pass `*functions` arg.
+        ctx.api.fail('Too few arguments for "_flow"', ctx.context)
+        return ctx.default_return_type
 
     return PipelineInference(
         ctx.arg_types[0][0],
     ).from_callable_sequence(
-        [arg_type[0] for arg_type in ctx.arg_types[1:] if arg_type],
-        [arg_kind[0] for arg_kind in ctx.arg_kinds[1:] if arg_kind],
+        [ctx.api.expr_checker.accept(arg) for arg in ctx.args[1]],
+        ctx.arg_kinds[1],
         ctx,
     )

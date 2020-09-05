@@ -73,8 +73,7 @@ See [0Ver](https://0ver.org/).
 
 ### Bugfixes
 
-- **Breaking**: fixes serious typing issue and changes how `flow` works,
-  now it has a hard limit of 21 parameters: 1 instance + 20 functions
+- **Breaking**: fixes serious typing issue and changes how `flow` works
 - **Breaking**: fixes serious typing issue and changes how `pipe` works,
   now it has a hard limit of 20 parameters
 - Fixes that `RequiresContextFutureResult` was not supported by `pytest` plugin
