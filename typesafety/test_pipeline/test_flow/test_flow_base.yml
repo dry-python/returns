@@ -151,7 +151,7 @@
     reveal_type(flow(r, identity, bind_result(test), bind_result(second)))  # N: Revealed type is 'returns.io.IOResult*[builtins.bool, builtins.str]'
 
 
-- case: bind_result_and_flow1
+- case: bind_result_and_flow2
   disable_cache: true
   main: |
     from returns.result import Result
