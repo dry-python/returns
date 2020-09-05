@@ -4,9 +4,9 @@
     from returns.context import RequiresContext
     from typing import Iterable
 
-    x1: Iterable[RequiresContext[int, str]]
+    x: Iterable[RequiresContext[int, str]]
 
-    reveal_type(RequiresContext.from_iterable(x1))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[typing.Sequence[builtins.int*], builtins.str*]'
+    reveal_type(RequiresContext.from_iterable(x))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[typing.Sequence[builtins.int*], builtins.str*]'
 
 
 - case: requires_context_from_iterable2
@@ -16,9 +16,9 @@
     from returns.primitives.iterables import CollectAll
     from typing import Iterable
 
-    x2: Iterable[RequiresContext[int, str]]
+    x: Iterable[RequiresContext[int, str]]
 
-    reveal_type(RequiresContext.from_iterable(x2, CollectAll))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[typing.Sequence[builtins.int*], builtins.str*]'
+    reveal_type(RequiresContext.from_iterable(x, CollectAll))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[typing.Sequence[builtins.int*], builtins.str*]'
 
 
 - case: requires_context_from_requires_context_ioresult
@@ -27,9 +27,9 @@
     from returns.context import RequiresContext
     from returns.context import RequiresContextIOResult
 
-    x3: RequiresContextIOResult[int, float, str]
+    x: RequiresContextIOResult[int, float, str]
 
-    reveal_type(RequiresContext.from_requires_context_ioresult(x3))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[returns.io.IOResult[builtins.int*, builtins.float*], builtins.str*]'
+    reveal_type(RequiresContext.from_requires_context_ioresult(x))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[returns.io.IOResult[builtins.int*, builtins.float*], builtins.str*]'
 
 
 - case: requires_context_from_requires_context_result
@@ -38,9 +38,9 @@
     from returns.context import RequiresContext
     from returns.context import RequiresContextResult
 
-    x4: RequiresContextResult[int, float, str]
+    x: RequiresContextResult[int, float, str]
 
-    reveal_type(RequiresContext.from_requires_context_result(x4))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[returns.result.Result[builtins.int*, builtins.float*], builtins.str*]'
+    reveal_type(RequiresContext.from_requires_context_result(x))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[returns.result.Result[builtins.int*, builtins.float*], builtins.str*]'
 
 
 - case: requires_context_from_requires_context_future_result
@@ -49,6 +49,6 @@
     from returns.context import RequiresContext
     from returns.context import RequiresContextFutureResult
 
-    x5: RequiresContextFutureResult[int, float, str]
+    x: RequiresContextFutureResult[int, float, str]
 
-    reveal_type(RequiresContext.from_requires_context_future_result(x5))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[returns.future.FutureResult[builtins.int*, builtins.float*], builtins.str*]'
+    reveal_type(RequiresContext.from_requires_context_future_result(x))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[returns.future.FutureResult[builtins.int*, builtins.float*], builtins.str*]'

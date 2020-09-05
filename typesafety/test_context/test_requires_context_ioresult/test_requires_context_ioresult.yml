@@ -1,5 +1,5 @@
 - case: requires_context_ioresult_call
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.context import RequiresContextIOResult
 
@@ -9,7 +9,7 @@
 
 
 - case: requires_context_ioresult_getattr
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.context import RequiresContextIOResult
 
@@ -18,7 +18,7 @@
 
 
 - case: requires_context_ioresult_swap
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.context import RequiresContextIOResult
 
@@ -28,7 +28,7 @@
 
 
 - case: requires_context_ioresult_bind
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.context import RequiresContextIOResult
 
@@ -41,7 +41,7 @@
 
 
 - case: requires_context_ioresult_bind_result
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.context import RequiresContextIOResult
     from returns.result import Result
@@ -55,7 +55,7 @@
 
 
 - case: requires_context_ioresult_bind_ioresult
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.context import RequiresContextIOResult
     from returns.io import IOResult
@@ -69,7 +69,7 @@
 
 
 - case: requires_context_ioresult_bind_io
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.context import RequiresContextIOResult
     from returns.io import IO
@@ -83,7 +83,7 @@
 
 
 - case: requires_context_ioresult_bind_context
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.context import RequiresContextIOResult, RequiresContext
 
@@ -97,7 +97,7 @@
 
 
 - case: requires_context_ioresult_bind_context_result
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.context import RequiresContextIOResult, RequiresContextResult
 
@@ -110,7 +110,7 @@
 
 
 - case: requires_context_ioresult_map
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.context import RequiresContextIOResult
 
@@ -120,7 +120,7 @@
 
 
 - case: requires_context_ioresult_apply
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import Callable
     from returns.context import RequiresContextIOResult
@@ -132,7 +132,7 @@
 
 
 - case: requires_context_ioresult_rescue
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.context import RequiresContextIOResult
 
@@ -145,7 +145,7 @@
 
 
 - case: requires_context_ioresult_alt
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.context import RequiresContextIOResult
 
@@ -158,7 +158,7 @@
 
 
 - case: requires_context_ioresult_modify_env
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.context import RequiresContextIOResult
 

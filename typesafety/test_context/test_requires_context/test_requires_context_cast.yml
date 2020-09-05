@@ -1,5 +1,5 @@
 - case: context_correct_cast
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.context import RequiresContext
 
@@ -10,7 +10,7 @@
 
 
 - case: context_wrong_cast
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.context import RequiresContext
 
@@ -21,7 +21,7 @@
 
 
 - case: context_covariant_cast
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.context import RequiresContext
 

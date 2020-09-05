@@ -1,5 +1,5 @@
 - case: requires_context_call_correct
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.context import RequiresContext
 
@@ -9,7 +9,7 @@
 
 
 - case: requires_context_getattr
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.context import RequiresContext
 
@@ -18,7 +18,7 @@
 
 
 - case: requires_context_map_correct
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.context import RequiresContext
 
@@ -28,7 +28,7 @@
 
 
 - case: requires_context_apply_correct
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import Callable
     from returns.context import RequiresContext
@@ -40,7 +40,7 @@
 
 
 - case: requires_context_bind_correct
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.context import RequiresContext
 
@@ -53,7 +53,7 @@
 
 
 - case: requires_context_bind_context_correct
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.context import RequiresContext
 
@@ -66,7 +66,7 @@
 
 
 - case: requires_context_modify_env
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.context import RequiresContext
 
@@ -75,7 +75,7 @@
 
 
 - case: requires_context_call_wrong
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.context import RequiresContext
 
@@ -86,7 +86,7 @@
 
 
 - case: requires_context_map_wrong
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.context import RequiresContext
 
@@ -101,7 +101,7 @@
 
 
 - case: requires_context_bind_wrong1
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.context import RequiresContext
 
@@ -116,7 +116,7 @@
 
 
 - case: requires_context_bind_wrong2
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.context import RequiresContext
 
