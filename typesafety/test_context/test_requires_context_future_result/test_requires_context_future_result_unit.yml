@@ -1,5 +1,5 @@
 - case: requires_context_future_result_success
-  disable_cache: false
+  disable_cache: true
   main: |
     from returns.context import RequiresContextFutureResult
 
@@ -7,7 +7,7 @@
 
 
 - case: requires_context_future_result_failure
-  disable_cache: false
+  disable_cache: true
   main: |
     from returns.context import RequiresContextFutureResult
 
@@ -15,7 +15,7 @@
 
 
 - case: requires_context_future_result_from_iterable1
-  disable_cache: false
+  disable_cache: true
   main: |
     from returns.context import RequiresContextFutureResult
     from typing import Iterable
@@ -26,7 +26,7 @@
 
 
 - case: requires_context_future_result_from_iterable2
-  disable_cache: false
+  disable_cache: true
   main: |
     from returns.context import RequiresContextFutureResult
     from returns.primitives.iterables import CollectAll
@@ -38,7 +38,7 @@
 
 
 - case: requires_context_future_result_result
-  disable_cache: false
+  disable_cache: true
   main: |
     from returns.context import RequiresContextFutureResult
     from returns.result import Result
@@ -49,7 +49,7 @@
 
 
 - case: requires_context_future_result_io
-  disable_cache: false
+  disable_cache: true
   main: |
     from returns.context import RequiresContextFutureResult
     from returns.io import IO
@@ -60,7 +60,7 @@
 
 
 - case: requires_context_future_result_failed_io
-  disable_cache: false
+  disable_cache: true
   main: |
     from returns.context import RequiresContextFutureResult
     from returns.io import IO
@@ -71,7 +71,7 @@
 
 
 - case: requires_context_future_result_ioresult
-  disable_cache: false
+  disable_cache: true
   main: |
     from returns.context import RequiresContextFutureResult
     from returns.io import IOResult
@@ -82,7 +82,7 @@
 
 
 - case: requires_context_future_result_future
-  disable_cache: false
+  disable_cache: true
   main: |
     from returns.context import RequiresContextFutureResult
     from returns.future import Future
@@ -93,7 +93,7 @@
 
 
 - case: requires_context_future_result_failed_future
-  disable_cache: false
+  disable_cache: true
   main: |
     from returns.context import RequiresContextFutureResult
     from returns.future import Future
@@ -104,7 +104,7 @@
 
 
 - case: requires_context_future_result_future_result
-  disable_cache: false
+  disable_cache: true
   main: |
     from returns.context import RequiresContextFutureResult
     from returns.future import FutureResult
@@ -115,7 +115,7 @@
 
 
 - case: requires_context_future_result_typecast
-  disable_cache: false
+  disable_cache: true
   main: |
     from returns.context import RequiresContextFutureResult, RequiresContext
     from returns.future import FutureResult
@@ -126,7 +126,7 @@
 
 
 - case: requires_context_future_result_successful_context
-  disable_cache: false
+  disable_cache: true
   main: |
     from returns.context import RequiresContextFutureResult, RequiresContext
 
@@ -136,7 +136,7 @@
 
 
 - case: requires_context_future_result_failed_context
-  disable_cache: false
+  disable_cache: true
   main: |
     from returns.context import RequiresContextFutureResult, RequiresContext
 
@@ -146,7 +146,7 @@
 
 
 - case: requires_context_future_result_from_result_context
-  disable_cache: false
+  disable_cache: true
   main: |
     from returns.context import RequiresContextFutureResult, RequiresContextResult
 
@@ -156,7 +156,7 @@
 
 
 - case: requires_context_future_result_from_ioresult_context
-  disable_cache: false
+  disable_cache: true
   main: |
     from returns.context import RequiresContextFutureResult, RequiresContextIOResult
 

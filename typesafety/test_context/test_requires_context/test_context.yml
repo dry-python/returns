@@ -1,5 +1,5 @@
 - case: context_ask1
-  disable_cache: false
+  disable_cache: true
   main: |
     from returns.context import RequiresContext
 
@@ -7,7 +7,7 @@
 
 
 - case: context_ask2
-  disable_cache: false
+  disable_cache: true
   main: |
     from returns.context import RequiresContext
 
@@ -15,7 +15,7 @@
 
 
 - case: requires_context_from_value
-  disable_cache: false
+  disable_cache: true
   main: |
     from returns.context import RequiresContext
 
@@ -23,7 +23,7 @@
 
 
 - case: requires_context_from_context
-  disable_cache: false
+  disable_cache: true
   main: |
     from returns.context import RequiresContext
 

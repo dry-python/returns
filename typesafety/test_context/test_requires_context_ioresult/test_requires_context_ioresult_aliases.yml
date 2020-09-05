@@ -1,5 +1,5 @@
 - case: requires_context_ioresult_aliases
-  disable_cache: false
+  disable_cache: true
   main: |
     from returns.context import (
         RequiresContextIOResult,
