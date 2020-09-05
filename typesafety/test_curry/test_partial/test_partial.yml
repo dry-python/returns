@@ -1,5 +1,5 @@
 - case: partial_zero_args
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.curry import partial
 
@@ -10,7 +10,7 @@
 
 
 - case: partial_single_arg
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.curry import partial
 
@@ -21,7 +21,7 @@
 
 
 - case: partial_all_args
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.curry import partial
 
@@ -32,7 +32,7 @@
 
 
 - case: partial_single_named_arg
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.curry import partial
 
@@ -43,7 +43,7 @@
 
 
 - case: partial_multiple_args
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.curry import partial
 
@@ -61,7 +61,7 @@
 
 
 - case: partial_not_callable_type
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.curry import partial
 
@@ -71,7 +71,7 @@
 
 
 - case: partial_explicit_noreturn
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.curry import partial
     from typing import NoReturn
@@ -83,7 +83,7 @@
 
 
 - case: partial_wrong_argument_types
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.curry import partial
     from typing_extensions import Literal
@@ -102,7 +102,7 @@
 
 
 - case: partial_too_many_positional_args
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.curry import partial
     from typing_extensions import Literal
@@ -119,7 +119,7 @@
 
 
 - case: partial_invalid_named_arg
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.curry import partial
     from typing_extensions import Literal

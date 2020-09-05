@@ -1,5 +1,5 @@
 - case: iosuccess_bind
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IOSuccess, IOResult
 
@@ -11,7 +11,7 @@
 
 
 - case: iosuccess_bind_result
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IOSuccess, IOResult
     from returns.result import Result
@@ -24,7 +24,7 @@
 
 
 - case: iosuccess_bind_io
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IO, IOSuccess, IOResult
 
@@ -36,7 +36,7 @@
 
 
 - case: iosuccess_unify1
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IOSuccess, IOResult
 
@@ -48,7 +48,7 @@
 
 
 - case: iosuccess_unify2
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import Union
     from returns.io import IOSuccess, IOResult
@@ -61,7 +61,7 @@
 
 
 - case: iosuccess_unify3
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import Union
     from returns.io import IOSuccess, IOResult
@@ -74,7 +74,7 @@
 
 
 - case: iosuccess_map
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IOSuccess, IOResult
 
@@ -82,7 +82,7 @@
 
 
 - case: iosuccess_apply
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IOSuccess, IOResult
 
@@ -93,7 +93,7 @@
 
 
 - case: iosuccess_value_or
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IOSuccess
 
@@ -101,7 +101,7 @@
 
 
 - case: iosuccess_unwrap
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IOSuccess
 

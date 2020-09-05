@@ -1,5 +1,5 @@
 - case: io_constructor1
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IO
 
@@ -7,7 +7,7 @@
 
 
 - case: io_constructor2
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IO
 
@@ -15,7 +15,7 @@
 
 
 - case: io_constructor3
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IO
 
@@ -23,7 +23,7 @@
 
 
 - case: io_from_iterable1
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IO
     from typing import Iterable
@@ -34,7 +34,7 @@
 
 
 - case: io_from_iterable2
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IO
     from returns.primitives.iterables import CollectAll
@@ -46,7 +46,7 @@
 
 
 - case: io_bind
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IO
 
@@ -58,7 +58,7 @@
 
 
 - case: io_bind_io
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IO
 
@@ -69,7 +69,7 @@
 
 
 - case: io_map
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IO
 
@@ -77,7 +77,7 @@
 
 
 - case: io_apply
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IO
 

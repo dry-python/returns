@@ -1,5 +1,5 @@
 - case: future_inheritance_correct1
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import Callable, TypeVar, Generator, Awaitable
     from returns.interfaces.specific.future import FutureLike1
@@ -59,7 +59,7 @@
 
 
 - case: future_inheritance_correct2
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import Callable, TypeVar, Generator, Any, Awaitable
     from returns.interfaces.specific.future import FutureLike2
@@ -120,7 +120,7 @@
 
 
 - case: future_inheritance_missing
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import TypeVar
     from typing_extensions import final
@@ -140,7 +140,7 @@
 
 
 - case: future_inheritance_wrong
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import Callable, TypeVar, Generator, Awaitable
     from returns.interfaces.specific.future import FutureLike1

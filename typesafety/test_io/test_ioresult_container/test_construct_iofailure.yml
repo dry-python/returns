@@ -1,5 +1,5 @@
 - case: iofailure_rescue
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IOFailure, IOResult
 
@@ -11,7 +11,7 @@
 
 
 - case: iofailure_alt
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IOFailure
 
@@ -19,7 +19,7 @@
 
 
 - case: iofailure_iofailure
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IOFailure
 

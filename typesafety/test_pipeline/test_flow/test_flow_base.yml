@@ -1,5 +1,5 @@
 - case: flow_function
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pipeline import flow
 
@@ -10,7 +10,7 @@
 
 
 - case: flow_function_with_overloads1
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pipeline import flow
 
@@ -21,7 +21,7 @@
 
 
 - case: flow_function_with_overloads2
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pipeline import flow
     from returns.functions import identity
@@ -33,7 +33,7 @@
 
 
 - case: flow_with_object1
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pipeline import flow
 
@@ -45,7 +45,7 @@
 
 
 - case: flow_with_object2
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pipeline import flow
 
@@ -57,7 +57,7 @@
 
 
 - case: flow_with_lambdas
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pipeline import flow
 
@@ -75,7 +75,7 @@
 
 
 - case: flow_with_methods
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pipeline import flow
 
@@ -102,7 +102,7 @@
 
 
 - case: flow_with_any
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pipeline import flow
     from typing import Any
@@ -114,7 +114,7 @@
 
 
 - case: flow_with_containers
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pipeline import flow
     from returns.pointfree import bind, map_
@@ -133,7 +133,7 @@
 
 
 - case: bind_result_and_flow1
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.result import Result
     from returns.io import IOResult
@@ -152,7 +152,7 @@
 
 
 - case: bind_result_and_flow2
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.result import Result
     from returns.io import IOResult

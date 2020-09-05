@@ -1,5 +1,5 @@
 - case: managed_with_non_none_release
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IOResult
     from returns.pipeline import managed
@@ -19,7 +19,7 @@
 
 
 - case: managed_with_non_matching_use_release_types
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IOResult
     from returns.pipeline import managed
@@ -39,7 +39,7 @@
 
 
 - case: managed_with_wrong_container_input
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IOResult
     from returns.pipeline import managed

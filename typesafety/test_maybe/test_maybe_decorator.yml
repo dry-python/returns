@@ -1,5 +1,5 @@
 - case: maybe_decorator_no_params
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.maybe import maybe
 
@@ -11,7 +11,7 @@
 
 
 - case: maybe_decorator_no_params_optional
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import Optional
     from returns.maybe import maybe
@@ -24,7 +24,7 @@
 
 
 - case: maybe_composition_no_params
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.maybe import maybe
 
@@ -35,7 +35,7 @@
 
 
 - case: maybe_decorator_with_args
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import Optional
     from returns.maybe import maybe
@@ -48,7 +48,7 @@
 
 
 - case: maybe_composition_with_args
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import Optional
     from returns.maybe import maybe
@@ -60,7 +60,7 @@
 
 
 - case: maybe_decorator_with_args_kwargs
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.maybe import maybe
 
@@ -72,7 +72,7 @@
 
 
 - case: maybe_decorator_with_typed_args_kwargs
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.maybe import maybe
 
@@ -84,7 +84,7 @@
 
 
 - case: maybe_decorator_with_optional
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import Optional
     from returns.maybe import maybe
@@ -97,7 +97,7 @@
 
 
 - case: maybe_multiple_decorators
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import Optional
     from returns.maybe import maybe

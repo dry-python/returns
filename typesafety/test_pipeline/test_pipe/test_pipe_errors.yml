@@ -1,5 +1,5 @@
 - case: pipe_function_error
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pipeline import pipe
 
@@ -13,7 +13,7 @@
 
 
 - case: pipe_wrong_steps_error
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pipeline import pipe
 
@@ -25,7 +25,7 @@
 
 
 - case: pipe_function_without_steps
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pipeline import pipe
 
@@ -35,7 +35,7 @@
 
 
 - case: pipe_function_first_arg_error
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pipeline import pipe
 
@@ -50,7 +50,7 @@
 
 
 - case: pipe_function_without_args_error
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pipeline import pipe
 
@@ -64,7 +64,7 @@
 
 
 - case: pipe_function_with_too_many_args_error
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pipeline import pipe
 

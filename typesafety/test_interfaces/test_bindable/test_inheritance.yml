@@ -1,5 +1,5 @@
 - case: bindable_inheritance_correct1
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import Callable, TypeVar
     from returns.interfaces.bindable import Bindable1
@@ -25,7 +25,7 @@
 
 
 - case: bindable_inheritance_correct2
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import Callable, TypeVar
     from returns.interfaces.bindable import Bindable2
@@ -53,7 +53,7 @@
 
 
 - case: bindable_inheritance_correct3
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import Callable, TypeVar
     from returns.interfaces.bindable import Bindable3
@@ -83,7 +83,7 @@
 
 
 - case: bindable_inheritance_missing
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import TypeVar
     from returns.interfaces.bindable import Bindable1
@@ -100,7 +100,7 @@
 
 
 - case: bindable_inheritance_wrong1
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import Callable, TypeVar
     from returns.interfaces.bindable import Bindable1
@@ -123,7 +123,7 @@
 
 
 - case: bindable_inheritance_wrong2
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import Callable, TypeVar
     from returns.interfaces.bindable import Bindable2
@@ -147,7 +147,7 @@
 
 
 - case: bindable_inheritance_wrong3
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import Callable, TypeVar
     from returns.interfaces.bindable import Bindable3

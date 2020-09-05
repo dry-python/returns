@@ -1,5 +1,5 @@
 - case: compose_result_ioresult
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import compose_result
     from returns.io import IOResult
@@ -13,7 +13,7 @@
 
 
 - case: compose_result_requires_context_ioresult
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import compose_result
     from returns.context import RequiresContextIOResult
@@ -27,7 +27,7 @@
 
 
 - case: compose_result_future
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import compose_result
     from returns.future import FutureResult
@@ -41,7 +41,7 @@
 
 
 - case: compose_result_requires_context_future_result
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import compose_result
     from returns.context import NoDeps, RequiresContextFutureResult
@@ -55,7 +55,7 @@
 
 
 - case: compose_result_custom_type
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import TypeVar
 

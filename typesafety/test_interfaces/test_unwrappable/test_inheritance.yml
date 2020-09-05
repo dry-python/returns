@@ -1,5 +1,5 @@
 - case: unwrappable_correct_inheritance
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.primitives.hkt import SupportsKind2
     from returns.interfaces.unwrappable import Unwrappable
@@ -27,7 +27,7 @@
 
 
 - case: unwrappable_missing_inheritance
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.primitives.hkt import SupportsKind2
     from returns.interfaces.unwrappable import Unwrappable
@@ -46,7 +46,7 @@
 
 
 - case: unwrappable_wrong_inheritance
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.primitives.hkt import SupportsKind2
     from returns.interfaces.unwrappable import Unwrappable

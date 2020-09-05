@@ -1,5 +1,5 @@
 - case: future_constructor
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.future import Future
 
@@ -11,7 +11,7 @@
 
 
 - case: future_awaitable
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.future import Future
 
@@ -21,7 +21,7 @@
 
 
 - case: future_bind
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.future import Future
 
@@ -32,7 +32,7 @@
 
 
 - case: future_bind_awaitable
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.future import Future
 
@@ -43,7 +43,7 @@
 
 
 - case: future_bind_async
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.future import Future
 
@@ -54,7 +54,7 @@
 
 
 - case: future_map
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.future import Future
 
@@ -62,7 +62,7 @@
 
 
 - case: future_apply
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.future import Future
 

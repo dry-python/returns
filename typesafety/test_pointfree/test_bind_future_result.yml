@@ -1,5 +1,5 @@
 - case: bind_future_result_wrong_value
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import bind_future_result
     from returns.future import FutureResult
@@ -12,7 +12,7 @@
 
 
 - case: bind_future_result_wrong_error
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import bind_future_result
     from returns.future import FutureResult
@@ -25,7 +25,7 @@
 
 
 - case: bind_future_result_requires_context_future_result
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import bind_future_result
     from returns.context import RequiresContextFutureResult
@@ -39,7 +39,7 @@
 
 
 - case: bind_future_result_future_result
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import bind_future_result
     from returns.future import FutureResult
@@ -52,7 +52,7 @@
 
 
 - case: bind_future_result_custom_type
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import bind_future_result
     from returns.primitives.hkt import SupportsKind2

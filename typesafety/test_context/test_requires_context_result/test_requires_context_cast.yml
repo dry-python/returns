@@ -1,5 +1,5 @@
 - case: requires_context_result_success_cast
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.context import RequiresContextResult
 
@@ -8,7 +8,7 @@
 
 
 - case: requires_context_result_failure_cast
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.context import RequiresContextResult
 
@@ -17,7 +17,7 @@
 
 
 - case: requires_context_result_env_cast
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.context import RequiresContextResult
 
@@ -28,7 +28,7 @@
 
 
 - case: requires_context_result_wrong_cast
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.context import RequiresContextResult
 

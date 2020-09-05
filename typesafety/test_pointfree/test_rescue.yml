@@ -1,5 +1,5 @@
 - case: rescue_wrong_second_type
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import rescue
     from returns.context import RequiresContextIOResult
@@ -12,7 +12,7 @@
 
 
 - case: rescue_wrong_else_types
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import rescue
     from returns.context import RequiresContextIOResult
@@ -25,7 +25,7 @@
 
 
 - case: rescue_maybe
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import rescue
     from returns.maybe import Maybe
@@ -38,7 +38,7 @@
 
 
 - case: rescue_result
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import rescue
     from returns.result import Result
@@ -51,7 +51,7 @@
 
 
 - case: rescue_ioresult
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import rescue
     from returns.io import IOResult
@@ -64,7 +64,7 @@
 
 
 - case: rescue_context_result
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import rescue
     from returns.context import RequiresContextResult
@@ -77,7 +77,7 @@
 
 
 - case: rescue_context_ioresult
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import rescue
     from returns.context import RequiresContextIOResult
@@ -90,7 +90,7 @@
 
 
 - case: rescue_context_future_result
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import rescue
     from returns.context import RequiresContextFutureResult
@@ -103,7 +103,7 @@
 
 
 - case: rescue_future_result
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import rescue
     from returns.future import FutureResult
@@ -116,7 +116,7 @@
 
 
 - case: rescue_custom_type
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import TypeVar
     from returns.pointfree import rescue
