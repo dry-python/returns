@@ -32,10 +32,6 @@ See [0Ver](https://0ver.org/).
   now it does accept an `Unwrappable` instance instead of a `BaseContainer`
 - **Breaking**: removes `.fix` method from all containers,
   also removes `fix` pointfree function
-- **Breaking**: removes `unify` poinfree function,
-  it is not a recommeneded way to compose things,
-  but due to HKT support,
-  users can write their own `unify` poinfree function now
 - **Breaking**: Removes `coalesce` function,
   because it is impossible to properly type it
 - **Breaking**: Removes all `Context*` based types with `.ask()` method,
@@ -63,10 +59,11 @@ See [0Ver](https://0ver.org/).
 - Changes `iterable` helper function to be `iterable_kind`,
   now it works with any `KindN`
 - Adds a helper to test traces to our `pytest` plugin
-- Adds `cond` method to `methods` package
-- Adds `cond` function to `pointfree` package
+- Adds `cond` function to `pointfree` and `methods` packages
 - Adds `compose_result` HKT method and pointfree function
-- Adds `unify` HKT method and pointfree function
+- Adds `unify` HKT pointfree function
+- Adds `bimap` pointfree function
+- Adds `unwrap_or_failure` function to `methods` package
 
 - Adds `collect_trace` helper function for better development experience
 - Adds `hypothesis` intergration and pre-defined "monad laws as values"
