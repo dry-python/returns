@@ -173,7 +173,7 @@
 # Regression to
 # https://github.com/dry-python/returns/issues/461
 - case: bind_result_and_flow3
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.result import Result
     from returns.io import IOResult

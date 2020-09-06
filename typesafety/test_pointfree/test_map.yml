@@ -63,7 +63,7 @@
 
 
 - case: map_and_bind
-  disable_cache: True
+  disable_cache: false
   main: |
     from returns.io import IO
     from returns.pointfree import map_, bind

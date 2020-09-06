@@ -1,5 +1,6 @@
 from returns.pointfree.alt import alt as alt
 from returns.pointfree.apply import apply as apply
+from returns.pointfree.bimap import bimap as bimap
 from returns.pointfree.bind import bind as bind
 from returns.pointfree.bind_async import bind_async as bind_async
 from returns.pointfree.bind_async_future import (
