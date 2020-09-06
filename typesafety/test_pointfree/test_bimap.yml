@@ -1,0 +1,138 @@
+- case: bimap_and_flow
+  disable_cache: false
+  main: |
+    from returns.result import Result
+    from returns.pointfree import bimap
+    from returns.pipeline import flow
+
+    def first(arg: float) -> str:
+        ...
+
+    def second(arg: int) -> str:
+        ...
+
+    r: Result[float, int]
+    reveal_type(flow(r, bimap(first, second)))  # N: Revealed type is 'returns.result.Result*[builtins.str, builtins.str]'
+
+
+- case: bimap_result
+  disable_cache: false
+  main: |
+    from returns.pointfree import bimap
+    from returns.result import Result
+
+    def first(arg: float) -> str:
+        ...
+
+    def second(arg: int) -> str:
+        ...
+
+    x: Result[float, int]
+    reveal_type(bimap(first, second)(x))  # N: Revealed type is 'returns.result.Result*[builtins.str, builtins.str]'
+
+
+- case: bimap_ioresult
+  disable_cache: false
+  main: |
+    from returns.pointfree import bimap
+    from returns.io import IOResult
+
+    def first(arg: float) -> str:
+        ...
+
+    def second(arg: int) -> str:
+        ...
+
+    x: IOResult[float, int]
+    reveal_type(bimap(first, second)(x))  # N: Revealed type is 'returns.io.IOResult*[builtins.str, builtins.str]'
+
+
+- case: bimap_requires_context_result
+  disable_cache: false
+  main: |
+    from returns.pointfree import bimap
+    from returns.context import RequiresContextResult
+
+    def first(arg: float) -> str:
+        ...
+
+    def second(arg: int) -> str:
+        ...
+
+    x: RequiresContextResult[float, int, bool]
+    reveal_type(bimap(first, second)(x))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult*[builtins.str, builtins.str, builtins.bool*]'
+
+
+- case: bimap_requires_context_ioresult
+  disable_cache: false
+  main: |
+    from returns.pointfree import bimap
+    from returns.context import RequiresContextIOResult
+
+    def first(arg: float) -> str:
+        ...
+
+    def second(arg: int) -> str:
+        ...
+
+    x: RequiresContextIOResult[float, int, bool]
+    reveal_type(bimap(first, second)(x))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult*[builtins.str, builtins.str, builtins.bool*]'
+
+
+- case: bimap_requires_context_future_result
+  disable_cache: false
+  main: |
+    from returns.pointfree import bimap
+    from returns.context import RequiresContextFutureResult
+
+    def first(arg: float) -> str:
+        ...
+
+    def second(arg: int) -> str:
+        ...
+
+    x: RequiresContextFutureResult[float, int, bool]
+    reveal_type(bimap(first, second)(x))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult*[builtins.str, builtins.str, builtins.bool*]'
+
+
+- case: bimap_future_result
+  disable_cache: false
+  main: |
+    from returns.pointfree import bimap
+    from returns.future import FutureResult
+
+    def first(arg: float) -> str:
+        ...
+
+    def second(arg: int) -> str:
+        ...
+
+    x: FutureResult[float, int]
+    reveal_type(bimap(first, second)(x))  # N: Revealed type is 'returns.future.FutureResult*[builtins.str, builtins.str]'
+
+
+- case: bimap_custom_type
+  disable_cache: false
+  main: |
+    from returns.pointfree import bimap
+    from returns.primitives.hkt import SupportsKind2
+    from returns.interfaces.bimappable import BiMappable2
+    from typing import TypeVar
+
+    T = TypeVar('T')
+    E = TypeVar('E')
+
+    class MyOwn(
+        SupportsKind2['MyOwn', T, E],
+        BiMappable2[T, E],
+    ):
+        ...
+
+    def first(arg: float) -> str:
+        ...
+
+    def second(arg: int) -> str:
+        ...
+
+    x: MyOwn[float, int]
+    reveal_type(bimap(first, second)(x))  # N: Revealed type is 'main.MyOwn*[builtins.str, builtins.str]'

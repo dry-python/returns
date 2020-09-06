@@ -1,4 +1,4 @@
-- case: applicative_mappable_inheritance_missing
+- case: container_inheritance_missing
   disable_cache: false
   main: |
     from typing import TypeVar
