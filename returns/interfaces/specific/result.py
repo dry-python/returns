@@ -18,7 +18,7 @@ from typing import (
 
 from typing_extensions import final
 
-from returns.interfaces import altable, equable, rescuable, unwrappable
+from returns.interfaces import bimappable, equable, rescuable, unwrappable
 from returns.interfaces.container import ContainerN
 from returns.primitives.asserts import assert_equal
 from returns.primitives.hkt import KindN
@@ -122,7 +122,7 @@ class _LawSpec(LawSpecDef):
 
 class ResultLikeN(
     ContainerN[_FirstType, _SecondType, _ThirdType],
-    altable.AltableN[_FirstType, _SecondType, _ThirdType],
+    bimappable.BiMappableN[_FirstType, _SecondType, _ThirdType],
     rescuable.RescuableN[_FirstType, _SecondType, _ThirdType],
     Lawful['ResultLikeN[_FirstType, _SecondType, _ThirdType]'],
 ):
