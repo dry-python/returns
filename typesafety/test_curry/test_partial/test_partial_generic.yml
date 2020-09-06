@@ -1,5 +1,5 @@
 - case: partial_wrong_generic
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.curry import partial
     from typing import List, TypeVar
@@ -22,7 +22,7 @@
 
 
 - case: partial_correct_generic
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.curry import partial
     from typing import List, TypeVar
@@ -44,7 +44,7 @@
 
 
 - case: partial_single_generic
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.curry import partial
     from typing import List, TypeVar
@@ -80,7 +80,7 @@
 
 
 - case: partial_double_generic_complex37
-  disable_cache: true
+  disable_cache: false
   skip: sys.version_info[:2] >= (3, 8)
   main: |
     from returns.curry import partial
@@ -117,7 +117,7 @@
 
 # Python3.8+ sorts generic arguments differently:
 - case: partial_double_generic_complex38
-  disable_cache: true
+  disable_cache: false
   skip: sys.version_info[:2] < (3, 8)
   main: |
     from returns.curry import partial
@@ -153,7 +153,7 @@
 
 
 - case: partial_double_generic
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.curry import partial
     from typing import List, TypeVar, Union

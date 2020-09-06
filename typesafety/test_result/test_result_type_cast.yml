@@ -1,5 +1,5 @@
 - case: result_success_cast1
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.result import Result, Success
 
@@ -8,7 +8,7 @@
 
 
 - case: result_success_cast2
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.result import Result, Success
 
@@ -17,7 +17,7 @@
 
 
 - case: result_failure_cast1
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.result import Result, Failure
 
@@ -26,7 +26,7 @@
 
 
 - case: result_failure_cast2
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.result import Result, Failure
 
@@ -35,7 +35,7 @@
 
 
 - case: result_swap
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.result import Result
 
@@ -44,7 +44,7 @@
 
 
 - case: result_getattr
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.result import Result
 
@@ -53,7 +53,7 @@
 
 
 - case: result_from_value
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.result import Result
 
@@ -61,7 +61,7 @@
 
 
 - case: result_from_failure
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.result import Result
 
@@ -69,7 +69,7 @@
 
 
 - case: result_from_result
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.result import Result
 
@@ -78,7 +78,7 @@
 
 
 - case: result_from_iterable1
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.result import Result
     from typing import List, Iterable, Sequence, Iterator, Tuple
@@ -97,7 +97,7 @@
 
 
 - case: result_from_iterable2
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.result import Result
     from returns.primitives.iterables import CollectAll
@@ -109,7 +109,7 @@
 
 
 - case: result_covariant_cast
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.result import Result
 
@@ -119,7 +119,7 @@
 
 
 - case: result_success_bind_contra1
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.result import Result, Success
 
@@ -131,7 +131,7 @@
 
 
 - case: result_success_bind_contra2
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.result import Result, Success
 
@@ -144,7 +144,7 @@
 
 
 - case: result_correct_usage
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.result import Result, Success, Failure
 
@@ -157,7 +157,7 @@
 
 
 - case: result_success_type
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.result import Result
 
@@ -165,7 +165,7 @@
 
 
 - case: result_failure_type
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.result import Result
 
@@ -173,7 +173,7 @@
 
 
 - case: resulte_typecast1
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.result import Result, ResultE, Success, Failure
 
@@ -187,7 +187,7 @@
 
 
 - case: resulte_typecast2
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.result import Result, ResultE, Success, Failure
 

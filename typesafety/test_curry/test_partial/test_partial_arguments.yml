@@ -1,5 +1,5 @@
 - case: partial_complex_args
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.curry import partial
 
@@ -38,7 +38,7 @@
 
 
 - case: partial_args_kwargs
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.curry import partial
 
@@ -52,7 +52,7 @@
 
 
 - case: partial_pos_only_args
-  disable_cache: true
+  disable_cache: false
   skip: sys.version_info[:2] < (3, 8)
   main: |
     from returns.curry import partial
@@ -74,7 +74,7 @@
 
 
 - case: partial_object
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.curry import partial
 
@@ -97,7 +97,7 @@
 
 
 - case: partial_classmethod
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.curry import partial
 
@@ -110,7 +110,7 @@
 
 
 - case: partial_staticmethod
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.curry import partial
 
@@ -123,7 +123,7 @@
 
 
 - case: partial_union
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import Union
     from returns.curry import partial
@@ -146,7 +146,7 @@
 
 
 - case: partial_type_var
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import Callable, TypeVar
     from returns.curry import partial
@@ -166,7 +166,7 @@
 
 
 - case: partial_type_type
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import Type, TypeVar
     from returns.curry import partial
@@ -185,7 +185,7 @@
 
 
 - case: partial_star_arg
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.curry import partial
 
@@ -196,7 +196,7 @@
 
 
 - case: partial_star2_arg
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.curry import partial
 
@@ -207,7 +207,7 @@
 
 
 - case: partial_lambda
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.curry import partial
 

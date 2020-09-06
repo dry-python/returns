@@ -1,5 +1,5 @@
 - case: iterable_inheritance_correct1
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import Any, Type, TypeVar, Iterable, Sequence
     from returns.interfaces.iterable import Iterable1
@@ -24,7 +24,7 @@
 
 
 - case: iterable_inheritance_correct2
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import Any, Type, TypeVar, Iterable, Sequence
     from returns.interfaces.iterable import Iterable2
@@ -51,7 +51,7 @@
 
 
 - case: iterable_inheritance_correct3
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import Any, Type, TypeVar, Iterable, Sequence
     from returns.interfaces.iterable import Iterable3
@@ -80,7 +80,7 @@
 
 
 - case: iterable_inheritance_missing
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import TypeVar
     from returns.interfaces.iterable import Iterable1
@@ -97,7 +97,7 @@
 
 
 - case: iterable_inheritance_wrong1
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import TypeVar, Iterable
     from returns.interfaces.iterable import Iterable1
@@ -118,7 +118,7 @@
 
 
 - case: iterable_inheritance_wrong2
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import Any, Type, TypeVar, Iterable, Sequence
     from returns.interfaces.iterable import Iterable2

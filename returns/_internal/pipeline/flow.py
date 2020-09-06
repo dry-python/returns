@@ -49,4 +49,4 @@ def _flow(
 
     Requires our :ref:`mypy plugin <mypy-plugins>`.
     """
-    return reduce(compose, functions)(instance)
+    return reduce(compose, functions)(instance)  # type: ignore

@@ -1,5 +1,5 @@
 - case: success_bind
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.result import Success, Result
 
@@ -11,7 +11,7 @@
 
 
 - case: success_bind_result
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.result import Success, Result
 
@@ -23,7 +23,7 @@
 
 
 - case: success_unify1
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.result import Success, Result
 
@@ -35,7 +35,7 @@
 
 
 - case: success_unify2
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import Union
     from returns.result import Success, Result
@@ -48,7 +48,7 @@
 
 
 - case: success_unify3
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import Union
     from returns.result import Success, Result
@@ -61,7 +61,7 @@
 
 
 - case: success_map
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.result import Success, Result
 
@@ -69,7 +69,7 @@
 
 
 - case: success_apply1
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.result import Success, Result
 
@@ -77,7 +77,7 @@
 
 
 - case: success_apply2
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.result import Success, Result
     from returns.curry import curry
@@ -90,7 +90,7 @@
 
 
 - case: success_value_or
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.result import Success
 
@@ -98,7 +98,7 @@
 
 
 - case: success_unwrap
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.result import Success
 

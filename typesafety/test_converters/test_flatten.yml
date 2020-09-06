@@ -1,5 +1,5 @@
 - case: flatten_wrong_flatten_non_bindable
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import Callable, TypeVar
     from returns.converters import flatten
@@ -19,7 +19,7 @@
 
 
 - case: flatten_wrong_error_type
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.converters import flatten
     from returns.result import Result
@@ -30,7 +30,7 @@
 
 
 - case: flatten_custom_type
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import TypeVar
     from returns.converters import flatten
@@ -47,7 +47,7 @@
 
 
 - case: flatten_wrong_flatten_error_type
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.converters import flatten
     from returns.result import Result
@@ -61,7 +61,7 @@
 
 
 - case: flatten_io
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.converters import flatten
     from returns.io import IO
@@ -70,7 +70,7 @@
 
 
 - case: flatten_maybe
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.converters import flatten
     from returns.maybe import Some
@@ -79,7 +79,7 @@
 
 
 - case: flatten_result
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.converters import flatten
     from returns.result import Result
@@ -91,7 +91,7 @@
 
 
 - case: flatten_ioresult
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.converters import flatten
     from returns.io import IOResult
@@ -103,7 +103,7 @@
 
 
 - case: flatten_context
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.converters import flatten
     from returns.context import RequiresContext
@@ -114,7 +114,7 @@
 
 
 - case: flatten_context_result
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.converters import flatten
     from returns.context import RequiresContextResult
@@ -125,7 +125,7 @@
 
 
 - case: flatten_context_ioresult
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.converters import flatten
     from returns.context import RequiresContextIOResult
@@ -136,7 +136,7 @@
 
 
 - case: flatten_context_ioresult
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.converters import flatten
     from returns.context import RequiresContextIOResult
@@ -147,7 +147,7 @@
 
 
 - case: flatten_future_result
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.converters import flatten
     from returns.context import ReaderFutureResult
@@ -158,7 +158,7 @@
 
 
 - case: flatten_future_result
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.converters import flatten
     from returns.future import FutureResult

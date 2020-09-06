@@ -1,12 +1,12 @@
 - case: collect_traces_context_manager_return_type_one
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.primitives.tracing import collect_traces
 
     reveal_type(collect_traces)  # N: Revealed type is 'Overload(def () -> typing.ContextManager[None], def [_FunctionType <: def (*Any, **Any) -> Any] (function: _FunctionType`-1) -> _FunctionType`-1)'
 
 - case: collect_traces_context_manager_return_type_two
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.primitives.tracing import collect_traces
 
@@ -14,7 +14,7 @@
         pass
 
 - case: collect_traces_decorated_function_return_type
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.primitives.tracing import collect_traces
 
@@ -25,7 +25,7 @@
     reveal_type(function)  # N: Revealed type is 'def () -> builtins.int'
 
 - case: collect_traces_decorated_function_with_argument_return_type
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.primitives.tracing import collect_traces
 

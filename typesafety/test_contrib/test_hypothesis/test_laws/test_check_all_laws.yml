@@ -1,5 +1,5 @@
 - case: check_all_laws
-  disable_cache: true
+  disable_cache: false
   parametrized:
     - container: Result
     - container: Maybe
@@ -27,7 +27,7 @@
 
 
 - case: test_all_laws_sig
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.contrib.hypothesis.laws import check_all_laws
 

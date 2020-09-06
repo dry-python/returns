@@ -1,5 +1,5 @@
 - case: equable_correct_inheritance1
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.primitives.hkt import SupportsKind1
     from returns.interfaces.equable import SupportsEquality
@@ -23,7 +23,7 @@
 
 
 - case: equable_correct_inheritance2
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.primitives.hkt import SupportsKind1
     from returns.interfaces.equable import SupportsEquality
@@ -47,7 +47,7 @@
 
 
 - case: equable_inheritance_missing
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.primitives.hkt import SupportsKind1
     from returns.interfaces.equable import SupportsEquality
@@ -67,7 +67,7 @@
 
 
 - case: equable_inheritance_wrong
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.primitives.hkt import SupportsKind1
     from returns.interfaces.equable import SupportsEquality

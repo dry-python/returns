@@ -1,5 +1,5 @@
 - case: bind_result_and_flow
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.result import Result
     from returns.io import IOResult
@@ -18,7 +18,7 @@
 
 
 - case: bind_result_wrong_first_type
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import bind_result
     from returns.context import RequiresContextFutureResult
@@ -32,7 +32,7 @@
 
 
 - case: bind_result_wrong_second_type
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import bind_result
     from returns.context import RequiresContextFutureResult
@@ -46,7 +46,7 @@
 
 
 - case: bind_result_result
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import bind_result
     from returns.result import Result
@@ -59,7 +59,7 @@
 
 
 - case: bind_result_ioresult
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import bind_result
     from returns.io import IOResult
@@ -73,7 +73,7 @@
 
 
 - case: bind_result_requires_context_result
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import bind_result
     from returns.context import RequiresContextResult
@@ -87,7 +87,7 @@
 
 
 - case: bind_result_requires_context_ioresult
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import bind_result
     from returns.context import RequiresContextIOResult
@@ -101,7 +101,7 @@
 
 
 - case: bind_result_requires_context_future_result
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import bind_result
     from returns.context import RequiresContextFutureResult
@@ -115,7 +115,7 @@
 
 
 - case: bind_result_future_result
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import bind_result
     from returns.future import FutureResult
@@ -129,7 +129,7 @@
 
 
 - case: bind_result_custom_type
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import TypeVar
     from returns.interfaces.specific.result import ResultBased2

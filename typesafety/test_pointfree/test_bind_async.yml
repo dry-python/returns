@@ -1,5 +1,5 @@
 - case: bind_async_wrong_value
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import bind_async
     from returns.future import Future
@@ -12,7 +12,7 @@
 
 
 - case: bind_async_wrong_second_type
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import bind_async
     from returns.future import FutureResult
@@ -25,7 +25,7 @@
 
 
 - case: bind_async_wrong_instance_type
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import bind_async
     from returns.io import IO
@@ -41,7 +41,7 @@
 
 
 - case: bind_async_wrong_function_type
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import bind_async
     from returns.future import Future
@@ -57,7 +57,7 @@
 
 
 - case: bind_async_with_flow
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import bind_async
     from returns.pipeline import flow
@@ -70,11 +70,11 @@
         ...
 
     x: Future[float]
-    reveal_type(flow(x, bind_async(test1), bind_async(test2)))  # N: Revealed type is 'returns.future.Future[builtins.str]'
+    reveal_type(flow(x, bind_async(test1), bind_async(test2)))  # N: Revealed type is 'returns.future.Future*[builtins.str*]'
 
 
 - case: bind_async_requires_context_future_result
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import bind_async
     from returns.context import RequiresContextFutureResult
@@ -87,7 +87,7 @@
 
 
 - case: bind_async_future
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import bind_async
     from returns.future import Future
@@ -100,7 +100,7 @@
 
 
 - case: bind_async_future_result
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import bind_async
     from returns.future import FutureResult
@@ -113,7 +113,7 @@
 
 
 - case: bind_async_custom_type
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import bind_async
     from returns.primitives.hkt import SupportsKind1

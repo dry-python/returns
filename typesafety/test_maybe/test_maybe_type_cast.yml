@@ -1,5 +1,5 @@
 - case: maybe_correct_cast
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.maybe import Maybe
 
@@ -9,7 +9,7 @@
 
 
 - case: maybe_getattr
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.maybe import Maybe
 
@@ -18,7 +18,7 @@
 
 
 - case: maybe_some_constructor
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.maybe import Some
 
@@ -26,7 +26,7 @@
 
 
 - case: maybe_nothing_const
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.maybe import Nothing
 
@@ -34,7 +34,7 @@
 
 
 - case: maybe_result_success_type
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.maybe import Maybe
 
@@ -42,7 +42,7 @@
 
 
 - case: maybe_result_failure_type
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.maybe import Maybe
 

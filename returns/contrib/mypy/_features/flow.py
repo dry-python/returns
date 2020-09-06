@@ -37,10 +37,18 @@ def analyze(ctx: FunctionContext) -> MypyType:
         ctx.api.fail('Too few arguments for "_flow"', ctx.context)
         return ctx.default_return_type
 
+    # We use custom argument type inference here,
+    # because for some reason, `mypy` does not do it correctly.
+    # It inferes `covariant` types incorrectly.
+    real_arg_types = [
+        ctx.api.expr_checker.accept(arg)   # type: ignore
+        for arg in ctx.args[1]
+    ]
+
     return PipelineInference(
         ctx.arg_types[0][0],
     ).from_callable_sequence(
-        [ctx.api.expr_checker.accept(arg) for arg in ctx.args[1]],
+        real_arg_types,
         ctx.arg_kinds[1],
         ctx,
     )

@@ -1,5 +1,5 @@
 - case: dekind_correct_fully_known
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IO
     from returns.primitives.hkt import Kind1, dekind
@@ -9,7 +9,7 @@
 
 
 - case: dekind_bindable
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.interfaces.bindable import Bindable1
     from typing import Callable, TypeVar
@@ -28,7 +28,7 @@
 
 
 - case: dekind_correct_two_type_args
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.io import IOResult
     from returns.primitives.hkt import Kind2, dekind
@@ -38,7 +38,7 @@
 
 
 - case: dekind_correct_typevar
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import Callable, TypeVar
     from returns.primitives.hkt import SupportsKind1, Kind1, dekind
@@ -57,7 +57,7 @@
 
 
 - case: dekind_wrong_non_instance
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import TypeVar
     from returns.primitives.hkt import Kind2, dekind

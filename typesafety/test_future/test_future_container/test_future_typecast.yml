@@ -1,5 +1,5 @@
 - case: future_correct_cast
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.future import Future
 
@@ -9,7 +9,7 @@
 
 
 - case: future_from_value
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.future import Future
 
@@ -17,7 +17,7 @@
 
 
 - case: future_from_iterable1
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.future import Future
     from typing import Iterable
@@ -28,7 +28,7 @@
 
 
 - case: future_from_iterable2
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.future import Future
     from returns.primitives.iterables import CollectAll
@@ -40,7 +40,7 @@
 
 
 - case: future_from_io
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.future import Future
     from returns.io import IO
@@ -49,7 +49,7 @@
 
 
 - case: future_from_downcast
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.future import Future, FutureResult
 

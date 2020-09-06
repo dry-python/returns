@@ -1,5 +1,5 @@
 - case: map_variance
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import map_
     from returns.maybe import Maybe
@@ -17,7 +17,7 @@
 
 
 - case: map_callback_protocol
-  disable_cache: true
+  disable_cache: false
   main: |
     from typing import Callable, TypeVar
     from returns.pointfree import map_
@@ -45,7 +45,7 @@
 
 
 - case: map_and_flow
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.result import Result
     from returns.functions import identity
@@ -76,7 +76,7 @@
 
 
 - case: map_io
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import map_
     from returns.io import IO
@@ -88,7 +88,7 @@
 
 
 - case: map_maybe
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import map_
     from returns.maybe import Maybe
@@ -100,7 +100,7 @@
 
 
 - case: map_result
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import map_
     from returns.result import Result
@@ -113,7 +113,7 @@
 
 
 - case: map_ioresult
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import map_
     from returns.io import IOResult
@@ -126,7 +126,7 @@
 
 
 - case: map_requires_context
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import map_
     from returns.context import RequiresContext
@@ -139,7 +139,7 @@
 
 
 - case: map_requires_context_result
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import map_
     from returns.context import RequiresContextResult
@@ -152,7 +152,7 @@
 
 
 - case: map_requires_context_ioresult
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import map_
     from returns.context import RequiresContextIOResult
@@ -165,7 +165,7 @@
 
 
 - case: map_requires_context_future_result
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import map_
     from returns.context import RequiresContextFutureResult
@@ -178,7 +178,7 @@
 
 
 - case: map_future
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import map_
     from returns.future import Future
@@ -190,7 +190,7 @@
 
 
 - case: map_future_result
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import map_
     from returns.future import FutureResult
@@ -203,7 +203,7 @@
 
 
 - case: map_custom_type
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.pointfree import map_
     from returns.primitives.hkt import SupportsKind1

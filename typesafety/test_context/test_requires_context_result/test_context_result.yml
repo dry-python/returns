@@ -1,5 +1,5 @@
 - case: context_ask1
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.context import RequiresContextResult
 
@@ -7,7 +7,7 @@
 
 
 - case: context_ask2
-  disable_cache: true
+  disable_cache: false
   main: |
     from returns.context import RequiresContextResult
 
