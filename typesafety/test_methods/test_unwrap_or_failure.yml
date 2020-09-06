@@ -1,0 +1,35 @@
+- case: unwrap_or_failure_result
+  disable_cache: false
+  main: |
+    from returns.methods import unwrap_or_failure
+    from returns.result import Result
+
+    x: Result[int, str]
+    reveal_type(unwrap_or_failure(x))  # N: Revealed type is 'Union[builtins.int*, builtins.str*]'
+
+
+- case: unwrap_or_failure_ioresult
+  disable_cache: false
+  main: |
+    from returns.methods import unwrap_or_failure
+    from returns.io import IOResult
+
+    x: IOResult[int, str]
+    reveal_type(unwrap_or_failure(x))  # N: Revealed type is 'Union[returns.io.IO*[builtins.int*], returns.io.IO*[builtins.str*]]'
+
+
+- case: unwrap_or_failure_custom_type
+  disable_cache: false
+  main: |
+    from typing import TypeVar
+    from returns.interfaces.unwrappable import Unwrappable
+    from returns.methods import unwrap_or_failure
+
+    ValueType = TypeVar('ValueType')
+    ErrorType = TypeVar('ErrorType')
+
+    class MyOwn(Unwrappable[ValueType, ErrorType]):
+        ...
+
+    x: MyOwn[int, str]
+    reveal_type(unwrap_or_failure(x))  # N: Revealed type is 'Union[builtins.int*, builtins.str*]'
