@@ -12,8 +12,7 @@ _ThirdType = TypeVar('_ThirdType')
 _ContainerKind = TypeVar('_ContainerKind', bound=ContainerN)
 
 
-@kinded
-def iterable_kind(
+def internal_iterable_kind(
     cls,
     sequence: Iterable[
         KindN[_ContainerKind, _FirstType, _SecondType, _ThirdType],
@@ -37,3 +36,7 @@ def iterable_kind(
     And since this is an internal function, we don't really care.
     """
     return strategy(sequence, cls.from_value(()))()
+
+
+#: Kinded version of the same `iterable_kind`
+iterable_kind = kinded(internal_iterable_kind)
