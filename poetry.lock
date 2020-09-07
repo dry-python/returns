@@ -136,7 +136,7 @@ version = "7.1.2"
 [[package]]
 category = "dev"
 description = "Cross-platform colored terminal text."
-marker = "platform_system == \"Windows\" or sys_platform == \"win32\""
+marker = "sys_platform == \"win32\" or platform_system == \"Windows\""
 name = "colorama"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
@@ -509,7 +509,7 @@ description = "A library for property-based testing"
 name = "hypothesis"
 optional = false
 python-versions = ">=3.5.2"
-version = "5.32.0"
+version = "5.33.0"
 
 [package.dependencies]
 attrs = ">=19.2.0"
@@ -1410,7 +1410,8 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "de1cfa627777605cafa5373f38088251a9fdd93f53bf7ce2f4d73c5407a7ad21"
+content-hash = "228c75106659d5c5f07237bcb4de861e3088c910f57ffecd5b8bdf8e4b75f05b"
+lock-version = "1.0"
 python-versions = "^3.6"
 
 [metadata.files]
@@ -1642,8 +1643,8 @@ gitpython = [
     {file = "GitPython-3.1.7.tar.gz", hash = "sha256:2db287d71a284e22e5c2846042d0602465c7434d910406990d5b74df4afb0858"},
 ]
 hypothesis = [
-    {file = "hypothesis-5.32.0-py3-none-any.whl", hash = "sha256:f95ab883c6260026b3462c54fdbe2a14c4066f3ab603ed8c3b639fb2f0ed053d"},
-    {file = "hypothesis-5.32.0.tar.gz", hash = "sha256:92b993398097e9e135381d1590c72feda02b8635ce2b64e52ab8ecc0191fbe82"},
+    {file = "hypothesis-5.33.0-py3-none-any.whl", hash = "sha256:37d106550f7fa3a81e4e2c318df2922b31568ab3f77153f30370acf4065b0369"},
+    {file = "hypothesis-5.33.0.tar.gz", hash = "sha256:d2207d1e570c8aeb571a69c93175dad9488db88a632b60f1e43a815cb26e0904"},
 ]
 idna = [
     {file = "idna-2.10-py2.py3-none-any.whl", hash = "sha256:b97d804b1e9b523befed77c48dacec60e6dcb0b5391d57af6a65a312a90648c0"},
