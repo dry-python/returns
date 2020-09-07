@@ -30,6 +30,7 @@ To use it in your tests, request ``returns`` fixture like so:
   def test_my_container(returns):
       ...
 
+
 is_error_handled
 ~~~~~~~~~~~~~~~~
 
@@ -96,6 +97,15 @@ created and looking for the desired function.
 
   >>> test_if_failure_is_created_at_convert_function(returns_fixture)
   >>> test_if_success_is_created_at_convert_function(returns_fixture)
+
+
+markers
+~~~~~~~
+
+We also ship a bunch of pre-defined markers with ``returns``:
+
+- ``returns_lawful`` is used to mark all tests generated
+  by our :ref:`hypothesis-plugins`
 
 
 Further reading

@@ -67,6 +67,12 @@ This will increase the number of generated test to 500.
 We support all kwargs from ``@settings``, see
 `@settings docs <https://hypothesis.readthedocs.io/en/latest/settings.html>`_.
 
+Warning::
+  Checking laws is not compatible with ``pytest-xdist``,
+  because we use a lot of global mutable state there.
+  Please, use ``returns_lawful`` marker
+  to exclude them from ``pytest-xdist`` execution plan.
+
 
 Further reading
 ---------------
