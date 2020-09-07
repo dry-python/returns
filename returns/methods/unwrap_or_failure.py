@@ -11,7 +11,7 @@ def unwrap_or_failure(
     container: Unwrappable[_FirstType, _SecondType],
 ) -> Union[_FirstType, _SecondType]:
     """
-    Unwraps either succesful or failed value.
+    Unwraps either successful or failed value.
 
     .. code:: python
 
