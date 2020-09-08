@@ -67,6 +67,51 @@ This will increase the number of generated test to 500.
 We support all kwargs from ``@settings``, see
 `@settings docs <https://hypothesis.readthedocs.io/en/latest/settings.html>`_.
 
+You can also change how ``hypothesis`` creates instances of your container.
+By default, we use ``.from_value``, ``.from_optional``, and ``.from_failure``
+if we are able to find them.
+
+But, you can also pass types without these methods,
+but with ``__init__`` defined:
+
+.. code:: python
+
+  from typing import Callable, TypeVar
+  from typing_extensions import final
+  from returns.interfaces.mappable import Mappable1
+  from returns.primitives.container import BaseContainer
+  from returns.primitives.hkt import SupportsKind1
+
+  _ValueType = TypeVar('_ValueType')
+  _NewValueType = TypeVar('_NewValueType')
+
+  @final
+  class Number(
+      BaseContainer,
+      SupportsKind1['Number', _ValueType],
+      Mappable1[_ValueType],
+  ):
+      def __init__(self, inner_value: _ValueType) -> None:
+          super().__init__(inner_value)
+
+      def map(
+          self,
+          function: Callable[[_ValueType], _NewValueType],
+      ) -> 'Number[_NewValueType]':
+          return Number(function(self._inner_value))
+
+  # We want to allow ``__init__`` method to be used:
+  check_all_laws(Number, use_init=True)
+
+As you see, we don't support any ``from`` methods here.
+But, ``__init__`` would be used to generate values thanks to ``use_init=True``.
+
+By default, we don't allow to use ``__init__``,
+because there are different complex types
+like ``Future``, ``ReaderFutureResult``, etc
+that have complex ``__init__`` signatures.
+And we don't want to mess with them.
+
 Warning::
   Checking laws is not compatible with ``pytest-xdist``,
   because we use a lot of global mutable state there.

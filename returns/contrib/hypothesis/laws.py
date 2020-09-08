@@ -1,24 +1,45 @@
 import inspect
 import sys
 from contextlib import contextmanager
-from typing import Any, Callable, Dict, Iterator, List, Optional, Type, TypeVar
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    Iterator,
+    List,
+    NamedTuple,
+    Optional,
+    Type,
+    TypeVar,
+)
 
 import pytest
-from hypothesis import given, settings
+from hypothesis import given
+from hypothesis import settings as hypothesis_settings
 from hypothesis import strategies as st
 from hypothesis.strategies._internal import types
+from typing_extensions import final
 
 from returns.interfaces.applicative import ApplicativeN
-from returns.interfaces.specific.result import ResultLikeN
+from returns.interfaces.specific import maybe, result
 from returns.primitives.laws import Law, Lawful
 
 _pyversion = sys.version_info[:2]
+
+
+@final
+class _Settings(NamedTuple):
+    """Settings that we provide to an end user."""
+
+    settings_kwargs: Dict[str, Any]
+    use_init: bool
 
 
 def check_all_laws(
     container_type: Type[Lawful],
     *,
     settings_kwargs: Optional[Dict[str, Any]] = None,
+    use_init: bool = False,
 ) -> None:
     """
     Function to check all definied mathematical laws in a specified container.
@@ -43,18 +64,27 @@ def check_all_laws(
 
     See: https://mmhaskell.com/blog/2017/3/13/obey-the-type-laws
     """
+    settings = _Settings(
+        settings_kwargs if settings_kwargs is not None else {},
+        use_init,
+    )
+
     for interface, laws in container_type.laws().items():
         for law in laws:
             _create_law_test_case(
                 container_type,
                 interface,
                 law,
-                settings_kwargs=settings_kwargs,
+                settings=settings,
             )
 
 
 @contextmanager
-def container_strategies(container_type: Type[Lawful]) -> Iterator[None]:
+def container_strategies(
+    container_type: Type[Lawful],
+    *,
+    settings: _Settings,
+) -> Iterator[None]:
     """
     Registers all types inside a container to resolve to a correct strategy.
 
@@ -64,26 +94,45 @@ def container_strategies(container_type: Type[Lawful]) -> Iterator[None]:
 
     Can be used independently from other functions.
     """
-    def factory(type_) -> st.SearchStrategy:
-        strategies: List[st.SearchStrategy[Any]] = []
-        if issubclass(container_type, ApplicativeN):
-            strategies.append(st.builds(container_type.from_value))
-        if issubclass(container_type, ResultLikeN):
-            strategies.append(st.builds(container_type.from_failure))
-        return st.one_of(*strategies)
-
-    interfaces = {
+    our_interfaces = {
         base_type
         for base_type in container_type.__mro__
         if getattr(base_type, '__module__', '').startswith('returns.')
     }
-    for interface in interfaces:
-        st.register_type_strategy(interface, factory)
+    for interface in our_interfaces:
+        st.register_type_strategy(
+            interface,
+            _create_container_factory(
+                container_type,
+                use_init=settings.use_init,
+            ),
+        )
+
+    with maybe_register_container(container_type, use_init=settings.use_init):
+        yield
+
+    for interface in our_interfaces:
+        types._global_type_lookup.pop(interface)  # noqa: WPS441
+
+
+@contextmanager
+def maybe_register_container(
+    container_type: Type[Lawful],
+    *,
+    use_init: bool,
+) -> Iterator[None]:
+    """Temporary registeres a container if it is not registered yet."""
+    unknown_container = container_type not in types._global_type_lookup
+    if unknown_container:
+        st.register_type_strategy(
+            container_type,
+            _create_container_factory(container_type, use_init=use_init),
+        )
 
     yield
 
-    for interface in interfaces:
-        types._global_type_lookup.pop(interface)  # noqa: WPS441
+    if unknown_container:
+        types._global_type_lookup.pop(container_type)  # noqa: WPS441
 
 
 @contextmanager
@@ -144,9 +193,44 @@ def type_vars() -> Iterator[None]:
     st.register_type_strategy(TypeVar, used)  # type: ignore
 
 
+def _create_container_factory(
+    container_type: Type[Lawful],
+    *,
+    use_init: bool,
+) -> Callable[[type], st.SearchStrategy]:
+    """
+    Creates a strategy from a container type.
+
+    Basically, containers should not support ``__init__``
+    even when they have one.
+    Because, that can be very complex: for example ``FutureResult`` requires
+    ``Awaitable[Result[a, b]]`` as an ``__init__`` value.
+
+    But, custom containers pass ``use_init``
+    if they are not an instance of ``ApplicativeN``
+    and do not have a working ``.from_value`` method.
+
+    For example, pure ``MappableN`` can do that.
+    """
+    def factory(type_: type) -> st.SearchStrategy:
+        strategies: List[st.SearchStrategy[Any]] = []
+        if use_init and getattr(container_type, '__init__', None):
+            strategies.append(st.builds(container_type))
+        if issubclass(container_type, ApplicativeN):
+            strategies.append(st.builds(container_type.from_value))
+        if issubclass(container_type, result.ResultLikeN):
+            strategies.append(st.builds(container_type.from_failure))
+        if issubclass(container_type, maybe.MaybeLikeN):
+            strategies.append(st.builds(container_type.from_optional))
+        return st.one_of(*strategies)
+    return factory
+
+
 def _run_law(
     container_type: Type[Lawful],
     law: Law,
+    *,
+    settings: _Settings,
 ) -> Callable[[st.DataObject], None]:
     def factory(source: st.DataObject) -> None:
         if _pyversion < (3, 7):  # pragma: no cover
@@ -158,7 +242,7 @@ def _run_law(
 
         with type_vars():
             with pure_functions():
-                with container_strategies(container_type):
+                with container_strategies(container_type, settings=settings):
                     source.draw(st.builds(law.definition))
     return factory
 
@@ -168,14 +252,11 @@ def _create_law_test_case(
     interface: Type[Lawful],
     law: Law,
     *,
-    settings_kwargs: Optional[Dict[str, Any]],
+    settings: _Settings,
 ) -> None:
-    if settings_kwargs is None:
-        settings_kwargs = {}
-
     test_function = given(st.data())(
-        settings(**settings_kwargs)(
-            _run_law(container_type, law),
+        hypothesis_settings(**settings.settings_kwargs)(
+            _run_law(container_type, law, settings=settings),
         ),
     )
 
