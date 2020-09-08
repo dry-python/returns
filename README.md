@@ -96,14 +96,14 @@ from returns.maybe import Maybe, maybe
 def bad_function() -> Optional[int]:
     ...
 
-maybe_number: Maybe[float] = bad_function().map(
+maybe_number: Maybe[float] = bad_function().bind_optional(
     lambda number: number / 2,
 )
 # => Maybe will return Some[float] only if there's a non-None value
 #    Otherwise, will return Nothing
 ```
 
-You can be sure that `.map()` method won't be called for `Nothing`.
+You can be sure that `.bind_optional()` method won't be called for `Nothing`.
 Forget about `None`-related errors forever!
 
 We can also bind a `Optional`-returning function over a container.
