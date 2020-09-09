@@ -1,9 +1,17 @@
+import sys
 from typing import Callable, TypeVar
+
+import pytest
 
 from returns.contrib.hypothesis.laws import check_all_laws
 from returns.interfaces import mappable
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import SupportsKind1
+
+pytestmark = pytest.mark.skipif(
+    sys.version_info < (3, 7),
+    reason='Python 3.6 does not support many hypothesis features',
+)
 
 _ValueType = TypeVar('_ValueType')
 _NewValueType = TypeVar('_NewValueType')
