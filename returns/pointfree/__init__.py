@@ -3,6 +3,9 @@ from returns.pointfree.apply import apply as apply
 from returns.pointfree.bimap import bimap as bimap
 from returns.pointfree.bind import bind as bind
 from returns.pointfree.bind_async import bind_async as bind_async
+from returns.pointfree.bind_async_context_future_result import (
+    bind_async_context_future_result as bind_async_context_future_result,
+)
 from returns.pointfree.bind_async_future import (
     bind_async_future as bind_async_future,
 )
@@ -13,6 +16,9 @@ from returns.pointfree.bind_awaitable import bind_awaitable as bind_awaitable
 from returns.pointfree.bind_context import bind_context as bind_context
 from returns.pointfree.bind_context import bind_context2 as bind_context2
 from returns.pointfree.bind_context import bind_context3 as bind_context3
+from returns.pointfree.bind_context_future_result import (
+    bind_context_future_result as bind_context_future_result,
+)
 from returns.pointfree.bind_context_ioresult import (
     bind_context_ioresult as bind_context_ioresult,
 )

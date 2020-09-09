@@ -1,0 +1,71 @@
+- case: reader_future_result_based_inheritance_correct
+  disable_cache: false
+  main: |
+    from typing import TypeVar
+    from returns.interfaces.specific.reader_future_result import (
+        ReaderFutureResultBased3,
+    )
+    from returns.primitives.hkt import SupportsKind3
+    from returns.future import FutureResult
+
+    T = TypeVar('T')
+    V = TypeVar('V')
+    U = TypeVar('U')
+
+    class MyClass(
+        SupportsKind3['MyClass', T, V, U],
+        ReaderFutureResultBased3[T, V, U],
+    ):
+        def __call__(self, deps: U) -> FutureResult[T, V]:
+            ...
+
+
+- case: reader_future_result_based_inheritance_missing
+  disable_cache: false
+  main: |
+    from typing import TypeVar
+    from typing_extensions import final
+    from returns.interfaces.specific.reader_future_result import (
+        ReaderFutureResultBased3,
+    )
+    from returns.primitives.hkt import SupportsKind3
+
+    T = TypeVar('T')
+    V = TypeVar('V')
+    U = TypeVar('U')
+
+    @final
+    class MyClass(
+        SupportsKind3['MyClass', T, V, U],
+        ReaderFutureResultBased3[T, V, U],
+    ):
+        ...
+  out: |
+    main:13: error: Final class main.MyClass has abstract attributes "__call__", "alt", "apply", "ask", "bind", "bind_async", "bind_async_context_future_result", "bind_async_future", "bind_async_future_result", "bind_awaitable", "bind_context", "bind_context_future_result", "bind_context_ioresult", "bind_context_result", "bind_future", "bind_future_result", "bind_io", "bind_ioresult", "bind_result", "compose_result", "empty", "from_context", "from_failed_context", "from_failed_future", "from_failed_io", "from_failure", "from_future", "from_future_result_context", "from_io", "from_ioresult", "from_ioresult_context", "from_iterable", "from_result", "from_result_context", "from_value", "map", "modify_env", "rescue", "swap"
+
+
+- case: reader_future_result_based_inheritance_wrong
+  disable_cache: false
+  main: |
+    from typing import TypeVar
+    from returns.interfaces.specific.reader_future_result import (
+        ReaderFutureResultBased3,
+    )
+    from returns.primitives.hkt import SupportsKind3
+    from returns.future import FutureResult
+
+    T = TypeVar('T')
+    V = TypeVar('V')
+    U = TypeVar('U')
+
+    class MyClass(
+        SupportsKind3['MyClass', T, V, U],
+        ReaderFutureResultBased3[T, V, U],
+    ):
+        def __call__(self, deps: T) -> FutureResult[V, U]:
+            ...
+  out: |
+    main:16: error: Argument 1 of "__call__" is incompatible with supertype "CanBeCalled"; supertype defines the argument type as "U"
+    main:16: error: Return type "FutureResult[V, U]" of "__call__" incompatible with return type "FutureResult[T, V]" in supertype "CanBeCalled"
+    main:16: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:16: note: This violates the Liskov substitution principle

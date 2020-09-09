@@ -26,7 +26,10 @@ def apply(
     Turns container containing a function into a callable.
 
     In other words, it modifies the function
-    signature from: ``Container[a -> b]`` to: ``Container[a] -> Container[b]``
+    signature from:
+    ``Container[a -> b]``
+    to:
+    ``Container[a] -> Container[b]``
 
     This is how it should be used:
 

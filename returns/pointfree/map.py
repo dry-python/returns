@@ -21,7 +21,9 @@ def map_(
     Lifts function to be wrapped in a container for better composition.
 
     In other words, it modifies the function's
-    signature from: ``a -> b`` to: ``Container[a] -> Container[b]``
+    signature from:
+    ``a -> b``
+    to: ``Container[a] -> Container[b]``
 
     This is how it should be used:
 

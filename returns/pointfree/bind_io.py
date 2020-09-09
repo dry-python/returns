@@ -24,8 +24,10 @@ def bind_io(
     Composes successful container with a function that returns a container.
 
     In other words, it modifies the function's
-    signature from: ``a -> IO[b]``
-    to: ``Container[a, c] -> Container[b, c]``
+    signature from:
+    ``a -> IO[b]``
+    to:
+    ``Container[a, c] -> Container[b, c]``
 
     .. code:: python
 

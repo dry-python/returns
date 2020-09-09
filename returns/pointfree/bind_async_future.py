@@ -25,8 +25,10 @@ def bind_async_future(
     Compose a container and async function returning ``Future``.
 
     In other words, it modifies the function
-    signature from: ``a -> Awaitable[Future[b]]``
-    to: ``Container[a] -> Container[b]``
+    signature from:
+    ``a -> Awaitable[Future[b]]``
+    to:
+    ``Container[a] -> Container[b]``
 
     This is how it should be used:
 

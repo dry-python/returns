@@ -24,7 +24,10 @@ def rescue(
     Turns function's input parameter from a regular value to a container.
 
     In other words, it modifies the function
-    signature from: ``a -> Container[b]`` to: ``Container[a] -> Container[b]``
+    signature from:
+    ``a -> Container[b]``
+    to:
+    ``Container[a] -> Container[b]``
 
     Similar to :func:`returns.pointfree.bind`, but works for failed containers.
 

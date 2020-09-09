@@ -24,8 +24,10 @@ def bind_ioresult(
     Composes successful container with a function that returns a container.
 
     In other words, it modifies the function's
-    signature from: ``a -> IOResult[b, c]``
-    to: ``Container[a, c] -> Container[b, c]``
+    signature from:
+    ``a -> IOResult[b, c]``
+    to:
+    ``Container[a, c] -> Container[b, c]``
 
     .. code:: python
 

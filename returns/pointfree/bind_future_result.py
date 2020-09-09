@@ -22,8 +22,10 @@ def bind_future_result(
     Compose a container and async function returning ``FutureResult``.
 
     In other words, it modifies the function
-    signature from: ``a -> FutureResult[b, c]``
-    to: ``Container[a, c] -> Container[b, c]``
+    signature from:
+    ``a -> FutureResult[b, c]``
+    to:
+    ``Container[a, c] -> Container[b, c]``
 
     This is how it should be used:
 

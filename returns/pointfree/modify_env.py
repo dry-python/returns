@@ -22,8 +22,10 @@ def modify_env2(
     Modifies the second type argument of a ``ReaderLike2``.
 
     In other words, it modifies the function's
-    signature from: ``a -> b``
-    to: ``Container[x, a] -> Container[x, b]``
+    signature from:
+    ``a -> b``
+    to:
+    ``Container[x, a] -> Container[x, b]``
 
     .. code:: python
 

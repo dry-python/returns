@@ -16,7 +16,7 @@ from returns._internal.futures import _reader_future_result
 from returns._internal.iterable import iterable_kind
 from returns.context import NoDeps
 from returns.future import Future, FutureResult
-from returns.interfaces.specific import future_result, reader_ioresult
+from returns.interfaces.specific import future_result, reader_future_result
 from returns.io import IO, IOResult
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind3, SupportsKind3, dekind
@@ -51,7 +51,9 @@ class RequiresContextFutureResult(
     SupportsKind3[
         'RequiresContextFutureResult', _ValueType, _ErrorType, _EnvType,
     ],
-    reader_ioresult.ReaderIOResultLikeN[_ValueType, _ErrorType, _EnvType],
+    reader_future_result.ReaderFutureResultBasedN[
+        _ValueType, _ErrorType, _EnvType,
+    ],
     future_result.FutureResultLike3[_ValueType, _ErrorType, _EnvType],
 ):
     """
@@ -307,6 +309,10 @@ class RequiresContextFutureResult(
             ),
         )
 
+    #: Alias for `bind_context_future_result` method,
+    #: it is the same as `bind` here.
+    bind_context_future_result = bind
+
     def bind_async(
         self,
         function: Callable[
@@ -354,6 +360,10 @@ class RequiresContextFutureResult(
                 function, self, deps,
             )),
         )
+
+    #: Alias for `bind_async_context_future_result` method,
+    #: it is the same as `bind_async` here.
+    bind_async_context_future_result = bind_async
 
     def bind_awaitable(
         self,
@@ -1112,6 +1122,38 @@ class RequiresContextFutureResult(
         return RequiresContextFutureResult(
             lambda _: FutureResult.from_failed_future(inner_value),
         )
+
+    @classmethod
+    def from_future_result_context(
+        cls,
+        inner_value:
+            'ReaderFutureResult[_NewValueType, _NewErrorType, _NewEnvType]',
+    ) -> 'ReaderFutureResult[_NewValueType, _NewErrorType, _NewEnvType]':
+        """
+        Creates new container with ``ReaderFutureResult`` as a unit value.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.context import RequiresContextFutureResult
+          >>> from returns.io import IOSuccess, IOFailure
+
+          >>> assert anyio.run(
+          ...    RequiresContextFutureResult.from_future_result_context(
+          ...        RequiresContextFutureResult.from_value(1),
+          ...    ),
+          ...    RequiresContextFutureResult.empty,
+          ... ) == IOSuccess(1)
+
+          >>> assert anyio.run(
+          ...    RequiresContextFutureResult.from_future_result_context(
+          ...        RequiresContextFutureResult.from_failure(1),
+          ...    ),
+          ...    RequiresContextFutureResult.empty,
+          ... ) == IOFailure(1)
+
+        """
+        return inner_value
 
     @classmethod
     def from_future_result(

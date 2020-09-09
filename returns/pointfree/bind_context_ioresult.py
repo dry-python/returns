@@ -30,7 +30,9 @@ def bind_context_ioresult(
     Lifts function from ``RequiresContextIOResult`` for better composition.
 
     In other words, it modifies the function's
-    signature from: ``a -> RequiresContextResult[env, b, c]`` to:
+    signature from:
+    ``a -> RequiresContextIOResult[env, b, c]``
+    to:
     ``Container[env, a, c]`` -> ``Container[env, b, c]``
 
     .. code:: python

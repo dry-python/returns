@@ -20,6 +20,12 @@ def bind_optional(
     """
     Binds a function returing optional value over a container.
 
+    In other words, it modifies the function's
+    signature from:
+    ``a -> Optional[b]``
+    to:
+    ``Container[a] -> Container[b]``
+
     .. code:: python
 
       >>> from typing import Optional

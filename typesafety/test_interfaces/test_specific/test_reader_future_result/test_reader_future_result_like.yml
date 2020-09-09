@@ -1,0 +1,116 @@
+- case: reader_future_result_like_inheritance_correct
+  disable_cache: false
+  main: |
+    from typing import TypeVar, Callable, Awaitable
+    from returns.interfaces.specific.reader_future_result import (
+        ReaderFutureResultLike3,
+    )
+    from returns.primitives.hkt import SupportsKind3
+    from returns.context import ReaderFutureResult
+
+    T = TypeVar('T')
+    V = TypeVar('V')
+    U = TypeVar('U')
+    N = TypeVar('N')
+
+    R1 = TypeVar('R1')
+    R2 = TypeVar('R2')
+    R3 = TypeVar('R3')
+
+    class MyClass(
+        SupportsKind3['MyClass', T, V, U],
+        ReaderFutureResultLike3[T, V, U],
+    ):
+        def bind_context_future_result(
+            self,
+            function: Callable[[T], ReaderFutureResult[N, V, U]],
+        ) -> MyClass[N, V, U]:
+            ...
+
+        def bind_async_context_future_result(
+            self,
+            function: Callable[[T], Awaitable[ReaderFutureResult[N, V, U]]],
+        ) -> MyClass[N, V, U]:
+            ...
+
+        @classmethod
+        def from_future_result_context(
+            cls,
+            inner_value: ReaderFutureResult[R1, R2, R3],
+        ) -> MyClass[R1, R2, R3]:
+            ...
+
+
+- case: reader_future_result_like_inheritance_missing
+  disable_cache: false
+  main: |
+    from typing import TypeVar
+    from typing_extensions import final
+    from returns.interfaces.specific.reader_future_result import (
+        ReaderFutureResultLike3,
+    )
+    from returns.primitives.hkt import SupportsKind3
+
+    T = TypeVar('T')
+    V = TypeVar('V')
+    U = TypeVar('U')
+
+    @final
+    class MyClass(
+        SupportsKind3['MyClass', T, V, U],
+        ReaderFutureResultLike3[T, V, U],
+    ):
+        ...
+  out: |
+    main:13: error: Final class main.MyClass has abstract attributes "alt", "apply", "ask", "bind", "bind_async", "bind_async_context_future_result", "bind_async_future", "bind_async_future_result", "bind_awaitable", "bind_context", "bind_context_future_result", "bind_context_ioresult", "bind_context_result", "bind_future", "bind_future_result", "bind_io", "bind_ioresult", "bind_result", "compose_result", "empty", "from_context", "from_failed_context", "from_failed_future", "from_failed_io", "from_failure", "from_future", "from_future_result_context", "from_io", "from_ioresult", "from_ioresult_context", "from_iterable", "from_result", "from_result_context", "from_value", "map", "modify_env", "rescue", "swap"
+
+
+- case: reader_future_result_like_inheritance_wrong
+  disable_cache: false
+  main: |
+    from typing import TypeVar, Callable, Awaitable
+    from returns.interfaces.specific.reader_future_result import (
+        ReaderFutureResultLike3,
+    )
+    from returns.primitives.hkt import SupportsKind3
+    from returns.context import ReaderFutureResult
+
+    T = TypeVar('T')
+    V = TypeVar('V')
+    U = TypeVar('U')
+    N = TypeVar('N')
+
+    class MyClass(
+        SupportsKind3['MyClass', T, V, U],
+        ReaderFutureResultLike3[T, V, U],
+    ):
+        def bind_context_future_result(
+            self,
+            function: Callable[[T], ReaderFutureResult[T, V, U]],
+        ) -> MyClass[T, V, U]:
+            ...
+
+        def bind_async_context_future_result(
+            self,
+            function: Callable[[T], ReaderFutureResult[N, V, U]],
+        ) -> MyClass[N, V, U]:
+            ...
+
+        @classmethod
+        def from_future_result_context(
+            cls,
+            inner_value: ReaderFutureResult[T, V, U],
+        ) -> MyClass[T, V, U]:
+            ...
+  out: |
+    main:17: error: Argument 1 of "bind_context_future_result" is incompatible with supertype "ReaderFutureResultLikeN"; supertype defines the argument type as "Callable[[T], RequiresContextFutureResult[_UpdatedType, V, U]]"
+    main:17: error: Return type "MyClass[T, V, U]" of "bind_context_future_result" incompatible with return type "KindN[MyClass[T, V, U], _UpdatedType, V, U]" in supertype "ReaderFutureResultLikeN"
+    main:17: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:17: note: This violates the Liskov substitution principle
+    main:23: error: Argument 1 of "bind_async_context_future_result" is incompatible with supertype "ReaderFutureResultLikeN"; supertype defines the argument type as "Callable[[T], Awaitable[RequiresContextFutureResult[_UpdatedType, V, U]]]"
+    main:23: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:23: note: This violates the Liskov substitution principle
+    main:30: error: Argument 1 of "from_future_result_context" is incompatible with supertype "ReaderFutureResultLikeN"; supertype defines the argument type as "RequiresContextFutureResult[_ValueType, _ErrorType, _EnvType]"
+    main:30: error: Return type "MyClass[T, V, U]" of "from_future_result_context" incompatible with return type "KindN[MyClass[T, V, U], _ValueType, _ErrorType, _EnvType]" in supertype "ReaderFutureResultLikeN"
+    main:30: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:30: note: This violates the Liskov substitution principle
