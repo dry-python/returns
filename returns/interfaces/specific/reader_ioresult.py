@@ -45,12 +45,7 @@ class ReaderIOResultLikeN(
         self: _ReaderIOResultLikeType,
         function: Callable[
             [_FirstType],
-            KindN[
-                _ReaderIOResultLikeType,
-                _UpdatedType,
-                _SecondType,
-                _ThirdType,
-            ],
+            'ReaderIOResult[_UpdatedType, _SecondType, _ThirdType]',
         ],
     ) -> KindN[_ReaderIOResultLikeType, _UpdatedType, _SecondType, _ThirdType]:
         """Binds a ``ReaderIOResult`` returning function over a container."""
