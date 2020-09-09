@@ -154,10 +154,10 @@ and internal implementation.
 How to compose error types?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You might want to sometimes use ``.unify`` instead of ``.bind``
-to compose error types together.
+You might want to sometimes use ``unify`` :ref:`pointfree` functions
+instead of ``.bind`` to compose error types together.
 While ``.bind`` enforces error type to stay the same,
-``.unify`` is designed
+``unify`` is designed
 to return a ``Union`` of a revious error type and a new one.
 
 It gives an extra flexibility, but also provokes more thinking
@@ -168,6 +168,7 @@ Like so:
 .. code:: python
 
   >>> from returns.result import Result, Success, Failure
+  >>> from returns.pointfree import unify
 
   >>> def div(number: int) -> Result[float, ZeroDivisionError]:
   ...     if number:
@@ -175,7 +176,7 @@ Like so:
   ...     return Failure(ZeroDivisionError('division by zero'))
 
   >>> container: Result[int, ValueError] = Success(1)
-  >>> assert container.unify(div) == Success(1.0)
+  >>> assert unify(div)(container) == Success(1.0)
   >>> # => Revealed type is:
   >>> # Result[float, Union[ValueError, ZeroDivisionError]]
 
