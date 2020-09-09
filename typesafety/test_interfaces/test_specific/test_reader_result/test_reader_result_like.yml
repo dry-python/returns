@@ -13,6 +13,7 @@
 
     R1 = TypeVar('R1')
     R2 = TypeVar('R2')
+    R3 = TypeVar('R3')
 
     class MyClass(
         SupportsKind3['MyClass', T, V, U],
@@ -27,8 +28,15 @@
         @classmethod
         def from_failed_context(
             cls,
-            inner_value: 'Reader[R1, R2]',
+            inner_value: Reader[R1, R2],
         ) -> MyClass[T, R1, R2]:
+            ...
+
+        @classmethod
+        def from_result_context(
+            cls,
+            inner_value: ReaderResult[R1, R2, R3],
+        ) -> MyClass[R1, R2, R3]:
             ...
 
 
@@ -51,7 +59,7 @@
     ):
         ...
   out: |
-    main:11: error: Final class main.MyClass has abstract attributes "alt", "apply", "ask", "bind", "bind_context", "bind_context_result", "bind_result", "empty", "from_context", "from_failed_context", "from_failure", "from_iterable", "from_result", "from_value", "map", "modify_env", "rescue", "swap"
+    main:11: error: Final class main.MyClass has abstract attributes "alt", "apply", "ask", "bind", "bind_context", "bind_context_result", "bind_result", "empty", "from_context", "from_failed_context", "from_failure", "from_iterable", "from_result", "from_result_context", "from_value", "map", "modify_env", "rescue", "swap"
 
 
 - case: reader_result_like_inheritance_wrong
@@ -83,8 +91,15 @@
         @classmethod
         def from_failed_context(
             cls,
-            inner_value: 'Reader[R1, R1]',
+            inner_value: Reader[R1, R1],
         ) -> MyClass[R1, R1, R1]:
+            ...
+
+        @classmethod
+        def from_result_context(
+            cls,
+            inner_value: ReaderResult[T, V, U],
+        ) -> MyClass[T, V, U]:
             ...
   out: |
     main:18: error: Argument 1 of "bind_context_result" is incompatible with supertype "ReaderResultLikeN"; supertype defines the argument type as "Callable[[T], RequiresContextResult[_UpdatedType, V, U]]"
@@ -92,3 +107,7 @@
     main:18: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
     main:18: note: This violates the Liskov substitution principle
     main:25: error: Signature of "from_failed_context" incompatible with supertype "ReaderResultLikeN"
+    main:32: error: Argument 1 of "from_result_context" is incompatible with supertype "ReaderResultLikeN"; supertype defines the argument type as "RequiresContextResult[_ValueType, _ErrorType, _EnvType]"
+    main:32: error: Return type "MyClass[T, V, U]" of "from_result_context" incompatible with return type "KindN[MyClass[T, V, U], _ValueType, _ErrorType, _EnvType]" in supertype "ReaderResultLikeN"
+    main:32: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:32: note: This violates the Liskov substitution principle

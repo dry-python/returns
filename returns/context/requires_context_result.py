@@ -554,6 +554,27 @@ class RequiresContextResult(
         return RequiresContextResult(lambda deps: Failure(inner_value(deps)))
 
     @classmethod
+    def from_result_context(
+        cls,
+        inner_value:
+            'RequiresContextResult[_NewValueType, _NewErrorType, _NewEnvType]',
+    ) -> 'RequiresContextResult[_NewValueType, _NewErrorType, _NewEnvType]':
+        """
+        Creates ``RequiresContextResult`` from another instance of it.
+
+        .. code:: python
+
+          >>> from returns.context import ReaderResult
+          >>> from returns.result import Success
+
+          >>> assert ReaderResult.from_result_context(
+          ...     ReaderResult.from_value(1),
+          ... )(...) == Success(1)
+
+        """
+        return inner_value
+
+    @classmethod
     def from_value(
         cls, inner_value: _FirstType,
     ) -> 'RequiresContextResult[_FirstType, Any, NoDeps]':

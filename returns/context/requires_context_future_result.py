@@ -16,7 +16,7 @@ from returns._internal.futures import _reader_future_result
 from returns._internal.iterable import iterable_kind
 from returns.context import NoDeps
 from returns.future import Future, FutureResult
-from returns.interfaces.specific import future_result, reader_result
+from returns.interfaces.specific import future_result, reader_ioresult
 from returns.io import IO, IOResult
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind3, SupportsKind3, dekind
@@ -51,7 +51,7 @@ class RequiresContextFutureResult(
     SupportsKind3[
         'RequiresContextFutureResult', _ValueType, _ErrorType, _EnvType,
     ],
-    reader_result.ReaderResultLikeN[_ValueType, _ErrorType, _EnvType],
+    reader_ioresult.ReaderIOResultLikeN[_ValueType, _ErrorType, _EnvType],
     future_result.FutureResultLike3[_ValueType, _ErrorType, _EnvType],
 ):
     """
@@ -1236,8 +1236,9 @@ class RequiresContextFutureResult(
     @classmethod
     def from_result_context(
         cls,
-        inner_value: 'RequiresContextResult[_ValueType, _ErrorType, _EnvType]',
-    ) -> 'RequiresContextFutureResult[_ValueType, _ErrorType, _EnvType]':
+        inner_value:
+            'RequiresContextResult[_NewValueType, _NewErrorType, _NewEnvType]',
+    ) -> 'ReaderFutureResult[_NewValueType, _NewErrorType, _NewEnvType]':
         """
         Creates new container from ``RequiresContextResult`` as a unit value.
 

@@ -9,7 +9,6 @@ from typing import (
     Sequence,
     Type,
     TypeVar,
-    Union,
 )
 
 from typing_extensions import final
@@ -989,41 +988,6 @@ class FutureResult(
         return FutureResult(_future_result.async_bind_async_future(
             function, self._inner_value,
         ))
-
-    def unify(
-        self,
-        function: Callable[
-            [_ValueType], 'FutureResult[_NewValueType, _NewErrorType]',
-        ],
-    ) -> 'FutureResult[_NewValueType, Union[_ErrorType, _NewErrorType]]':
-        """
-        Composes successful container with a function that returns a container.
-
-        Similar to :meth:`~FutureResult.bind` but has different type.
-        It returns ``FutureResult[ValueType, Union[ErrorType, NewErrorType]]``
-        instead of ``FutureResult[ValueType, ErrorType]``.
-
-        So, it can be more useful in some situations.
-        Probably with specific exceptions.
-
-        .. code:: python
-
-          >>> import anyio
-          >>> from returns.future import FutureResult
-          >>> from returns.io import IOSuccess, IOFailure
-
-          >>> def bindable(x: int) -> FutureResult[int, str]:
-          ...    return FutureResult.from_value(x + 1)
-
-          >>> assert anyio.run(
-          ...     FutureResult.from_value(1).unify(bindable).awaitable,
-          ... ) == IOSuccess(2)
-          >>> assert anyio.run(
-          ...     FutureResult.from_failure(1).unify(bindable).awaitable,
-          ... ) == IOFailure(1)
-
-        """
-        return self.bind(function)  # type: ignore
 
     def alt(
         self,

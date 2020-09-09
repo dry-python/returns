@@ -58,6 +58,14 @@ class ReaderResultLikeN(
     ) -> KindN[_ReaderResultLikeType, _FirstType, _ErrorType, _EnvType]:
         """Unit method to create new containers from failed ``Reader``."""
 
+    @classmethod
+    @abstractmethod
+    def from_result_context(
+        cls: Type[_ReaderResultLikeType],  # noqa: N805
+        inner_value: 'ReaderResult[_ValueType, _ErrorType, _EnvType]',
+    ) -> KindN[_ReaderResultLikeType, _ValueType, _ErrorType, _EnvType]:
+        """Unit method to create new containers from ``ReaderResult``."""
+
 
 #: Type alias for kinds with three type arguments.
 ReaderResultLike3 = ReaderResultLikeN[_FirstType, _SecondType, _ThirdType]
