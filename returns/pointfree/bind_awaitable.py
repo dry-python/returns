@@ -23,8 +23,10 @@ def bind_awaitable(
     This function should return plain, non-container value.
 
     In other words, it modifies the function's
-    signature from: ``a -> Awaitable[b]``
-    to: ``Container[a] -> Container[b]``
+    signature from:
+    ``a -> Awaitable[b]``
+    to:
+    ``Container[a] -> Container[b]``
 
     This is how it should be used:
 

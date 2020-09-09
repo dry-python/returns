@@ -30,8 +30,10 @@ def bind_context_result(
     Composes successful container with a function that returns a container.
 
     In other words, it modifies the function's
-    signature from: ``a -> ReaderResult[b, c, e]``
-    to: ``Container[a, c, e] -> Container[b, c, e]``
+    signature from:
+    ``a -> ReaderResult[b, c, e]``
+    to:
+    ``Container[a, c, e] -> Container[b, c, e]``
 
     .. code:: python
 

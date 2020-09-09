@@ -1,37 +1,39 @@
-from typing import TYPE_CHECKING, Callable, TypeVar
+from typing import TYPE_CHECKING, Awaitable, Callable, TypeVar
 
-from returns.interfaces.specific.reader_ioresult import ReaderIOResultLikeN
+from returns.interfaces.specific.reader_future_result import (
+    ReaderFutureResultLikeN,
+)
 from returns.primitives.hkt import Kinded, KindN, kinded
 
 if TYPE_CHECKING:
-    from returns.context import ReaderIOResult  # noqa: WPS433
+    from returns.context import ReaderFutureResult  # noqa: WPS433
 
 _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')
 _ThirdType = TypeVar('_ThirdType')
 _UpdatedType = TypeVar('_UpdatedType')
 
-_ReaderIOResultLikeKind = TypeVar(
-    '_ReaderIOResultLikeKind',
-    bound=ReaderIOResultLikeN,
+_ReaderFutureResultLikeKind = TypeVar(
+    '_ReaderFutureResultLikeKind',
+    bound=ReaderFutureResultLikeN,
 )
 
 
-def bind_context_ioresult(
+def bind_async_context_future_result(
     function: Callable[
         [_FirstType],
-        'ReaderIOResult[_UpdatedType, _SecondType, _ThirdType]',
+        Awaitable['ReaderFutureResult[_UpdatedType, _SecondType, _ThirdType]'],
     ],
 ) -> Kinded[Callable[
-    [KindN[_ReaderIOResultLikeKind, _FirstType, _SecondType, _ThirdType]],
-    KindN[_ReaderIOResultLikeKind, _UpdatedType, _SecondType, _ThirdType],
+    [KindN[_ReaderFutureResultLikeKind, _FirstType, _SecondType, _ThirdType]],
+    KindN[_ReaderFutureResultLikeKind, _UpdatedType, _SecondType, _ThirdType],
 ]]:
     """
-    Lifts function from ``RequiresContextIOResult`` for better composition.
+    Lifts function from ``RequiresContextFutureResult`` for better composition.
 
     In other words, it modifies the function's
     signature from:
-    ``a -> RequiresContextIOResult[env, b, c]``
+    ``async a -> RequiresContextFutureResult[env, b, c]``
     to:
     ``Container[env, a, c]`` -> ``Container[env, b, c]``
 
@@ -61,11 +63,16 @@ def bind_context_ioresult(
     @kinded
     def factory(
         container: KindN[
-            _ReaderIOResultLikeKind,
+            _ReaderFutureResultLikeKind,
             _FirstType,
             _SecondType,
             _ThirdType,
         ],
-    ) -> KindN[_ReaderIOResultLikeKind, _UpdatedType, _SecondType, _ThirdType]:
-        return container.bind_context_ioresult(function)
+    ) -> KindN[
+        _ReaderFutureResultLikeKind,
+        _UpdatedType,
+        _SecondType,
+        _ThirdType,
+    ]:
+        return container.bind_async_context_future_result(function)
     return factory

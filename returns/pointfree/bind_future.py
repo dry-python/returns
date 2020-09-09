@@ -22,8 +22,10 @@ def bind_future(
     Compose a container and sync function returning ``Future``.
 
     In other words, it modifies the function
-    signature from: ``a -> Future[b]``
-    to: ``Container[a] -> Container[b]``
+    signature from:
+    ``a -> Future[b]``
+    to:
+    ``Container[a] -> Container[b]``
 
     Similar to :func:`returns.pointfree.rescue`,
     but works for successful containers.

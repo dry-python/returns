@@ -24,8 +24,10 @@ def bind_async(
     Compose a container and ``async`` function returning a container.
 
     In other words, it modifies the function's
-    signature from: ``a -> Awaitable[Container[b]]``
-    to: ``Container[a] -> Container[b]``
+    signature from:
+    ``a -> Awaitable[Container[b]]``
+    to:
+    ``Container[a] -> Container[b]``
 
     This is how it should be used:
 
