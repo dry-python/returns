@@ -11,6 +11,7 @@ from typing import (
 
 from returns.interfaces.specific import future_result, reader, reader_ioresult
 from returns.primitives.hkt import KindN
+from returns.primitives.asserts import assert_equal
 from returns.primitives.laws import (
     Law,
     Law2,
@@ -109,9 +110,10 @@ class _LawSpec(LawSpecDef):
         env: _ThirdType,
     ) -> None:
         """Asking for an env, always returns the env."""
-        assert container.ask().__call__(    # noqa: WPS609
-            env,
-        ) == container.from_value(env).__call__(env)  # noqa: WPS609
+        assert_equal(
+            container.ask().__call__(env),  # noqa: WPS609
+            container.from_value(env).__call__(env),  # noqa: WPS609
+        )
 
 
 class ReaderFutureResultBasedN(
