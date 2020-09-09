@@ -40,23 +40,21 @@ def bind_async_context_future_result(
     .. code:: python
 
       >>> import anyio
-      >>> from returns.context import (
-      ...     RequiresContextFutureResult,
-      ...     RequiresContextIOResult,
-      ... )
+      >>> from returns.context import ReaderFutureResult
       >>> from returns.io import IOSuccess, IOFailure
-      >>> from returns.pointfree import bind_context_ioresult
+      >>> from returns.future import FutureResult
+      >>> from returns.pointfree import bind_async_context_future_result
 
-      >>> def function(arg: int) -> RequiresContextIOResult[str, int, str]:
-      ...     return RequiresContextIOResult(
-      ...         lambda deps: IOSuccess(len(deps) + arg),
+      >>> async def function(arg: int) -> ReaderFutureResult[str, int, str]:
+      ...     return ReaderFutureResult(
+      ...         lambda deps: FutureResult.from_value(len(deps) + arg),
       ...     )
 
-      >>> assert anyio.run(bind_context_ioresult(function)(
-      ...     RequiresContextFutureResult.from_value(2),
+      >>> assert anyio.run(bind_async_context_future_result(function)(
+      ...     ReaderFutureResult.from_value(2),
       ... )('abc').awaitable) == IOSuccess(5)
-      >>> assert anyio.run(bind_context_ioresult(function)(
-      ...     RequiresContextFutureResult.from_failure(0),
+      >>> assert anyio.run(bind_async_context_future_result(function)(
+      ...     ReaderFutureResult.from_failure(0),
       ... )('abc').awaitable) == IOFailure(0)
 
     """

@@ -16,6 +16,9 @@ from returns.pointfree.bind_context import bind_context3 as bind_context3
 from returns.pointfree.bind_context_future_result import (
     bind_context_future_result as bind_context_future_result,
 )
+from returns.pointfree.bind_async_context_future_result import (
+    bind_async_context_future_result as bind_async_context_future_result,
+)
 from returns.pointfree.bind_context_ioresult import (
     bind_context_ioresult as bind_context_ioresult,
 )
