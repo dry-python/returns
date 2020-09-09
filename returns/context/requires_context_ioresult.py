@@ -13,7 +13,7 @@ from typing_extensions import final
 
 from returns._internal.iterable import iterable_kind
 from returns.context import NoDeps
-from returns.interfaces.specific import ioresult, reader_result
+from returns.interfaces.specific import reader_ioresult
 from returns.io import IO, IOFailure, IOResult, IOSuccess
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind3, SupportsKind3, dekind
@@ -42,8 +42,7 @@ _FirstType = TypeVar('_FirstType')
 class RequiresContextIOResult(
     BaseContainer,
     SupportsKind3['RequiresContextIOResult', _ValueType, _ErrorType, _EnvType],
-    reader_result.ReaderResultLikeN[_ValueType, _ErrorType, _EnvType],
-    ioresult.IOResultLike3[_ValueType, _ErrorType, _EnvType],
+    reader_ioresult.ReaderIOResultLikeN[_ValueType, _ErrorType, _EnvType],
 ):
     """
     The ``RequiresContextIOResult`` combinator.
@@ -294,6 +293,9 @@ class RequiresContextIOResult(
                 )(deps),
             ),
         )
+
+    #: Alias for `bind_context_ioresult` method, it is the same as `bind` here.
+    bind_context_ioresult = bind
 
     def bind_result(
         self,
@@ -806,8 +808,9 @@ class RequiresContextIOResult(
     @classmethod
     def from_result_context(
         cls,
-        inner_value: 'RequiresContextResult[_ValueType, _ErrorType, _EnvType]',
-    ) -> 'RequiresContextIOResult[_ValueType, _ErrorType, _EnvType]':
+        inner_value:
+            'RequiresContextResult[_NewValueType, _NewErrorType, _NewEnvType]',
+    ) -> 'RequiresContextIOResult[_NewValueType, _NewErrorType, _NewEnvType]':
         """
         Creates new container from ``RequiresContextResult`` as a unit value.
 
@@ -832,8 +835,8 @@ class RequiresContextIOResult(
     @classmethod
     def from_value(
         cls,
-        inner_value: _FirstType,
-    ) -> 'RequiresContextIOResult[_FirstType, Any, NoDeps]':
+        inner_value: _NewValueType,
+    ) -> 'RequiresContextIOResult[_NewValueType, Any, NoDeps]':
         """
         Creates new container with ``IOSuccess(inner_value)`` as a unit value.
 
@@ -852,8 +855,8 @@ class RequiresContextIOResult(
     @classmethod
     def from_failure(
         cls,
-        inner_value: _FirstType,
-    ) -> 'RequiresContextIOResult[Any, _FirstType, NoDeps]':
+        inner_value: _NewErrorType,
+    ) -> 'RequiresContextIOResult[Any, _NewErrorType, NoDeps]':
         """
         Creates new container with ``IOFailure(inner_value)`` as a unit value.
 

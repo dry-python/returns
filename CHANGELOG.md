@@ -37,6 +37,8 @@ See [0Ver](https://0ver.org/).
 - **Breaking**: Removes all `Context*` based types with `.ask()` method,
   use new `.ask()` methods on the `Reader`-based containers
 - **Breaking**: Now `Future` and `FutureResult` can be awaited multiple times
+- **Breaking**: Removes `.unify()` method from several containers,
+  use `unify()` pointfree function instead
 
 - Adds new public interfaces: see `returns.interfaces`
 - Adds `methods` package with all the composition methods we support

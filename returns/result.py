@@ -162,39 +162,6 @@ class Result(
     #: Alias for `bind_result` method, it is the same as `bind` here.
     bind_result = bind
 
-    def unify(
-        self,
-        function: Callable[
-            [_ValueType],
-            'Result[_NewValueType, _NewErrorType]',
-        ],
-    ) -> 'Result[_NewValueType, Union[_ErrorType, _NewErrorType]]':
-        """
-        Composes successful container with a function that returns a container.
-
-        Similar to :meth:`~Result.bind` but has different type.
-        It returns ``Result[ValueType, Union[OldErrorType, NewErrorType]]``
-        instead of ``Result[ValueType, OldErrorType]``.
-
-        So, it can be more useful in some situations.
-        Probably with specific exceptions.
-
-        .. code:: python
-
-          >>> from returns.result import Result, Success, Failure
-
-          >>> def bindable(arg: str) -> Result[str, str]:
-          ...      if len(arg) > 1:
-          ...          return Success(arg + 'b')
-          ...      return Failure(arg + 'c')
-
-          >>> assert Success('aa').unify(bindable) == Success('aab')
-          >>> assert Success('a').unify(bindable) == Failure('ac')
-          >>> assert Failure('a').unify(bindable) == Failure('a')
-
-        """
-        return self.bind(function)  # type: ignore
-
     def alt(
         self,
         function: Callable[[_ErrorType], _NewErrorType],

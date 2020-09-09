@@ -33,17 +33,6 @@ def test_left_identity_success():
     assert bound.bind(factory) == factory(input_value)
 
 
-def test_unify_and_bind():
-    """Ensures that left identity works for Success container."""
-    def factory(inner_value: int) -> Result[int, str]:
-        return Success(inner_value * 2)
-
-    bound: Result[int, str] = Success(5)
-
-    assert bound.unify(factory) == bound.bind(factory)
-    assert bound.bind(factory) == bound.unify(factory)
-
-
 def test_left_identity_failure():
     """Ensures that left identity works for Failure container."""
     def factory(inner_value: int) -> Result[int, int]:
@@ -54,7 +43,6 @@ def test_left_identity_failure():
 
     assert bound.bind(factory) == Failure(input_value)
     assert Failure(input_value).bind(factory) == Failure(5)
-    assert bound.unify(factory) == Failure(input_value)
     assert str(bound) == '<Failure: 5>'
 
 

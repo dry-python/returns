@@ -1236,8 +1236,9 @@ class RequiresContextFutureResult(
     @classmethod
     def from_result_context(
         cls,
-        inner_value: 'RequiresContextResult[_ValueType, _ErrorType, _EnvType]',
-    ) -> 'RequiresContextFutureResult[_ValueType, _ErrorType, _EnvType]':
+        inner_value:
+            'RequiresContextResult[_NewValueType, _NewErrorType, _NewEnvType]',
+    ) -> 'ReaderFutureResult[_NewValueType, _NewErrorType, _NewEnvType]':
         """
         Creates new container from ``RequiresContextResult`` as a unit value.
 

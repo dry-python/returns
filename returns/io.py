@@ -518,31 +518,6 @@ class IOResult(
 
         """
 
-    def unify(
-        self,
-        function: Callable[
-            [_ValueType],
-            'IOResult[_NewValueType, _NewErrorType]',
-        ],
-    ) -> 'IOResult[_NewValueType, Union[_ErrorType, _NewErrorType]]':
-        """
-        Composes successful container with a function that returns a container.
-
-        .. code:: python
-
-          >>> from returns.io import IOResult, IOFailure, IOSuccess
-          >>> def bindable(string: str) -> IOResult[str, str]:
-          ...      if len(string) > 1:
-          ...          return IOSuccess(string + 'b')
-          ...      return IOFailure(string + 'c')
-
-          >>> assert IOSuccess('aa').unify(bindable) == IOSuccess('aab')
-          >>> assert IOSuccess('a').unify(bindable) == IOFailure('ac')
-          >>> assert IOFailure('a').unify(bindable) == IOFailure('a')
-
-        """
-        return self.bind(function)  # type: ignore
-
     def alt(
         self,
         function: Callable[[_ErrorType], _NewErrorType],
