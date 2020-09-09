@@ -1124,6 +1124,38 @@ class RequiresContextFutureResult(
         )
 
     @classmethod
+    def from_future_result_context(
+        cls,
+        inner_value:
+            'ReaderFutureResult[_NewValueType, _NewErrorType, _NewEnvType]',
+    ) -> 'ReaderFutureResult[_NewValueType, _NewErrorType, _NewEnvType]':
+        """
+        Creates new container with ``ReaderFutureResult`` as a unit value.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.context import RequiresContextFutureResult
+          >>> from returns.io import IOSuccess, IOFailure
+
+          >>> assert anyio.run(
+          ...    RequiresContextFutureResult.from_future_result_context(
+          ...        RequiresContextFutureResult.from_value(1),
+          ...    ),
+          ...    RequiresContextFutureResult.empty,
+          ... ) == IOSuccess(1)
+
+          >>> assert anyio.run(
+          ...    RequiresContextFutureResult.from_future_result_context(
+          ...        RequiresContextFutureResult.from_failure(1),
+          ...    ),
+          ...    RequiresContextFutureResult.empty,
+          ... ) == IOFailure(1)
+
+        """
+        return inner_value
+
+    @classmethod
     def from_future_result(
         cls,
         inner_value: FutureResult[_NewValueType, _NewErrorType],

@@ -565,11 +565,15 @@ class RequiresContextResult(
         .. code:: python
 
           >>> from returns.context import ReaderResult
-          >>> from returns.result import Success
+          >>> from returns.result import Success, Failure
 
           >>> assert ReaderResult.from_result_context(
           ...     ReaderResult.from_value(1),
           ... )(...) == Success(1)
+
+          >>> assert ReaderResult.from_result_context(
+          ...     ReaderResult.from_failure(1),
+          ... )(...) == Failure(1)
 
         """
         return inner_value

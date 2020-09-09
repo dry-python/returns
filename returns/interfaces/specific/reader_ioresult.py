@@ -51,6 +51,7 @@ class ReaderIOResultLikeN(
         """Binds a ``ReaderIOResult`` returning function over a container."""
 
     @classmethod
+    @abstractmethod
     def from_ioresult_context(
         cls: Type[_ReaderIOResultLikeType],  # noqa: N805
         inner_value: 'ReaderIOResult[_ValueType, _ErrorType, _EnvType]',

@@ -81,6 +81,7 @@ class ReaderFutureResultLikeN(
         """Bind async ``ReaderFutureResult`` function."""
 
     @classmethod
+    @abstractmethod
     def from_future_result_context(
         cls: Type[_ReaderFutureResultLikeType],  # noqa: N805
         inner_value: 'ReaderFutureResult[_ValueType, _ErrorType, _EnvType]',

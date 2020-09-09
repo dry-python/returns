@@ -734,6 +734,31 @@ class RequiresContextIOResult(
         return RequiresContextIOResult(lambda _: inner_value)
 
     @classmethod
+    def from_ioresult_context(
+        cls,
+        inner_value:
+            'ReaderIOResult[_NewValueType, _NewErrorType, _NewEnvType]',
+    ) -> 'ReaderIOResult[_NewValueType, _NewErrorType, _NewEnvType]':
+        """
+        Creates new container with ``ReaderIOResult`` as a unit value.
+
+        .. code:: python
+
+          >>> from returns.context import RequiresContextIOResult
+          >>> from returns.io import IOSuccess, IOFailure
+
+          >>> assert RequiresContextIOResult.from_ioresult_context(
+          ...    RequiresContextIOResult.from_value(1),
+          ... )(...) == IOSuccess(1)
+
+          >>> assert RequiresContextIOResult.from_ioresult_context(
+          ...    RequiresContextIOResult.from_failure(1),
+          ... )(...) == IOFailure(1)
+
+        """
+        return inner_value
+
+    @classmethod
     def from_typecast(
         cls,
         inner_value:
