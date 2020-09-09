@@ -10,8 +10,8 @@ from typing import (
 )
 
 from returns.interfaces.specific import future_result, reader, reader_ioresult
-from returns.primitives.hkt import KindN
 from returns.primitives.asserts import assert_equal
+from returns.primitives.hkt import KindN
 from returns.primitives.laws import (
     Law,
     Law2,
