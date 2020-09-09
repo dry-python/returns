@@ -42,7 +42,7 @@ _FirstType = TypeVar('_FirstType')
 class RequiresContextIOResult(
     BaseContainer,
     SupportsKind3['RequiresContextIOResult', _ValueType, _ErrorType, _EnvType],
-    reader_ioresult.ReaderIOResultLikeN[_ValueType, _ErrorType, _EnvType],
+    reader_ioresult.ReaderIOResultBasedN[_ValueType, _ErrorType, _EnvType],
 ):
     """
     The ``RequiresContextIOResult`` combinator.
