@@ -578,6 +578,7 @@ class IOResult(
         Get value from successful container or raise exception for failed one.
 
         .. code:: pycon
+          :force:
 
           >>> from returns.io import IO, IOFailure, IOSuccess
           >>> assert IOSuccess(1).unwrap() == IO(1)
@@ -587,7 +588,7 @@ class IOResult(
             ...
           returns.primitives.exceptions.UnwrapFailedError
 
-        """
+        """  # noqa: RST399
         return IO(self._inner_value.unwrap())
 
     def failure(self) -> IO[_ErrorType]:
@@ -595,6 +596,7 @@ class IOResult(
         Get failed value from failed container or raise exception from success.
 
         .. code:: pycon
+          :force:
 
           >>> from returns.io import IO, IOFailure, IOSuccess
           >>> assert IOFailure(1).failure() == IO(1)
@@ -604,7 +606,7 @@ class IOResult(
             ...
           returns.primitives.exceptions.UnwrapFailedError
 
-        """
+        """  # noqa: RST399
         return IO(self._inner_value.failure())
 
     def compose_result(

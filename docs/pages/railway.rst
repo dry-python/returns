@@ -144,6 +144,7 @@ inner state of containers into a regular types:
   >>> assert Some(0).unwrap() == 0
 
 .. code:: pycon
+  :force:
 
   >>> Failure(1).unwrap()
   Traceback (most recent call last):
@@ -160,6 +161,7 @@ use :func:`.failure <returns.interfaces.unwrappable.Unwrapable.failure>`
 to unwrap the failed state:
 
 .. code:: pycon
+  :force:
 
   >>> assert Failure(1).failure() == 1
   >>> Success(1).failure()

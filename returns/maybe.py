@@ -217,6 +217,7 @@ class Maybe(
         Get value from successful container or raise exception for failed one.
 
         .. code:: pycon
+          :force:
 
           >>> from returns.maybe import Nothing, Some
           >>> assert Some(1).unwrap() == 1
@@ -226,13 +227,14 @@ class Maybe(
             ...
           returns.primitives.exceptions.UnwrapFailedError
 
-        """
+        """  # noqa: RST399
 
     def failure(self) -> None:
         """
         Get failed value from failed container or raise exception from success.
 
         .. code:: pycon
+          :force:
 
           >>> from returns.maybe import Nothing, Some
           >>> assert Nothing.failure() is None
@@ -242,7 +244,7 @@ class Maybe(
             ...
           returns.primitives.exceptions.UnwrapFailedError
 
-        """
+        """  # noqa: RST399
 
     @classmethod
     def from_value(
