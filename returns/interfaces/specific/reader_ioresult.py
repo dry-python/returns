@@ -35,7 +35,7 @@ class ReaderIOResultLikeN(
     ioresult.IOResultLikeN[_FirstType, _SecondType, _ThirdType],
 ):
     """
-    Base interface for all types that do look like ``ReaderResult`` instance.
+    Base interface for all types that do look like ``ReaderIOResult`` instance.
 
     Cannot be called.
     """
@@ -64,7 +64,7 @@ ReaderIOResultLike3 = ReaderIOResultLikeN[_FirstType, _SecondType, _ThirdType]
 
 class _LawSpec(LawSpecDef):
     """
-    Concrete laws for ``ReaderResulBasedN``.
+    Concrete laws for ``ReaderIOResultBasedN``.
 
     See: https://github.com/haskell/mtl/pull/61/files
     """
@@ -93,7 +93,7 @@ class ReaderIOResultBasedN(
     Lawful['ReaderIOResultBasedN[_FirstType, _SecondType, _ThirdType]'],
 ):
     """
-    This interface is very specific to our ``ReaderResult`` type.
+    This interface is very specific to our ``ReaderIOResult`` type.
 
     The only thing that differs from ``ReaderIOResultLikeN`` is that we know
     the specific types for its ``__call__`` method.
