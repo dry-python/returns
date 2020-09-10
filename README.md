@@ -59,7 +59,7 @@ Make sure you know how to get started, [check out our docs](https://returns.read
 - [Result container](#result-container) that let's you to get rid of exceptions
 - [IO container](#io-container) and [IOResult](#troublesome-io) that marks all impure operations and structures them
 - [Future container](#future-container) and [FutureResult](#async-code-without-exceptions) to work with `async` code
-- Write your own container! You would still have all the features for your own types (including full existing code reuse and type-safety)
+- [Write your own container!](https://returns.readthedocs.io/en/latest/pages/create-your-own-container.html) You would still have all the features for your own types (including full existing code reuse and type-safety)
 
 
 ## Maybe container
