@@ -278,8 +278,8 @@ class IOResult(
     """
     Explicit container for impure function results that might fail.
 
-    Definition
-    ~~~~~~~~~~
+    .. rubric:: Definition
+
     This type is similar to :class:`returns.result.Result`.
     This basically a more useful version of ``IO[Result[a, b]]``.
     Use this type for ``IO`` computations that might fail.
@@ -319,8 +319,8 @@ class IOResult(
     See also:
         https://github.com/gcanti/fp-ts/blob/master/docs/modules/IOEither.ts.md
 
-    Implementation
-    ~~~~~~~~~~~~~~
+    .. rubric:: Implementation
+
     This class contains all the methods that can be delegated to ``Result``.
     But, some methods are not implemented which means
     that we have to use special :class:`~_IOSuccess` and :class:`~_IOFailure`

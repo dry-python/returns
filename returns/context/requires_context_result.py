@@ -84,8 +84,9 @@ class RequiresContextResult(
     - ``RequiresContext`` values and pure functions returning it
     - ``Result`` and functions returning it
 
-    Important implementation detail:
-    due it is meaning, ``RequiresContextResult``
+    .. rubric:: Important implementation details
+
+    Due it is meaning, ``RequiresContextResult``
     cannot have ``Success`` and ``Failure`` subclasses.
 
     We only have just one type. That's by design.

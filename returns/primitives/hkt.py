@@ -68,8 +68,8 @@ class KindN(
     ``KindN`` does not exist in runtime. It is used just for typing.
     There are (and must be) no instances of this type directly.
 
-    Implementation details
-    ~~~~~~~~~~~~~~~~~~~~~~
+    .. rubric:: Implementation details
+
     We didn't use ``ABCMeta`` to disallow its creation,
     because we don't want to have
     a possible metaclass conflict with other metaclasses.
@@ -116,7 +116,7 @@ class SupportsKindN(
     Notice, that we use ``KindN`` / ``Kind1`` to annotate values,
     but we use ``SupportsKindN`` / ``SupportsKind1`` to inherit from.
 
-    Implementation details:
+    .. rubric:: Implementation details
 
     The only thing this class does is: making sure that the resulting classes
     won't have ``__getattr__`` available during the typecheking phase.

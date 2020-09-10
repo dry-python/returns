@@ -69,8 +69,8 @@ def managed(
         - https://github.com/gcanti/fp-ts/blob/master/src/IOEither.ts
         - https://zio.dev/docs/datatypes/datatypes_managed
 
-    Implementation
-    ~~~~~~~~~~~~~~
+    .. rubric:: Implementation
+
     This class requires some explanation.
 
     First of all, we modeled this function as a class,

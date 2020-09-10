@@ -87,8 +87,9 @@ class RequiresContextFutureResult(
 
     This is a complex type for complex tasks!
 
-    Important implementation detail:
-    due it is meaning, ``RequiresContextFutureResult``
+    .. rubric:: Important implementation details
+
+    Due it is meaning, ``RequiresContextFutureResult``
     cannot have ``Success`` and ``Failure`` subclasses.
 
     We only have just one type. That's by design.

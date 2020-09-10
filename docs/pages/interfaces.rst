@@ -329,6 +329,12 @@ Applicative
 .. automodule:: returns.interfaces.applicative
   :members:
 
+ApplicativeMappable
+~~~~~~~~~~~~~~~~~~~
+
+.. automodule:: returns.interfaces.applicative_mappable
+  :members:
+
 Altable
 ~~~~~~~
 
@@ -357,6 +363,12 @@ Iterable
 ~~~~~~~~
 
 .. automodule:: returns.interfaces.iterable
+  :members:
+
+Maybe specific
+~~~~~~~~~~~~~~
+
+.. automodule:: returns.interfaces.specific.maybe
   :members:
 
 Result specific

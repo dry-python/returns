@@ -93,8 +93,9 @@ class RequiresContextIOResult(
 
     This is a complex type for complex tasks!
 
-    Important implementation detail:
-    due it is meaning, ``RequiresContextIOResult``
+    .. rubric:: Important implementation details
+
+    Due it is meaning, ``RequiresContextIOResult``
     cannot have ``Success`` and ``Failure`` subclasses.
 
     We only have just one type. That's by design.
