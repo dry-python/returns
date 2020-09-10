@@ -168,7 +168,7 @@ So, that's where ``returns`` saves the day!
 
 .. note::
 
-  Technical note: this feature requires :ref:`mypy plugins <mypy-plugins>`.
+  Technical note: this feature requires :ref:`mypy plugin <mypy-plugins>`.
 
 The main idea is that we can rewrite ``I[int]`` as ``Kind1[I, int]``.
 Let's see how it works:
@@ -192,6 +192,8 @@ Why almost? Because the revealed type will be ``Kind1``.
 The final solution is to decorate ``all_to_str`` with ``@kinded``:
 
 .. code:: python
+
+  >>> from returns.primitives.hkt import kinded
 
   >>> @kinded
   ... def all_to_str(arg: Kind1[I, int]) -> Kind1[I, str]:
