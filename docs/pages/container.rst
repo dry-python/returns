@@ -261,58 +261,6 @@ since they increase your developer experience and type-safety level:
 Check out our docs on using our :ref:`mypy plugins <mypy-plugins>`.
 
 
-.. _composition:
-
-Composition
------------
-
-You can and should compose different containers together.
-Here's a table of some compositions that do not make sense:
-
-Needs transformation
-~~~~~~~~~~~~~~~~~~~~
-
-You can use :ref:`converters` to convert ``Maybe`` and ``Result`` containers.
-You can also use :func:`flatten <returns.converters.flatten>`
-to merge nested containers.
-
-- ``IO[Result[A, B]]`` 🤔,
-  use :meth:`returns.io.IOResult.from_typecast` and ``IOResult``
-- ``IO[Maybe[A]]`` 🤔,
-  use :func:`maybe_to_result <returns.converters.maybe_to_result>`
-  and then :meth:`returns.io.IOResult.from_typecast`
-  to convert it to ``IOResult``
-- ``IO[IO[A]]`` 🤔, use :func:`flatten <returns.converters.flatten>`
-- ``Maybe[Maybe[A]]`` 🤔, use :func:`flatten <returns.converters.flatten>`
-- ``Result[Result[A, B], C]`` 🤔,
-  use :func:`flatten <returns.converters.flatten>`
-- ``Result[Maybe[A], B]`` 🤔,
-  use :func:`maybe_to_result <returns.converters.maybe_to_result>`
-  and then :func:`flatten <returns.converters.flatten>`
-- ``Maybe[Result[A, B]]`` 🤔,
-  use :func:`result_to_maybe <returns.converters.result_to_maybe>`
-  and then :func:`flatten <returns.converters.flatten>`
-- ``RequiresContext[env, Result[A, B]]`` 🤔,
-  use ``RequiresContextResult.from_typecast``
-  and ``RequiresResultContext``
-- ``RequiresContext[env, RequiresContext[env, A]]`` 🤔,
-  use :func:`flatten <returns.converters.flatten>`
-- ``RequiresContextResult[env, RequiresContextResult[env, A, B], B]`` 🤔,
-  use :func:`flatten <returns.converters.flatten>`
-- ``RequiresContext[env, IOResult[A, B]]`` 🤔,
-  use ``RequiresContextIOResult.from_typecast``
-  and ``RequiresResultContext``
-- ``RequiresContextIOResult[env, RequiresContextIOResult[env, A, B], B]``
-  🤔,
-  use :func:`flatten <returns.converters.flatten>`
-
-Nope
-~~~~
-
-- ``Result[IO[A], B]`` 🚫
-- ``Result[A, IO[A]]`` 🚫
-
-
 Further reading
 ---------------
 
