@@ -16,11 +16,14 @@ for example, can have one, two or three possible types. See the example below:
 
   >>> from typing import NoReturn
 
-  >>> from returns.interfaces.mappable import MappableN, Mappable1, Mappable2, Mappable3
+  >>> from returns.interfaces.mappable import (
+  ...    MappableN, Mappable1, Mappable2, Mappable3,
+  ... )
 
   >>> one_type: MappableN[int, NoReturn, NoReturn]
   >>> two_types: MappableN[int, str, NoReturn]
   >>> three_types: MappableN[int, str, bool]
+
   >>> # We have a shortcut for each amount of arguments to reduce the boilerplate
   >>> one_type: Mappable1[int]
   >>> two_types: Mappable2[int, str]
@@ -80,8 +83,9 @@ create our own mappable container like :class:`Maybe <returns.maybe.Maybe>`.
   ...     ) -> 'Number[_NewNumberType]':
   ...         return Number(function(self._inner_value))
   ...
-  ...     def __eq__(self, other: Any) -> bool:  # Required to check the identity law
-  ...         if not isinstance(self, type(other)):
+  ...     def __eq__(self, other: Any) -> bool:
+  ...         # Required to check the identity law
+  ...         if type(self) != type(other):
   ...             return False
   ...         return self._inner_value == other._inner_value
 
@@ -126,7 +130,13 @@ same result if we compose them together.
   ...     return number * 10
 
   >>> mappable_number: Number[int] = Number(9)
-  >>> assert mappable_number.map(add_one).map(multiply_by_ten) == mappable_number.map(compose(add_one, multiply_by_ten))
+  >>> assert mappable_number.map(
+  ...    add_one,
+  ... ).map(
+  ...    multiply_by_ten,
+  ... ) == mappable_number.map(
+  ...     compose(add_one, multiply_by_ten),
+  ... )
 
 Bindable
 --------
@@ -217,7 +227,9 @@ bind the result with ``y``.
   ...     return Bag(Peanuts(peanuts.quantity // 2))
 
   >>> bag = Bag(Peanuts(9))
-  >>> assert bag.bind(minus_one).bind(half) == bag.bind(lambda value: minus_one(value).bind(half))
+  >>> assert bag.bind(minus_one).bind(half) == bag.bind(
+  ...    lambda value: minus_one(value).bind(half),
+  ... )
 
 What's the difference between ``Mappable`` and ``Bindable``?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -277,7 +289,8 @@ See the example below using ``FutureResult`` to get a ``IOResult``:
   ...     return Success(arg + 1)
 
   >>> # `result_like` does not have the result we want (Result[int, str])
-  >>> # it's just the intention of having one, we have to await it to get the real result
+  >>> # it's just the intention of having one,
+  >>> # we have to await it to get the real result
   >>> result_like: FutureResult[int, str] = FutureResult(coro(1))
   >>> assert isinstance(result_like, ResultLikeN)
   >>> # `anyio.run(...)` will await our coroutine and give the real result to us
@@ -291,6 +304,12 @@ See the example below using ``FutureResult`` to get a ``IOResult``:
 
 API Reference
 -------------
+
+SupportsEquality
+~~~~~~~~~~~~~~~~
+
+.. automodule:: returns.interfaces.equable
+  :members:
 
 Mappable
 ~~~~~~~~
@@ -314,6 +333,12 @@ Altable
 ~~~~~~~
 
 .. automodule:: returns.interfaces.altable
+  :members:
+
+BiMappable
+~~~~~~~~~~
+
+.. automodule:: returns.interfaces.bimappable
   :members:
 
 Rescuable
@@ -368,4 +393,22 @@ Reader specific
 ~~~~~~~~~~~~~~~
 
 .. automodule:: returns.interfaces.specific.reader
+  :members:
+
+ReaderResult specific
+~~~~~~~~~~~~~~~~~~~~~
+
+.. automodule:: returns.interfaces.specific.reader_result
+  :members:
+
+ReaderIOResult specific
+~~~~~~~~~~~~~~~~~~~~~~~
+
+.. automodule:: returns.interfaces.specific.reader_ioresult
+  :members:
+
+ReaderFutureResult specific
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. automodule:: returns.interfaces.specific.reader_future_result
   :members:

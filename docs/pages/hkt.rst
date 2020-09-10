@@ -84,7 +84,9 @@ That's the whole point of copying!
 
 But, there are different functions, that do different things with types.
 For example, we can write a function that converts
-a value inside any ``Container1`` (a base class for all our containers)
+a value inside any
+:class:`Container1 <returns.interfaces.container.ContainerN>`
+(a base class for all our containers)
 from ``int`` to ``str``:
 
 We can also write functions that work with generics:
@@ -97,6 +99,8 @@ We can also write functions that work with generics:
   ...     return container.map(str)
 
 And here's how it can be used:
+
+.. code:: python
 
   >>> from returns.maybe import Maybe
   >>> from returns.io import IO
@@ -121,6 +125,7 @@ How can we fix this problem? With ``@overload``!
 
 .. code:: python
 
+  >>> from typing import overload
   >>> from returns.maybe import Maybe
   >>> from returns.io import IO
 
@@ -232,11 +237,14 @@ in terms of a number of type arguments.
 We support different kinds:
 
 - ``Kind1[Maybe, int]`` is similar to ``Maybe[int]``
-- ``Kind2[Result, str, int]`` to ``Result[str, int]``
+- ``Kind2[Result, str, int]`` is similar to ``Result[str, int]``
 - ``Kind3[RequiresContextResult, str, int, bool]``
-  to ``RequiresContextResult[str, int, bool]``
+  is similar to ``RequiresContextResult[str, int, bool]``
 
 You can use any of them freely.
+
+Later you will learn how to
+:ref:`create your own types <create-your-own-container>` that support kinds!
 
 
 API Reference
