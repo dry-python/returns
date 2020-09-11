@@ -392,11 +392,15 @@ SupportsEquality
 Mappable
 ~~~~~~~~
 
+.. autoclasstree:: returns.interfaces.mappable
+
 .. automodule:: returns.interfaces.mappable
   :members:
 
 Bindable
 ~~~~~~~~
+
+.. autoclasstree:: returns.interfaces.bindable
 
 .. automodule:: returns.interfaces.bindable
   :members:
@@ -404,11 +408,15 @@ Bindable
 Applicative
 ~~~~~~~~~~~
 
+.. autoclasstree:: returns.interfaces.applicative
+
 .. automodule:: returns.interfaces.applicative
   :members:
 
 ApplicativeMappable
 ~~~~~~~~~~~~~~~~~~~
+
+.. autoclasstree:: returns.interfaces.applicative_mappable
 
 .. automodule:: returns.interfaces.applicative_mappable
   :members:
@@ -416,11 +424,15 @@ ApplicativeMappable
 Altable
 ~~~~~~~
 
+.. autoclasstree:: returns.interfaces.altable
+
 .. automodule:: returns.interfaces.altable
   :members:
 
 BiMappable
 ~~~~~~~~~~
+
+.. autoclasstree:: returns.interfaces.bimappable
 
 .. automodule:: returns.interfaces.bimappable
   :members:
@@ -428,11 +440,15 @@ BiMappable
 Rescuable
 ~~~~~~~~~
 
+.. autoclasstree:: returns.interfaces.rescuable
+
 .. automodule:: returns.interfaces.rescuable
   :members:
 
 Unwrappable
 ~~~~~~~~~~~
+
+.. autoclasstree:: returns.interfaces.unwrappable
 
 .. automodule:: returns.interfaces.unwrappable
   :members:
@@ -440,11 +456,15 @@ Unwrappable
 Iterable
 ~~~~~~~~
 
+.. autoclasstree:: returns.interfaces.iterable
+
 .. automodule:: returns.interfaces.iterable
   :members:
 
 Maybe specific
 ~~~~~~~~~~~~~~
+
+.. autoclasstree:: returns.interfaces.specific.maybe
 
 .. automodule:: returns.interfaces.specific.maybe
   :members:
@@ -452,11 +472,15 @@ Maybe specific
 Result specific
 ~~~~~~~~~~~~~~~
 
+.. autoclasstree:: returns.interfaces.specific.result
+
 .. automodule:: returns.interfaces.specific.result
   :members:
 
 IO specific
 ~~~~~~~~~~~
+
+.. autoclasstree:: returns.interfaces.specific.io
 
 .. automodule:: returns.interfaces.specific.io
   :members:
@@ -464,11 +488,15 @@ IO specific
 IOResult specific
 ~~~~~~~~~~~~~~~~~
 
+.. autoclasstree:: returns.interfaces.specific.ioresult
+
 .. automodule:: returns.interfaces.specific.ioresult
   :members:
 
 Future specific
 ~~~~~~~~~~~~~~~
+
+.. autoclasstree:: returns.interfaces.specific.future
 
 .. automodule:: returns.interfaces.specific.future
   :members:
@@ -476,11 +504,15 @@ Future specific
 FutureResult specific
 ~~~~~~~~~~~~~~~~~~~~~
 
+.. autoclasstree:: returns.interfaces.specific.future_result
+
 .. automodule:: returns.interfaces.specific.future_result
   :members:
 
 Reader specific
 ~~~~~~~~~~~~~~~
+
+.. autoclasstree:: returns.interfaces.specific.reader
 
 .. automodule:: returns.interfaces.specific.reader
   :members:
@@ -488,17 +520,23 @@ Reader specific
 ReaderResult specific
 ~~~~~~~~~~~~~~~~~~~~~
 
+.. autoclasstree:: returns.interfaces.specific.reader_result
+
 .. automodule:: returns.interfaces.specific.reader_result
   :members:
 
 ReaderIOResult specific
 ~~~~~~~~~~~~~~~~~~~~~~~
 
+.. autoclasstree:: returns.interfaces.specific.reader_ioresult
+
 .. automodule:: returns.interfaces.specific.reader_ioresult
   :members:
 
 ReaderFutureResult specific
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autoclasstree:: returns.interfaces.specific.reader_future_result
 
 .. automodule:: returns.interfaces.specific.reader_future_result
   :members:
