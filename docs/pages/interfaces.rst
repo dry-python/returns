@@ -234,8 +234,37 @@ FAQ
 Why do you have general and specific interfaces?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+We have ``.intrefaces.*`` types that can be applied to any possible type.
+There's nothing they know about other types or ``returns`` package.
+
+We also have a special ``.interfaces.specific`` package
+where we have types that know about other types in ``returns``.
+
+For example, ``MappableN`` from ``.interfaces``
+only knows about ``.map`` method. It does not require anything else.
+
+But, ``ResultLikeN`` from ``.interfaces.specific.result``
+does require to have ``.bind_result`` method
+which relies on our :class:`Result <returns.result.Result>` type.
+
+That's the only difference.
+Build your own types with any of those interfaces.
+
 Why some interfaces do not have type alias for 1 or 2 type arguments?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Some types like
+:class:`ResultLikeN <returns.interfaces.specific.result.ResultLikeN>`
+do not have type aliases for one type argument in a form of ``ResultLike1``.
+
+Why does ``Mappable1`` exists and ``ResultLike1`` does not?
+
+Because ``Mappable1`` does make sense.
+But, ``ResultLike1`` requiers at least two (value and error) types to exist.
+The same applies for ``ReaderLike1`` and ``ReaderResultLike1``
+and ``ReaderResultLike2``.
+
+We don't support type aliases for types that won't make sence.
 
 What's the difference between ``Mappable`` and ``Bindable``?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -306,6 +335,7 @@ See the example below using ``FutureResult`` to get a ``IOResult``:
 
   The same difference applies to all ``*ResultLikeN`` vs ``*ResultBasedN``
   (e.g. ``IOResultLikeN`` and ``IOResultBasedN``)
+
 
 API Reference
 -------------
