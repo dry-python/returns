@@ -66,28 +66,25 @@ create our own mappable container like :class:`Maybe <returns.maybe.Maybe>`.
 
   >>> from returns.interfaces.mappable import Mappable1
   >>> from returns.primitives.hkt import SupportsKind1
+  >>> from returns.primitives.container import BaseContainer
 
   >>> _NumberType = TypeVar('_NumberType')
   >>> _NewNumberType = TypeVar('_NewNumberType')
 
   >>> class Number(
+  ...     BaseContainer,
   ...     SupportsKind1['Number', _NumberType],
   ...     Mappable1[_NumberType],
   ... ):
-  ...     def __init__(self, inner_value: _NumberType):
-  ...         self._inner_value = inner_value
+  ...     def __init__(self, inner_value: _NumberType) -> None:
+  ...         super().__init__(inner_value)
   ...
   ...     def map(  # This method is required by Mappable
   ...         self,
   ...         function: Callable[[_NumberType], _NewNumberType]
   ...     ) -> 'Number[_NewNumberType]':
   ...         return Number(function(self._inner_value))
-  ...
-  ...     def __eq__(self, other: Any) -> bool:
-  ...         # Required to check the identity law
-  ...         if type(self) != type(other):
-  ...             return False
-  ...         return self._inner_value == other._inner_value
+
 
 With our ``Number`` mappable class we can compose easily math functions with it.
 
@@ -138,6 +135,7 @@ same result if we compose them together.
   ...     compose(add_one, multiply_by_ten),
   ... )
 
+
 Bindable
 --------
 
@@ -148,40 +146,33 @@ us to create our custom bindable.
 
 .. code:: python
 
+  >>> from dataclasses import dataclass
   >>> from typing import Any, Callable, TypeVar
 
   >>> from returns.interfaces.bindable import Bindable1
   >>> from returns.primitives.hkt import SupportsKind1
+  >>> from returns.primitives.container import BaseContainer
 
   >>> _BagContentType = TypeVar('_BagContentType')
   >>> _NewBagContentType = TypeVar('_NewBagContentType')
 
   >>> class Bag(
+  ...     BaseContainer,
   ...     SupportsKind1['Bag', int],
   ...     Bindable1[_BagContentType],
   ... ):
-  ...     def __init__(self, inner_value: _BagContentType):
-  ...         self._inner_value = inner_value
+  ...     def __init__(self, inner_value: _BagContentType) -> None:
+  ...         super().__init__(inner_value)
   ...
   ...     def bind(
   ...         self,
   ...         function: Callable[[_BagContentType], 'Bag[_NewBagContentType]']
   ...     ) -> 'Bag[_NewBagContentType]':
   ...         return function(self._inner_value)
-  ...
-  ...     def __eq__(self, other: Any) -> bool:
-  ...         if not isinstance(self, type(other)):
-  ...             return False
-  ...         return self._inner_value == other._inner_value
 
-  >>> class Peanuts:
-  ...     def __init__(self, quantity: int) -> None:
-  ...         self.quantity = quantity
-  ...
-  ...     def __eq__(self, other: Any) -> bool:
-  ...         if not isinstance(self, type(other)):
-  ...             return False
-  ...         return self.quantity == other.quantity
+  >>> @dataclass
+  ... class Peanuts(object):
+  ...     quantity: int
 
   >>> def get_half(peanuts: Peanuts) -> Bag[Peanuts]:
   ...     return Bag(Peanuts(peanuts.quantity // 2))
@@ -231,6 +222,21 @@ bind the result with ``y``.
   ...    lambda value: minus_one(value).bind(half),
   ... )
 
+
+
+Naming convention
+-----------------
+
+
+FAQ
+---
+
+Why do you have general and specific interfaces?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Why some interfaces do not have type alias for 1 or 2 type arguments?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 What's the difference between ``Mappable`` and ``Bindable``?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -250,18 +256,6 @@ with Bindable we have to pass a function that returns another container:
   >>> def can_be_bound(string: str) -> Maybe[str]:
   ...     return Some(string + '!')
 
-Naming convention
------------------
-
-FAQ
----
-
-Why do you have general and specific interfaces?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Why some interfaces do not have type alias for 1 type argument?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 What is the difference between ResultLikeN and ResultBasedN?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -280,8 +274,12 @@ See the example below using ``FutureResult`` to get a ``IOResult``:
 
   >>> import anyio
   >>> from returns.future import FutureResult
-  >>> from returns.interfaces.specific.ioresult import IOResultBasedN
-  >>> from returns.interfaces.specific.result import ResultLikeN
+  >>> from returns.interfaces.specific.future_result import FutureResultBasedN
+  >>> from returns.interfaces.specific.ioresult import (
+  ...    IOResultBasedN,
+  ...    IOResultLikeN,
+  ... )
+  >>> from returns.interfaces.specific.result import ResultLikeN, ResultBasedN
   >>> from returns.io import IOSuccess, IOResult
   >>> from returns.result import Success, Result
 
@@ -292,10 +290,17 @@ See the example below using ``FutureResult`` to get a ``IOResult``:
   >>> # it's just the intention of having one,
   >>> # we have to await it to get the real result
   >>> result_like: FutureResult[int, str] = FutureResult(coro(1))
+  >>> assert isinstance(result_like, FutureResultBasedN)
+  >>> assert isinstance(result_like, IOResultLikeN)
   >>> assert isinstance(result_like, ResultLikeN)
+
   >>> # `anyio.run(...)` will await our coroutine and give the real result to us
   >>> result: IOResult[int, str] = anyio.run(result_like.awaitable)
   >>> assert isinstance(result, IOResultBasedN)
+  >>> assert isinstance(result, ResultLikeN)
+
+  >>> # Compare it with the real result:
+  >>> assert isinstance(Success(1), ResultBasedN)
 
 .. note::
 
