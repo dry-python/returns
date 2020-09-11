@@ -3,6 +3,19 @@
 Interfaces
 ==========
 
+We provide a lot of generic interfaces
+to write our bundeled and your own custom types.
+
+These interfaces are designed:
+
+1. To be subclasses
+2. To provide abstract methods to implement in your own types
+3. To enforce correctness on final types
+4. To attach critical laws to be checked
+
+We use :ref:`Higher Kinded Types <hkt>` to define abstract methods.
+
+
 General Information
 -------------------
 
@@ -37,6 +50,19 @@ for example, can have one, two or three possible types. See the example below:
   * `Understanding Functor and Monad With a Bag of Peanuts <https://medium.com/beingprofessional/understanding-functor-and-monad-with-a-bag-of-peanuts-8fa702b3f69e>`_
   * `Variance of generic types <https://mypy.readthedocs.io/en/latest/generics.html#variance-of-generic-types>`_
   * `If you know map, I will teach you monads <https://www.youtube.com/watch?v=cB0vpg9-YMQ>`_
+
+Laws
+~~~~
+
+Some interfaces define its laws as values.
+These laws can be viewed as test that are attached to an interface.
+
+We are able to check them of any type
+that implements a given interfaces with laws
+by our own :ref:`check_all_laws hypothesis plugin <hypothesis-plugins>`.
+
+In this docs we are going to describe each general interface and its laws.
+
 
 Mappable
 --------
