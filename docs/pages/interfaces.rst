@@ -20,7 +20,8 @@ General Information
 -------------------
 
 All the non-specific interfaces (e.g. MappableN, BindableN, ApplicativeN) can
-have **Nth** types, at the maximum of three possible types. What does this mean?
+have **Nth** types, at the maximum of three possible types.
+What does this mean?
 
 :class:`MappableN <returns.interfaces.mappable.MappableN>` interface,
 for example, can have one, two or three possible types. See the example below:
@@ -151,7 +152,7 @@ To make sure your mappable implementation is right, you can apply the
 Mappable laws on it to test.
 
 1. **Identity Law:** When we pass the identity function to the map method,
-the mappable has to be the same, unaltered.
+   the mappable has to be the same, unaltered.
 
 .. code:: python
 
@@ -160,9 +161,10 @@ the mappable has to be the same, unaltered.
   >>> mappable_number: Number[int] = Number(1)
   >>> assert mappable_number.map(identity) == Number(1)
 
-2. **Associative Law**: Given two functions, ``x`` and ``y``, calling the map
-method with ``x`` function and after that calling with ``y`` function must have the
-same result if we compose them together.
+2. **Associative Law**: Given two functions, ``x`` and ``y``,
+   calling the map  method with ``x`` function and after that calling
+   with ``y`` function must have the
+   same result if we compose them together.
 
 .. code:: python
 
@@ -235,7 +237,7 @@ To make sure other people will be able to use your implementation, it should
 respect three laws.
 
 1. **Left Identity:** If we ``bind`` a function to our bindable must have to be
-the same result as passing the value directly to the function.
+   the same result as passing the value directly to the function.
 
 .. code:: python
 
@@ -245,7 +247,7 @@ the same result as passing the value directly to the function.
   >>> assert Bag(5).bind(can_be_bound) == can_be_bound(5)
 
 2. **Right Identity:** If we pass the bindable constructor through ``bind`` must
-have to be the same result as instantiating the bindable on our own.
+   have to be the same result as instantiating the bindable on our own.
 
 .. code:: python
 
@@ -253,9 +255,10 @@ have to be the same result as instantiating the bindable on our own.
   >>> assert bag.bind(Bag) == Bag(Peanuts(2))
 
 3. **Associative Law:** Given two functions, ``x`` and ``y``, calling the bind
-method with ``x`` function and after that calling with ``y`` function must have the
-same result if we bind with a function that passes the value to ``x`` and then
-bind the result with ``y``.
+   method with ``x`` function and after that calling with ``y`` function
+   must have the same result if we bind with
+   a function that passes the value to ``x``
+   and then bind the result with ``y``.
 
 .. code:: python
 
@@ -386,6 +389,8 @@ API Reference
 SupportsEquality
 ~~~~~~~~~~~~~~~~
 
+.. autoclasstree:: returns.interfaces.equable
+
 .. automodule:: returns.interfaces.equable
   :members:
 
@@ -459,6 +464,14 @@ Iterable
 .. autoclasstree:: returns.interfaces.iterable
 
 .. automodule:: returns.interfaces.iterable
+  :members:
+
+Container
+~~~~~~~~~
+
+.. autoclasstree:: returns.interfaces.container
+
+.. automodule:: returns.interfaces.container
   :members:
 
 Maybe specific
