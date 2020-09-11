@@ -51,6 +51,28 @@ for example, can have one, two or three possible types. See the example below:
   * `Variance of generic types <https://mypy.readthedocs.io/en/latest/generics.html#variance-of-generic-types>`_
   * `If you know map, I will teach you monads <https://www.youtube.com/watch?v=cB0vpg9-YMQ>`_
 
+Naming convention
+~~~~~~~~~~~~~~~~~
+
+We follow a very specific naming convention in our interface names.
+
+If interface does not depend on the number of types
+it works with and is always the same, we name it as is.
+For example, ``SupportsEquality`` is always the same
+and does not depend on the number of type arguments.
+
+Secondly, if interface depends on the number of type arguments,
+it is named with ``N`` suffix in the end.
+It would always have numeric aliases for each number of arguments supported.
+For example, ``MappableN``, ``Mappable1``, ``Mappable2``, and ``Mappable3``.
+
+The last criteria we have to decided on naming is
+"whether this interface always the same or it can have slight variations"?
+That's why we have ``ResultLikeN`` and ``ResultBasedN`` interfaces.
+Because ``ResultBasedN`` has two extra methods compared to ``ResultLikeN``.
+We use ``Like`` suffix for interfaces that descibes some similar types.
+We use ``Based`` suffix for interfaces that descire almost concrete types.
+
 Laws
 ~~~~
 
@@ -247,11 +269,6 @@ bind the result with ``y``.
   >>> assert bag.bind(minus_one).bind(half) == bag.bind(
   ...    lambda value: minus_one(value).bind(half),
   ... )
-
-
-
-Naming convention
------------------
 
 
 FAQ
