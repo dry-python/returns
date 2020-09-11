@@ -14,3 +14,4 @@ tomlkit==0.7.0
 typing-extensions==3.7.4.3
 mypy==0.782
 pytest==5.4.3
+hypothesis==5.35.0

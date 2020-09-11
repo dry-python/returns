@@ -124,5 +124,16 @@ Further reading
 API Reference
 -------------
 
+DSL to define laws
+~~~~~~~~~~~~~~~~~~
+
+.. autoclasstree:: returns.primitives.laws
+
+.. automodule:: returns.primitives.laws
+   :members:
+
+Plugin internals
+~~~~~~~~~~~~~~~~
+
 .. automodule:: returns.contrib.hypothesis.laws
    :members:
