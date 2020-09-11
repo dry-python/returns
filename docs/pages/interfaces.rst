@@ -15,8 +15,11 @@ These interfaces are designed:
 
 We use :ref:`Higher Kinded Types <hkt>` to define abstract methods.
 
+Reading about interfaces will be the most useful
+if you plan to :ref:`create your own containers <create-your-own-container>`.
 
-General Information
+
+General information
 -------------------
 
 All the non-specific interfaces (e.g. MappableN, BindableN, ApplicativeN) can
@@ -272,6 +275,36 @@ respect three laws.
   >>> assert bag.bind(minus_one).bind(half) == bag.bind(
   ...    lambda value: minus_one(value).bind(half),
   ... )
+
+
+Applicative
+-----------
+
+Laws
+~~~~
+
+
+Container
+---------
+
+Laws
+~~~~
+
+
+More!
+-----
+
+We have way more interfaces with different features!
+We have covered all of them in the technical docs.
+
+So, use them to enforce type-safety of your own containers.
+
+Specific interfaces
+~~~~~~~~~~~~~~~~~~~
+
+We also have a whole package of different specific interfaces
+that will help you to create containers based on our internal types,
+like ``Result``.
 
 
 FAQ

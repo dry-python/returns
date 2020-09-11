@@ -84,7 +84,7 @@ That's the whole point of copying!
 
 But, there are different functions, that do different things with types.
 For example, we can write a function that converts
-a value inside any :class:`returns.interfaces.container.Container1`
+a value inside any :class:`Container1 <returns.interfaces.container.ContainerN>`
 (a base class for all our containers)
 from ``int`` to ``str``:
 

@@ -112,7 +112,7 @@ class Lawful(Generic[_Caps]):
         Collects all laws from all parent classes.
 
         Algorithm:
-        1. First, we collect all unique parents in ``__mro__`
+        1. First, we collect all unique parents in ``__mro__``
         2. Then we get the laws definition from each of them
         3. Then we structure them in a ``type: its_laws`` way
 
