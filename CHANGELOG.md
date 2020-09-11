@@ -12,6 +12,7 @@ See [0Ver](https://0ver.org/).
 
 - Adds Higher Kinded Types partial support
 
+- **Breaking**: drops `python3.6` support
 - **Breaking**: makes our `mypy` plugin not optional, but required!
 - **Breaking**: changes all `RequiresContext`-based type arguments order,
   previously we used to specify `_EnvType` as the first type argument,

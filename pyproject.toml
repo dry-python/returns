@@ -53,7 +53,7 @@ _ = "returns.contrib.hypothesis._entrypoint:hypothesis_setup_hook"
 
 
 [tool.poetry.dependencies]
-python = "^3.6"
+python = "^3.7"
 
 typing-extensions = "^3.7"
 

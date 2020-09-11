@@ -7,15 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        include:
-          - python-version: 3.6
-            # We need this, because python3.6 does not support hypothesis
-            # checking of our laws. That's why we decrease our coverage.
-            coverage: 97.5
-          - python-version: 3.7
-            coverage: 100
-          - python-version: 3.8
-            coverage: 100
+        python-version: [3.7, 3.8]
 
     steps:
     - uses: actions/checkout@v2
@@ -48,7 +40,7 @@ jobs:
         poetry run flake8 .
         poetry run mypy returns ./tests/**/*.py
         # Different python versions are covered differently:
-        poetry run pytest returns docs/pages tests --cov-fail-under=${{ matrix.coverage }}
+        poetry run pytest returns docs/pages tests
         poetry run doc8 -q docs
         poetry run poetry check
         poetry run pip check

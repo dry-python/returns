@@ -1,5 +1,4 @@
 import inspect
-import sys
 from contextlib import contextmanager
 from typing import (
     Any,
@@ -23,8 +22,6 @@ from typing_extensions import final
 from returns.interfaces.applicative import ApplicativeN
 from returns.interfaces.specific import maybe, result
 from returns.primitives.laws import Law, Lawful
-
-_pyversion = sys.version_info[:2]
 
 
 @final
@@ -233,13 +230,6 @@ def _run_law(
     settings: _Settings,
 ) -> Callable[[st.DataObject], None]:
     def factory(source: st.DataObject) -> None:
-        if _pyversion < (3, 7):  # pragma: no cover
-            raise RuntimeError(
-                'Hypothesis does not support several important ' +
-                'typing features on python3.6, and earlier versions. ' +
-                'Please update to at least python3.7',
-            )
-
         with type_vars():
             with pure_functions():
                 with container_strategies(container_type, settings=settings):

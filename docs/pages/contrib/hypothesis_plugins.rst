@@ -15,10 +15,6 @@ It is not bundled with ``returns``.
 
 We also require ``anyio`` package for this plugin to work with async laws.
 
-Warning::
-  This module does not support ``python3.6``,
-  please upgrade to at least ``python3.7``!
-
 
 hypothesis entrypoint
 ---------------------
