@@ -49,7 +49,7 @@ classifiers = [
 returns = "returns.contrib.pytest.plugin"
 
 [tool.poetry.plugins.hypothesis]
-_ = "returns.contrib.hypothesis._entrypoint:hypothesis_setup_hook"
+_ = "returns.contrib.hypothesis._entrypoint"
 
 
 [tool.poetry.dependencies]
@@ -65,7 +65,7 @@ flake8-pytest-style = "^1.2"
 flake8-pyi = "^20.5"
 nitpick = "^0.22"
 
-anyio = "^1.4"
+anyio = "^2.0"
 curio = "^1.4"
 trio = "^0.16"
 

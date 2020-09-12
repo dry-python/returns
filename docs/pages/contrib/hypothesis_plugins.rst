@@ -35,6 +35,39 @@ So, you don't have to. Example:
 This is a convenience thing only.
 
 
+strategy_from_container
+-----------------------
+
+We provide a utility function
+to create ``hypothesis`` strategy from any container.
+
+You can use it to easily register your own containers.
+
+.. code:: python
+
+  from hypothesis import strategies as st
+  from returns.contrib.hypothesis.containers import strategy_from_container
+
+  st.register_type_strategy(
+      YourContainerClass,
+      strategy_from_container(YourContainerClass),
+  )
+
+You can also pass ``use_init`` keyword argument
+if you wish to use ``__init__`` method to instanciate your containers.
+Turned off by default.
+Example:
+
+.. code:: python
+
+  st.register_type_strategy(
+      YourContainerClass,
+      strategy_from_container(YourContainerClass, use_init=True),
+  )
+
+Or you can write your own ``hypothesis`` strategy. It is also fine.
+
+
 check_all_laws
 --------------
 
@@ -123,6 +156,12 @@ Further reading
 
 API Reference
 -------------
+
+DSL to register custom containers
+---------------------------------
+
+.. automodule:: returns.contrib.hypothesis.containers
+   :members:
 
 DSL to define laws
 ~~~~~~~~~~~~~~~~~~
