@@ -59,7 +59,7 @@ CustomResult = Result[int, str]
 
 
 @given(st.from_type(CustomResult))
-def test_custom_result_error_alias_resolves(thing: CustomResult) -> None:
+def test_custom_result_error_types_resolve(thing: CustomResult) -> None:
     """Ensures that type aliases are resolved correctly."""
     if is_successful(thing):
         assert isinstance(thing.unwrap(), int)
@@ -78,5 +78,20 @@ def test_reader_result_error_alias_resolves(
     thing: RequiresContextResultE,
 ) -> None:
     """Ensures that type aliases are resolved correctly."""
-    real_result = thing(...)
+    real_result = thing(RequiresContextResultE.empty)
     assert isinstance(real_result.failure(), Exception)
+
+
+CustomReaderResult = RequiresContextResult[int, str, bool]
+
+
+@given(st.from_type(CustomReaderResult))
+def test_custom_readerresult_types_resolve(
+    thing: CustomReaderResult,
+) -> None:
+    """Ensures that type aliases are resolved correctly."""
+    real_result = thing(RequiresContextResultE.empty)
+    if is_successful(real_result):
+        assert isinstance(real_result.unwrap(), int)
+    else:
+        assert isinstance(real_result.failure(), str)
