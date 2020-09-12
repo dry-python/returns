@@ -89,7 +89,7 @@ class RequiresContext(
     #: This field has an extra 'RequiresContext' just because `mypy` needs it.
     _inner_value: Callable[['RequiresContext', _EnvType], _ReturnType]
 
-    #: A convinient placeholder to call methods created by `.from_value()`:
+    #: A convenient placeholder to call methods created by `.from_value()`:
     empty: ClassVar[NoDeps] = object()
 
     def __init__(

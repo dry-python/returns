@@ -108,7 +108,7 @@ class RequiresContextResult(
         Result[_ValueType, _ErrorType],
     ]
 
-    #: A convinient placeholder to call methods created by `.from_value()`.
+    #: A convenient placeholder to call methods created by `.from_value()`.
     empty: ClassVar[NoDeps] = object()
 
     def __init__(
