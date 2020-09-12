@@ -92,7 +92,10 @@ def container_strategies(
     our_interfaces = {
         base_type
         for base_type in container_type.__mro__
-        if getattr(base_type, '__module__', '').startswith('returns.')
+        if (
+            getattr(base_type, '__module__', '').startswith('returns.') and
+            base_type != container_type
+        )
     }
     for interface in our_interfaces:
         st.register_type_strategy(

@@ -157,8 +157,14 @@ Further reading
 API Reference
 -------------
 
+Types we have already registered for you
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. automodule:: returns.contrib.hypothesis._entrypoint
+   :members:
+
 DSL to register custom containers
----------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: returns.contrib.hypothesis.containers
    :members:

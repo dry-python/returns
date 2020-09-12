@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Callable, List, Type
+from typing import TYPE_CHECKING, Any, Callable, List, Type, TypeVar
 
 from hypothesis import strategies as st
 
@@ -22,21 +22,44 @@ def strategy_from_container(
     But, custom containers pass ``use_init``
     if they are not an instance of ``ApplicativeN``
     and do not have a working ``.from_value`` method.
-
     For example, pure ``MappableN`` can do that.
+
+    We also try to resolve generic arguments.
+    So, ``Result[_ValueType, Exception]``
+    will produce any value for success cases
+    and only exceptions for failure cases.
     """
     from returns.interfaces.applicative import ApplicativeN
     from returns.interfaces.specific import maybe, result
 
     def factory(type_: type) -> st.SearchStrategy:
+        value_type, error_type = _get_type_vars(type_)
+
         strategies: List[st.SearchStrategy[Any]] = []
         if use_init and getattr(container_type, '__init__', None):
             strategies.append(st.builds(container_type))
         if issubclass(container_type, ApplicativeN):
-            strategies.append(st.builds(container_type.from_value))
+            strategies.append(st.builds(
+                container_type.from_value,
+                st.from_type(value_type),
+            ))
         if issubclass(container_type, result.ResultLikeN):
-            strategies.append(st.builds(container_type.from_failure))
+            strategies.append(st.builds(
+                container_type.from_failure,
+                st.from_type(error_type),
+            ))
         if issubclass(container_type, maybe.MaybeLikeN):
-            strategies.append(st.builds(container_type.from_optional))
+            strategies.append(st.builds(
+                container_type.from_optional,
+                st.from_type(value_type),
+            ))
         return st.one_of(*strategies)
     return factory
+
+
+_FirstType = TypeVar('_FirstType')
+_SecondType = TypeVar('_SecondType')
+
+
+def _get_type_vars(thing: type):
+    return getattr(thing, '__args__', (_FirstType, _SecondType))[:2]
