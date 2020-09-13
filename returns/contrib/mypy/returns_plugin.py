@@ -67,13 +67,13 @@ class _ReturnsPlugin(Plugin):
 
     _method_sig_hook_plugins: ClassVar[Mapping[str, _MethodSigCallback]] = {
         _consts.TYPED_PIPE_METHOD: pipe.signature,
-        _consts.TYPED_KIND_KINDED: kind.kinded_signature,
+        _consts.TYPED_KIND_KINDED_CALL: kind.kinded_signature,
     }
 
     _method_hook_plugins: ClassVar[Mapping[str, _MethodCallback]] = {
         _consts.TYPED_PIPE_METHOD: pipe.infer,
-        _consts.TYPED_KIND_KINDED: kind.kinded_call,
-        'returns.primitives.hkt.Kinded.__get__': kind.kinded_get_descriptor,
+        _consts.TYPED_KIND_KINDED_CALL: kind.kinded_call,
+        _consts.TYPED_KIND_KINDED_GET: kind.kinded_get_descriptor,
     }
 
     def get_function_hook(
