@@ -1,7 +1,7 @@
 from typing import Callable, TypeVar
 
 from returns.interfaces.specific.ioresult import IOResultLikeN
-from returns.primitives.hkt import Kinded, KindN
+from returns.primitives.hkt import Kinded, KindN, kinded
 from returns.result import Result
 
 _FirstType = TypeVar('_FirstType')
@@ -89,6 +89,7 @@ def managed(
     But, we do not recommend to use this function with ``lambda`` functions.
 
     """
+    @kinded
     def factory(
         acquire: KindN[_IOResultLikeType, _FirstType, _SecondType, _ThirdType],
     ) -> KindN[_IOResultLikeType, _UpdatedType, _SecondType, _ThirdType]:

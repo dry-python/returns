@@ -192,7 +192,15 @@ class Kinded(Protocol[_FunctionDefType]):  # type: ignore
     Otherwise, it is currently impossible to properly type this.
     """
 
+    #: Use to translate `KindN` into real types.
     __call__: _FunctionDefType
+
+    def __get__(
+        self,
+        instance: _UpdatedType,
+        type_,
+    ) -> Callable[..., _UpdatedType]:
+        """Used to decorate and properly analyze method calls."""
 
 
 def kinded(function: _FunctionType) -> Kinded[_FunctionType]:

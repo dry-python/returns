@@ -8,7 +8,7 @@ from mypy.plugin import (
     MethodContext,
     MethodSigContext,
 )
-from mypy.typeops import erase_to_bound
+from mypy.typeops import bind_self, erase_to_bound
 from mypy.types import AnyType, CallableType, Instance
 from mypy.types import Type as MypyType
 from mypy.types import TypeOfAny, TypeVarType, get_proper_type
@@ -105,7 +105,7 @@ def kinded_signature(ctx: MethodSigContext) -> CallableType:
     return ctx.type.args[0]
 
 
-def kinded_method(ctx: MethodContext) -> MypyType:
+def kinded_call(ctx: MethodContext) -> MypyType:
     """
     Reveals the correct return type of ``Kinded.__call__`` method.
 
@@ -120,6 +120,27 @@ def kinded_method(ctx: MethodContext) -> MypyType:
     See :class:`returns.primitives.hkt.Kinded` for more information.
     """
     return _process_kinded_type(ctx.default_return_type)
+
+
+@asserts_fallback_to_any
+def kinded_get_descriptor(ctx: MethodContext) -> MypyType:
+    """
+    Used to analyze ``@kinded`` method calls.
+
+    We do this due to ``__get__`` descriptor magic.
+    """
+    assert isinstance(ctx.type, Instance)
+    assert isinstance(ctx.type.args[0], CallableType)
+
+    function = bind_self(ctx.type.args[0])
+    assert isinstance(function, CallableType)
+    assert isinstance(function.ret_type, Instance)
+
+    new_ret_type = function.ret_type.copy_modified(
+        args=[ctx.arg_types[0][0], *function.ret_type.args[1:]],
+    )
+    replaced_method = function.copy_modified(ret_type=new_ret_type)
+    return ctx.type.copy_modified(args=[replaced_method])
 
 
 @unique  # noqa: WPS600

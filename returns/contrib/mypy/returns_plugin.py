@@ -72,7 +72,8 @@ class _ReturnsPlugin(Plugin):
 
     _method_hook_plugins: ClassVar[Mapping[str, _MethodCallback]] = {
         _consts.TYPED_PIPE_METHOD: pipe.infer,
-        _consts.TYPED_KIND_KINDED: kind.kinded_method,
+        _consts.TYPED_KIND_KINDED: kind.kinded_call,
+        'returns.primitives.hkt.Kinded.__get__': kind.kinded_get_descriptor,
     }
 
     def get_function_hook(
