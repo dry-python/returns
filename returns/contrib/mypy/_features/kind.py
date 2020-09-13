@@ -122,7 +122,7 @@ def kinded_call(ctx: MethodContext) -> MypyType:
     return _process_kinded_type(ctx.default_return_type)
 
 
-# @asserts_fallback_to_any
+@asserts_fallback_to_any
 def kinded_get_descriptor(ctx: MethodContext) -> MypyType:
     """
     Used to analyze ``@kinded`` method calls.
