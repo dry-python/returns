@@ -122,7 +122,7 @@ def kinded_call(ctx: MethodContext) -> MypyType:
     return _process_kinded_type(ctx.default_return_type)
 
 
-@asserts_fallback_to_any
+# @asserts_fallback_to_any
 def kinded_get_descriptor(ctx: MethodContext) -> MypyType:
     """
     Used to analyze ``@kinded`` method calls.
@@ -134,7 +134,7 @@ def kinded_get_descriptor(ctx: MethodContext) -> MypyType:
 
     function = bind_self(ctx.type.args[0])
     assert isinstance(function, CallableType)
-    assert isinstance(function.ret_type, Instance)
+    assert isinstance(get_proper_type(function.ret_type), Instance)
 
     new_ret_type = function.ret_type.copy_modified(
         args=[ctx.arg_types[0][0], *function.ret_type.args[1:]],
