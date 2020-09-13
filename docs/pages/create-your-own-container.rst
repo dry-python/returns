@@ -108,7 +108,9 @@ Let's look at the resul:
   ...     rescuable.Rescuable2[_FirstType, _SecondType],
   ...     equable.SupportsEquality,
   ... ):
-  ...     def __init__(self, inner_value: Tuple[_FirstType, _SecondType]) -> None:
+  ...     def __init__(
+  ...         self, inner_value: Tuple[_FirstType, _SecondType],
+  ...     ) -> None:
   ...         super().__init__(inner_value)
 
 .. note::
