@@ -39,7 +39,8 @@ classifiers = [
   "Intended Audience :: Developers",
   "Operating System :: OS Independent",
   "Topic :: Software Development :: Libraries :: Python Modules",
-  "Topic :: Utilities"
+  "Topic :: Utilities",
+  "Typing :: Typed"
 ]
 
 [tool.poetry.urls]
