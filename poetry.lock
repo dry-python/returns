@@ -501,7 +501,7 @@ description = "A library for property-based testing"
 name = "hypothesis"
 optional = false
 python-versions = ">=3.6"
-version = "5.35.1"
+version = "5.35.3"
 
 [package.dependencies]
 attrs = ">=19.2.0"
@@ -1614,8 +1614,8 @@ gitpython = [
     {file = "GitPython-3.1.8.tar.gz", hash = "sha256:080bf8e2cf1a2b907634761c2eaefbe83b69930c94c66ad11b65a8252959f912"},
 ]
 hypothesis = [
-    {file = "hypothesis-5.35.1-py3-none-any.whl", hash = "sha256:63ef65b9abe71f4d3342a47dcdd3f18bd01d729d3878b024d9c22e5caf0a58eb"},
-    {file = "hypothesis-5.35.1.tar.gz", hash = "sha256:15f68c69b4d9007769f4ee9ec97ebad1fe2da801e110eb210bd951eb6f14453b"},
+    {file = "hypothesis-5.35.3-py3-none-any.whl", hash = "sha256:ee7bad5a617beed17090375f6e8e0f4f06677e9db92eaf598a186e69479843fa"},
+    {file = "hypothesis-5.35.3.tar.gz", hash = "sha256:a480386934cdfb2e69adb3333e7156ad9149b1935a910e44041a87c5bd8374dd"},
 ]
 idna = [
     {file = "idna-2.10-py2.py3-none-any.whl", hash = "sha256:b97d804b1e9b523befed77c48dacec60e6dcb0b5391d57af6a65a312a90648c0"},
