@@ -1,13 +1,5 @@
 from abc import abstractmethod
-from typing import (
-    Callable,
-    ClassVar,
-    Generic,
-    NoReturn,
-    Sequence,
-    Type,
-    TypeVar,
-)
+from typing import Callable, ClassVar, NoReturn, Sequence, Type, TypeVar
 
 from typing_extensions import final
 
