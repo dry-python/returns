@@ -3,7 +3,7 @@ from typing import Callable, ClassVar, NoReturn, Sequence, TypeVar
 from typing_extensions import final
 
 from returns.interfaces import bindable, iterable
-from returns.interfaces.applicative_mappable import ApplicativeMappableN
+from returns.interfaces.applicative import ApplicativeN
 from returns.primitives.asserts import assert_equal
 from returns.primitives.hkt import KindN
 from returns.primitives.laws import (
@@ -98,7 +98,7 @@ class _LawSpec(LawSpecDef):
 
 
 class ContainerN(
-    ApplicativeMappableN[_FirstType, _SecondType, _ThirdType],
+    ApplicativeN[_FirstType, _SecondType, _ThirdType],
     bindable.BindableN[_FirstType, _SecondType, _ThirdType],
     iterable.IterableN[_FirstType, _SecondType, _ThirdType],
     Lawful['ContainerN[_FirstType, _SecondType, _ThirdType]'],

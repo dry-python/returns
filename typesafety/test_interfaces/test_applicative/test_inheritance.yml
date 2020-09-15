@@ -9,20 +9,15 @@
     N = TypeVar('N')
 
     class MyClass(SupportsKind1['MyClass', V], Applicative1[V]):
-        def __init__(self, value: V) -> None:
-            self.value = value
-
         def apply(
             self,
             container: Kind1['MyClass', Callable[[V], N]],
         ) -> 'MyClass[N]':
-            return MyClass(dekind(container).value(self.value))
+            ...
 
         @classmethod
         def from_value(cls, inner_value: N) -> MyClass[N]:
-            return MyClass(inner_value)
-
-    reveal_type(MyClass('1').apply(MyClass.from_value(int)))  # N: Revealed type is 'main.MyClass[builtins.int*]'
+            ...
 
 
 - case: applicative_inheritance_correct2
@@ -37,21 +32,15 @@
     N = TypeVar('N')
 
     class MyClass(SupportsKind2['MyClass', V, E], Applicative2[V, E]):
-        def __init__(self, value: V, error: E) -> None:
-            self.value = value
-            self.error = error
-
         def apply(
             self,
             container: Kind2['MyClass', Callable[[V], N], E],
         ) -> 'MyClass[N, E]':
-            return MyClass(dekind(container).value(self.value), self.error)
+            ...
 
         @classmethod
         def from_value(cls, inner_value: N) -> MyClass[N, Any]:
-            return MyClass(inner_value, None)
-
-    reveal_type(MyClass('1', True).apply(MyClass.from_value(int)))  # N: Revealed type is 'main.MyClass[builtins.int*, builtins.bool]'
+            ...
 
 
 - case: applicative_inheritance_correct3
@@ -67,39 +56,32 @@
     N = TypeVar('N')
 
     class MyClass(SupportsKind3['MyClass', V, E, T], Applicative3[V, E, T]):
-        def __init__(self, value: V, error: E, last: T) -> None:
-            self.value = value
-            self.error = error
-            self.last = last
-
         def apply(
             self,
             container: Kind3['MyClass', Callable[[V], N], E, T],
         ) -> 'MyClass[N, E, T]':
-            return MyClass(dekind(container).value(self.value), self.error, self.last)
+            ...
 
         @classmethod
         def from_value(cls, inner_value: N) -> MyClass[N, Any, Any]:
-            return MyClass(inner_value, None, None)
-
-    reveal_type(MyClass('1', True, 'a').apply(MyClass.from_value(int)))  # N: Revealed type is 'main.MyClass[builtins.int*, builtins.bool, builtins.str]'
+            ...
 
 
 - case: applicative_inheritance_missing
   disable_cache: false
   main: |
     from typing import TypeVar
+    from typing_extensions import final
     from returns.interfaces.applicative import Applicative1
     from returns.primitives.hkt import SupportsKind1
 
     V = TypeVar('V')
 
+    @final
     class MyClass(SupportsKind1['MyClass', V], Applicative1[V]):
         ...
-
-    MyClass()
   out: |
-    main:10: error: Cannot instantiate abstract class 'MyClass' with abstract attributes 'apply' and 'from_value'
+    main:9: error: Final class main.MyClass has abstract attributes "apply", "from_value", "map"
 
 
 - case: applicative_inheritance_wrong

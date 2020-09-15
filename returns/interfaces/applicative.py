@@ -12,6 +12,7 @@ from typing import (
 from typing_extensions import final
 
 from returns.functions import compose, identity
+from returns.interfaces import mappable
 from returns.primitives.asserts import assert_equal
 from returns.primitives.hkt import KindN
 from returns.primitives.laws import (
@@ -126,7 +127,7 @@ class _LawSpec(LawSpecDef):
 
 
 class ApplicativeN(
-    Generic[_FirstType, _SecondType, _ThirdType],
+    mappable.MappableN[_FirstType, _SecondType, _ThirdType],
     Lawful['ApplicativeN[_FirstType, _SecondType, _ThirdType]'],
 ):
     """

@@ -73,12 +73,10 @@ let's find pre-defined aliases we can reuse.
 
 Turns out, there are some of them!
 
-- :class:`returns.interfaces.applicative_mappable.ApplicativeMappableN`
-  which combines ``MappableN`` and ``ApplicativeN``
 - :class:`returns.interfaces.bimappable.BiMappableN`
   which combines ``MappableN`` and ``AltableN``
 - :class:`returns.interfaces.container.ContainerN` which combines
-  ``ApplicativeMappableN`` and ``BindableN``
+  ``ApplicativeN`` and ``BindableN``
 
 Let's look at the resul:
 

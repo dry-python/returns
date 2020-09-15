@@ -451,14 +451,6 @@ Applicative
 .. automodule:: returns.interfaces.applicative
   :members:
 
-ApplicativeMappable
-~~~~~~~~~~~~~~~~~~~
-
-.. autoclasstree:: returns.interfaces.applicative_mappable
-
-.. automodule:: returns.interfaces.applicative_mappable
-  :members:
-
 Altable
 ~~~~~~~
 
