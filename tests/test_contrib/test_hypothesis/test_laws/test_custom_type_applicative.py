@@ -19,6 +19,12 @@ class _Wrapper(
     def __init__(self, inner_value: _ValueType) -> None:
         super().__init__(inner_value)
 
+    def map(
+        self,
+        function: Callable[[_ValueType], _NewValueType],
+    ) -> '_Wrapper[_NewValueType]':
+        return _Wrapper(function(self._inner_value))
+
     def apply(
         self,
         container: Kind1['_Wrapper', Callable[[_ValueType], _NewValueType]],
