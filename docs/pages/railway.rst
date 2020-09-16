@@ -6,7 +6,7 @@ Railway oriented programming
 Containers can serve many different purposes
 (while still serving the main one: composition)
 for example, some of them
-(:class:`returns.result.Result` and :class:`returns.maybe.Maybe`) are used
+(:class:`~returns.result.Result` and :class:`~returns.maybe.Maybe`) are used
 to work with different types of errors
 starting with ``NullPointerException`` to arbitary user-defined ones.
 
@@ -120,8 +120,8 @@ It can also rescue your flow and get on the successful track again:
   :class:`returns.interfaces.rescuable.RescuableN`
   and
   :class:`returns.interfaces.altable.AltableN`
-  For example, :class:`returns.io.IO` based containers
-  and :class:`returns.context.requires_context.RequiresContext`
+  For example, :class:`~returns.io.IO` based containers
+  and :class:`~returns.context.requires_context.RequiresContext`
   cannot be alted or rescued.
 
 
@@ -175,8 +175,8 @@ when you try to ``.failure()`` a successful container.
   Not all containers support these methods,
   only containers that implement
   :class:`returns.interfaces.unwrappable.Unwrappable`.
-  For example, :class:`returns.io.IO` based containers
-  and :class:`returns.context.requires_context.RequiresContext`
+  For example, :class:`~returns.io.IO` based containers
+  and :class:`~returns.context.requires_context.RequiresContext`
   cannot be unwrapped.
 
 .. note::
