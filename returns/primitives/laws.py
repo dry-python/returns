@@ -37,12 +37,6 @@ class Law(Immutable):
         """Returns a name of the given law. Basically a name of the function."""
         return self.definition.__name__
 
-    @final  # noqa: WPS125
-    @property
-    def __doc__(self) -> str:  # noqa: WPS125
-        """Returns the docs for a specific law."""
-        return self.definition.__doc__
-
 
 @final
 class Law1(
