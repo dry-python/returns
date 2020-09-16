@@ -55,16 +55,46 @@ Returning execution to the right track
 We also support two special methods to work with "failed"
 types like ``Failure``:
 
-- :func:`~returns.primitives.container.Rescueable.rescue`
+- :func:`~returns.interfaces.rescuable.RescuableN.rescue`
   is the opposite of ``bind`` method
   that works only when container is in failed state
-- :func:`~returns.primitives.container.Altable.alt`
+- :func:`~returns.interfaces.altable.AltableN.alt`
   transforms error to another error
   that works only when container is in failed state,
   is the opposite of ``map`` method
 
-``rescue`` should return one of ``Success`` or ``Failure`` types.
+``alt`` method allows to change your error type.
+
+.. mermaid::
+  :caption: Illustration of ``alt`` method.
+
+   graph LR
+      F1["Container[A]"] -- "alt(function)" --> F2["Container[B]"]
+
+      style F1 fill:red
+      style F2 fill:red
+
+.. code:: python
+
+  >>> from returns.result import Failure
+  >>> assert Failure(1).alt(str) == Failure('1')
+
+The second method is ``rescue``. It is a bit different.
+We pass a function that returns another container to it.
+:func:`returns.interfaces.rescuable.RescuableN.rescue`
+is used to literally bind two different containers together.
 It can also rescue your flow and get on the successful track again:
+
+.. mermaid::
+  :caption: Illustration of ``rescue`` method.
+
+   graph LR
+      F1["Container[A]"] -- "rescue(function)" --> F2["Container[B]"]
+      F1["Container[A]"] -- "rescye(function)" --> F3["Container[C]"]
+
+      style F1 fill:red
+      style F2 fill:green
+      style F3 fill:red
 
 .. code:: python
 
@@ -83,12 +113,13 @@ It can also rescue your flow and get on the successful track again:
   >>> result2: Result[int, Exception] = value2.rescue(tolerate_exception)
   >>> # => Failure(ValueError())
 
-
 .. note::
 
   Not all containers support these methods,
   only containers that implement
-  :class:`returns.interfaces.specific.result.ResultLikeN`.
+  :class:`returns.interfaces.rescuable.RescuableN`
+  and
+  :class:`returns.interfaces.altable.AltableN`
   For example, ``IO`` based containers
   and ``RequiresContext`` cannot be alted or rescued.
 

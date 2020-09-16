@@ -19,8 +19,9 @@ List of supported containers:
 There are also some combintations like
 :class:`IOResult <returns.io.IOResult>`,
 :class:`FutureResult <returns.future.FutureResult>`,
-:class:`RequiresContextResult <.RequiresContextResult>` and
-:class:`RequiresContextIOResult <.RequiresContextIOResult>`.
+:class:`RequiresContextResult <.RequiresContextResult>`,
+:class:`RequiresContextIOResult <.RequiresContextIOResult>` and
+:class:`RequiresContextFutureResult <.RequiresContextFutureResult>`.
 
 We will show you container's simple API of one attribute
 and several simple methods.
@@ -47,15 +48,6 @@ And we can see how this state is evolving during the execution.
        F3                       --> F4["Container(FailedLoginAttempt(1))"]
        F4                       --> F5["Container(SentNotificationId(992))"]
 
-All containers support special ``.from_value`` method
-to construct a new container from a raw value.
-
-.. code:: python
-
-  >>> from returns.result import Result
-
-  >>> assert str(Result.from_value(1)) == '<Success: 1>'
-
 
 Working with a container
 ------------------------
@@ -68,22 +60,19 @@ The difference is simple:
 - ``map`` works with functions that return regular value
 - ``bind`` works with functions that return new container of the same type
 
-:func:`returns.primitives.container.Bindable.bind`
-is used to literally bind two different containers together.
+We have :func:`returns.interfaces.mappable.MappableN.map`
+to compose containers with regular functions.
 
-.. code:: python
+Here's how it looks:
 
-  from returns.result import Result, Success
+.. mermaid::
+  :caption: Illustration of ``map`` method.
 
-  def may_fail(user_id: int) -> Result[float, str]:
-      ...
+   graph LR
+      F1["Container[A]"] -- "map(function)" --> F2["Container[B]"]
 
-  value: Result[int, str] = Success(1)
-  # Can be assumed as either Success[float] or Failure[str]:
-  result: Result[float, str] = value.bind(may_fail)
-
-And we have :func:`returns.interfaces.mappable.Mappable.map`
-to use containers with regular functions.
+      style F1 fill:green
+      style F2 fill:green
 
 .. code:: python
 
@@ -109,13 +98,79 @@ The same works with built-in functions as well:
   >>> str(io)
   "<IO: ['b', 'y', 't', 'e', 's']>"
 
+The second method is ``bind``. It is a bit different.
+We pass a function that returns another container to it.
+:func:`returns.interfaces.bindable.BindableN.bind`
+is used to literally bind two different containers together.
+
+Here's how it looks:
+
+.. mermaid::
+  :caption: Illustration of ``bind`` method.
+
+   graph LR
+      F1["Container[A]"] -- "bind(function)" --> F2["Container[B]"]
+      F1["Container[A]"] -- "bind(function)" --> F3["Container[C]"]
+
+      style F1 fill:green
+      style F2 fill:green
+      style F3 fill:red
+
+.. code:: python
+
+  from returns.result import Result, Success
+
+  def may_fail(user_id: int) -> Result[float, str]:
+      ...
+
+  value: Result[int, str] = Success(1)
+  # Can be assumed as either Success[float] or Failure[str]:
+  result: Result[float, str] = value.bind(may_fail)
+
 .. note::
 
   All containers support these methods.
+  Because all containers implement
+  :class:`returns.interfaces.mappable.MappableN`
+  and
+  :class:`returns.interfaces.bindable.BindableN`.
 
 You can read more about methods
 that some other containers support
 and :ref:`interfaces <base-interfaces>` behind them.
+
+
+Instantiating a container
+-------------------------
+
+All :class:`returns.interfaces.applicative.ApplicativeN` containers
+support special ``.from_value`` method
+to construct a new container from a raw value.
+
+.. code:: python
+
+  >>> from returns.result import Result
+  >>> assert str(Result.from_value(1)) == '<Success: 1>'
+
+There are also other methods in other interfaces.
+For example, here are some of them:
+
+- :func:`returns.interfaces.specific.maybe.MaybeLikeN.from_optional`
+  creates a value from ``Optional`` value
+
+.. code:: python
+
+  >>> from returns.maybe import Maybe, Some, Nothing
+  >>> assert Maybe.from_optional(1) == Some(1)
+  >>> assert Maybe.from_optional(None) == Nothing
+
+- :func:`returns.interfaces.specific.result.ResultLikeN.from_failure`
+  creates a failing container from a value
+
+.. code:: python
+
+  >>> from returns.result import Result, Failure
+  >>> assert Result.from_failure(1) == Failure(1)
 
 
 Working with multiple containers
