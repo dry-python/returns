@@ -16,7 +16,7 @@ Error handling
 
 When talking about error handling we use a concept of
 `Railway oriented programming <https://fsharpforfunandprofit.com/rop/>`_.
-It mean that our code can go on two tracks:
+It mean that flow of our program has two tracks:
 
 1. Successful one: where everything goes perfectly: HTTP requests work,
    database is always serving us data, parsing values does not failed

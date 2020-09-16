@@ -26,7 +26,7 @@ All the non-specific interfaces (e.g. MappableN, BindableN, ApplicativeN) can
 have **Nth** types, at the maximum of three possible types.
 What does this mean?
 
-:class:`MappableN <returns.interfaces.mappable.MappableN>` interface,
+:class:`~returns.interfaces.mappable.MappableN` interface,
 for example, can have one, two or three possible types. See the example below:
 
 .. code:: python
@@ -96,7 +96,7 @@ Mappable
 Something is considered mappable if we can ``map`` it using a function,
 generally ``map`` is a method that accepts a function.
 
-An example in this library is :class:`Maybe <returns.maybe.Maybe>`,
+An example in this library is :class:`~returns.maybe.Maybe`,
 that implements the ``Mappable`` interface:
 
 .. code:: python
@@ -109,8 +109,8 @@ that implements the ``Mappable`` interface:
   >>> maybe_str: Maybe[str] = Some('example')
   >>> assert maybe_str.map(can_be_mapped) == Some('example!')
 
-:class:`Mappable <returns.interfaces.mappable.MappableN>` interface help us to
-create our own mappable container like :class:`Maybe <returns.maybe.Maybe>`.
+:class:`~returns.interfaces.mappable.MappableN` interface help us to
+create our own mappable container like :class:`~returns.maybe.Maybe`.
 
 .. code:: python
 
@@ -192,9 +192,9 @@ Mappable laws on it to test.
 Bindable
 --------
 
-Bindable is something that we can bind it with a function, like
-:class:`Maybe <returns.maybe.Maybe>`, so
-:class:`Bindable <returns.interfaces.bindable.BindableN>` interface will help
+Bindable is something that we can bind with a function. Like
+:class:`~returns.maybe.Maybe`, so
+:class:`~returns.interfaces.bindable.BindableN` interface will help
 us to create our custom bindable.
 
 .. code:: python
@@ -324,7 +324,7 @@ only knows about ``.map`` method. It does not require anything else.
 
 But, ``ResultLikeN`` from ``.interfaces.specific.result``
 does require to have ``.bind_result`` method
-which relies on our :class:`Result <returns.result.Result>` type.
+which relies on our :class:`~returns.result.Result` type.
 
 That's the only difference.
 Build your own types with any of those interfaces.
@@ -333,7 +333,7 @@ Why some interfaces do not have type alias for 1 or 2 type arguments?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Some types like
-:class:`ResultLikeN <returns.interfaces.specific.result.ResultLikeN>`
+:class:`~returns.interfaces.specific.result.ResultLikeN`
 do not have type aliases for one type argument in a form of ``ResultLike1``.
 
 Why does ``Mappable1`` exists and ``ResultLike1`` does not?
@@ -345,10 +345,10 @@ and ``ReaderResultLike2``.
 
 We don't support type aliases for types that won't make sence.
 
-What's the difference between ``Mappable`` and ``Bindable``?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+What's the difference between ``MappableN`` and ``BindableN``?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-While Mappable you have to pass a pure function, like:
+While ``MappableN`` you have to pass a pure function, like:
 
 .. code:: python
 
@@ -364,13 +364,21 @@ with Bindable we have to pass a function that returns another container:
   >>> def can_be_bound(string: str) -> Maybe[str]:
   ...     return Some(string + '!')
 
+The main difference is the return type.
+The consequence of this is big! 
+``BindableN`` allows to change the container type.
+While ``MappableN`` cannot do that.
+
+So, ``Some.bind(function)`` can be evaluated to both ``Some`` and ``Nothing``.
+While ``Some.map(function)`` will always stay as ``Some``.
+
 What is the difference between ResultLikeN and ResultBasedN?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``ResultLikeN`` is just an intention of having a result
-(e.g. :class:`FutureResult <returns.future.FutureResult>`),
+(e.g. :class:`~returns.future.FutureResult`),
 it's not the result yet. While ``ResultBasedN`` is a concret result
-(e.g. :class:`IOResult <returns.io.IOResult>`),
+(e.g. :class:`~returns.io.IOResult`),
 it's has the desired result value.
 
 Because of this difference between them is why we can't unwrap a ``ResultLikeN``
