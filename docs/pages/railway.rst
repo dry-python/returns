@@ -5,7 +5,8 @@ Railway oriented programming
 
 Containers can serve many different purposes
 (while still serving the main one: composition)
-for example, some of them (``Result`` and ``Maybe``) are used
+for example, some of them
+(:class:`returns.result.Result` and :class:`returns.maybe.Maybe`) are used
 to work with different types of errors
 starting with ``NullPointerException`` to arbitary user-defined ones.
 
@@ -52,16 +53,15 @@ or we can fix the situation.
 Returning execution to the right track
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We also support two special methods to work with "failed"
-types like ``Failure``:
+We also support two special methods to work with "failed" values:
 
-- :func:`~returns.interfaces.rescuable.RescuableN.rescue`
-  is the opposite of ``bind`` method
+- :func:`returns.interfaces.rescuable.RescuableN.rescue`
+  is the opposite of :func:`returns.interfaces.bindable.BindableN.bind` method
   that works only when container is in failed state
-- :func:`~returns.interfaces.altable.AltableN.alt`
+- :func:`returns.interfaces.altable.AltableN.alt`
   transforms error to another error
   that works only when container is in failed state,
-  is the opposite of ``map`` method
+  is the opposite of :func:`returns.interfaces.mappable.MappableN.map` method
 
 ``alt`` method allows to change your error type.
 
@@ -90,7 +90,7 @@ It can also rescue your flow and get on the successful track again:
 
    graph LR
       F1["Container[A]"] -- "rescue(function)" --> F2["Container[B]"]
-      F1["Container[A]"] -- "rescye(function)" --> F3["Container[C]"]
+      F1["Container[A]"] -- "rescue(function)" --> F3["Container[C]"]
 
       style F1 fill:red
       style F2 fill:green
@@ -120,8 +120,9 @@ It can also rescue your flow and get on the successful track again:
   :class:`returns.interfaces.rescuable.RescuableN`
   and
   :class:`returns.interfaces.altable.AltableN`
-  For example, ``IO`` based containers
-  and ``RequiresContext`` cannot be alted or rescued.
+  For example, :class:`returns.io.IO` based containers
+  and :class:`returns.context.requires_context.RequiresContext`
+  cannot be alted or rescued.
 
 
 Unwrapping values
@@ -141,8 +142,6 @@ inner state of containers into a regular types:
 
   >>> assert Success(1).value_or(None) == 1
   >>> assert Some(0).unwrap() == 0
-
-  >>> assert Failure(1).value_or(100) == 100
 
 .. code:: pycon
 
@@ -176,12 +175,13 @@ when you try to ``.failure()`` a successful container.
   Not all containers support these methods,
   only containers that implement
   :class:`returns.interfaces.unwrappable.Unwrappable`.
-  For example,
-  ``IO`` based containers and ``RequiresContext`` cannot be unwrapped.
+  For example, :class:`returns.io.IO` based containers
+  and :class:`returns.context.requires_context.RequiresContext`
+  cannot be unwrapped.
 
 .. note::
 
-  Some containers also have ``.value_or`` helper method.
+  Some containers also have ``.value_or()`` helper method.
   Example:
 
   .. code:: python
