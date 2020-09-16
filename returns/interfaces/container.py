@@ -73,7 +73,7 @@ class _LawSpec(LawSpecDef):
         )
 
     @law_definition
-    def associativity_law(
+    def associative_law(
         container: 'ContainerN[_FirstType, _SecondType, _ThirdType]',
         first: Callable[
             [_FirstType],
@@ -116,7 +116,7 @@ class ContainerN(
     _laws: ClassVar[Sequence[Law]] = (
         Law3(_LawSpec.left_identity_law),
         Law1(_LawSpec.right_identity_law),
-        Law3(_LawSpec.associativity_law),
+        Law3(_LawSpec.associative_law),
     )
 
 

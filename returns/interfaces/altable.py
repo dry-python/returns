@@ -43,7 +43,7 @@ class _LawSpec(LawSpecDef):
         assert_equal(altable.alt(identity), altable)
 
     @law_definition
-    def associativity_law(
+    def associative_law(
         altable: 'AltableN[_FirstType, _SecondType, _ThirdType]',
         first: Callable[[_SecondType], _NewType1],
         second: Callable[[_NewType1], _NewType2],
@@ -63,7 +63,7 @@ class AltableN(
 
     _laws: ClassVar[Sequence[Law]] = (
         Law1(_LawSpec.identity_law),
-        Law3(_LawSpec.associativity_law),
+        Law3(_LawSpec.associative_law),
     )
 
     @abstractmethod

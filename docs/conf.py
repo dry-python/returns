@@ -99,9 +99,10 @@ autodoc_member_order = 'bysource'
 
 autodoc_member_order = 'bysource'
 autodoc_default_options = {
-    'members': '',
-    'undoc-members': 'code,error_template',
+    'members': True,
+    'undoc-members': '_laws',
     'exclude-members': '__dict__,__weakref__',
+    'show-inheritance': True,
 }
 
 # Set `typing.TYPE_CHECKING` to `True`:
@@ -140,10 +141,6 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 pygments_style = 'sphinx'
 
 add_module_names = False
-
-autodoc_default_options = {
-    'show-inheritance': True,
-}
 
 
 # -- Options for HTML output -------------------------------------------------

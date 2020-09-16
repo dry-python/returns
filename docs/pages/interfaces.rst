@@ -93,6 +93,8 @@ In this docs we are going to describe each general interface and its laws.
 Mappable
 --------
 
+.. currentmodule:: returns.interfaces.mappable
+
 Something is considered mappable if we can ``map`` it using a function,
 generally ``map`` is a method that accepts a function.
 
@@ -154,7 +156,8 @@ Laws
 To make sure your mappable implementation is right, you can apply the
 Mappable laws on it to test.
 
-1. **Identity Law:** When we pass the identity function to the map method,
+1. :func:`Identity Law <_LawSpec.identity_law>`:
+   When we pass the identity function to the map method,
    the mappable has to be the same, unaltered.
 
 .. code:: python
@@ -164,7 +167,8 @@ Mappable laws on it to test.
   >>> mappable_number: Number[int] = Number(1)
   >>> assert mappable_number.map(identity) == Number(1)
 
-2. **Associative Law**: Given two functions, ``x`` and ``y``,
+2. :func:`Associative Law <_LawSpec.associative_law>`:
+   Given two functions, ``x`` and ``y``,
    calling the map  method with ``x`` function and after that calling
    with ``y`` function must have the
    same result if we compose them together.
@@ -191,6 +195,8 @@ Mappable laws on it to test.
 
 Bindable
 --------
+
+.. currentmodule:: returns.interfaces.bindable
 
 Bindable is something that we can bind with a function. Like
 :class:`~returns.maybe.Maybe`, so
@@ -233,13 +239,29 @@ us to create our custom bindable.
   >>> bag_of_peanuts: Bag[Peanuts] = Bag(Peanuts(10))
   >>> assert bag_of_peanuts.bind(get_half) == Bag(Peanuts(5))
 
+
+Applicative
+-----------
+
+.. currentmodule:: returns.interfaces.applicative
+
+Laws
+~~~~
+
+
+Container
+---------
+
+.. currentmodule:: returns.interfaces.container
+
 Laws
 ~~~~
 
 To make sure other people will be able to use your implementation, it should
-respect three laws.
+respect three new laws.
 
-1. **Left Identity:** If we ``bind`` a function to our bindable must have to be
+1. :func:`Left Identity <_LawSpec.left_identity_law>`:
+   If we ``bind`` a function to our bindable must have to be
    the same result as passing the value directly to the function.
 
 .. code:: python
@@ -249,7 +271,8 @@ respect three laws.
 
   >>> assert Bag(5).bind(can_be_bound) == can_be_bound(5)
 
-2. **Right Identity:** If we pass the bindable constructor through ``bind`` must
+2. :func:`Right Identity <_LawSpec.right_identity_law>`:
+   If we pass the bindable constructor through ``bind`` must
    have to be the same result as instantiating the bindable on our own.
 
 .. code:: python
@@ -257,7 +280,8 @@ respect three laws.
   >>> bag = Bag(Peanuts(2))
   >>> assert bag.bind(Bag) == Bag(Peanuts(2))
 
-3. **Associative Law:** Given two functions, ``x`` and ``y``, calling the bind
+3. :func:`Associative Law <_LawSpec.associative_law>`:
+   Given two functions, ``x`` and ``y``, calling the bind
    method with ``x`` function and after that calling with ``y`` function
    must have the same result if we bind with
    a function that passes the value to ``x``
@@ -275,20 +299,6 @@ respect three laws.
   >>> assert bag.bind(minus_one).bind(half) == bag.bind(
   ...    lambda value: minus_one(value).bind(half),
   ... )
-
-
-Applicative
------------
-
-Laws
-~~~~
-
-
-Container
----------
-
-Laws
-~~~~
 
 
 More!
@@ -365,7 +375,7 @@ with Bindable we have to pass a function that returns another container:
   ...     return Some(string + '!')
 
 The main difference is the return type.
-The consequence of this is big! 
+The consequence of this is big!
 ``BindableN`` allows to change the container type.
 While ``MappableN`` cannot do that.
 
@@ -421,7 +431,8 @@ See the example below using ``FutureResult`` to get a ``IOResult``:
 .. note::
 
   The same difference applies to all ``*ResultLikeN`` vs ``*ResultBasedN``
-  (e.g. ``IOResultLikeN`` and ``IOResultBasedN``)
+  (e.g. :class:`~returns.interfaces.specific.ioresult.IOResultLikeN`
+  and :class:`~returns.interfaces.specific.ioresult.IOResultBasedN`)
 
 
 API Reference
@@ -434,6 +445,7 @@ SupportsEquality
 
 .. automodule:: returns.interfaces.equable
   :members:
+  :private-members:
 
 Mappable
 ~~~~~~~~
@@ -442,6 +454,7 @@ Mappable
 
 .. automodule:: returns.interfaces.mappable
   :members:
+  :private-members:
 
 Bindable
 ~~~~~~~~
@@ -450,6 +463,7 @@ Bindable
 
 .. automodule:: returns.interfaces.bindable
   :members:
+  :private-members:
 
 Applicative
 ~~~~~~~~~~~
@@ -458,6 +472,7 @@ Applicative
 
 .. automodule:: returns.interfaces.applicative
   :members:
+  :private-members:
 
 Altable
 ~~~~~~~
@@ -466,6 +481,7 @@ Altable
 
 .. automodule:: returns.interfaces.altable
   :members:
+  :private-members:
 
 BiMappable
 ~~~~~~~~~~
@@ -474,6 +490,7 @@ BiMappable
 
 .. automodule:: returns.interfaces.bimappable
   :members:
+  :private-members:
 
 Rescuable
 ~~~~~~~~~
@@ -482,6 +499,7 @@ Rescuable
 
 .. automodule:: returns.interfaces.rescuable
   :members:
+  :private-members:
 
 Unwrappable
 ~~~~~~~~~~~
@@ -490,6 +508,7 @@ Unwrappable
 
 .. automodule:: returns.interfaces.unwrappable
   :members:
+  :private-members:
 
 Iterable
 ~~~~~~~~
@@ -498,6 +517,7 @@ Iterable
 
 .. automodule:: returns.interfaces.iterable
   :members:
+  :private-members:
 
 Container
 ~~~~~~~~~
@@ -506,6 +526,7 @@ Container
 
 .. automodule:: returns.interfaces.container
   :members:
+  :private-members:
 
 Maybe specific
 ~~~~~~~~~~~~~~
@@ -514,6 +535,7 @@ Maybe specific
 
 .. automodule:: returns.interfaces.specific.maybe
   :members:
+  :private-members:
 
 Result specific
 ~~~~~~~~~~~~~~~
@@ -522,6 +544,7 @@ Result specific
 
 .. automodule:: returns.interfaces.specific.result
   :members:
+  :private-members:
 
 IO specific
 ~~~~~~~~~~~
@@ -530,6 +553,7 @@ IO specific
 
 .. automodule:: returns.interfaces.specific.io
   :members:
+  :private-members:
 
 IOResult specific
 ~~~~~~~~~~~~~~~~~
@@ -538,6 +562,7 @@ IOResult specific
 
 .. automodule:: returns.interfaces.specific.ioresult
   :members:
+  :private-members:
 
 Future specific
 ~~~~~~~~~~~~~~~
@@ -546,6 +571,7 @@ Future specific
 
 .. automodule:: returns.interfaces.specific.future
   :members:
+  :private-members:
 
 FutureResult specific
 ~~~~~~~~~~~~~~~~~~~~~
@@ -554,6 +580,7 @@ FutureResult specific
 
 .. automodule:: returns.interfaces.specific.future_result
   :members:
+  :private-members:
 
 Reader specific
 ~~~~~~~~~~~~~~~
@@ -562,6 +589,7 @@ Reader specific
 
 .. automodule:: returns.interfaces.specific.reader
   :members:
+  :private-members:
 
 ReaderResult specific
 ~~~~~~~~~~~~~~~~~~~~~
@@ -570,6 +598,7 @@ ReaderResult specific
 
 .. automodule:: returns.interfaces.specific.reader_result
   :members:
+  :private-members:
 
 ReaderIOResult specific
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -578,6 +607,7 @@ ReaderIOResult specific
 
 .. automodule:: returns.interfaces.specific.reader_ioresult
   :members:
+  :private-members:
 
 ReaderFutureResult specific
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -586,3 +616,4 @@ ReaderFutureResult specific
 
 .. automodule:: returns.interfaces.specific.reader_future_result
   :members:
+  :private-members:

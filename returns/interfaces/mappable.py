@@ -43,7 +43,7 @@ class _LawSpec(LawSpecDef):
         assert_equal(mappable.map(identity), mappable)
 
     @law_definition
-    def associativity_law(
+    def associative_law(
         mappable: 'MappableN[_FirstType, _SecondType, _ThirdType]',
         first: Callable[[_FirstType], _NewType1],
         second: Callable[[_NewType1], _NewType2],
@@ -66,11 +66,12 @@ class MappableN(
 
     See also:
         https://en.wikipedia.org/wiki/Functor
+
     """
 
     _laws: ClassVar[Sequence[Law]] = (
         Law1(_LawSpec.identity_law),
-        Law3(_LawSpec.associativity_law),
+        Law3(_LawSpec.associative_law),
     )
 
     @abstractmethod  # noqa: WPS125
