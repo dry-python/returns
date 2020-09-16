@@ -22,3 +22,11 @@ API Reference
 
 .. automodule:: returns.primitives.types
    :members:
+
+Exceptions
+~~~~~~~~~~
+
+.. autoclasstree:: returns.primitives.exceptions
+
+.. automodule:: returns.primitives.exceptions
+   :members:

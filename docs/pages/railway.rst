@@ -28,19 +28,17 @@ or we can fix the situation.
   :caption: Railway oriented programming.
 
    graph LR
-       S1 -- Map --> S3
-       S3 --> S5
-       S5 --> S7
+       S1 -- bind --> S3
+       S1 -- bind --> F2
+       S3 -- map --> S5
+       S5 -- bind --> S7
+       S5 -- bind --> F6
 
-       F2 -- Alt --> F4
-       F4 --> F6
-       F6 --> F8
-
-       S1 -- Fail --> F2
-       F2 -- Rescue --> S3
-       S3 -- Fail --> F4
-       S5 -- Fail --> F6
-       F6 -- Rescue --> S7
+       F2 -- alt --> F4
+       F4 -- rescue --> F6
+       F4 -- rescue --> S5
+       F6 -- rescue --> F8
+       F6 -- rescue --> S7
 
        style S1 fill:green
        style S3 fill:green
@@ -60,10 +58,6 @@ types like ``Failure``:
 - :func:`~returns.primitives.container.Rescueable.rescue`
   is the opposite of ``bind`` method
   that works only when container is in failed state
-- :func:`~returns.primitives.container.Fixable.fix`
-  transforms error to value (failure became success)
-  that works only when container is in failed state,
-  is the opposite of ``map`` method
 - :func:`~returns.primitives.container.Altable.alt`
   transforms error to another error
   that works only when container is in failed state,
@@ -90,10 +84,13 @@ It can also rescue your flow and get on the successful track again:
   >>> # => Failure(ValueError())
 
 
-Note::
+.. note::
 
-  Not all containers support these methods.
-  ``IO`` and ``RequiresContext`` cannot be alted  or rescued.
+  Not all containers support these methods,
+  only containers that implement
+  :class:`returns.interfaces.specific.result.ResultLikeN`.
+  For example, ``IO`` based containers
+  and ``RequiresContext`` cannot be alted or rescued.
 
 
 Unwrapping values
@@ -102,10 +99,9 @@ Unwrapping values
 And we have two more functions to unwrap
 inner state of containers into a regular types:
 
-- :func:`.value_or <returns.primitives.container.Unwrapable.value_or>`
-  returns a value if it is possible, returns ``default_value`` otherwise
-- :func:`.unwrap <returns.primitives.container.Unwrapable.unwrap>`
-  returns a value if it is possible, raises ``UnwrapFailedError`` otherwise
+- :func:`.unwrap <returns.interfaces.unwrappable.Unwrapable.unwrap>`
+  returns a value if it is possible,
+  raises :class:`returns.primitives.exceptions.UnwrapFailedError` otherwise
 
 .. code:: python
 
@@ -130,7 +126,7 @@ inner state of containers into a regular types:
   returns.primitives.exceptions.UnwrapFailedError
 
 For failing containers you can
-use :func:`.failure <returns.primitives.container.Unwrapable.failure>`
+use :func:`.failure <returns.interfaces.unwrappable.Unwrapable.failure>`
 to unwrap the failed state:
 
 .. code:: pycon
@@ -144,10 +140,24 @@ to unwrap the failed state:
 Be careful, since this method will raise an exception
 when you try to ``.failure()`` a successful container.
 
-Note::
+.. note::
 
-  Not all containers support these methods.
+  Not all containers support these methods,
+  only containers that implement
+  :class:`returns.interfaces.unwrappable.Unwrappable`.
+  For example,
   ``IO`` based containers and ``RequiresContext`` cannot be unwrapped.
+
+.. note::
+
+  Some containers also have ``.value_or`` helper method.
+  Example:
+
+  .. code:: python
+
+    >>> from returns.result import Success, Failure
+    >>> assert Success(1).value_or(None) == 1
+    >>> assert Failure(1).value_or(None) is None
 
 
 Further reading

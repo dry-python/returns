@@ -109,7 +109,7 @@ The same works with built-in functions as well:
   >>> str(io)
   "<IO: ['b', 'y', 't', 'e', 's']>"
 
-Note::
+.. note::
 
   All containers support these methods.
 
