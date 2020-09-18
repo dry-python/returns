@@ -18,6 +18,7 @@ _FunctionType = TypeVar(
 )
 
 _UpdatedType = TypeVar('_UpdatedType')
+
 _FirstKind = TypeVar('_FirstKind')
 _SecondKind = TypeVar('_SecondKind')
 
@@ -192,7 +193,7 @@ class Kinded(Protocol[_FunctionDefType]):  # type: ignore
     Otherwise, it is currently impossible to properly type this.
     """
 
-    #: Use to translate `KindN` into real types.
+    #: Used to translate `KindN` into real types.
     __call__: _FunctionDefType
 
     def __get__(

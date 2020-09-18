@@ -18,7 +18,7 @@ class IterableN(Generic[_FirstType, _SecondType, _ThirdType]):
     """
     Allows to work with iterables of containers.
 
-    Coverts ``Iterable[Container[...]]`` to ``Container[Sequence[...]]``
+    Converts ``Iterable[Container[...]]`` to ``Container[Sequence[...]]``
     """
 
     @classmethod
