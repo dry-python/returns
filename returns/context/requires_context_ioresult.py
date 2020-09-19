@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import (
     TYPE_CHECKING,
     Any,
@@ -115,7 +117,7 @@ class RequiresContextIOResult(
     #: is just a function that returns `IOResult`.
     #: This field has an extra 'RequiresContext' just because `mypy` needs it.
     _inner_value: Callable[
-        ['RequiresContextIOResult', _EnvType],
+        [RequiresContextIOResult, _EnvType],
         IOResult[_ValueType, _ErrorType],
     ]
 
@@ -167,7 +169,7 @@ class RequiresContextIOResult(
 
     def swap(
         self,
-    ) -> 'RequiresContextIOResult[_ErrorType, _ValueType, _EnvType]':
+    ) -> RequiresContextIOResult[_ErrorType, _ValueType, _EnvType]:
         """
         Swaps value and error types.
 
@@ -192,7 +194,7 @@ class RequiresContextIOResult(
 
     def map(  # noqa: WPS125
         self, function: Callable[[_ValueType], _NewValueType],
-    ) -> 'RequiresContextIOResult[_NewValueType, _ErrorType, _EnvType]':
+    ) -> RequiresContextIOResult[_NewValueType, _ErrorType, _EnvType]:
         """
         Composes successful container with a pure function.
 
@@ -215,12 +217,12 @@ class RequiresContextIOResult(
     def apply(
         self,
         container: Kind3[
-            'RequiresContextIOResult',
+            RequiresContextIOResult,
             Callable[[_ValueType], _NewValueType],
             _ErrorType,
             _EnvType,
         ],
-    ) -> 'RequiresContextIOResult[_NewValueType, _ErrorType, _EnvType]':
+    ) -> RequiresContextIOResult[_NewValueType, _ErrorType, _EnvType]:
         """
         Calls a wrapped function in a container on this container.
 
@@ -254,13 +256,13 @@ class RequiresContextIOResult(
         function: Callable[
             [_ValueType],
             Kind3[
-                'RequiresContextIOResult',
+                RequiresContextIOResult,
                 _NewValueType,
                 _ErrorType,
                 _EnvType,
             ],
         ],
-    ) -> 'RequiresContextIOResult[_NewValueType, _ErrorType, _EnvType]':
+    ) -> RequiresContextIOResult[_NewValueType, _ErrorType, _EnvType]:
         """
         Composes this container with a function returning the same type.
 
@@ -300,8 +302,8 @@ class RequiresContextIOResult(
 
     def bind_result(
         self,
-        function: Callable[[_ValueType], 'Result[_NewValueType, _ErrorType]'],
-    ) -> 'RequiresContextIOResult[_NewValueType, _ErrorType, _EnvType]':
+        function: Callable[[_ValueType], Result[_NewValueType, _ErrorType]],
+    ) -> RequiresContextIOResult[_NewValueType, _ErrorType, _EnvType]:
         """
         Binds ``Result`` returning function to the current container.
 
@@ -337,7 +339,7 @@ class RequiresContextIOResult(
             [_ValueType],
             'RequiresContext[_NewValueType, _EnvType]',
         ],
-    ) -> 'RequiresContextIOResult[_NewValueType, _ErrorType, _EnvType]':
+    ) -> RequiresContextIOResult[_NewValueType, _ErrorType, _EnvType]:
         """
         Binds ``RequiresContext`` returning function to current container.
 
@@ -372,7 +374,7 @@ class RequiresContextIOResult(
             [_ValueType],
             'RequiresContextResult[_NewValueType, _ErrorType, _EnvType]',
         ],
-    ) -> 'RequiresContextIOResult[_NewValueType, _ErrorType, _EnvType]':
+    ) -> RequiresContextIOResult[_NewValueType, _ErrorType, _EnvType]:
         """
         Binds ``RequiresContextResult`` returning function to the current one.
 
@@ -422,7 +424,7 @@ class RequiresContextIOResult(
     def bind_io(
         self,
         function: Callable[[_ValueType], IO[_NewValueType]],
-    ) -> 'RequiresContextIOResult[_NewValueType, _ErrorType, _EnvType]':
+    ) -> RequiresContextIOResult[_NewValueType, _ErrorType, _EnvType]:
         """
         Binds ``IO`` returning function to the current container.
 
@@ -450,7 +452,7 @@ class RequiresContextIOResult(
     def bind_ioresult(
         self,
         function: Callable[[_ValueType], IOResult[_NewValueType, _ErrorType]],
-    ) -> 'RequiresContextIOResult[_NewValueType, _ErrorType, _EnvType]':
+    ) -> RequiresContextIOResult[_NewValueType, _ErrorType, _EnvType]:
         """
         Binds ``IOResult`` returning function to the current container.
 
@@ -481,7 +483,7 @@ class RequiresContextIOResult(
 
     def alt(
         self, function: Callable[[_ErrorType], _NewErrorType],
-    ) -> 'RequiresContextIOResult[_ValueType, _NewErrorType, _EnvType]':
+    ) -> RequiresContextIOResult[_ValueType, _NewErrorType, _EnvType]:
         """
         Composes failed container with a pure function.
 
@@ -506,13 +508,13 @@ class RequiresContextIOResult(
         function: Callable[
             [_ErrorType],
             Kind3[
-                'RequiresContextIOResult',
+                RequiresContextIOResult,
                 _ValueType,
                 _NewErrorType,
                 _EnvType,
             ],
         ],
-    ) -> 'RequiresContextIOResult[_ValueType, _NewErrorType, _EnvType]':
+    ) -> RequiresContextIOResult[_ValueType, _NewErrorType, _EnvType]:
         """
         Composes this container with a function returning the same type.
 
@@ -554,13 +556,13 @@ class RequiresContextIOResult(
         function: Callable[
             [Result[_ValueType, _ErrorType]],
             Kind3[
-                'RequiresContextIOResult',
+                RequiresContextIOResult,
                 _NewValueType,
                 _ErrorType,
                 _EnvType,
             ],
         ],
-    ) -> 'RequiresContextIOResult[_NewValueType, _ErrorType, _EnvType]':
+    ) -> RequiresContextIOResult[_NewValueType, _ErrorType, _EnvType]:
         """
         Composes inner ``Result`` with ``ReaderIOResult`` returning function.
 
@@ -594,7 +596,7 @@ class RequiresContextIOResult(
     def modify_env(
         self,
         function: Callable[[_NewEnvType], _EnvType],
-    ) -> 'RequiresContextIOResult[_ValueType, _ErrorType, _NewEnvType]':
+    ) -> RequiresContextIOResult[_ValueType, _ErrorType, _NewEnvType]:
         """
         Allows to modify the environment type.
 
@@ -615,7 +617,7 @@ class RequiresContextIOResult(
         return RequiresContextIOResult(lambda deps: self(function(deps)))
 
     @classmethod
-    def ask(cls) -> 'RequiresContextIOResult[_EnvType, _ErrorType, _EnvType]':
+    def ask(cls) -> RequiresContextIOResult[_EnvType, _ErrorType, _EnvType]:
         """
         Is used to get the current dependencies inside the call stack.
 
@@ -641,8 +643,8 @@ class RequiresContextIOResult(
 
     @classmethod
     def from_result(
-        cls, inner_value: 'Result[_NewValueType, _NewErrorType]',
-    ) -> 'RequiresContextIOResult[_NewValueType, _NewErrorType, NoDeps]':
+        cls, inner_value: Result[_NewValueType, _NewErrorType],
+    ) -> RequiresContextIOResult[_NewValueType, _NewErrorType, NoDeps]:
         """
         Creates new container with ``Result`` as a unit value.
 
@@ -670,7 +672,7 @@ class RequiresContextIOResult(
     def from_io(
         cls,
         inner_value: IO[_NewValueType],
-    ) -> 'RequiresContextIOResult[_NewValueType, Any, NoDeps]':
+    ) -> RequiresContextIOResult[_NewValueType, Any, NoDeps]:
         """
         Creates new container from successful ``IO`` value.
 
@@ -692,7 +694,7 @@ class RequiresContextIOResult(
     def from_failed_io(
         cls,
         inner_value: IO[_NewErrorType],
-    ) -> 'RequiresContextIOResult[Any, _NewErrorType, NoDeps]':
+    ) -> RequiresContextIOResult[Any, _NewErrorType, NoDeps]:
         """
         Creates a new container from failed ``IO`` value.
 
@@ -713,7 +715,7 @@ class RequiresContextIOResult(
     @classmethod
     def from_ioresult(
         cls, inner_value: IOResult[_NewValueType, _NewErrorType],
-    ) -> 'RequiresContextIOResult[_NewValueType, _NewErrorType, NoDeps]':
+    ) -> RequiresContextIOResult[_NewValueType, _NewErrorType, NoDeps]:
         """
         Creates new container with ``IOResult`` as a unit value.
 
@@ -738,8 +740,8 @@ class RequiresContextIOResult(
     def from_ioresult_context(
         cls,
         inner_value:
-            'ReaderIOResult[_NewValueType, _NewErrorType, _NewEnvType]',
-    ) -> 'ReaderIOResult[_NewValueType, _NewErrorType, _NewEnvType]':
+            ReaderIOResult[_NewValueType, _NewErrorType, _NewEnvType],
+    ) -> ReaderIOResult[_NewValueType, _NewErrorType, _NewEnvType]:
         """
         Creates new container with ``ReaderIOResult`` as a unit value.
 
@@ -764,7 +766,7 @@ class RequiresContextIOResult(
         cls,
         inner_value:
             'RequiresContext[IOResult[_NewValueType, _NewErrorType], _EnvType]',
-    ) -> 'RequiresContextIOResult[_NewValueType, _NewErrorType, _EnvType]':
+    ) -> RequiresContextIOResult[_NewValueType, _NewErrorType, _EnvType]:
         """
         You might end up with ``RequiresContext[IOResult]`` as a value.
 
@@ -792,7 +794,7 @@ class RequiresContextIOResult(
     @classmethod
     def from_context(
         cls, inner_value: 'RequiresContext[_NewValueType, _NewEnvType]',
-    ) -> 'RequiresContextIOResult[_NewValueType, Any, _NewEnvType]':
+    ) -> RequiresContextIOResult[_NewValueType, Any, _NewEnvType]:
         """
         Creates new container from ``RequiresContext`` as a success unit.
 
@@ -813,7 +815,7 @@ class RequiresContextIOResult(
     @classmethod
     def from_failed_context(
         cls, inner_value: 'RequiresContext[_NewValueType, _NewEnvType]',
-    ) -> 'RequiresContextIOResult[Any, _NewValueType, _NewEnvType]':
+    ) -> RequiresContextIOResult[Any, _NewValueType, _NewEnvType]:
         """
         Creates new container from ``RequiresContext`` as a failure unit.
 
@@ -836,7 +838,7 @@ class RequiresContextIOResult(
         cls,
         inner_value:
             'RequiresContextResult[_NewValueType, _NewErrorType, _NewEnvType]',
-    ) -> 'RequiresContextIOResult[_NewValueType, _NewErrorType, _NewEnvType]':
+    ) -> RequiresContextIOResult[_NewValueType, _NewErrorType, _NewEnvType]:
         """
         Creates new container from ``RequiresContextResult`` as a unit value.
 
@@ -862,7 +864,7 @@ class RequiresContextIOResult(
     def from_value(
         cls,
         inner_value: _NewValueType,
-    ) -> 'RequiresContextIOResult[_NewValueType, Any, NoDeps]':
+    ) -> RequiresContextIOResult[_NewValueType, Any, NoDeps]:
         """
         Creates new container with ``IOSuccess(inner_value)`` as a unit value.
 
@@ -882,7 +884,7 @@ class RequiresContextIOResult(
     def from_failure(
         cls,
         inner_value: _NewErrorType,
-    ) -> 'RequiresContextIOResult[Any, _NewErrorType, NoDeps]':
+    ) -> RequiresContextIOResult[Any, _NewErrorType, NoDeps]:
         """
         Creates new container with ``IOFailure(inner_value)`` as a unit value.
 
@@ -903,14 +905,14 @@ class RequiresContextIOResult(
         cls,
         inner_value: Iterable[
             Kind3[
-                'RequiresContextIOResult',
+                RequiresContextIOResult,
                 _NewValueType,
                 _NewErrorType,
                 _NewEnvType,
             ],
         ],
         strategy: Type[BaseIterableStrategyN] = FailFast,
-    ) -> 'ReaderIOResult[Sequence[_NewValueType], _NewErrorType, _NewEnvType]':
+    ) -> ReaderIOResult[Sequence[_NewValueType], _NewErrorType, _NewEnvType]:
         """
         Transforms an iterable of ``RequiresContextIOResult`` containers.
 

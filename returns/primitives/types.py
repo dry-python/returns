@@ -11,6 +11,7 @@ class Immutable(object):
     Nothing can be added or deleted from it.
 
     .. code:: pycon
+      :force:
 
       >>> from returns.primitives.types import Immutable
       >>> class MyModel(Immutable):
@@ -24,7 +25,7 @@ class Immutable(object):
 
     See :class:`returns.primitives.container.BaseContainer` for examples.
 
-    """
+    """  # noqa: RST399
 
     def __copy__(self) -> 'Immutable':
         """Returns itself."""

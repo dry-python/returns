@@ -6,6 +6,8 @@ This type means that ``FutureResult`` can (and will!) fail with exceptions.
 Use this type to mark that this specific async opetaion can fail.
 """
 
+from __future__ import annotations
+
 from abc import abstractmethod
 from typing import TYPE_CHECKING, Awaitable, Callable, NoReturn, Type, TypeVar
 

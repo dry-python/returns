@@ -6,6 +6,8 @@ Don't use this type for async that can. Instead, use
 :class:`returns.interfaces.specific.future_result.FutureResultBasedN` type.
 """
 
+from __future__ import annotations
+
 from abc import abstractmethod
 from typing import (
     TYPE_CHECKING,
