@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from abc import abstractmethod
 from typing import TYPE_CHECKING, Callable, ClassVar, Sequence, Type, TypeVar
 
@@ -72,7 +74,7 @@ class _LawSpec(LawSpecDef):
 
     @law_definition
     def asking_law(
-        container: 'ReaderIOResultBasedN[_FirstType, _SecondType, _ThirdType]',
+        container: ReaderIOResultBasedN[_FirstType, _SecondType, _ThirdType],
         env: _ThirdType,
     ) -> None:
         """Asking for an env, always returns the env."""

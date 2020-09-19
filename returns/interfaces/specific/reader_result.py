@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from abc import abstractmethod
 from typing import TYPE_CHECKING, Callable, ClassVar, Sequence, Type, TypeVar
 
@@ -80,7 +82,7 @@ class _LawSpec(LawSpecDef):
 
     @law_definition
     def purity_law(
-        container: 'ReaderResultBasedN[_FirstType, _SecondType, _ThirdType]',
+        container: ReaderResultBasedN[_FirstType, _SecondType, _ThirdType],
         env: _ThirdType,
     ) -> None:
         """Calling a ``Reader`` twice has the same result with the same env."""
@@ -88,7 +90,7 @@ class _LawSpec(LawSpecDef):
 
     @law_definition
     def asking_law(
-        container: 'ReaderResultBasedN[_FirstType, _SecondType, _ThirdType]',
+        container: ReaderResultBasedN[_FirstType, _SecondType, _ThirdType],
         env: _ThirdType,
     ) -> None:
         """Asking for an env, always returns the env."""

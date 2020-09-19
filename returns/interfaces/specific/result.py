@@ -5,6 +5,8 @@ For impure result see
 :class:`returns.interfaces.specific.ioresult.IOResultLikeN` type.
 """
 
+from __future__ import annotations
+
 from abc import abstractmethod
 from typing import (
     TYPE_CHECKING,
@@ -64,7 +66,7 @@ class _LawSpec(LawSpecDef):
     @law_definition
     def map_short_circuit_law(
         raw_value: _SecondType,
-        container: 'ResultLikeN[_FirstType, _SecondType, _ThirdType]',
+        container: ResultLikeN[_FirstType, _SecondType, _ThirdType],
         function: Callable[[_FirstType], _NewType1],
     ) -> None:
         """Ensures that you cannot map a failure."""
@@ -76,10 +78,10 @@ class _LawSpec(LawSpecDef):
     @law_definition
     def bind_short_circuit_law(
         raw_value: _SecondType,
-        container: 'ResultLikeN[_FirstType, _SecondType, _ThirdType]',
+        container: ResultLikeN[_FirstType, _SecondType, _ThirdType],
         function: Callable[
             [_FirstType],
-            KindN['ResultLikeN', _NewType1, _SecondType, _ThirdType],
+            KindN[ResultLikeN, _NewType1, _SecondType, _ThirdType],
         ],
     ) -> None:
         """
@@ -95,7 +97,7 @@ class _LawSpec(LawSpecDef):
     @law_definition
     def alt_short_circuit_law(
         raw_value: _SecondType,
-        container: 'ResultLikeN[_FirstType, _SecondType, _ThirdType]',
+        container: ResultLikeN[_FirstType, _SecondType, _ThirdType],
         function: Callable[[_SecondType], _NewType1],
     ) -> None:
         """Ensures that you cannot alt a success."""
@@ -107,10 +109,10 @@ class _LawSpec(LawSpecDef):
     @law_definition
     def rescue_short_circuit_law(
         raw_value: _FirstType,
-        container: 'ResultLikeN[_FirstType, _SecondType, _ThirdType]',
+        container: ResultLikeN[_FirstType, _SecondType, _ThirdType],
         function: Callable[
             [_SecondType],
-            KindN['ResultLikeN', _FirstType, _NewType1, _ThirdType],
+            KindN[ResultLikeN, _FirstType, _NewType1, _ThirdType],
         ],
     ) -> None:
         """Ensures that you cannot rescue a success."""

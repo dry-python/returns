@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import (
     TYPE_CHECKING,
     Any,
@@ -104,7 +106,7 @@ class RequiresContextResult(
 
     #: This field has an extra 'RequiresContext' just because `mypy` needs it.
     _inner_value: Callable[
-        ['RequiresContextResult', _EnvType],
+        [RequiresContextResult, _EnvType],
         Result[_ValueType, _ErrorType],
     ]
 
@@ -154,7 +156,7 @@ class RequiresContextResult(
         """
         return self._inner_value(deps)
 
-    def swap(self) -> 'RequiresContextResult[_ErrorType, _ValueType, _EnvType]':
+    def swap(self) -> RequiresContextResult[_ErrorType, _ValueType, _EnvType]:
         """
         Swaps value and error types.
 
@@ -179,7 +181,7 @@ class RequiresContextResult(
 
     def map(  # noqa: WPS125
         self, function: Callable[[_ValueType], _NewValueType],
-    ) -> 'RequiresContextResult[_NewValueType, _ErrorType, _EnvType]':
+    ) -> RequiresContextResult[_NewValueType, _ErrorType, _EnvType]:
         """
         Composes successful container with a pure function.
 
@@ -202,12 +204,12 @@ class RequiresContextResult(
     def apply(
         self,
         container: Kind3[
-            'RequiresContextResult',
+            RequiresContextResult,
             Callable[[_ValueType], _NewValueType],
             _ErrorType,
             _EnvType,
         ],
-    ) -> 'RequiresContextResult[_NewValueType, _ErrorType, _EnvType]':
+    ) -> RequiresContextResult[_NewValueType, _ErrorType, _EnvType]:
         """
         Calls a wrapped function in a container on this container.
 
@@ -241,13 +243,13 @@ class RequiresContextResult(
         function: Callable[
             [_ValueType],
             Kind3[
-                'RequiresContextResult',
+                RequiresContextResult,
                 _NewValueType,
                 _ErrorType,
                 _EnvType,
             ],
         ],
-    ) -> 'RequiresContextResult[_NewValueType, _ErrorType, _EnvType]':
+    ) -> RequiresContextResult[_NewValueType, _ErrorType, _EnvType]:
         """
         Composes this container with a function returning the same type.
 
@@ -286,7 +288,7 @@ class RequiresContextResult(
     def bind_result(
         self,
         function: Callable[[_ValueType], Result[_NewValueType, _ErrorType]],
-    ) -> 'RequiresContextResult[_NewValueType, _ErrorType, _EnvType]':
+    ) -> RequiresContextResult[_NewValueType, _ErrorType, _EnvType]:
         """
         Binds ``Result`` returning function to current container.
 
@@ -319,7 +321,7 @@ class RequiresContextResult(
             [_ValueType],
             'RequiresContext[_NewValueType, _EnvType]',
         ],
-    ) -> 'RequiresContextResult[_NewValueType, _ErrorType, _EnvType]':
+    ) -> RequiresContextResult[_NewValueType, _ErrorType, _EnvType]:
         """
         Binds ``RequiresContext`` returning function to current container.
 
@@ -350,7 +352,7 @@ class RequiresContextResult(
 
     def alt(
         self, function: Callable[[_ErrorType], _NewErrorType],
-    ) -> 'RequiresContextResult[_ValueType, _NewErrorType, _EnvType]':
+    ) -> RequiresContextResult[_ValueType, _NewErrorType, _EnvType]:
         """
         Composes failed container with a pure function.
 
@@ -375,13 +377,13 @@ class RequiresContextResult(
         function: Callable[
             [_ErrorType],
             Kind3[
-                'RequiresContextResult',
+                RequiresContextResult,
                 _ValueType,
                 _NewErrorType,
                 _EnvType,
             ],
         ],
-    ) -> 'RequiresContextResult[_ValueType, _NewErrorType, _EnvType]':
+    ) -> RequiresContextResult[_ValueType, _NewErrorType, _EnvType]:
         """
         Composes this container with a function returning the same type.
 
@@ -419,7 +421,7 @@ class RequiresContextResult(
     def modify_env(
         self,
         function: Callable[[_NewEnvType], _EnvType],
-    ) -> 'RequiresContextResult[_ValueType, _ErrorType, _NewEnvType]':
+    ) -> RequiresContextResult[_ValueType, _ErrorType, _NewEnvType]:
         """
         Allows to modify the environment type.
 
@@ -440,7 +442,7 @@ class RequiresContextResult(
         return RequiresContextResult(lambda deps: self(function(deps)))
 
     @classmethod
-    def ask(cls) -> 'RequiresContextResult[_EnvType, _ErrorType, _EnvType]':
+    def ask(cls) -> RequiresContextResult[_EnvType, _ErrorType, _EnvType]:
         """
         Is used to get the current dependencies inside the call stack.
 
@@ -467,7 +469,7 @@ class RequiresContextResult(
     @classmethod
     def from_result(
         cls, inner_value: Result[_NewValueType, _NewErrorType],
-    ) -> 'RequiresContextResult[_NewValueType, _NewErrorType, NoDeps]':
+    ) -> RequiresContextResult[_NewValueType, _NewErrorType, NoDeps]:
         """
         Creates new container with ``Result`` as a unit value.
 
@@ -493,7 +495,7 @@ class RequiresContextResult(
         cls,
         inner_value:
             'RequiresContext[Result[_NewValueType, _NewErrorType], _EnvType]',
-    ) -> 'RequiresContextResult[_NewValueType, _NewErrorType, _EnvType]':
+    ) -> RequiresContextResult[_NewValueType, _NewErrorType, _EnvType]:
         """
         You might end up with ``RequiresContext[Result[...]]`` as a value.
 
@@ -521,7 +523,7 @@ class RequiresContextResult(
     @classmethod
     def from_context(
         cls, inner_value: 'RequiresContext[_NewValueType, _NewEnvType]',
-    ) -> 'RequiresContextResult[_NewValueType, Any, _NewEnvType]':
+    ) -> RequiresContextResult[_NewValueType, Any, _NewEnvType]:
         """
         Creates new container from ``RequiresContext`` as a success unit.
 
@@ -539,7 +541,7 @@ class RequiresContextResult(
     @classmethod
     def from_failed_context(
         cls, inner_value: 'RequiresContext[_NewValueType, _NewEnvType]',
-    ) -> 'RequiresContextResult[Any, _NewValueType, _NewEnvType]':
+    ) -> RequiresContextResult[Any, _NewValueType, _NewEnvType]:
         """
         Creates new container from ``RequiresContext`` as a failure unit.
 
@@ -558,8 +560,8 @@ class RequiresContextResult(
     def from_result_context(
         cls,
         inner_value:
-            'RequiresContextResult[_NewValueType, _NewErrorType, _NewEnvType]',
-    ) -> 'RequiresContextResult[_NewValueType, _NewErrorType, _NewEnvType]':
+            RequiresContextResult[_NewValueType, _NewErrorType, _NewEnvType],
+    ) -> RequiresContextResult[_NewValueType, _NewErrorType, _NewEnvType]:
         """
         Creates ``RequiresContextResult`` from another instance of it.
 
@@ -582,7 +584,7 @@ class RequiresContextResult(
     @classmethod
     def from_value(
         cls, inner_value: _FirstType,
-    ) -> 'RequiresContextResult[_FirstType, Any, NoDeps]':
+    ) -> RequiresContextResult[_FirstType, Any, NoDeps]:
         """
         Creates new container with ``Success(inner_value)`` as a unit value.
 
@@ -598,7 +600,7 @@ class RequiresContextResult(
     @classmethod
     def from_failure(
         cls, inner_value: _FirstType,
-    ) -> 'RequiresContextResult[Any, _FirstType, NoDeps]':
+    ) -> RequiresContextResult[Any, _FirstType, NoDeps]:
         """
         Creates new container with ``Failure(inner_value)`` as a unit value.
 
@@ -616,14 +618,14 @@ class RequiresContextResult(
         cls,
         inner_value: Iterable[
             Kind3[
-                'RequiresContextResult',
+                RequiresContextResult,
                 _NewValueType,
                 _NewErrorType,
                 _NewEnvType,
             ],
         ],
         strategy: Type[BaseIterableStrategyN] = FailFast,
-    ) -> 'ReaderResult[Sequence[_NewValueType], _NewErrorType, _NewEnvType]':
+    ) -> ReaderResult[Sequence[_NewValueType], _NewErrorType, _NewEnvType]:
         """
         Transforms an iterable of ``RequiresContextResult`` containers.
 

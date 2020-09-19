@@ -4,6 +4,8 @@ An interface for types that do ``IO`` and can fail.
 It is a base interface for both sync and async ``IO`` stacks.
 """
 
+from __future__ import annotations
+
 from abc import abstractmethod
 from typing import TYPE_CHECKING, Callable, NoReturn, Type, TypeVar
 

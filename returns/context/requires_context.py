@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import (
     TYPE_CHECKING,
     Any,
@@ -87,7 +89,7 @@ class RequiresContext(
     """
 
     #: This field has an extra 'RequiresContext' just because `mypy` needs it.
-    _inner_value: Callable[['RequiresContext', _EnvType], _ReturnType]
+    _inner_value: Callable[[RequiresContext, _EnvType], _ReturnType]
 
     #: A convenient placeholder to call methods created by `.from_value()`:
     empty: ClassVar[NoDeps] = object()
@@ -136,7 +138,7 @@ class RequiresContext(
 
     def map(  # noqa: WPS125
         self, function: Callable[[_ReturnType], _NewReturnType],
-    ) -> 'RequiresContext[_NewReturnType, _EnvType]':
+    ) -> RequiresContext[_NewReturnType, _EnvType]:
         """
         Allows to compose functions inside the wrapped container.
 
@@ -164,7 +166,7 @@ class RequiresContext(
             Callable[[_ReturnType], _NewReturnType],
             _EnvType,
         ],
-    ) -> 'RequiresContext[_NewReturnType, _EnvType]':
+    ) -> RequiresContext[_NewReturnType, _EnvType]:
         """
         Calls a wrapped function in a container on this container.
 
@@ -186,7 +188,7 @@ class RequiresContext(
             [_ReturnType],
             Kind2['RequiresContext', _NewReturnType, _EnvType],
         ],
-    ) -> 'RequiresContext[_NewReturnType, _EnvType]':
+    ) -> RequiresContext[_NewReturnType, _EnvType]:
         """
         Composes a container with a function returning another container.
 
@@ -221,7 +223,7 @@ class RequiresContext(
     def modify_env(
         self,
         function: Callable[[_NewEnvType], _EnvType],
-    ) -> 'RequiresContext[_ReturnType, _NewEnvType]':
+    ) -> RequiresContext[_ReturnType, _NewEnvType]:
         """
         Allows to modify the environment type.
 
@@ -238,7 +240,7 @@ class RequiresContext(
         return RequiresContext(lambda deps: self(function(deps)))
 
     @classmethod
-    def ask(cls) -> 'RequiresContext[_EnvType, _EnvType]':
+    def ask(cls) -> RequiresContext[_EnvType, _EnvType]:
         """
         Get current context to use the dependencies.
 
@@ -316,13 +318,13 @@ class RequiresContext(
         See also:
             https://dev.to/gcanti/getting-started-with-fp-ts-reader-1ie5
 
-        """
+        """  # noqa: F811
         return RequiresContext(identity)
 
     @classmethod
     def from_value(
         cls, inner_value: _FirstType,
-    ) -> 'RequiresContext[_FirstType, NoDeps]':
+    ) -> RequiresContext[_FirstType, NoDeps]:
         """
         Used to return some specific value from the container.
 
@@ -343,8 +345,8 @@ class RequiresContext(
 
     @classmethod
     def from_context(
-        cls, inner_value: 'RequiresContext[_NewReturnType, _NewEnvType]',
-    ) -> 'RequiresContext[_NewReturnType, _NewEnvType]':
+        cls, inner_value: RequiresContext[_NewReturnType, _NewEnvType],
+    ) -> RequiresContext[_NewReturnType, _NewEnvType]:
         """
         Used to create new containers from existing ones.
 
@@ -363,10 +365,10 @@ class RequiresContext(
     def from_iterable(
         cls,
         inner_value: Iterable[
-            Kind2['RequiresContext', _NewReturnType, _NewEnvType],
+            Kind2[RequiresContext, _NewReturnType, _NewEnvType],
         ],
         strategy: Type[BaseIterableStrategyN] = FailFast,
-    ) -> 'RequiresContext[Sequence[_NewReturnType], _NewEnvType]':
+    ) -> RequiresContext[Sequence[_NewReturnType], _NewEnvType]:
         """
         Transforms an iterable of ``RequiresContext`` containers.
 
@@ -388,7 +390,7 @@ class RequiresContext(
     def from_requires_context_result(
         cls,
         inner_value: 'RequiresContextResult[_ValueType, _ErrorType, _EnvType]',
-    ) -> 'RequiresContext[Result[_ValueType, _ErrorType], _EnvType]':
+    ) -> RequiresContext[Result[_ValueType, _ErrorType], _EnvType]:
         """
         Typecasts ``RequiresContextResult`` to ``RequiresContext`` instance.
 
@@ -414,7 +416,7 @@ class RequiresContext(
         cls,
         inner_value:
             'RequiresContextIOResult[_ValueType, _ErrorType, _EnvType]',
-    ) -> 'RequiresContext[IOResult[_ValueType, _ErrorType], _EnvType]':
+    ) -> RequiresContext[IOResult[_ValueType, _ErrorType], _EnvType]:
         """
         Typecasts ``RequiresContextIOResult`` to ``RequiresContext`` instance.
 
@@ -440,7 +442,7 @@ class RequiresContext(
         cls,
         inner_value:
             'RequiresContextFutureResult[_ValueType, _ErrorType, _EnvType]',
-    ) -> 'RequiresContext[FutureResult[_ValueType, _ErrorType], _EnvType]':
+    ) -> RequiresContext[FutureResult[_ValueType, _ErrorType], _EnvType]:
         """
         Typecasts ``RequiresContextIOResult`` to ``RequiresContext`` instance.
 

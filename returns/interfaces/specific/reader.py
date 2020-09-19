@@ -24,6 +24,8 @@ See also:
 
 """
 
+from __future__ import annotations
+
 from abc import abstractmethod
 from typing import (
     TYPE_CHECKING,
@@ -213,7 +215,7 @@ class _LawSpec(LawSpecDef):
 
     @law_definition
     def purity_law(
-        container: 'ReaderBased2[_FirstType, _SecondType]',
+        container: ReaderBased2[_FirstType, _SecondType],
         env: _SecondType,
     ) -> None:
         """Calling a ``Reader`` twice has the same result with the same env."""
@@ -221,7 +223,7 @@ class _LawSpec(LawSpecDef):
 
     @law_definition
     def asking_law(
-        container: 'ReaderBased2[_FirstType, _SecondType]',
+        container: ReaderBased2[_FirstType, _SecondType],
         env: _SecondType,
     ) -> None:
         """Asking for an env, always returns the env."""
