@@ -139,6 +139,9 @@ def kinded_get_descriptor(ctx: MethodContext) -> MypyType:
     assert isinstance(ret_type, Instance)
 
     new_ret_type = ret_type.copy_modified(
+        # TODO: instead we need to replace first typevar in `KindN`
+        # to the proper type, not just blindly replacing the first arg
+        # in a single place
         args=[ctx.arg_types[0][0], *ret_type.args[1:]],
     )
     replaced_method = function.copy_modified(ret_type=new_ret_type)

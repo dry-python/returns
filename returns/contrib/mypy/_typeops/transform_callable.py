@@ -122,7 +122,7 @@ class Functions(object):
         ]
         new_function_args = []
 
-        for ind, arg in enumerate(FuncArg.from_callable(self._original)):
+        for index, arg in enumerate(FuncArg.from_callable(self._original)):
             should_be_copied = (
                 arg.kind in {ARG_STAR, ARG_STAR2} or
                 arg.name not in intermediate_names or
@@ -132,14 +132,14 @@ class Functions(object):
                 # might be missing for some reason.
                 (
                     not arg.name and not (
-                        ind < len(intermediate_names) and
+                        index < len(intermediate_names) and
                         # If this is also unnamed arg, then ignoring it.
-                        not intermediate_names[ind]
+                        not intermediate_names[index]
                     )
                 )
             )
             if should_be_copied:
                 new_function_args.append(arg)
-        return Intermediate(self._original).with_applied_args(
+        return Intermediate(self._original).with_signature(
             new_function_args,
         )

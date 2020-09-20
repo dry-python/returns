@@ -77,6 +77,7 @@ See [0Ver](https://0ver.org/).
 - **Breaking**: fixes serious typing issue and changes how `pipe` works,
   now it has a hard limit of 20 parameters
 - Fixes that `RequiresContextFutureResult` was not supported by `pytest` plugin
+- Fixes incorrect `partial` behaviour with 
 
 ### Misc
 

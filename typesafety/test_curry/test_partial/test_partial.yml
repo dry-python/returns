@@ -134,3 +134,19 @@
   out: |
     main:4: note: "multiple" defined here
     main:10: error: Unexpected keyword argument "missing" for "multiple"
+
+
+- case: partial_regression618
+  disable_cache: false
+  main: |
+    from typing import Callable, TypeVar
+    from returns.curry import partial
+
+    _FirstType = TypeVar('_FirstType')
+    _SecondType = TypeVar('_SecondType')
+
+    def test(
+        default: _SecondType,
+        function: Callable[[_SecondType, _FirstType], _SecondType],
+    ):
+        reveal_type(partial(function, default))  # N: Revealed type is 'def (_FirstType`-2) -> _SecondType`-1'
