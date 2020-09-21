@@ -291,7 +291,7 @@ API Reference
 
 .. autofunction:: returns.pointfree.bind_awaitable
 
-.. autofunction:: returns.pointfree.bind_optional.bind_optional
+.. autofunction:: returns.pointfree.bind_optional
 
 .. autofunction:: returns.pointfree.compose_result
 

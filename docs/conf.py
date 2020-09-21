@@ -87,6 +87,11 @@ extensions = [
     # Used to insert typehints into the final docs:
     'sphinx_autodoc_typehints',
 
+    # Our custom sphinx plugin
+    # Should be removed after `sphinx` 3.3.0 release
+    # https://github.com/sphinx-doc/sphinx/pull/8202
+    'docs.plugin',
+
     # Used to build graphs:
     'sphinxcontrib.mermaid',
 
