@@ -12,7 +12,7 @@
 
 -----
 
-Make your functions return something meaningful, typed, and safe!
+Make your functions return something meaningful, typed, and safe! Test!
 
 
 ## Features
