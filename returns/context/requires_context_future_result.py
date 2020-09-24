@@ -1390,41 +1390,6 @@ class RequiresContextFutureResult(
             lambda _: FutureResult.from_failure(inner_value),
         )
 
-    @classmethod
-    def from_iterable(
-        cls,
-        inner_value: Iterable[
-            Kind3[
-                RequiresContextFutureResult,
-                _FirstType,
-                _NewErrorType,
-                _NewEnvType,
-            ],
-        ],
-        strategy: Type[BaseIterableStrategyN] = FailFast,
-    ) -> ReaderFutureResult[Sequence[_FirstType], _NewErrorType, _NewEnvType]:
-        """
-        Transforms an iterable of ``RequiresContextFutureResult`` containers.
-
-        Returns a single container with multiple elements inside.
-
-        .. code:: python
-
-          >>> import anyio
-          >>> from returns.context import RequiresContextFutureResult
-          >>> from returns.io import IOSuccess
-
-          >>> assert anyio.run(
-          ...    RequiresContextFutureResult.from_iterable([
-          ...        RequiresContextFutureResult.from_value(1),
-          ...        RequiresContextFutureResult.from_value(2),
-          ...    ]),
-          ...    RequiresContextFutureResult.empty,
-          ... ) == IOSuccess((1, 2))
-
-        """
-        return iterable_kind(cls, inner_value, strategy)
-
 
 # Aliases:
 

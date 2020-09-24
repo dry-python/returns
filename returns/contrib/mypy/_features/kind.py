@@ -136,7 +136,6 @@ def kinded_get_descriptor(ctx: MethodContext) -> MypyType:
     self_type = wrapped_method.arg_types[0]
     signature = bind_self(
         wrapped_method,
-        None,
         is_classmethod=isinstance(self_type, TypeType),
     )
     return ctx.type.copy_modified(args=[signature])

@@ -362,31 +362,6 @@ class RequiresContext(
         return inner_value
 
     @classmethod
-    def from_iterable(
-        cls,
-        inner_value: Iterable[
-            Kind2[RequiresContext, _NewReturnType, _NewEnvType],
-        ],
-        strategy: Type[BaseIterableStrategyN] = FailFast,
-    ) -> RequiresContext[Sequence[_NewReturnType], _NewEnvType]:
-        """
-        Transforms an iterable of ``RequiresContext`` containers.
-
-        Returns a single container with a sequence of values.
-
-        .. code:: python
-
-          >>> from returns.context import RequiresContext
-
-          >>> assert RequiresContext.from_iterable([
-          ...    RequiresContext.from_value(1),
-          ...    RequiresContext.from_value(2),
-          ... ])(...) == (1, 2)
-
-        """
-        return iterable_kind(cls, inner_value, strategy)
-
-    @classmethod
     def from_requires_context_result(
         cls,
         inner_value: 'RequiresContextResult[_ValueType, _ErrorType, _EnvType]',

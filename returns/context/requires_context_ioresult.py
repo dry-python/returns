@@ -900,37 +900,6 @@ class RequiresContextIOResult(
         """
         return RequiresContextIOResult(lambda _: IOFailure(inner_value))
 
-    @classmethod
-    def from_iterable(
-        cls,
-        inner_value: Iterable[
-            Kind3[
-                RequiresContextIOResult,
-                _NewValueType,
-                _NewErrorType,
-                _NewEnvType,
-            ],
-        ],
-        strategy: Type[BaseIterableStrategyN] = FailFast,
-    ) -> ReaderIOResult[Sequence[_NewValueType], _NewErrorType, _NewEnvType]:
-        """
-        Transforms an iterable of ``RequiresContextIOResult`` containers.
-
-        Returns a single container with multiple elements inside.
-
-        .. code:: python
-
-          >>> from returns.context import RequiresContextIOResult
-          >>> from returns.io import IOSuccess
-
-          >>> assert RequiresContextIOResult.from_iterable([
-          ...    RequiresContextIOResult.from_value(1),
-          ...    RequiresContextIOResult.from_value(2),
-          ... ])(...) == IOSuccess((1, 2))
-
-        """
-        return iterable_kind(cls, inner_value, strategy)
-
 
 # Aliases:
 

@@ -194,27 +194,6 @@ class IO(
         return inner_value
 
     @classmethod
-    def from_iterable(
-        cls,
-        inner_value: Iterable[Kind1['IO', _NewValueType]],
-        strategy: Type[BaseIterableStrategyN] = FailFast,
-    ) -> 'IO[Sequence[_NewValueType]]':
-        """
-        Transforms an iterable of ``IO`` containers into a single container.
-
-        .. code:: python
-
-          >>> from returns.io import IO
-
-          >>> assert IO.from_iterable([
-          ...    IO(1),
-          ...    IO(2),
-          ... ]) == IO((1, 2))
-
-        """
-        return iterable_kind(cls, inner_value, strategy)
-
-    @classmethod
     def from_ioresult(
         cls,
         inner_value: 'IOResult[_NewValueType, _NewErrorType]',
@@ -767,27 +746,6 @@ class IOResult(
 
         """
         return IOFailure(inner_value)
-
-    @classmethod
-    def from_iterable(
-        cls,
-        inner_value: Iterable[Kind2['IOResult', _NewValueType, _NewErrorType]],
-        strategy: Type[BaseIterableStrategyN] = FailFast,
-    ) -> 'IOResult[Sequence[_NewValueType], _NewErrorType]':
-        """
-        Transforms an iterable of ``IOResult`` containers into a single one.
-
-        .. code:: python
-
-          >>> from returns.io import IOResult, IOSuccess
-
-          >>> assert IOResult.from_iterable([
-          ...    IOSuccess(1),
-          ...    IOSuccess(2),
-          ... ]) == IOSuccess((1, 2))
-
-        """
-        return iterable_kind(cls, inner_value, strategy)
 
 
 @final

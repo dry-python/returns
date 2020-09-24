@@ -312,27 +312,6 @@ class Result(
         """
         return inner_value
 
-    @classmethod
-    def from_iterable(
-        cls,
-        inner_value: Iterable[Kind2['Result', _NewValueType, _NewErrorType]],
-        strategy: Type[BaseIterableStrategyN] = FailFast,
-    ) -> 'Result[Sequence[_NewValueType], _NewErrorType]':
-        """
-        Transforms an iterable of ``Result`` containers into a single container.
-
-        .. code:: python
-
-          >>> from returns.result import Result, Success
-
-          >>> assert Result.from_iterable([
-          ...    Success(1),
-          ...    Success(2),
-          ... ]) == Success((1, 2))
-
-        """
-        return iterable_kind(cls, inner_value, strategy)
-
 
 @final
 class _Failure(Result[Any, _ErrorType]):

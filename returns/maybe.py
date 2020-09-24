@@ -283,27 +283,6 @@ class Maybe(
             return _Nothing(inner_value)
         return _Some(inner_value)
 
-    @classmethod
-    def from_iterable(
-        cls,
-        inner_value: Iterable[Kind1['Maybe', _NewValueType]],
-        strategy: Type[BaseIterableStrategyN] = FailFast,
-    ) -> 'Maybe[Sequence[_NewValueType]]':
-        """
-        Transforms an iterable of ``Maybe`` containers into a single container.
-
-        .. code:: python
-
-          >>> from returns.maybe import Maybe, Some
-
-          >>> assert Maybe.from_iterable([
-          ...    Some(1),
-          ...    Some(2),
-          ... ]) == Some((1, 2))
-
-        """
-        return iterable_kind(cls, inner_value, strategy)
-
 
 @final
 class _Nothing(Maybe[Any]):
