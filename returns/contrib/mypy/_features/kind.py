@@ -11,7 +11,7 @@ from mypy.plugin import (
 from mypy.typeops import bind_self, erase_to_bound
 from mypy.types import AnyType, CallableType, Instance
 from mypy.types import Type as MypyType
-from mypy.types import TypeOfAny, TypeVarType, get_proper_type
+from mypy.types import TypeOfAny, TypeType, TypeVarType, get_proper_type
 
 from returns.contrib.mypy._consts import TYPED_KINDN
 from returns.contrib.mypy._typeops.fallback import asserts_fallback_to_any
@@ -132,20 +132,14 @@ def kinded_get_descriptor(ctx: MethodContext) -> MypyType:
     assert isinstance(ctx.type, Instance)
     assert isinstance(ctx.type.args[0], CallableType)
 
-    function = bind_self(ctx.type.args[0])
-    assert isinstance(function, CallableType)
-
-    ret_type = get_proper_type(function.ret_type)
-    assert isinstance(ret_type, Instance)
-
-    new_ret_type = ret_type.copy_modified(
-        # TODO: instead we need to replace first typevar in `KindN`
-        # to the proper type, not just blindly replacing the first arg
-        # in a single place
-        args=[ctx.arg_types[0][0], *ret_type.args[1:]],
+    wrapped_method = ctx.type.args[0]
+    self_type = wrapped_method.arg_types[0]
+    signature = bind_self(
+        wrapped_method,
+        None,
+        is_classmethod=isinstance(self_type, TypeType),
     )
-    replaced_method = function.copy_modified(ret_type=new_ret_type)
-    return ctx.type.copy_modified(args=[replaced_method])
+    return ctx.type.copy_modified(args=[signature])
 
 
 @unique  # noqa: WPS600

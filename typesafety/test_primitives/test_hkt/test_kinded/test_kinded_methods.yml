@@ -20,7 +20,7 @@
     reveal_type(x.map(str))  # N: Revealed type is 'main.Mappable[builtins.str*]'
 
 
-- case: kinded_with_method_child
+- case: kinded_with_unannotated_self_method
   disable_cache: false
   main: |
     from typing import Callable, Generic, TypeVar
@@ -33,13 +33,140 @@
     class Mappable(Generic[_FirstType]):
         @kinded
         def map(
-            self,
+            self,  # not annotated, `_MappableType` is unbound
             function: Callable[[_FirstType], _UpdatedType],
         ) -> Kind1[_MappableType, _UpdatedType]:
             ...
 
-    class My(Mappable[_FirstType]):
+    x: Mappable[int]
+    reveal_type(x.map(str))  # N: Revealed type is 'Any'
+
+
+- case: kinded_with_two_params
+  disable_cache: false
+  main: |
+    from typing import Callable, TypeVar
+    from returns.primitives.hkt import Kind1, SupportsKind1, kinded
+
+    _FirstType = TypeVar('_FirstType')
+    _UpdatedType = TypeVar('_UpdatedType')
+    _MappableType = TypeVar('_MappableType', bound='Mappable')
+
+    class Mappable(object):
+        @kinded
+        def map(
+            self,
+            container: Kind1[_MappableType, _FirstType],
+            function: Callable[[_FirstType], _UpdatedType],
+        ) -> Kind1[_MappableType, _UpdatedType]:
+            ...
+
+    class My(Mappable, SupportsKind1['My', _FirstType]):
         ...
 
-    x: My[int]
-    reveal_type(x.map(str))  # N: Revealed type is 'main.My[builtins.str*]'
+    x: Mappable
+    y: My[int]
+    reveal_type(x.map(y, str))  # N: Revealed type is 'main.My[builtins.str*]'
+
+
+- case: kinded_classmethod_with_two_params1
+  disable_cache: false
+  main: |
+    from typing import Callable, TypeVar
+    from returns.primitives.hkt import Kind1, SupportsKind1, kinded
+
+    _FirstType = TypeVar('_FirstType')
+    _UpdatedType = TypeVar('_UpdatedType')
+    _MappableType = TypeVar('_MappableType', bound='Mappable')
+
+    class Mappable(object):
+        @kinded
+        @classmethod
+        def map(
+            cls,
+            container: Kind1[_MappableType, _FirstType],
+            function: Callable[[_FirstType], _UpdatedType],
+        ) -> Kind1[_MappableType, _UpdatedType]:
+            ...
+
+    class My(Mappable, SupportsKind1['My', _FirstType]):
+        ...
+
+    y: My[int]
+    reveal_type(Mappable.map(y, str))  # N: Revealed type is 'main.My[builtins.str*]'
+    reveal_type(My.map(y, str))  # N: Revealed type is 'main.My[builtins.str*]'
+    reveal_type(y.map(y, str))  # N: Revealed type is 'main.My[builtins.str*]'
+
+
+- case: kinded_classmethod_with_two_params2
+  disable_cache: false
+  main: |
+    from typing import Callable, TypeVar, Type
+    from returns.primitives.hkt import Kind1, SupportsKind1, kinded
+
+    _FirstType = TypeVar('_FirstType')
+    _UpdatedType = TypeVar('_UpdatedType')
+    _MappableType = TypeVar('_MappableType', bound='Mappable')
+
+    class Mappable(object):
+        @kinded
+        @classmethod
+        def map(
+            cls: Type[Mappable],
+            container: Kind1[_MappableType, _FirstType],
+            function: Callable[[_FirstType], _UpdatedType],
+        ) -> Kind1[_MappableType, _UpdatedType]:
+            ...
+
+    class My(Mappable, SupportsKind1['My', _FirstType]):
+        ...
+
+    y: My[int]
+    reveal_type(Mappable.map(y, str))  # N: Revealed type is 'main.My[builtins.str*]'
+    reveal_type(My.map(y, str))  # N: Revealed type is 'main.My[builtins.str*]'
+    reveal_type(y.map(y, str))  # N: Revealed type is 'main.My[builtins.str*]'
+
+
+- case: kinded_with_wrong_self_type1
+  disable_cache: false
+  main: |
+    from typing import Callable, TypeVar, Type
+    from returns.primitives.hkt import Kind1, kinded
+
+    _FirstType = TypeVar('_FirstType')
+    _UpdatedType = TypeVar('_UpdatedType')
+    _MappableType = TypeVar('_MappableType', bound='Mappable')
+
+    class Mappable(object):
+        @kinded
+        def map(
+            self: int,
+            container: Kind1[_MappableType, _FirstType],
+            function: Callable[[_FirstType], _UpdatedType],
+        ) -> Kind1[_MappableType, _UpdatedType]:
+            ...
+  out: |
+    main:10: error: The erased type of self "builtins.int" is not a supertype of its class "main.Mappable"
+
+
+- case: kinded_with_wrong_self_type2
+  disable_cache: false
+  main: |
+    from typing import Callable, TypeVar, Type
+    from returns.primitives.hkt import Kind1, kinded
+
+    _FirstType = TypeVar('_FirstType')
+    _UpdatedType = TypeVar('_UpdatedType')
+    _MappableType = TypeVar('_MappableType', bound='Mappable')
+
+    class Mappable(object):
+        @kinded
+        @classmethod
+        def map(
+            cls: Type[int],
+            container: Kind1[_MappableType, _FirstType],
+            function: Callable[[_FirstType], _UpdatedType],
+        ) -> Kind1[_MappableType, _UpdatedType]:
+            ...
+  out: |
+    main:11: error: The erased type of self "Type[builtins.int]" is not a supertype of its class "Type[main.Mappable]"
