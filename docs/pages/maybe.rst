@@ -275,6 +275,7 @@ API Reference
 -------------
 
 .. autoclasstree:: returns.maybe
+   :strict:
 
 .. automodule:: returns.maybe
    :members:

@@ -19,6 +19,7 @@ API Reference
 -------------
 
 .. autoclasstree:: returns.primitives.types
+   :strict:
 
 .. automodule:: returns.primitives.types
    :members:
@@ -27,6 +28,7 @@ Exceptions
 ~~~~~~~~~~
 
 .. autoclasstree:: returns.primitives.exceptions
+   :strict:
 
 .. automodule:: returns.primitives.exceptions
    :members:

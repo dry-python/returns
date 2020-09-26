@@ -118,6 +118,7 @@ API Reference
 -------------
 
 .. autoclasstree:: returns.contrib.pytest.plugin
+   :strict:
 
 .. automodule:: returns.contrib.pytest.plugin
    :members:

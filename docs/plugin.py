@@ -1,3 +1,5 @@
+# TODO: remove after sphinx_autodoc_typehints is released
+
 def processe_docstring(  # noqa: WPS211
     app, what, name, object_, options, lines,
 ):
