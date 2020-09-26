@@ -304,6 +304,7 @@ API Reference
 -------------
 
 .. autoclasstree:: returns.future
+   :strict:
 
 .. automodule:: returns.future
    :members:

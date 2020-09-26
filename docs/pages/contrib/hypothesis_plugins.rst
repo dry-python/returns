@@ -173,6 +173,7 @@ DSL to define laws
 ~~~~~~~~~~~~~~~~~~
 
 .. autoclasstree:: returns.primitives.laws
+   :strict:
 
 .. automodule:: returns.primitives.laws
    :members:

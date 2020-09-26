@@ -334,6 +334,7 @@ API Reference
 It defines some basic things like representation, hashing, pickling, etc.
 
 .. autoclasstree:: returns.primitives.container
+   :strict:
 
 .. automodule:: returns.primitives.container
    :members:

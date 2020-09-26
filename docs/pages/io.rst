@@ -466,6 +466,7 @@ API Reference
 -------------
 
 .. autoclasstree:: returns.io
+   :strict:
 
 .. automodule:: returns.io
    :members:

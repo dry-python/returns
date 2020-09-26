@@ -224,6 +224,7 @@ API Reference
 -------------
 
 .. autoclasstree:: returns.result
+   :strict:
 
 .. automodule:: returns.result
    :members:

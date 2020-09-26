@@ -80,6 +80,7 @@ Plugin defenition
    :members:
 
 .. autoclasstree:: returns.contrib.mypy.returns_plugin
+   :strict:
 
 .. automodule:: returns.contrib.mypy.returns_plugin
    :members:
@@ -88,6 +89,7 @@ Kind
 ~~~~
 
 .. autoclasstree:: returns.contrib.mypy._features.kind
+   :strict:
 
 .. automodule:: returns.contrib.mypy._features.kind
    :members:
@@ -96,6 +98,7 @@ Curry
 ~~~~~
 
 .. autoclasstree:: returns.contrib.mypy._features.curry
+   :strict:
 
 .. automodule:: returns.contrib.mypy._features.curry
    :members:
@@ -104,6 +107,7 @@ Partial
 ~~~~~~~
 
 .. autoclasstree:: returns.contrib.mypy._features.partial
+   :strict:
 
 .. automodule:: returns.contrib.mypy._features.partial
    :members:
@@ -112,6 +116,7 @@ Flow
 ~~~~
 
 .. autoclasstree:: returns.contrib.mypy._features.flow
+   :strict:
 
 .. automodule:: returns.contrib.mypy._features.flow
    :members:
@@ -120,6 +125,7 @@ Pipe
 ~~~~
 
 .. autoclasstree:: returns.contrib.mypy._features.pipe
+   :strict:
 
 .. automodule:: returns.contrib.mypy._features.pipe
    :members:
@@ -128,6 +134,7 @@ Decorators
 ~~~~~~~~~~
 
 .. autoclasstree:: returns.contrib.mypy._features.decorators
+   :strict:
 
 .. automodule:: returns.contrib.mypy._features.decorators
    :members:

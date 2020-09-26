@@ -438,10 +438,39 @@ See the example below using ``FutureResult`` to get a ``IOResult``:
 API Reference
 -------------
 
+Overview
+~~~~~~~~
+
+Here's a full overview of all our interfaces:
+
+.. autoclasstree::
+   returns.interfaces.mappable
+   returns.interfaces.bindable
+   returns.interfaces.applicative
+   returns.interfaces.rescuable
+   returns.interfaces.altable
+   returns.interfaces.bimappable
+   returns.interfaces.unwrappable
+   returns.interfaces.container
+   returns.interfaces.specific.maybe
+   returns.interfaces.specific.result
+   returns.interfaces.specific.io
+   returns.interfaces.specific.ioresult
+   returns.interfaces.specific.future
+   returns.interfaces.specific.future_result
+   returns.interfaces.specific.reader
+   returns.interfaces.specific.reader_result
+   returns.interfaces.specific.reader_ioresult
+   returns.interfaces.specific.reader_future_result
+   :strict:
+
+Let's review it one by one.
+
 SupportsEquality
 ~~~~~~~~~~~~~~~~
 
 .. autoclasstree:: returns.interfaces.equable
+   :strict:
 
 .. automodule:: returns.interfaces.equable
   :members:
@@ -451,6 +480,7 @@ Mappable
 ~~~~~~~~
 
 .. autoclasstree:: returns.interfaces.mappable
+   :strict:
 
 .. automodule:: returns.interfaces.mappable
   :members:
@@ -460,6 +490,7 @@ Bindable
 ~~~~~~~~
 
 .. autoclasstree:: returns.interfaces.bindable
+   :strict:
 
 .. automodule:: returns.interfaces.bindable
   :members:
@@ -469,6 +500,7 @@ Applicative
 ~~~~~~~~~~~
 
 .. autoclasstree:: returns.interfaces.applicative
+   :strict:
 
 .. automodule:: returns.interfaces.applicative
   :members:
@@ -478,6 +510,7 @@ Altable
 ~~~~~~~
 
 .. autoclasstree:: returns.interfaces.altable
+   :strict:
 
 .. automodule:: returns.interfaces.altable
   :members:
@@ -487,6 +520,7 @@ BiMappable
 ~~~~~~~~~~
 
 .. autoclasstree:: returns.interfaces.bimappable
+   :strict:
 
 .. automodule:: returns.interfaces.bimappable
   :members:
@@ -496,6 +530,7 @@ Rescuable
 ~~~~~~~~~
 
 .. autoclasstree:: returns.interfaces.rescuable
+   :strict:
 
 .. automodule:: returns.interfaces.rescuable
   :members:
@@ -505,6 +540,7 @@ Unwrappable
 ~~~~~~~~~~~
 
 .. autoclasstree:: returns.interfaces.unwrappable
+   :strict:
 
 .. automodule:: returns.interfaces.unwrappable
   :members:
@@ -514,6 +550,7 @@ Iterable
 ~~~~~~~~
 
 .. autoclasstree:: returns.interfaces.iterable
+   :strict:
 
 .. automodule:: returns.interfaces.iterable
   :members:
@@ -523,6 +560,7 @@ Container
 ~~~~~~~~~
 
 .. autoclasstree:: returns.interfaces.container
+   :strict:
 
 .. automodule:: returns.interfaces.container
   :members:
@@ -532,6 +570,7 @@ Maybe specific
 ~~~~~~~~~~~~~~
 
 .. autoclasstree:: returns.interfaces.specific.maybe
+   :strict:
 
 .. automodule:: returns.interfaces.specific.maybe
   :members:
@@ -541,6 +580,7 @@ Result specific
 ~~~~~~~~~~~~~~~
 
 .. autoclasstree:: returns.interfaces.specific.result
+   :strict:
 
 .. automodule:: returns.interfaces.specific.result
   :members:
@@ -550,6 +590,7 @@ IO specific
 ~~~~~~~~~~~
 
 .. autoclasstree:: returns.interfaces.specific.io
+   :strict:
 
 .. automodule:: returns.interfaces.specific.io
   :members:
@@ -559,6 +600,7 @@ IOResult specific
 ~~~~~~~~~~~~~~~~~
 
 .. autoclasstree:: returns.interfaces.specific.ioresult
+   :strict:
 
 .. automodule:: returns.interfaces.specific.ioresult
   :members:
@@ -568,6 +610,7 @@ Future specific
 ~~~~~~~~~~~~~~~
 
 .. autoclasstree:: returns.interfaces.specific.future
+   :strict:
 
 .. automodule:: returns.interfaces.specific.future
   :members:
@@ -577,6 +620,7 @@ FutureResult specific
 ~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclasstree:: returns.interfaces.specific.future_result
+   :strict:
 
 .. automodule:: returns.interfaces.specific.future_result
   :members:
@@ -586,6 +630,7 @@ Reader specific
 ~~~~~~~~~~~~~~~
 
 .. autoclasstree:: returns.interfaces.specific.reader
+   :strict:
 
 .. automodule:: returns.interfaces.specific.reader
   :members:
@@ -595,6 +640,7 @@ ReaderResult specific
 ~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclasstree:: returns.interfaces.specific.reader_result
+   :strict:
 
 .. automodule:: returns.interfaces.specific.reader_result
   :members:
@@ -604,6 +650,7 @@ ReaderIOResult specific
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclasstree:: returns.interfaces.specific.reader_ioresult
+   :strict:
 
 .. automodule:: returns.interfaces.specific.reader_ioresult
   :members:
@@ -613,6 +660,7 @@ ReaderFutureResult specific
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclasstree:: returns.interfaces.specific.reader_future_result
+   :strict:
 
 .. automodule:: returns.interfaces.specific.reader_future_result
   :members:

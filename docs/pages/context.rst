@@ -742,6 +742,7 @@ RequiresContext
 ~~~~~~~~~~~~~~~
 
 .. autoclasstree:: returns.context.requires_context
+   :strict:
 
 .. automodule:: returns.context.requires_context
    :members:
@@ -750,6 +751,7 @@ RequiresContextResult
 ~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclasstree:: returns.context.requires_context_result
+   :strict:
 
 .. automodule:: returns.context.requires_context_result
    :members:
@@ -758,6 +760,7 @@ RequiresContextIOResult
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclasstree:: returns.context.requires_context_ioresult
+   :strict:
 
 .. automodule:: returns.context.requires_context_ioresult
    :members:
@@ -766,6 +769,7 @@ RequiresContextFutureResult
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclasstree:: returns.context.requires_context_future_result
+   :strict:
 
 .. automodule:: returns.context.requires_context_future_result
    :members:

@@ -249,5 +249,8 @@ Later you will learn how to
 API Reference
 -------------
 
+.. autoclasstree:: returns.primitives.hkt
+   :strict:
+
 .. automodule:: returns.primitives.hkt
   :members:
