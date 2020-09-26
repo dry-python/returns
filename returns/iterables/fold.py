@@ -1,10 +1,10 @@
-from typing import TYPE_CHECKING, Callable, Iterable, TypeVar, Sequence
+from typing import Callable, Iterable, TypeVar, Sequence
 from abc import abstractmethod
 from typing_extensions import final
 
 from returns.interfaces.applicative import ApplicativeN
 from returns.primitives.hkt import KindN, kinded
-from returns.maybe import Maybe, Nothing
+from returns.maybe import Maybe, Some, Nothing
 
 
 _FirstType = TypeVar('_FirstType')
@@ -49,43 +49,8 @@ class AbstractFold(object):
         """
         return cls._loop(iterable, default, function)
 
-    @final
-    @kinded
     @classmethod
-    def loop_back(
-        cls,
-        iterable: Sequence[
-            KindN[_ApplicativeKind, _FirstType, _SecondType, _ThirdType],
-        ],
-        default: KindN[_ApplicativeKind, _UpdatedType, _SecondType, _ThirdType],
-        function: Callable[
-            [_FirstType],
-            Callable[[_UpdatedType], _UpdatedType],
-        ],
-    ) -> KindN[_ApplicativeKind, _UpdatedType, _SecondType, _ThirdType]:
-        return cls._loop_back(iterable, default, function)
-
-    @classmethod
-    def any(
-        cls,
-        iterable: Iterable[
-            KindN[_ApplicativeKind, _FirstType, _SecondType, _ThirdType],
-        ],
-        predicate: Callable[[_FirstType], bool],
-    ) -> bool:
-        ...
-
-    @classmethod
-    def all(
-        iterable: Iterable[
-            KindN[_ApplicativeKind, _FirstType, _SecondType, _ThirdType],
-        ],
-        predicate: Callable[[_FirstType], bool],
-    ) -> bool:
-        ...
-
     @abstractmethod
-    @classmethod
     def _loop(
         cls,
         iterable: Iterable[
@@ -102,24 +67,6 @@ class AbstractFold(object):
 
         Can be replaced in subclasses for better performance, etc.
         """
-
-    @classmethod
-    def _loop_back(
-        cls,
-        iterable: Sequence[
-            KindN[_ApplicativeKind, _FirstType, _SecondType, _ThirdType],
-        ],
-        default: KindN[_ApplicativeKind, _UpdatedType, _SecondType, _ThirdType],
-        function: Callable[
-            [_FirstType],
-            Callable[[_UpdatedType], _UpdatedType],
-        ],
-    ) -> KindN[_ApplicativeKind, _UpdatedType, _SecondType, _ThirdType]:
-        return cls._loop(
-            reversed(iterable),
-            default,
-            lambda x: lambda y: function(y)(x),
-        )
 
 
 class Fold(AbstractFold):
