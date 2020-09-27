@@ -72,7 +72,7 @@ class _ReturnsPlugin(Plugin):
     }
 
     _function_hook_def_plugins: ClassVar[Mapping[str, _FunctionDefCallback]] = {
-        **dict.fromkeys(_consts.TYPED_DECORATORS, decorators.analyze)
+        **dict.fromkeys(_consts.TYPED_DECORATORS, decorators.analyze),
     }
 
     _method_sig_hook_plugins: ClassVar[Mapping[str, _MethodSigCallback]] = {
