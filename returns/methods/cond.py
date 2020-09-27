@@ -1,22 +1,22 @@
 from typing import Type, TypeVar
 
-from returns.interfaces.specific.result import ResultLikeN
+from returns.interfaces.failable import DiverseFailableN
 from returns.primitives.hkt import Kind2, kinded
 
 _ValueType = TypeVar('_ValueType')
 _ErrorType = TypeVar('_ErrorType')
 
-_ResultKind = TypeVar('_ResultKind', bound=ResultLikeN)
+_DiverseFailableKind = TypeVar('_DiverseFailableKind', bound=DiverseFailableN)
 
 
 def internal_cond(
-    container_type: Type[_ResultKind],
+    container_type: Type[_DiverseFailableKind],
     is_success: bool,
     success_value: _ValueType,
     error_value: _ErrorType,
-) -> Kind2[_ResultKind, _ValueType, _ErrorType]:
+) -> Kind2[_DiverseFailableKind, _ValueType, _ErrorType]:
     """
-    Help us to reduce the boilerplate when choosing paths with ``ResultLikeN``.
+    Reduce the boilerplate when choosing paths with ``DiverseFailableN``.
 
     .. code:: python
 

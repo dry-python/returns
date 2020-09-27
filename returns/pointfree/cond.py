@@ -1,22 +1,24 @@
 from typing import Callable, Type, TypeVar
 
-from returns.interfaces.specific.result import ResultLikeN
+from returns.interfaces.failable import DiverseFailableN
 from returns.methods.cond import internal_cond
 from returns.primitives.hkt import Kind2, Kinded, kinded
 
 _ValueType = TypeVar('_ValueType')
 _ErrorType = TypeVar('_ErrorType')
 
-_ResultKind = TypeVar('_ResultKind', bound=ResultLikeN)
+_DiverseFailableKind = TypeVar('_DiverseFailableKind', bound=DiverseFailableN)
 
 
 def cond(
-    container_type: Type[_ResultKind],
+    container_type: Type[_DiverseFailableKind],
     success_value: _ValueType,
     error_value: _ErrorType,
-) -> Kinded[Callable[[bool], Kind2[_ResultKind, _ValueType, _ErrorType]]]:
+) -> Kinded[
+    Callable[[bool], Kind2[_DiverseFailableKind, _ValueType, _ErrorType]]
+]:
     """
-    Help us to reduce the boilerplate when choosing paths with ``ResultLikeN``.
+    Reduce the boilerplate when choosing paths with ``DiverseFailableN``.
 
     .. code:: python
 
@@ -30,7 +32,7 @@ def cond(
     @kinded
     def factory(
         is_success: bool,
-    ) -> Kind2[_ResultKind, _ValueType, _ErrorType]:
+    ) -> Kind2[_DiverseFailableKind, _ValueType, _ErrorType]:
         return internal_cond(
             container_type, is_success, success_value, error_value,
         )

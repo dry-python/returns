@@ -218,8 +218,8 @@ kind of manipulation.
 cond
 ----
 
-Sometimes we need to create ``ResultLikeN`` containers based on a boolean
-expression, ``cond`` can help us.
+Sometimes we need to create ``DiverseFailableN`` containers
+(e.g. ``ResultLikeN``) based on a boolean expression, ``cond`` can help us.
 
 See the example below:
 
