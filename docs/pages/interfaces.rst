@@ -452,6 +452,7 @@ Here's a full overview of all our interfaces:
    returns.interfaces.bimappable
    returns.interfaces.unwrappable
    returns.interfaces.container
+   returns.interfaces.failable
    returns.interfaces.specific.maybe
    returns.interfaces.specific.result
    returns.interfaces.specific.io
@@ -563,6 +564,16 @@ Container
    :strict:
 
 .. automodule:: returns.interfaces.container
+  :members:
+  :private-members:
+
+Failable
+~~~~~~~~
+
+.. autoclasstree:: returns.interfaces.failable
+   :strict:
+
+.. automodule:: returns.interfaces.failable
   :members:
   :private-members:
 
