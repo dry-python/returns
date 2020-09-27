@@ -51,6 +51,9 @@ class Maybe(
 
     _inner_value: Optional[_ValueType]
 
+    #: Alias for `Nothing`
+    empty: ClassVar['Maybe[Any]']
+
     # These two are required for projects like `classes`:
 
     #: Success type that is used to represent the successful computation.
@@ -441,6 +444,7 @@ def Some(inner_value: _NewValueType) -> Maybe[_NewValueType]:  # noqa: N802
 
 #: Public unit value of protected :class:`~_Nothing` type.
 Nothing: Maybe[NoReturn] = _Nothing()
+Maybe.empty = Nothing
 
 
 def maybe(

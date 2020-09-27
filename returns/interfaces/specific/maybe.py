@@ -12,8 +12,7 @@ from typing import (
 
 from typing_extensions import final
 
-from returns.interfaces import equable, rescuable, unwrappable
-from returns.interfaces.container import ContainerN
+from returns.interfaces import equable, failable, unwrappable
 from returns.primitives.asserts import assert_equal
 from returns.primitives.hkt import KindN
 from returns.primitives.laws import (
@@ -113,8 +112,7 @@ class _LawSpec(LawSpecDef):
 
 
 class MaybeLikeN(
-    ContainerN[_FirstType, _SecondType, _ThirdType],
-    rescuable.RescuableN[_FirstType, _SecondType, _ThirdType],
+    failable.SingleFailableN[_FirstType, _SecondType, _ThirdType],
     Lawful['MaybeLikeN[_FirstType, _SecondType, _ThirdType]'],
 ):
     """

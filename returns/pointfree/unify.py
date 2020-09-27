@@ -1,6 +1,6 @@
 from typing import Callable, TypeVar, Union
 
-from returns.interfaces.specific.result import ResultLikeN
+from returns.interfaces.failable import DiverseFailableN
 from returns.primitives.hkt import Kind2, Kinded, kinded
 
 _ValueType = TypeVar('_ValueType')
@@ -8,17 +8,21 @@ _NewValueType = TypeVar('_NewValueType')
 _ErrorType = TypeVar('_ErrorType')
 _NewErrorType = TypeVar('_NewErrorType')
 
-_ResultLikeKind = TypeVar('_ResultLikeKind', bound=ResultLikeN)
+_DiverseFailableKind = TypeVar('_DiverseFailableKind', bound=DiverseFailableN)
 
 
 def unify(  # noqa: WPS234
     function: Callable[
-        [_ValueType], Kind2[_ResultLikeKind, _NewValueType, _NewErrorType],
+        [_ValueType], Kind2[_DiverseFailableKind, _NewValueType, _NewErrorType],
     ],
 ) -> Kinded[
     Callable[
-        [Kind2[_ResultLikeKind, _ValueType, _ErrorType]],
-        Kind2[_ResultLikeKind, _NewValueType, Union[_ErrorType, _NewErrorType]],
+        [Kind2[_DiverseFailableKind, _ValueType, _ErrorType]],
+        Kind2[
+            _DiverseFailableKind,
+            _NewValueType,
+            Union[_ErrorType, _NewErrorType],
+        ],
     ]
 ]:
     """
@@ -47,9 +51,9 @@ def unify(  # noqa: WPS234
     """
     @kinded
     def factory(
-        container: Kind2[_ResultLikeKind, _ValueType, _ErrorType],
+        container: Kind2[_DiverseFailableKind, _ValueType, _ErrorType],
     ) -> Kind2[
-        _ResultLikeKind, _NewValueType, Union[_ErrorType, _NewErrorType],
+        _DiverseFailableKind, _NewValueType, Union[_ErrorType, _NewErrorType],
     ]:
         return container.bind(function)  # type: ignore
     return factory
