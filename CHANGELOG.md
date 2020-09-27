@@ -79,6 +79,7 @@ See [0Ver](https://0ver.org/).
 - Fixes that `.apply` method of `IOResult` was working incorrectly,
   it was returning `IOFailure(2)`
   as a result of  `IOFailure(1).apply(IOFailure(2))`
+- Fixes bug that `safe(tap(...))` was revealing invalid types sometimes
 
 ### Misc
 

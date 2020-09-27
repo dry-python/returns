@@ -12,6 +12,7 @@ https://github.com/mkurnikov/pytest-mypy-plugins
 """
 from typing import Callable, ClassVar, Mapping, Optional, Type
 
+from mypy.nodes import SymbolTableNode
 from mypy.plugin import (
     AttributeContext,
     FunctionContext,
@@ -39,6 +40,12 @@ from returns.contrib.mypy._features import (
 #: Type for a function hook.
 _FunctionCallback = Callable[[FunctionContext], MypyType]
 
+#: Type for a function hook that need a definition node.
+_FunctionDefCallback = Callable[
+    [Optional[SymbolTableNode]],
+    Callable[[FunctionContext], MypyType],
+]
+
 #: Type for attribute hook.
 _AttributeCallback = Callable[[AttributeContext], MypyType]
 
@@ -62,7 +69,10 @@ class _ReturnsPlugin(Plugin):
         _consts.TYPED_FLOW_FUNCTION: flow.analyze,
         _consts.TYPED_PIPE_FUNCTION: pipe.analyze,
         _consts.TYPED_KIND_DEKIND: kind.dekind,
-        **dict.fromkeys(_consts.TYPED_DECORATORS, decorators.analyze),
+    }
+
+    _function_hook_def_plugins: ClassVar[Mapping[str, _FunctionDefCallback]] = {
+        **dict.fromkeys(_consts.TYPED_DECORATORS, decorators.analyze)
     }
 
     _method_sig_hook_plugins: ClassVar[Mapping[str, _MethodSigCallback]] = {
@@ -89,6 +99,10 @@ class _ReturnsPlugin(Plugin):
 
         Otherwise, we return ``None``.
         """
+        if fullname in self._function_hook_def_plugins:
+            definition = self.lookup_fully_qualified(fullname)
+            plugin = self._function_hook_def_plugins.get(fullname)
+            return plugin(definition) if plugin else None
         return self._function_hook_plugins.get(fullname)
 
     def get_attribute_hook(
