@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Callable, Iterable, Sequence, Tuple, TypeVar
+from typing import Callable, Iterable, Tuple, TypeVar
 
 from typing_extensions import final
 
