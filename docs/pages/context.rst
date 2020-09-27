@@ -310,13 +310,14 @@ Here's how it should be used:
 
   from typing import Callable, Sequence
 
-  import anyio  # you wound need to `pip install anyio`
-  import httpx  # you wound need to `pip install httpx`
+  import anyio  # you would need to `pip install anyio`
+  import httpx  # you would need to `pip install httpx`
   from typing_extensions import Final, TypedDict
 
   from returns.context import RequiresContextFutureResultE
   from returns.functions import tap
   from returns.future import FutureResultE, future_safe
+  from returns.iterables import Fold
   from returns.pipeline import managed
   from returns.result import safe
 
@@ -335,10 +336,12 @@ Here's how it should be used:
   def _fetch_post(
       post_id: int,
   ) -> RequiresContextFutureResultE[_Post, httpx.AsyncClient]:
-      return RequresContextFutureResultE[
-          _Post,
+      context: RequiresContextFutureResultE[
           httpx.AsyncClient,
-      ].ask().bind_future_result(
+          httpx.AsyncClient,
+      ] = RequiresContextFutureResultE.ask()
+
+      return context.bind_future_result(
           lambda client: future_safe(client.get)(_URL.format(post_id)),
       ).bind_result(
           safe(tap(httpx.Response.raise_for_status)),
@@ -349,12 +352,13 @@ Here's how it should be used:
   def show_titles(
       number_of_posts: int,
   ) -> RequiresContextFutureResultE[Sequence[_TitleOnly], httpx.AsyncClient]:
-      return RequiresContextFutureResultE.from_iterable([
+      titles = [
           # Notice how easily we compose async and sync functions:
           _fetch_post(post_id).map(lambda post: post['title'])
           # TODO: try `for post_id in {2, 1, 0}:` to see how errors work
           for post_id in range(1, number_of_posts + 1)
-      ])
+      ]
+      return Fold.collect(titles, RequiresContextFutureResultE.from_value(()))
 
   if __name__ == '__main__':
       # Let's fetch 3 titles of posts asynchronously:

@@ -88,7 +88,9 @@ Let's see how it can be used in a real program:
   import anyio  # you would need to `pip install anyio`
   import httpx  # you would need to `pip install httpx`
   from typing_extensions import Final, TypedDict
+
   from returns.future import FutureResultE, future_safe
+  from returns.iterables import Fold
 
   _URL: Final = 'https://jsonplaceholder.typicode.com/posts/{0}'
   _Post = TypedDict('_Post', {
@@ -108,12 +110,13 @@ Let's see how it can be used in a real program:
           return response.json()
 
   def show_titles(number_of_posts: int) -> FutureResultE[Sequence[_TitleOnly]]:
-      return FutureResultE.from_iterable([
+      titles = [
           # Notice how easily we compose async and sync functions:
           _fetch_post(post_id).map(lambda post: post['title'])
           # TODO: try `for post_id in {2, 1, 0}:` to see how errors work
           for post_id in range(1, number_of_posts + 1)
-      ])
+      ]
+      return Fold.collect(titles, FutureResultE.from_value(()))
 
   if __name__ == '__main__':
       # Let's fetch 3 titles of posts asynchronously:
