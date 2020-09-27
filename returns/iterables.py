@@ -1,10 +1,10 @@
 from abc import abstractmethod
-from typing import TYPE_CHECKING, Callable, Iterable, Sequence, Tuple, TypeVar
+from typing import Callable, Iterable, Sequence, Tuple, TypeVar
 
-from typing_extensions import Protocol, final
+from typing_extensions import final
 
 from returns.interfaces.applicative import ApplicativeN
-from returns.interfaces.specific.result import ResultLikeN
+from returns.interfaces.failable import FailableN
 from returns.primitives.hkt import KindN, kinded
 
 _FirstType = TypeVar('_FirstType')
@@ -13,32 +13,7 @@ _ThirdType = TypeVar('_ThirdType')
 _UpdatedType = TypeVar('_UpdatedType')
 
 _ApplicativeKind = TypeVar('_ApplicativeKind', bound=ApplicativeN)
-_ResultKind = TypeVar('_ResultKind', bound=ResultLikeN)  # TODO: FailableN
-
-
-if TYPE_CHECKING:
-    # We use this hack here, because `Sequence` is not a real protocol,
-    # but it works like one.
-
-    @final
-    class _ConcatableSequence(  # type: ignore
-        Protocol[_FirstType],
-        Sequence[_FirstType],
-    ):
-        """
-        Special interface that combines all props of ``Sequence`` with ``+`` op.
-
-        This protocol can work with any ``Sequence``
-        that can handle ``+ (new_item,)`` operation.
-
-        We use tuples here because, they are immutable.
-        """
-
-        def __add__(
-            self,
-            other: Tuple[_FirstType, ...],
-        ) -> '_ConcatableSequence[_FirstType]':
-            """Must support addition with tuples."""
+_FailableKind = TypeVar('_FailableKind', bound=FailableN)
 
 
 class AbstractFold(object):
@@ -122,13 +97,13 @@ class AbstractFold(object):
         ],
         acc: KindN[
             _ApplicativeKind,
-            '_ConcatableSequence[_FirstType]',
+            'Tuple[_FirstType, ...]',
             _SecondType,
             _ThirdType,
         ],
     ) -> KindN[
         _ApplicativeKind,
-        '_ConcatableSequence[_FirstType]',
+        'Tuple[_FirstType, ...]',
         _SecondType,
         _ThirdType,
     ]:
@@ -183,17 +158,17 @@ class AbstractFold(object):
     def collect_all(
         cls,
         iterable: Iterable[
-            KindN[_ResultKind, _FirstType, _SecondType, _ThirdType],
+            KindN[_FailableKind, _FirstType, _SecondType, _ThirdType],
         ],
         acc: KindN[
-            _ResultKind,
-            '_ConcatableSequence[_FirstType]',
+            _FailableKind,
+            'Tuple[_FirstType, ...]',
             _SecondType,
             _ThirdType,
         ],
     ) -> KindN[
-        _ResultKind,
-        '_ConcatableSequence[_FirstType]',
+        _FailableKind,
+        'Tuple[_FirstType, ...]',
         _SecondType,
         _ThirdType,
     ]:
@@ -287,13 +262,13 @@ class AbstractFold(object):
         ],
         acc: KindN[
             _ApplicativeKind,
-            '_ConcatableSequence[_FirstType]',
+            'Tuple[_FirstType, ...]',
             _SecondType,
             _ThirdType,
         ],
     ) -> KindN[
         _ApplicativeKind,
-        '_ConcatableSequence[_FirstType]',
+        'Tuple[_FirstType, ...]',
         _SecondType,
         _ThirdType,
     ]:
@@ -308,17 +283,17 @@ class AbstractFold(object):
     def _collect_all(
         cls,
         iterable: Iterable[
-            KindN[_ResultKind, _FirstType, _SecondType, _ThirdType],
+            KindN[_FailableKind, _FirstType, _SecondType, _ThirdType],
         ],
         acc: KindN[
-            _ResultKind,
-            '_ConcatableSequence[_FirstType]',
+            _FailableKind,
+            'Tuple[_FirstType, ...]',
             _SecondType,
             _ThirdType,
         ],
     ) -> KindN[
-        _ResultKind,
-        '_ConcatableSequence[_FirstType]',
+        _FailableKind,
+        'Tuple[_FirstType, ...]',
         _SecondType,
         _ThirdType,
     ]:
@@ -382,8 +357,8 @@ class Fold(AbstractFold):
 def _concat_sequence(
     first: _FirstType,
 ) -> Callable[
-    ['_ConcatableSequence[_FirstType]'],
-    '_ConcatableSequence[_FirstType]',
+    ['Tuple[_FirstType, ...]'],
+    'Tuple[_FirstType, ...]',
 ]:
     """
     Concats a given item to an existing sequence.
@@ -415,17 +390,21 @@ def _concat_applicative(
 
 def _concat_failable_safely(
     current: KindN[
-        _ResultKind, _FirstType, _SecondType, _ThirdType,
+        _FailableKind, _FirstType, _SecondType, _ThirdType,
     ],
     acc: KindN[
-        _ResultKind, _UpdatedType, _SecondType, _ThirdType,
+        _FailableKind, _UpdatedType, _SecondType, _ThirdType,
     ],
     function: KindN[
-        _ResultKind,
+        _FailableKind,
         Callable[[_FirstType], Callable[[_UpdatedType], _UpdatedType]],
         _SecondType,
         _ThirdType,
     ],
-) -> KindN[_ResultKind, _UpdatedType, _SecondType, _ThirdType]:
-    """Concats two applicatives using a curried-like function and a fallback."""
+) -> KindN[_FailableKind, _UpdatedType, _SecondType, _ThirdType]:
+    """
+    Concats two ``FailableN`` using a curried-like function and a fallback.
+
+    We need both ``.apply`` and ``.rescue`` methods here.
+    """
     return _concat_applicative(current, acc, function).rescue(lambda _: acc)

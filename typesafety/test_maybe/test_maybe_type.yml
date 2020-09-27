@@ -37,29 +37,6 @@
     reveal_type(Maybe.from_optional(value))  # N: Revealed type is 'returns.maybe.Maybe[builtins.int*]'
 
 
-- case: maybe_from_iterable1
-  disable_cache: false
-  main: |
-    from returns.maybe import Maybe
-    from typing import Iterable
-
-    x: Iterable[Maybe[int]]
-
-    reveal_type(Maybe.from_iterable(x))  # N: Revealed type is 'returns.maybe.Maybe[typing.Sequence[builtins.int*]]'
-
-
-- case: maybe_from_iterable2
-  disable_cache: false
-  main: |
-    from returns.maybe import Maybe
-    from returns.primitives.iterables import CollectAll
-    from typing import Iterable
-
-    x: Iterable[Maybe[int]]
-
-    reveal_type(Maybe.from_iterable(x, CollectAll))  # N: Revealed type is 'returns.maybe.Maybe[typing.Sequence[builtins.int*]]'
-
-
 - case: maybe_map_regular
   disable_cache: false
   main: |

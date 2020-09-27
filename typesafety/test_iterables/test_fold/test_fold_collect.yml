@@ -1,0 +1,24 @@
+- case: fold_collect_iterable_types
+  disable_cache: false
+  main: |
+    from typing import List, Iterable, Sequence, Iterator, Tuple, Generator
+    from returns.result import Result
+    from returns.iterables import Fold
+
+    x1: List[Result[int, str]]
+    x2: Iterable[Result[int, str]]
+    x3: Sequence[Result[int, str]]
+    x4: Iterator[Result[int, str]]
+    x5: Tuple[Result[int, str], ...]
+    x6: Tuple[Result[int, str]]
+    x7: Generator[Result[int, str], None, None]
+
+    acc: Result[Tuple[()], str] = Result.from_value(())
+
+    reveal_type(Fold.collect(x1, acc))  # N: Revealed type is 'returns.result.Result*[builtins.tuple[builtins.int*], builtins.str*]'
+    reveal_type(Fold.collect(x2, acc))  # N: Revealed type is 'returns.result.Result*[builtins.tuple[builtins.int*], builtins.str*]'
+    reveal_type(Fold.collect(x3, acc))  # N: Revealed type is 'returns.result.Result*[builtins.tuple[builtins.int*], builtins.str*]'
+    reveal_type(Fold.collect(x4, acc))  # N: Revealed type is 'returns.result.Result*[builtins.tuple[builtins.int*], builtins.str*]'
+    reveal_type(Fold.collect(x5, acc))  # N: Revealed type is 'returns.result.Result*[builtins.tuple[builtins.int*], builtins.str*]'
+    reveal_type(Fold.collect(x6, acc))  # N: Revealed type is 'returns.result.Result*[builtins.tuple[builtins.int*], builtins.str*]'
+    reveal_type(Fold.collect(x7, acc))  # N: Revealed type is 'returns.result.Result*[builtins.tuple[builtins.int*], builtins.str*]'
