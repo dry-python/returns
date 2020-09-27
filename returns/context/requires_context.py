@@ -13,14 +13,12 @@ from typing import (
 
 from typing_extensions import final
 
-from returns._internal.iterable import iterable_kind
 from returns.functions import identity
 from returns.future import FutureResult
 from returns.interfaces.specific import reader
 from returns.io import IOResult
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind2, SupportsKind2, dekind
-from returns.primitives.iterables import BaseIterableStrategyN, FailFast
 from returns.result import Result
 
 if TYPE_CHECKING:

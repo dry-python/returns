@@ -13,13 +13,11 @@ from typing import (
 
 from typing_extensions import final
 
-from returns._internal.iterable import iterable_kind
 from returns.context import NoDeps
 from returns.interfaces.specific import reader_ioresult
 from returns.io import IO, IOFailure, IOResult, IOSuccess
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind3, SupportsKind3, dekind
-from returns.primitives.iterables import BaseIterableStrategyN, FailFast
 from returns.result import Result
 
 if TYPE_CHECKING:

@@ -1,4 +1,4 @@
-from typing import Callable, Iterable, TypeVar, Sequence, Type
+from typing import Callable, Iterable, TypeVar, Sequence, Type, Tuple
 from abc import abstractmethod
 from typing_extensions import final
 
@@ -6,6 +6,20 @@ from returns.interfaces.applicative import ApplicativeN
 from returns.interfaces.specific.result import ResultLikeN
 from returns.primitives.hkt import KindN, kinded
 from returns.maybe import Maybe, Some, Nothing
+
+from typing_extensions import Protocol
+
+# TODO: use it everywhere
+@final
+class _ConcatableSequence(  # type: ignore
+    Protocol[_FirstType],
+    Sequence[_FirstType],
+):
+    def __add__(
+        self,
+        other: Tuple[_FirstType, ...],
+    ) -> '_ConcatableSequence[_FirstType]':
+        ...
 
 
 _FirstType = TypeVar('_FirstType')
@@ -60,9 +74,17 @@ class AbstractFold(object):
             KindN[_ApplicativeKind, _FirstType, _SecondType, _ThirdType],
         ],
         default: KindN[
-            _ApplicativeKind, Sequence[_FirstType], _SecondType, _ThirdType,
+            _ApplicativeKind,
+            _ConcatableSequence[_FirstType],
+            _SecondType,
+            _ThirdType,
         ],
-    ) -> KindN[_ApplicativeKind, Sequence[_FirstType], _SecondType, _ThirdType]:
+    ) -> KindN[
+        _ApplicativeKind,
+        _ConcatableSequence[_FirstType],
+        _SecondType,
+        _ThirdType,
+    ]:
         return cls._collect(iterable, default)
 
     @final
@@ -74,9 +96,17 @@ class AbstractFold(object):
             KindN[_ResultKind, _FirstType, _SecondType, _ThirdType],
         ],
         default: KindN[
-            _ResultKind, Sequence[_FirstType], _SecondType, _ThirdType,
+            _ResultKind,
+            _ConcatableSequence[_FirstType],
+            _SecondType,
+            _ThirdType,
         ],
-    ) -> KindN[_ResultKind, Sequence[_FirstType], _SecondType, _ThirdType]:
+    ) -> KindN[
+        _ResultKind,
+        _ConcatableSequence[_FirstType],
+        _SecondType,
+        _ThirdType,
+    ]:
         return cls._collect_all(iterable, default)
 
     @classmethod
@@ -115,9 +145,17 @@ class AbstractFold(object):
             KindN[_ApplicativeKind, _FirstType, _SecondType, _ThirdType],
         ],
         default: KindN[
-            _ApplicativeKind, Sequence[_FirstType], _SecondType, _ThirdType,
+            _ApplicativeKind,
+            _ConcatableSequence[_FirstType],
+            _SecondType,
+            _ThirdType,
         ],
-    ) -> KindN[_ApplicativeKind, Sequence[_FirstType], _SecondType, _ThirdType]:
+    ) -> KindN[
+        _ApplicativeKind,
+        _ConcatableSequence[_FirstType],
+        _SecondType,
+        _ThirdType,
+    ]:
         return cls._loop(
             iterable,
             default,
@@ -132,9 +170,17 @@ class AbstractFold(object):
             KindN[_ResultKind, _FirstType, _SecondType, _ThirdType],
         ],
         default: KindN[
-            _ResultKind, Sequence[_FirstType], _SecondType, _ThirdType,
+            _ResultKind,
+            _ConcatableSequence[_FirstType],
+            _SecondType,
+            _ThirdType,
         ],
-    ) -> KindN[_ResultKind, Sequence[_FirstType], _SecondType, _ThirdType]:
+    ) -> KindN[
+        _ResultKind,
+        _ConcatableSequence[_FirstType],
+        _SecondType,
+        _ThirdType,
+    ]:
         return cls._loop(
             iterable,
             default,
@@ -157,16 +203,22 @@ class Fold(AbstractFold):
             [_UpdatedType],
             Callable[[_FirstType], _UpdatedType],
         ],
-        concat: Callable[[
-            KindN[_ApplicativeKind, _FirstType, _SecondType, _ThirdType],
-            KindN[_ApplicativeKind, _UpdatedType, _SecondType, _ThirdType],
-            KindN[
-                _ApplicativeKind,
-                Callable[[_UpdatedType], Callable[[_FirstType], _UpdatedType]],
-                _SecondType,
-                _ThirdType,
+        concat: Callable[
+            [
+                KindN[_ApplicativeKind, _FirstType, _SecondType, _ThirdType],
+                KindN[_ApplicativeKind, _UpdatedType, _SecondType, _ThirdType],
+                KindN[
+                    _ApplicativeKind,
+                    Callable[
+                        [_UpdatedType],
+                        Callable[[_FirstType], _UpdatedType],
+                    ],
+                    _SecondType,
+                    _ThirdType,
+                ],
             ],
-        ], KindN[_ApplicativeKind, _UpdatedType, _SecondType, _ThirdType]],
+            KindN[_ApplicativeKind, _UpdatedType, _SecondType, _ThirdType],
+        ],
     ) -> KindN[_ApplicativeKind, _UpdatedType, _SecondType, _ThirdType]:
         """
         Protected part of ``loop`` method.
@@ -179,10 +231,11 @@ class Fold(AbstractFold):
         return default
 
 
+
 def _concat_sequence(
-    first: Sequence[_FirstType],
-) -> Callable[[_FirstType], Sequence[_FirstType]]:
-    return lambda second: first + (second, )  # type: ignore
+    first: _ConcatableSequence[_FirstType],
+) -> Callable[[_FirstType], _ConcatableSequence[_FirstType]]:
+    return lambda second: first + (second, )
 
 
 def concat_applicatives(
@@ -219,5 +272,12 @@ def concat_applicatives_with_fallback(
     return concat_applicatives(current, acc, function).rescue(lambda _: acc)
 
 
+import anyio
 from returns.result import Success, Failure
+from returns.future import FutureSuccess, FutureFailure
+from returns.io import IOSuccess
 assert Fold.collect_all([Success(1), Failure(2)], Success(())) == Success((1,))
+
+assert anyio.run(
+    Fold.collect_all([FutureFailure(2), FutureSuccess(1)], FutureSuccess(())).awaitable,
+) == IOSuccess((1,))

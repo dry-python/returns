@@ -15,14 +15,12 @@ from typing import (
 from typing_extensions import final
 
 from returns._internal.futures import _reader_future_result
-from returns._internal.iterable import iterable_kind
 from returns.context import NoDeps
 from returns.future import Future, FutureResult
 from returns.interfaces.specific import future_result, reader_future_result
 from returns.io import IO, IOResult
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind3, SupportsKind3, dekind
-from returns.primitives.iterables import BaseIterableStrategyN, FailFast
 from returns.result import Result
 
 if TYPE_CHECKING:

@@ -14,7 +14,6 @@ from typing import (
 from typing_extensions import final
 
 from returns._internal.futures import _future, _future_result
-from returns._internal.iterable import iterable_kind
 from returns.interfaces.specific.future import FutureBased1
 from returns.interfaces.specific.future_result import FutureResultBased2
 from returns.io import IO, IOResult
@@ -26,7 +25,6 @@ from returns.primitives.hkt import (
     SupportsKind2,
     dekind,
 )
-from returns.primitives.iterables import BaseIterableStrategyN, FailFast
 from returns.primitives.reawaitable import ReAwaitable
 from returns.result import Failure, Result, Success
 
