@@ -5,11 +5,9 @@ from typing import (
     Any,
     Callable,
     ClassVar,
-    Iterable,
     List,
     NoReturn,
     Optional,
-    Sequence,
     Type,
     TypeVar,
     Union,
@@ -127,8 +125,8 @@ class Result(
           >>> assert Success('a').apply(Success(appliable)) == Success('ab')
           >>> assert Failure('a').apply(Success(appliable)) == Failure('a')
 
-          >>> with_failure = Success('a').apply(Failure(appliable))
-          >>> assert isinstance(with_failure, Result.failure_type)
+          >>> assert Success('a').apply(Failure(1)) == Failure(1)
+          >>> assert Failure(1).apply(Failure(2)) == Failure(1)
 
         """
 

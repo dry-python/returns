@@ -1,15 +1,6 @@
 from __future__ import annotations
 
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    Callable,
-    ClassVar,
-    Iterable,
-    Sequence,
-    Type,
-    TypeVar,
-)
+from typing import TYPE_CHECKING, Any, Callable, ClassVar, TypeVar
 
 from typing_extensions import final
 
@@ -227,7 +218,7 @@ class RequiresContextIOResult(
         .. code:: python
 
           >>> from returns.context import RequiresContextIOResult
-          >>> from returns.io import IOSuccess, IOFailure, IOResult
+          >>> from returns.io import IOSuccess, IOFailure
 
           >>> def transform(arg: str) -> str:
           ...     return arg + 'b'
@@ -236,13 +227,17 @@ class RequiresContextIOResult(
           ...    RequiresContextIOResult.from_value(transform),
           ... )(...) == IOSuccess('ab')
 
+          >>> assert RequiresContextIOResult.from_value('a').apply(
+          ...    RequiresContextIOResult.from_failure(1),
+          ... )(...) == IOFailure(1)
+
           >>> assert RequiresContextIOResult.from_failure('a').apply(
           ...    RequiresContextIOResult.from_value(transform),
           ... )(...) == IOFailure('a')
 
-          >>> assert isinstance(RequiresContextIOResult.from_value('a').apply(
-          ...    RequiresContextIOResult.from_failure(transform),
-          ... )(...), IOResult.failure_type) is True
+          >>> assert RequiresContextIOResult.from_failure('a').apply(
+          ...    RequiresContextIOResult.from_failure('b'),
+          ... )(...) == IOFailure('a')
 
         """
         return RequiresContextIOResult(

@@ -1,18 +1,7 @@
 from abc import ABCMeta
 from functools import wraps
 from inspect import FrameInfo
-from typing import (
-    Any,
-    Callable,
-    ClassVar,
-    Iterable,
-    List,
-    Optional,
-    Sequence,
-    Type,
-    TypeVar,
-    Union,
-)
+from typing import Any, Callable, ClassVar, List, Optional, Type, TypeVar, Union
 
 from typing_extensions import final
 
@@ -391,7 +380,7 @@ class IOResult(
 
         .. code:: python
 
-          >>> from returns.io import IOSuccess, IOFailure, IOResult
+          >>> from returns.io import IOSuccess, IOFailure
 
           >>> def appliable(first: str) -> str:
           ...      return first + 'b'
@@ -403,11 +392,12 @@ class IOResult(
           ...     IOSuccess(appliable),
           ... ) == IOFailure('a')
 
-          >>> assert isinstance(IOSuccess('a').apply(
-          ...     IOFailure(appliable),
-          ... ), IOResult.failure_type)
+          >>> assert IOSuccess('a').apply(IOFailure(1)) == IOFailure(1)
+          >>> assert IOFailure('a').apply(IOFailure('b')) == IOFailure('a')
 
         """
+        if isinstance(self, self.failure_type):
+            return self
         if isinstance(container, self.success_type):
             return self.from_result(
                 self._inner_value.map(

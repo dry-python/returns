@@ -1,15 +1,5 @@
 from functools import wraps
-from typing import (
-    Any,
-    Awaitable,
-    Callable,
-    Coroutine,
-    Generator,
-    Iterable,
-    Sequence,
-    Type,
-    TypeVar,
-)
+from typing import Any, Awaitable, Callable, Coroutine, Generator, TypeVar
 
 from typing_extensions import final
 
@@ -696,11 +686,16 @@ class FutureResult(
           ...     ).awaitable,
           ... ) == IOFailure(1)
 
-          >>> assert isinstance(anyio.run(
+          >>> assert anyio.run(
           ...     FutureResult.from_value(1).apply(
-          ...         FutureResult.from_failure(appliable),
+          ...         FutureResult.from_failure(2),
           ...     ).awaitable,
-          ... ), IOResult.failure_type)
+          ... ) == IOFailure(2)
+          >>> assert anyio.run(
+          ...     FutureResult.from_failure(1).apply(
+          ...         FutureResult.from_failure(2),
+          ...     ).awaitable,
+          ... ) == IOFailure(1)
 
         """
         return FutureResult(_future_result.async_apply(
