@@ -17,9 +17,6 @@
         SupportsKind2['MyClass', _ValueType, _ErrorType],
         ResultLike2[_ValueType, _ErrorType],
     ):
-        def swap(self) -> MyClass[_ErrorType, _ValueType]:
-            ...
-
         def bind_result(
             self,
             function: Callable[
@@ -33,12 +30,6 @@
         def from_result(
             self, inner_value: Result[_NewValueType, _NewErrorType],
         ) -> MyClass[_NewValueType, _NewErrorType]:
-            ...
-
-        @classmethod
-        def from_failure(
-            cls, inner_value: _NewErrorType,
-        ) -> MyClass[Any, _NewErrorType]:
             ...
 
     def test(a: int) -> Result[float, str]:
@@ -68,9 +59,6 @@
         SupportsKind3['MyClass', _ValueType, _ErrorType, _T],
         ResultLike3[_ValueType, _ErrorType, _T],
     ):
-        def swap(self) -> MyClass[_ErrorType, _ValueType, _T]:
-            ...
-
         def bind_result(
             self,
             function: Callable[
@@ -84,12 +72,6 @@
         def from_result(
             self, inner_value: Result[_NewValueType, _NewErrorType],
         ) -> MyClass[_NewValueType, _NewErrorType, Any]:
-            ...
-
-        @classmethod
-        def from_failure(
-            cls, inner_value: _NewErrorType,
-        ) -> MyClass[Any, _NewErrorType, Any]:
             ...
 
     def test(a: int) -> Result[float, str]:
@@ -136,9 +118,6 @@
         SupportsKind2['MyClass', _ValueType, _ErrorType],
         ResultLike2[_ValueType, _ErrorType],
     ):
-        def swap(self) -> MyClass[_ValueType, _ErrorType]:
-            ...
-
         def bind_result(
             self,
             function: Callable[
@@ -152,20 +131,12 @@
             self, inner_value: Result[_NewValueType, _NewErrorType],
         ) -> MyClass[_NewValueType, _NewErrorType]:
             ...
-
-        @classmethod
-        def from_failure(
-            cls, inner_value: _NewErrorType,
-        ) -> MyClass[_NewErrorType, _NewErrorType]:
-            ...
   out: |
-    main:17: error: Return type "MyClass[_ValueType, _ErrorType]" of "swap" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType], _ErrorType, _ValueType, NoReturn]" in supertype "ResultLikeN"
-    main:20: error: Argument 1 of "bind_result" is incompatible with supertype "ResultLikeN"; supertype defines the argument type as "Callable[[_ValueType], Result[_UpdatedType, _ErrorType]]"
-    main:20: error: Return type "MyClass[_ValueType, _ErrorType]" of "bind_result" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType], _UpdatedType, _ErrorType, NoReturn]" in supertype "ResultLikeN"
-    main:20: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
-    main:20: note: This violates the Liskov substitution principle
-    main:29: error: Signature of "from_result" incompatible with supertype "ResultLikeN"
-    main:35: error: Signature of "from_failure" incompatible with supertype "ResultLikeN"
+    main:17: error: Argument 1 of "bind_result" is incompatible with supertype "ResultLikeN"; supertype defines the argument type as "Callable[[_ValueType], Result[_UpdatedType, _ErrorType]]"
+    main:17: error: Return type "MyClass[_ValueType, _ErrorType]" of "bind_result" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType], _UpdatedType, _ErrorType, NoReturn]" in supertype "ResultLikeN"
+    main:17: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:17: note: This violates the Liskov substitution principle
+    main:26: error: Signature of "from_result" incompatible with supertype "ResultLikeN"
 
 
 - case: result_inheritance_wrong3
@@ -188,9 +159,6 @@
         SupportsKind3['MyClass', _ValueType, _ErrorType, _T],
         ResultLike3[_ValueType, _ErrorType, _T],
     ):
-        def swap(self) -> MyClass[_ErrorType, _ValueType, int]:
-            ...
-
         def bind_result(
             self,
             function: Callable[
@@ -205,14 +173,6 @@
             self, inner_value: Result[_NewValueType, _NewErrorType],
         ) -> MyClass[_NewValueType, _NewErrorType, bool]:
             ...
-
-        @classmethod
-        def from_failure(
-            cls, inner_value: _NewErrorType,
-        ) -> MyClass[Any, _NewErrorType, Exception]:
-            ...
   out: |
-    main:18: error: Return type "MyClass[_ErrorType, _ValueType, int]" of "swap" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType, _T], _ErrorType, _ValueType, _T]" in supertype "ResultLikeN"
-    main:21: error: Return type "MyClass[_NewValueType, _ErrorType, str]" of "bind_result" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType, _T], _UpdatedType, _ErrorType, _T]" in supertype "ResultLikeN"
-    main:31: error: Return type "MyClass[_NewValueType, _NewErrorType, bool]" of "from_result" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType, _T], _ValueType, _ErrorType, _T]" in supertype "ResultLikeN"
-    main:37: error: Return type "MyClass[Any, _NewErrorType, Exception]" of "from_failure" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType, _T], _ValueType, _ErrorType, _T]" in supertype "ResultLikeN"
+    main:18: error: Return type "MyClass[_NewValueType, _ErrorType, str]" of "bind_result" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType, _T], _UpdatedType, _ErrorType, _T]" in supertype "ResultLikeN"
+    main:28: error: Return type "MyClass[_NewValueType, _NewErrorType, bool]" of "from_result" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType, _T], _ValueType, _ErrorType, _T]" in supertype "ResultLikeN"

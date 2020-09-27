@@ -8,29 +8,10 @@ For impure result see
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import (
-    TYPE_CHECKING,
-    Callable,
-    ClassVar,
-    NoReturn,
-    Sequence,
-    Type,
-    TypeVar,
-)
+from typing import TYPE_CHECKING, Callable, NoReturn, Type, TypeVar
 
-from typing_extensions import final
-
-from returns.interfaces import bimappable, equable, rescuable, unwrappable
-from returns.interfaces.container import ContainerN
-from returns.primitives.asserts import assert_equal
+from returns.interfaces import equable, failable, unwrappable
 from returns.primitives.hkt import KindN
-from returns.primitives.laws import (
-    Law,
-    Law3,
-    Lawful,
-    LawSpecDef,
-    law_definition,
-)
 
 if TYPE_CHECKING:
     from returns.result import Result  # noqa: WPS433
@@ -50,102 +31,15 @@ _ErrorType = TypeVar('_ErrorType')
 _FirstUnwrappableType = TypeVar('_FirstUnwrappableType')
 _SecondUnwrappableType = TypeVar('_SecondUnwrappableType')
 
-# Used in laws:
-_NewType1 = TypeVar('_NewType1')
-
-
-@final
-class _LawSpec(LawSpecDef):
-    """
-    Result laws.
-
-    We need to be sure that ``.map``, ``.bind``, ``.alt``, and ``.rescue``
-    works correctly for both success and failure types.
-    """
-
-    @law_definition
-    def map_short_circuit_law(
-        raw_value: _SecondType,
-        container: ResultLikeN[_FirstType, _SecondType, _ThirdType],
-        function: Callable[[_FirstType], _NewType1],
-    ) -> None:
-        """Ensures that you cannot map a failure."""
-        assert_equal(
-            container.from_failure(raw_value),
-            container.from_failure(raw_value).map(function),
-        )
-
-    @law_definition
-    def bind_short_circuit_law(
-        raw_value: _SecondType,
-        container: ResultLikeN[_FirstType, _SecondType, _ThirdType],
-        function: Callable[
-            [_FirstType],
-            KindN[ResultLikeN, _NewType1, _SecondType, _ThirdType],
-        ],
-    ) -> None:
-        """
-        Ensures that you cannot bind a failure.
-
-        See: https://wiki.haskell.org/Typeclassopedia#MonadFail
-        """
-        assert_equal(
-            container.from_failure(raw_value),
-            container.from_failure(raw_value).bind(function),
-        )
-
-    @law_definition
-    def alt_short_circuit_law(
-        raw_value: _SecondType,
-        container: ResultLikeN[_FirstType, _SecondType, _ThirdType],
-        function: Callable[[_SecondType], _NewType1],
-    ) -> None:
-        """Ensures that you cannot alt a success."""
-        assert_equal(
-            container.from_value(raw_value),
-            container.from_value(raw_value).alt(function),
-        )
-
-    @law_definition
-    def rescue_short_circuit_law(
-        raw_value: _FirstType,
-        container: ResultLikeN[_FirstType, _SecondType, _ThirdType],
-        function: Callable[
-            [_SecondType],
-            KindN[ResultLikeN, _FirstType, _NewType1, _ThirdType],
-        ],
-    ) -> None:
-        """Ensures that you cannot rescue a success."""
-        assert_equal(
-            container.from_value(raw_value),
-            container.from_value(raw_value).rescue(function),
-        )
-
 
 class ResultLikeN(
-    ContainerN[_FirstType, _SecondType, _ThirdType],
-    bimappable.BiMappableN[_FirstType, _SecondType, _ThirdType],
-    rescuable.RescuableN[_FirstType, _SecondType, _ThirdType],
-    Lawful['ResultLikeN[_FirstType, _SecondType, _ThirdType]'],
+    failable.DiverseFailableN[_FirstType, _SecondType, _ThirdType],
 ):
     """
     Base types for types that looks like ``Result`` but cannot be unwrapped.
 
     Like ``RequiresContextResult`` or ``FutureResult``.
     """
-
-    _laws: ClassVar[Sequence[Law]] = (
-        Law3(_LawSpec.map_short_circuit_law),
-        Law3(_LawSpec.bind_short_circuit_law),
-        Law3(_LawSpec.alt_short_circuit_law),
-        Law3(_LawSpec.rescue_short_circuit_law),
-    )
-
-    @abstractmethod
-    def swap(
-        self: _ResultLikeType,
-    ) -> KindN[_ResultLikeType, _SecondType, _FirstType, _ThirdType]:
-        """Swaps value and error types in ``Result``."""
 
     @abstractmethod
     def bind_result(
@@ -160,14 +54,6 @@ class ResultLikeN(
         cls: Type[_ResultLikeType],  # noqa: N805
         inner_value: 'Result[_ValueType, _ErrorType]',
     ) -> KindN[_ResultLikeType, _ValueType, _ErrorType, _ThirdType]:
-        """Unit method to create new containers from any raw value."""
-
-    @classmethod
-    @abstractmethod
-    def from_failure(
-        cls: Type[_ResultLikeType],  # noqa: N805
-        inner_value: _ErrorType,
-    ) -> KindN[_ResultLikeType, _FirstType, _ErrorType, _ThirdType]:
         """Unit method to create new containers from any raw value."""
 
 
