@@ -72,7 +72,7 @@ trio = "^0.17"
 
 safety = "^1.8"
 
-pytest = "^6.0"
+pytest = "^6.1"
 pytest-cov = "^2.10"
 pytest-randomly = "^3.4"
 pytest-mypy-plugins = "^1.4"
