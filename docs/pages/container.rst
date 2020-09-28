@@ -164,7 +164,7 @@ For example, here are some of them:
   >>> assert Maybe.from_optional(1) == Some(1)
   >>> assert Maybe.from_optional(None) == Nothing
 
-- :func:`returns.interfaces.specific.result.ResultLikeN.from_failure`
+- :func:`returns.interfaces.failable.DiverseFailableN.from_failure`
   creates a failing container from a value
 
 .. code:: python

@@ -25,14 +25,14 @@ You can use all power of declarative loops in your app with ``Fold``.
   ... ) == IO('123')
 
 There are also other helpfil methods as well.
-See :class:`returns.iterables.Fold`.
+See :class:`returns.iterables.AbstractFold`.
 
-We also ship :class:`returns.iterables.AbtractFold`,
+We also ship :class:`~returns.iterables.AbstractFold`,
 where you can change how ``loop`` (or any other) method works.
 For example, for performance reasons.
 
 Let's say you have a big number of
-:class:`returns.context.requires_context.RequiresContext` instances
+:class:`~returns.context.requires_context.RequiresContext` instances
 and you want to do the same thing string concatenation we have shown above.
 
 You might face recursion problems with it:
@@ -64,6 +64,10 @@ So, let's change how it works for this specific type:
   ...             acc = Reader.from_value(concat(current, acc, wrapped)(deps))
   ...         return acc
 
+.. note::
+  Don't forget to add typing annotations to your real code!
+  This is just an example.
+
 And now let's test that it works without recursion:
 
 .. code:: python
@@ -73,7 +77,7 @@ And now let's test that it works without recursion:
   ...    items, Reader.from_value(0), lambda x: lambda y: x + y,
   ... )(...) == sum(range(sys.getrecursionlimit()))
 
-And no error will be produced!
+And no error will be produced! We now don't use recursion inside.
 Consider this way of doing things as a respected hack.
 
 
@@ -101,7 +105,6 @@ Types
 ~~~~~
 
 .. autoclasstree:: returns.primitives.types
-   :strict:
 
 .. automodule:: returns.primitives.types
    :members:
@@ -110,7 +113,6 @@ Exceptions
 ~~~~~~~~~~
 
 .. autoclasstree:: returns.primitives.exceptions
-   :strict:
 
 .. automodule:: returns.primitives.exceptions
    :members:
