@@ -88,8 +88,6 @@ Let's look at the resul:
   >>> from returns.interfaces import container, bimappable, rescuable, equable
   >>> from returns.primitives.container import BaseContainer, container_equality
   >>> from returns.primitives.hkt import SupportsKind2
-  >>> from returns.primitives.iterables import BaseIterableStrategyN, FailFast
-  >>> from returns._internal.iterable import iterable_kind
 
   >>> _FirstType = TypeVar('_FirstType')
   >>> _SecondType = TypeVar('_SecondType')

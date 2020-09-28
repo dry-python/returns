@@ -1,9 +1,17 @@
+from typing import Callable, Optional
+
+from mypy.nodes import ARG_POS, SymbolTableNode
 from mypy.plugin import FunctionContext
 from mypy.types import CallableType
 from mypy.types import Type as MypyType
 
+from returns.contrib.mypy._structures.args import FuncArg
+from returns.contrib.mypy._typeops import analtype
 
-def analyze(ctx: FunctionContext) -> MypyType:
+
+def analyze(
+    sym: Optional[SymbolTableNode],
+) -> Callable[[FunctionContext], MypyType]:
     """
     Changes a type of a decorator.
 
@@ -14,14 +22,24 @@ def analyze(ctx: FunctionContext) -> MypyType:
     It uses the passed function to copy its type.
     We only copy arguments and return type is defined by type annotations.
     """
-    if not isinstance(ctx.arg_types[0][0], CallableType):
-        return ctx.default_return_type
-    if not isinstance(ctx.default_return_type, CallableType):
-        return ctx.default_return_type
-    return _change_decorator_function_type(
-        ctx.default_return_type,
-        ctx.arg_types[0][0],
-    )
+    def factory(ctx: FunctionContext) -> MypyType:
+        if not (sym and sym.type and isinstance(sym.type, CallableType)):
+            return ctx.default_return_type
+
+        arg = ctx.api.expr_checker.accept(ctx.args[0][0])  # type: ignore
+        tp = analtype.analyze_call(
+            sym.type,
+            [FuncArg(None, arg, ARG_POS)],
+            ctx,
+            show_errors=False,
+        )
+
+        if not (isinstance(arg, CallableType) and isinstance(tp, CallableType)):
+            return ctx.default_return_type
+        if not isinstance(tp.ret_type, CallableType):
+            return ctx.default_return_type
+        return _change_decorator_function_type(tp.ret_type, arg)
+    return factory
 
 
 def _change_decorator_function_type(

@@ -1,25 +1,14 @@
 from __future__ import annotations
 
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    Callable,
-    ClassVar,
-    Iterable,
-    Sequence,
-    Type,
-    TypeVar,
-)
+from typing import TYPE_CHECKING, Any, Callable, ClassVar, TypeVar
 
 from typing_extensions import final
 
-from returns._internal.iterable import iterable_kind
 from returns.context import NoDeps
 from returns.interfaces.specific import reader_ioresult
 from returns.io import IO, IOFailure, IOResult, IOSuccess
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind3, SupportsKind3, dekind
-from returns.primitives.iterables import BaseIterableStrategyN, FailFast
 from returns.result import Result
 
 if TYPE_CHECKING:
@@ -229,7 +218,7 @@ class RequiresContextIOResult(
         .. code:: python
 
           >>> from returns.context import RequiresContextIOResult
-          >>> from returns.io import IOSuccess, IOFailure, IOResult
+          >>> from returns.io import IOSuccess, IOFailure
 
           >>> def transform(arg: str) -> str:
           ...     return arg + 'b'
@@ -238,13 +227,17 @@ class RequiresContextIOResult(
           ...    RequiresContextIOResult.from_value(transform),
           ... )(...) == IOSuccess('ab')
 
+          >>> assert RequiresContextIOResult.from_value('a').apply(
+          ...    RequiresContextIOResult.from_failure(1),
+          ... )(...) == IOFailure(1)
+
           >>> assert RequiresContextIOResult.from_failure('a').apply(
           ...    RequiresContextIOResult.from_value(transform),
           ... )(...) == IOFailure('a')
 
-          >>> assert isinstance(RequiresContextIOResult.from_value('a').apply(
-          ...    RequiresContextIOResult.from_failure(transform),
-          ... )(...), IOResult.failure_type) is True
+          >>> assert RequiresContextIOResult.from_failure('a').apply(
+          ...    RequiresContextIOResult.from_failure('b'),
+          ... )(...) == IOFailure('a')
 
         """
         return RequiresContextIOResult(
@@ -899,37 +892,6 @@ class RequiresContextIOResult(
 
         """
         return RequiresContextIOResult(lambda _: IOFailure(inner_value))
-
-    @classmethod
-    def from_iterable(
-        cls,
-        inner_value: Iterable[
-            Kind3[
-                RequiresContextIOResult,
-                _NewValueType,
-                _NewErrorType,
-                _NewEnvType,
-            ],
-        ],
-        strategy: Type[BaseIterableStrategyN] = FailFast,
-    ) -> ReaderIOResult[Sequence[_NewValueType], _NewErrorType, _NewEnvType]:
-        """
-        Transforms an iterable of ``RequiresContextIOResult`` containers.
-
-        Returns a single container with multiple elements inside.
-
-        .. code:: python
-
-          >>> from returns.context import RequiresContextIOResult
-          >>> from returns.io import IOSuccess
-
-          >>> assert RequiresContextIOResult.from_iterable([
-          ...    RequiresContextIOResult.from_value(1),
-          ...    RequiresContextIOResult.from_value(2),
-          ... ])(...) == IOSuccess((1, 2))
-
-        """
-        return iterable_kind(cls, inner_value, strategy)
 
 
 # Aliases:

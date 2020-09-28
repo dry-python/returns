@@ -136,7 +136,7 @@
     ):
         ...
   out: |
-    main:9: error: Final class main.MyClass has abstract attributes "apply", "bind", "bind_async", "bind_async_future", "bind_awaitable", "bind_future", "bind_io", "from_future", "from_io", "from_iterable", "from_value", "map"
+    main:9: error: Final class main.MyClass has abstract attributes "apply", "bind", "bind_async", "bind_async_future", "bind_awaitable", "bind_future", "bind_io", "from_future", "from_io", "from_value", "map"
 
 
 - case: future_inheritance_wrong

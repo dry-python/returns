@@ -1,22 +1,10 @@
 from abc import ABCMeta
 from functools import wraps
 from inspect import FrameInfo
-from typing import (
-    Any,
-    Callable,
-    ClassVar,
-    Iterable,
-    List,
-    Optional,
-    Sequence,
-    Type,
-    TypeVar,
-    Union,
-)
+from typing import Any, Callable, ClassVar, List, Optional, Type, TypeVar, Union
 
 from typing_extensions import final
 
-from returns._internal.iterable import iterable_kind
 from returns.interfaces.specific import io, ioresult
 from returns.primitives.container import BaseContainer, container_equality
 from returns.primitives.hkt import (
@@ -26,7 +14,6 @@ from returns.primitives.hkt import (
     SupportsKind2,
     dekind,
 )
-from returns.primitives.iterables import BaseIterableStrategyN, FailFast
 from returns.result import Failure, Result, Success
 
 _ValueType = TypeVar('_ValueType', covariant=True)
@@ -192,27 +179,6 @@ class IO(
 
         """
         return inner_value
-
-    @classmethod
-    def from_iterable(
-        cls,
-        inner_value: Iterable[Kind1['IO', _NewValueType]],
-        strategy: Type[BaseIterableStrategyN] = FailFast,
-    ) -> 'IO[Sequence[_NewValueType]]':
-        """
-        Transforms an iterable of ``IO`` containers into a single container.
-
-        .. code:: python
-
-          >>> from returns.io import IO
-
-          >>> assert IO.from_iterable([
-          ...    IO(1),
-          ...    IO(2),
-          ... ]) == IO((1, 2))
-
-        """
-        return iterable_kind(cls, inner_value, strategy)
 
     @classmethod
     def from_ioresult(
@@ -414,7 +380,7 @@ class IOResult(
 
         .. code:: python
 
-          >>> from returns.io import IOSuccess, IOFailure, IOResult
+          >>> from returns.io import IOSuccess, IOFailure
 
           >>> def appliable(first: str) -> str:
           ...      return first + 'b'
@@ -426,11 +392,12 @@ class IOResult(
           ...     IOSuccess(appliable),
           ... ) == IOFailure('a')
 
-          >>> assert isinstance(IOSuccess('a').apply(
-          ...     IOFailure(appliable),
-          ... ), IOResult.failure_type)
+          >>> assert IOSuccess('a').apply(IOFailure(1)) == IOFailure(1)
+          >>> assert IOFailure('a').apply(IOFailure('b')) == IOFailure('a')
 
         """
+        if isinstance(self, self.failure_type):
+            return self
         if isinstance(container, self.success_type):
             return self.from_result(
                 self._inner_value.map(
@@ -767,27 +734,6 @@ class IOResult(
 
         """
         return IOFailure(inner_value)
-
-    @classmethod
-    def from_iterable(
-        cls,
-        inner_value: Iterable[Kind2['IOResult', _NewValueType, _NewErrorType]],
-        strategy: Type[BaseIterableStrategyN] = FailFast,
-    ) -> 'IOResult[Sequence[_NewValueType], _NewErrorType]':
-        """
-        Transforms an iterable of ``IOResult`` containers into a single one.
-
-        .. code:: python
-
-          >>> from returns.io import IOResult, IOSuccess
-
-          >>> assert IOResult.from_iterable([
-          ...    IOSuccess(1),
-          ...    IOSuccess(2),
-          ... ]) == IOSuccess((1, 2))
-
-        """
-        return iterable_kind(cls, inner_value, strategy)
 
 
 @final

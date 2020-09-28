@@ -189,7 +189,6 @@ You might end up with an iterable of containers:
   >>> from returns.maybe import Maybe, Some, Nothing, maybe
 
   >>> source = {'a': 1, 'b': 2}
-
   >>> fetched_values: Maybe[int] = [
   ...     maybe(source.get)(key)
   ...     for key in ('a', 'b')
@@ -200,7 +199,9 @@ it is recommended to cast it into a container with the iterable inside:
 
 .. code:: python
 
-  >>> assert Maybe.from_iterable(fetched_values) == Some((1, 2))
+  >>> from returns.iterables import Fold
+
+  >>> assert Fold.collect(fetched_values, Some(())) == Some((1, 2))
 
 Any falsy values will result in a falsy result (pun intended):
 
@@ -210,11 +211,20 @@ Any falsy values will result in a falsy result (pun intended):
   ...     maybe(source.get)(key)
   ...     for key in ('a', 'c')  # 'c' is missing!
   ... ]
-  >>> assert Maybe.from_iterable(fetched_values) == Nothing
+  >>> assert Fold.collect(fetched_values, Some(())) == Nothing
+
+You can also use a different strategy to fetch values you need:
+
+.. code:: python
+
+  >>> fetched_values: Maybe[int] = [
+  ...     maybe(source.get)(key)
+  ...     for key in ('a', 'c')  # 'c' is missing!
+  ... ]
+  >>> assert Fold.collect_all(fetched_values, Some(())) == Some((1,))
 
 We support any ``Iterable[T]`` input type
 and return a ``Container[Sequence[T]]``.
-All containers support this method.
 
 Multiple container arguments
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~

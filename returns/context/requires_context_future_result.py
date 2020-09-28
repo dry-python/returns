@@ -1,28 +1,16 @@
 from __future__ import annotations
 
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    Awaitable,
-    Callable,
-    ClassVar,
-    Iterable,
-    Sequence,
-    Type,
-    TypeVar,
-)
+from typing import TYPE_CHECKING, Any, Awaitable, Callable, ClassVar, TypeVar
 
 from typing_extensions import final
 
 from returns._internal.futures import _reader_future_result
-from returns._internal.iterable import iterable_kind
 from returns.context import NoDeps
 from returns.future import Future, FutureResult
 from returns.interfaces.specific import future_result, reader_future_result
 from returns.io import IO, IOResult
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind3, SupportsKind3, dekind
-from returns.primitives.iterables import BaseIterableStrategyN, FailFast
 from returns.result import Result
 
 if TYPE_CHECKING:
@@ -1389,41 +1377,6 @@ class RequiresContextFutureResult(
         return RequiresContextFutureResult(
             lambda _: FutureResult.from_failure(inner_value),
         )
-
-    @classmethod
-    def from_iterable(
-        cls,
-        inner_value: Iterable[
-            Kind3[
-                RequiresContextFutureResult,
-                _FirstType,
-                _NewErrorType,
-                _NewEnvType,
-            ],
-        ],
-        strategy: Type[BaseIterableStrategyN] = FailFast,
-    ) -> ReaderFutureResult[Sequence[_FirstType], _NewErrorType, _NewEnvType]:
-        """
-        Transforms an iterable of ``RequiresContextFutureResult`` containers.
-
-        Returns a single container with multiple elements inside.
-
-        .. code:: python
-
-          >>> import anyio
-          >>> from returns.context import RequiresContextFutureResult
-          >>> from returns.io import IOSuccess
-
-          >>> assert anyio.run(
-          ...    RequiresContextFutureResult.from_iterable([
-          ...        RequiresContextFutureResult.from_value(1),
-          ...        RequiresContextFutureResult.from_value(2),
-          ...    ]),
-          ...    RequiresContextFutureResult.empty,
-          ... ) == IOSuccess((1, 2))
-
-        """
-        return iterable_kind(cls, inner_value, strategy)
 
 
 # Aliases:

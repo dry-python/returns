@@ -5,11 +5,9 @@ from typing import (
     Any,
     Callable,
     ClassVar,
-    Iterable,
     List,
     NoReturn,
     Optional,
-    Sequence,
     Type,
     TypeVar,
     Union,
@@ -17,12 +15,10 @@ from typing import (
 
 from typing_extensions import final
 
-from returns._internal.iterable import iterable_kind
 from returns.interfaces.specific import result
 from returns.primitives.container import BaseContainer, container_equality
 from returns.primitives.exceptions import UnwrapFailedError
 from returns.primitives.hkt import Kind2, SupportsKind2
-from returns.primitives.iterables import BaseIterableStrategyN, FailFast
 
 # Definitions:
 _ValueType = TypeVar('_ValueType', covariant=True)
@@ -129,8 +125,8 @@ class Result(
           >>> assert Success('a').apply(Success(appliable)) == Success('ab')
           >>> assert Failure('a').apply(Success(appliable)) == Failure('a')
 
-          >>> with_failure = Success('a').apply(Failure(appliable))
-          >>> assert isinstance(with_failure, Result.failure_type)
+          >>> assert Success('a').apply(Failure(1)) == Failure(1)
+          >>> assert Failure(1).apply(Failure(2)) == Failure(1)
 
         """
 
@@ -311,27 +307,6 @@ class Result(
         :class:`returns.interfaces.specific.result.ResultBasedN` interface.
         """
         return inner_value
-
-    @classmethod
-    def from_iterable(
-        cls,
-        inner_value: Iterable[Kind2['Result', _NewValueType, _NewErrorType]],
-        strategy: Type[BaseIterableStrategyN] = FailFast,
-    ) -> 'Result[Sequence[_NewValueType], _NewErrorType]':
-        """
-        Transforms an iterable of ``Result`` containers into a single container.
-
-        .. code:: python
-
-          >>> from returns.result import Result, Success
-
-          >>> assert Result.from_iterable([
-          ...    Success(1),
-          ...    Success(2),
-          ... ]) == Success((1, 2))
-
-        """
-        return iterable_kind(cls, inner_value, strategy)
 
 
 @final

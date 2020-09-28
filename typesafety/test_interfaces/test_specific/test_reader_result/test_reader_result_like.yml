@@ -59,7 +59,7 @@
     ):
         ...
   out: |
-    main:11: error: Final class main.MyClass has abstract attributes "alt", "apply", "ask", "bind", "bind_context", "bind_context_result", "bind_result", "empty", "from_context", "from_failed_context", "from_failure", "from_iterable", "from_result", "from_result_context", "from_value", "map", "modify_env", "rescue", "swap"
+    main:11: error: Final class main.MyClass has abstract attributes "alt", "apply", "ask", "bind", "bind_context", "bind_context_result", "bind_result", "empty", "from_context", "from_failed_context", "from_failure", "from_result", "from_result_context", "from_value", "map", "modify_env", "rescue", "swap"
 
 
 - case: reader_result_like_inheritance_wrong

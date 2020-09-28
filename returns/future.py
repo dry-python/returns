@@ -1,20 +1,9 @@
 from functools import wraps
-from typing import (
-    Any,
-    Awaitable,
-    Callable,
-    Coroutine,
-    Generator,
-    Iterable,
-    Sequence,
-    Type,
-    TypeVar,
-)
+from typing import Any, Awaitable, Callable, Coroutine, Generator, TypeVar
 
 from typing_extensions import final
 
 from returns._internal.futures import _future, _future_result
-from returns._internal.iterable import iterable_kind
 from returns.interfaces.specific.future import FutureBased1
 from returns.interfaces.specific.future_result import FutureResultBased2
 from returns.io import IO, IOResult
@@ -26,7 +15,6 @@ from returns.primitives.hkt import (
     SupportsKind2,
     dekind,
 )
-from returns.primitives.iterables import BaseIterableStrategyN, FailFast
 from returns.primitives.reawaitable import ReAwaitable
 from returns.result import Failure, Result, Success
 
@@ -379,29 +367,6 @@ class Future(
         return inner_value
 
     @classmethod
-    def from_iterable(
-        cls,
-        inner_value: Iterable[Kind1['Future', _NewValueType]],
-        strategy: Type[BaseIterableStrategyN] = FailFast,
-    ) -> 'Future[Sequence[_NewValueType]]':
-        """
-        Transforms an iterable of ``Future`` containers into a single container.
-
-        .. code:: python
-
-          >>> import anyio
-          >>> from returns.future import Future
-          >>> from returns.io import IO
-
-          >>> assert anyio.run(Future.from_iterable([
-          ...    Future.from_value(1),
-          ...    Future.from_value(2),
-          ... ]).awaitable) == IO((1, 2))
-
-        """
-        return iterable_kind(cls, inner_value, strategy)
-
-    @classmethod
     def from_io(cls, inner_value: IO[_NewValueType]) -> 'Future[_NewValueType]':
         """
         Allows to create a ``Future`` from ``IO`` container.
@@ -721,11 +686,16 @@ class FutureResult(
           ...     ).awaitable,
           ... ) == IOFailure(1)
 
-          >>> assert isinstance(anyio.run(
+          >>> assert anyio.run(
           ...     FutureResult.from_value(1).apply(
-          ...         FutureResult.from_failure(appliable),
+          ...         FutureResult.from_failure(2),
           ...     ).awaitable,
-          ... ), IOResult.failure_type)
+          ... ) == IOFailure(2)
+          >>> assert anyio.run(
+          ...     FutureResult.from_failure(1).apply(
+          ...         FutureResult.from_failure(2),
+          ...     ).awaitable,
+          ... ) == IOFailure(1)
 
         """
         return FutureResult(_future_result.async_apply(
@@ -1334,35 +1304,6 @@ class FutureResult(
 
         """
         return FutureResult(async_identity(Failure(inner_value)))
-
-    @classmethod
-    def from_iterable(
-        cls,
-        inner_value: Iterable[
-            Kind2['FutureResult', _NewValueType, _NewErrorType],
-        ],
-        strategy: Type[BaseIterableStrategyN] = FailFast,
-    ) -> 'FutureResult[Sequence[_NewValueType], _NewErrorType]':
-        """
-        Transforms an iterable of ``FutureResult`` containers.
-
-        Returns a single container with multiple elements inside.
-
-        .. code:: python
-
-          >>> import anyio
-          >>> from returns.future import FutureResult
-          >>> from returns.io import IOSuccess
-
-          >>> all_success = FutureResult.from_iterable([
-          ...    FutureResult.from_value(1),
-          ...    FutureResult.from_value(2),
-          ... ])
-          >>> assert anyio.run(all_success.awaitable) == IOSuccess((1, 2))
-
-
-        """
-        return iterable_kind(cls, inner_value, strategy)
 
 
 def FutureSuccess(  # noqa: N802

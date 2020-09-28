@@ -547,16 +547,6 @@ Unwrappable
   :members:
   :private-members:
 
-Iterable
-~~~~~~~~
-
-.. autoclasstree:: returns.interfaces.iterable
-   :strict:
-
-.. automodule:: returns.interfaces.iterable
-  :members:
-  :private-members:
-
 Container
 ~~~~~~~~~
 

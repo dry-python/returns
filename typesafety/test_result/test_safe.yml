@@ -59,6 +59,19 @@
     reveal_type(send)  # N: Revealed type is 'def (text: builtins.str) -> returns.result.Result[Any, builtins.Exception]'
 
 
+- case: safe_regression641
+  disable_cache: false
+  main: |
+    from returns.result import safe
+    from returns.functions import tap
+
+    class Response(object):
+        def raise_for_status(self) -> None:
+            ...
+
+    reveal_type(safe(tap(Response.raise_for_status)))  # N: Revealed type is 'def (main.Response*) -> returns.result.Result[main.Response, builtins.Exception]'
+
+
 - case: safe_decorator_with_args_kwargs
   disable_cache: false
   main: |

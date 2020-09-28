@@ -1,26 +1,3 @@
-- case: requires_context_from_iterable1
-  disable_cache: true
-  main: |
-    from returns.context import RequiresContext
-    from typing import Iterable
-
-    x: Iterable[RequiresContext[int, str]]
-
-    reveal_type(RequiresContext.from_iterable(x))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[typing.Sequence[builtins.int*], builtins.str*]'
-
-
-- case: requires_context_from_iterable2
-  disable_cache: true
-  main: |
-    from returns.context import RequiresContext
-    from returns.primitives.iterables import CollectAll
-    from typing import Iterable
-
-    x: Iterable[RequiresContext[int, str]]
-
-    reveal_type(RequiresContext.from_iterable(x, CollectAll))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[typing.Sequence[builtins.int*], builtins.str*]'
-
-
 - case: requires_context_from_requires_context_ioresult
   disable_cache: true
   main: |

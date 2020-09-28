@@ -4,10 +4,8 @@ from typing import (
     Any,
     Callable,
     ClassVar,
-    Iterable,
     NoReturn,
     Optional,
-    Sequence,
     Type,
     TypeVar,
     Union,
@@ -15,12 +13,10 @@ from typing import (
 
 from typing_extensions import final
 
-from returns._internal.iterable import iterable_kind
 from returns.interfaces.specific.maybe import MaybeBased2
 from returns.primitives.container import BaseContainer, container_equality
 from returns.primitives.exceptions import UnwrapFailedError
 from returns.primitives.hkt import Kind1, SupportsKind1
-from returns.primitives.iterables import BaseIterableStrategyN, FailFast
 
 # Definitions:
 _ValueType = TypeVar('_ValueType', covariant=True)
@@ -282,27 +278,6 @@ class Maybe(
         if inner_value is None:
             return _Nothing(inner_value)
         return _Some(inner_value)
-
-    @classmethod
-    def from_iterable(
-        cls,
-        inner_value: Iterable[Kind1['Maybe', _NewValueType]],
-        strategy: Type[BaseIterableStrategyN] = FailFast,
-    ) -> 'Maybe[Sequence[_NewValueType]]':
-        """
-        Transforms an iterable of ``Maybe`` containers into a single container.
-
-        .. code:: python
-
-          >>> from returns.maybe import Maybe, Some
-
-          >>> assert Maybe.from_iterable([
-          ...    Some(1),
-          ...    Some(2),
-          ... ]) == Some((1, 2))
-
-        """
-        return iterable_kind(cls, inner_value, strategy)
 
 
 @final

@@ -40,12 +40,12 @@ See [0Ver](https://0ver.org/).
 - **Breaking**: Now `Future` and `FutureResult` can be awaited multiple times
 - **Breaking**: Removes `.unify()` method from several containers,
   use `unify()` pointfree function instead
+- **Breaking**: Removes ``.from_iterable`` method from all containers,
+  instead adds better `iterables` support,
+  we now have `returns.iterables` module with `Fold` helper
 
 - Adds new public interfaces: see `returns.interfaces`
-- Adds `methods` package with all the composition methods we support
-- Adds better `from_iterable` support,
-  now it receives a custom strategy with how to handle iterable
-- Adds two predefined iterable strategies: `FailFast` and `CollectAll`
+- Adds `methods` package with several helpful things inside
 
 - Adds `FutureSuccess` and `FutureFailure` unit functions
   to be similar to `Result` and `IOResult`
@@ -59,8 +59,6 @@ See [0Ver](https://0ver.org/).
 - Adds `.from_optional` and `.bind_optional` to `Maybe` container
 - Adds `__slots__` to `UnwrapFailedError` with `halted_container`
 - Changes `flatten` to work with `KindN` and any possible container
-- Changes `iterable` helper function to be `iterable_kind`,
-  now it works with any `KindN`
 - Adds a helper to test traces to our `pytest` plugin
 - Adds `cond` function to `pointfree` and `methods` packages
 - Adds `compose_result` HKT method and pointfree function
@@ -78,6 +76,10 @@ See [0Ver](https://0ver.org/).
   now it has a hard limit of 20 parameters
 - Fixes that `RequiresContextFutureResult` was not supported by `pytest` plugin
 - Fixes incorrect `partial` behaviour in an edge case, #618
+- Fixes that `.apply` method of `IOResult` was working incorrectly,
+  it was returning `IOFailure(2)`
+  as a result of  `IOFailure(1).apply(IOFailure(2))`
+- Fixes bug that `safe(tap(...))` was revealing invalid types sometimes
 
 ### Misc
 

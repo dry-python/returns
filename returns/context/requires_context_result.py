@@ -1,24 +1,13 @@
 from __future__ import annotations
 
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    Callable,
-    ClassVar,
-    Iterable,
-    Sequence,
-    Type,
-    TypeVar,
-)
+from typing import TYPE_CHECKING, Any, Callable, ClassVar, TypeVar
 
 from typing_extensions import final
 
-from returns._internal.iterable import iterable_kind
 from returns.context import NoDeps
 from returns.interfaces.specific import reader_result
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import Kind3, SupportsKind3, dekind
-from returns.primitives.iterables import BaseIterableStrategyN, FailFast
 from returns.result import Failure, Result, Success
 
 if TYPE_CHECKING:
@@ -612,37 +601,6 @@ class RequiresContextResult(
 
         """
         return RequiresContextResult(lambda _: Failure(inner_value))
-
-    @classmethod
-    def from_iterable(
-        cls,
-        inner_value: Iterable[
-            Kind3[
-                RequiresContextResult,
-                _NewValueType,
-                _NewErrorType,
-                _NewEnvType,
-            ],
-        ],
-        strategy: Type[BaseIterableStrategyN] = FailFast,
-    ) -> ReaderResult[Sequence[_NewValueType], _NewErrorType, _NewEnvType]:
-        """
-        Transforms an iterable of ``RequiresContextResult`` containers.
-
-        Returns a single container with multiple elements inside.
-
-        .. code:: python
-
-          >>> from returns.context import RequiresContextResult
-          >>> from returns.result import Success
-
-          >>> assert RequiresContextResult.from_iterable([
-          ...    RequiresContextResult.from_value(1),
-          ...    RequiresContextResult.from_value(2),
-          ... ])(...) == Success((1, 2))
-
-        """
-        return iterable_kind(cls, inner_value, strategy)
 
 
 # Aliases:

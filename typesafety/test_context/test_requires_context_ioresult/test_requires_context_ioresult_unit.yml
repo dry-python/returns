@@ -14,29 +14,6 @@
     reveal_type(RequiresContextIOResult.from_failure(1))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[Any, builtins.int*, Any]'
 
 
-- case: requires_context_ioresult_from_iterable1
-  disable_cache: false
-  main: |
-    from returns.context import RequiresContextIOResult
-    from typing import Iterable
-
-    x: Iterable[RequiresContextIOResult[int, float, str]]
-
-    reveal_type(RequiresContextIOResult.from_iterable(x))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[typing.Sequence[builtins.int*], builtins.float*, builtins.str*]'
-
-
-- case: requires_context_ioresult_from_iterable2
-  disable_cache: false
-  main: |
-    from returns.context import RequiresContextIOResult
-    from returns.primitives.iterables import CollectAll
-    from typing import Iterable
-
-    x: Iterable[RequiresContextIOResult[int, float, str]]
-
-    reveal_type(RequiresContextIOResult.from_iterable(x, CollectAll))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[typing.Sequence[builtins.int*], builtins.float*, builtins.str*]'
-
-
 - case: requires_context_ioresult_result
   disable_cache: false
   main: |

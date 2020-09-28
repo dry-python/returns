@@ -68,6 +68,7 @@ def curry(function: Callable[..., _ReturnType]) -> Callable[..., _ReturnType]:
       >>> divide(1)  # doesn't call the func and remembers arguments
       <function divide at ...>
       >>> assert divide(1)(by=10) == 0.1  # calls the func when possible
+      >>> assert divide(1)(10) == 0.1  # calls the func when possible
       >>> assert divide(1, by=10) == 0.1  # or call the func like always
 
     Here are several examples with wrong arguments:
