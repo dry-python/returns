@@ -272,7 +272,8 @@ So, here's how your code will look like:
   >>> assert all(isinstance(number, IO) for number in numbers)
 
 So, how to sum these random values into a single ``IO[int]`` value?
-That's here :meth:`returns.iterables.Fold.loop` really helps!
+That's where
+:meth:`Fold.loop <returns.iterables.AbstractFold.loop>` really helps!
 
 .. code:: python
 
@@ -317,7 +318,7 @@ You might end up with an iterable of containers:
 
 To work with iterable of containers,
 it is recommended to cast it into a container with the iterable inside
-using the :meth:`returns.iterables.Fold.collect` method:
+using the :meth:`Fold.collect <returns.iterables.AbstractFold.collect>` method:
 
 .. code:: python
 
@@ -336,7 +337,8 @@ Any falsy values will result in a falsy result (pun intended):
   >>> assert Fold.collect(fetched_values, Some(())) == Nothing
 
 You can also use a different strategy to fetch values you need,
-to do just that we have :meth:`returns.iterables.Fold.collect_all` method:
+to do just that we have
+:meth:`Fold.collect_all <returns.iterables.AbstractFold.collect_all>` method:
 
 .. code:: python
 
