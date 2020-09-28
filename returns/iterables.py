@@ -145,7 +145,7 @@ class AbstractFold(object):
           >>> assert Fold.collect(all_failures, acc) == Failure('a')
 
         If that's now what you need, check out
-        :method:`~AbstractFold.collect_all`
+        :meth:`~AbstractFold.collect_all`
         to force collect all non-failed values.
 
         Public interface for ``_collect`` method. Cannot be modified directly.
@@ -208,7 +208,7 @@ class AbstractFold(object):
           >>> assert Fold.collect_all(all_failures, acc) == Success(())
           >>> assert Fold.collect_all(empty, Failure('c')) == Failure('c')
 
-        If that's now what you need, check out :method:`~AbstractFold.collect`
+        If that's now what you need, check out :meth:`~AbstractFold.collect`
         to collect only successful values and fail on any failed ones.
 
         Public interface for ``_collect_all`` method.
