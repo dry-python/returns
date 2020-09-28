@@ -13,7 +13,7 @@
     x6: Tuple[Result[int, str]]
     x7: Generator[Result[int, str], None, None]
 
-    acc: Result[Tuple[()], str] = Result.from_value(())
+    acc: Result[Tuple[()], str]
 
     reveal_type(Fold.collect_all(x1, acc))  # N: Revealed type is 'returns.result.Result*[builtins.tuple[builtins.int*], builtins.str*]'
     reveal_type(Fold.collect_all(x2, acc))  # N: Revealed type is 'returns.result.Result*[builtins.tuple[builtins.int*], builtins.str*]'
