@@ -51,4 +51,4 @@
     ):
         ...
   out: |
-    main:10: error: Final class main.MyClass has abstract attributes "apply", "bind", "empty", "from_iterable", "from_value", "map", "rescue"
+    main:10: error: Final class main.MyClass has abstract attributes "apply", "bind", "empty", "from_value", "map", "rescue"

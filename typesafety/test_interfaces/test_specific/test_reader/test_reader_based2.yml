@@ -70,7 +70,7 @@
     ):
         ...
   out: |
-    main:10: error: Final class main.MyClass has abstract attributes "__call__", "apply", "ask", "bind", "bind_context", "empty", "from_context", "from_iterable", "from_value", "map", "modify_env"
+    main:10: error: Final class main.MyClass has abstract attributes "__call__", "apply", "ask", "bind", "bind_context", "empty", "from_context", "from_value", "map", "modify_env"
 
 
 - case: reader_inheritance_wrong
