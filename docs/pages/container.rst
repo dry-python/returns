@@ -179,53 +179,6 @@ Check out concrete types and their interfaces.
 Working with multiple containers
 --------------------------------
 
-Iterable of containers
-~~~~~~~~~~~~~~~~~~~~~~
-
-You might end up with an iterable of containers:
-
-.. code:: python
-
-  >>> from returns.maybe import Maybe, Some, Nothing, maybe
-
-  >>> source = {'a': 1, 'b': 2}
-  >>> fetched_values: Maybe[int] = [
-  ...     maybe(source.get)(key)
-  ...     for key in ('a', 'b')
-  ... ]
-
-To work with iterable of containers,
-it is recommended to cast it into a container with the iterable inside:
-
-.. code:: python
-
-  >>> from returns.iterables import Fold
-
-  >>> assert Fold.collect(fetched_values, Some(())) == Some((1, 2))
-
-Any falsy values will result in a falsy result (pun intended):
-
-.. code:: python
-
-  >>> fetched_values: Maybe[int] = [
-  ...     maybe(source.get)(key)
-  ...     for key in ('a', 'c')  # 'c' is missing!
-  ... ]
-  >>> assert Fold.collect(fetched_values, Some(())) == Nothing
-
-You can also use a different strategy to fetch values you need:
-
-.. code:: python
-
-  >>> fetched_values: Maybe[int] = [
-  ...     maybe(source.get)(key)
-  ...     for key in ('a', 'c')  # 'c' is missing!
-  ... ]
-  >>> assert Fold.collect_all(fetched_values, Some(())) == Some((1,))
-
-We support any ``Iterable[T]`` input type
-and return a ``Container[Sequence[T]]``.
-
 Multiple container arguments
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -236,17 +189,17 @@ Let's say you have a function of two arguments and two containers:
 
 .. code:: python
 
-  def sum_two_numbers(first: int, second: int) -> int:
-      return first + second
+  >>> def sum_two_numbers(first: int, second: int) -> int:
+  ...     return first + second
 
 And here are our two containers:
 
 .. code:: python
 
-  from returns.io import IO
+  >>> from returns.io import IO
 
-  one = IO(1)
-  two = IO(2)
+  >>> one = IO(1)
+  >>> two = IO(2)
 
 Naive approach to compose two ``IO`` containers and a function
 would be two hard to show here.
@@ -273,7 +226,20 @@ It can be done like so:
   >>> two = IO(2)
   >>> assert two.apply(one.apply(IO(sum_two_numbers))) == IO(3)
 
-But, there are other ways to make ``sum_two_numbers`` partial. One can use:
+But, there are other ways to make ``sum_two_numbers`` partial.
+One can use ``partial`` as well:
+
+.. code:: python
+
+  >>> from returns.curry import partial
+
+  >>> one = IO(1)
+  >>> two = IO(2)
+  >>> assert two.apply(one.apply(
+  ...     IO(lambda x: partial(sum_two_numbers, x)),
+  ... )) == IO(3)
+
+Or even native ``lambda`` functions:
 
 .. code:: python
 
@@ -285,6 +251,105 @@ But, there are other ways to make ``sum_two_numbers`` partial. One can use:
 
 It would be faster, but not as elegant (and type-safe).
 
+Working with iterable of containers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Imagine that you have two take 10 random numbers
+and then sum they to get the final result.
+
+So, here's how your code will look like:
+
+.. code:: python
+
+  >>> import random
+  >>> from returns.io import IO
+
+  >>> def random_number() -> IO[int]:
+  ...     return IO(2)  # Example, basically alias of ``random.randint(1, 5)``
+
+  >>> numbers = [random_number() for _ in range(10)]
+  >>> assert len(numbers) == 10
+  >>> assert all(isinstance(number, IO) for number in numbers)
+
+So, how to sum these random values into a single ``IO[int]`` value?
+That's here :meth:`returns.iterables.Fold.loop` really helps!
+
+.. code:: python
+
+  >>> from typing import Callable
+  >>> from returns.iterables import Fold
+
+  >>> def sum_two_numbers(first: int) -> Callable[[int], int]:
+  ...     return lambda second: first + second
+
+  >>> assert Fold.loop(
+  ...     numbers,  # let's loop on our ``IO`` values
+  ...     IO(0),  # starting from ``0`` value
+  ...     sum_two_numbers,  # and getting the sum of each two numbers in a loop
+  ... ) == IO(20)
+
+We can also change the initial element to some other value:
+
+.. code:: python
+
+  >>> assert Fold.loop(
+  ...     numbers,
+  ...     IO(5),  # now we will start from ``5``, not ``0`
+  ...     sum_two_numbers,
+  ... ) == IO(25)
+
+``Fold.loop`` is eager. It will be executed for all items in your iterable.
+
+Collecting an iterable of containers into a single container
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You might end up with an iterable of containers:
+
+.. code:: python
+
+  >>> from returns.maybe import Maybe, Some, Nothing, maybe
+
+  >>> source = {'a': 1, 'b': 2}
+  >>> fetched_values: Maybe[int] = [
+  ...     maybe(source.get)(key)
+  ...     for key in ('a', 'b')
+  ... ]
+
+To work with iterable of containers,
+it is recommended to cast it into a container with the iterable inside
+using the :meth:`returns.iterables.Fold.collect` method:
+
+.. code:: python
+
+  >>> from returns.iterables import Fold
+
+  >>> assert Fold.collect(fetched_values, Some(())) == Some((1, 2))
+
+Any falsy values will result in a falsy result (pun intended):
+
+.. code:: python
+
+  >>> fetched_values: Maybe[int] = [
+  ...     maybe(source.get)(key)
+  ...     for key in ('a', 'c')  # 'c' is missing!
+  ... ]
+  >>> assert Fold.collect(fetched_values, Some(())) == Nothing
+
+You can also use a different strategy to fetch values you need,
+to do just that we have :meth:`returns.iterables.Fold.collect_all` method:
+
+.. code:: python
+
+  >>> fetched_values: Maybe[int] = [
+  ...     maybe(source.get)(key)
+  ...     for key in ('a', 'c')  # 'c' is missing!
+  ... ]
+  >>> assert Fold.collect_all(fetched_values, Some(())) == Some((1,))
+
+We support any ``Iterable[T]`` input type
+and return a ``Container[Sequence[T]]``.
+
+You can subclass ``Fold`` type to change how any of these methods work.
 
 .. _immutability:
 
