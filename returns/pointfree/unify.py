@@ -1,27 +1,33 @@
 from typing import Callable, TypeVar, Union
 
 from returns.interfaces.failable import DiverseFailableN
-from returns.primitives.hkt import Kind2, Kinded, kinded
+from returns.primitives.hkt import Kinded, KindN, kinded
 
-_ValueType = TypeVar('_ValueType')
-_NewValueType = TypeVar('_NewValueType')
-_ErrorType = TypeVar('_ErrorType')
-_NewErrorType = TypeVar('_NewErrorType')
+_FirstType = TypeVar('_FirstType')
+_NewFirstType = TypeVar('_NewFirstType')
+_SecondType = TypeVar('_SecondType')
+_NewSecondType = TypeVar('_NewSecondType')
+_ThirdType = TypeVar('_ThirdType')
+_NewThirdType = TypeVar('_NewThirdType')
 
 _DiverseFailableKind = TypeVar('_DiverseFailableKind', bound=DiverseFailableN)
 
 
 def unify(  # noqa: WPS234
     function: Callable[
-        [_ValueType], Kind2[_DiverseFailableKind, _NewValueType, _NewErrorType],
+        [_FirstType],
+        KindN[
+            _DiverseFailableKind, _NewFirstType, _NewSecondType, _NewThirdType,
+        ],
     ],
 ) -> Kinded[
     Callable[
-        [Kind2[_DiverseFailableKind, _ValueType, _ErrorType]],
-        Kind2[
+        [KindN[_DiverseFailableKind, _FirstType, _SecondType, _ThirdType]],
+        KindN[
             _DiverseFailableKind,
-            _NewValueType,
-            Union[_ErrorType, _NewErrorType],
+            _NewFirstType,
+            Union[_SecondType, _NewSecondType],
+            _NewThirdType,
         ],
     ]
 ]:
@@ -51,9 +57,14 @@ def unify(  # noqa: WPS234
     """
     @kinded
     def factory(
-        container: Kind2[_DiverseFailableKind, _ValueType, _ErrorType],
-    ) -> Kind2[
-        _DiverseFailableKind, _NewValueType, Union[_ErrorType, _NewErrorType],
+        container: KindN[
+            _DiverseFailableKind, _FirstType, _SecondType, _ThirdType,
+        ],
+    ) -> KindN[
+        _DiverseFailableKind,
+        _NewFirstType,
+        Union[_SecondType, _NewSecondType],
+        _NewThirdType,
     ]:
         return container.bind(function)  # type: ignore
     return factory

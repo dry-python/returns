@@ -1,7 +1,8 @@
 from typing import Type, TypeVar
 
+from returns.context import NoDeps
 from returns.interfaces.failable import DiverseFailableN
-from returns.primitives.hkt import Kind2, kinded
+from returns.primitives.hkt import KindN, kinded
 
 _ValueType = TypeVar('_ValueType')
 _ErrorType = TypeVar('_ErrorType')
@@ -14,7 +15,7 @@ def internal_cond(
     is_success: bool,
     success_value: _ValueType,
     error_value: _ErrorType,
-) -> Kind2[_DiverseFailableKind, _ValueType, _ErrorType]:
+) -> KindN[_DiverseFailableKind, _ValueType, _ErrorType, NoDeps]:
     """
     Reduce the boilerplate when choosing paths with ``DiverseFailableN``.
 
