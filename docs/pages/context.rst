@@ -186,7 +186,7 @@ And now we access the current context from any place in our callstack.
 Isn't it convenient?
 
 .. warning::
-  RequiresContext and similar types are not recursion safe.
+  ``RequiresContext`` and similar types are not recursion safe.
   If you would have nesting of more than ``sys.getrecursionlimit()``
   you will end up with ``RecursionError``.
   Will this ever happen to you? Probably not.
@@ -245,11 +245,11 @@ There's how execution flows:
   :caption: RequiresContext execution flow.
 
    graph LR
-       F1["first(1)"] --> F2["RequiresContext[str, bool]"]
+       F1["first(1)"] --> F2["RequiresContext(inner)"]
        F2 --> F3
-       F3["container('abc')"] --> F4["bool"]
+       F3["container('abc')"] --> F4["True"]
        F4 --> F5
-       F5["bool_to_str()"] --> F6["str"]
+       F5["bool_to_str(True)"] --> F6["'ok'"]
 
 The rule is: the dependencies are injected at the very last moment in time.
 And then normal logical execution happens.
