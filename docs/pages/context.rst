@@ -195,7 +195,9 @@ Isn't it convenient?
 RequiresContext container
 -------------------------
 
-The concept behind ``RequiresContext`` container is really simple.
+The concept behind
+:class:`~returns.context.requires_context.RequiresContext`
+container is really simple.
 It is a container around ``Callable[[EnvType], ReturnType]`` function.
 
 By its definition it works with pure functions that never fails.
@@ -258,13 +260,14 @@ And then normal logical execution happens.
 RequiresContextResult container
 -------------------------------
 
-This container is a combintaion of ``RequiresContext[Result[a, b], env]``.
+.. currentmodule:: returns.context.requires_context_result
+
+:class:`~RequiresContextResult` container
+is a combintaion of ``RequiresContext[Result[a, b], env]``.
 Which means that it is a wrapper around pure function that might fail.
 
 We also added a lot of useful methods for this container,
 so you can work easily with it:
-
-.. currentmodule:: returns.context.requires_context_result
 
 - :meth:`~RequiresContextResult.bind_result`
   allows to bind functions that return ``Result`` with just one call
@@ -278,13 +281,14 @@ Use it when you work with pure context-related functions that might fail.
 RequiresContextIOResult container
 ---------------------------------
 
-This container is a combintaion of ``RequiresContext[IOResult[a, b], env]``.
+.. currentmodule:: returns.context.requires_context_ioresult
+
+:class:`~RequiresContextIOResult` container
+is a combintaion of ``RequiresContext[IOResult[a, b], env]``.
 Which means that it is a wrapper around impure function that might fail.
 
 We also added a lot of useful methods for this container,
 so you can work easily with it:
-
-.. currentmodule:: returns.context.requires_context_ioresult
 
 - :meth:`~RequiresContextIOResult.bind_result`
   allows to bind functions that return ``Result`` with just one call
@@ -307,7 +311,10 @@ This is basically **the main type** that is going to be used in most apps.
 RequiresContextFutureResult container
 -------------------------------------
 
-This container is a combintaion of ``RequiresContext[FutureResult[a, b], env]``.
+.. currentmodule:: returns.context.requires_context_future_result
+
+:class:`~RequiresContextFutureResult` container
+is a combintaion of ``RequiresContext[FutureResult[a, b], env]``.
 Which means that it is a wrapper around impure async function that might fail.
 
 Here's how it should be used:
@@ -386,8 +393,6 @@ We also added a lot of useful methods for this container,
 so you can work easily with it.
 
 These methods are identical with ``RequiresContextIOResult``:
-
-.. currentmodule:: returns.context.requires_context_future_result
 
 - :meth:`~RequiresContextFutureResult.bind_result`
   allows to bind functions that return ``Result`` with just one call
