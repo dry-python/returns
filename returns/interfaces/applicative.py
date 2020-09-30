@@ -126,8 +126,8 @@ class ApplicativeN(
     Allows to create unit containers from raw values and to apply wrapped funcs.
 
     See also:
-        https://en.wikipedia.org/wiki/Applicative_functor
-        http://learnyouahaskell.com/functors-applicative-functors-and-monoids
+        - https://en.wikipedia.org/wiki/Applicative_functor
+        - http://learnyouahaskell.com/functors-applicative-functors-and-monoids
 
     """
 

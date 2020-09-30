@@ -17,7 +17,7 @@ class BiMappableN(
     Uses ``.map`` to change first type and ``.alt`` to change second type.
 
     See also:
-        https://typelevel.org/cats/typeclasses/bifunctor.html
+        - https://typelevel.org/cats/typeclasses/bifunctor.html
 
     """
 

@@ -80,9 +80,8 @@ class Future(
     to a separate module.
 
     See also:
-        https://gcanti.github.io/fp-ts/modules/Task.ts.html
-        https://zio.dev/docs/overview/overview_basic_concurrency
-        https://github.com/correl/typesafe-monads/blob/master/monads/future.py
+        - https://gcanti.github.io/fp-ts/modules/Task.ts.html
+        - https://zio.dev/docs/overview/overview_basic_concurrency
 
     """
 
@@ -129,8 +128,8 @@ class Future(
         to indicate that the computation was impure.
 
         See also:
-            https://docs.python.org/3/library/asyncio-task.html#awaitables
-            https://www.python.org/dev/peps/pep-0492/#new-abstract-base-classes
+            - https://docs.python.org/3/library/asyncio-task.html#awaitables
+            - https://bit.ly/2SfayNc
 
         """
         return self.awaitable().__await__()  # noqa: WPS609
@@ -518,8 +517,8 @@ class FutureResult(
     to a separate module.
 
     See also:
-        https://gcanti.github.io/fp-ts/modules/TaskEither.ts.html
-        https://zio.dev/docs/overview/overview_basic_concurrency
+        - https://gcanti.github.io/fp-ts/modules/TaskEither.ts.html
+        - https://zio.dev/docs/overview/overview_basic_concurrency
 
     """
 
@@ -572,8 +571,8 @@ class FutureResult(
         to indicate that the computation was impure and can fail.
 
         See also:
-            https://docs.python.org/3/library/asyncio-task.html#awaitables
-            https://www.python.org/dev/peps/pep-0492/#new-abstract-base-classes
+            - https://docs.python.org/3/library/asyncio-task.html#awaitables
+            - https://bit.ly/2SfayNc
 
         """
         return self.awaitable().__await__()  # noqa: WPS609

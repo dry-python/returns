@@ -71,9 +71,9 @@ class RequiresContext(
         You won't be able to supply arbitrary types!
 
     See also:
-        https://dev.to/gcanti/getting-started-with-fp-ts-reader-1ie5
-        https://en.wikipedia.org/wiki/Lazy_evaluation
-        https://bit.ly/2R8l4WK
+        - https://dev.to/gcanti/getting-started-with-fp-ts-reader-1ie5
+        - https://en.wikipedia.org/wiki/Lazy_evaluation
+        - https://bit.ly/2R8l4WK
 
     """
 
@@ -305,7 +305,7 @@ class RequiresContext(
         And ``mypy`` will warn you: ``error: Need type annotation for '...'``
 
         See also:
-            https://dev.to/gcanti/getting-started-with-fp-ts-reader-1ie5
+            - https://dev.to/gcanti/getting-started-with-fp-ts-reader-1ie5
 
         """  # noqa: F811
         return RequiresContext(identity)

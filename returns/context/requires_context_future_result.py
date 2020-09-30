@@ -88,10 +88,10 @@ class RequiresContextFutureResult(
     Use converters inside the ``RequiresContext`` context, not outside.
 
     See also:
-        https://dev.to/gcanti/getting-started-with-fp-ts-reader-1ie5
-        https://en.wikipedia.org/wiki/Lazy_evaluation
-        https://bit.ly/2R8l4WK
-        https://bit.ly/2RwP4fp
+        - https://dev.to/gcanti/getting-started-with-fp-ts-reader-1ie5
+        - https://en.wikipedia.org/wiki/Lazy_evaluation
+        - https://bit.ly/2R8l4WK
+        - https://bit.ly/2RwP4fp
 
     """
 

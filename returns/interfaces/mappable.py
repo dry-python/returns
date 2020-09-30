@@ -65,7 +65,7 @@ class MappableN(
     Behaves like a functor.
 
     See also:
-        https://en.wikipedia.org/wiki/Functor
+        - https://en.wikipedia.org/wiki/Functor
 
     """
 

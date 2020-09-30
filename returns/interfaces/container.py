@@ -108,7 +108,7 @@ class ContainerN(
     Should be a base class for almost any containers you write.
 
     See also:
-        https://bit.ly/2CTEVov
+        - https://bit.ly/2CTEVov
 
     """
 

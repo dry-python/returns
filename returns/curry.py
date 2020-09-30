@@ -31,7 +31,7 @@ def partial(
       >>> assert sum_with_ten(-5) == 5
 
     See also:
-        https://docs.python.org/3/library/functools.html#functools.partial
+        - https://docs.python.org/3/library/functools.html#functools.partial
 
     """
     return _partial(func, *args, **kwargs)
@@ -111,8 +111,8 @@ def curry(function: Callable[..., _ReturnType]) -> Callable[..., _ReturnType]:
     when they know that they are doing.
 
     See also:
-        https://en.wikipedia.org/wiki/Currying
-        https://stackoverflow.com/questions/218025/
+        - https://en.wikipedia.org/wiki/Currying
+        - https://stackoverflow.com/questions/218025/
 
     """
     argspec = Signature.from_callable(function).bind_partial()

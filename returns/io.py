@@ -53,8 +53,8 @@ class IO(
     Like DB access or network operations.
 
     See also:
-        https://dev.to/gcanti/getting-started-with-fp-ts-io-36p6
-        https://gist.github.com/chris-taylor/4745921
+        - https://dev.to/gcanti/getting-started-with-fp-ts-io-36p6
+        - https://gist.github.com/chris-taylor/4745921
 
     """
 

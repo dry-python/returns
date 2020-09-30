@@ -85,7 +85,7 @@ def _get_trace(_self: _Failure) -> Optional[List[FrameInfo]]:
     ending on ``Failure`` function call!
 
     See also:
-        https://github.com/dry-python/returns/issues/409
+        - https://github.com/dry-python/returns/issues/409
 
     """
     current_stack = stack()

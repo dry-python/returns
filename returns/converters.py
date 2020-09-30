@@ -43,7 +43,7 @@ def flatten(
       >>> assert flatten(Failure(Failure(1))) == Failure(Failure(1))
 
     See also:
-        https://bit.ly/2sIviUr
+        - https://bit.ly/2sIviUr
 
     """
     return container.bind(identity)

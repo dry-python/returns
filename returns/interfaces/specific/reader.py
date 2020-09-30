@@ -20,7 +20,7 @@ Furthermore, ``Reader`` cannot have ``ReaderLike1`` type,
 because we need both ``value`` and ``env`` types at all cases.
 
 See also:
-    https://github.com/dry-python/returns/issues/485
+    - https://github.com/dry-python/returns/issues/485
 
 """
 

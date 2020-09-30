@@ -41,7 +41,7 @@ class Maybe(
     Instead use ``Some`` and ``Nothing``.
 
     See also:
-        https://github.com/gcanti/fp-ts/blob/master/docs/modules/Option.ts.md
+        - https://github.com/gcanti/fp-ts/blob/master/docs/modules/Option.ts.md
 
     """
 

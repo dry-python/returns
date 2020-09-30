@@ -25,7 +25,7 @@ def unsafe_perform_io(wrapped_in_io: IO[_ValueType]) -> _ValueType:
       >>> assert unsafe_perform_io(IO(1)) == 1
 
     See also:
-        https://github.com/seddonym/import-linter
+        - https://github.com/seddonym/import-linter
 
     """
     return wrapped_in_io._inner_value  # noqa: WPS437
