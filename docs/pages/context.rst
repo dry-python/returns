@@ -185,6 +185,12 @@ Let's see the final result:
 And now we access the current context from any place in our callstack.
 Isn't it convenient?
 
+.. warning::
+  RequiresContext and similar types are not recursion safe.
+  If you would have nesting of more than ``sys.getrecursionlimit()``
+  you will end up with ``RecursionError``.
+  Will this ever happen to you? Probably not.
+
 
 RequiresContext container
 -------------------------
