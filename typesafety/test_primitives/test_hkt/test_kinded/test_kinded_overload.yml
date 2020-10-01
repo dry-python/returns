@@ -1,0 +1,35 @@
+- case: kinded_with_any
+  disable_cache: false
+  main: |
+    from typing import TypeVar, overload, Optional
+    from returns.maybe import Maybe
+    from returns.interfaces.mappable import MappableN
+    from returns.primitives.hkt import Kind1, kinded
+
+    _ValueType = TypeVar('_ValueType')
+    _NewType = TypeVar('_NewType')
+    _MappableKind = TypeVar('_MappableKind', bound=MappableN)
+
+    @overload
+    def _test(
+        instance: Kind1[_MappableKind, _ValueType],
+    ) -> Kind1[_MappableKind, None]:
+        ...
+
+    @overload
+    def _test(
+        instance: Kind1[_MappableKind, _ValueType],
+        value: _NewType,
+    ) -> Kind1[_MappableKind, _NewType]:
+        ...
+
+    def _test(
+        instance: Kind1[_MappableKind, _ValueType],
+        value: Optional[_NewType] = None,
+    ) -> Kind1[_MappableKind, Optional[_NewType]]:
+        ...
+
+    test = kinded(_test)
+    x: Maybe[int]
+    reveal_type(test(x))  # N: Revealed type is 'returns.maybe.Maybe*[None]'
+    reveal_type(test(x, 'a'))  # N: Revealed type is 'returns.maybe.Maybe*[builtins.str*]'

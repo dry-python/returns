@@ -9,7 +9,7 @@ from mypy.plugin import (
     MethodSigContext,
 )
 from mypy.typeops import bind_self, erase_to_bound
-from mypy.types import AnyType, CallableType, Instance
+from mypy.types import AnyType, CallableType, Instance, FunctionLike, Overloaded
 from mypy.types import Type as MypyType
 from mypy.types import TypeOfAny, TypeType, TypeVarType, get_proper_type
 
@@ -93,7 +93,7 @@ def dekind(ctx: FunctionContext) -> MypyType:
 
 
 @asserts_fallback_to_any
-def kinded_signature(ctx: MethodSigContext) -> CallableType:
+def kinded_signature(ctx: MethodSigContext) -> FunctionLike:
     """
     Returns the internal function wrapped as ``Kinded[def]``.
 
@@ -101,8 +101,12 @@ def kinded_signature(ctx: MethodSigContext) -> CallableType:
     See :class:`returns.primitives.hkt.Kinded` for more information.
     """
     assert isinstance(ctx.type, Instance)
-    assert isinstance(ctx.type.args[0], CallableType)
-    return ctx.type.args[0]
+    assert isinstance(ctx.type.args[0], FunctionLike)
+
+    wrapped_method = ctx.type.args[0]
+    if isinstance(wrapped_method, Overloaded):
+        return ctx.default_signature
+    return wrapped_method
 
 
 def kinded_call(ctx: MethodContext) -> MypyType:
