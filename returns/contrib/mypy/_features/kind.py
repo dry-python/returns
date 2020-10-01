@@ -93,7 +93,7 @@ def dekind(ctx: FunctionContext) -> MypyType:
 
 
 @asserts_fallback_to_any
-def kinded_signature(ctx: MethodSigContext) -> FunctionLike:
+def kinded_signature(ctx: MethodSigContext) -> CallableType:
     """
     Returns the internal function wrapped as ``Kinded[def]``.
 
@@ -106,6 +106,8 @@ def kinded_signature(ctx: MethodSigContext) -> FunctionLike:
     wrapped_method = ctx.type.args[0]
     if isinstance(wrapped_method, Overloaded):
         return ctx.default_signature
+
+    assert isinstance(wrapped_method, CallableType)
     return wrapped_method
 
 
