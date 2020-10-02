@@ -22,20 +22,13 @@ class BaseContainer(Immutable, metaclass=ABCMeta):
         """
         object.__setattr__(self, '_inner_value', inner_value)  # noqa: WPS609
 
-    def __str__(self) -> str:
+    def __repr__(self) -> str:
         """Converts to string."""
         return '<{0}: {1}>'.format(
             self.__class__.__qualname__.strip('_'),
             str(self._inner_value),
         )
 
-    def __repr__(self) -> str:
-        """Used to display details of object"""
-        return '<{0}: {1}>'.format(
-            self.__class__.__qualname__.strip('_'),
-            str(self._inner_value),
-        )
-        
     def __eq__(self, other: Any) -> bool:
         """Used to compare two 'Container' objects."""
         return container_equality(self, other)  # type: ignore
