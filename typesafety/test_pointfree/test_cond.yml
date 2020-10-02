@@ -43,6 +43,15 @@
     reveal_type(cond(ReaderFutureResult, 1, 1.0)(True))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult*[builtins.int*, builtins.float*, Any]'
 
 
+- case: cond_maybe
+  disable_cache: false
+  main: |
+    from returns.pointfree import cond
+    from returns.maybe import Maybe
+
+    reveal_type(cond(Maybe, True)(False))  # N: Revealed type is 'returns.maybe.Maybe[builtins.bool]'
+
+
 - case: cond_custom_type
   disable_cache: false
   main: |
