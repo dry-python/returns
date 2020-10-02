@@ -222,6 +222,8 @@ Sometimes we need to create ``SingleFailableN`` or ``DiverseFailableN``
 containers (e.g. ``Maybe``, ``ResultLikeN``) based on a boolean expression,
 ``cond`` can help us.
 
+Consider ``cond`` to be a functional ``if``.
+
 See the example below:
 
 .. code:: python
