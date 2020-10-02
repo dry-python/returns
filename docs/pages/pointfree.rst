@@ -218,8 +218,9 @@ kind of manipulation.
 cond
 ----
 
-Sometimes we need to create ``DiverseFailableN`` containers
-(e.g. ``ResultLikeN``) based on a boolean expression, ``cond`` can help us.
+Sometimes we need to create ``SingleFailableN`` or ``DiverseFailableN``
+containers (e.g. ``Maybe``, ``ResultLikeN``) based on a boolean expression,
+``cond`` can help us.
 
 See the example below:
 
@@ -227,7 +228,7 @@ See the example below:
 
   >>> from returns.pipeline import flow
   >>> from returns.pointfree import cond
-  >>> from returns.result import Failure, Success
+  >>> from returns.result import Result, Failure, Success
 
   >>> def returns_boolean(arg: int) -> bool:
   ...     return bool(arg)
@@ -241,6 +242,24 @@ See the example below:
   ...     returns_boolean(0),
   ...     cond(Result, 'success', 'failure')
   ... ) == Failure('failure')
+
+Example using ``cond`` with the ``Maybe`` container:
+
+.. code:: python
+
+  >>> from returns.pipeline import flow
+  >>> from returns.pointfree import cond
+  >>> from returns.maybe import Maybe, Some, Nothing
+
+  >>> assert flow(
+  ...     returns_boolean(1),
+  ...     cond(Maybe, 'success')
+  ... ) == Some('success')
+
+  >>> assert flow(
+  ...     returns_boolean(0),
+  ...     cond(Maybe, 'success')
+  ... ) == Nothing
 
 
 Further reading
