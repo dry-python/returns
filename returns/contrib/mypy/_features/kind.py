@@ -101,7 +101,6 @@ def kinded_signature(ctx: MethodSigContext) -> CallableType:
     See :class:`returns.primitives.hkt.Kinded` for more information.
     """
     assert isinstance(ctx.type, Instance)
-    assert isinstance(ctx.type.args[0], FunctionLike)
 
     wrapped_method = ctx.type.args[0]
     if isinstance(wrapped_method, Overloaded):
