@@ -9,7 +9,7 @@ from mypy.plugin import (
     MethodSigContext,
 )
 from mypy.typeops import bind_self, erase_to_bound
-from mypy.types import AnyType, CallableType, FunctionLike, Instance, Overloaded
+from mypy.types import AnyType, CallableType, Instance, Overloaded
 from mypy.types import Type as MypyType
 from mypy.types import TypeOfAny, TypeType, TypeVarType, get_proper_type
 
