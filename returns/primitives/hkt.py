@@ -83,6 +83,7 @@ class KindN(
         - https://arrow-kt.io/docs/0.10/patterns/glossary/#higher-kinds
         - https://github.com/gcanti/fp-ts/blob/master/docs/guides/HKT.md
         - https://bow-swift.io/docs/fp-concepts/higher-kinded-types
+        - https://github.com/pelotom/hkts
 
     """
 
