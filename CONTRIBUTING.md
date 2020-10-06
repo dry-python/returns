@@ -1,5 +1,9 @@
 # How to contribute
 
+Do you have questions or issues? Join our chat!
+
+[![Telegram chat](https://img.shields.io/badge/chat-join-blue?logo=telegram)](https://t.me/drypython)
+
 ## Tutorials
 
 If you want to start working on this project,
@@ -65,7 +69,7 @@ poetry run pytest typesafety
 
 **NOTE:** This can take upwards of 20 minutes, only recommended to run if necessary.
 
-Here's [a helpful tutorial](https://sobolevn.me/2019/08/testing-mypy-types) if you are looking 
+Here's [a helpful tutorial](https://sobolevn.me/2019/08/testing-mypy-types) if you are looking
 for more information.
 
 
@@ -123,5 +127,5 @@ It would also be a huge contribution to write
 a short article on how you are using this project.
 You can also share your best practices with us.
 
-Join in the conversation with us on our Telegram. 
+Join in the conversation with us on our Telegram.
 [![Telegram chat](https://img.shields.io/badge/chat-join-blue?logo=telegram)](https://t.me/drypython)
