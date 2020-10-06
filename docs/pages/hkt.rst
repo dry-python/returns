@@ -246,6 +246,71 @@ Later you will learn how to
 :ref:`create your own types <create-your-own-container>` that support kinds!
 
 
+FAQ
+---
+
+Which types you can use with KindN?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The first position in all ``KindN`` types
+can be occupied by either ``Instance`` type or ``TypeVar`` with ``bound=``.
+
+Let's see an example:
+
+.. code:: python
+
+  >>> from typing import TypeVar
+  >>> from returns.primitives.hkt import KindN, kinded
+  >>> from returns.interfaces.mappable import MappableN
+
+  >>> _FirstType = TypeVar('_FirstType')
+  >>> _SecondType = TypeVar('_SecondType')
+  >>> _ThirdType = TypeVar('_ThirdType')
+  >>> _MappableKind = TypeVar('_MappableKind', bound=MappableN)
+
+  >>> @kinded
+  ... def works_with_interface(
+  ...     container: KindN[_MappableKind, _FirstType, _SecondType, _ThirdType],
+  ... ) -> KindN[_MappableKind, str, _SecondType, _ThirdType]:
+  ...     return container.map(str)
+
+This version of ``works_with_interface`` will work
+with any subtype of ``MappableN``.
+Because we use ``_MappableKind`` in its definition.
+And ``_MappableKind`` is a ``TypeVar`` bound to ``MappableN``.
+Arguments of non ``MappableN`` subtypes will be rejected by a type-checker:
+
+.. code:: python
+
+  >>> from returns.maybe import Maybe
+  >>> from returns.io import IO
+  >>> from returns.result import Success
+
+  >>> assert works_with_interface(Maybe.from_value(1)) == Maybe.from_value('1')
+  >>> assert works_with_interface(IO.from_value(1)) == IO.from_value('1')
+  >>> assert works_with_interface(Success(1)) == Success('1')
+
+In contrast, we can work directly with some specific type,
+let's say ``Maybe`` container:
+
+.. code:: python
+
+  >>> from returns.maybe import Maybe
+
+  >>> @kinded
+  ... def works_with_maybe(
+  ...     container: KindN[Maybe, _FirstType, _SecondType, _ThirdType],
+  ... ) -> KindN[Maybe, str, _SecondType, _ThirdType]:
+  ...     return container.map(str)
+
+  >>> assert works_with_maybe(Maybe.from_value(1)) == Maybe.from_value('1')
+
+Function ``works_with_maybe`` will work correctly with ``Maybe`` instance.
+Other types will be rejected.
+
+So, choose wisely which mechanism you need.
+
+
 API Reference
 -------------
 
