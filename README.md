@@ -28,6 +28,8 @@ Make your functions return something meaningful, typed, and safe!
 - Support functions and coroutines, framework agnostic
 - Easy to start: has lots of docs, tests, and tutorials
 
+[Quickstart](https://returns.readthedocs.io/en/latest/pages/quickstart.html) right now!
+
 
 ## Installation
 

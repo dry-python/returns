@@ -3,10 +3,9 @@
 mypy plugin
 ===========
 
-We provide several ``mypy`` plugins to fix existing issues
-and improve type-safety of things developers commonly use:
-
-- ``returns_plugin`` to solve untyped `decorator issue <https://github.com/python/mypy/issues/3157>`_ and add better :ref:`curry` support
+We provide a custom ``mypy`` plugin to fix existing issues,
+provide new awesome features,
+and improve type-safety of things developers commonly use.
 
 
 Installation
