@@ -297,8 +297,17 @@ class _Nothing(Maybe[Any]):
         """
         super().__init__(None)
 
-    def __str__(self):
-        """Custom ``str`` definition without the state inside."""
+    def __repr__(self):
+        """
+        Custom ``str`` definition without the state inside.
+
+        .. code:: python
+
+          >>> from returns.maybe import Nothing
+          >>> assert str(Nothing) == '<Nothing>'
+          >>> assert repr(Nothing) == '<Nothing>'
+
+        """
         return '<Nothing>'
 
     def map(self, function):  # noqa: WPS125

@@ -316,7 +316,7 @@ class IOResult(
         """
         super().__init__(inner_value)
 
-    def __str__(self) -> str:
+    def __repr__(self) -> str:
         """
         Custom ``str`` representation for better readability.
 
@@ -324,6 +324,7 @@ class IOResult(
 
           >>> from returns.io import IOSuccess, IOFailure
           >>> assert str(IOSuccess(1)) == '<IOResult: <Success: 1>>'
+          >>> assert repr(IOSuccess(1)) == '<IOResult: <Success: 1>>'
           >>> str(IOFailure(ValueError('wrong!')))
           '<IOResult: <Failure: wrong!>>'
 
