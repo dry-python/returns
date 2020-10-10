@@ -123,7 +123,7 @@
     ):
         ...
   out: |
-    main:10: error: Final class main.MyClass has abstract attributes "alt", "apply", "bind", "bind_io", "bind_ioresult", "bind_result", "compose_result", "equals", "failure", "from_failed_io", "from_failure", "from_io", "from_ioresult", "from_result", "from_value", "map", "lash", "swap", "unwrap"
+    main:10: error: Final class main.MyClass has abstract attributes "alt", "apply", "bind", "bind_io", "bind_ioresult", "bind_result", "compose_result", "equals", "failure", "from_failed_io", "from_failure", "from_io", "from_ioresult", "from_result", "from_value", "lash", "map", "swap", "unwrap"
 
 
 - case: ioresult_inheritance_wrong2
