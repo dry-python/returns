@@ -1,5 +1,5 @@
 from enum import Enum, unique
-from typing import List, Optional, Sequence
+from typing import Optional, Sequence, Tuple
 
 from mypy.checkmember import analyze_member_access
 from mypy.plugin import (
@@ -159,7 +159,7 @@ class _KindErrors(str, Enum):  # noqa: WPS600
 def _crop_kind_args(
     kind: Instance,
     limit: Optional[Sequence[MypyType]] = None,
-) -> List[MypyType]:
+) -> Tuple[MypyType, ...]:
     """Returns the correct amount of type arguments for a kind."""
     if limit is None:
         limit = kind.args[0].args  # type: ignore

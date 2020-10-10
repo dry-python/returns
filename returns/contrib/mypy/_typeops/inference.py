@@ -1,4 +1,4 @@
-from typing import List, Mapping, Optional, cast
+from typing import List, Mapping, Optional, Tuple, cast
 
 from mypy.argmap import map_actuals_to_formals
 from mypy.constraints import infer_constraints_for_callable
@@ -108,7 +108,7 @@ class PipelineInference(object):
 
     def from_callable_sequence(
         self,
-        pipeline_types: List[MypyType],
+        pipeline_types: Tuple[MypyType, ...],
         pipeline_kinds: List[int],
         ctx: CallableContext,
     ) -> MypyType:

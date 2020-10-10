@@ -17,6 +17,48 @@
     reveal_type(multiple)  # N: Revealed type is 'Overload(def (builtins.int) -> Overload(def (builtins.int, builtins.int, d: builtins.int) -> builtins.str, def (builtins.int, builtins.int) -> def (d: builtins.int) -> builtins.str, def (builtins.int) -> Overload(def (builtins.int, d: builtins.int) -> builtins.str, def (builtins.int) -> def (d: builtins.int) -> builtins.str)), def (builtins.int, builtins.int) -> Overload(def (builtins.int, d: builtins.int) -> builtins.str, def (builtins.int) -> def (d: builtins.int) -> builtins.str), def (builtins.int, builtins.int, builtins.int) -> def (d: builtins.int) -> builtins.str, def (builtins.int, builtins.int, builtins.int, d: builtins.int) -> builtins.str)'
 
 
+- case: curry_nested_overload1
+  disable_cache: false
+  main: |
+    from typing import Generic, TypeVar
+    from returns.curry import curry
+
+    ValueType = TypeVar('ValueType')
+
+    class MyClass(Generic[ValueType]):
+        inner_value: ValueType
+
+        def __init__(self, inner_value: ValueType) -> None:
+            ...
+
+    @curry
+    def test(a: int, b: int) -> float:
+        ...
+
+    reveal_type(MyClass(test))  # N: Revealed type is 'main.MyClass[Overload(def (a: builtins.int) -> def (b: builtins.int) -> builtins.float, def (a: builtins.int, b: builtins.int) -> builtins.float)]'
+
+
+- case: curry_nested_overload2
+  disable_cache: false
+  main: |
+    from typing import Generic, TypeVar
+    from returns.curry import curry
+
+    ValueType = TypeVar('ValueType')
+
+    class MyClass(Generic[ValueType]):
+        inner_value: ValueType
+
+        def __init__(self, inner_value: ValueType) -> None:
+            ...
+
+    @curry
+    def test(a: int, b: int, c: str) -> int:
+        ...
+
+    reveal_type(MyClass(test))  # N: Revealed type is 'main.MyClass[Overload(def (a: builtins.int) -> Overload(def (b: builtins.int, c: builtins.str) -> builtins.int, def (b: builtins.int) -> def (c: builtins.str) -> builtins.int), def (a: builtins.int, b: builtins.int) -> def (c: builtins.str) -> builtins.int, def (a: builtins.int, b: builtins.int, c: builtins.str) -> builtins.int)]'
+
+
 # TODO: remove skip after this bug in `mypy` is fixed:
 # https://github.com/python/mypy/issues/8801
 - case: curry_init_magic_method

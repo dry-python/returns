@@ -40,10 +40,10 @@ def analyze(ctx: FunctionContext) -> MypyType:
     # We use custom argument type inference here,
     # because for some reason, `mypy` does not do it correctly.
     # It inferes `covariant` types incorrectly.
-    real_arg_types = [
+    real_arg_types = tuple(
         ctx.api.expr_checker.accept(arg)   # type: ignore
         for arg in ctx.args[1]
-    ]
+    )
 
     return PipelineInference(
         ctx.arg_types[0][0],

@@ -172,7 +172,7 @@ def type_vars() -> Iterator[None]:
        for example, ``nan`` does not work for us
 
     """
-    used = types._global_type_lookup[TypeVar]  # type: ignore
+    used = types._global_type_lookup[TypeVar]
 
     def factory(thing):
         type_strategies = [
@@ -183,12 +183,12 @@ def type_vars() -> Iterator[None]:
             lambda inner: inner == inner,  # noqa: WPS312
         )
 
-    st.register_type_strategy(TypeVar, factory)  # type: ignore
+    st.register_type_strategy(TypeVar, factory)
 
     yield
 
-    types._global_type_lookup.pop(TypeVar)  # type: ignore
-    st.register_type_strategy(TypeVar, used)  # type: ignore
+    types._global_type_lookup.pop(TypeVar)
+    st.register_type_strategy(TypeVar, used)
 
 
 def _run_law(
