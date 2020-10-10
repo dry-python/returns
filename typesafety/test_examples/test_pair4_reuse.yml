@@ -1,0 +1,16 @@
+- case: test_pair_map
+  disable_cache: false
+  env:
+    # We only need this because we store this example in `tests/`
+    # and not in our source code. Please, do not copy this line!
+    - MYPYPATH=./tests/test_examples
+  main: |
+    from test_pair4 import Pair
+    from returns.pointfree import map_
+
+    my_pair: Pair[int, int] = Pair.from_unpaired(1)
+    reveal_type(my_pair.map(str))
+    reveal_type(map_(str)(my_pair))
+  out: |
+    main:5: note: Revealed type is 'test_pair4.Pair[builtins.str*, builtins.int]'
+    main:6: note: Revealed type is 'test_pair4.Pair*[builtins.str, builtins.int*]'

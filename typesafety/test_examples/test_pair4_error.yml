@@ -1,0 +1,18 @@
+- case: test_pair_error
+  disable_cache: false
+  env:
+    # We only need this because we store this example in `tests/`
+    # and not in our source code. Please, do not copy this line!
+    - MYPYPATH=./tests/test_examples
+  main: |
+    # Let's import our `Pair` type we defined earlier:
+    from test_pair4 import Pair
+
+    # Oups! This function has first and second types swapped!
+    def function(first: str, second: int) -> Pair[float, bool]:
+        ...
+
+    my_pair = Pair.from_paired(1, 'a')
+    my_pair.pair(function)  # this should and will error
+  out: |
+    main:9: error: Argument 1 to "pair" of "Pair" has incompatible type "Callable[[str, int], Pair[float, bool]]"; expected "Callable[[int, str], KindN[Pair[Any, Any], float, bool, Any]]"

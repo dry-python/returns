@@ -239,12 +239,6 @@ class DiverseFailableN(
         Law3(_DiverseFailableLawSpec.alt_short_circuit_law),
     )
 
-    @abstractmethod
-    def swap(
-        self: _DiverseFailableType,
-    ) -> KindN[_DiverseFailableType, _SecondType, _FirstType, _ThirdType]:
-        """Swaps value and error types in ``DiverseFailableN``."""
-
     @classmethod
     @abstractmethod
     def from_failure(
