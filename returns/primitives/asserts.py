@@ -31,10 +31,11 @@ def assert_equal(
 
 
 def _convert(container, *, deps, backend: str):
-    import anyio
     from returns.interfaces.specific import future, reader
 
     if isinstance(container, future.AsyncFutureN):
+        import anyio
+
         return _convert(
             anyio.run(container.awaitable, backend=backend),
             deps=deps,

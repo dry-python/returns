@@ -528,7 +528,7 @@ BiMappable
   :private-members:
 
 Lashable
-~~~~~~~~~
+~~~~~~~~
 
 .. autoclasstree:: returns.interfaces.lashable
    :strict:

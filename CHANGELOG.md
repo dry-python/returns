@@ -89,7 +89,7 @@ See [0Ver](https://0ver.org/).
 - Adds a lot of new typetests
 - Checks that now all math laws are checked for all types
 - Changes docs structure, adds new `Interfaces`, `HKT`, and `Methods` pages
-- Changed str function in BaseContainer class to repr function.
+- Changed `__str__` method in `BaseContainer` class to `__repr__` method
 - Adds `Quickstart` guide
 
 

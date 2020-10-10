@@ -55,14 +55,15 @@ Returning execution to the right track
 
 We also support two special methods to work with "failed" values:
 
-- :func:`returns.interfaces.lashable.LashableN.lash`
-  is the opposite of :func:`returns.interfaces.bindable.BindableN.bind` method
-  that works only when container is in failed state
 - :func:`returns.interfaces.altable.AltableN.alt`
   transforms error to another error
   that works only when container is in failed state,
   is the opposite of :func:`returns.interfaces.mappable.MappableN.map` method
+- :func:`returns.interfaces.lashable.LashableN.lash`
+  is the opposite of :func:`returns.interfaces.bindable.BindableN.bind` method
+  that works only when container is in failed state
 
+Let's start from the first one:
 ``alt`` method allows to change your error type.
 
 .. mermaid::
@@ -113,6 +114,10 @@ It can also lash your flow and get on the successful track again:
   >>> result2: Result[int, Exception] = value2.lash(tolerate_exception)
   >>> # => Failure(ValueError())
 
+From typing perspective ``.alt`` and ``.lash``
+are exaclty the same as ``.map`` and ``.bind``
+but only work with the second type argument instead of the first one.
+
 .. note::
 
   Not all containers support these methods,
@@ -122,7 +127,7 @@ It can also lash your flow and get on the successful track again:
   :class:`returns.interfaces.altable.AltableN`
   For example, :class:`~returns.io.IO` based containers
   and :class:`~returns.context.requires_context.RequiresContext`
-  cannot be alted or lashd.
+  cannot be alted or lashed.
 
 
 Unwrapping values
@@ -157,7 +162,7 @@ inner state of containers into a regular types:
   returns.primitives.exceptions.UnwrapFailedError
 
 For failing containers you can
-use :func:`.failure <returns.interfaces.unwrappable.Unwrapable.failure>`
+use :meth:`returns.interfaces.unwrappable.Unwrapable.failure`
 to unwrap the failed state:
 
 .. code:: pycon

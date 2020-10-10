@@ -120,7 +120,7 @@ We also have a long list of other ``bind_*`` functions, like:
 
 
 lash
-------
+----
 
 Pointfree ``lash()`` function is an alternative
 to ``.lash()`` container method.
