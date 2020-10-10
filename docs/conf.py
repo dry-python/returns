@@ -165,6 +165,7 @@ html_theme_options = {
     ),
     'github_user': 'dry-python',
     'github_repo': 'returns',
+    'color': '#E8371A',
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
