@@ -119,7 +119,7 @@ async def test_all_success(acquire, use, release, final_result, log):
         release(pipeline_logs),
     )(acquire())
 
-    assert await pipeline_result(ReaderFutureResult.empty) == final_result
+    assert await pipeline_result(ReaderFutureResult.no_args) == final_result
     assert pipeline_logs == log
 
 
@@ -131,7 +131,7 @@ async def test_full_typing():
         _use_success,
         _ReleaseSuccess(logs),
     )(_acquire_success())
-    inner = pipeline_result(ReaderFutureResult.empty)
+    inner = pipeline_result(ReaderFutureResult.no_args)
 
     assert await inner == IOSuccess('use success')
     assert logs == [('acquire success', Success('use success'))]

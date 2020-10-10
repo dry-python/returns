@@ -32,11 +32,11 @@ def test_bind_regular_result():
     first: RCR[int, str, int] = RCR.from_value(1)
     third: RCR[int, str, int] = RCR.from_failure('a')
 
-    assert first.bind_result(factory)(RCR.empty) == IOSuccess(2)
+    assert first.bind_result(factory)(RCR.no_args) == IOSuccess(2)
     assert RCR.from_value(0).bind_result(
         factory,
-    )(RCR.empty) == IOFailure('nope')
-    assert third.bind_result(factory)(RCR.empty) == IOFailure('a')
+    )(RCR.no_args) == IOFailure('nope')
+    assert third.bind_result(factory)(RCR.no_args) == IOFailure('a')
 
 
 def test_bind_ioresult():
@@ -49,11 +49,11 @@ def test_bind_ioresult():
     first: RCR[int, str, int] = RCR.from_value(1)
     third: RCR[int, str, int] = RCR.from_failure('a')
 
-    assert first.bind_ioresult(factory)(RCR.empty) == IOSuccess(2)
+    assert first.bind_ioresult(factory)(RCR.no_args) == IOSuccess(2)
     assert RCR.from_value(0).bind_ioresult(
         factory,
-    )(RCR.empty) == IOFailure('nope')
-    assert third.bind_ioresult(factory)(RCR.empty) == IOFailure('a')
+    )(RCR.no_args) == IOFailure('nope')
+    assert third.bind_ioresult(factory)(RCR.no_args) == IOFailure('a')
 
 
 def test_bind_regular_context():

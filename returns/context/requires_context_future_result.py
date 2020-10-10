@@ -104,7 +104,7 @@ class RequiresContextFutureResult(
     ]
 
     #: A convenient placeholder to call methods created by `.from_value()`.
-    empty: ClassVar[NoDeps] = object()
+    no_args: ClassVar[NoDeps] = object()
 
     def __init__(
         self,
@@ -237,14 +237,14 @@ class RequiresContextFutureResult(
           ...    RequiresContextFutureResult.from_value('a').apply(
           ...        RequiresContextFutureResult.from_value(transform),
           ...    ),
-          ...    RequiresContextFutureResult.empty,
+          ...    RequiresContextFutureResult.no_args,
           ... ) == IOSuccess('ab')
 
           >>> assert anyio.run(
           ...    RequiresContextFutureResult.from_failure('a').apply(
           ...        RequiresContextFutureResult.from_value(transform),
           ...    ),
-          ...    RequiresContextFutureResult.empty,
+          ...    RequiresContextFutureResult.no_args,
           ... ) == IOFailure('a')
 
         """
@@ -336,13 +336,13 @@ class RequiresContextFutureResult(
           ...     RequiresContextFutureResult.from_value(1).bind_async(
           ...        function,
           ...     ),
-          ...     RequiresContextFutureResult.empty,
+          ...     RequiresContextFutureResult.no_args,
           ... ) == IOSuccess(2)
           >>> assert anyio.run(
           ...     RequiresContextFutureResult.from_failure(1).bind_async(
           ...        function,
           ...     ),
-          ...     RequiresContextFutureResult.empty,
+          ...     RequiresContextFutureResult.no_args,
           ... ) == IOFailure(1)
 
         """
@@ -380,14 +380,14 @@ class RequiresContextFutureResult(
           ...     RequiresContextFutureResult.from_value(1).bind_awaitable(
           ...         coroutine,
           ...     ),
-          ...     RequiresContextFutureResult.empty,
+          ...     RequiresContextFutureResult.no_args,
           ... ) == IOSuccess(2)
 
           >>> assert anyio.run(
           ...     RequiresContextFutureResult.from_failure(1).bind_awaitable(
           ...         coroutine,
           ...     ),
-          ...     RequiresContextFutureResult.empty,
+          ...     RequiresContextFutureResult.no_args,
           ... ) == IOFailure(1)
 
         """
@@ -416,14 +416,14 @@ class RequiresContextFutureResult(
           ...     RequiresContextFutureResult.from_value(1).bind_result(
           ...         function,
           ...     ),
-          ...     RequiresContextFutureResult.empty,
+          ...     RequiresContextFutureResult.no_args,
           ... ) == IOSuccess(2)
 
           >>> assert anyio.run(
           ...     RequiresContextFutureResult.from_failure(':(').bind_result(
           ...         function,
           ...     ),
-          ...     RequiresContextFutureResult.empty,
+          ...     RequiresContextFutureResult.no_args,
           ... ) == IOFailure(':(')
 
         """
@@ -574,12 +574,12 @@ class RequiresContextFutureResult(
 
           >>> assert anyio.run(
           ...     RequiresContextFutureResult.from_value(1).bind_io(do_io),
-          ...     RequiresContextFutureResult.empty,
+          ...     RequiresContextFutureResult.no_args,
           ... ) == IOSuccess('1')
 
           >>> assert anyio.run(
           ...     RequiresContextFutureResult.from_failure(1).bind_io(do_io),
-          ...     RequiresContextFutureResult.empty,
+          ...     RequiresContextFutureResult.no_args,
           ... ) == IOFailure(1)
 
         """
@@ -607,14 +607,14 @@ class RequiresContextFutureResult(
           ...     RequiresContextFutureResult.from_value(1).bind_ioresult(
           ...         function,
           ...     ),
-          ...     RequiresContextFutureResult.empty,
+          ...     RequiresContextFutureResult.no_args,
           ... ) == IOSuccess(2)
 
           >>> assert anyio.run(
           ...     RequiresContextFutureResult.from_failure(':(').bind_ioresult(
           ...         function,
           ...     ),
-          ...     RequiresContextFutureResult.empty,
+          ...     RequiresContextFutureResult.no_args,
           ... ) == IOFailure(':(')
 
         """
@@ -643,13 +643,13 @@ class RequiresContextFutureResult(
           ...     RequiresContextFutureResult.from_value(1).bind_future(
           ...         function,
           ...     ),
-          ...     RequiresContextFutureResult.empty,
+          ...     RequiresContextFutureResult.no_args,
           ... ) == IOSuccess(2)
 
           >>> failed = RequiresContextFutureResult.from_failure(':(')
           >>> assert anyio.run(
           ...     failed.bind_future(function),
-          ...     RequiresContextFutureResult.empty,
+          ...     RequiresContextFutureResult.no_args,
           ... ) == IOFailure(':(')
 
         """
@@ -681,13 +681,13 @@ class RequiresContextFutureResult(
           ...     RequiresContextFutureResult.from_value(1).bind_future_result(
           ...         function,
           ...     ),
-          ...     RequiresContextFutureResult.empty,
+          ...     RequiresContextFutureResult.no_args,
           ... ) == IOSuccess(2)
 
           >>> failed = RequiresContextFutureResult.from_failure(':(')
           >>> assert anyio.run(
           ...     failed.bind_future_result(function),
-          ...     RequiresContextFutureResult.empty,
+          ...     RequiresContextFutureResult.no_args,
           ... ) == IOFailure(':(')
 
         """
@@ -716,13 +716,13 @@ class RequiresContextFutureResult(
           ...     RequiresContextFutureResult.from_value(1).bind_async_future(
           ...         function,
           ...     ),
-          ...     RequiresContextFutureResult.empty,
+          ...     RequiresContextFutureResult.no_args,
           ... ) == IOSuccess(2)
 
           >>> failed = RequiresContextFutureResult.from_failure(':(')
           >>> assert anyio.run(
           ...     failed.bind_async_future(function),
-          ...     RequiresContextFutureResult.empty,
+          ...     RequiresContextFutureResult.no_args,
           ... ) == IOFailure(':(')
 
         """
@@ -756,13 +756,13 @@ class RequiresContextFutureResult(
           ...     ).bind_async_future_result(
           ...         function,
           ...     ),
-          ...     RequiresContextFutureResult.empty,
+          ...     RequiresContextFutureResult.no_args,
           ... ) == IOSuccess(2)
 
           >>> failed = RequiresContextFutureResult.from_failure(':(')
           >>> assert anyio.run(
           ...     failed.bind_async_future_result(function),
-          ...     RequiresContextFutureResult.empty,
+          ...     RequiresContextFutureResult.no_args,
           ... ) == IOFailure(':(')
 
         """
@@ -786,14 +786,14 @@ class RequiresContextFutureResult(
           ...     RequiresContextFutureResult.from_value(1).alt(
           ...        lambda x: x + 1,
           ...     ),
-          ...     RequiresContextFutureResult.empty,
+          ...     RequiresContextFutureResult.no_args,
           ... ) == IOSuccess(1)
 
           >>> assert anyio.run(
           ...     RequiresContextFutureResult.from_failure(1).alt(
           ...        lambda x: x + 1,
           ...     ),
-          ...     RequiresContextFutureResult.empty,
+          ...     RequiresContextFutureResult.no_args,
           ... ) == IOFailure(2)
 
         """
@@ -886,10 +886,10 @@ class RequiresContextFutureResult(
           >>> failure = ReaderFutureResult.from_failure(-1)
 
           >>> assert anyio.run(
-          ...     success.compose_result(count), ReaderFutureResult.empty,
+          ...     success.compose_result(count), ReaderFutureResult.no_args,
           ... ) == IOSuccess(2)
           >>> assert anyio.run(
-          ...     failure.compose_result(count), ReaderFutureResult.empty,
+          ...     failure.compose_result(count), ReaderFutureResult.no_args,
           ... ) == IOFailure(1)
 
         """
@@ -973,12 +973,12 @@ class RequiresContextFutureResult(
 
           >>> assert anyio.run(
           ...    RequiresContextFutureResult.from_result(Success(1)),
-          ...    RequiresContextFutureResult.empty,
+          ...    RequiresContextFutureResult.no_args,
           ... ) == IOSuccess(1)
 
           >>> assert anyio.run(
           ...    RequiresContextFutureResult.from_result(Failure(1)),
-          ...    RequiresContextFutureResult.empty,
+          ...    RequiresContextFutureResult.no_args,
           ... ) == IOFailure(1)
 
         """
@@ -1002,7 +1002,7 @@ class RequiresContextFutureResult(
 
           >>> assert anyio.run(
           ...     RequiresContextFutureResult.from_io(IO(1)),
-          ...     RequiresContextFutureResult.empty,
+          ...     RequiresContextFutureResult.no_args,
           ... ) == IOSuccess(1)
 
         """
@@ -1026,7 +1026,7 @@ class RequiresContextFutureResult(
 
           >>> assert anyio.run(
           ...     RequiresContextFutureResult.from_failed_io(IO(1)),
-          ...     RequiresContextFutureResult.empty,
+          ...     RequiresContextFutureResult.no_args,
           ... ) == IOFailure(1)
 
         """
@@ -1049,12 +1049,12 @@ class RequiresContextFutureResult(
 
           >>> assert anyio.run(
           ...    RequiresContextFutureResult.from_ioresult(IOSuccess(1)),
-          ...    RequiresContextFutureResult.empty,
+          ...    RequiresContextFutureResult.no_args,
           ... ) == IOSuccess(1)
 
           >>> assert anyio.run(
           ...    RequiresContextFutureResult.from_ioresult(IOFailure(1)),
-          ...    RequiresContextFutureResult.empty,
+          ...    RequiresContextFutureResult.no_args,
           ... ) == IOFailure(1)
 
         """
@@ -1079,7 +1079,7 @@ class RequiresContextFutureResult(
 
           >>> assert anyio.run(
           ...    RequiresContextFutureResult.from_future(Future.from_value(1)),
-          ...    RequiresContextFutureResult.empty,
+          ...    RequiresContextFutureResult.no_args,
           ... ) == IOSuccess(1)
 
         """
@@ -1106,7 +1106,7 @@ class RequiresContextFutureResult(
           ...    RequiresContextFutureResult.from_failed_future(
           ...        Future.from_value(1),
           ...    ),
-          ...    RequiresContextFutureResult.empty,
+          ...    RequiresContextFutureResult.no_args,
           ... ) == IOFailure(1)
 
         """
@@ -1133,14 +1133,14 @@ class RequiresContextFutureResult(
           ...    RequiresContextFutureResult.from_future_result_context(
           ...        RequiresContextFutureResult.from_value(1),
           ...    ),
-          ...    RequiresContextFutureResult.empty,
+          ...    RequiresContextFutureResult.no_args,
           ... ) == IOSuccess(1)
 
           >>> assert anyio.run(
           ...    RequiresContextFutureResult.from_future_result_context(
           ...        RequiresContextFutureResult.from_failure(1),
           ...    ),
-          ...    RequiresContextFutureResult.empty,
+          ...    RequiresContextFutureResult.no_args,
           ... ) == IOFailure(1)
 
         """
@@ -1165,14 +1165,14 @@ class RequiresContextFutureResult(
           ...    RequiresContextFutureResult.from_future_result(
           ...        FutureResult.from_value(1),
           ...    ),
-          ...    RequiresContextFutureResult.empty,
+          ...    RequiresContextFutureResult.no_args,
           ... ) == IOSuccess(1)
 
           >>> assert anyio.run(
           ...    RequiresContextFutureResult.from_future_result(
           ...        FutureResult.from_failure(1),
           ...    ),
-          ...    RequiresContextFutureResult.empty,
+          ...    RequiresContextFutureResult.no_args,
           ... ) == IOFailure(1)
 
         """
@@ -1203,14 +1203,14 @@ class RequiresContextFutureResult(
           ...     RequiresContextFutureResult.from_typecast(
           ...         RequiresContext.from_value(FutureResult.from_value(1)),
           ...     ),
-          ...     RequiresContextFutureResult.empty,
+          ...     RequiresContextFutureResult.no_args,
           ... ) == IOSuccess(1)
 
           >>> assert anyio.run(
           ...     RequiresContextFutureResult.from_typecast(
           ...         RequiresContext.from_value(FutureResult.from_failure(1)),
           ...     ),
-          ...     RequiresContextFutureResult.empty,
+          ...     RequiresContextFutureResult.no_args,
           ... ) == IOFailure(1)
 
         """
@@ -1233,7 +1233,7 @@ class RequiresContextFutureResult(
           ...     RequiresContextFutureResult.from_context(
           ...         RequiresContext.from_value(1),
           ...     ),
-          ...     RequiresContextFutureResult.empty,
+          ...     RequiresContextFutureResult.no_args,
           ... ) == IOSuccess(1)
 
         """
@@ -1258,7 +1258,7 @@ class RequiresContextFutureResult(
           ...     RequiresContextFutureResult.from_failed_context(
           ...         RequiresContext.from_value(1),
           ...     ),
-          ...     RequiresContextFutureResult.empty,
+          ...     RequiresContextFutureResult.no_args,
           ... ) == IOFailure(1)
 
         """
@@ -1285,14 +1285,14 @@ class RequiresContextFutureResult(
           ...     RequiresContextFutureResult.from_result_context(
           ...         RequiresContextResult.from_value(1),
           ...     ),
-          ...     RequiresContextFutureResult.empty,
+          ...     RequiresContextFutureResult.no_args,
           ... ) == IOSuccess(1)
 
           >>> assert anyio.run(
           ...     RequiresContextFutureResult.from_result_context(
           ...         RequiresContextResult.from_failure(1),
           ...     ),
-          ...     RequiresContextFutureResult.empty,
+          ...     RequiresContextFutureResult.no_args,
           ... ) == IOFailure(1)
 
         """
@@ -1319,14 +1319,14 @@ class RequiresContextFutureResult(
           ...     RequiresContextFutureResult.from_ioresult_context(
           ...         RequiresContextIOResult.from_value(1),
           ...     ),
-          ...     RequiresContextFutureResult.empty,
+          ...     RequiresContextFutureResult.no_args,
           ... ) == IOSuccess(1)
 
           >>> assert anyio.run(
           ...     RequiresContextFutureResult.from_ioresult_context(
           ...         RequiresContextIOResult.from_failure(1),
           ...     ),
-          ...     RequiresContextFutureResult.empty,
+          ...     RequiresContextFutureResult.no_args,
           ... ) == IOFailure(1)
 
         """
@@ -1348,7 +1348,7 @@ class RequiresContextFutureResult(
           >>> from returns.io import IOSuccess
 
           >>> assert anyio.run(RequiresContextFutureResult.from_value(1)(
-          ...    RequiresContextFutureResult.empty,
+          ...    RequiresContextFutureResult.no_args,
           ... ).awaitable) == IOSuccess(1)
 
         """
@@ -1370,7 +1370,7 @@ class RequiresContextFutureResult(
           >>> from returns.io import IOFailure
 
           >>> assert anyio.run(RequiresContextFutureResult.from_failure(1)(
-          ...     RequiresContextFutureResult.empty,
+          ...     RequiresContextFutureResult.no_args,
           ... ).awaitable) == IOFailure(1)
 
         """

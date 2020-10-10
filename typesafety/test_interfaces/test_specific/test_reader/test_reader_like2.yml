@@ -15,7 +15,7 @@
         SupportsKind2['MyClass', _ReturnType, _EnvType],
         ReaderLike2[_ReturnType, _EnvType],
     ):
-        empty: ClassVar[NoDeps] = object()
+        no_args: ClassVar[NoDeps] = object()
 
         def bind_context(
             self,
@@ -67,7 +67,7 @@
     ):
         ...
   out: |
-    main:10: error: Final class main.MyClass has abstract attributes "apply", "ask", "bind", "bind_context", "empty", "from_context", "from_value", "map", "modify_env"
+    main:10: error: Final class main.MyClass has abstract attributes "apply", "ask", "bind", "bind_context", "from_context", "from_value", "map", "modify_env", "no_args"
 
 
 - case: reader_inheritance_wrong
