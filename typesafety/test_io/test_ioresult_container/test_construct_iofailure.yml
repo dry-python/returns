@@ -1,4 +1,4 @@
-- case: iofailure_rescue
+- case: iofailure_lash
   disable_cache: false
   main: |
     from returns.io import IOFailure, IOResult
@@ -7,7 +7,7 @@
         ...
 
     first: IOResult[str, int] = IOFailure(1)
-    reveal_type(first.rescue(returns_result))  # N: Revealed type is 'returns.io.IOResult[builtins.str, builtins.Exception*]'
+    reveal_type(first.lash(returns_result))  # N: Revealed type is 'returns.io.IOResult[builtins.str, builtins.Exception*]'
 
 
 - case: iofailure_alt

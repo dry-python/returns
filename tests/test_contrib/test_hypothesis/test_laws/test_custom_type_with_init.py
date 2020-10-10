@@ -13,7 +13,7 @@ class _Wrapper(
     BaseContainer,
     SupportsKind1['_Wrapper', _ValueType],
     mappable.Mappable1[_ValueType],
-    equable.SupportsEquality,
+    equable.Equable,
 ):
     _inner_value: _ValueType
 

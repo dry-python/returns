@@ -13,7 +13,7 @@ from returns.primitives.laws import (
     law_definition,
 )
 
-_EqualType = TypeVar('_EqualType', bound='SupportsEquality')
+_EqualType = TypeVar('_EqualType', bound='Equable')
 
 
 @final
@@ -50,7 +50,7 @@ class _LawSpec(LawSpecDef):
             assert first.equals(third)
 
 
-class SupportsEquality(Lawful['SupportsEquality']):
+class Equable(Lawful['Equable']):
     """
     Interface for types that can be compared with real values.
 

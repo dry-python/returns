@@ -27,7 +27,7 @@ def bind_future(
     to:
     ``Container[a] -> Container[b]``
 
-    Similar to :func:`returns.pointfree.rescue`,
+    Similar to :func:`returns.pointfree.lash`,
     but works for successful containers.
     This is how it should be used:
 

@@ -152,7 +152,7 @@ class RequiresContextResult(
         So, values become errors and errors become values.
         It is useful when you have to work with errors a lot.
         And since we have a lot of ``.bind_`` related methods
-        and only a single ``.rescue`` - it is easier to work with values.
+        and only a single ``.lash`` - it is easier to work with values.
 
         .. code:: python
 
@@ -361,7 +361,7 @@ class RequiresContextResult(
         """
         return RequiresContextResult(lambda deps: self(deps).alt(function))
 
-    def rescue(
+    def lash(
         self,
         function: Callable[
             [_ErrorType],
@@ -381,7 +381,7 @@ class RequiresContextResult(
           >>> from returns.context import RequiresContextResult
           >>> from returns.result import Success, Failure
 
-          >>> def rescuable(arg: str) -> RequiresContextResult[str, str, str]:
+          >>> def lashable(arg: str) -> RequiresContextResult[str, str, str]:
           ...      if len(arg) > 1:
           ...          return RequiresContextResult(
           ...              lambda deps: Success(deps + arg),
@@ -390,19 +390,19 @@ class RequiresContextResult(
           ...          lambda deps: Failure(arg + deps),
           ...      )
 
-          >>> assert RequiresContextResult.from_value('a').rescue(
-          ...     rescuable,
+          >>> assert RequiresContextResult.from_value('a').lash(
+          ...     lashable,
           ... )('c') == Success('a')
-          >>> assert RequiresContextResult.from_failure('a').rescue(
-          ...     rescuable,
+          >>> assert RequiresContextResult.from_failure('a').lash(
+          ...     lashable,
           ... )('c') == Failure('ac')
-          >>> assert RequiresContextResult.from_failure('aa').rescue(
-          ...     rescuable,
+          >>> assert RequiresContextResult.from_failure('aa').lash(
+          ...     lashable,
           ... )('b') == Success('baa')
 
         """
         return RequiresContextResult(
-            lambda deps: self(deps).rescue(
+            lambda deps: self(deps).lash(
                 lambda inner: function(inner)(deps),  # type: ignore
             ),
         )

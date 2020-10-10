@@ -2,8 +2,7 @@ from typing import Callable, ClassVar, NoReturn, Sequence, TypeVar
 
 from typing_extensions import final
 
-from returns.interfaces import bindable
-from returns.interfaces.applicative import ApplicativeN
+from returns.interfaces import applicative, bindable
 from returns.primitives.asserts import assert_equal
 from returns.primitives.hkt import KindN
 from returns.primitives.laws import (
@@ -98,7 +97,7 @@ class _LawSpec(LawSpecDef):
 
 
 class ContainerN(
-    ApplicativeN[_FirstType, _SecondType, _ThirdType],
+    applicative.ApplicativeN[_FirstType, _SecondType, _ThirdType],
     bindable.BindableN[_FirstType, _SecondType, _ThirdType],
     Lawful['ContainerN[_FirstType, _SecondType, _ThirdType]'],
 ):

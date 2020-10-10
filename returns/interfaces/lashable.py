@@ -8,10 +8,10 @@ _SecondType = TypeVar('_SecondType')
 _ThirdType = TypeVar('_ThirdType')
 _UpdatedType = TypeVar('_UpdatedType')
 
-_RescuableType = TypeVar('_RescuableType', bound='RescuableN')
+_LashableType = TypeVar('_LashableType', bound='LashableN')
 
 
-class RescuableN(Generic[_FirstType, _SecondType, _ThirdType]):
+class LashableN(Generic[_FirstType, _SecondType, _ThirdType]):
     """
     Represents a "context" in which calculations can be executed.
 
@@ -24,13 +24,13 @@ class RescuableN(Generic[_FirstType, _SecondType, _ThirdType]):
     """
 
     @abstractmethod
-    def rescue(
-        self: _RescuableType,
+    def lash(
+        self: _LashableType,
         function: Callable[
             [_SecondType],
-            KindN[_RescuableType, _FirstType, _UpdatedType, _ThirdType],
+            KindN[_LashableType, _FirstType, _UpdatedType, _ThirdType],
         ],
-    ) -> KindN[_RescuableType, _FirstType, _UpdatedType, _ThirdType]:
+    ) -> KindN[_LashableType, _FirstType, _UpdatedType, _ThirdType]:
         """
         Applies 'function' to the result of a previous calculation.
 
@@ -39,7 +39,7 @@ class RescuableN(Generic[_FirstType, _SecondType, _ThirdType]):
 
 
 #: Type alias for kinds with two type arguments.
-Rescuable2 = RescuableN[_FirstType, _SecondType, NoReturn]
+Lashable2 = LashableN[_FirstType, _SecondType, NoReturn]
 
 #: Type alias for kinds with three type arguments.
-Rescuable3 = RescuableN[_FirstType, _SecondType, _ThirdType]
+Lashable3 = LashableN[_FirstType, _SecondType, _ThirdType]

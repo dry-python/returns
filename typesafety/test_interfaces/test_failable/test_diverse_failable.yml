@@ -77,7 +77,7 @@
     ):
         ...
   out: |
-    main:10: error: Final class main.MyClass has abstract attributes "alt", "apply", "bind", "from_failure", "from_value", "map", "rescue", "swap"
+    main:10: error: Final class main.MyClass has abstract attributes "alt", "apply", "bind", "from_failure", "from_value", "lash", "map", "swap"
 
 
 - case: diverse_failable_inheritance_wrong2
@@ -106,7 +106,7 @@
 
     x: MyClass[str, int]
   out: |
-    main:12: error: Return type "MyClass[_FirstType, _SecondType]" of "swap" incompatible with return type "KindN[MyClass[_FirstType, _SecondType], _SecondType, _FirstType, NoReturn]" in supertype "DiverseFailableN"
+    main:12: error: Return type "MyClass[_FirstType, _SecondType]" of "swap" incompatible with return type "KindN[MyClass[_FirstType, _SecondType], _SecondType, _FirstType, NoReturn]" in supertype "BiMappableN"
     main:16: error: Argument 1 of "from_failure" is incompatible with supertype "DiverseFailableN"; supertype defines the argument type as "_UpdatedType"
     main:16: error: Return type "MyClass[_FirstType, _FirstType]" of "from_failure" incompatible with return type "KindN[MyClass[_FirstType, _SecondType], _FirstType, _UpdatedType, NoReturn]" in supertype "DiverseFailableN"
     main:16: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
@@ -140,7 +140,7 @@
 
     x: MyClass[float, bool, str]
   out: |
-    main:13: error: Return type "MyClass[_FirstType, _SecondType, _ThirdType]" of "swap" incompatible with return type "KindN[MyClass[_FirstType, _SecondType, _ThirdType], _SecondType, _FirstType, _ThirdType]" in supertype "DiverseFailableN"
+    main:13: error: Return type "MyClass[_FirstType, _SecondType, _ThirdType]" of "swap" incompatible with return type "KindN[MyClass[_FirstType, _SecondType, _ThirdType], _SecondType, _FirstType, _ThirdType]" in supertype "BiMappableN"
     main:17: error: Argument 1 of "from_failure" is incompatible with supertype "DiverseFailableN"; supertype defines the argument type as "_UpdatedType"
     main:17: error: Return type "MyClass[_FirstType, _FirstType, _FirstType]" of "from_failure" incompatible with return type "KindN[MyClass[_FirstType, _SecondType, _ThirdType], _FirstType, _UpdatedType, _ThirdType]" in supertype "DiverseFailableN"
     main:17: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides

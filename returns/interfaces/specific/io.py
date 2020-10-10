@@ -55,7 +55,7 @@ IOLike3 = IOLikeN[_FirstType, _SecondType, _ThirdType]
 
 class IOBasedN(
     IOLikeN[_FirstType, _SecondType, _ThirdType],
-    equable.SupportsEquality,
+    equable.Equable,
 ):
     """
     Represents the base interface for types that do fearless ``IO``.

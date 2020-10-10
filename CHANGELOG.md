@@ -17,6 +17,7 @@ See [0Ver](https://0ver.org/).
 - **Breaking**: changes all `RequiresContext`-based type arguments order,
   previously we used to specify `_EnvType` as the first type argument,
   now it is the last one. This is done to respect new HKT rules
+- **Breaking**: renames `.rescue` to `.lash`
 - **Breaking**: removes all old interfaces from `primitives/interfaces.py`,
   use new typeclasses instead
 - **Breaking**: ``Maybe`` is fully reworked to be lawful
@@ -88,7 +89,9 @@ See [0Ver](https://0ver.org/).
 - Adds a lot of new typetests
 - Checks that now all math laws are checked for all types
 - Changes docs structure, adds new `Interfaces`, `HKT`, and `Methods` pages
-- Changed str function in BaseContainer class to repr function.  
+- Changed `__str__` method in `BaseContainer` class to `__repr__` method
+- Adds `Quickstart` guide
+
 
 ## 0.14.0
 

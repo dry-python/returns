@@ -5,7 +5,7 @@ from typing_extensions import final
 
 from returns.interfaces.bimappable import BiMappableN
 from returns.interfaces.container import ContainerN
-from returns.interfaces.rescuable import RescuableN
+from returns.interfaces.lashable import LashableN
 from returns.primitives.asserts import assert_equal
 from returns.primitives.hkt import KindN
 from returns.primitives.laws import (
@@ -35,11 +35,11 @@ class _FailableLawSpec(LawSpecDef):
     """
     Failable laws.
 
-    We need to be sure that ``.rescue`` won't rescue success types.
+    We need to be sure that ``.lash`` won't lash success types.
     """
 
     @law_definition
-    def rescue_short_circuit_law(
+    def lash_short_circuit_law(
         raw_value: _FirstType,
         container: 'FailableN[_FirstType, _SecondType, _ThirdType]',
         function: Callable[
@@ -47,16 +47,16 @@ class _FailableLawSpec(LawSpecDef):
             KindN['FailableN', _FirstType, _NewFirstType, _ThirdType],
         ],
     ) -> None:
-        """Ensures that you cannot rescue a success."""
+        """Ensures that you cannot lash a success."""
         assert_equal(
             container.from_value(raw_value),
-            container.from_value(raw_value).rescue(function),
+            container.from_value(raw_value).lash(function),
         )
 
 
 class FailableN(
     ContainerN[_FirstType, _SecondType, _ThirdType],
-    RescuableN[_FirstType, _SecondType, _ThirdType],
+    LashableN[_FirstType, _SecondType, _ThirdType],
     Lawful['FailableN[_FirstType, _SecondType, _ThirdType]'],
 ):
     """
@@ -67,7 +67,7 @@ class FailableN(
     """
 
     _laws: ClassVar[Sequence[Law]] = (
-        Law3(_FailableLawSpec.rescue_short_circuit_law),
+        Law3(_FailableLawSpec.lash_short_circuit_law),
     )
 
 
@@ -238,12 +238,6 @@ class DiverseFailableN(
         Law3(_DiverseFailableLawSpec.apply_short_circuit_law),
         Law3(_DiverseFailableLawSpec.alt_short_circuit_law),
     )
-
-    @abstractmethod
-    def swap(
-        self: _DiverseFailableType,
-    ) -> KindN[_DiverseFailableType, _SecondType, _FirstType, _ThirdType]:
-        """Swaps value and error types in ``DiverseFailableN``."""
 
     @classmethod
     @abstractmethod

@@ -44,7 +44,7 @@ class _LawSpec(LawSpecDef):
     Maybe laws.
 
     We need to be sure that
-    ``.map``, ``.bind``, ``.bind_optional``, and ``.rescue``
+    ``.map``, ``.bind``, ``.bind_optional``, and ``.lash``
     works correctly for both successful and failed types.
     """
 
@@ -85,7 +85,7 @@ class _LawSpec(LawSpecDef):
         )
 
     @law_definition
-    def rescue_short_circuit_law(
+    def lash_short_circuit_law(
         raw_value: _FirstType,
         container: 'MaybeLikeN[_FirstType, _SecondType, _ThirdType]',
         function: Callable[
@@ -93,9 +93,9 @@ class _LawSpec(LawSpecDef):
             KindN['MaybeLikeN', _FirstType, _NewType1, _ThirdType],
         ],
     ) -> None:
-        """Ensures that you cannot rescue a success."""
+        """Ensures that you cannot lash a success."""
         assert_equal(
-            container.from_value(raw_value).rescue(function),
+            container.from_value(raw_value).lash(function),
             container.from_value(raw_value),
         )
 
@@ -126,7 +126,7 @@ class MaybeLikeN(
         Law2(_LawSpec.map_short_circuit_law),
         Law2(_LawSpec.bind_short_circuit_law),
         Law2(_LawSpec.bind_optional_short_circuit_law),
-        Law3(_LawSpec.rescue_short_circuit_law),
+        Law3(_LawSpec.lash_short_circuit_law),
         Law2(_LawSpec.unit_structure_law),
     )
 
@@ -156,7 +156,7 @@ MaybeLike3 = MaybeLikeN[_FirstType, _SecondType, _ThirdType]
 class MaybeBasedN(
     MaybeLikeN[_FirstType, _SecondType, _ThirdType],
     unwrappable.Unwrappable[_FirstType, None],
-    equable.SupportsEquality,
+    equable.Equable,
 ):
     """
     Concrete interface for ``Maybe`` type.

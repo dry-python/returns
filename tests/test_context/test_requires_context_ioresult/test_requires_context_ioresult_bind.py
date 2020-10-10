@@ -86,27 +86,27 @@ def test_bind_result_context():
     assert third.bind_context_result(factory)(1) == IOFailure('a')
 
 
-def test_rescue_success():
-    """Ensures that rescue works for Success container."""
+def test_lash_success():
+    """Ensures that lash works for Success container."""
     def factory(inner_value) -> RCR[int, str, int]:
         return RCR.from_value(inner_value * 2)
 
-    assert RCR.from_value(5).rescue(
+    assert RCR.from_value(5).lash(
         factory,
     )(0) == RCR.from_value(5)(0)
-    assert RCR.from_failure(5).rescue(
+    assert RCR.from_failure(5).lash(
         factory,
     )(0) == RCR.from_value(10)(0)
 
 
-def test_rescue_failure():
-    """Ensures that rescue works for Failure container."""
+def test_lash_failure():
+    """Ensures that lash works for Failure container."""
     def factory(inner_value) -> RCR[int, str, int]:
         return RCR.from_failure(inner_value * 2)
 
-    assert RCR.from_value(5).rescue(
+    assert RCR.from_value(5).lash(
         factory,
     )(0) == RCR.from_value(5)(0)
-    assert RCR.from_failure(5).rescue(
+    assert RCR.from_failure(5).lash(
         factory,
     )(0) == RCR.from_failure(10)(0)

@@ -33,7 +33,7 @@ _ThirdType = TypeVar('_ThirdType')
 _UpdatedType = TypeVar('_UpdatedType')
 
 _FutureLikeType = TypeVar('_FutureLikeType', bound='FutureLikeN')
-_AsyncFutureType = TypeVar('_AsyncFutureType', bound='AsyncFutureN')
+_AsyncFutureType = TypeVar('_AsyncFutureType', bound='AwaitableFutureN')
 _FutureBasedType = TypeVar('_FutureBasedType', bound='FutureBasedN')
 
 
@@ -96,7 +96,7 @@ FutureLike2 = FutureLikeN[_FirstType, _SecondType, NoReturn]
 FutureLike3 = FutureLikeN[_FirstType, _SecondType, _ThirdType]
 
 
-class AsyncFutureN(Generic[_FirstType, _SecondType, _ThirdType]):
+class AwaitableFutureN(Generic[_FirstType, _SecondType, _ThirdType]):
     """
     Type that provides the required API for ``Future`` to be async.
 
@@ -117,18 +117,18 @@ class AsyncFutureN(Generic[_FirstType, _SecondType, _ThirdType]):
 
 
 #: Type alias for kinds with one type argument.
-AsyncFuture1 = AsyncFutureN[_FirstType, NoReturn, NoReturn]
+AsyncFuture1 = AwaitableFutureN[_FirstType, NoReturn, NoReturn]
 
 #: Type alias for kinds with two type arguments.
-AsyncFuture2 = AsyncFutureN[_FirstType, _SecondType, NoReturn]
+AsyncFuture2 = AwaitableFutureN[_FirstType, _SecondType, NoReturn]
 
 #: Type alias for kinds with three type arguments.
-AsyncFuture3 = AsyncFutureN[_FirstType, _SecondType, _ThirdType]
+AsyncFuture3 = AwaitableFutureN[_FirstType, _SecondType, _ThirdType]
 
 
 class FutureBasedN(
     FutureLikeN[_FirstType, _SecondType, _ThirdType],
-    AsyncFutureN[_FirstType, _SecondType, _ThirdType],
+    AwaitableFutureN[_FirstType, _SecondType, _ThirdType],
 ):
     """
     Base type for real ``Future`` objects.

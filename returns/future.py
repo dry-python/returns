@@ -606,7 +606,7 @@ class FutureResult(
         So, values become errors and errors become values.
         It is useful when you have to work with errors a lot.
         And since we have a lot of ``.bind_`` related methods
-        and only a single ``.rescue``.
+        and only a single ``.lash``.
         It is easier to work with values than with errors.
 
         .. code:: python
@@ -984,7 +984,7 @@ class FutureResult(
             function, self._inner_value,
         ))
 
-    def rescue(
+    def lash(
         self,
         function: Callable[
             [_ErrorType],
@@ -1000,18 +1000,18 @@ class FutureResult(
           >>> from returns.future import FutureResult
           >>> from returns.io import IOSuccess
 
-          >>> def rescuable(x: int) -> FutureResult[int, str]:
+          >>> def lashable(x: int) -> FutureResult[int, str]:
           ...    return FutureResult.from_value(x + 1)
 
           >>> assert anyio.run(
-          ...     FutureResult.from_value(1).rescue(rescuable).awaitable,
+          ...     FutureResult.from_value(1).lash(lashable).awaitable,
           ... ) == IOSuccess(1)
           >>> assert anyio.run(
-          ...     FutureResult.from_failure(1).rescue(rescuable).awaitable,
+          ...     FutureResult.from_failure(1).lash(lashable).awaitable,
           ... ) == IOSuccess(2)
 
         """
-        return FutureResult(_future_result.async_rescue(
+        return FutureResult(_future_result.async_lash(
             function, self._inner_value,
         ))
 

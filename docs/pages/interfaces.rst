@@ -62,8 +62,9 @@ We follow a very specific naming convention in our interface names.
 
 If interface does not depend on the number of types
 it works with and is always the same, we name it as is.
-For example, ``SupportsEquality`` is always the same
+For example, ``Equable`` is always the same
 and does not depend on the number of type arguments.
+We use adjectives to name these interfaces.
 
 Secondly, if interface depends on the number of type arguments,
 it is named with ``N`` suffix in the end.
@@ -81,7 +82,7 @@ Laws
 ~~~~
 
 Some interfaces define its laws as values.
-These laws can be viewed as test that are attached to an interface.
+These laws can be viewed as tests that are attached to the specific interface.
 
 We are able to check them of any type
 that implements a given interfaces with laws
@@ -447,7 +448,7 @@ Here's a full overview of all our interfaces:
    returns.interfaces.mappable
    returns.interfaces.bindable
    returns.interfaces.applicative
-   returns.interfaces.rescuable
+   returns.interfaces.lashable
    returns.interfaces.altable
    returns.interfaces.bimappable
    returns.interfaces.unwrappable
@@ -467,8 +468,8 @@ Here's a full overview of all our interfaces:
 
 Let's review it one by one.
 
-SupportsEquality
-~~~~~~~~~~~~~~~~
+Equable
+~~~~~~~
 
 .. autoclasstree:: returns.interfaces.equable
    :strict:
@@ -527,13 +528,13 @@ BiMappable
   :members:
   :private-members:
 
-Rescuable
-~~~~~~~~~
+Lashable
+~~~~~~~~
 
-.. autoclasstree:: returns.interfaces.rescuable
+.. autoclasstree:: returns.interfaces.lashable
    :strict:
 
-.. automodule:: returns.interfaces.rescuable
+.. automodule:: returns.interfaces.lashable
   :members:
   :private-members:
 

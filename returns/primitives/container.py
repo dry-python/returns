@@ -1,11 +1,11 @@
 from abc import ABCMeta
 from typing import Any, TypeVar
 
-from returns.interfaces.equable import SupportsEquality
+from returns.interfaces.equable import Equable
 from returns.primitives.hkt import Kind1
 from returns.primitives.types import Immutable
 
-_EqualType = TypeVar('_EqualType', bound=SupportsEquality)
+_EqualType = TypeVar('_EqualType', bound=Equable)
 
 
 class BaseContainer(Immutable, metaclass=ABCMeta):

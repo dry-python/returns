@@ -1,136 +1,136 @@
-- case: rescue_wrong_second_type
+- case: lash_wrong_second_type
   disable_cache: false
   main: |
-    from returns.pointfree import rescue
+    from returns.pointfree import lash
     from returns.context import RequiresContextIOResult
 
     def test(arg: float) -> RequiresContextIOResult[float, str, int]:
         ...
 
     x: RequiresContextIOResult[float, str, int]
-    rescue(test)(x)  # E: Argument 1 has incompatible type "RequiresContextIOResult[float, str, int]"; expected "KindN[RequiresContextIOResult[Any, Any, Any], float, float, int]"
+    lash(test)(x)  # E: Argument 1 has incompatible type "RequiresContextIOResult[float, str, int]"; expected "KindN[RequiresContextIOResult[Any, Any, Any], float, float, int]"
 
 
-- case: rescue_wrong_else_types
+- case: lash_wrong_else_types
   disable_cache: false
   main: |
-    from returns.pointfree import rescue
+    from returns.pointfree import lash
     from returns.context import RequiresContextIOResult
 
     def test(arg: float) -> RequiresContextIOResult[float, str, int]:
         ...
 
     x: RequiresContextIOResult[str, float, str]
-    rescue(test)(x)  # E: Argument 1 has incompatible type "RequiresContextIOResult[str, float, str]"; expected "KindN[RequiresContextIOResult[Any, Any, Any], float, float, int]"
+    lash(test)(x)  # E: Argument 1 has incompatible type "RequiresContextIOResult[str, float, str]"; expected "KindN[RequiresContextIOResult[Any, Any, Any], float, float, int]"
 
 
-- case: rescue_maybe
+- case: lash_maybe
   disable_cache: false
   main: |
-    from returns.pointfree import rescue
+    from returns.pointfree import lash
     from returns.maybe import Maybe
 
     def test(arg=None) -> Maybe[int]:
         ...
 
     x: Maybe[int]
-    reveal_type(rescue(test)(x))  # N: Revealed type is 'returns.maybe.Maybe*[builtins.int*]'
+    reveal_type(lash(test)(x))  # N: Revealed type is 'returns.maybe.Maybe*[builtins.int*]'
 
 
-- case: rescue_result
+- case: lash_result
   disable_cache: false
   main: |
-    from returns.pointfree import rescue
+    from returns.pointfree import lash
     from returns.result import Result
 
     def test(arg: float) -> Result[int, str]:
         ...
 
     x: Result[int, float]
-    reveal_type(rescue(test)(x))  # N: Revealed type is 'returns.result.Result*[builtins.int*, builtins.str*]'
+    reveal_type(lash(test)(x))  # N: Revealed type is 'returns.result.Result*[builtins.int*, builtins.str*]'
 
 
-- case: rescue_ioresult
+- case: lash_ioresult
   disable_cache: false
   main: |
-    from returns.pointfree import rescue
+    from returns.pointfree import lash
     from returns.io import IOResult
 
     def test(arg: float) -> IOResult[int, str]:
         ...
 
     x: IOResult[int, float]
-    reveal_type(rescue(test)(x))  # N: Revealed type is 'returns.io.IOResult*[builtins.int*, builtins.str*]'
+    reveal_type(lash(test)(x))  # N: Revealed type is 'returns.io.IOResult*[builtins.int*, builtins.str*]'
 
 
-- case: rescue_context_result
+- case: lash_context_result
   disable_cache: false
   main: |
-    from returns.pointfree import rescue
+    from returns.pointfree import lash
     from returns.context import RequiresContextResult
 
     def test(arg: float) -> RequiresContextResult[float, str, int]:
         ...
 
     x: RequiresContextResult[float, float, int]
-    reveal_type(rescue(test)(x))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult*[builtins.float*, builtins.str*, builtins.int*]'
+    reveal_type(lash(test)(x))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult*[builtins.float*, builtins.str*, builtins.int*]'
 
 
-- case: rescue_context_ioresult
+- case: lash_context_ioresult
   disable_cache: false
   main: |
-    from returns.pointfree import rescue
+    from returns.pointfree import lash
     from returns.context import RequiresContextIOResult
 
     def test(arg: float) -> RequiresContextIOResult[float, str, int]:
         ...
 
     x: RequiresContextIOResult[float, float, int]
-    reveal_type(rescue(test)(x))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult*[builtins.float*, builtins.str*, builtins.int*]'
+    reveal_type(lash(test)(x))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult*[builtins.float*, builtins.str*, builtins.int*]'
 
 
-- case: rescue_context_future_result
+- case: lash_context_future_result
   disable_cache: false
   main: |
-    from returns.pointfree import rescue
+    from returns.pointfree import lash
     from returns.context import RequiresContextFutureResult
 
     def test(arg: float) -> RequiresContextFutureResult[float, str, int]:
         ...
 
     x: RequiresContextFutureResult[float, float, int]
-    reveal_type(rescue(test)(x))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult*[builtins.float*, builtins.str*, builtins.int*]'
+    reveal_type(lash(test)(x))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult*[builtins.float*, builtins.str*, builtins.int*]'
 
 
-- case: rescue_future_result
+- case: lash_future_result
   disable_cache: false
   main: |
-    from returns.pointfree import rescue
+    from returns.pointfree import lash
     from returns.future import FutureResult
 
     def test(arg: float) -> FutureResult[int, str]:
         ...
 
     x: FutureResult[int, float]
-    reveal_type(rescue(test)(x))  # N: Revealed type is 'returns.future.FutureResult*[builtins.int*, builtins.str*]'
+    reveal_type(lash(test)(x))  # N: Revealed type is 'returns.future.FutureResult*[builtins.int*, builtins.str*]'
 
 
-- case: rescue_custom_type
+- case: lash_custom_type
   disable_cache: false
   main: |
     from typing import TypeVar
-    from returns.pointfree import rescue
-    from returns.interfaces.rescuable import Rescuable2
+    from returns.pointfree import lash
+    from returns.interfaces.lashable import Lashable2
     from returns.primitives.hkt import SupportsKind2
 
     V = TypeVar('V')
     E = TypeVar('E')
 
-    class MyClass(SupportsKind2['MyClass', V, E], Rescuable2[V, E]):
+    class MyClass(SupportsKind2['MyClass', V, E], Lashable2[V, E]):
         ...
 
     def test(arg: str) -> MyClass[int, int]:
         ...
 
     x: MyClass[int, str]
-    reveal_type(rescue(test)(x))  # N: Revealed type is 'main.MyClass*[builtins.int*, builtins.int*]'
+    reveal_type(lash(test)(x))  # N: Revealed type is 'main.MyClass*[builtins.int*, builtins.int*]'

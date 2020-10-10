@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 _ERROR_FIELD: Final = '_error_handled'
 _ERROR_HANDLERS: Final = (
-    'rescue',
+    'lash',
 )
 _ERRORS_COPIERS: Final = (
     'map',

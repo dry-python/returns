@@ -63,7 +63,7 @@ _ReaderLike2Type = TypeVar('_ReaderLike2Type', bound='ReaderLike2')
 _ReaderLike3Type = TypeVar('_ReaderLike3Type', bound='ReaderLike3')
 
 
-class CanBeCalled(Generic[_ValueType, _EnvType]):
+class Contextable(Generic[_ValueType, _EnvType]):
     """
     Special type we use as a base one for all callble ``Reader`` instances.
 
@@ -132,7 +132,7 @@ class ReaderLike2(Container2[_FirstType, _SecondType]):
 
 class CallableReader2(
     ReaderLike2[_FirstType, _SecondType],
-    CanBeCalled[_ValueType, _EnvType],
+    Contextable[_ValueType, _EnvType],
 ):
     """
     Intermediate interface for ``ReaderLike2`` + ``__call__`` method.
@@ -193,7 +193,7 @@ class ReaderLike3(Container3[_FirstType, _SecondType, _ThirdType]):
 
 class CallableReader3(
     ReaderLike3[_FirstType, _SecondType, _ThirdType],
-    CanBeCalled[_ValueType, _EnvType],
+    Contextable[_ValueType, _EnvType],
 ):
     """
     Intermediate interface for ``ReaderLike3`` + ``__call__`` method.

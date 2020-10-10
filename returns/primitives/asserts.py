@@ -31,17 +31,18 @@ def assert_equal(
 
 
 def _convert(container, *, deps, backend: str):
-    import anyio
     from returns.interfaces.specific import future, reader
 
-    if isinstance(container, future.AsyncFutureN):
+    if isinstance(container, future.AwaitableFutureN):
+        import anyio
+
         return _convert(
             anyio.run(container.awaitable, backend=backend),
             deps=deps,
             backend=backend,
         )
     # TODO: remove `callable`
-    if callable(container) or isinstance(container, reader.CanBeCalled):
+    if callable(container) or isinstance(container, reader.Contextable):
         return _convert(
             container(deps),
             deps=deps,

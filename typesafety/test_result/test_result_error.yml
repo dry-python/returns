@@ -1,4 +1,4 @@
-- case: failure_rescue
+- case: failure_lash
   disable_cache: false
   main: |
     from returns.result import ResultE, Success, Failure

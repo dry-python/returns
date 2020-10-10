@@ -19,7 +19,7 @@ class BindableN(Generic[_FirstType, _SecondType, _ThirdType]):
     a series of calculations while maintaining
     the context of that specific container.
 
-    In contrast to :class:`returns.interfaces.rescuable.RescuableN`,
+    In contrast to :class:`returns.interfaces.lashable.LashableN`,
     works with the first type argument.
     """
 
