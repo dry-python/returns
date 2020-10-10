@@ -82,7 +82,7 @@ Laws
 ~~~~
 
 Some interfaces define its laws as values.
-These laws can be viewed as test that are attached to an interface.
+These laws can be viewed as tests that are attached to the specific interface.
 
 We are able to check them of any type
 that implements a given interfaces with laws
@@ -469,7 +469,7 @@ Here's a full overview of all our interfaces:
 Let's review it one by one.
 
 Equable
-~~~~~~~~~~~~~~~~
+~~~~~~~
 
 .. autoclasstree:: returns.interfaces.equable
    :strict:
