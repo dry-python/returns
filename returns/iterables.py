@@ -25,7 +25,7 @@ class AbstractFold(object):
     .. rubric:: Implementation
 
     ``AbstractFold`` and ``Fold`` types are special.
-    They have duoble definition for all method: public and protected ones.
+    They have double definition for each method: public and protected ones.
     Why?
 
     Because you cannot override ``@kinded`` method due to a ``mypy`` bug.
@@ -36,8 +36,8 @@ class AbstractFold(object):
 
     We have chosen the second way! Here's how it works:
 
-    1. Public methods are ``@kinded`` for better typing and cannot be overriden
-    2. Protected methods are unkinded and can be overriden in subtyping
+    1. Public methods are ``@kinded`` for better typing and cannot be overridden
+    2. Protected methods are unkinded and can be overridden in subtyping
 
     Now, if you need to make a change into our implementation,
     then you can subclass ``Fold`` or ``AbstractFold`` and then
@@ -179,7 +179,7 @@ class AbstractFold(object):
         not just any ``ApplicativeN`` like :meth:`~AbstractFold.collect`.
 
         Strategy to extract all successful values
-        even if there are failued values.
+        even if there are failed values.
 
         If there's at least one successful value
         and any amount of failed values,

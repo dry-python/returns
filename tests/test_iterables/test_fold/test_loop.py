@@ -1,3 +1,4 @@
+import sys
 from typing import Iterable, List, Tuple
 
 import pytest
@@ -216,3 +217,10 @@ async def test_fold_collect_future_result(subtests):
             assert await Fold.loop(
                 iterable, sequence.from_value(10), _sum_two,
             ) == await sequence
+
+
+def test_fold_loop_recursion_limit():
+    """Ensures that ``.loop`` method is recurion safe."""
+    limit = sys.getrecursionlimit() + 1
+    iterable = (IO(1) for _ in range(limit))
+    assert Fold.loop(iterable, IO(0), _sum_two) == IO(limit)
