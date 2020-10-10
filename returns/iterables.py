@@ -25,7 +25,7 @@ class AbstractFold(object):
     .. rubric:: Implementation
 
     ``AbstractFold`` and ``Fold`` types are special.
-    They have double definition for all method: public and protected ones.
+    They have double definition for each method: public and protected ones.
     Why?
 
     Because you cannot override ``@kinded`` method due to a ``mypy`` bug.

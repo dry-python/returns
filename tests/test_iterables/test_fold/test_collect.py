@@ -206,6 +206,6 @@ async def test_fold_collect_future_result(subtests):
 def test_fold_collect_recursion_limit():
     """Ensures that ``.collect`` method is recurion safe."""
     limit = sys.getrecursionlimit() + 1
-    iterable = [IO(1) for _ in range(limit)]
+    iterable = (IO(1) for _ in range(limit))
     expected = IO((1,) * limit)
     assert Fold.collect(iterable, IO(())) == expected
