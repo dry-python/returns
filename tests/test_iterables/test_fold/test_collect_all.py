@@ -1,3 +1,4 @@
+import sys
 from typing import Iterable, List, Sequence, Tuple
 
 import pytest
@@ -158,3 +159,11 @@ async def test_collect_all_future_result(subtests):
             assert await Fold.collect_all(
                 iterable, sequence.from_value(()),
             ) == await sequence
+
+
+def test_fold_collect_recursion_limit():
+    """Ensures that ``.collect_all`` method is recurion safe."""
+    limit = sys.getrecursionlimit() + 1
+    iterable = [Success(1) for _ in range(limit)]
+    expected = Success((1,) * limit)
+    assert Fold.collect_all(iterable, Success(())) == expected
