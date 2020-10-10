@@ -169,7 +169,7 @@ class RequiresContextFutureResult(
         So, values become errors and errors become values.
         It is useful when you have to work with errors a lot.
         And since we have a lot of ``.bind_`` related methods
-        and only a single ``.rescue`` - it is easier to work with values.
+        and only a single ``.lash`` - it is easier to work with values.
 
         .. code:: python
 
@@ -801,7 +801,7 @@ class RequiresContextFutureResult(
             lambda deps: self(deps).alt(function),
         )
 
-    def rescue(
+    def lash(
         self,
         function: Callable[
             [_ErrorType],
@@ -823,7 +823,7 @@ class RequiresContextFutureResult(
           >>> from returns.future import FutureResult
           >>> from returns.io import IOSuccess
 
-          >>> def rescuable(
+          >>> def lashable(
           ...     arg: str,
           ... ) -> RequiresContextFutureResult[str, str, str]:
           ...      return RequiresContextFutureResult(
@@ -833,20 +833,20 @@ class RequiresContextFutureResult(
           ...      )
 
           >>> assert anyio.run(
-          ...     RequiresContextFutureResult.from_value('a').rescue(rescuable),
+          ...     RequiresContextFutureResult.from_value('a').lash(lashable),
           ...     'c',
           ... ) == IOSuccess('a')
 
           >>> assert anyio.run(
-          ...     RequiresContextFutureResult.from_failure('aa').rescue(
-          ...         rescuable,
+          ...     RequiresContextFutureResult.from_failure('aa').lash(
+          ...         lashable,
           ...     ),
           ...     'b',
           ... ) == IOSuccess('baa')
 
         """
         return RequiresContextFutureResult(
-            lambda deps: self(deps).rescue(
+            lambda deps: self(deps).lash(
                 lambda inner: function(inner)(deps),  # type: ignore
             ),
         )

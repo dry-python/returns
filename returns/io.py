@@ -343,7 +343,7 @@ class IOResult(
         So, values become errors and errors become values.
         It is useful when you have to work with errors a lot.
         And since we have a lot of ``.bind_`` related methods
-        and only a single ``.rescue`` - it is easier to work with values.
+        and only a single ``.lash`` - it is easier to work with values.
 
         .. code:: python
 
@@ -501,7 +501,7 @@ class IOResult(
         """
         return self.from_result(self._inner_value.alt(function))
 
-    def rescue(
+    def lash(
         self,
         function: Callable[
             [_ErrorType],
@@ -514,14 +514,14 @@ class IOResult(
         .. code:: python
 
           >>> from returns.io import IOFailure, IOSuccess, IOResult
-          >>> def rescuable(state: str) -> IOResult[int, str]:
+          >>> def lashable(state: str) -> IOResult[int, str]:
           ...     if len(state) > 1:
           ...         return IOSuccess(len(state))
           ...     return IOFailure('oops')
 
-          >>> assert IOFailure('a').rescue(rescuable) == IOFailure('oops')
-          >>> assert IOFailure('abc').rescue(rescuable) == IOSuccess(3)
-          >>> assert IOSuccess('a').rescue(rescuable) == IOSuccess('a')
+          >>> assert IOFailure('a').lash(lashable) == IOFailure('oops')
+          >>> assert IOFailure('abc').lash(lashable) == IOSuccess(3)
+          >>> assert IOSuccess('a').lash(lashable) == IOSuccess('a')
 
         """
 
@@ -773,7 +773,7 @@ class _IOFailure(IOResult):
         """Does nothing for ``IOFailure``."""
         return self
 
-    def rescue(self, function):
+    def lash(self, function):
         """Composes this container with a function returning ``IOResult``."""
         return function(self._inner_value.failure())
 
@@ -814,7 +814,7 @@ class _IOSuccess(IOResult):
         """Binds ``IO`` returning function to current container."""
         return self.from_io(function(self._inner_value.unwrap()))
 
-    def rescue(self, function):
+    def lash(self, function):
         """Does nothing for ``IOSuccess``."""
         return self
 

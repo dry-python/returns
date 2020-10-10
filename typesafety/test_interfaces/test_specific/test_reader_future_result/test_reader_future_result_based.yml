@@ -41,7 +41,7 @@
     ):
         ...
   out: |
-    main:13: error: Final class main.MyClass has abstract attributes "__call__", "alt", "apply", "ask", "bind", "bind_async", "bind_async_context_future_result", "bind_async_future", "bind_async_future_result", "bind_awaitable", "bind_context", "bind_context_future_result", "bind_context_ioresult", "bind_context_result", "bind_future", "bind_future_result", "bind_io", "bind_ioresult", "bind_result", "compose_result", "from_context", "from_failed_context", "from_failed_future", "from_failed_io", "from_failure", "from_future", "from_future_result_context", "from_io", "from_ioresult", "from_ioresult_context", "from_result", "from_result_context", "from_value", "map", "modify_env", "no_args", "rescue", "swap"
+    main:13: error: Final class main.MyClass has abstract attributes "__call__", "alt", "apply", "ask", "bind", "bind_async", "bind_async_context_future_result", "bind_async_future", "bind_async_future_result", "bind_awaitable", "bind_context", "bind_context_future_result", "bind_context_ioresult", "bind_context_result", "bind_future", "bind_future_result", "bind_io", "bind_ioresult", "bind_result", "compose_result", "from_context", "from_failed_context", "from_failed_future", "from_failed_io", "from_failure", "from_future", "from_future_result_context", "from_io", "from_ioresult", "from_ioresult_context", "from_result", "from_result_context", "from_value", "map", "modify_env", "no_args", "lash", "swap"
 
 
 - case: reader_future_result_based_inheritance_wrong

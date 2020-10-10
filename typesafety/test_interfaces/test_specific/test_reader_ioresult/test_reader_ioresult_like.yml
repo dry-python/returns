@@ -52,7 +52,7 @@
     ):
         ...
   out: |
-    main:11: error: Final class main.MyClass has abstract attributes "alt", "apply", "ask", "bind", "bind_context", "bind_context_ioresult", "bind_context_result", "bind_io", "bind_ioresult", "bind_result", "compose_result", "from_context", "from_failed_context", "from_failed_io", "from_failure", "from_io", "from_ioresult", "from_ioresult_context", "from_result", "from_result_context", "from_value", "map", "modify_env", "no_args", "rescue", "swap"
+    main:11: error: Final class main.MyClass has abstract attributes "alt", "apply", "ask", "bind", "bind_context", "bind_context_ioresult", "bind_context_result", "bind_io", "bind_ioresult", "bind_result", "compose_result", "from_context", "from_failed_context", "from_failed_io", "from_failure", "from_io", "from_ioresult", "from_ioresult_context", "from_result", "from_result_context", "from_value", "map", "modify_env", "no_args", "lash", "swap"
 
 
 - case: reader_ioresult_like_inheritance_wrong

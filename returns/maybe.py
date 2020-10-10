@@ -137,7 +137,7 @@ class Maybe(
 
         """
 
-    def rescue(
+    def lash(
         self,
         function: Callable[[Any], Kind1['Maybe', _ValueType]],
     ) -> 'Maybe[_ValueType]':
@@ -148,11 +148,11 @@ class Maybe(
 
           >>> from returns.maybe import Maybe, Some, Nothing
 
-          >>> def rescuable(arg=None) -> Maybe[str]:
+          >>> def lashable(arg=None) -> Maybe[str]:
           ...      return Some('b')
 
-          >>> assert Some('a').rescue(rescuable) == Some('a')
-          >>> assert Nothing.rescue(rescuable) == Some('b')
+          >>> assert Some('a').lash(lashable) == Some('a')
+          >>> assert Nothing.lash(lashable) == Some('b')
 
         We need this feature to make ``Maybe`` compatible
         with different ``Result`` like oeprations.
@@ -326,7 +326,7 @@ class _Nothing(Maybe[Any]):
         """Does nothing."""
         return self
 
-    def rescue(self, function):
+    def lash(self, function):
         """Composes this container with a function returning container."""
         return function(None)
 
@@ -384,7 +384,7 @@ class _Some(Maybe[_ValueType]):
         """Binds a function returning an optional value over a container."""
         return Maybe.from_optional(function(self._inner_value))
 
-    def rescue(self, function):
+    def lash(self, function):
         """Does nothing for ``Some``."""
         return self
 

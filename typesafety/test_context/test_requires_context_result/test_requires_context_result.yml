@@ -89,7 +89,7 @@
     reveal_type(x.apply(y))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.bool*, builtins.float, builtins.str]'
 
 
-- case: requires_context_result_rescue
+- case: requires_context_result_lash
   disable_cache: false
   main: |
     from returns.context import RequiresContextResult
@@ -99,7 +99,7 @@
     def test(param: float) -> RequiresContextResult[int, bool, str]:
         ...
 
-    reveal_type(x.rescue(test))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.int, builtins.bool*, builtins.str]'
+    reveal_type(x.lash(test))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.int, builtins.bool*, builtins.str]'
 
 
 - case: requires_context_result_alt

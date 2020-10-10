@@ -44,7 +44,7 @@ It tests that containers do handle error track.
   def test_my_container(returns):
       assert not returns.is_error_handled(Failure(1))
       assert returns.is_error_handled(
-          Failure(1).rescue(lambda _: Success('default value')),
+          Failure(1).lash(lambda _: Success('default value')),
       )
 
 We recommed to unit test big chunks of code this way.
@@ -53,7 +53,7 @@ you need at least one error handling at the very end.
 
 This is how it works internally:
 
-- Methods like ``fix`` and ``rescue`` mark errors
+- Methods like ``fix`` and ``lash`` mark errors
   inside the container as handled
 - Methods like ``map`` and ``alt`` just copies
   the error handling state from the old container to a new one,

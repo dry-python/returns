@@ -447,7 +447,7 @@ Here's a full overview of all our interfaces:
    returns.interfaces.mappable
    returns.interfaces.bindable
    returns.interfaces.applicative
-   returns.interfaces.rescuable
+   returns.interfaces.lashable
    returns.interfaces.altable
    returns.interfaces.bimappable
    returns.interfaces.unwrappable
@@ -527,13 +527,13 @@ BiMappable
   :members:
   :private-members:
 
-Rescuable
+Lashable
 ~~~~~~~~~
 
-.. autoclasstree:: returns.interfaces.rescuable
+.. autoclasstree:: returns.interfaces.lashable
    :strict:
 
-.. automodule:: returns.interfaces.rescuable
+.. automodule:: returns.interfaces.lashable
   :members:
   :private-members:
 

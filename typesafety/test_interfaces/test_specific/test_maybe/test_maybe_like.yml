@@ -34,7 +34,7 @@
     class MyClass(SupportsKind2['MyClass', V, None], MaybeLike2[V, None]):
         ...
   out: |
-    main:9: error: Final class main.MyClass has abstract attributes "apply", "bind", "bind_optional", "empty", "from_optional", "from_value", "map", "rescue"
+    main:9: error: Final class main.MyClass has abstract attributes "apply", "bind", "bind_optional", "empty", "from_optional", "from_value", "map", "lash"
 
 
 - case: maybe_like_inheritance_wrong

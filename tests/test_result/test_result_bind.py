@@ -46,26 +46,26 @@ def test_left_identity_failure():
     assert str(bound) == '<Failure: 5>'
 
 
-def test_rescue_success():
-    """Ensures that rescue works for Success container."""
+def test_lash_success():
+    """Ensures that lash works for Success container."""
     def factory(inner_value) -> Result[int, str]:
         return Success(inner_value * 2)
 
-    bound = Success(5).rescue(factory)
+    bound = Success(5).lash(factory)
 
     assert bound == Success(5)
-    assert Success(5).rescue(factory) == Success(5)
+    assert Success(5).lash(factory) == Success(5)
     assert str(bound) == '<Success: 5>'
 
 
-def test_rescue_failure():
-    """Ensures that rescue works for Failure container."""
+def test_lash_failure():
+    """Ensures that lash works for Failure container."""
     def factory(inner_value: int) -> Result[str, int]:
         return Failure(inner_value + 1)
 
     expected = 6
     bound: Result[str, int] = Failure(5)
 
-    assert bound.rescue(factory) == Failure(expected)
-    assert Failure(5).rescue(factory) == Failure(expected)
-    assert str(bound.rescue(factory)) == '<Failure: 6>'
+    assert bound.lash(factory) == Failure(expected)
+    assert Failure(5).lash(factory) == Failure(expected)
+    assert str(bound.lash(factory)) == '<Failure: 6>'

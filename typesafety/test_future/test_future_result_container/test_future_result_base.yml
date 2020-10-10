@@ -144,7 +144,7 @@
     reveal_type(first.alt(float))  # N: Revealed type is 'returns.future.FutureResult[builtins.int, builtins.float*]'
 
 
-- case: future_result_rescue
+- case: future_result_lash
   disable_cache: false
   main: |
     from returns.future import FutureResult
@@ -154,4 +154,4 @@
 
     first: FutureResult[int, str]
 
-    reveal_type(first.rescue(bind))  # N: Revealed type is 'returns.future.FutureResult[builtins.int, builtins.float*]'
+    reveal_type(first.lash(bind))  # N: Revealed type is 'returns.future.FutureResult[builtins.int, builtins.float*]'

@@ -60,22 +60,22 @@ def test_bind_regular_result():
     assert third.bind_result(factory) == IOFailure('a')
 
 
-def test_rescue_success():
-    """Ensures that rescue works for IOSuccess container."""
+def test_lash_success():
+    """Ensures that lash works for IOSuccess container."""
     def factory(inner_value) -> IOResult[int, str]:
         return IOSuccess(inner_value * 2)
 
-    bound = IOSuccess(5).rescue(factory)
+    bound = IOSuccess(5).lash(factory)
 
     assert bound == IOSuccess(5)
 
 
-def test_rescue_failure():
-    """Ensures that rescue works for IOFailure container."""
+def test_lash_failure():
+    """Ensures that lash works for IOFailure container."""
     def factory(inner_value: int) -> IOResult[str, int]:
         return IOFailure(inner_value + 1)
 
     expected = 6
     bound: IOResult[str, int] = IOFailure(5)
 
-    assert bound.rescue(factory) == IOFailure(expected)
+    assert bound.lash(factory) == IOFailure(expected)

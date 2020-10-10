@@ -405,6 +405,6 @@ def _concat_failable_safely(
     """
     Concats two ``FailableN`` using a curried-like function and a fallback.
 
-    We need both ``.apply`` and ``.rescue`` methods here.
+    We need both ``.apply`` and ``.lash`` methods here.
     """
-    return _concat_applicative(current, acc, function).rescue(lambda _: acc)
+    return _concat_applicative(current, acc, function).lash(lambda _: acc)

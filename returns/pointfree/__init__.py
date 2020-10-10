@@ -35,9 +35,9 @@ from returns.pointfree.bind_optional import bind_optional as bind_optional
 from returns.pointfree.bind_result import bind_result as bind_result
 from returns.pointfree.compose_result import compose_result as compose_result
 from returns.pointfree.cond import cond as cond
+from returns.pointfree.lash import lash as lash
 from returns.pointfree.map import map_ as map_
 from returns.pointfree.modify_env import modify_env as modify_env
 from returns.pointfree.modify_env import modify_env2 as modify_env2
 from returns.pointfree.modify_env import modify_env3 as modify_env3
-from returns.pointfree.rescue import rescue as rescue
 from returns.pointfree.unify import unify as unify

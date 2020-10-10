@@ -119,16 +119,16 @@ We also have a long list of other ``bind_*`` functions, like:
 - ``bind_awaitable`` to bind async non-container functions
 
 
-rescue
+lash
 ------
 
-Pointfree ``rescue()`` function is an alternative
-to ``.rescue()`` container method.
+Pointfree ``lash()`` function is an alternative
+to ``.lash()`` container method.
 It is also required for better declarative programming.
 
 .. code:: python
 
-  >>> from returns.pointfree import rescue
+  >>> from returns.pointfree import lash
   >>> from returns.result import Success, Failure, Result
 
   >>> def function(arg: str) -> Result[int, str]:
@@ -136,10 +136,10 @@ It is also required for better declarative programming.
 
   >>> container: Result[int, str] = Failure('a')
   >>> # We now have two way of composining these entities.
-  >>> # 1. Via ``.rescue``:
-  >>> assert container.rescue(function) == Success(1)
-  >>> # 2. Or via ``rescue`` function, the same but in the inverse way:
-  >>> assert rescue(function)(container) == Success(1)
+  >>> # 1. Via ``.lash``:
+  >>> assert container.lash(function) == Success(1)
+  >>> # 2. Or via ``lash`` function, the same but in the inverse way:
+  >>> assert lash(function)(container) == Success(1)
 
 
 apply
@@ -318,7 +318,7 @@ API Reference
 
 .. autofunction:: returns.pointfree.cond
 
-.. autofunction:: returns.pointfree.rescue
+.. autofunction:: returns.pointfree.lash
 
 .. autofunction:: returns.pointfree.unify
 

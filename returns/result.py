@@ -75,7 +75,7 @@ class Result(
         So, values become errors and errors become values.
         It is useful when you have to work with errors a lot.
         And since we have a lot of ``.bind_`` related methods
-        and only a single ``.rescue`` - it is easier to work with values.
+        and only a single ``.lash`` - it is easier to work with values.
 
         .. code:: python
 
@@ -177,7 +177,7 @@ class Result(
 
         """
 
-    def rescue(
+    def lash(
         self,
         function: Callable[
             [_ErrorType], Kind2['Result', _ValueType, _NewErrorType],
@@ -190,14 +190,14 @@ class Result(
 
           >>> from returns.result import Result, Success, Failure
 
-          >>> def rescuable(arg: str) -> Result[str, str]:
+          >>> def lashable(arg: str) -> Result[str, str]:
           ...      if len(arg) > 1:
           ...          return Success(arg + 'b')
           ...      return Failure(arg + 'c')
 
-          >>> assert Success('a').rescue(rescuable) == Success('a')
-          >>> assert Failure('a').rescue(rescuable) == Failure('ac')
-          >>> assert Failure('aa').rescue(rescuable) == Success('aab')
+          >>> assert Success('a').lash(lashable) == Success('a')
+          >>> assert Failure('a').lash(lashable) == Failure('ac')
+          >>> assert Failure('aa').lash(lashable) == Success('aab')
 
         """
 
@@ -355,7 +355,7 @@ class _Failure(Result[Any, _ErrorType]):
     #: Alias for `bind` method. Part of the `ResultBasedN` interface.
     bind_result = bind
 
-    def rescue(self, function):
+    def lash(self, function):
         """Composes this container with a function returning container."""
         return function(self._inner_value)
 
@@ -429,7 +429,7 @@ class _Success(Result[_ValueType, Any]):
     #: Alias for `bind` method. Part of the `ResultBasedN` interface.
     bind_result = bind
 
-    def rescue(self, function):
+    def lash(self, function):
         """Does nothing for ``Success``."""
         return self
 

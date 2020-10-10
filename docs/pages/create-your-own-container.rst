@@ -64,7 +64,7 @@ What interfaces a ``Pair`` type needs?
   and apply a wrapped function over it
 - :class:`returns.interfaces.altable.AltableN`,
   because the second type can be composed with pure functions
-- :class:`returns.interfaces.rescuable.RescuableN`,
+- :class:`returns.interfaces.lashable.LashableN`,
   because a ``Pair`` can be bound to a function returning a new ``Pair``
   based on the second type
 
@@ -85,7 +85,7 @@ Let's look at the resul:
   >>> from typing_extensions import final
   >>> from typing import Callable, TypeVar, Tuple
 
-  >>> from returns.interfaces import container, bimappable, rescuable, equable
+  >>> from returns.interfaces import container, bimappable, lashable, equable
   >>> from returns.primitives.container import BaseContainer, container_equality
   >>> from returns.primitives.hkt import SupportsKind2
 
@@ -101,7 +101,7 @@ Let's look at the resul:
   ...     SupportsKind2['Pair', _FirstType, _SecondType],
   ...     container.Container2[_FirstType, _SecondType],
   ...     bimappable.BiMappable2[_FirstType, _SecondType],
-  ...     rescuable.Rescuable2[_FirstType, _SecondType],
+  ...     lashable.Lashable2[_FirstType, _SecondType],
   ...     equable.SupportsEquality,
   ... ):
   ...     def __init__(

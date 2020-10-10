@@ -165,7 +165,7 @@ class RequiresContextIOResult(
         So, values become errors and errors become values.
         It is useful when you have to work with errors a lot.
         And since we have a lot of ``.bind_`` related methods
-        and only a single ``.rescue`` - it is easier to work with values.
+        and only a single ``.lash`` - it is easier to work with values.
 
         .. code:: python
 
@@ -496,7 +496,7 @@ class RequiresContextIOResult(
         """
         return RequiresContextIOResult(lambda deps: self(deps).alt(function))
 
-    def rescue(
+    def lash(
         self,
         function: Callable[
             [_ErrorType],
@@ -516,7 +516,7 @@ class RequiresContextIOResult(
           >>> from returns.context import RequiresContextIOResult
           >>> from returns.io import IOSuccess, IOFailure
 
-          >>> def rescuable(
+          >>> def lashable(
           ...     arg: str,
           ... ) -> RequiresContextIOResult[str, str, str]:
           ...      if len(arg) > 1:
@@ -527,19 +527,19 @@ class RequiresContextIOResult(
           ...          lambda deps: IOFailure(arg + deps),
           ...      )
 
-          >>> assert RequiresContextIOResult.from_value('a').rescue(
-          ...     rescuable,
+          >>> assert RequiresContextIOResult.from_value('a').lash(
+          ...     lashable,
           ... )('c') == IOSuccess('a')
-          >>> assert RequiresContextIOResult.from_failure('a').rescue(
-          ...     rescuable,
+          >>> assert RequiresContextIOResult.from_failure('a').lash(
+          ...     lashable,
           ... )('c') == IOFailure('ac')
-          >>> assert RequiresContextIOResult.from_failure('aa').rescue(
-          ...     rescuable,
+          >>> assert RequiresContextIOResult.from_failure('aa').lash(
+          ...     lashable,
           ... )('b') == IOSuccess('baa')
 
         """
         return RequiresContextIOResult(
-            lambda deps: self(deps).rescue(
+            lambda deps: self(deps).lash(
                 lambda inner: function(inner)(deps),  # type: ignore
             ),
         )

@@ -1,6 +1,6 @@
 from typing import Callable, TypeVar
 
-from returns.interfaces.rescuable import RescuableN
+from returns.interfaces.lashable import LashableN
 from returns.primitives.hkt import Kinded, KindN, kinded
 
 _FirstType = TypeVar('_FirstType')
@@ -8,17 +8,17 @@ _SecondType = TypeVar('_SecondType')
 _ThirdType = TypeVar('_ThirdType')
 _UpdatedType = TypeVar('_UpdatedType')
 
-_RescuableKind = TypeVar('_RescuableKind', bound=RescuableN)
+_LashableKind = TypeVar('_LashableKind', bound=LashableN)
 
 
-def rescue(
+def lash(
     function: Callable[
         [_SecondType],
-        KindN[_RescuableKind, _FirstType, _UpdatedType, _ThirdType],
+        KindN[_LashableKind, _FirstType, _UpdatedType, _ThirdType],
     ],
 ) -> Kinded[Callable[
-    [KindN[_RescuableKind, _FirstType, _SecondType, _ThirdType]],
-    KindN[_RescuableKind, _FirstType, _UpdatedType, _ThirdType],
+    [KindN[_LashableKind, _FirstType, _SecondType, _ThirdType]],
+    KindN[_LashableKind, _FirstType, _UpdatedType, _ThirdType],
 ]]:
     """
     Turns function's input parameter from a regular value to a container.
@@ -35,22 +35,22 @@ def rescue(
 
     .. code:: python
 
-      >>> from returns.pointfree import rescue
+      >>> from returns.pointfree import lash
       >>> from returns.result import Success, Failure, Result
 
       >>> def example(argument: int) -> Result[str, int]:
       ...     return Success(argument + 1)
 
-      >>> assert rescue(example)(Success('a')) == Success('a')
-      >>> assert rescue(example)(Failure(1)) == Success(2)
+      >>> assert lash(example)(Success('a')) == Success('a')
+      >>> assert lash(example)(Failure(1)) == Success(2)
 
-    Note, that this function works for all containers with ``.rescue`` method.
-    See :class:`returns.interfaces.rescuable.Rescuable` for more info.
+    Note, that this function works for all containers with ``.lash`` method.
+    See :class:`returns.interfaces.lashable.Lashable` for more info.
 
     """
     @kinded
     def factory(
-        container: KindN[_RescuableKind, _FirstType, _SecondType, _ThirdType],
-    ) -> KindN[_RescuableKind, _FirstType, _UpdatedType, _ThirdType]:
-        return container.rescue(function)
+        container: KindN[_LashableKind, _FirstType, _SecondType, _ThirdType],
+    ) -> KindN[_LashableKind, _FirstType, _UpdatedType, _ThirdType]:
+        return container.lash(function)
     return factory

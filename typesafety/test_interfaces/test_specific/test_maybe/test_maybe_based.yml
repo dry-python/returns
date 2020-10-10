@@ -30,7 +30,7 @@
     class MyClass(SupportsKind2['MyClass', V, None], MaybeBased2[V, None]):
         ...
   out: |
-    main:9: error: Final class main.MyClass has abstract attributes "apply", "bind", "bind_optional", "empty", "equals", "failure", "from_optional", "from_value", "map", "or_else_call", "rescue", "unwrap"
+    main:9: error: Final class main.MyClass has abstract attributes "apply", "bind", "bind_optional", "empty", "equals", "failure", "from_optional", "from_value", "map", "or_else_call", "lash", "unwrap"
 
 
 - case: maybe_based_inheritance_wrong

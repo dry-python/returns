@@ -36,10 +36,10 @@ or we can fix the situation.
        S5 -- bind --> F6
 
        F2 -- alt --> F4
-       F4 -- rescue --> F6
-       F4 -- rescue --> S5
-       F6 -- rescue --> F8
-       F6 -- rescue --> S7
+       F4 -- lash --> F6
+       F4 -- lash --> S5
+       F6 -- lash --> F8
+       F6 -- lash --> S7
 
        style S1 fill:green
        style S3 fill:green
@@ -55,7 +55,7 @@ Returning execution to the right track
 
 We also support two special methods to work with "failed" values:
 
-- :func:`returns.interfaces.rescuable.RescuableN.rescue`
+- :func:`returns.interfaces.lashable.LashableN.lash`
   is the opposite of :func:`returns.interfaces.bindable.BindableN.bind` method
   that works only when container is in failed state
 - :func:`returns.interfaces.altable.AltableN.alt`
@@ -79,18 +79,18 @@ We also support two special methods to work with "failed" values:
   >>> from returns.result import Failure
   >>> assert Failure(1).alt(str) == Failure('1')
 
-The second method is ``rescue``. It is a bit different.
+The second method is ``lash``. It is a bit different.
 We pass a function that returns another container to it.
-:func:`returns.interfaces.rescuable.RescuableN.rescue`
+:func:`returns.interfaces.lashable.LashableN.lash`
 is used to literally bind two different containers together.
-It can also rescue your flow and get on the successful track again:
+It can also lash your flow and get on the successful track again:
 
 .. mermaid::
-  :caption: Illustration of ``rescue`` method.
+  :caption: Illustration of ``lash`` method.
 
    graph LR
-      F1["Container[A]"] -- "rescue(function)" --> F2["Container[B]"]
-      F1["Container[A]"] -- "rescue(function)" --> F3["Container[C]"]
+      F1["Container[A]"] -- "lash(function)" --> F2["Container[B]"]
+      F1["Container[A]"] -- "lash(function)" --> F3["Container[C]"]
 
       style F1 fill:red
       style F2 fill:green
@@ -106,23 +106,23 @@ It can also rescue your flow and get on the successful track again:
   ...     return Failure(state)
 
   >>> value: Result[int, Exception] = Failure(ZeroDivisionError())
-  >>> result: Result[int, Exception] = value.rescue(tolerate_exception)
+  >>> result: Result[int, Exception] = value.lash(tolerate_exception)
   >>> assert result == Success(0)
 
   >>> value2: Result[int, Exception] = Failure(ValueError())
-  >>> result2: Result[int, Exception] = value2.rescue(tolerate_exception)
+  >>> result2: Result[int, Exception] = value2.lash(tolerate_exception)
   >>> # => Failure(ValueError())
 
 .. note::
 
   Not all containers support these methods,
   only containers that implement
-  :class:`returns.interfaces.rescuable.RescuableN`
+  :class:`returns.interfaces.lashable.LashableN`
   and
   :class:`returns.interfaces.altable.AltableN`
   For example, :class:`~returns.io.IO` based containers
   and :class:`~returns.context.requires_context.RequiresContext`
-  cannot be alted or rescued.
+  cannot be alted or lashd.
 
 
 Unwrapping values
