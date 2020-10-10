@@ -239,21 +239,6 @@ us to create our custom bindable.
   >>> bag_of_peanuts: Bag[Peanuts] = Bag(Peanuts(10))
   >>> assert bag_of_peanuts.bind(get_half) == Bag(Peanuts(5))
 
-
-Applicative
------------
-
-.. currentmodule:: returns.interfaces.applicative
-
-Laws
-~~~~
-
-
-Container
----------
-
-.. currentmodule:: returns.interfaces.container
-
 Laws
 ~~~~
 
@@ -299,6 +284,21 @@ respect three new laws.
   >>> assert bag.bind(minus_one).bind(half) == bag.bind(
   ...    lambda value: minus_one(value).bind(half),
   ... )
+
+
+Applicative
+-----------
+
+.. currentmodule:: returns.interfaces.applicative
+
+Laws
+~~~~
+
+
+Container
+---------
+
+.. currentmodule:: returns.interfaces.container
 
 
 More!
