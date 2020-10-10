@@ -116,7 +116,20 @@ It can also lash your flow and get on the successful track again:
 
 From typing perspective ``.alt`` and ``.lash``
 are exaclty the same as ``.map`` and ``.bind``
-but only work with the second type argument instead of the first one.
+but only work with the second type argument instead of the first one:
+
+.. code:: python
+
+  from returns.result import Result
+
+  first: Result[int, int]
+  second: Result[int, int]
+
+  reveal_type(first.map(str))
+  # => Result[str, int]
+
+  reveal_type(second.alt(str))
+  # => Result[int, str]
 
 .. note::
 
