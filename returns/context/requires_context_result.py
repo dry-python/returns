@@ -100,7 +100,7 @@ class RequiresContextResult(
     ]
 
     #: A convenient placeholder to call methods created by `.from_value()`.
-    empty: ClassVar[NoDeps] = object()
+    no_args: ClassVar[NoDeps] = object()
 
     def __init__(
         self,
@@ -291,15 +291,15 @@ class RequiresContextResult(
 
           >>> assert RequiresContextResult.from_value(1).bind_result(
           ...     function,
-          ... )(RequiresContextResult.empty) == Success(2)
+          ... )(RequiresContextResult.no_args) == Success(2)
 
           >>> assert RequiresContextResult.from_value(0).bind_result(
           ...     function,
-          ... )(RequiresContextResult.empty) == Failure('<0')
+          ... )(RequiresContextResult.no_args) == Failure('<0')
 
           >>> assert RequiresContextResult.from_failure(':(').bind_result(
           ...     function,
-          ... )(RequiresContextResult.empty) == Failure(':(')
+          ... )(RequiresContextResult.no_args) == Failure(':(')
 
         """
         return RequiresContextResult(lambda deps: self(deps).bind(function))
@@ -466,7 +466,7 @@ class RequiresContextResult(
 
           >>> from returns.context import RequiresContextResult
           >>> from returns.result import Success, Failure
-          >>> deps = RequiresContextResult.empty
+          >>> deps = RequiresContextResult.no_args
 
           >>> assert RequiresContextResult.from_result(
           ...    Success(1),
@@ -500,11 +500,11 @@ class RequiresContextResult(
 
           >>> assert RequiresContextResult.from_typecast(
           ...     RequiresContext.from_value(Success(1)),
-          ... )(RequiresContextResult.empty) == Success(1)
+          ... )(RequiresContextResult.no_args) == Success(1)
 
           >>> assert RequiresContextResult.from_typecast(
           ...     RequiresContext.from_value(Failure(1)),
-          ... )(RequiresContextResult.empty) == Failure(1)
+          ... )(RequiresContextResult.no_args) == Failure(1)
 
         """
         return RequiresContextResult(inner_value)

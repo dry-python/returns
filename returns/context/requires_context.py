@@ -81,7 +81,7 @@ class RequiresContext(
     _inner_value: Callable[[RequiresContext, _EnvType], _ReturnType]
 
     #: A convenient placeholder to call methods created by `.from_value()`:
-    empty: ClassVar[NoDeps] = object()
+    no_args: ClassVar[NoDeps] = object()
 
     def __init__(
         self,
@@ -319,14 +319,14 @@ class RequiresContext(
 
         Consider this method as some kind of factory.
         Passed value will be a return type.
-        Make sure to use :attr:`~RequiresContext.empty`
+        Make sure to use :attr:`~RequiresContext.no_args`
         for getting the unit value.
 
         .. code:: python
 
           >>> from returns.context import RequiresContext
           >>> unit = RequiresContext.from_value(5)
-          >>> assert unit(RequiresContext.empty) == 5
+          >>> assert unit(RequiresContext.no_args) == 5
 
         Might be used with or without direct type hint.
         """
@@ -424,7 +424,7 @@ class RequiresContext(
           ...    RequiresContextFutureResult.from_value(1),
           ... )
           >>> assert anyio.run(
-          ...     container, RequiresContext.empty,
+          ...     container, RequiresContext.no_args,
           ... ) == IOSuccess(1)
 
         Can be reverted with ``RequiresContextFutureResult.from_typecast``.

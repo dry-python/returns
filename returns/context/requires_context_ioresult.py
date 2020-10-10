@@ -111,7 +111,7 @@ class RequiresContextIOResult(
     ]
 
     #: A convenient placeholder to call methods created by `.from_value()`.
-    empty: ClassVar[NoDeps] = object()
+    no_args: ClassVar[NoDeps] = object()
 
     def __init__(
         self,
@@ -311,15 +311,15 @@ class RequiresContextIOResult(
 
           >>> assert RequiresContextIOResult.from_value(1).bind_result(
           ...     function,
-          ... )(RequiresContextIOResult.empty) == IOSuccess(2)
+          ... )(RequiresContextIOResult.no_args) == IOSuccess(2)
 
           >>> assert RequiresContextIOResult.from_value(0).bind_result(
           ...     function,
-          ... )(RequiresContextIOResult.empty) == IOFailure('<0')
+          ... )(RequiresContextIOResult.no_args) == IOFailure('<0')
 
           >>> assert RequiresContextIOResult.from_failure(':(').bind_result(
           ...     function,
-          ... )(RequiresContextIOResult.empty) == IOFailure(':(')
+          ... )(RequiresContextIOResult.no_args) == IOFailure(':(')
 
         """
         return RequiresContextIOResult(
@@ -431,11 +431,11 @@ class RequiresContextIOResult(
 
           >>> assert RequiresContextIOResult.from_value(1).bind_io(
           ...     function,
-          ... )(RequiresContextIOResult.empty) == IOSuccess('1')
+          ... )(RequiresContextIOResult.no_args) == IOSuccess('1')
 
           >>> assert RequiresContextIOResult.from_failure(1).bind_io(
           ...     function,
-          ... )(RequiresContextIOResult.empty) == IOFailure(1)
+          ... )(RequiresContextIOResult.no_args) == IOFailure(1)
 
         """
         return RequiresContextIOResult(
@@ -459,15 +459,15 @@ class RequiresContextIOResult(
 
           >>> assert RequiresContextIOResult.from_value(1).bind_ioresult(
           ...     function,
-          ... )(RequiresContextIOResult.empty) == IOSuccess(2)
+          ... )(RequiresContextIOResult.no_args) == IOSuccess(2)
 
           >>> assert RequiresContextIOResult.from_value(0).bind_ioresult(
           ...     function,
-          ... )(RequiresContextIOResult.empty) == IOFailure('<0')
+          ... )(RequiresContextIOResult.no_args) == IOFailure('<0')
 
           >>> assert RequiresContextIOResult.from_failure(':(').bind_ioresult(
           ...     function,
-          ... )(RequiresContextIOResult.empty) == IOFailure(':(')
+          ... )(RequiresContextIOResult.no_args) == IOFailure(':(')
 
         """
         return RequiresContextIOResult(
@@ -646,7 +646,7 @@ class RequiresContextIOResult(
           >>> from returns.context import RequiresContextIOResult
           >>> from returns.result import Success, Failure
           >>> from returns.io import IOSuccess, IOFailure
-          >>> deps = RequiresContextIOResult.empty
+          >>> deps = RequiresContextIOResult.no_args
 
           >>> assert RequiresContextIOResult.from_result(
           ...    Success(1),
@@ -675,7 +675,7 @@ class RequiresContextIOResult(
           >>> from returns.context import RequiresContextIOResult
 
           >>> assert RequiresContextIOResult.from_io(IO(1))(
-          ...     RequiresContextIOResult.empty,
+          ...     RequiresContextIOResult.no_args,
           ... ) == IOSuccess(1)
 
         """
@@ -697,7 +697,7 @@ class RequiresContextIOResult(
           >>> from returns.context import RequiresContextIOResult
 
           >>> assert RequiresContextIOResult.from_failed_io(IO(1))(
-          ...     RequiresContextIOResult.empty,
+          ...     RequiresContextIOResult.no_args,
           ... ) == IOFailure(1)
 
         """
@@ -716,7 +716,7 @@ class RequiresContextIOResult(
 
           >>> from returns.context import RequiresContextIOResult
           >>> from returns.io import IOSuccess, IOFailure
-          >>> deps = RequiresContextIOResult.empty
+          >>> deps = RequiresContextIOResult.no_args
 
           >>> assert RequiresContextIOResult.from_ioresult(
           ...    IOSuccess(1),
@@ -775,11 +775,11 @@ class RequiresContextIOResult(
 
           >>> assert RequiresContextIOResult.from_typecast(
           ...     RequiresContext.from_value(IOSuccess(1)),
-          ... )(RequiresContextIOResult.empty) == IOSuccess(1)
+          ... )(RequiresContextIOResult.no_args) == IOSuccess(1)
 
           >>> assert RequiresContextIOResult.from_typecast(
           ...     RequiresContext.from_value(IOFailure(1)),
-          ... )(RequiresContextIOResult.empty) == IOFailure(1)
+          ... )(RequiresContextIOResult.no_args) == IOFailure(1)
 
         """
         return RequiresContextIOResult(inner_value)
@@ -867,7 +867,7 @@ class RequiresContextIOResult(
           >>> from returns.io import IOSuccess
 
           >>> assert RequiresContextIOResult.from_value(1)(
-          ...    RequiresContextIOResult.empty,
+          ...    RequiresContextIOResult.no_args,
           ... ) == IOSuccess(1)
 
         """
@@ -887,7 +887,7 @@ class RequiresContextIOResult(
           >>> from returns.io import IOFailure
 
           >>> assert RequiresContextIOResult.from_failure(1)(
-          ...     RequiresContextIOResult.empty,
+          ...     RequiresContextIOResult.no_args,
           ... ) == IOFailure(1)
 
         """

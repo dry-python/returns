@@ -16,7 +16,7 @@
         SupportsKind3['MyClass', _ValueType, _ErrorType, _EnvType],
         ReaderLike3[_ValueType, _ErrorType, _EnvType],
     ):
-        empty: ClassVar[NoDeps] = object()
+        no_args: ClassVar[NoDeps] = object()
 
         def __call__(self, deps: _EnvType) -> Union[_ValueType, _ErrorType]:
             ...
@@ -72,7 +72,7 @@
     ):
         ...
   out: |
-    main:11: error: Final class main.MyClass has abstract attributes "apply", "ask", "bind", "bind_context", "empty", "from_context", "from_value", "map", "modify_env"
+    main:11: error: Final class main.MyClass has abstract attributes "apply", "ask", "bind", "bind_context", "from_context", "from_value", "map", "modify_env", "no_args"
 
 
 - case: reader_inheritance_wrong

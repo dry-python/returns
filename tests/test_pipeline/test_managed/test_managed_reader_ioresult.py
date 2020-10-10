@@ -113,7 +113,7 @@ def test_all_success(acquire, use, release, final_result, log):
         release(pipeline_logs),
     )(acquire)
 
-    assert pipeline_result(ReaderIOResult.empty) == final_result
+    assert pipeline_result(ReaderIOResult.no_args) == final_result
     assert pipeline_logs == log
 
 
@@ -125,5 +125,5 @@ def test_full_typing():
         _ReleaseSuccess(logs),
     )(_acquire_success)
 
-    assert pipeline_result(ReaderIOResult.empty) == IOSuccess('use success')
+    assert pipeline_result(ReaderIOResult.no_args) == IOSuccess('use success')
     assert logs == [('acquire success', Success('use success'))]

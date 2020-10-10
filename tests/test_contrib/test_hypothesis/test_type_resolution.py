@@ -70,7 +70,7 @@ def test_custom_result_error_types_resolve(thing: CustomResult) -> None:
 @given(
     st.from_type(RequiresContextResultE).filter(
         lambda container: not is_successful(
-            container(RequiresContextResultE.empty),
+            container(RequiresContextResultE.no_args),
         ),
     ),
 )
@@ -78,7 +78,7 @@ def test_reader_result_error_alias_resolves(
     thing: RequiresContextResultE,
 ) -> None:
     """Ensures that type aliases are resolved correctly."""
-    real_result = thing(RequiresContextResultE.empty)
+    real_result = thing(RequiresContextResultE.no_args)
     assert isinstance(real_result.failure(), Exception)
 
 
@@ -90,7 +90,7 @@ def test_custom_readerresult_types_resolve(
     thing: CustomReaderResult,
 ) -> None:
     """Ensures that type aliases are resolved correctly."""
-    real_result = thing(RequiresContextResultE.empty)
+    real_result = thing(RequiresContextResultE.no_args)
     if is_successful(real_result):
         assert isinstance(real_result.unwrap(), int)
     else:

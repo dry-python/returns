@@ -43,6 +43,8 @@ See [0Ver](https://0ver.org/).
 - **Breaking**: Removes ``.from_iterable`` method from all containers,
   instead adds better `iterables` support,
   we now have `returns.iterables` module with `Fold` helper
+- **Breaking**: Renames property `empty` to `no_args` of
+  all `RequiresContext`-based classes
 
 - Adds new public interfaces: see `returns.interfaces`
 - Adds `methods` package with several helpful things inside

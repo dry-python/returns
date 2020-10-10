@@ -30,11 +30,11 @@ def test_bind_regular_result():
     first: RCR[int, str, int] = RCR.from_value(1)
     third: RCR[int, str, int] = RCR.from_failure('a')
 
-    assert first.bind_result(factory)(RCR.empty) == Success(2)
+    assert first.bind_result(factory)(RCR.no_args) == Success(2)
     assert RCR.from_value(0).bind_result(
         factory,
-    )(RCR.empty) == Failure('nope')
-    assert third.bind_result(factory)(RCR.empty) == Failure('a')
+    )(RCR.no_args) == Failure('nope')
+    assert third.bind_result(factory)(RCR.no_args) == Failure('a')
 
 
 def test_bind_regular_context():

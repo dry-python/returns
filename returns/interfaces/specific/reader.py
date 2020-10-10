@@ -94,8 +94,8 @@ class ReaderLike2(Container2[_FirstType, _SecondType]):
 
     @property
     @abstractmethod
-    def empty(self: _ReaderLike2Type) -> 'NoDeps':
-        """Is required to call ``Reader`` with explicit empty argument."""
+    def no_args(self: _ReaderLike2Type) -> 'NoDeps':
+        """Is required to call ``Reader`` with no explicit arguments."""
 
     @abstractmethod
     def bind_context(
@@ -155,8 +155,8 @@ class ReaderLike3(Container3[_FirstType, _SecondType, _ThirdType]):
 
     @property
     @abstractmethod
-    def empty(self: _ReaderLike3Type) -> 'NoDeps':
-        """Is required to call ``Reader`` with explicit empty argument."""
+    def no_args(self: _ReaderLike3Type) -> 'NoDeps':
+        """Is required to call ``Reader`` with no explicit arguments."""
 
     @abstractmethod
     def bind_context(
