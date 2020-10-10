@@ -67,7 +67,7 @@ ResultLike3 = ResultLikeN[_FirstType, _SecondType, _ThirdType]
 class UnwrappableResult(
     ResultLikeN[_FirstType, _SecondType, _ThirdType],
     unwrappable.Unwrappable[_FirstUnwrappableType, _SecondUnwrappableType],
-    equable.SupportsEquality,
+    equable.Equable,
 ):
     """
     Intermediate type with 5 type arguments that represents unwrappable result.

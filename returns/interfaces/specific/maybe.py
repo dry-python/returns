@@ -156,7 +156,7 @@ MaybeLike3 = MaybeLikeN[_FirstType, _SecondType, _ThirdType]
 class MaybeBasedN(
     MaybeLikeN[_FirstType, _SecondType, _ThirdType],
     unwrappable.Unwrappable[_FirstType, None],
-    equable.SupportsEquality,
+    equable.Equable,
 ):
     """
     Concrete interface for ``Maybe`` type.

@@ -52,7 +52,7 @@ And then subtype the interfaces that provide these methods and laws.
 
 What interfaces a ``Pair`` type needs?
 
-- :class:`returns.interfaces.equable.SupportsEquality`,
+- :class:`returns.interfaces.equable.Equable`,
   because two ``Pair`` instances can be compared
 - :class:`returns.interfaces.mappable.MappableN`,
   because the first type can be composed with pure functions
@@ -102,7 +102,7 @@ Let's look at the resul:
   ...     container.Container2[_FirstType, _SecondType],
   ...     bimappable.BiMappable2[_FirstType, _SecondType],
   ...     lashable.Lashable2[_FirstType, _SecondType],
-  ...     equable.SupportsEquality,
+  ...     equable.Equable,
   ... ):
   ...     def __init__(
   ...         self, inner_value: Tuple[_FirstType, _SecondType],

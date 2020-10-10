@@ -59,4 +59,4 @@
         def __call__(self, deps: U) -> IOResult[V, T]:
             ...
   out: |
-    main:14: error: Return type "IOResult[V, T]" of "__call__" incompatible with return type "IOResult[T, V]" in supertype "CanBeCalled"
+    main:14: error: Return type "IOResult[V, T]" of "__call__" incompatible with return type "IOResult[T, V]" in supertype "Contextable"

@@ -62,8 +62,9 @@ We follow a very specific naming convention in our interface names.
 
 If interface does not depend on the number of types
 it works with and is always the same, we name it as is.
-For example, ``SupportsEquality`` is always the same
+For example, ``Equable`` is always the same
 and does not depend on the number of type arguments.
+We use adjectives to name these interfaces.
 
 Secondly, if interface depends on the number of type arguments,
 it is named with ``N`` suffix in the end.
@@ -467,7 +468,7 @@ Here's a full overview of all our interfaces:
 
 Let's review it one by one.
 
-SupportsEquality
+Equable
 ~~~~~~~~~~~~~~~~
 
 .. autoclasstree:: returns.interfaces.equable

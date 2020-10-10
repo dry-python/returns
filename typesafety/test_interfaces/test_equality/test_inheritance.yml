@@ -2,7 +2,7 @@
   disable_cache: false
   main: |
     from returns.primitives.hkt import SupportsKind1
-    from returns.interfaces.equable import SupportsEquality
+    from returns.interfaces.equable import Equable
     from returns.primitives.container import container_equality
     from typing import TypeVar
 
@@ -10,7 +10,7 @@
 
     class MyOwn(
         SupportsKind1['MyOwn', T],
-        SupportsEquality,
+        Equable,
     ):
         def __init__(self, value: T) -> None:
             ...
@@ -26,7 +26,7 @@
   disable_cache: false
   main: |
     from returns.primitives.hkt import SupportsKind1
-    from returns.interfaces.equable import SupportsEquality
+    from returns.interfaces.equable import Equable
     from typing import TypeVar
 
     T = TypeVar('T')
@@ -34,7 +34,7 @@
 
     class MyOwn(
         SupportsKind1['MyOwn', T],
-        SupportsEquality,
+        Equable,
     ):
         def __init__(self, value: T) -> None:
             ...
@@ -50,7 +50,7 @@
   disable_cache: false
   main: |
     from returns.primitives.hkt import SupportsKind1
-    from returns.interfaces.equable import SupportsEquality
+    from returns.interfaces.equable import Equable
     from typing import TypeVar
     from typing_extensions import final
 
@@ -59,7 +59,7 @@
     @final
     class MyOwn(
         SupportsKind1['MyOwn', T],
-        SupportsEquality,
+        Equable,
     ):
         ...
   out: |
@@ -70,7 +70,7 @@
   disable_cache: false
   main: |
     from returns.primitives.hkt import SupportsKind1
-    from returns.interfaces.equable import SupportsEquality
+    from returns.interfaces.equable import Equable
     from typing import TypeVar
     from typing_extensions import final
 
@@ -79,12 +79,12 @@
     @final
     class MyOwn(
         SupportsKind1['MyOwn', T],
-        SupportsEquality,
+        Equable,
     ):
         def equals(self, other: bool) -> T:
             ...
   out: |
-    main:13: error: Argument 1 of "equals" is incompatible with supertype "SupportsEquality"; supertype defines the argument type as "MyOwn[T]"
-    main:13: error: Return type "T" of "equals" incompatible with return type "bool" in supertype "SupportsEquality"
+    main:13: error: Argument 1 of "equals" is incompatible with supertype "Equable"; supertype defines the argument type as "MyOwn[T]"
+    main:13: error: Return type "T" of "equals" incompatible with return type "bool" in supertype "Equable"
     main:13: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
     main:13: note: This violates the Liskov substitution principle
