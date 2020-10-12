@@ -5,11 +5,6 @@ Contents
 
 .. toctree::
   :maxdepth: 2
-
-  pages/quickstart.rst
-
-.. toctree::
-  :maxdepth: 2
   :caption: Userguide
 
   pages/container.rst
@@ -38,6 +33,7 @@ Contents
   pages/functions.rst
   pages/curry.rst
   pages/types.rst
+  pages/methods.rst
 
 .. toctree::
   :maxdepth: 2
