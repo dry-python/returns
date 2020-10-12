@@ -3,9 +3,8 @@ from typing import Callable, ClassVar, NoReturn, Sequence, Type, TypeVar
 
 from typing_extensions import final
 
-from returns.interfaces.bimappable import BiMappableN
-from returns.interfaces.container import ContainerN
-from returns.interfaces.lashable import LashableN
+from returns.interfaces import container as _container
+from returns.interfaces import lashable, swappable
 from returns.primitives.asserts import assert_equal
 from returns.primitives.hkt import KindN
 from returns.primitives.laws import (
@@ -55,8 +54,8 @@ class _FailableLawSpec(LawSpecDef):
 
 
 class FailableN(
-    ContainerN[_FirstType, _SecondType, _ThirdType],
-    LashableN[_FirstType, _SecondType, _ThirdType],
+    _container.ContainerN[_FirstType, _SecondType, _ThirdType],
+    lashable.LashableN[_FirstType, _SecondType, _ThirdType],
     Lawful['FailableN[_FirstType, _SecondType, _ThirdType]'],
 ):
     """
@@ -223,7 +222,7 @@ class _DiverseFailableLawSpec(LawSpecDef):
 
 class DiverseFailableN(
     FailableN[_FirstType, _SecondType, _ThirdType],
-    BiMappableN[_FirstType, _SecondType, _ThirdType],
+    swappable.SwappableN[_FirstType, _SecondType, _ThirdType],
     Lawful['DiverseFailableN[_FirstType, _SecondType, _ThirdType]'],
 ):
     """

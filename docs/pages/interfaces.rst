@@ -528,6 +528,16 @@ BiMappable
   :members:
   :private-members:
 
+Swappable
+~~~~~~~~~
+
+.. autoclasstree:: returns.interfaces.swappable
+   :strict:
+
+.. automodule:: returns.interfaces.swappable
+  :members:
+  :private-members:
+
 Lashable
 ~~~~~~~~
 

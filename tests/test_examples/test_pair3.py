@@ -3,7 +3,7 @@ from typing import Callable, NoReturn, Tuple, Type, TypeVar
 
 from typing_extensions import final
 
-from returns.interfaces import bimappable, bindable, equable, lashable
+from returns.interfaces import bindable, equable, lashable, swappable
 from returns.primitives.container import BaseContainer, container_equality
 from returns.primitives.hkt import Kind2, KindN, SupportsKind2, dekind
 
@@ -19,7 +19,7 @@ _PairLikeKind = TypeVar('_PairLikeKind', bound='PairLikeN')
 
 class PairLikeN(
     bindable.BindableN[_FirstType, _SecondType, _ThirdType],
-    bimappable.BiMappableN[_FirstType, _SecondType, _ThirdType],
+    swappable.SwappableN[_FirstType, _SecondType, _ThirdType],
     lashable.LashableN[_FirstType, _SecondType, _ThirdType],
     equable.Equable,
 ):
@@ -150,7 +150,7 @@ class Pair(
         """
         return dekind(function(self._inner_value[1]))
 
-    # `BiMappableN` part:
+    # `SwappableN` part:
 
     def swap(self) -> 'Pair[_SecondType, _FirstType]':
         """

@@ -2,15 +2,15 @@
   disable_cache: false
   main: |
     from typing import TypeVar
+    from typing_extensions import final
     from returns.interfaces.bimappable import BiMappable2
     from returns.primitives.hkt import SupportsKind2
 
     V = TypeVar('V')
     T = TypeVar('T')
 
+    @final
     class MyClass(SupportsKind2['MyClass', V, T], BiMappable2[V, T]):
         ...
-
-    MyClass()
   out: |
-    main:11: error: Cannot instantiate abstract class 'MyClass' with abstract attributes 'alt', 'map' and 'swap'
+    main:10: error: Final class main.MyClass has abstract attributes "alt", "map"

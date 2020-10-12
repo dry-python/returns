@@ -74,8 +74,10 @@ let's find pre-defined aliases we can reuse.
 Turns out, there are some of them!
 
 - :class:`returns.interfaces.bimappable.BiMappableN`
-  which combines ``MappableN`` and ``AltableN``,
-  it also requires to add a new method called ``.swap`` to change values order
+  which combines ``MappableN`` and ``AltableN``
+- :class:`returns.interfaces.swappable.SwappableN`
+  is an alias for ``BiMappableN``
+  with a new method called ``.swap`` to change values order
 
 Let's look at the resul:
 
@@ -84,7 +86,7 @@ Let's look at the resul:
   >>> from typing_extensions import final
   >>> from typing import Callable, TypeVar, Tuple
 
-  >>> from returns.interfaces import bimappable, bindable, equable, lashable
+  >>> from returns.interfaces import bindable, equable, lashable, swappable
   >>> from returns.primitives.container import BaseContainer
   >>> from returns.primitives.hkt import SupportsKind2
 
@@ -99,7 +101,7 @@ Let's look at the resul:
   ...     BaseContainer,
   ...     SupportsKind2['Pair', _FirstType, _SecondType],
   ...     bindable.Bindable2[_FirstType, _SecondType],
-  ...     bimappable.BiMappable2[_FirstType, _SecondType],
+  ...     swappable.Swappable2[_FirstType, _SecondType],
   ...     lashable.Lashable2[_FirstType, _SecondType],
   ...     equable.Equable,
   ... ):
