@@ -3,7 +3,8 @@ from typing import Callable, ClassVar, NoReturn, Sequence, Type, TypeVar
 
 from typing_extensions import final
 
-from returns.interfaces import container, lashable, swappable
+from returns.interfaces import container as _container
+from returns.interfaces import lashable, swappable
 from returns.primitives.asserts import assert_equal
 from returns.primitives.hkt import KindN
 from returns.primitives.laws import (
@@ -53,7 +54,7 @@ class _FailableLawSpec(LawSpecDef):
 
 
 class FailableN(
-    container.ContainerN[_FirstType, _SecondType, _ThirdType],
+    _container.ContainerN[_FirstType, _SecondType, _ThirdType],
     lashable.LashableN[_FirstType, _SecondType, _ThirdType],
     Lawful['FailableN[_FirstType, _SecondType, _ThirdType]'],
 ):

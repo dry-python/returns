@@ -45,9 +45,7 @@ class SwappableN(
     bimappable.BiMappableN[_FirstType, _SecondType, _ThirdType],
     Lawful['SwappableN[_FirstType, _SecondType, _ThirdType]'],
 ):
-    """
-
-    """
+    """Interface that allows swapping first and second type values."""
 
     _laws: ClassVar[Sequence[Law]] = (
         Law1(_LawSpec.double_swap_law),

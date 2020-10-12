@@ -1,4 +1,3 @@
-from abc import abstractmethod
 from typing import NoReturn, TypeVar
 
 from returns.interfaces import altable, mappable
