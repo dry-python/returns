@@ -42,7 +42,7 @@ Can be replaced with this:
   >>> assert is_numeric('text') == Failure('It is not a number')
 
 Why is it helpful? Because ``cond`` can be easily added
-into a :ref:`pipeline` of functions.
+into a :ref:`pipelines` of functions.
 
 
 unwrap_or_failure
