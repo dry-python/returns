@@ -13,9 +13,6 @@
         SupportsKind2['MyClass', _FirstType, _SecondType],
         DiverseFailable2[_FirstType, _SecondType],
     ):
-        def swap(self) -> MyClass[_SecondType, _FirstType]:
-            ...
-
         @classmethod
         def from_failure(
             cls,
@@ -24,7 +21,6 @@
             ...
 
     x: MyClass[str, int]
-    reveal_type(x.swap())  # N: Revealed type is 'main.MyClass[builtins.int*, builtins.str*]'
     reveal_type(MyClass.from_failure(10))  # N: Revealed type is 'main.MyClass[builtins.int*, builtins.int*]'
 
 
@@ -44,9 +40,6 @@
         SupportsKind3['MyClass', _FirstType, _SecondType, _ThirdType],
         DiverseFailable3[_FirstType, _SecondType, _ThirdType],
     ):
-        def swap(self) -> MyClass[_SecondType, _FirstType, _ThirdType]:
-            ...
-
         @classmethod
         def from_failure(
             cls,
@@ -55,7 +48,6 @@
             ...
 
     x: MyClass[float, bool, str]
-    reveal_type(x.swap())  # N: Revealed type is 'main.MyClass[builtins.bool*, builtins.float*, builtins.str*]'
     reveal_type(MyClass.from_failure(10))  # N: Revealed type is 'main.MyClass[builtins.int*, builtins.int*, <nothing>]'
 
 
@@ -94,23 +86,17 @@
         SupportsKind2['MyClass', _FirstType, _SecondType],
         DiverseFailable2[_FirstType, _SecondType],
     ):
-        def swap(self) -> MyClass[_FirstType, _SecondType]:
-            ...
-
         @classmethod
         def from_failure(
             cls,
             inner_value: _FirstType
         ) -> MyClass[_FirstType, _FirstType]:
             ...
-
-    x: MyClass[str, int]
   out: |
-    main:12: error: Return type "MyClass[_FirstType, _SecondType]" of "swap" incompatible with return type "KindN[MyClass[_FirstType, _SecondType], _SecondType, _FirstType, NoReturn]" in supertype "BiMappableN"
-    main:16: error: Argument 1 of "from_failure" is incompatible with supertype "DiverseFailableN"; supertype defines the argument type as "_UpdatedType"
-    main:16: error: Return type "MyClass[_FirstType, _FirstType]" of "from_failure" incompatible with return type "KindN[MyClass[_FirstType, _SecondType], _FirstType, _UpdatedType, NoReturn]" in supertype "DiverseFailableN"
-    main:16: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
-    main:16: note: This violates the Liskov substitution principle
+    main:13: error: Argument 1 of "from_failure" is incompatible with supertype "DiverseFailableN"; supertype defines the argument type as "_UpdatedType"
+    main:13: error: Return type "MyClass[_FirstType, _FirstType]" of "from_failure" incompatible with return type "KindN[MyClass[_FirstType, _SecondType], _FirstType, _UpdatedType, NoReturn]" in supertype "DiverseFailableN"
+    main:13: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:13: note: This violates the Liskov substitution principle
 
 
 - case: diverse_failable_inheritance_wrong3
@@ -128,20 +114,14 @@
         SupportsKind3['MyClass', _FirstType, _SecondType, _ThirdType],
         DiverseFailable3[_FirstType, _SecondType, _ThirdType],
     ):
-        def swap(self) -> MyClass[_FirstType, _SecondType, _ThirdType]:
-            ...
-
         @classmethod
         def from_failure(
             cls,
             inner_value: _SecondType
         ) -> MyClass[_FirstType, _FirstType, _FirstType]:
             ...
-
-    x: MyClass[float, bool, str]
   out: |
-    main:13: error: Return type "MyClass[_FirstType, _SecondType, _ThirdType]" of "swap" incompatible with return type "KindN[MyClass[_FirstType, _SecondType, _ThirdType], _SecondType, _FirstType, _ThirdType]" in supertype "BiMappableN"
-    main:17: error: Argument 1 of "from_failure" is incompatible with supertype "DiverseFailableN"; supertype defines the argument type as "_UpdatedType"
-    main:17: error: Return type "MyClass[_FirstType, _FirstType, _FirstType]" of "from_failure" incompatible with return type "KindN[MyClass[_FirstType, _SecondType, _ThirdType], _FirstType, _UpdatedType, _ThirdType]" in supertype "DiverseFailableN"
-    main:17: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
-    main:17: note: This violates the Liskov substitution principle
+    main:14: error: Argument 1 of "from_failure" is incompatible with supertype "DiverseFailableN"; supertype defines the argument type as "_UpdatedType"
+    main:14: error: Return type "MyClass[_FirstType, _FirstType, _FirstType]" of "from_failure" incompatible with return type "KindN[MyClass[_FirstType, _SecondType, _ThirdType], _FirstType, _UpdatedType, _ThirdType]" in supertype "DiverseFailableN"
+    main:14: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:14: note: This violates the Liskov substitution principle
