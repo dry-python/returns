@@ -9,12 +9,12 @@ _TypeArgType3 = TypeVar('_TypeArgType3', covariant=True)
 
 _FunctionDefType = TypeVar(
     '_FunctionDefType',
-    bound=Callable[..., 'KindN'],
+    bound=Callable,
     covariant=True,  # This is a must! Otherwise it would not work.
 )
 _FunctionType = TypeVar(
     '_FunctionType',
-    bound=Callable[..., 'KindN'],
+    bound=Callable,
 )
 
 _UpdatedType = TypeVar('_UpdatedType')
