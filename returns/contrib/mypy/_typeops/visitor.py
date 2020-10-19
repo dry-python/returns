@@ -132,10 +132,9 @@ def _process_kinded_type(kind: Instance) -> Type:
     if isinstance(real_type, TypeVarType):
         return erase_to_bound(real_type)
     elif isinstance(real_type, Instance):
-        return real_type.copy_modified(args=[
-            type_arg
-            for type_arg in kind.args[1:len(real_type.args) + 1]
-        ])
+        return real_type.copy_modified(
+            args=kind.args[1:len(real_type.args) + 1],
+        )
 
     # This should never happen, probably can be an exception:
     return AnyType(TypeOfAny.implementation_artifact)
