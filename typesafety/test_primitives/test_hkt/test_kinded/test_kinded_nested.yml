@@ -1,0 +1,98 @@
+- case: kinded_with_nested_kind_interface
+  disable_cache: false
+  main: |
+    from returns.primitives.hkt import KindN, kinded
+    from returns.interfaces.mappable import MappableN
+    from returns.context import ReaderIOResult
+    from typing import TypeVar, Sequence
+
+    I = TypeVar('I', bound=MappableN)
+
+    @kinded
+    def test(arg: KindN[I, int, str, bool]) -> Sequence[KindN[I, int, str, bool]]:
+        ...
+
+    x: ReaderIOResult[int, str, bool]
+    reveal_type(test(x))  # N: Revealed type is 'typing.Sequence[returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int, builtins.str, builtins.bool]]'
+
+
+- case: kinded_with_nested_kind_instance
+  disable_cache: false
+  main: |
+    from returns.primitives.hkt import KindN, kinded
+    from returns.context import ReaderIOResult
+    from typing import Sequence
+
+    @kinded
+    def test() -> Sequence[KindN[ReaderIOResult, int, str, bool]]:
+        ...
+
+    reveal_type(test())  # N: Revealed type is 'typing.Sequence[returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int, builtins.str, builtins.bool]]'
+
+
+
+- case: kinded_with_nested_kind_callable
+  disable_cache: false
+  main: |
+    from returns.primitives.hkt import KindN, kinded
+    from returns.context import ReaderIOResult
+    from typing import Sequence, Callable
+
+    @kinded
+    def test() -> Sequence[
+        Callable[
+            [KindN[ReaderIOResult, int, str, bool]],
+            KindN[ReaderIOResult, int, str, bool]
+        ],
+    ]:
+        ...
+
+    reveal_type(test())  # N: Revealed type is 'typing.Sequence[def (returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int, builtins.str, builtins.bool]) -> returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int, builtins.str, builtins.bool]]'
+
+
+- case: kinded_with_nested_kind_tuple
+  disable_cache: false
+  main: |
+    from returns.primitives.hkt import KindN, kinded
+    from returns.context import ReaderIOResult
+    from typing import Tuple
+
+    @kinded
+    def test() -> Tuple[
+        KindN[ReaderIOResult, int, str, bool],
+        KindN[ReaderIOResult, float, bytes, object],
+    ]:
+        ...
+
+    reveal_type(test())  # N: Revealed type is 'Tuple[returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int, builtins.str, builtins.bool], returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.float, builtins.bytes, builtins.object]]'
+
+
+- case: kinded_with_nested_kind_union
+  disable_cache: false
+  main: |
+    from returns.primitives.hkt import KindN, kinded
+    from returns.context import ReaderIOResult
+    from typing import Union
+
+    @kinded
+    def test() -> Union[
+        KindN[ReaderIOResult, int, str, bool],
+        KindN[ReaderIOResult, float, bytes, object],
+    ]:
+        ...
+
+    reveal_type(test())  # N: Revealed type is 'Union[returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int, builtins.str, builtins.bool], returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.float, builtins.bytes, builtins.object]]'
+
+
+- case: kinded_with_nested_kind_type
+  disable_cache: false
+  main: |
+    from returns.primitives.hkt import KindN, kinded
+    from returns.context import ReaderIOResult
+    from typing import Type
+
+    @kinded
+    def test() -> Type[KindN[ReaderIOResult, int, str, bool]]:
+        ...
+
+    reveal_type(test())  # N: Revealed type is 'Type[returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int, builtins.str, builtins.bool]]'

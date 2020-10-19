@@ -71,6 +71,7 @@ def translate_kind_instance(typ: Type) -> Type:  # noqa: WPS, C901
 
     elif isinstance(typ, CallableType):
         return typ.copy_modified(
+            arg_types=_translate_types(typ.arg_types),
             ret_type=translate_kind_instance(typ.ret_type),
         )
     elif isinstance(typ, TupleType):

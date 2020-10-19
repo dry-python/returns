@@ -111,6 +111,8 @@ def kinded_signature(ctx: MethodSigContext) -> CallableType:
     return wrapped_method
 
 
+# TODO: we should raise an error if bound type does not have any `KindN`
+# instances, because that's not how `@kinded` and `Kinded[]` should be used.
 def kinded_call(ctx: MethodContext) -> MypyType:
     """
     Reveals the correct return type of ``Kinded.__call__`` method.
