@@ -13,7 +13,6 @@ from mypy.types import AnyType, CallableType, FunctionLike, Instance, Overloaded
 from mypy.types import Type as MypyType
 from mypy.types import TypeOfAny, TypeType, TypeVarType, get_proper_type
 
-from returns.contrib.mypy._consts import TYPED_KINDN
 from returns.contrib.mypy._typeops.fallback import asserts_fallback_to_any
 from returns.contrib.mypy._typeops.visitor import translate_kind_instance
 
