@@ -34,7 +34,7 @@
         ...
 
     x: Maybe[int]
-    reveal_type(lash(test)(x))  # N: Revealed type is 'returns.maybe.Maybe*[builtins.int*]'
+    reveal_type(lash(test)(x))  # N: Revealed type is 'returns.maybe.Maybe[builtins.int]'
 
 
 - case: lash_result
@@ -47,7 +47,7 @@
         ...
 
     x: Result[int, float]
-    reveal_type(lash(test)(x))  # N: Revealed type is 'returns.result.Result*[builtins.int*, builtins.str*]'
+    reveal_type(lash(test)(x))  # N: Revealed type is 'returns.result.Result[builtins.int, builtins.str]'
 
 
 - case: lash_ioresult
@@ -60,7 +60,7 @@
         ...
 
     x: IOResult[int, float]
-    reveal_type(lash(test)(x))  # N: Revealed type is 'returns.io.IOResult*[builtins.int*, builtins.str*]'
+    reveal_type(lash(test)(x))  # N: Revealed type is 'returns.io.IOResult[builtins.int, builtins.str]'
 
 
 - case: lash_context_result
@@ -73,7 +73,7 @@
         ...
 
     x: RequiresContextResult[float, float, int]
-    reveal_type(lash(test)(x))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult*[builtins.float*, builtins.str*, builtins.int*]'
+    reveal_type(lash(test)(x))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.float, builtins.str, builtins.int]'
 
 
 - case: lash_context_ioresult
@@ -86,7 +86,7 @@
         ...
 
     x: RequiresContextIOResult[float, float, int]
-    reveal_type(lash(test)(x))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult*[builtins.float*, builtins.str*, builtins.int*]'
+    reveal_type(lash(test)(x))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.float, builtins.str, builtins.int]'
 
 
 - case: lash_context_future_result
@@ -99,7 +99,7 @@
         ...
 
     x: RequiresContextFutureResult[float, float, int]
-    reveal_type(lash(test)(x))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult*[builtins.float*, builtins.str*, builtins.int*]'
+    reveal_type(lash(test)(x))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.float, builtins.str, builtins.int]'
 
 
 - case: lash_future_result
@@ -112,7 +112,7 @@
         ...
 
     x: FutureResult[int, float]
-    reveal_type(lash(test)(x))  # N: Revealed type is 'returns.future.FutureResult*[builtins.int*, builtins.str*]'
+    reveal_type(lash(test)(x))  # N: Revealed type is 'returns.future.FutureResult[builtins.int, builtins.str]'
 
 
 - case: lash_custom_type
@@ -133,4 +133,4 @@
         ...
 
     x: MyClass[int, str]
-    reveal_type(lash(test)(x))  # N: Revealed type is 'main.MyClass*[builtins.int*, builtins.int*]'
+    reveal_type(lash(test)(x))  # N: Revealed type is 'main.MyClass[builtins.int, builtins.int]'

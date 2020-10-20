@@ -8,13 +8,13 @@ from mypy.plugin import (
     MethodContext,
     MethodSigContext,
 )
-from mypy.typeops import bind_self, erase_to_bound
+from mypy.typeops import bind_self
 from mypy.types import AnyType, CallableType, FunctionLike, Instance, Overloaded
 from mypy.types import Type as MypyType
 from mypy.types import TypeOfAny, TypeType, TypeVarType, get_proper_type
 
-from returns.contrib.mypy._consts import TYPED_KINDN
 from returns.contrib.mypy._typeops.fallback import asserts_fallback_to_any
+from returns.contrib.mypy._typeops.visitor import translate_kind_instance
 
 # TODO: probably we can validate `KindN[]` creation during `get_analtype`
 
@@ -111,6 +111,8 @@ def kinded_signature(ctx: MethodSigContext) -> CallableType:
     return wrapped_method
 
 
+# TODO: we should raise an error if bound type does not have any `KindN`
+# instances, because that's not how `@kinded` and `Kinded[]` should be used.
 def kinded_call(ctx: MethodContext) -> MypyType:
     """
     Reveals the correct return type of ``Kinded.__call__`` method.
@@ -125,7 +127,7 @@ def kinded_call(ctx: MethodContext) -> MypyType:
 
     See :class:`returns.primitives.hkt.Kinded` for more information.
     """
-    return _process_kinded_type(ctx.default_return_type)
+    return translate_kind_instance(ctx.default_return_type)
 
 
 @asserts_fallback_to_any
@@ -164,27 +166,3 @@ def _crop_kind_args(
     if limit is None:
         limit = kind.args[0].args  # type: ignore
     return kind.args[1:len(limit) + 1]
-
-
-def _process_kinded_type(instance: MypyType) -> MypyType:
-    """Recursively process all type arguments in a kind."""
-    kind = get_proper_type(instance)
-    if not isinstance(kind, Instance) or not kind.args:
-        return instance
-
-    if kind.type.fullname != TYPED_KINDN:  # this is some other instance
-        return instance
-
-    real_type = get_proper_type(kind.args[0])
-    if isinstance(real_type, TypeVarType):
-        return erase_to_bound(real_type)
-    elif isinstance(real_type, Instance):
-        return real_type.copy_modified(args=[
-            # Let's check if there are any nested `KindN[]` instance,
-            # if so, it would be dekinded into a regular type following
-            # the same rules:
-            _process_kinded_type(type_arg)
-            for type_arg in kind.args[1:len(real_type.args) + 1]
-        ])
-    # This should never happen, probably can be an exception:
-    return AnyType(TypeOfAny.implementation_artifact)
