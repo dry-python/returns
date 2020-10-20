@@ -72,6 +72,8 @@ See [0Ver](https://0ver.org/).
 - Adds `collect_trace` helper function for better development experience
 - Adds `hypothesis` intergration and pre-defined "monad laws as values"
 
+- Adds `assert_equal` method to our `pytest` plugin
+
 ### Bugfixes
 
 - **Breaking**: fixes serious typing issue and changes how `flow` works

@@ -9,7 +9,6 @@ import pytest
 from typing_extensions import Final, final
 
 if TYPE_CHECKING:
-    from returns.interfaces.failable import FailableN
     from returns.interfaces.specific.result import ResultLikeN
 
 _ERROR_FIELD: Final = '_error_handled'
@@ -45,12 +44,12 @@ class ReturnsAsserts(object):
         from returns.primitives.asserts import assert_equal
         assert_equal(first, second, deps=deps, backend=backend)
 
-    def is_error_handled(self, container: 'FailableN') -> bool:
+    def is_error_handled(self, container) -> bool:
         """Ensures that container has its error handled in the end."""
         return bool(getattr(container, _ERROR_FIELD, False))
 
     @contextmanager
-    def has_trace(
+    def assert_trace(
         self,
         trace_type: _ReturnsResultType,
         function_to_search: _FunctionType,
