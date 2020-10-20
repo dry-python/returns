@@ -109,13 +109,14 @@ This is how it works internally:
   It does not affect production code.
 
 
-has_trace
-~~~~~~~~~
+assert_trace
+~~~~~~~~~~~~
 
 Sometimes we have to know if a container is created correctly in a specific
 point of our flow.
 
-``has_trace`` helps us to check exactly this by identifying when a container is
+``assert_trace`` helps us to check exactly this by
+identifying when a container is
 created and looking for the desired function.
 
 .. code:: python
@@ -131,13 +132,13 @@ created and looking for the desired function.
   >>> def test_if_failure_is_created_at_convert_function(
   ...     returns: ReturnsAsserts,
   ... ):
-  ...     with returns.has_trace(Failure, desired_function):
+  ...     with returns.assert_trace(Failure, desired_function):
   ...         Success('not a number').bind(desired_function)
 
   >>> def test_if_success_is_created_at_convert_function(
   ...     returns: ReturnsAsserts,
   ... ):
-  ...     with returns.has_trace(Success, desired_function):
+  ...     with returns.assert_trace(Success, desired_function):
   ...         Success('42').bind(desired_function)
 
   >>> # We only run these tests manually, because it is a doc example:
