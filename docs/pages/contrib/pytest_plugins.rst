@@ -31,6 +31,43 @@ To use it in your tests, request ``returns`` fixture like so:
       ...
 
 
+assert_equal
+~~~~~~~~~~~~
+
+We have a special helper to compare containers' equality.
+
+It might be an easy task for two ``Result`` or ``Maybe`` containers,
+but it is not very easy for two ``ReaderResult`` or ``FutureResult`` instances.
+
+Take a look:
+
+.. code:: python
+
+  >>> from returns.result import Result
+  >>> from returns.context import Reader
+
+  >>> assert Result.from_value(1) == Result.from_value(1)
+  >>> Reader.from_value(1) == Reader.from_value(1)
+  False
+
+So, we can use :func:`~returns.primitives.asserts.assert_equal`
+or ``returns.assert_equal`` method from our ``pytest`` fixture:
+
+.. code:: python
+
+  >>> from returns.result import Success
+  >>> from returns.context import Reader
+  >>> from returns.contrib.pytest import ReturnsAsserts
+
+  >>> def test_container_equality(returns: ReturnsAsserts):
+  ...     returns.assert_equal(Success(1), Success(1))
+  ...     returns.assert_equal(Reader.from_value(1), Reader.from_value(1))
+
+  >>> # We only run these tests manually, because it is a doc example:
+  >>> returns_fixture = getfixture('returns')
+  >>> test_container_equality(returns_fixture)
+
+
 is_error_handled
 ~~~~~~~~~~~~~~~~
 
@@ -39,14 +76,18 @@ It tests that containers do handle error track.
 
 .. code:: python
 
-  from returns.result import Failure, Success
-  from returns.contrib.pytest import ReturnsAsserts
+  >>> from returns.result import Failure, Success
+  >>> from returns.contrib.pytest import ReturnsAsserts
 
-  def test_my_container(returns: ReturnsAsserts):
-      assert not returns.is_error_handled(Failure(1))
-      assert returns.is_error_handled(
-          Failure(1).lash(lambda _: Success('default value')),
-      )
+  >>> def test_error_handled(returns: ReturnsAsserts):
+  ...     assert not returns.is_error_handled(Failure(1))
+  ...     assert returns.is_error_handled(
+  ...         Failure(1).lash(lambda _: Success('default value')),
+  ...     )
+
+  >>> # We only run these tests manually, because it is a doc example:
+  >>> returns_fixture = getfixture('returns')
+  >>> test_error_handled(returns_fixture)
 
 We recommed to unit test big chunks of code this way.
 This is helpful for big pipelines where
@@ -82,8 +123,6 @@ created and looking for the desired function.
   >>> from returns.result import Result, Success, Failure
   >>> from returns.contrib.pytest import ReturnsAsserts
 
-  >>> returns_fixture = getfixture('returns')
-
   >>> def desired_function(arg: str) -> Result[int, str]:
   ...     if arg.isnumeric():
   ...         return Success(int(arg))
@@ -101,6 +140,8 @@ created and looking for the desired function.
   ...     with returns.has_trace(Success, desired_function):
   ...         Success('42').bind(desired_function)
 
+  >>> # We only run these tests manually, because it is a doc example:
+  >>> returns_fixture = getfixture('returns')
   >>> test_if_failure_is_created_at_convert_function(returns_fixture)
   >>> test_if_success_is_created_at_convert_function(returns_fixture)
 
@@ -127,4 +168,7 @@ API Reference
    :strict:
 
 .. automodule:: returns.contrib.pytest.plugin
+   :members:
+
+.. automodule:: returns.primitives.asserts
    :members:

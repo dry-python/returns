@@ -5,6 +5,7 @@ from returns.context import (
     RequiresContextIOResult,
     RequiresContextResult,
 )
+from returns.contrib.pytest import ReturnsAsserts
 from returns.functions import identity
 from returns.future import FutureResult
 from returns.io import IOFailure, IOSuccess
@@ -38,7 +39,7 @@ def _under_test(
 @pytest.mark.parametrize('kwargs', [
     {'should_lash': True},
 ])
-def test_error_handled(container, returns, kwargs):
+def test_error_handled(returns: ReturnsAsserts, container, kwargs):
     """Demo on how to use ``pytest`` helpers to work with error handling."""
     error_handled = _under_test(container, **kwargs)
 
@@ -59,7 +60,7 @@ def test_error_handled(container, returns, kwargs):
     RequiresContextResult.from_value(1),
     RequiresContextResult.from_failure(1),
 ])
-def test_error_not_handled(container, returns):
+def test_error_not_handled(returns: ReturnsAsserts, container):
     """Demo on how to use ``pytest`` helpers to work with error handling."""
     error_handled = _under_test(container)
 
@@ -76,7 +77,7 @@ def test_error_not_handled(container, returns):
     RequiresContextFutureResult.from_value(1),
     RequiresContextFutureResult.from_failure(1),
 ])
-async def test_error_not_handled_async(container, returns):
+async def test_error_not_handled_async(returns: ReturnsAsserts, container):
     """Demo on how to use ``pytest`` helpers to work with error handling."""
     error_handled = _under_test(container)
 

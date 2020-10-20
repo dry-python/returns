@@ -8,6 +8,7 @@ from returns.context import (
     ReaderIOResult,
     ReaderResult,
 )
+from returns.contrib.pytest import ReturnsAsserts
 from returns.future import Future, FutureResult
 from returns.io import IO, IOResult
 from returns.maybe import Maybe
@@ -42,16 +43,41 @@ _containers: Sequence[BaseContainer] = (
 
 
 @pytest.mark.parametrize('container', _containers)
-def test_assert_equal(container, anyio_backend_name):
+def test_assert_equal(container, anyio_backend_name: str):
     """Ensure that containers can be equal."""
     assert_equal(container, container, backend=anyio_backend_name)
 
 
 @pytest.mark.parametrize('container', _containers)
-def test_assert_equal_not(container, anyio_backend_name):
+def test_assert_equal_plugin(
+    container,
+    anyio_backend_name: str,
+    returns: ReturnsAsserts,
+):
+    """Ensure that containers can be equal."""
+    returns.assert_equal(container, container, backend=anyio_backend_name)
+
+
+@pytest.mark.parametrize('container', _containers)
+def test_assert_equal_not(container, anyio_backend_name: str):
     """Ensure that containers can be not equal."""
     with pytest.raises(AssertionError):
         assert_equal(
+            container,
+            container.from_value(2),
+            backend=anyio_backend_name,
+        )
+
+
+@pytest.mark.parametrize('container', _containers)
+def test_assert_equal_not_plugin(
+    container,
+    anyio_backend_name: str,
+    returns: ReturnsAsserts,
+):
+    """Ensure that containers can be not equal."""
+    with pytest.raises(AssertionError):
+        returns.assert_equal(
             container,
             container.from_value(2),
             backend=anyio_backend_name,

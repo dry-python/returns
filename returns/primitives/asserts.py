@@ -41,8 +41,7 @@ def _convert(container, *, deps, backend: str):
             deps=deps,
             backend=backend,
         )
-    # TODO: remove `callable`
-    if callable(container) or isinstance(container, reader.Contextable):
+    elif isinstance(container, reader.Contextable):
         return _convert(
             container(deps),
             deps=deps,

@@ -1,0 +1,13 @@
+- case: check_all_laws
+  disable_cache: false
+  main: |
+    from returns.contrib.pytest import ReturnsAsserts
+
+    x: ReturnsAsserts
+    reveal_type(x.has_trace)
+    reveal_type(x.is_error_handled)
+    reveal_type(x.assert_equal)
+  out: |
+    main:4: note: Revealed type is 'def [_ReturnsResultType <: def (*Any, **Any) -> returns.interfaces.specific.result.ResultLikeN[Any, Any, Any], _FunctionType <: def (*Any, **Any) -> Any] (trace_type: _ReturnsResultType`1429, function_to_search: _FunctionType`1430) -> contextlib._GeneratorContextManager[None]'
+    main:5: note: Revealed type is 'def (container: returns.interfaces.failable.FailableN[Any, Any, Any]) -> builtins.bool'
+    main:6: note: Revealed type is 'def (first: Any, second: Any, *, deps: Any =, backend: builtins.str =)'
