@@ -8,7 +8,7 @@
         ...
 
     x: Result[str, AssertionError]
-    reveal_type(unify(test)(x))  # N: Revealed type is 'returns.result.Result[builtins.str, Union[builtins.AssertionError*, builtins.int]]'
+    reveal_type(unify(test)(x))  # N: Revealed type is 'returns.result.Result[builtins.str, Union[builtins.AssertionError, builtins.int]]'
 
 
 - case: unify_ioresult
@@ -21,7 +21,7 @@
         ...
 
     x: IOResult[float, bool]
-    reveal_type(unify(test)(x))  # N: Revealed type is 'returns.io.IOResult[builtins.str, Union[builtins.bool*, builtins.bytes]]'
+    reveal_type(unify(test)(x))  # N: Revealed type is 'returns.io.IOResult[builtins.str, Union[builtins.bool, builtins.bytes]]'
 
 
 - case: unify_future_result
@@ -34,7 +34,7 @@
         ...
 
     x: FutureResult[bool, float]
-    reveal_type(unify(test)(x))  # N: Revealed type is 'returns.future.FutureResult[builtins.bool, Union[builtins.float*, builtins.str]]'
+    reveal_type(unify(test)(x))  # N: Revealed type is 'returns.future.FutureResult[builtins.bool, Union[builtins.float, builtins.str]]'
 
 
 - case: unify_reader_ioresult
@@ -47,7 +47,7 @@
         ...
 
     x: ReaderIOResult[float, Exception, float]
-    reveal_type(unify(test)(x))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.bool, Union[builtins.Exception*, builtins.str], builtins.float]'
+    reveal_type(unify(test)(x))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.bool, Union[builtins.Exception, builtins.str], builtins.float]'
 
 
 - case: unify_reader_future_result1
@@ -60,7 +60,7 @@
         ...
 
     x: ReaderFutureResult[int, str, NoDeps]
-    reveal_type(unify(test)(x))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.int, Union[builtins.str*, builtins.bool], builtins.bool]'
+    reveal_type(unify(test)(x))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.int, Union[builtins.str, builtins.bool], builtins.bool]'
 
 
 - case: unify_reader_future_result2
@@ -73,7 +73,7 @@
         ...
 
     x: ReaderFutureResult[int, str, float]
-    reveal_type(unify(test)(x))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.int, Union[builtins.str*, builtins.bool], builtins.float]'
+    reveal_type(unify(test)(x))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.int, Union[builtins.str, builtins.bool], builtins.float]'
 
 
 - case: unify_custom_type
@@ -98,4 +98,4 @@
         ...
 
     x: MyOwn[str, ValueError]
-    reveal_type(unify(test)(x))  # N: Revealed type is 'main.MyOwn[builtins.str, Union[builtins.ValueError*, builtins.bool]]'
+    reveal_type(unify(test)(x))  # N: Revealed type is 'main.MyOwn[builtins.str, Union[builtins.ValueError, builtins.bool]]'

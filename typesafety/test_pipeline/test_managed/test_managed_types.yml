@@ -15,7 +15,7 @@
         ...
 
     x: IOResult[int, str]
-    reveal_type(managed(use, release)(x))  # N: Revealed type is 'returns.io.IOResult*[builtins.float*, builtins.str*]'
+    reveal_type(managed(use, release)(x))  # N: Revealed type is 'returns.io.IOResult[builtins.float, builtins.str]'
 
 
 - case: managed_with_future_result
@@ -35,7 +35,7 @@
         ...
 
     x: FutureResult[int, str]
-    reveal_type(managed(use, release)(x))  # N: Revealed type is 'returns.future.FutureResult*[builtins.float*, builtins.str*]'
+    reveal_type(managed(use, release)(x))  # N: Revealed type is 'returns.future.FutureResult[builtins.float, builtins.str]'
 
 
 - case: managed_with_reader_ioresult
@@ -55,7 +55,7 @@
         ...
 
     x: ReaderIOResult[int, str, bool]
-    reveal_type(managed(use, release)(x))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult*[builtins.float*, builtins.str*, builtins.bool*]'
+    reveal_type(managed(use, release)(x))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.float, builtins.str, builtins.bool]'
 
 
 - case: managed_with_reader_future_result
@@ -75,7 +75,7 @@
         ...
 
     x: ReaderFutureResult[int, str, bool]
-    reveal_type(managed(use, release)(x))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult*[builtins.float*, builtins.str*, builtins.bool*]'
+    reveal_type(managed(use, release)(x))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.float, builtins.str, builtins.bool]'
 
 
 - case: managed_custom_type
@@ -130,4 +130,4 @@
         ...
 
     x: MyClass[int, str]
-    reveal_type(managed(use, release)(x))  # N: Revealed type is 'main.MyClass*[builtins.float*, builtins.str*]'
+    reveal_type(managed(use, release)(x))  # N: Revealed type is 'main.MyClass[builtins.float, builtins.str]'

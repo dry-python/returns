@@ -12,7 +12,7 @@
         ...
 
     r: Result[float, int]
-    reveal_type(flow(r, bimap(first, second)))  # N: Revealed type is 'returns.result.Result*[builtins.str, builtins.str]'
+    reveal_type(flow(r, bimap(first, second)))  # N: Revealed type is 'returns.result.Result[builtins.str, builtins.str]'
 
 
 - case: bimap_result
@@ -28,7 +28,7 @@
         ...
 
     x: Result[float, int]
-    reveal_type(bimap(first, second)(x))  # N: Revealed type is 'returns.result.Result*[builtins.str, builtins.str]'
+    reveal_type(bimap(first, second)(x))  # N: Revealed type is 'returns.result.Result[builtins.str, builtins.str]'
 
 
 - case: bimap_ioresult
@@ -44,7 +44,7 @@
         ...
 
     x: IOResult[float, int]
-    reveal_type(bimap(first, second)(x))  # N: Revealed type is 'returns.io.IOResult*[builtins.str, builtins.str]'
+    reveal_type(bimap(first, second)(x))  # N: Revealed type is 'returns.io.IOResult[builtins.str, builtins.str]'
 
 
 - case: bimap_requires_context_result
@@ -60,7 +60,7 @@
         ...
 
     x: RequiresContextResult[float, int, bool]
-    reveal_type(bimap(first, second)(x))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult*[builtins.str, builtins.str, builtins.bool*]'
+    reveal_type(bimap(first, second)(x))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.str, builtins.str, builtins.bool]'
 
 
 - case: bimap_requires_context_ioresult
@@ -76,7 +76,7 @@
         ...
 
     x: RequiresContextIOResult[float, int, bool]
-    reveal_type(bimap(first, second)(x))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult*[builtins.str, builtins.str, builtins.bool*]'
+    reveal_type(bimap(first, second)(x))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.str, builtins.str, builtins.bool]'
 
 
 - case: bimap_requires_context_future_result
@@ -92,7 +92,7 @@
         ...
 
     x: RequiresContextFutureResult[float, int, bool]
-    reveal_type(bimap(first, second)(x))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult*[builtins.str, builtins.str, builtins.bool*]'
+    reveal_type(bimap(first, second)(x))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.str, builtins.str, builtins.bool]'
 
 
 - case: bimap_future_result
@@ -108,7 +108,7 @@
         ...
 
     x: FutureResult[float, int]
-    reveal_type(bimap(first, second)(x))  # N: Revealed type is 'returns.future.FutureResult*[builtins.str, builtins.str]'
+    reveal_type(bimap(first, second)(x))  # N: Revealed type is 'returns.future.FutureResult[builtins.str, builtins.str]'
 
 
 - case: bimap_custom_type
@@ -135,4 +135,4 @@
         ...
 
     x: MyOwn[float, int]
-    reveal_type(bimap(first, second)(x))  # N: Revealed type is 'main.MyOwn*[builtins.str, builtins.str]'
+    reveal_type(bimap(first, second)(x))  # N: Revealed type is 'main.MyOwn[builtins.str, builtins.str]'

@@ -25,4 +25,4 @@
         ...
 
     x: Maybe[float]
-    reveal_type(bind_optional(test)(x))  # N: Revealed type is 'returns.maybe.Maybe*[builtins.str]'
+    reveal_type(bind_optional(test)(x))  # N: Revealed type is 'returns.maybe.Maybe[builtins.str]'
