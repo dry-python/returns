@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import inspect
 import sys
 from contextlib import contextmanager
@@ -45,7 +47,7 @@ class ReturnsAsserts(object):
         from returns.primitives.asserts import assert_equal
         assert_equal(first, second, deps=deps, backend=backend)
 
-    def is_error_handled(self, container: 'FailableN') -> bool:
+    def is_error_handled(self, container: FailableN) -> bool:
         """Ensures that container has its error handled in the end."""
         return bool(getattr(container, _ERROR_FIELD, False))
 
