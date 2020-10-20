@@ -40,8 +40,9 @@ It tests that containers do handle error track.
 .. code:: python
 
   from returns.result import Failure, Success
+  from returns.contrib.pytest import ReturnsAsserts
 
-  def test_my_container(returns):
+  def test_my_container(returns: ReturnsAsserts):
       assert not returns.is_error_handled(Failure(1))
       assert returns.is_error_handled(
           Failure(1).lash(lambda _: Success('default value')),
@@ -79,6 +80,7 @@ created and looking for the desired function.
 .. code:: python
 
   >>> from returns.result import Result, Success, Failure
+  >>> from returns.contrib.pytest import ReturnsAsserts
 
   >>> returns_fixture = getfixture('returns')
 
@@ -87,11 +89,15 @@ created and looking for the desired function.
   ...         return Success(int(arg))
   ...     return Failure('"{0}" is not a number'.format(arg))
 
-  >>> def test_if_failure_is_created_at_convert_function(returns):
+  >>> def test_if_failure_is_created_at_convert_function(
+  ...     returns: ReturnsAsserts,
+  ... ):
   ...     with returns.has_trace(Failure, desired_function):
   ...         Success('not a number').bind(desired_function)
 
-  >>> def test_if_success_is_created_at_convert_function(returns):
+  >>> def test_if_success_is_created_at_convert_function(
+  ...     returns: ReturnsAsserts,
+  ... ):
   ...     with returns.has_trace(Success, desired_function):
   ...         Success('42').bind(desired_function)
 

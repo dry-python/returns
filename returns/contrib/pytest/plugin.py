@@ -9,7 +9,8 @@ import pytest
 from typing_extensions import Final, final
 
 if TYPE_CHECKING:
-    from returns.interfaces.specific.result import ResultBasedN
+    from returns.interfaces.failable import FailableN
+    from returns.interfaces.specific.result import ResultLikeN
 
 _ERROR_FIELD: Final = '_error_handled'
 _ERROR_HANDLERS: Final = (
@@ -21,9 +22,51 @@ _ERRORS_COPIERS: Final = (
 )
 
 _FunctionType = TypeVar('_FunctionType', bound=Callable)
-_ResultCallableType = TypeVar(
-    '_ResultCallableType', bound=Callable[..., 'ResultBasedN'],
+_ReturnsResultType = TypeVar(
+    '_ReturnsResultType', bound=Callable[..., 'ResultLikeN'],
 )
+
+
+@final
+class ReturnsAsserts(object):
+    """Class with helpers assertions to check containers."""
+
+    __slots__ = ()
+
+    def is_error_handled(self, container: 'FailableN') -> bool:
+        """Ensures that container has its error handled in the end."""
+        return bool(getattr(container, _ERROR_FIELD, False))
+
+    @contextmanager
+    def has_trace(
+        self,
+        trace_type: _ReturnsResultType,
+        function_to_search: _FunctionType,
+    ) -> Iterator[None]:
+        """
+        Ensures that a given function was called during execution.
+
+        Use it to determine where the failure happened.
+        """
+        old_tracer = sys.gettrace()
+        sys.settrace(partial(_trace_function, trace_type, function_to_search))
+
+        try:
+            yield
+        except _DesiredFunctionFound:
+            pass  # noqa: WPS420
+        else:
+            pytest.fail(
+                'No container {0} was created'.format(trace_type.__name__),
+            )
+        finally:
+            sys.settrace(old_tracer)
+
+
+@pytest.fixture(scope='session')
+def returns(_patch_containers) -> ReturnsAsserts:  # noqa: WPS442
+    """Returns our own class with helpers assertions to check containers."""
+    return ReturnsAsserts()
 
 
 def pytest_configure(config) -> None:
@@ -39,41 +82,6 @@ def pytest_configure(config) -> None:
         use `-m "not returns_lawful"` to skip them.
         """,
     )
-
-
-class _DesiredFunctionFound(RuntimeError):
-    """Exception to raise when expected function is found."""
-
-
-@final
-class _ReturnsAsserts(object):
-    """Class with helpers assertions to check containers."""
-
-    __slots__ = ()
-
-    def is_error_handled(self, container) -> bool:
-        """Ensures that container has its error handled in the end."""
-        return bool(getattr(container, _ERROR_FIELD, False))
-
-    @contextmanager
-    def has_trace(
-        self,
-        trace_type: _ResultCallableType,
-        function_to_search: _FunctionType,
-    ) -> Iterator[None]:
-        old_tracer = sys.gettrace()
-        sys.settrace(partial(_trace_function, trace_type, function_to_search))
-
-        try:
-            yield
-        except _DesiredFunctionFound:
-            pass  # noqa: WPS420
-        else:
-            pytest.fail(
-                'No container {0} was created'.format(trace_type.__name__),
-            )
-        finally:
-            sys.settrace(old_tracer)
 
 
 @pytest.fixture(scope='session')
@@ -92,12 +100,6 @@ def _patch_containers() -> None:
     _patch_error_handling(_ERRORS_COPIERS, _PatchedContainer.copy_handler)
 
 
-@pytest.fixture(scope='session')
-def returns(_patch_containers) -> _ReturnsAsserts:  # noqa: WPS442
-    """Returns our own class with helpers assertions to check containers."""
-    return _ReturnsAsserts()
-
-
 def _patch_error_handling(methods, patch_handler) -> None:
     for container in _PatchedContainer.containers_to_patch():
         for method in methods:
@@ -107,7 +109,7 @@ def _patch_error_handling(methods, patch_handler) -> None:
 
 
 def _trace_function(
-    trace_type: _ResultCallableType,
+    trace_type: _ReturnsResultType,
     function_to_search: _FunctionType,
     frame: FrameType,
     event: str,
@@ -192,3 +194,7 @@ class _PatchedContainer(object):
                 )
                 return original_result
         return wraps(original)(factory)
+
+
+class _DesiredFunctionFound(RuntimeError):
+    """Exception to raise when expected function is found."""
