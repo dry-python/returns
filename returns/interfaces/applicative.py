@@ -105,7 +105,7 @@ class _LawSpec(LawSpecDef):
         """
         Composition law.
 
-        Apply two functions twice is the same
+        Appling two functions twice is the same
         as applying their composition once.
         """
         assert_equal(
