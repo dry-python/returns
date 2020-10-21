@@ -6,7 +6,7 @@ incremental in minor, bugfixes only are patches.
 See [0Ver](https://0ver.org/).
 
 
-## 0.15.0 WIP aka The initial HKT release
+## 0.15.0 aka The initial HKT release
 
 ### Features
 
