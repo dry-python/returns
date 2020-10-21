@@ -81,51 +81,8 @@ And is literally a wrapper around ``Future[Result[_V, _E]]`` type.
 
 Let's see how it can be used in a real program:
 
-.. code:: python
-
-  from typing import Sequence
-
-  import anyio  # you would need to `pip install anyio`
-  import httpx  # you would need to `pip install httpx`
-  from typing_extensions import Final, TypedDict
-
-  from returns.future import FutureResultE, future_safe
-  from returns.iterables import Fold
-
-  _URL: Final = 'https://jsonplaceholder.typicode.com/posts/{0}'
-  _Post = TypedDict('_Post', {
-      'id': int,
-      'userId': int,
-      'title': str,
-      'body': str,
-  })
-  _TitleOnly = TypedDict('_TitleOnly', {'title': str})
-
-  @future_safe
-  async def _fetch_post(post_id: int) -> _Post:
-      # Ideally, we can use `ReaderFutureResult` to provide `client` from deps.
-      async with httpx.AsyncClient(timeout=5) as client:
-          response = await client.get(_URL.format(post_id))
-          response.raise_for_status()
-          return response.json()
-
-  def show_titles(number_of_posts: int) -> FutureResultE[Sequence[_TitleOnly]]:
-      titles = [
-          # Notice how easily we compose async and sync functions:
-          _fetch_post(post_id).map(lambda post: post['title'])
-          # TODO: try `for post_id in {2, 1, 0}:` to see how errors work
-          for post_id in range(1, number_of_posts + 1)
-      ]
-      return Fold.collect(titles, FutureResultE.from_value(()))
-
-  if __name__ == '__main__':
-      # Let's fetch 3 titles of posts asynchronously:
-      print(anyio.run(show_titles(3).awaitable))
-      # <IOResult: <Success: (
-      #    'sunt aut facere repellat provident occaecati ...',
-      #    'qui est esse',
-      #    'ea molestias quasi exercitationem repellat qui ipsa sit aut',
-      # )>>
+.. literalinclude:: ../../tests/test_examples/test_future/test_future_result.py
+   :linenos:
 
 What is different?
 

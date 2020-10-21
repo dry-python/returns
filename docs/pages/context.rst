@@ -319,72 +319,8 @@ Which means that it is a wrapper around impure async function that might fail.
 
 Here's how it should be used:
 
-.. code:: python
-
-  from typing import Callable, Sequence
-
-  import anyio  # you would need to `pip install anyio`
-  import httpx  # you would need to `pip install httpx`
-  from typing_extensions import Final, TypedDict
-
-  from returns.context import RequiresContextFutureResultE
-  from returns.functions import tap
-  from returns.future import FutureResultE, future_safe
-  from returns.iterables import Fold
-  from returns.pipeline import managed
-  from returns.result import safe
-
-  _URL: Final = 'https://jsonplaceholder.typicode.com/posts/{0}'
-  _Post = TypedDict('_Post', {
-      'id': int,
-      'userId': int,
-      'title': str,
-      'body': str,
-  })
-  _TitleOnly = TypedDict('_TitleOnly', {'title': str})
-
-  def _close(client: httpx.AsyncClient, _) -> FutureResultE[None]:
-      return future_safe(client.aclose)()
-
-  def _fetch_post(
-      post_id: int,
-  ) -> RequiresContextFutureResultE[_Post, httpx.AsyncClient]:
-      context: RequiresContextFutureResultE[
-          httpx.AsyncClient,
-          httpx.AsyncClient,
-      ] = RequiresContextFutureResultE.ask()
-
-      return context.bind_future_result(
-          lambda client: future_safe(client.get)(_URL.format(post_id)),
-      ).bind_result(
-          safe(tap(httpx.Response.raise_for_status)),
-      ).map(
-          lambda response: response.json(),
-      )
-
-  def show_titles(
-      number_of_posts: int,
-  ) -> RequiresContextFutureResultE[Sequence[_TitleOnly], httpx.AsyncClient]:
-      titles = [
-          # Notice how easily we compose async and sync functions:
-          _fetch_post(post_id).map(lambda post: post['title'])
-          # TODO: try `for post_id in {2, 1, 0}:` to see how errors work
-          for post_id in range(1, number_of_posts + 1)
-      ]
-      return Fold.collect(titles, RequiresContextFutureResultE.from_value(()))
-
-  if __name__ == '__main__':
-      # Let's fetch 3 titles of posts asynchronously:
-      managed_httpx = managed(show_titles(3), _close)
-      future_result = managed_httpx(
-          FutureResultE.from_value(httpx.AsyncClient(timeout=5)),
-      )
-      print(anyio.run(future_result.awaitable))
-      # <IOResult: <Success: (
-      #    'sunt aut facere repellat provident occaecati ...',
-      #    'qui est esse',
-      #    'ea molestias quasi exercitationem repellat qui ipsa sit aut',
-      # )>>
+.. literalinclude:: ../../tests/test_examples/test_context/test_reader_future_result.py
+   :linenos:
 
 This example illustrates the whole point of our actions: writting
 sync code that executes asynchronously without any magic at all!

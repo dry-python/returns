@@ -138,7 +138,7 @@ Looks like it already knows what methods should be there!
 Ok, let's drop some initial and straight forward implementation.
 We will later make it more complex step by step.
 
-.. literalinclude:: ../../tests/test_examples/test_pair1.py
+.. literalinclude:: ../../tests/test_examples/test_your_container/test_pair1.py
    :linenos:
 
 You can check our resulting source with ``mypy``. It would be happy this time.
@@ -159,17 +159,17 @@ It would be also nice to add all other interfaces there as supertypes.
 
 That's how it is going to look:
 
-.. literalinclude:: ../../tests/test_examples/test_pair2.py
+.. literalinclude:: ../../tests/test_examples/test_your_container/test_pair2.py
    :linenos:
    :pyobject: PairLikeN
 
 Awesome! Now we have a new interface to implement. Let's do that!
 
-.. literalinclude:: ../../tests/test_examples/test_pair2.py
+.. literalinclude:: ../../tests/test_examples/test_your_container/test_pair2.py
    :linenos:
    :pyobject: Pair.pair
 
-.. literalinclude:: ../../tests/test_examples/test_pair2.py
+.. literalinclude:: ../../tests/test_examples/test_your_container/test_pair2.py
    :linenos:
    :pyobject: Pair.from_unpaired
 
@@ -194,7 +194,7 @@ This gives us several key benefits:
 
 Let's add docs and doctests! Let's use ``map`` method as a short example:
 
-.. literalinclude:: ../../tests/test_examples/test_pair3.py
+.. literalinclude:: ../../tests/test_examples/test_your_container/test_pair3.py
    :linenos:
    :pyobject: Pair.map
 
@@ -215,13 +215,13 @@ Let's add them to our ``PairLikeN`` interface.
 
 Let's start with laws definition:
 
-.. literalinclude:: ../../tests/test_examples/test_pair4.py
+.. literalinclude:: ../../tests/test_examples/test_your_container/test_pair4.py
    :linenos:
    :pyobject: _LawSpec
 
 And them let's add them to our ``PairLikeN`` interface:
 
-.. literalinclude:: ../../tests/test_examples/test_pair4.py
+.. literalinclude:: ../../tests/test_examples/test_your_container/test_pair4.py
    :linenos:
    :pyobject: PairLikeN
    :emphasize-lines: 9-12
@@ -231,7 +231,7 @@ to generate 10 ``hypothesis`` test cases with hundreds real test cases inside.
 
 Here's the final result of our brand new ``Pair`` type:
 
-.. literalinclude:: ../../tests/test_examples/test_pair4.py
+.. literalinclude:: ../../tests/test_examples/test_your_container/test_pair4.py
    :linenos:
 
 
@@ -258,12 +258,12 @@ to make sure our ``.pair`` function works correctly:
   We need it since we store our example in ``tests/`` folder.
   And we have to tell ``mypy`` how to find it.
 
-.. literalinclude:: ../../typesafety/test_examples/test_pair4_def.yml
+.. literalinclude:: ../../typesafety/test_examples/test_your_container/test_pair4_def.yml
    :linenos:
 
 Ok, now, let's try to raise an error by using it incorrectly:
 
-.. literalinclude:: ../../typesafety/test_examples/test_pair4_error.yml
+.. literalinclude:: ../../typesafety/test_examples/test_your_container/test_pair4_error.yml
    :linenos:
 
 
@@ -280,7 +280,7 @@ So, let's say we want to use native :func:`~returns.pointfree.map.map_`
 pointfree function with our new ``Pair`` type.
 Let's test that it will work correctly:
 
-.. literalinclude:: ../../typesafety/test_examples/test_pair4_reuse.yml
+.. literalinclude:: ../../typesafety/test_examples/test_your_container/test_pair4_reuse.yml
    :linenos:
 
 Yes, it works!
