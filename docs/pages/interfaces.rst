@@ -112,12 +112,12 @@ that implements the ``Mappable`` interface:
   >>> maybe_str: Maybe[str] = Some('example')
   >>> assert maybe_str.map(can_be_mapped) == Some('example!')
 
-:class:`~returns.interfaces.mappable.MappableN` interface help us to
+:class:`~MappableN` interface helps us to
 create our own mappable container like :class:`~returns.maybe.Maybe`.
 
 .. code:: python
 
-  >>> from typing import Any, Callable, TypeVar
+  >>> from typing import Callable, TypeVar
 
   >>> from returns.interfaces.mappable import Mappable1
   >>> from returns.primitives.hkt import SupportsKind1
@@ -154,12 +154,12 @@ With our ``Number`` mappable class we can compose easily math functions with it.
 Laws
 ~~~~
 
-To make sure your mappable implementation is right, you can apply the
-Mappable laws on it to test.
+To make sure your ``Mappable`` implementation is right,
+you can apply the ``Mappable`` laws on it to test.
 
 1. :func:`Identity Law <_LawSpec.identity_law>`:
-   When we pass the identity function to the map method,
-   the mappable has to be the same, unaltered.
+   When we pass the identity function to the ``map`` method,
+   the ``Mappable`` instance has to be the same, unchanged.
 
 .. code:: python
 
@@ -201,44 +201,282 @@ Bindable
 
 Bindable is something that we can bind with a function. Like
 :class:`~returns.maybe.Maybe`, so
-:class:`~returns.interfaces.bindable.BindableN` interface will help
+:class:`~BindableN` interface will help
 us to create our custom bindable.
 
 .. code:: python
 
-  >>> from dataclasses import dataclass
-  >>> from typing import Any, Callable, TypeVar
+  >>> from typing import Callable, TypeVar
 
   >>> from returns.interfaces.bindable import Bindable1
-  >>> from returns.primitives.hkt import SupportsKind1
+  >>> from returns.primitives.hkt import SupportsKind1, Kind1, dekind
   >>> from returns.primitives.container import BaseContainer
 
-  >>> _BagContentType = TypeVar('_BagContentType')
-  >>> _NewBagContentType = TypeVar('_NewBagContentType')
+  >>> _NumberType = TypeVar('_NumberType')
+  >>> _NewNumberType = TypeVar('_NewNumberType')
 
-  >>> class Bag(
+  >>> class Number(
   ...     BaseContainer,
-  ...     SupportsKind1['Bag', int],
-  ...     Bindable1[_BagContentType],
+  ...     SupportsKind1['Number', _NumberType],
+  ...     Bindable1[_NumberType],
   ... ):
-  ...     def __init__(self, inner_value: _BagContentType) -> None:
+  ...     def __init__(self, inner_value: _NumberType) -> None:
   ...         super().__init__(inner_value)
   ...
-  ...     def bind(
+  ...     def bind(  # This method is required by Bindable
   ...         self,
-  ...         function: Callable[[_BagContentType], 'Bag[_NewBagContentType]']
-  ...     ) -> 'Bag[_NewBagContentType]':
-  ...         return function(self._inner_value)
+  ...         function: Kind1[
+  ...             'Number',
+  ...             Callable[[_NumberType], 'Number[_NewNumberType]'],
+  ...         ],
+  ...     ) -> 'Number[_NewNumberType]':
+  ...         return dekind(function(self._inner_value))
 
-  >>> @dataclass
-  ... class Peanuts(object):
-  ...     quantity: int
+And here's how we can use it:
 
-  >>> def get_half(peanuts: Peanuts) -> Bag[Peanuts]:
-  ...     return Bag(Peanuts(peanuts.quantity // 2))
+.. code:: python
 
-  >>> bag_of_peanuts: Bag[Peanuts] = Bag(Peanuts(10))
-  >>> assert bag_of_peanuts.bind(get_half) == Bag(Peanuts(5))
+  >>> def double(arg: int) -> Number[int]:
+  ...    return Number(arg * 2)
+
+  >>> number = Number(5)
+  >>> assert number.bind(double) == Number(10)
+
+
+Applicative
+-----------
+
+.. currentmodule:: returns.interfaces.applicative
+
+Something is considered applicative
+if it is a functor already and,
+moreover, we can ``apply`` another container to it
+and construct a new value with ``.from_value`` method.
+
+An example in this library is :class:`~returns.maybe.Maybe`,
+that implements the ``Mappable`` and ``Applicative`` interfaces:
+
+.. code:: python
+
+  >>> from returns.maybe import Maybe, Some
+
+  >>> maybe_str = Maybe.from_value('example')
+  >>> maybe_func = Maybe.from_value(len)  # we use function as a value!
+
+  >>> assert maybe_str.apply(maybe_func) == Some(7)
+
+As you see, ``apply`` takes a container with a function inside
+and applies it to the currect value inside the container.
+
+This way we really execute ``Maybe.from_value(len('example'))``.
+
+:class:`~ApplicativeN` which is a subtype of
+:class:`~returns.interfaces.mappable.MappableN` interface helps us to
+create our own applicative container like :class:`~returns.maybe.Maybe`.
+
+.. code:: python
+
+  >>> from typing import Callable, TypeVar
+
+  >>> from returns.interfaces.applicative import Applicative1
+  >>> from returns.primitives.hkt import SupportsKind1, Kind1, dekind
+  >>> from returns.primitives.container import BaseContainer
+
+  >>> _NumberType = TypeVar('_NumberType')
+  >>> _NewNumberType = TypeVar('_NewNumberType')
+
+  >>> class Number(
+  ...     BaseContainer,
+  ...     SupportsKind1['Number', _NumberType],
+  ...     Applicative1[_NumberType],
+  ... ):
+  ...     def __init__(self, inner_value: _NumberType) -> None:
+  ...         super().__init__(inner_value)
+  ...
+  ...     def map(  # This method is required by Mappable
+  ...         self,
+  ...         function: Callable[[_NumberType], _NewNumberType]
+  ...     ) -> 'Number[_NewNumberType]':
+  ...         return Number(function(self._inner_value))
+  ...
+  ...     def apply(  # This method is required by Applicative
+  ...         self,
+  ...         container: Kind1[
+  ...             'Number',
+  ...             Callable[[_NumberType], _NewNumberType],
+  ...         ],
+  ...     ) -> 'Number[_NewNumberType]':
+  ...         return Number.from_value(
+  ...             dekind(container._inner_value(self._inner_value)),
+  ...         )
+  ...
+  ...     @classmethod
+  ...     def from_value(  # This method is required by Applicative
+  ...         cls,
+  ...         inner_value: _NewNumberType,
+  ...     ) -> 'Number[_NewNumberType]':
+  ...         return Number(inner_value)
+
+With our ``Number`` mappable class we can compose easily math functions with it.
+
+.. code:: python
+
+  >>> def my_math_function(number: int) -> int:
+  ...     return number - 1
+
+  >>> number = Number(3)
+  >>> number_function = Number.from_value(my_math_function)
+
+  >>> assert number.apply(number_function) == Number(2)
+
+Laws
+~~~~
+
+To make sure your ``Applicative`` implementation is right,
+you can apply the ``Applicative`` laws on it to test.
+
+1. :func:`Identity Law <_LawSpec.identity_law>`:
+   When we pass an applicative instance
+   with wrapped identity function to the ``apply`` method,
+   the ``Applicative`` has to be the same, unchanged.
+
+.. code:: python
+
+  >>> from returns.functions import identity
+
+  >>> applicative_number: Number[int] = Number(1)
+  >>> assert applicative_number.apply(
+  ...     applicative_number.from_value(identity),
+  ... ) == Number(1)
+
+2. :func:`Interchange Law <_LawSpec.interchange_law>`:
+   We can start our composition with both raw value and a function.
+
+.. code:: python
+
+  >>> def function(arg: int) -> int:
+  ...     return arg + 1
+
+  >>> raw_value = 5
+
+  >>> assert Number.from_value(raw_value).apply(
+  ...     Number.from_value(function),
+  ... ) == Number.from_value(function).apply(
+  ...     Number.from_value(lambda inner: inner(raw_value)),
+  ... )
+
+3. :func:`Homomorphism Law <_LawSpec.homomorphism_law>`:
+   The homomorphism law says that
+   applying a wrapped function to a wrapped value is the same
+   as applying the function to the value in the normal way
+   and then using ``.from_value`` on the result.
+
+.. code:: python
+
+  >>> def function(arg: int) -> int:
+  ...     return arg + 1
+
+  >>> raw_value = 5
+
+  >>> assert Number.from_value(
+  ...     function(raw_value),
+  ... ) == Number.from_value(raw_value).apply(
+  ...     Number.from_value(function),
+  ... )
+
+4. :func:`Composition Law <_LawSpec.composition_law>`:
+   Appling two functions twice is the same
+   as applying their composition once.
+
+.. code:: python
+
+  >>> from returns.functions import compose
+
+  >>> def first(arg: int) -> int:
+  ...     return arg * 2
+
+  >>> def second(arg: int) -> int:
+  ...     return arg + 1
+
+  >>> instance = Number(5)
+  >>> assert instance.apply(
+  ...     Number.from_value(compose(first, second)),
+  ... ) == instance.apply(
+  ...     Number.from_value(first),
+  ... ).apply(
+  ...     Number.from_value(second),
+  ... )
+
+Plus all laws from ``MappableN`` interface.
+
+
+Container
+---------
+
+.. currentmodule:: returns.interfaces.container
+
+:class:`~ContainerN` is a central piece of our library.
+It is an interface that combines
+:class:`~returns.interfaces.applicative.ApplicativeN`
+and
+:class:`~returns.interfaces.bindable.BindableN` together.
+
+So, in other words: ``Container`` is an ``Apllicative`` that you can ``bind``!
+
+.. code:: python
+
+  >>> from typing import Callable, TypeVar
+
+  >>> from returns.interfaces.container import Container1
+  >>> from returns.primitives.hkt import SupportsKind1, Kind1, dekind
+  >>> from returns.primitives.container import BaseContainer
+
+  >>> _NumberType = TypeVar('_NumberType')
+  >>> _NewNumberType = TypeVar('_NewNumberType')
+
+  >>> class Number(
+  ...     BaseContainer,
+  ...     SupportsKind1['Number', _NumberType],
+  ...     Container1[_NumberType],
+  ... ):
+  ...     def __init__(self, inner_value: _NumberType) -> None:
+  ...         super().__init__(inner_value)
+  ...
+  ...     def map(  # This method is required by Mappable
+  ...         self,
+  ...         function: Callable[[_NumberType], _NewNumberType]
+  ...     ) -> 'Number[_NewNumberType]':
+  ...         return Number(function(self._inner_value))
+  ...
+  ...     def bind(  # This method is required by Bindable
+  ...         self,
+  ...         function: Kind1[
+  ...             'Number',
+  ...             Callable[[_NumberType], 'Number[_NewNumberType]'],
+  ...         ],
+  ...     ) -> 'Number[_NewNumberType]':
+  ...         return dekind(function(self._inner_value))
+  ...
+  ...     def apply(  # This method is required by Applicative
+  ...         self,
+  ...         container: Kind1[
+  ...             'Number',
+  ...             Callable[[_NumberType], _NewNumberType],
+  ...         ],
+  ...     ) -> 'Number[_NewNumberType]':
+  ...         return Number.from_value(
+  ...             container._inner_value(self._inner_value),
+  ...         )
+  ...
+  ...     @classmethod
+  ...     def from_value(  # This method is required by Applicative
+  ...         cls,
+  ...         inner_value: _NewNumberType,
+  ...     ) -> 'Number[_NewNumberType]':
+  ...         return Number(inner_value)
+
+This code gives us an opportunity to use ``Number``
+with ``map``, ``apply``, and ``bind`` as we already did in the examples above.
 
 Laws
 ~~~~
@@ -252,10 +490,10 @@ respect three new laws.
 
 .. code:: python
 
-  >>> def can_be_bound(value: int) -> Bag[Peanuts]:
-  ...     return Bag(Peanuts(value))
+  >>> def can_be_bound(value: int) -> Number[int]:
+  ...     return Number(value)
 
-  >>> assert Bag(5).bind(can_be_bound) == can_be_bound(5)
+  >>> assert Number.from_value(5).bind(can_be_bound) == can_be_bound(5)
 
 2. :func:`Right Identity <_LawSpec.right_identity_law>`:
    If we pass the bindable constructor through ``bind`` must
@@ -263,8 +501,8 @@ respect three new laws.
 
 .. code:: python
 
-  >>> bag = Bag(Peanuts(2))
-  >>> assert bag.bind(Bag) == Bag(Peanuts(2))
+  >>> number = Number(2)
+  >>> assert number.bind(Number) == Number(2)
 
 3. :func:`Associative Law <_LawSpec.associative_law>`:
    Given two functions, ``x`` and ``y``, calling the bind
@@ -275,31 +513,18 @@ respect three new laws.
 
 .. code:: python
 
-  >>> def minus_one(peanuts: Peanuts) -> Bag[Peanuts]:
-  ...     return Bag(Peanuts(peanuts.quantity - 1))
+  >>> def minus_one(arg: int) -> Number[int]:
+  ...     return Number(arg - 1)
 
-  >>> def half(peanuts: Peanuts) -> Bag[Peanuts]:
-  ...     return Bag(Peanuts(peanuts.quantity // 2))
+  >>> def half(arg: int) -> Number[int]:
+  ...     return Number(arg // 2)
 
-  >>> bag = Bag(Peanuts(9))
-  >>> assert bag.bind(minus_one).bind(half) == bag.bind(
+  >>> number = Number(9)
+  >>> assert number.bind(minus_one).bind(half) == number.bind(
   ...    lambda value: minus_one(value).bind(half),
   ... )
 
-
-Applicative
------------
-
-.. currentmodule:: returns.interfaces.applicative
-
-Laws
-~~~~
-
-
-Container
----------
-
-.. currentmodule:: returns.interfaces.container
+Plus all laws from ``MappableN`` and ``ApplicativeN`` interfaces.
 
 
 More!
