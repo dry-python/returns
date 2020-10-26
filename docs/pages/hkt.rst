@@ -246,6 +246,12 @@ Later you will learn how to
 :ref:`create your own types <create-your-own-container>` that support kinds!
 
 
+Further reading
+---------------
+
+- `Higher Kinded Types in Python <https://sobolevn.me/2020/10/higher-kinded-types-in-python>`_
+
+
 FAQ
 ---
 
