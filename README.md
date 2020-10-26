@@ -637,6 +637,7 @@ Or read these articles:
 - [Enforcing Single Responsibility Principle in Python](https://sobolevn.me/2019/03/enforcing-srp)
 - [Typed functional Dependency Injection in Python](https://sobolevn.me/2020/02/typed-functional-dependency-injection)
 - [How Async Should Have Been](https://sobolevn.me/2020/06/how-async-should-have-been)
+- [Higher Kinded Types in Python](https://sobolevn.me/2020/10/higher-kinded-types-in-python)
 
 Do you have an article to submit? Feel free to open a pull request!
 
