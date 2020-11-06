@@ -38,11 +38,10 @@ def _monkeypatch(cls):
 @_monkeypatch(sphinx.registry.SphinxComponentRegistry)
 def add_source_parser(self, _old_add_source_parser, *args, **kwargs):
     """This function changed in sphinx v3.0, we need to fix it back."""
-    # signature is (parser: Type[Parser], **kwargs), but m2r expects
-    # the removed (str, parser: Type[Parser], **kwargs).
-    if isinstance(args[0], str):
-        args = args[1:]
-    return _old_add_source_parser(self, *args, **kwargs)
+    # signature is (parser: "Type[Parser]", override: bool = False),
+    # but m2r expects the removed (str, parser: Type[Parser], **kwargs).
+    if not isinstance(args[0], str):
+        return _old_add_source_parser(self, *args, **kwargs)
 
 
 # -- Project information -----------------------------------------------------
