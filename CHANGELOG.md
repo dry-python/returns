@@ -6,6 +6,13 @@ incremental in minor, bugfixes only are patches.
 See [0Ver](https://0ver.org/).
 
 
+## 0.16.0 WIP
+
+### Misc
+
+- Makes `_Nothing` a singleton
+
+
 ## 0.15.0 aka The initial HKT release
 
 ### Features
