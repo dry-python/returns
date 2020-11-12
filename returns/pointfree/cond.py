@@ -3,7 +3,7 @@ from typing import Callable, Optional, Type, TypeVar, Union, overload
 from returns.context import NoDeps
 from returns.interfaces.failable import DiverseFailableN, SingleFailableN
 from returns.methods.cond import internal_cond
-from returns.primitives.hkt import Kinded, KindN, kinded
+from returns.primitives.hkt import Kinded, KindN
 
 _ValueType = TypeVar('_ValueType')
 _ErrorType = TypeVar('_ErrorType')
@@ -70,10 +70,7 @@ def cond(  # type: ignore
       >>> assert cond(Maybe, 10.0)(False) == Nothing
 
     """
-    @kinded
-    def factory(
-        is_success: bool,
-    ):
+    def factory(is_success: bool):
         return internal_cond(
             container_type, is_success, success_value, error_value,
         )
