@@ -70,10 +70,7 @@ def cond(  # type: ignore
       >>> assert cond(Maybe, 10.0)(False) == Nothing
 
     """
-    @kinded
-    def factory(
-        is_success: bool,
-    ):
+    def factory(is_success: bool):
         return internal_cond(
             container_type, is_success, success_value, error_value,
         )
