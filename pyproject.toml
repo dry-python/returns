@@ -76,7 +76,7 @@ safety = "^1.8"
 
 pytest = "^6.1"
 pytest-cov = "^2.10"
-pytest-randomly = "^3.4"
+pytest-randomly = "^3.5"
 pytest-mypy-plugins = "^1.6"
 pytest-subtests = "^0.3"
 pytest-xdist = "^2.1"
