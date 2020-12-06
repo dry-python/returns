@@ -97,7 +97,7 @@ What is different?
 You can see the next example
 with :ref:`RequiresContextFutureResult <requires_context_future_result>`
 and without a single ``async/await``.
-That example illustrates the whole point of our actions: writting
+That example illustrates the whole point of our actions: writing
 sync code that executes asynchronously without any magic at all.
 
 Aliases
@@ -217,7 +217,7 @@ Python happens to have its own meaning for this word.
 In our worldview, these two ``Future`` entities should never meet each other
 in a single codebase.
 
-It is also not related to `concurrent.Future <https://docs.python.org/3/library/concurrent.futures.html>`.
+It is also not related to `concurrent.Future <https://docs.python.org/3/library/concurrent.futures.html>`_.
 
 How to create unit objects?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~

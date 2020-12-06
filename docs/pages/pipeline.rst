@@ -160,15 +160,15 @@ and clear things up and release the acquired resource.
 
 There are several rules here:
 
-1. If the aquiring failed,
+1. If the acquiring failed,
    then do nothing: do not try to use the resource or release it
 2. If the resource is acquired, then try to use it
-   and then release it desipe of the usage result
+   and then release it despite of the usage result
 
 In other words, if you cannot open a file, then do nothing.
 If you opened it, then try to read it. And then always close it.
 
-Let's say you have to read a file contents:
+Let's say you have to read a file's contents:
 
 .. code:: python
 
@@ -226,7 +226,7 @@ Notice a few tricks here:
 1. We use ``managed`` with and without ``flow`` here,
    both are fine!
 2. We have created a ``managed_read`` managed function,
-   so we don't need to specify it everytime we want
+   so we don't need to specify it every time we want
    to read a file in a functional way
 3. We are using impure and pure operations inside the pipeline:
    this helps us to understand how our app works.

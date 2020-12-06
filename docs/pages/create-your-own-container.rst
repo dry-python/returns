@@ -79,7 +79,7 @@ Turns out, there are some of them!
   is an alias for ``BiMappableN``
   with a new method called ``.swap`` to change values order
 
-Let's look at the resul:
+Let's look at the result:
 
 .. code: python
 
@@ -123,7 +123,7 @@ Later we will talk about an actual implementation of all required methods.
 Step 2: Initial implementation
 ------------------------------
 
-So, let's start writting some code!
+So, let's start writing some code!
 
 We would need to implement all interface methods,
 otherwise ``mypy`` won't be happy.
@@ -176,7 +176,7 @@ Awesome! Now we have a new interface to implement. Let's do that!
 Looks like we are done!
 
 
-Step 4: Writting tests and docs
+Step 4: Writing tests and docs
 -------------------------------
 
 The best part about this type is that it is pure.
@@ -199,7 +199,7 @@ Let's add docs and doctests! Let's use ``map`` method as a short example:
    :pyobject: Pair.map
 
 By adding these simple tests we would already have 100% coverage.
-But, what if we can completely skip writting tests, but still have 100%?
+But, what if we can completely skip writing tests, but still have 100%?
 
 Let's discuss how we can achieve that with "Laws as values".
 
@@ -235,7 +235,7 @@ Here's the final result of our brand new ``Pair`` type:
    :linenos:
 
 
-Step 6: Writting type-tests
+Step 6: Writing type-tests
 ---------------------------
 
 .. note::

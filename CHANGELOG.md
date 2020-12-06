@@ -11,6 +11,7 @@ See [0Ver](https://0ver.org/).
 ### Misc
 
 - Makes `_Nothing` a singleton
+- Fixes typos in documentation
 
 
 ## 0.15.0 aka The initial HKT release

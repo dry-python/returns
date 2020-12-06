@@ -19,7 +19,7 @@ Why
 One of the most frequent questions
 Python developers ask: why would we need this?
 
-Basically, the answer is that ``return`` provides
+Basically, the answer is that ``returns`` provides
 useful abstractions that solve some problems every developer has:
 
 1. :class:`~returns.maybe.Maybe` helps to work with ``None`` in a type-safe way
@@ -30,8 +30,8 @@ useful abstractions that solve some problems every developer has:
 4. :class:`~returns.future.Future` helps to write ``await`` free code
 5. :class:`~returns.context.requires_context.RequiresContext` helps
    to inject dependencies in a very readable, explicit, type-safe, and clean way
-6. :ref:`pipelines` can be used independently or together with the types above
-   to create complex, declrative, and type-safe data pipelines
+6. :ref:`~pipelines` can be used independently or together with the types above
+   to create complex, declarative, and type-safe data pipelines
 
 On top of that we provide useful interfaces that allows you
 to switch implementation on the fly.

@@ -203,7 +203,7 @@ And here are our two containers:
 
 Naive approach to compose two ``IO`` containers and a function
 would be two hard to show here.
-Luckly, we support partial application and ``.apply()`` method.
+Luckily, we support partial application and ``.apply()`` method.
 
 Here are the required steps:
 

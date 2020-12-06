@@ -5,7 +5,7 @@ Mathematicians dream in pure functions.
 Each of them only relies on its arguments
 and always produces the same result for the same input.
 
-That's not how useful program work.
+That's not how a useful program works.
 We need to rely on the environment and we need to do side effects.
 
 Furthermore, there are several types of ``IO`` in our programs:

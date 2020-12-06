@@ -73,7 +73,9 @@ safe
 regular functions that can throw exceptions to functions
 that return :class:`Result <returns.result.Result>` type.
 
-Supports both async and regular functions.
+Supports only regular functions.
+If you need to mark ``async`` functions as ``safe``,
+use `future_safe <returns.future.future_safe>` instead.
 
 .. code:: python
 

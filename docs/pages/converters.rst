@@ -10,7 +10,7 @@ and back again.
 Maybe and Result
 ----------------
 
-We have two converters to work with ``Result <-> Maybe`` tranformations:
+We have two converters to work with ``Result <-> Maybe`` transformations:
 
 .. currentmodule:: returns.converters
 

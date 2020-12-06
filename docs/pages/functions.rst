@@ -63,8 +63,8 @@ For example you sometimes need to ``print()`` values inside your :ref:`pipe`:
   1
   >>> assert result == 1
 
-You can also use ``untap`` function to turn any function
-return type to ``None`` and still do its thing"
+You can also use the ``untap`` function to turn any function's
+return type to ``None`` and still do its thing:
 
 .. code:: python
 
