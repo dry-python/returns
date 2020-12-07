@@ -22,4 +22,4 @@ def processe_docstring(  # noqa: WPS211
 def setup(app):
     """Register a function to receive an event from sphinx."""
     app.connect('autodoc-process-docstring', processe_docstring)
-    return dict(parallel_read_safe=True)
+    return {'parallel_read_safe': True}
