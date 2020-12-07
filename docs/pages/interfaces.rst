@@ -4,7 +4,7 @@ Interfaces
 ==========
 
 We provide a lot of generic interfaces
-to write our bundeled and your own custom types.
+to write our bundled and your own custom types.
 
 These interfaces are designed:
 
@@ -75,7 +75,7 @@ The last criteria we have to decided on naming is
 "whether this interface always the same or it can have slight variations"?
 That's why we have ``ResultLikeN`` and ``ResultBasedN`` interfaces.
 Because ``ResultBasedN`` has two extra methods compared to ``ResultLikeN``.
-We use ``Like`` suffix for interfaces that descibes some similar types.
+We use ``Like`` suffix for interfaces that describes some similar types.
 We use ``Based`` suffix for interfaces that descire almost concrete types.
 
 Laws
@@ -266,7 +266,7 @@ that implements the ``Mappable`` and ``Applicative`` interfaces:
   >>> assert maybe_str.apply(maybe_func) == Some(7)
 
 As you see, ``apply`` takes a container with a function inside
-and applies it to the currect value inside the container.
+and applies it to the current value inside the container.
 
 This way we really execute ``Maybe.from_value(len('example'))``.
 
@@ -385,7 +385,7 @@ you can apply the ``Applicative`` laws on it to test.
   ... )
 
 4. :func:`Composition Law <_LawSpec.composition_law>`:
-   Appling two functions twice is the same
+   Applying two functions twice is the same
    as applying their composition once.
 
 .. code:: python
@@ -579,7 +579,7 @@ But, ``ResultLike1`` requiers at least two (value and error) types to exist.
 The same applies for ``ReaderLike1`` and ``ReaderResultLike1``
 and ``ReaderResultLike2``.
 
-We don't support type aliases for types that won't make sence.
+We don't support type aliases for types that won't make sense.
 
 What's the difference between ``MappableN`` and ``BindableN``?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

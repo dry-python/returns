@@ -1,7 +1,7 @@
 Context
 =======
 
-Dependency injection is a popular software architechture pattern.
+Dependency injection is a popular software architecture pattern.
 
 It's main idea is that you provide `Inversion of Control <https://en.wikipedia.org/wiki/Inversion_of_control>`_
 and can pass different things into your logic instead of hardcoding you stuff.

@@ -17,7 +17,7 @@ containing all :class:`inspect.FrameInfo` objects from the call stack when the
 
 To enable it you can use
 :func:`collect_traces <returns.primitives.tracing.collect_traces>`.
-See examples bellow:
+See examples below:
 
 You can use it as a context manager:
 

@@ -71,6 +71,7 @@ wemake-python-styleguide = "^0.14"
 flake8-pytest-style = "^1.2"
 flake8-pyi = "^20.10"
 nitpick = "^0.23"
+codespell = "^2.0"
 
 safety = "^1.8"
 

@@ -78,7 +78,7 @@ See [0Ver](https://0ver.org/).
 - Adds `unwrap_or_failure` function to `methods` package
 
 - Adds `collect_trace` helper function for better development experience
-- Adds `hypothesis` intergration and pre-defined "monad laws as values"
+- Adds `hypothesis` integration and pre-defined "monad laws as values"
 
 - Adds `assert_equal` method to our `pytest` plugin
 
@@ -138,7 +138,7 @@ See [0Ver](https://0ver.org/).
 
 - Adds typed `partial` and `curry` mypy plugins!
 - Adds typed `flow` plugin, now it can accept any number of arguments,
-  it now also has **excelent** type inference
+  it now also has **excellent** type inference
 - Adds typed `pipe` plugin, now it can accept any number of arguments,
   it now also has good type inference
 - Adds `managed` pipeline function that is useful
@@ -268,7 +268,7 @@ See [0Ver](https://0ver.org/).
 ### Misc
 
 - Updates `poetry` version in `travis`
-- Imporves ``pipe`` docs with ``lambda`` and `Generic` problem
+- Improves ``pipe`` docs with ``lambda`` and `Generic` problem
 - Improves docs in several places
 - Now examples in docs tries to be docstests where possible
 - Changes how tests are checked with `mypy` in CI

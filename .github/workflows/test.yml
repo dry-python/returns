@@ -41,6 +41,7 @@ jobs:
         # Different python versions are covered differently:
         poetry run pytest returns docs/pages tests
         poetry run doc8 -q docs
+        poetry run codespell returns tests docs typesafety README.md CONTRIBUTING.md CHANGELOG.md
         poetry run poetry check
         poetry run pip check
         poetry run safety check --full-report
