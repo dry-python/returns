@@ -9,7 +9,7 @@ from returns.primitives.exceptions import UnwrapFailedError
 
 def is_successful(container: Unwrappable) -> bool:
     """
-    Determins if a container was successful or not.
+    Determines if a container was successful or not.
 
     .. code:: python
 

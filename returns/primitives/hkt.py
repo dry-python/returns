@@ -121,7 +121,7 @@ class SupportsKindN(
     .. rubric:: Implementation details
 
     The only thing this class does is: making sure that the resulting classes
-    won't have ``__getattr__`` available during the typecheking phase.
+    won't have ``__getattr__`` available during the typechecking phase.
 
     Needless to say, that ``__getattr__`` during runtime - never exists at all.
     """
@@ -151,7 +151,7 @@ def dekind(
     """
     Turns ``Kind1[IO, int]`` type into real ``IO[int]`` type.
 
-    Should be used when you are left with accidential ``KindN`` instance
+    Should be used when you are left with accidental ``KindN`` instance
     when you really want to have the real type.
 
     Works with type arguments of any length.

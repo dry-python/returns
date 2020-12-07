@@ -37,7 +37,7 @@ def check_all_laws(
     use_init: bool = False,
 ) -> None:
     """
-    Function to check all definied mathematical laws in a specified container.
+    Function to check all defined mathematical laws in a specified container.
 
     Should be used like so:
 
@@ -119,7 +119,7 @@ def maybe_register_container(
     *,
     use_init: bool,
 ) -> Iterator[None]:
-    """Temporary registeres a container if it is not registered yet."""
+    """Temporary registers a container if it is not registered yet."""
     unknown_container = container_type not in types._global_type_lookup
     if unknown_container:
         st.register_type_strategy(
@@ -165,7 +165,7 @@ def type_vars() -> Iterator[None]:
     """
     Our custom ``TypeVar`` handling.
 
-    There are several noticable differences:
+    There are several noticeable differences:
 
     1. We add mutable types to the tests: like ``list`` and ``dict``
     2. We ensure that values inside strategies are self-equal,

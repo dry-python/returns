@@ -50,7 +50,7 @@ def test_assert_trace2(container_type, returns: ReturnsAsserts):
 def test_failed_assert_trace1(
     desired_type, wrong_type, returns: ReturnsAsserts,
 ):
-    """Test if our plugin will identify the conainter was not created."""
+    """Test if our plugin will identify the container was not created."""
     with pytest.raises(pytest.fail.Exception):  # noqa: PT012
         with returns.assert_trace(desired_type, _create_container_function):
             _create_container_function(wrong_type, 1)  # type: ignore
@@ -65,7 +65,7 @@ def test_failed_assert_trace1(
 def test_failed_assert_trace2(
     desired_type, wrong_type, returns: ReturnsAsserts,
 ):
-    """Test if our plugin will identify the conainter was not created."""
+    """Test if our plugin will identify the container was not created."""
     with pytest.raises(pytest.fail.Exception):  # noqa: PT012
         with returns.assert_trace(desired_type, _create_container_function):
             _create_container_function_intermediate(  # type: ignore

@@ -52,7 +52,7 @@ class IOResultLikeN(
             KindN[_IOResultLikeType, _UpdatedType, _SecondType, _ThirdType],
         ],
     ) -> KindN[_IOResultLikeType, _UpdatedType, _SecondType, _ThirdType]:
-        """Allows to compose the unrelying ``Result`` with a function."""
+        """Allows to compose the underlying ``Result`` with a function."""
 
     @classmethod
     @abstractmethod

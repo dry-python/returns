@@ -78,7 +78,7 @@ class _PartialFunctionReducer(object):
        of argument that are passed with the ``curry`` call
     2. Then, we run typechecking on this intermediate function
        and passed arguments to make sure that everything is correct
-    3. Then, we substract intermediate arguments from the passed function
+    3. Then, we subtract intermediate arguments from the passed function
     4. Finally we run type substitution on newly created final function
        to replace generic vars we already know to make sure
        that everything still works and the number of type vars is reduced
@@ -107,7 +107,7 @@ class _PartialFunctionReducer(object):
         Args:
             default_return_type: default callable type got by ``mypy``.
             original: passed function to be curried.
-            applied_args: arguments that are already provided in the defition.
+            applied_args: arguments that are already provided in the definition.
             ctx: plugin hook context provided by ``mypy``.
 
         """

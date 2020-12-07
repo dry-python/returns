@@ -507,7 +507,7 @@ class FutureResult(
     Use ``Future[a]`` for operations that cannot fail.
 
     This is a ``Future`` that returns ``Result`` type.
-    By providing this utility type we make developers' lifes easier.
+    By providing this utility type we make developers' lives easier.
     ``FutureResult`` has a lot of composition helpers
     to turn complex nested operations into a one function calls.
 

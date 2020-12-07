@@ -28,7 +28,7 @@ class Unwrappable(Generic[_FirstType, _SecondType]):
 
         .. note::
             As a part of the contract, failed ``unwrap`` calls
-            must raise :class:`returns.primitives.excetion.UnwrapFailedError`
+            must raise :class:`returns.primitives.exception.UnwrapFailedError`
             exception.
 
         This method is the opposite of :meth:`~Unwrapable.failure`.
@@ -41,7 +41,7 @@ class Unwrappable(Generic[_FirstType, _SecondType]):
 
         .. note::
             As a part of the contract, failed ``failure`` calls
-            must raise :class:`returns.primitives.excetion.UnwrapFailedError`
+            must raise :class:`returns.primitives.exception.UnwrapFailedError`
             exception.
 
         This method is the opposite of :meth:`~Unwrapable.unwrap`.

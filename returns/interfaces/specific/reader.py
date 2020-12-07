@@ -119,7 +119,7 @@ class ReaderLike2(Container2[_FirstType, _SecondType]):
     def ask(
         cls: Type[_ReaderLike2Type],
     ) -> Kind2[_ReaderLike2Type, _SecondType, _SecondType]:
-        """Returns the depedencies inside the container."""
+        """Returns the dependencies inside the container."""
 
     @classmethod
     @abstractmethod
@@ -180,7 +180,7 @@ class ReaderLike3(Container3[_FirstType, _SecondType, _ThirdType]):
     def ask(
         cls: Type[_ReaderLike3Type],
     ) -> Kind3[_ReaderLike3Type, _ThirdType, _SecondType, _ThirdType]:
-        """Returns the depedencies inside the container."""
+        """Returns the dependencies inside the container."""
 
     @classmethod
     @abstractmethod
