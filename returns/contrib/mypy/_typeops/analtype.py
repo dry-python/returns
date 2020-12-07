@@ -43,7 +43,7 @@ def analyze_call(
 
 def analyze_call(function, args, ctx, *, show_errors):
     """
-    Analyzes function call based on passed argumets.
+    Analyzes function call based on passed arguments.
 
     Internally uses ``check_call`` from ``mypy``.
     It does a lot of magic.
@@ -71,7 +71,7 @@ def safe_translate_to_function(
     ctx: CallableContext,
 ) -> MypyType:
     """
-    Tranforms many other types to something close to callable type.
+    Transforms many other types to something close to callable type.
 
     There's why we need it:
 

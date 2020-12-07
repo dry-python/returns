@@ -172,7 +172,7 @@ For example, here are some of them:
   >>> from returns.result import Result, Failure
   >>> assert Result.from_failure(1) == Failure(1)
 
-There are many other constuctors!
+There are many other constructors!
 Check out concrete types and their interfaces.
 
 

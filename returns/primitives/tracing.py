@@ -79,8 +79,8 @@ def _get_trace(_self: _Failure) -> Optional[List[FrameInfo]]:
     :func:`returns.primitives.tracing.collect_traces` function.
 
     We get all the call stack from the current call and return it from the
-    third position, to avoid two non-useful calls on the call stack.
-    Those non-useful calls are a call to this function and a call to `__init__`
+    third position, to avoid two useless calls on the call stack.
+    Those useless calls are a call to this function and a call to `__init__`
     method from ``_Failure`` class. We're just interested in the call stack
     ending on ``Failure`` function call!
 

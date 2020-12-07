@@ -49,7 +49,7 @@ class RequiresContextFutureResult(
     """
     The ``RequiresContextFutureResult`` combinator.
 
-    This probably the main type people are going to use in ``async`` programms.
+    This probably the main type people are going to use in ``async`` programs.
 
     See :class:`returns.context.requires_context.RequiresContext`,
     :class:`returns.context.requires_context_result.RequiresContextResult`,

@@ -44,7 +44,7 @@ class CallableInference(object):
         If it is not provided, we treat ``case_function`` as a full one.
 
         Args:
-            case_function: function with solved constaints.
+            case_function: function with solved constraints.
             fallback: Function with unsolved constraints.
             ctx: Function context with checker and expr_checker objects.
 
@@ -59,8 +59,8 @@ class CallableInference(object):
     ) -> CallableType:
         """Infers function constrains from its usage: passed arguments."""
         constraints = self._infer_constraints(applied_args)
-        infered = expand_type(self._case_function, constraints)
-        return cast(CallableType, infered)
+        inferred = expand_type(self._case_function, constraints)
+        return cast(CallableType, inferred)
 
     def _infer_constraints(
         self,

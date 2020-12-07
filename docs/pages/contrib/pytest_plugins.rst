@@ -89,7 +89,7 @@ It tests that containers do handle error track.
   >>> returns_fixture = getfixture('returns')
   >>> test_error_handled(returns_fixture)
 
-We recommed to unit test big chunks of code this way.
+We recommend to unit test big chunks of code this way.
 This is helpful for big pipelines where
 you need at least one error handling at the very end.
 

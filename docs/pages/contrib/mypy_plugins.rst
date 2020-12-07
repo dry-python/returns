@@ -72,7 +72,7 @@ Further reading
 API Reference
 -------------
 
-Plugin defenition
+Plugin definition
 ~~~~~~~~~~~~~~~~~
 
 .. automodule:: returns.contrib.mypy._consts

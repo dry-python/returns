@@ -54,7 +54,7 @@ You can use it to easily register your own containers.
   )
 
 You can also pass ``use_init`` keyword argument
-if you wish to use ``__init__`` method to instanciate your containers.
+if you wish to use ``__init__`` method to instantiate your containers.
 Turned off by default.
 Example:
 

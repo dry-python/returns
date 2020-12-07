@@ -23,7 +23,7 @@ def bimap(
     """
     Maps container on both: first and second arguments.
 
-    Can be used to syncronize state on both success and failure.
+    Can be used to synchronize state on both success and failure.
 
     This is how it should be used:
 

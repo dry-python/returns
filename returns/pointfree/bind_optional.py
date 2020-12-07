@@ -18,7 +18,7 @@ def bind_optional(
     KindN[_MaybeLikeKind, _UpdatedType, _SecondType, _ThirdType],
 ]]:
     """
-    Binds a function returing optional value over a container.
+    Binds a function returning optional value over a container.
 
     In other words, it modifies the function's
     signature from:
