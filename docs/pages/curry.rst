@@ -154,7 +154,7 @@ with all matching cases and discriminate unmatching ones.
 ------
 
 ``curry`` allows to provide only a subset of arguments to a function.
-And it won't be called untill all the required arguments are provided.
+And it won't be called until all the required arguments are provided.
 
 In contrast to ``partial`` which works on the calling stage,
 ``@curry`` works best when defining a new function.
@@ -226,7 +226,7 @@ Let's see how types do look like for a curried function:
   #     -> builtins.str
   # )
 
-It reaveals to us that there are 4 possible way to call this function.
+It reveals to us that there are 4 possible way to call this function.
 And we type all of them with
 `overload <https://mypy.readthedocs.io/en/stable/more_types.html#function-overloading>`_
 type.

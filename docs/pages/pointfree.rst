@@ -50,7 +50,7 @@ That's where pointfree functions become really useful.
 map_
 ----
 
-Allows to compose cointainers and functions, but in a reverse manner.
+Allows to compose containers and functions, but in a reverse manner.
 
 .. code:: python
 
@@ -76,11 +76,11 @@ Allows to bind a function that returns a container of the same type.
 Without ``bind()`` function
 it would be very hard to declaratively compose two entities:
 
-1. Existings container
-2. Existing functions that accepts a regular value and returns a container
+1. Existing containers
+2. Existing functions that accept a regular value and return a container
 
 We can compose these entities with ``.bind`` when calling it directly,
-but how can we do it inversevely?
+but how can we do it inversely?
 
 .. code:: python
 
@@ -91,7 +91,7 @@ but how can we do it inversevely?
   ...     return Some(1)
 
   >>> container: Maybe[str] = Some('a')
-  >>> # We now have two way of composining these entities.
+  >>> # We now have two way of composing these entities.
   >>> # 1. Via ``.bind``:
   >>> assert container.bind(bindable) == Some(1)
   >>> # 2. Or via ``bind`` function, the same but in the inverse way:
@@ -135,7 +135,7 @@ It is also required for better declarative programming.
   ...     return Success(1)
 
   >>> container: Result[int, str] = Failure('a')
-  >>> # We now have two way of composining these entities.
+  >>> # We now have two way of composing these entities.
   >>> # 1. Via ``.lash``:
   >>> assert container.lash(function) == Success(1)
   >>> # 2. Or via ``lash`` function, the same but in the inverse way:

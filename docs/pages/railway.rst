@@ -8,7 +8,7 @@ Containers can serve many different purposes
 for example, some of them
 (:class:`~returns.result.Result` and :class:`~returns.maybe.Maybe`) are used
 to work with different types of errors
-starting with ``NullPointerException`` to arbitary user-defined ones.
+starting with ``NullPointerException`` to arbitrary user-defined ones.
 
 
 Error handling
@@ -16,10 +16,10 @@ Error handling
 
 When talking about error handling we use a concept of
 `Railway oriented programming <https://fsharpforfunandprofit.com/rop/>`_.
-It mean that flow of our program has two tracks:
+It means that flow of our program has two tracks:
 
 1. Successful one: where everything goes perfectly: HTTP requests work,
-   database is always serving us data, parsing values does not failed
+   database is always serving us data, parsing values does not fail
 2. Failed one: where something went wrong
 
 We can switch from track to track: we can fail something
@@ -115,7 +115,7 @@ It can also lash your flow and get on the successful track again:
   >>> # => Failure(ValueError())
 
 From typing perspective ``.alt`` and ``.lash``
-are exaclty the same as ``.map`` and ``.bind``
+are exactly the same as ``.map`` and ``.bind``
 but only work with the second type argument instead of the first one:
 
 .. code:: python

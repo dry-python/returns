@@ -24,7 +24,7 @@ You can use all power of declarative loops in your app with ``Fold``.
   ...     lambda num: lambda text: text + str(num),
   ... ) == IO('123')
 
-There are also other helpfil methods as well.
+There are also other helpful methods as well.
 See :class:`returns.iterables.AbstractFold`.
 
 We also ship :class:`~returns.iterables.AbstractFold`,

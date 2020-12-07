@@ -8,7 +8,7 @@ to write our bundeled and your own custom types.
 
 These interfaces are designed:
 
-1. To be subclasses
+1. To be subclassed
 2. To provide abstract methods to implement in your own types
 3. To enforce correctness on final types
 4. To attach critical laws to be checked
@@ -549,7 +549,7 @@ FAQ
 Why do you have general and specific interfaces?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We have ``.intrefaces.*`` types that can be applied to any possible type.
+We have ``.interfaces.*`` types that can be applied to any possible type.
 There's nothing they know about other types or ``returns`` package.
 
 We also have a special ``.interfaces.specific`` package
@@ -613,9 +613,9 @@ What is the difference between ResultLikeN and ResultBasedN?
 
 ``ResultLikeN`` is just an intention of having a result
 (e.g. :class:`~returns.future.FutureResult`),
-it's not the result yet. While ``ResultBasedN`` is a concret result
+it's not the result yet. While ``ResultBasedN`` is a concrete result
 (e.g. :class:`~returns.io.IOResult`),
-it's has the desired result value.
+it has the desired result value.
 
 Because of this difference between them is why we can't unwrap a ``ResultLikeN``
 container, it does not have the real result yet.

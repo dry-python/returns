@@ -12,8 +12,8 @@ for your functions and objects.
 Using the context
 -----------------
 
-A lot of programms we write rely on the context implicitly or explicitly.
-We can rely on confugration, env variables, stubs, logical dependencies, etc.
+A lot of programs we write rely on the context implicitly or explicitly.
+We can rely on configuration, env variables, stubs, logical dependencies, etc.
 
 Let's look at the example.
 
@@ -263,7 +263,7 @@ RequiresContextResult container
 .. currentmodule:: returns.context.requires_context_result
 
 :class:`~RequiresContextResult` container
-is a combintaion of ``RequiresContext[Result[a, b], env]``.
+is a combination of ``RequiresContext[Result[a, b], env]``.
 Which means that it is a wrapper around pure function that might fail.
 
 We also added a lot of useful methods for this container,
@@ -284,7 +284,7 @@ RequiresContextIOResult container
 .. currentmodule:: returns.context.requires_context_ioresult
 
 :class:`~RequiresContextIOResult` container
-is a combintaion of ``RequiresContext[IOResult[a, b], env]``.
+is a combination of ``RequiresContext[IOResult[a, b], env]``.
 Which means that it is a wrapper around impure function that might fail.
 
 We also added a lot of useful methods for this container,
@@ -314,7 +314,7 @@ RequiresContextFutureResult container
 .. currentmodule:: returns.context.requires_context_future_result
 
 :class:`~RequiresContextFutureResult` container
-is a combintaion of ``RequiresContext[FutureResult[a, b], env]``.
+is a combination of ``RequiresContext[FutureResult[a, b], env]``.
 Which means that it is a wrapper around impure async function that might fail.
 
 Here's how it should be used:
@@ -322,7 +322,7 @@ Here's how it should be used:
 .. literalinclude:: ../../tests/test_examples/test_context/test_reader_future_result.py
    :linenos:
 
-This example illustrates the whole point of our actions: writting
+This example illustrates the whole point of our actions: writing
 sync code that executes asynchronously without any magic at all!
 
 We also added a lot of useful methods for this container,
@@ -368,7 +368,7 @@ This is basically **the main type** that is going to be used in most apps.
 Aliases
 -------
 
-There are several useful alises for ``RequiresContext``
+There are several useful aliases for ``RequiresContext``
 and friends with some common values:
 
 .. currentmodule:: returns.context.requires_context
@@ -588,7 +588,7 @@ It also does not care about building dependencies at all.
 All it does is: provides simple API to compose functions
 that need additional context (or dependencies) to run.
 
-You can even use them together: ``RequiresContext`` will pass depedencies
+You can even use them together: ``RequiresContext`` will pass dependencies
 built by ``punq`` (or any other tool of your choice)
 as a ``deps`` parameter to ``RequiresContext`` instance.
 
@@ -618,7 +618,7 @@ When not to use ``RequiresContext`` and use traditional DI?
 1. When you already have a lot of code written in a different approach:
    in OOP and/or imperative styles
 2. When you need to pass dependencies into a very deep level of your call stack
-   implicitly (without modifing the whole stack), this is called magic
+   implicitly (without modifying the whole stack), this is called magic
 3. When you not rely on types for dependencies.
    There are cases when DI is made by names or tags
 

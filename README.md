@@ -240,8 +240,8 @@ def fetch_user_profile(user_id: int) -> 'UserProfile':
     return response.json()
 ```
 
-Seems legit, does not it?
-It also seems like a pretty straight forward code to test.
+Seems legit, does it not?
+It also seems like a pretty straightforward code to test.
 All you need is to mock `requests.get` to return the structure you need.
 
 But, there are hidden problems in this tiny code sample
@@ -275,7 +275,7 @@ Now, all (probably all?) problems are clear.
 How can we be sure that this function will be safe
 to use inside our complex business logic?
 
-We really can not be sure!
+We really cannot be sure!
 We will have to create **lots** of `try` and `except` cases
 just to catch the expected exceptions. Our code will become complex and unreadable with all this mess!
 
@@ -391,7 +391,7 @@ Like `requests.get()` we had earlier in our example.
 Then we have to use a special `IOResult` type instead of a regular `Result`.
 Let's find the difference:
 
-- Our `_parse_json` function always return
+- Our `_parse_json` function always returns
   the same result (hopefully) for the same input:
   you can either parse valid `json` or fail on invalid one.
   That's why we return pure `Result`, there's no `IO` inside
@@ -512,7 +512,7 @@ Pretty much the same logic we had with our `IO` container.
 
 ### Async code without exceptions
 
-We have already covered how [`Result` works](#result-container)
+We have already covered how [`Result`](#result-container) works
 for both pure and impure code.
 The main idea is: we don't raise exceptions, we return them.
 It is **especially** critical in async code,
