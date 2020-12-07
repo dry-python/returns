@@ -30,7 +30,7 @@ useful abstractions that solve some problems every developer has:
 4. :class:`~returns.future.Future` helps to write ``await`` free code
 5. :class:`~returns.context.requires_context.RequiresContext` helps
    to inject dependencies in a very readable, explicit, type-safe, and clean way
-6. :ref:`~pipelines` can be used independently or together with the types above
+6. :ref:`pipelines` can be used independently or together with the types above
    to create complex, declarative, and type-safe data pipelines
 
 On top of that we provide useful interfaces that allows you
