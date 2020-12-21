@@ -73,7 +73,7 @@ flake8-pyi = "^20.10"
 nitpick = "^0.23"
 codespell = "^2.0"
 
-safety = "^1.8"
+safety = "^1.10"
 
 pytest = "^6.2"
 pytest-cov = "^2.10"
