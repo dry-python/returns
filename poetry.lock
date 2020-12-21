@@ -1150,7 +1150,7 @@ python-versions = "*"
 
 [[package]]
 name = "sphinx"
-version = "3.3.1"
+version = "3.4.0"
 description = "Python documentation generator"
 category = "dev"
 optional = false
@@ -1176,8 +1176,8 @@ sphinxcontrib-serializinghtml = "*"
 
 [package.extras]
 docs = ["sphinxcontrib-websupport"]
-lint = ["flake8 (>=3.5.0)", "flake8-import-order", "mypy (>=0.790)", "docutils-stubs"]
-test = ["pytest", "pytest-cov", "html5lib", "typed-ast", "cython"]
+lint = ["flake8 (>=3.5.0)", "isort", "mypy (>=0.790)", "docutils-stubs"]
+test = ["pytest", "pytest-cov", "html5lib", "cython", "typed-ast"]
 
 [[package]]
 name = "sphinx-autodoc-typehints"
@@ -1432,7 +1432,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "ba11af68ef7c6278141a342f362a64e697efa99011d41230cd53e22170ac1827"
+content-hash = "dbc76fa2a7c5690f99045c8239831d9ddbcd1b7df4ed3c7fac6f19905fe744a6"
 
 [metadata.files]
 alabaster = [
@@ -1974,8 +1974,8 @@ sortedcontainers = [
     {file = "sortedcontainers-2.3.0.tar.gz", hash = "sha256:59cc937650cf60d677c16775597c89a960658a09cf7c1a668f86e1e4464b10a1"},
 ]
 sphinx = [
-    {file = "Sphinx-3.3.1-py3-none-any.whl", hash = "sha256:d4e59ad4ea55efbb3c05cde3bfc83bfc14f0c95aa95c3d75346fcce186a47960"},
-    {file = "Sphinx-3.3.1.tar.gz", hash = "sha256:1e8d592225447104d1172be415bc2972bd1357e3e12fdc76edf2261105db4300"},
+    {file = "Sphinx-3.4.0-py3-none-any.whl", hash = "sha256:77c801947eb86457822e01eadd5c2e2de020db0201f1f9fc98b0927980b6d212"},
+    {file = "Sphinx-3.4.0.tar.gz", hash = "sha256:4dcde313801f23ea4789ac31e5405e240cb758b5d375804807f2f3cc3c396bfa"},
 ]
 sphinx-autodoc-typehints = [
     {file = "sphinx-autodoc-typehints-1.11.1.tar.gz", hash = "sha256:244ba6d3e2fdb854622f643c7763d6f95b6886eba24bec28e86edf205e4ddb20"},
