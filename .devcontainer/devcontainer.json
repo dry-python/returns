@@ -9,6 +9,7 @@
     // Environment:
     "python.pythonPath": "${workspaceFolder}/.venv/bin/python3",
     "python.terminal.activateEnvironment": true,
+    "python.showStartPage": false,
 
     // Linting:
     "python.linting.enabled": true,
@@ -27,6 +28,9 @@
 
   // Setting a proper env.
   // https://code.visualstudio.com/docs/remote/containers-advanced#_adding-environment-variables
+  "containerEnv": {
+    "POETRY_VIRTUALENVS_IN_PROJECT": "true",
+  },
   "remoteEnv": {
     "PATH": "${containerEnv:PATH}:/root/.poetry/bin",
     "POETRY_VIRTUALENVS_IN_PROJECT": "true",
