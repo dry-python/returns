@@ -9,13 +9,6 @@
     // Environment:
     "python.pythonPath": "${workspaceFolder}/.venv/bin/python3",
     "python.terminal.activateEnvironment": true,
-    "python.showStartPage": false,
-
-    // Linting:
-    "python.linting.enabled": true,
-    "python.linting.flake8Enabled": true,
-    "python.linting.mypyEnabled": true,
-    "python.linting.pylintEnabled": false,
   },
 
   // Add the IDs of extensions you want installed when the container is created.
