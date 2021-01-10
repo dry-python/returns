@@ -1,19 +1,19 @@
 {
-	"name": "dry-python/returns",
+  "name": "dry-python/returns",
 
-	// Update the 'image' property with your Docker image name.
-	"image": "python:3.8-slim-buster",
+  // Update the 'image' property with your Docker image name.
+  "image": "python:3.8-slim-buster",
 
-	// Set *default* container specific settings.json values on container create.
-	"settings": {
+  // Set *default* container specific settings.json values on container create.
+  "settings": {
     "python.linting.enabled": true,
     "python.linting.flake8Enabled": true,
     "python.linting.mypyEnabled": true,
     "python.linting.pylintEnabled": false,
   },
 
-	// Add the IDs of extensions you want installed when the container is created.
-	"extensions": [
+  // Add the IDs of extensions you want installed when the container is created.
+  "extensions": [
     "ms-python.python",
   ],
 
