@@ -1,0 +1,29 @@
+{
+	"name": "dry-python/returns",
+
+	// Update the 'image' property with your Docker image name.
+	"image": "python:3.8-slim-buster",
+
+	// Set *default* container specific settings.json values on container create.
+	"settings": {
+		"terminal.integrated.shell.linux": "/bin/bash"
+	},
+
+	// Add the IDs of extensions you want installed when the container is created.
+	"extensions": [
+    "ms-python.python"
+  ],
+
+  // Uncomment to run commands after the container is created - like installing curl
+  "postCreateCommand": "apt-get update && apt-get install -y curl && curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python",
+
+  // Setting a proper env.
+  // https://code.visualstudio.com/docs/remote/containers-advanced#_adding-environment-variables
+  "remoteEnv": {
+    "PATH": "${containerEnv:PATH}:/vscode/.poetry/bin",
+  },
+
+  // Comment out connect as root instead.
+  // To add a non-root user, see: https://aka.ms/vscode-remote/containers/non-root.
+	"remoteUser": "vscode"
+}
