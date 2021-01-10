@@ -6,6 +6,11 @@
 
   // Set *default* container specific settings.json values on container create.
   "settings": {
+    // Environment:
+    "python.pythonPath": "${workspaceFolder}/.venv/bin/python3",
+    "python.terminal.activateEnvironment": true,
+
+    // Linting:
     "python.linting.enabled": true,
     "python.linting.flake8Enabled": true,
     "python.linting.mypyEnabled": true,
@@ -24,5 +29,6 @@
   // https://code.visualstudio.com/docs/remote/containers-advanced#_adding-environment-variables
   "remoteEnv": {
     "PATH": "${containerEnv:PATH}:/root/.poetry/bin",
+    "POETRY_VIRTUALENVS_IN_PROJECT": "true",
   },
 }
