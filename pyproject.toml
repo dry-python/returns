@@ -62,7 +62,7 @@ typing-extensions = "^3.7"
 [tool.poetry.dev-dependencies]
 anyio = "^2.0"
 curio = "^1.4"
-trio = "^0.17"
+trio = "^0.18"
 attrs = "^20.3"
 httpx = "^0.16"
 

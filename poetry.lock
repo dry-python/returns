@@ -1345,7 +1345,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
 name = "trio"
-version = "0.17.0"
+version = "0.18.0"
 description = "A friendly Python library for async concurrency and I/O"
 category = "dev"
 optional = false
@@ -1434,7 +1434,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "5b02c17fccd91949533403e7881c9ea5e8a03a0766d021e6b647eb4eba4ff3f5"
+content-hash = "d75f23e09bf30f52b02ddd44b336ea5ee8dd6763c4983186bb7d78385543272e"
 
 [metadata.files]
 alabaster = [
@@ -2054,8 +2054,8 @@ tomlkit = [
     {file = "tomlkit-0.7.0.tar.gz", hash = "sha256:ac57f29693fab3e309ea789252fcce3061e19110085aa31af5446ca749325618"},
 ]
 trio = [
-    {file = "trio-0.17.0-py3-none-any.whl", hash = "sha256:fc70c74e8736d1105b3c05cc2e49b30c58755733740f9c51ae6d88a4d6d0a291"},
-    {file = "trio-0.17.0.tar.gz", hash = "sha256:e85cf9858e445465dfbb0e3fdf36efe92082d2df87bfe9d62585eedd6e8e9d7d"},
+    {file = "trio-0.18.0-py3-none-any.whl", hash = "sha256:a42af0634ba729cbfe8578be058750c6471dac19fbc7167ec6a3ca3f966fb424"},
+    {file = "trio-0.18.0.tar.gz", hash = "sha256:87a66ae61f27fe500c9024926a9ba482c07e1e0f56380b70a264d19c435ba076"},
 ]
 typed-ast = [
     {file = "typed_ast-1.4.2-cp35-cp35m-manylinux1_i686.whl", hash = "sha256:7703620125e4fb79b64aa52427ec192822e9f45d37d4b6625ab37ef403e1df70"},
