@@ -76,7 +76,7 @@ codespell = "^2.0"
 safety = "^1.10"
 
 pytest = "^6.2"
-pytest-cov = "^2.10"
+pytest-cov = "^2.11"
 pytest-randomly = "^3.5"
 pytest-mypy-plugins = "^1.6"
 pytest-subtests = "^0.4"
