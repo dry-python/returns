@@ -66,7 +66,7 @@ trio = "^0.18"
 attrs = "^20.3"
 httpx = "^0.16"
 
-mypy = "^0.790"
+mypy = "^0.800"
 wemake-python-styleguide = "^0.14"
 flake8-pytest-style = "^1.2"
 flake8-pyi = "^20.10"
