@@ -22,10 +22,10 @@ TYPED_PARTIAL_FUNCTION: Final = 'returns.curry.partial'
 TYPED_CURRY_FUNCTION: Final = 'returns.curry.curry'
 
 #: Used for typed ``flow`` call.
-TYPED_FLOW_FUNCTION: Final = 'returns._internal.pipeline.flow._flow'
+TYPED_FLOW_FUNCTION: Final = 'returns._internal.pipeline.flow.flow'
 
 #: Used for typed ``pipe`` call.
-TYPED_PIPE_FUNCTION: Final = 'returns._internal.pipeline.pipe._pipe'
+TYPED_PIPE_FUNCTION: Final = 'returns._internal.pipeline.pipe.pipe'
 TYPED_PIPE_METHOD: Final = 'returns._internal.pipeline.pipe._Pipe.__call__'
 
 #: Used for HKT emulation.

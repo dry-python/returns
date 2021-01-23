@@ -31,7 +31,7 @@
 
     pipe()
   out: |
-    main:3: error: Too few arguments for "_pipe"
+    main:3: error: Too few arguments for "pipe"
 
 
 - case: pipe_function_first_arg_error

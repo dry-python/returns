@@ -84,7 +84,7 @@ class _Pipe(Generic[
         ...
 
 
-def _pipe(
+def pipe(
     __function1: _PipelineStepType1,
     __function2: _PipelineStepType2 = ...,
     __function3: _PipelineStepType3 = ...,
