@@ -13,6 +13,6 @@ pygments==2.7.4
 
 # Dependencies of our project:
 typing-extensions==3.7.4.3
-mypy==0.790
+mypy==0.800
 pytest==6.2.1
 hypothesis==6.0.2
