@@ -7,7 +7,7 @@
         ...
 
     predefined = pipe(convert, int, bool)
-    reveal_type(predefined('1.0'))  # N: Revealed type is 'builtins.bool'
+    reveal_type(predefined('1.0'))  # N: Revealed type is 'builtins.bool*'
 
 
 - case: pipe_function2
@@ -78,7 +78,7 @@
     from returns.pipeline import pipe
 
     reveal_type(
-        pipe(  # N: Revealed type is 'builtins.float'
+        pipe(  # N: Revealed type is 'builtins.float*'
             lambda x: x,
             str,
             lambda y: y.split(' '),
@@ -133,8 +133,8 @@
     from returns.pipeline import pipe
 
     x = pipe(int, str, int)
-    reveal_type(x(1.0))  # N: Revealed type is 'builtins.int'
-    reveal_type(x('a'))  # N: Revealed type is 'builtins.int'
+    reveal_type(x(1.0))  # N: Revealed type is 'builtins.int*'
+    reveal_type(x('a'))  # N: Revealed type is 'builtins.int*'
 
 
 - case: pipe_with_containers

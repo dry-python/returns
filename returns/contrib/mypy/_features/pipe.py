@@ -55,7 +55,7 @@ def analyze(ctx: FunctionContext) -> MypyType:
         return ctx.default_return_type
 
     if not ctx.arg_types[0]:  # We do require to pass `*functions` arg.
-        ctx.api.fail('Too few arguments for "_pipe"', ctx.context)
+        ctx.api.fail('Too few arguments for "pipe"', ctx.context)
         return ctx.default_return_type
 
     arg_types = [arg_type[0] for arg_type in ctx.arg_types if arg_type]

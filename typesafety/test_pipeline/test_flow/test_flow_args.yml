@@ -5,7 +5,7 @@
 
     reveal_type(flow())
   out: |
-    main:3: error: Too few arguments for "_flow"
+    main:3: error: Missing positional argument "instance" in call to "flow"
     main:3: note: Revealed type is '<nothing>'
 
 
@@ -16,7 +16,7 @@
 
     reveal_type(flow(1))
   out: |
-    main:3: error: Too few arguments for "_flow"
+    main:3: error: Too few arguments for "flow"
     main:3: note: Revealed type is '<nothing>'
 
 

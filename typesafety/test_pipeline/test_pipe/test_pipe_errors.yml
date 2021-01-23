@@ -31,7 +31,7 @@
 
     pipe()
   out: |
-    main:3: error: Too few arguments for "_pipe"
+    main:3: error: Too few arguments for "pipe"
 
 
 - case: pipe_function_first_arg_error
@@ -75,5 +75,5 @@
   out: |
     main:6: error: Argument 1 to "__call__" of "_Pipe" has incompatible type "int"; expected "str"
     main:6: error: Argument 1 to "convert" has incompatible type "int"; expected "str"
-    main:6: error: Too few arguments for "convert"
+    main:6: error: Missing positional argument "other" in call to "convert"
     main:6: note: Revealed type is 'builtins.float'

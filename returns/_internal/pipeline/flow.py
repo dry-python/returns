@@ -8,7 +8,7 @@ _PipelineStepType = TypeVar('_PipelineStepType')
 _ReturnType = TypeVar('_ReturnType')
 
 
-def _flow(
+def flow(
     instance: _InstanceType,
     *functions: _PipelineStepType,
 ) -> _ReturnType:
@@ -36,7 +36,7 @@ def _flow(
        >>> assert flow('1', int, float, str) == '1.0'
 
     This function is closely related
-    to :func:`pipe <returns._internal.pipeline.pipe._pipe>`:
+    to :func:`pipe <returns._internal.pipeline.pipe.pipe>`:
 
     .. code:: python
 

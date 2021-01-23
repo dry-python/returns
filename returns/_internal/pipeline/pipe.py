@@ -1,7 +1,7 @@
-from returns._internal.pipeline.flow import _flow
+from returns._internal.pipeline.flow import flow
 
 
-def _pipe(*functions):
+def pipe(*functions):
     """
     Allows to compose a value and up to 7 functions that use this value.
 
@@ -19,7 +19,7 @@ def _pipe(*functions):
        >>> assert pipe(int, float, str)('1') == '1.0'
 
     This function is closely related
-    to :func:`pipe <returns._internal.pipeline.flow._flow>`:
+    to :func:`pipe <returns._internal.pipeline.flow.flow>`:
 
     .. code:: python
 
@@ -31,4 +31,4 @@ def _pipe(*functions):
         - https://github.com/gcanti/fp-ts/blob/master/src/pipeable.ts
 
     """
-    return lambda instance: _flow(instance, *functions)
+    return lambda instance: flow(instance, *functions)
