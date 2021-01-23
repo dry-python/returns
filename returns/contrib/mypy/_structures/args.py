@@ -7,7 +7,7 @@ from mypy.types import Type as MypyType
 from typing_extensions import final
 
 #: Basic struct to represent function arguments.
-_FuncArgStruct = namedtuple('_FuncArg', ('name', 'type', 'kind'))
+_FuncArgStruct = namedtuple('_FuncArgStruct', ('name', 'type', 'kind'))
 
 
 @final
