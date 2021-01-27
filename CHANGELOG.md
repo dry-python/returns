@@ -8,6 +8,11 @@ See [0Ver](https://0ver.org/).
 
 ## 0.16.0 WIP
 
+## Features
+
+- Adds `LazyIO` container
+- Marks `IO` as `@final`
+
 ### Misc
 
 - Makes `_Nothing` a singleton
