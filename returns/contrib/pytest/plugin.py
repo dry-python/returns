@@ -127,7 +127,8 @@ def _trace_function(
     arg: Any,
 ) -> None:
     is_desired_type_call = (
-        event == 'call' and frame.f_code is trace_type.__code__
+        event == 'call' and
+        frame.f_code is trace_type.__code__
     )
     if is_desired_type_call:
         current_call_stack = inspect.stack()
@@ -152,7 +153,7 @@ class _PatchedContainer(object):
             RequiresContextFutureResult,
         )
         from returns.future import FutureResult
-        from returns.io import _IOFailure, _IOSuccess
+        from returns.io.ioresult import _IOFailure, _IOSuccess
         from returns.result import _Failure, _Success
 
         return (

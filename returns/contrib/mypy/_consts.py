@@ -6,8 +6,8 @@ from typing_extensions import Final
 #: Set of full names of our decorators.
 TYPED_DECORATORS: Final = frozenset((
     'returns.result.safe',
-    'returns.io.impure',
-    'returns.io.impure_safe',
+    'returns.io.io.impure',
+    'returns.io.ioresult.impure_safe',
     'returns.maybe.maybe',
     'returns.future.future',
     'returns.future.asyncify',
