@@ -60,7 +60,7 @@ typing-extensions = "^3.7"
 
 
 [tool.poetry.dev-dependencies]
-anyio = "^2.0"
+anyio = "^2.1"
 curio = "^1.4"
 trio = "^0.18"
 attrs = "^20.3"
