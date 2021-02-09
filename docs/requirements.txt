@@ -3,7 +3,7 @@
 
 sphinx==3.4.3
 sphinx_autodoc_typehints==1.11.1
-sphinxcontrib-mermaid==0.6.0
+sphinxcontrib-mermaid==0.6.1
 sphinx-typlog-theme==0.8.0
 sphinx-hoverxref==0.5b1
 recommonmark==0.7.1
