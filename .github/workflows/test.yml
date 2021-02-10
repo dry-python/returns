@@ -18,8 +18,8 @@ jobs:
       matrix:
         python-version: [3.7, 3.8]
         include:
-          python-version: 3.9
-          experimental: true
+          - python-version: 3.9
+            experimental: true
 
     steps:
     - uses: actions/checkout@v2
