@@ -126,7 +126,10 @@ def test_star_kwargs():
 
     assert not factory()
     assert factory(arg=1) == [('arg', 1)]
-    assert factory(arg=1, other=2) == [('arg', 1), ('other', 2)]
+    assert factory(
+        arg=1,
+        other=2,
+    ) == [('arg', 1), ('other', 2)]
 
     with pytest.raises(TypeError):
         factory(1)
@@ -143,7 +146,10 @@ def test_arg_star_kwargs():
 
     assert factory(1) == [('first', 1)]
     assert factory(1, arg=2) == [('first', 1), ('arg', 2)]
-    assert factory(first=1, arg=2) == [('first', 1), ('arg', 2)]
+    assert factory(
+        first=1,
+        arg=2,
+    ) == [('first', 1), ('arg', 2)]
     assert factory(1, arg=2, other=3) == [
         ('first', 1),
         ('arg', 2),
@@ -165,7 +171,9 @@ def test_kwonly():
     def factory(*args: int, by: int) -> Tuple[int, ...]:
         return args + (by, )
 
-    assert factory(1, 2, 3)(by=10) == (1, 2, 3, 10)
+    assert factory(
+        1, 2, 3,
+    )(by=10) == (1, 2, 3, 10)
     assert factory(by=10) == (10, )
 
 
