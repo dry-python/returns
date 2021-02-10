@@ -1,4 +1,3 @@
-#
 # Configuration file for the Sphinx documentation builder.
 #
 # This file does only contain a selection of the most common options. For a
@@ -151,7 +150,6 @@ add_module_names = False
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-#
 html_theme = 'sphinx_typlog_theme'
 
 # Theme options are theme-specific and customize the look and feel of a theme

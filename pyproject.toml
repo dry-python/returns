@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 
 [tool.nitpick]
-style = "https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/master/styles/nitpick-style-wemake.toml"
+style = "https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/0.15.0/styles/nitpick-style-wemake.toml"
 
 
 [tool.poetry]
@@ -58,7 +58,6 @@ python = "^3.7"
 
 typing-extensions = "^3.7"
 
-
 [tool.poetry.dev-dependencies]
 anyio = "^2.0"
 curio = "^1.4"
@@ -67,7 +66,7 @@ attrs = "^20.3"
 httpx = "^0.16"
 
 mypy = "^0.800"
-wemake-python-styleguide = "^0.14"
+wemake-python-styleguide = "^0.15"
 flake8-pytest-style = "^1.2"
 flake8-pyi = "^20.10"
 nitpick = "^0.23"

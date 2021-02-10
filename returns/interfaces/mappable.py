@@ -75,7 +75,7 @@ class MappableN(
     )
 
     @abstractmethod  # noqa: WPS125
-    def map(  # noqa: WPS125
+    def map(
         self: _MappableType,
         function: Callable[[_FirstType], _UpdatedType],
     ) -> KindN[_MappableType, _UpdatedType, _SecondType, _ThirdType]:

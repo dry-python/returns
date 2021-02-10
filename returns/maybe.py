@@ -60,7 +60,7 @@ class Maybe(
     #: Typesafe equality comparison with other `Result` objects.
     equals = container_equality
 
-    def map(  # noqa: WPS125
+    def map(
         self,
         function: Callable[[_ValueType], _NewValueType],
     ) -> 'Maybe[_NewValueType]':
@@ -226,7 +226,7 @@ class Maybe(
             ...
           returns.primitives.exceptions.UnwrapFailedError
 
-        """  # noqa: RST399
+        """  # noqa: RST307
 
     def failure(self) -> None:
         """
@@ -243,7 +243,7 @@ class Maybe(
             ...
           returns.primitives.exceptions.UnwrapFailedError
 
-        """  # noqa: RST399
+        """  # noqa: RST307
 
     @classmethod
     def from_value(
@@ -316,7 +316,7 @@ class _Nothing(Maybe[Any]):
         """
         return '<Nothing>'
 
-    def map(self, function):  # noqa: WPS125
+    def map(self, function):
         """Does nothing for ``Nothing``."""
         return self
 
@@ -354,7 +354,7 @@ class _Nothing(Maybe[Any]):
 
 
 @final
-class _Some(Maybe[_ValueType]):
+class _Some(Maybe[_ValueType]):  # noqa: WPS110
     """
     Represents a calculation which has succeeded and contains the value.
 
@@ -372,7 +372,7 @@ class _Some(Maybe[_ValueType]):
         """
         super().__init__(inner_value)
 
-    def map(self, function):  # noqa: WPS125
+    def map(self, function):
         """Composes current container with a pure function."""
         return _Some(function(self._inner_value))
 
@@ -415,7 +415,9 @@ Maybe.success_type = _Some
 Maybe.failure_type = _Nothing
 
 
-def Some(inner_value: _NewValueType) -> Maybe[_NewValueType]:  # noqa: N802
+def Some(  # noqa: WPS110, N802
+    inner_value: _NewValueType,
+) -> Maybe[_NewValueType]:
     """
     Public unit function of protected :class:`~_Some` type.
 

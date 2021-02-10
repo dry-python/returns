@@ -84,7 +84,7 @@ class Pair(
 
     # `Mappable` part via `BiMappable`:
 
-    def map(  # noqa: WPS125
+    def map(
         self,
         function: Callable[[_FirstType], _NewFirstType],
     ) -> 'Pair[_NewFirstType, _SecondType]':

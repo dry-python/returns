@@ -16,8 +16,8 @@ from returns.result import Result
 if TYPE_CHECKING:
     from returns.context.requires_context import RequiresContext
     from returns.context.requires_context_ioresult import (
-        RequiresContextIOResult,
         ReaderIOResult,
+        RequiresContextIOResult,
     )
     from returns.context.requires_context_result import RequiresContextResult
 
@@ -186,7 +186,7 @@ class RequiresContextFutureResult(
         """
         return RequiresContextFutureResult(lambda deps: self(deps).swap())
 
-    def map(  # noqa: WPS125
+    def map(
         self,
         function: Callable[[_ValueType], _NewValueType],
     ) -> RequiresContextFutureResult[_NewValueType, _ErrorType, _EnvType]:

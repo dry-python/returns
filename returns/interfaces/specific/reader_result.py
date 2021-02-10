@@ -14,8 +14,8 @@ from returns.primitives.laws import (
 )
 
 if TYPE_CHECKING:
-    from returns.result import Result  # noqa: F401, WPS433
     from returns.context import Reader, ReaderResult  # noqa: WPS433
+    from returns.result import Result  # noqa: F401, WPS433
 
 _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')

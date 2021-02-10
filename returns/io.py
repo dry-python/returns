@@ -75,7 +75,7 @@ class IO(
         """
         super().__init__(inner_value)
 
-    def map(  # noqa: WPS125
+    def map(
         self,
         function: Callable[[_ValueType], _NewValueType],
     ) -> 'IO[_NewValueType]':
@@ -354,7 +354,7 @@ class IOResult(
         """
         return self.from_result(self._inner_value.swap())
 
-    def map(  # noqa: WPS125
+    def map(
         self, function: Callable[[_ValueType], _NewValueType],
     ) -> 'IOResult[_NewValueType, _ErrorType]':
         """
@@ -556,7 +556,7 @@ class IOResult(
             ...
           returns.primitives.exceptions.UnwrapFailedError
 
-        """  # noqa: RST399
+        """  # noqa: RST307
         return IO(self._inner_value.unwrap())
 
     def failure(self) -> IO[_ErrorType]:
@@ -574,7 +574,7 @@ class IOResult(
             ...
           returns.primitives.exceptions.UnwrapFailedError
 
-        """  # noqa: RST399
+        """  # noqa: RST307
         return IO(self._inner_value.failure())
 
     def compose_result(

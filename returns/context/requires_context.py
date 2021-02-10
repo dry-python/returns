@@ -15,13 +15,13 @@ from returns.result import Result
 if TYPE_CHECKING:
     # We need this condition to make sure Python can solve cycle imports.
     # But, since we only use these values in types, it is not important.
+    from returns.context.requires_context_future_result import (
+        RequiresContextFutureResult,
+    )
     from returns.context.requires_context_ioresult import (
         RequiresContextIOResult,
     )
     from returns.context.requires_context_result import RequiresContextResult
-    from returns.context.requires_context_future_result import (
-        RequiresContextFutureResult,
-    )
 
 # Context:
 _EnvType = TypeVar('_EnvType', contravariant=True)
@@ -125,7 +125,7 @@ class RequiresContext(
         """
         return self._inner_value(deps)
 
-    def map(  # noqa: WPS125
+    def map(
         self, function: Callable[[_ReturnType], _NewReturnType],
     ) -> RequiresContext[_NewReturnType, _EnvType]:
         """

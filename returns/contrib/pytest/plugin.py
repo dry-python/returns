@@ -88,10 +88,11 @@ def pytest_configure(config) -> None:
     """
     config.addinivalue_line(
         'markers',
-        """
-        returns_lawful: all tests under `check_all_laws` is marked this way,
-        use `-m "not returns_lawful"` to skip them.
-        """,
+        (
+            'returns_lawful: all tests under `check_all_laws` ' +
+            'is marked this way, ' +
+            'use `-m "not returns_lawful"` to skip them.'
+        ),
     )
 
 
@@ -147,9 +148,9 @@ class _PatchedContainer(object):
     def containers_to_patch(cls) -> tuple:
         """We need this method so coverage will work correctly."""
         from returns.context import (
+            RequiresContextFutureResult,
             RequiresContextIOResult,
             RequiresContextResult,
-            RequiresContextFutureResult,
         )
         from returns.future import FutureResult
         from returns.io import _IOFailure, _IOSuccess

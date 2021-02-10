@@ -31,7 +31,7 @@ _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')
 
 
-class Result(
+class Result(  # noqa: WPS110
     BaseContainer,
     SupportsKind2['Result', _ValueType, _ErrorType],
     result.ResultBased2[_ValueType, _ErrorType],
@@ -85,7 +85,7 @@ class Result(
 
         """
 
-    def map(  # noqa: WPS125
+    def map(
         self,
         function: Callable[[_ValueType], _NewValueType],
     ) -> 'Result[_NewValueType, _ErrorType]':
@@ -231,7 +231,7 @@ class Result(
             ...
           returns.primitives.exceptions.UnwrapFailedError
 
-        """  # noqa: RST399
+        """  # noqa: RST307
 
     def failure(self) -> _ErrorType:
         """
@@ -248,7 +248,7 @@ class Result(
             ...
           returns.primitives.exceptions.UnwrapFailedError
 
-        """  # noqa: RST399
+        """  # noqa: RST307
 
     @classmethod
     def from_value(
@@ -340,7 +340,7 @@ class _Failure(Result[Any, _ErrorType]):
         """Failures swap to :class:`_Success`."""
         return _Success(self._inner_value)
 
-    def map(self, function):  # noqa: WPS125
+    def map(self, function):
         """Does nothing for ``Failure``."""
         return self
 
@@ -412,7 +412,7 @@ class _Success(Result[_ValueType, Any]):
         """Successes swap to :class:`_Failure`."""
         return _Failure(self._inner_value)
 
-    def map(self, function):  # noqa: WPS125
+    def map(self, function):
         """Composes current container with a pure function."""
         return _Success(function(self._inner_value))
 

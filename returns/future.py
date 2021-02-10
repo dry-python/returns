@@ -154,7 +154,7 @@ class Future(
         """
         return IO(await self._inner_value)
 
-    def map(  # noqa: WPS125
+    def map(
         self,
         function: Callable[[_ValueType], _NewValueType],
     ) -> 'Future[_NewValueType]':
@@ -621,7 +621,7 @@ class FutureResult(
         """
         return FutureResult(_future_result.async_swap(self._inner_value))
 
-    def map(  # noqa: WPS125
+    def map(
         self,
         function: Callable[[_ValueType], _NewValueType],
     ) -> 'FutureResult[_NewValueType, _ErrorType]':

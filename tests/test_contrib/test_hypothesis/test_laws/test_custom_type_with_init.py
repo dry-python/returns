@@ -22,7 +22,7 @@ class _Wrapper(
 
     equals = container_equality
 
-    def map(  # noqa: WPS125
+    def map(
         self,
         function: Callable[[_ValueType], _NewValueType],
     ) -> '_Wrapper[_NewValueType]':

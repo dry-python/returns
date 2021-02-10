@@ -11,6 +11,6 @@ def _function(arg: int) -> float:
 @pytest.mark.anyio
 async def test_asyncify_decorator():
     """Ensure that function marked with ``@asyncify`` is awaitable."""
-    coro = _function(1)
+    coro = _function(2)
 
-    assert await coro == 0.5
+    assert await coro == 1

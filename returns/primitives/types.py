@@ -25,7 +25,7 @@ class Immutable(object):
 
     See :class:`returns.primitives.container.BaseContainer` for examples.
 
-    """  # noqa: RST399
+    """  # noqa: RST307
 
     def __copy__(self) -> 'Immutable':
         """Returns itself."""

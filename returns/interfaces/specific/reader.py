@@ -48,7 +48,7 @@ from returns.primitives.laws import (
 )
 
 if TYPE_CHECKING:
-    from returns.context import RequiresContext, NoDeps  # noqa: WPS433
+    from returns.context import NoDeps, RequiresContext  # noqa: WPS433
 
 _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')

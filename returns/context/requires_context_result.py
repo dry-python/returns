@@ -168,7 +168,7 @@ class RequiresContextResult(
         """
         return RequiresContextResult(lambda deps: self(deps).swap())
 
-    def map(  # noqa: WPS125
+    def map(
         self, function: Callable[[_ValueType], _NewValueType],
     ) -> RequiresContextResult[_NewValueType, _ErrorType, _EnvType]:
         """
