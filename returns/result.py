@@ -31,7 +31,7 @@ _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')
 
 
-class Result(  # noqa: WPS110
+class Result(
     BaseContainer,
     SupportsKind2['Result', _ValueType, _ErrorType],
     result.ResultBased2[_ValueType, _ErrorType],

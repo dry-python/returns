@@ -354,7 +354,7 @@ class _Nothing(Maybe[Any]):
 
 
 @final
-class _Some(Maybe[_ValueType]):  # noqa: WPS110
+class _Some(Maybe[_ValueType]):
     """
     Represents a calculation which has succeeded and contains the value.
 
@@ -415,7 +415,7 @@ Maybe.success_type = _Some
 Maybe.failure_type = _Nothing
 
 
-def Some(  # noqa: WPS110, N802
+def Some(  # noqa: N802
     inner_value: _NewValueType,
 ) -> Maybe[_NewValueType]:
     """
