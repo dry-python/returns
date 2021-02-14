@@ -308,10 +308,11 @@ You might end up with an iterable of containers:
 
 .. code:: python
 
+  >>> from typing import List
   >>> from returns.maybe import Maybe, Some, Nothing, maybe
 
   >>> source = {'a': 1, 'b': 2}
-  >>> fetched_values: Maybe[int] = [
+  >>> fetched_values: List[Maybe[int]] = [
   ...     maybe(source.get)(key)
   ...     for key in ('a', 'b')
   ... ]
@@ -330,7 +331,7 @@ Any falsy values will result in a falsy result (pun intended):
 
 .. code:: python
 
-  >>> fetched_values: Maybe[int] = [
+  >>> fetched_values: List[Maybe[int]] = [
   ...     maybe(source.get)(key)
   ...     for key in ('a', 'c')  # 'c' is missing!
   ... ]
