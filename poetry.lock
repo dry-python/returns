@@ -1152,7 +1152,7 @@ python-versions = "*"
 
 [[package]]
 name = "sphinx"
-version = "3.5.0"
+version = "3.5.1"
 description = "Python documentation generator"
 category = "dev"
 optional = false
@@ -1177,9 +1177,9 @@ sphinxcontrib-qthelp = "*"
 sphinxcontrib-serializinghtml = "*"
 
 [package.extras]
-lint = ["docutils-stubs", "flake8 (>=3.5.0)", "isort", "mypy (>=0.800)"]
-test = ["pytest", "pytest-cov", "html5lib", "cython", "typed-ast"]
 docs = ["sphinxcontrib-websupport"]
+lint = ["flake8 (>=3.5.0)", "isort", "mypy (>=0.800)", "docutils-stubs"]
+test = ["pytest", "pytest-cov", "html5lib", "cython", "typed-ast"]
 
 [[package]]
 name = "sphinx-autodoc-typehints"
@@ -2028,8 +2028,8 @@ sortedcontainers = [
     {file = "sortedcontainers-2.3.0.tar.gz", hash = "sha256:59cc937650cf60d677c16775597c89a960658a09cf7c1a668f86e1e4464b10a1"},
 ]
 sphinx = [
-    {file = "Sphinx-3.5.0-py3-none-any.whl", hash = "sha256:68da66ca3d6b35b22bea5c53d938d5f8988663dca042f0a46429a1eba1010051"},
-    {file = "Sphinx-3.5.0.tar.gz", hash = "sha256:deb468efb3abaa70d790add4147d18782d86fdeacf648d6e8afb7a99807f1546"},
+    {file = "Sphinx-3.5.1-py3-none-any.whl", hash = "sha256:e90161222e4d80ce5fc811ace7c6787a226b4f5951545f7f42acf97277bfc35c"},
+    {file = "Sphinx-3.5.1.tar.gz", hash = "sha256:11d521e787d9372c289472513d807277caafb1684b33eb4f08f7574c405893a9"},
 ]
 sphinx-autodoc-typehints = [
     {file = "sphinx-autodoc-typehints-1.11.1.tar.gz", hash = "sha256:244ba6d3e2fdb854622f643c7763d6f95b6886eba24bec28e86edf205e4ddb20"},
