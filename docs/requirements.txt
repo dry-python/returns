@@ -15,4 +15,4 @@ pygments==2.8.0
 typing-extensions==3.7.4.3
 mypy==0.800
 pytest==6.2.2
-hypothesis==6.2.0
+hypothesis==6.3.0
