@@ -46,6 +46,8 @@ class _LawSpec(LawSpecDef):
         third: _EqualType,
     ) -> None:
         """If ``A == B`` and ``B == C`` then ``A == C``."""
+        # We use this notation, because `first` might be equal to `third`,
+        # but not to `second`. Example: Some(1), Some(2), Some(1)
         if first.equals(second) and second.equals(third):
             assert first.equals(third)
 
