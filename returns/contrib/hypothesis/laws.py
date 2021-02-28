@@ -57,7 +57,7 @@ def check_all_laws(
     Note:
         Cannot be used inside doctests because of the magic we use inside.
 
-    See also: 
+    See also:
         - https://sobolevn.me/2021/02/make-tests-a-part-of-your-app
         - https://mmhaskell.com/blog/2017/3/13/obey-the-type-laws
 
