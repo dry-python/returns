@@ -46,7 +46,8 @@ class _LawSpec(LawSpecDef):
         third: _EqualType,
     ) -> None:
         """If ``A == B`` and ``B == C`` then ``A == C``."""
-        assert (first == second and second == third) == (first == third)
+        if first.equals(second) and second.equals(third):
+            assert first.equals(third)
 
 
 class Equable(Lawful['Equable']):
