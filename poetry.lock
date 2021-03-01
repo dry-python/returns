@@ -561,7 +561,7 @@ http2 = ["h2 (>=3.0.0,<4.0.0)"]
 
 [[package]]
 name = "hypothesis"
-version = "6.3.2"
+version = "6.3.4"
 description = "A library for property-based testing"
 category = "dev"
 optional = false
@@ -1780,8 +1780,8 @@ httpx = [
     {file = "httpx-0.16.1.tar.gz", hash = "sha256:126424c279c842738805974687e0518a94c7ae8d140cd65b9c4f77ac46ffa537"},
 ]
 hypothesis = [
-    {file = "hypothesis-6.3.2-py3-none-any.whl", hash = "sha256:0263f698eb66aebb2b3ade8721e5df67cf018d3b06f07cd0fef3e52cc2cc73b1"},
-    {file = "hypothesis-6.3.2.tar.gz", hash = "sha256:0dcb10290108c0977cfa9bd23b737c5a817faefab2974e677f5bcc7a96661758"},
+    {file = "hypothesis-6.3.4-py3-none-any.whl", hash = "sha256:69f7d32270f52a14f853cb3673eae65fc2f057601f6e7b5502e5c905985d8c69"},
+    {file = "hypothesis-6.3.4.tar.gz", hash = "sha256:26771ce7f21c2ed08e93f62bdd63755dab051c163cc9d54544269b5b8b550eac"},
 ]
 identify = [
     {file = "identify-1.5.13-py2.py3-none-any.whl", hash = "sha256:9dfb63a2e871b807e3ba62f029813552a24b5289504f5b071dea9b041aee9fe4"},
