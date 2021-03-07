@@ -1,0 +1,7 @@
+# Ref: https://help.github.com/en/github/building-a-strong-community/configuring-issue-templates-for-your-repository#configuring-the-template-chooser
+blank_issues_enabled: true  # default
+contact_links:
+- name: >-
+    💬 Telegram: @drypython
+  url: https://t.me/drypython
+  about: Chat with dry-python devs
