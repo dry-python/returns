@@ -187,11 +187,11 @@ toml = ["toml"]
 
 [[package]]
 name = "curio"
-version = "1.4"
+version = "1.5"
 description = "Curio"
 category = "dev"
 optional = false
-python-versions = ">= 3.6"
+python-versions = ">= 3.7"
 
 [package.extras]
 test = ["pytest", "sphinx"]
@@ -1502,7 +1502,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "e878d98c57b8cad189a6e5f3c7c11f64517524ae952e82ff03210930c1862d0b"
+content-hash = "75d029780158f0b834cf2f3a6393e83a43114be7e3cf353f519d2744a131667d"
 
 [metadata.files]
 alabaster = [
@@ -1661,7 +1661,7 @@ coverage = [
     {file = "coverage-5.4.tar.gz", hash = "sha256:6d2e262e5e8da6fa56e774fb8e2643417351427604c2b177f8e8c5f75fc928ca"},
 ]
 curio = [
-    {file = "curio-1.4.tar.gz", hash = "sha256:57edce81c837f3c2cf42fbb346dee26e537d1659e6605269fb13bd179e068744"},
+    {file = "curio-1.5.tar.gz", hash = "sha256:af08212e590bb7da8e4cc39c42012711494dc20d622f162155ba296cc2e3bc10"},
 ]
 darglint = [
     {file = "darglint-1.6.0-py3-none-any.whl", hash = "sha256:c80849fd83a06d0bec3c93240360214cf56979691c6d18e2abb293aa404bf443"},
