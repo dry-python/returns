@@ -453,7 +453,7 @@ pyflakes = ">=2.1.1"
 
 [[package]]
 name = "flake8-pytest-style"
-version = "1.3.0"
+version = "1.4.0"
 description = "A flake8 plugin checking common style issues or inconsistencies with pytest-based tests."
 category = "dev"
 optional = false
@@ -1502,7 +1502,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "efb41b862a9b322258cfe3c25b01a934f72811ade216ed4bca1b03a6c55ff938"
+content-hash = "b7be5708a70c9805f61c0f754a0dc172fbb60c4134775e68fc0d336dc1dc7c4d"
 
 [metadata.files]
 alabaster = [
@@ -1746,8 +1746,8 @@ flake8-pyi = [
     {file = "flake8_pyi-20.10.0-py2.py3-none-any.whl", hash = "sha256:ff5dfc40bffa878f6ce95bcfd9a6ad14c44b85cbe99c4864e729301bf54267f0"},
 ]
 flake8-pytest-style = [
-    {file = "flake8-pytest-style-1.3.0.tar.gz", hash = "sha256:d141476de2d1a31e491c2090ba7d1e32980b11a2c12e8aa3b3cc844571b19bfa"},
-    {file = "flake8_pytest_style-1.3.0-py3-none-any.whl", hash = "sha256:5a0bfb30696eb97473bb2078834794e9491848f975f680bdcb0554e5b4efbbfc"},
+    {file = "flake8-pytest-style-1.4.0.tar.gz", hash = "sha256:f51bf5c8f657ad4b4938bfedb9a5b84fb0885f72ac07b406ebb7f5ea83f8b74e"},
+    {file = "flake8_pytest_style-1.4.0-py3-none-any.whl", hash = "sha256:f8b6f24b15b28f317eee1bd354f38427007d527774e2ac8ae8b936e6e7eda604"},
 ]
 flake8-quotes = [
     {file = "flake8-quotes-3.2.0.tar.gz", hash = "sha256:3f1116e985ef437c130431ac92f9b3155f8f652fda7405ac22ffdfd7a9d1055e"},

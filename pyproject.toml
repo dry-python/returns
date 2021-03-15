@@ -67,7 +67,7 @@ httpx = "^0.17"
 
 mypy = "^0.812"
 wemake-python-styleguide = "^0.15"
-flake8-pytest-style = "^1.2"
+flake8-pytest-style = "^1.4"
 flake8-pyi = "^20.10"
 nitpick = "^0.25"
 codespell = "^2.0"
