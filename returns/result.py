@@ -15,6 +15,7 @@ from typing import (
 
 from typing_extensions import final
 
+from returns.contrib.pytest.plugin import _DesiredFunctionFound
 from returns.interfaces.specific import result
 from returns.primitives.container import BaseContainer, container_equality
 from returns.primitives.exceptions import UnwrapFailedError
@@ -528,6 +529,8 @@ def safe(
     def decorator(*args, **kwargs):
         try:
             return Success(function(*args, **kwargs))
+        except _DesiredFunctionFound:
+            raise
         except Exception as exc:
             return Failure(exc)
     return decorator

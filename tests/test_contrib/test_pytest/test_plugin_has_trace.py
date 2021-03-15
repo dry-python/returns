@@ -2,7 +2,7 @@ import pytest
 
 from returns.contrib.pytest import ReturnsAsserts
 from returns.io import IOFailure, IOSuccess
-from returns.result import Failure, Success
+from returns.result import Failure, Success, safe
 
 
 def _create_container_function(container_type, container_value):
@@ -13,6 +13,12 @@ def _create_container_function_intermediate(container_type, container_value):
     return _create_container_function(  # type: ignore
         container_type, container_value,
     )
+
+
+@safe
+def _safe_decorated_function(return_failure: bool = False):
+    if return_failure:
+        raise Exception  # noqa: WPS454
 
 
 @pytest.mark.parametrize('container_type', [  # noqa: WPS118
@@ -71,3 +77,13 @@ def test_failed_assert_trace2(
             _create_container_function_intermediate(  # type: ignore
                 wrong_type, 1,
             )
+
+
+@pytest.mark.parametrize('container_type', [  # noqa: WPS118
+    Success,
+    Failure,
+])
+def test_safe_decorated_assert(container_type, returns: ReturnsAsserts):
+    """Test if our plugin will catch containers from @safe-wrapped functions."""
+    with returns.assert_trace(container_type, _safe_decorated_function):
+        _safe_decorated_function(return_failure=container_type is Failure)
