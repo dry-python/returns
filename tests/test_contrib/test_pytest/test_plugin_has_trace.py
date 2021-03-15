@@ -18,7 +18,7 @@ def _create_container_function_intermediate(container_type, container_value):
 @safe
 def _safe_decorated_function(return_failure: bool = False):
     if return_failure:
-        raise Exception  # noqa: WPS454
+        raise ValueError('Function failed')
 
 
 @pytest.mark.parametrize('container_type', [  # noqa: WPS118

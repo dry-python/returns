@@ -8,6 +8,8 @@ from typing import TYPE_CHECKING, Any, Callable, Iterator, TypeVar
 import pytest
 from typing_extensions import Final, final
 
+from returns.primitives.exceptions import DesiredFunctionFound
+
 if TYPE_CHECKING:
     from returns.interfaces.specific.result import ResultLikeN
 
@@ -64,7 +66,7 @@ class ReturnsAsserts(object):
 
         try:
             yield
-        except _DesiredFunctionFound:
+        except DesiredFunctionFound:
             pass  # noqa: WPS420
         else:
             pytest.fail(
@@ -135,7 +137,7 @@ def _trace_function(
         function_to_search_code = getattr(function_to_search, '__code__', None)
         for frame_info in current_call_stack:
             if function_to_search_code is frame_info.frame.f_code:
-                raise _DesiredFunctionFound()
+                raise DesiredFunctionFound()
 
 
 @final
@@ -206,7 +208,3 @@ class _PatchedContainer(object):
                 )
                 return original_result
         return wraps(original)(factory)
-
-
-class _DesiredFunctionFound(RuntimeError):
-    """Exception to raise when expected function is found."""

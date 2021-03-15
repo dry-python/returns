@@ -15,10 +15,12 @@ from typing import (
 
 from typing_extensions import final
 
-from returns.contrib.pytest.plugin import _DesiredFunctionFound
 from returns.interfaces.specific import result
 from returns.primitives.container import BaseContainer, container_equality
-from returns.primitives.exceptions import UnwrapFailedError
+from returns.primitives.exceptions import (
+    DesiredFunctionFound,
+    UnwrapFailedError,
+)
 from returns.primitives.hkt import Kind2, SupportsKind2
 
 # Definitions:
@@ -529,8 +531,8 @@ def safe(
     def decorator(*args, **kwargs):
         try:
             return Success(function(*args, **kwargs))
-        except _DesiredFunctionFound:  # noqa: WPS329
-            raise
         except Exception as exc:
+            if isinstance(exc, DesiredFunctionFound):
+                raise
             return Failure(exc)
     return decorator

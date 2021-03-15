@@ -35,3 +35,7 @@ class ImmutableStateError(AttributeError):
 
     See: https://github.com/dry-python/returns/issues/394
     """
+
+
+class DesiredFunctionFound(RuntimeError):
+    """Exception to raise when expected function is found."""
