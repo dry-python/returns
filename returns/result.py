@@ -529,7 +529,7 @@ def safe(
     def decorator(*args, **kwargs):
         try:
             return Success(function(*args, **kwargs))
-        except _DesiredFunctionFound:
+        except _DesiredFunctionFound:  # noqa: WPS329
             raise
         except Exception as exc:
             return Failure(exc)
