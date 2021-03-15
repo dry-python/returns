@@ -117,7 +117,7 @@ def test_fold_collect_reader(iterable, sequence):
     )(...) == sequence(...)
 
 
-@pytest.mark.anyio
+@pytest.mark.anyio()
 async def test_fold_collect_reader_future_result(subtests):
     """Iterable for ``ReaderFutureResult`` and ``Fold``."""
     containers: List[Tuple[  # noqa: WPS234
@@ -159,7 +159,7 @@ async def test_fold_collect_reader_future_result(subtests):
             )(...) == await sequence(...)
 
 
-@pytest.mark.anyio
+@pytest.mark.anyio()
 async def test_fold_collect_future(subtests):
     """Iterable for ``Future`` and ``Fold``."""
     containers: List[Tuple[  # noqa: WPS234
@@ -180,7 +180,7 @@ async def test_fold_collect_future(subtests):
             ) == await sequence
 
 
-@pytest.mark.anyio
+@pytest.mark.anyio()
 async def test_fold_collect_future_result(subtests):
     """Iterable for ``FutureResult`` and ``Fold``."""
     containers: List[Tuple[  # noqa: WPS234

@@ -5,7 +5,7 @@ from returns.io import IO, IOFailure, IOSuccess
 from returns.result import Failure, Success
 
 
-@pytest.mark.anyio
+@pytest.mark.anyio()
 async def test_inner_value(subtests):
     """Ensure that coroutine correct value is preserved for all units."""
     containers = [

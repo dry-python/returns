@@ -70,7 +70,7 @@ def test_error_not_handled(returns: ReturnsAsserts, container):
     assert not returns.is_error_handled(error_handled.alt(identity))
 
 
-@pytest.mark.anyio
+@pytest.mark.anyio()
 @pytest.mark.parametrize('container', [
     FutureResult.from_value(1),
     FutureResult.from_failure(1),
