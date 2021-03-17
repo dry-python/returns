@@ -17,10 +17,7 @@ from typing_extensions import final
 
 from returns.interfaces.specific import result
 from returns.primitives.container import BaseContainer, container_equality
-from returns.primitives.exceptions import (
-    DesiredFunctionFound,
-    UnwrapFailedError,
-)
+from returns.primitives.exceptions import UnwrapFailedError
 from returns.primitives.hkt import Kind2, SupportsKind2
 
 # Definitions:
@@ -532,7 +529,5 @@ def safe(
         try:
             return Success(function(*args, **kwargs))
         except Exception as exc:
-            if isinstance(exc, DesiredFunctionFound):
-                raise
             return Failure(exc)
     return decorator
