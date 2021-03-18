@@ -3,10 +3,6 @@ name: test
 'on':
   push:
   pull_request:
-    branches:
-      # Branches from forks have the form 'user:branch-name'. Reference:
-      # https://github.community/t/how-to-trigger-an-action-on-push-or-pull-request-but-not-both/16662/9
-      - '**:**'
   workflow_dispatch:
 
 jobs:
