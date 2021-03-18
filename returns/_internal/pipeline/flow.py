@@ -1,7 +1,6 @@
 from functools import reduce
 from typing import TypeVar
 
-
 _InstanceType = TypeVar('_InstanceType')
 _PipelineStepType = TypeVar('_PipelineStepType')
 _ReturnType = TypeVar('_ReturnType')
