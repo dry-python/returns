@@ -12,7 +12,7 @@ See [0Ver](https://0ver.org/).
 
 - Makes `_Nothing` a singleton
 - Fixes typos in documentation
-
+- Refactor `flow` function
 
 ## 0.15.0 aka The initial HKT release
 
