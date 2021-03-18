@@ -48,4 +48,8 @@ def flow(
 
     Requires our :ref:`mypy plugin <mypy-plugins>`.
     """
-    return reduce(lambda composed, function: function(composed), functions, instance)   # type: ignore
+    return reduce(  # type: ignore
+        lambda composed, function: function(composed),
+        functions,
+        instance,
+    )
