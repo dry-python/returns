@@ -1,7 +1,6 @@
 from functools import reduce
 from typing import TypeVar
 
-from returns.functions import compose
 
 _InstanceType = TypeVar('_InstanceType')
 _PipelineStepType = TypeVar('_PipelineStepType')
@@ -49,4 +48,4 @@ def flow(
 
     Requires our :ref:`mypy plugin <mypy-plugins>`.
     """
-    return reduce(compose, functions)(instance)  # type: ignore
+    return reduce(lambda composed, function: function(composed), functions, instance)   # type: ignore
