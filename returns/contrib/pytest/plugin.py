@@ -207,5 +207,6 @@ class _PatchedContainer(object):
                 return original_result
         return wraps(original)(factory)
 
-class _DesiredFunctionFound(BaseException):
+
+class _DesiredFunctionFound(BaseException):  # noqa: WPS418
     """Exception to raise when expected function is found."""
