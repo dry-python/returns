@@ -49,7 +49,7 @@ class _ReleaseFailure(object):
         return FutureResult.from_failure('release failure')
 
 
-@pytest.mark.anyio
+@pytest.mark.anyio()
 @pytest.mark.parametrize(('acquire', 'use', 'release', 'final_result', 'log'), [
     # Acquire success:
     (
@@ -123,7 +123,7 @@ async def test_all_success(acquire, use, release, final_result, log):
     assert pipeline_logs == log
 
 
-@pytest.mark.anyio
+@pytest.mark.anyio()
 async def test_full_typing():
     """This test is here to be a case for typing."""
     logs: List[Tuple[str, Result[str, str]]] = []

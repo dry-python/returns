@@ -96,7 +96,7 @@ def test_collect_all_reader_result(iterable, sequence):
     )(...) == sequence(...)
 
 
-@pytest.mark.anyio
+@pytest.mark.anyio()
 async def test_collect_all_reader_future_result(subtests):
     """Iterable for ``ReaderFutureResult`` and ``Fold``."""
     containers: List[Tuple[  # noqa: WPS234
@@ -138,7 +138,7 @@ async def test_collect_all_reader_future_result(subtests):
             )(...) == await sequence(...)
 
 
-@pytest.mark.anyio
+@pytest.mark.anyio()
 async def test_collect_all_future_result(subtests):
     """Iterable for ``FutureResult`` and ``Fold``."""
     containers: List[Tuple[  # noqa: WPS234

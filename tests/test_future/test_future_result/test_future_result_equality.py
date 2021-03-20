@@ -9,7 +9,7 @@ def test_nonequality():
     assert hash(FutureResult.from_value(1))
 
 
-@pytest.mark.anyio
+@pytest.mark.anyio()
 async def test_equality():
     """Ensures that containers are not compared to regular values."""
     assert await FutureResult.from_value(

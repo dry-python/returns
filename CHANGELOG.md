@@ -12,8 +12,8 @@ See [0Ver](https://0ver.org/).
 
 - Makes `_Nothing` a singleton
 - Fixes typos in documentation
+- Refactor `flow` function
 - Fixes that `assert_trace` was not catching containers from `@safe`-wrapped functions
-
 
 ## 0.15.0 aka The initial HKT release
 
