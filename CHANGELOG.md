@@ -6,14 +6,22 @@ incremental in minor, bugfixes only are patches.
 See [0Ver](https://0ver.org/).
 
 
-## 0.16.0 WIP
+## 0.16.0
+
+### Features
+
+- Makes `_Nothing` a singleton
+- Refactor `flow` function to be faster
+
+### Bugfixes
+
+- Fixes that `assert_trace` was not catching containers
+  from `@safe`-wrapped functions
 
 ### Misc
 
-- Makes `_Nothing` a singleton
 - Fixes typos in documentation
-- Refactor `flow` function
-- Fixes that `assert_trace` was not catching containers from `@safe`-wrapped functions
+
 
 ## 0.15.0 aka The initial HKT release
 
