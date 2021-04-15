@@ -2,7 +2,7 @@
 # to generate documentation.
 
 sphinx==3.5.4
-sphinx_autodoc_typehints==1.11.1
+sphinx_autodoc_typehints==1.12.0
 sphinxcontrib-mermaid==0.6.3
 sphinx-typlog-theme==0.8.0
 sphinx-hoverxref==0.5b1
