@@ -63,7 +63,7 @@ anyio = "^3.0"
 curio = "^1.5"
 trio = "^0.18"
 attrs = "^20.3"
-httpx = "^0.17"
+httpx = "^0.18"
 
 mypy = "^0.812"
 wemake-python-styleguide = "^0.15"
