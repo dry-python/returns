@@ -38,6 +38,8 @@ jobs:
         poetry config virtualenvs.in-project true
         poetry install
 
+        poetry run pip install -U pip
+
     - name: Run tests
       run: |
         poetry run flake8 .
