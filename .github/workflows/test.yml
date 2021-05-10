@@ -41,6 +41,7 @@ jobs:
         key: venv-${{ matrix.python-version }}-${{ hashFiles('poetry.lock') }}
     - name: Install dependencies
       run: |
+        poetry config experimental.new-installer false
         poetry config virtualenvs.in-project true
         poetry install
 
