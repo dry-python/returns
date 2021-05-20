@@ -8,7 +8,7 @@ sphinx-typlog-theme==0.8.0
 sphinx-hoverxref==0.5b1
 recommonmark==0.7.1
 m2r==0.2.1
-tomlkit==0.7.0
+tomlkit==0.7.1
 pygments==2.9.0
 
 # Dependencies of our project:
