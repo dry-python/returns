@@ -1,7 +1,7 @@
 # This file is used to setup env
 # to generate documentation.
 
-sphinx==3.5.4
+sphinx==4.0.2
 sphinx_autodoc_typehints==1.12.0
 sphinxcontrib-mermaid==0.6.3
 sphinx-typlog-theme==0.8.0
@@ -16,3 +16,7 @@ typing-extensions==3.10.0.0
 mypy==0.812
 pytest==6.2.4
 hypothesis==6.12.0
+
+# TODO: Remove this lock when we found and fix the route case.
+# See: https://github.com/typlog/sphinx-typlog-theme/issues/22
+jinja2==2.11.2
