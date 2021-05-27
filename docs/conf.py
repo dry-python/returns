@@ -17,6 +17,16 @@ import sphinx
 
 sys.path.insert(0, os.path.abspath('..'))
 
+# TODO: Removes the whole if statement when the below PR is merged:
+# https://github.com/mgaitan/sphinxcontrib-mermaid/pull/71
+# From `sphinx>=4` the `ENOENT` constant was fully deprecated,
+# in order to make the things work with `sphinxcontrib-mermaid`
+# we need to mokey patch that constant.
+if sphinx.version_info[0] >= 4:
+    import errno
+    import sphinx.util.osutil  # noqa: I003, WPS301
+    sphinx.util.osutil.ENOENT = errno.ENOENT
+
 
 # -- Monkeypatches -----------------------------------------------------------
 
