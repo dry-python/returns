@@ -78,7 +78,7 @@ pytest = "^6.2"
 pytest-cov = "^2.12"
 pytest-randomly = "^3.8"
 pytest-mypy-plugins = "^1.7"
-pytest-subtests = "^0.4"
+pytest-subtests = "^0.5"
 pytest-xdist = "^2.2"
 hypothesis = "^6.13"
 
