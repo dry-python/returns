@@ -13,7 +13,7 @@ pygments==2.9.0
 
 # Dependencies of our project:
 typing-extensions==3.10.0.0
-mypy==0.901
+mypy==0.902
 pytest==6.2.4
 hypothesis==6.14.0
 
