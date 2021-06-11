@@ -5,13 +5,13 @@ from mypy.checkmember import analyze_member_access
 from mypy.nodes import ARG_NAMED, ARG_OPT
 from mypy.types import CallableType, FunctionLike
 from mypy.types import Type as MypyType
-from typing_extensions import Literal
+from typing_extensions import Final, Literal
 
 from returns.contrib.mypy._structures.args import FuncArg
 from returns.contrib.mypy._structures.types import CallableContext
 
 #: Mapping for better `call || function` argument compatibility.
-_KIND_MAPPING = MappingProxyType({
+_KIND_MAPPING: Final = MappingProxyType({
     # We have to replace `ARG_OPT` to `ARG_NAMED`,
     # because `ARG_OPT` is only used in function defs, not calls.
     # And `ARG_NAMED` is the same thing for calls.
