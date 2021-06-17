@@ -4,7 +4,7 @@
     from returns.pointfree import cond
     from returns.result import Result
 
-    reveal_type(cond(Result, 42, '42')(True))  # N: Revealed type is 'returns.result.Result[builtins.int, builtins.str]'
+    reveal_type(cond(Result, 42, '42')(True))  # N: Revealed type is "returns.result.Result[builtins.int, builtins.str]"
 
 
 - case: cond_ioresult
@@ -13,7 +13,7 @@
     from returns.io import IOResult
     from returns.pointfree import cond
 
-    reveal_type(cond(IOResult, 'success', 'failure')(False))  # N: Revealed type is 'returns.io.IOResult[builtins.str, builtins.str]'
+    reveal_type(cond(IOResult, 'success', 'failure')(False))  # N: Revealed type is "returns.io.IOResult[builtins.str, builtins.str]"
 
 
 - case: cond_future_result
@@ -22,7 +22,7 @@
     from returns.future import FutureResult
     from returns.pointfree import cond
 
-    reveal_type(cond(FutureResult, True, False)(False))  # N: Revealed type is 'returns.future.FutureResult[builtins.bool, builtins.bool]'
+    reveal_type(cond(FutureResult, True, False)(False))  # N: Revealed type is "returns.future.FutureResult[builtins.bool, builtins.bool]"
 
 
 - case: cond_reader_ioresult
@@ -31,7 +31,7 @@
     from returns.pointfree import cond
     from returns.context import ReaderIOResult
 
-    reveal_type(cond(ReaderIOResult, 1.0, False)(True))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.float, builtins.bool, Any]'
+    reveal_type(cond(ReaderIOResult, 1.0, False)(True))  # N: Revealed type is "returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.float, builtins.bool, Any]"
 
 
 - case: cond_reader_future_result
@@ -40,7 +40,7 @@
     from returns.pointfree import cond
     from returns.context import ReaderFutureResult
 
-    reveal_type(cond(ReaderFutureResult, 1, 1.0)(True))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.int, builtins.float, Any]'
+    reveal_type(cond(ReaderFutureResult, 1, 1.0)(True))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.int, builtins.float, Any]"
 
 
 - case: cond_maybe
@@ -49,7 +49,7 @@
     from returns.pointfree import cond
     from returns.maybe import Maybe
 
-    reveal_type(cond(Maybe, True)(False))  # N: Revealed type is 'returns.maybe.Maybe[builtins.bool]'
+    reveal_type(cond(Maybe, True)(False))  # N: Revealed type is "returns.maybe.Maybe[builtins.bool]"
 
 
 - case: cond_custom_type
@@ -73,4 +73,4 @@
     reveal_type(cond(MyOwn, 'test', 1.0)(True))
   out: |
     main:16: error: Only concrete class can be given where "Type[MyOwn[Any, Any]]" is expected
-    main:16: note: Revealed type is 'main.MyOwn[builtins.str, builtins.float]'
+    main:16: note: Revealed type is "main.MyOwn[builtins.str, builtins.float]"

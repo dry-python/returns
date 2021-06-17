@@ -3,7 +3,7 @@
   main: |
     from returns.context import RequiresContextFutureResult
 
-    reveal_type(RequiresContextFutureResult.ask())  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[<nothing>, <nothing>, <nothing>]'
+    reveal_type(RequiresContextFutureResult.ask())  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[<nothing>, <nothing>, <nothing>]"
 
 
 - case: context_result_future_ask2
@@ -11,4 +11,4 @@
   main: |
     from returns.context import RequiresContextFutureResult
 
-    reveal_type(RequiresContextFutureResult[int, bool, str].ask())  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.str*, builtins.bool*, builtins.str*]'
+    reveal_type(RequiresContextFutureResult[int, bool, str].ask())  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.str*, builtins.bool*, builtins.str*]"

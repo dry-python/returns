@@ -15,13 +15,13 @@
 
     acc: Result[Tuple[()], str]
 
-    reveal_type(Fold.collect_all(x1, acc))  # N: Revealed type is 'returns.result.Result[builtins.tuple[builtins.int], builtins.str]'
-    reveal_type(Fold.collect_all(x2, acc))  # N: Revealed type is 'returns.result.Result[builtins.tuple[builtins.int], builtins.str]'
-    reveal_type(Fold.collect_all(x3, acc))  # N: Revealed type is 'returns.result.Result[builtins.tuple[builtins.int], builtins.str]'
-    reveal_type(Fold.collect_all(x4, acc))  # N: Revealed type is 'returns.result.Result[builtins.tuple[builtins.int], builtins.str]'
-    reveal_type(Fold.collect_all(x5, acc))  # N: Revealed type is 'returns.result.Result[builtins.tuple[builtins.int], builtins.str]'
-    reveal_type(Fold.collect_all(x6, acc))  # N: Revealed type is 'returns.result.Result[builtins.tuple[builtins.int], builtins.str]'
-    reveal_type(Fold.collect_all(x7, acc))  # N: Revealed type is 'returns.result.Result[builtins.tuple[builtins.int], builtins.str]'
+    reveal_type(Fold.collect_all(x1, acc))  # N: Revealed type is "returns.result.Result[builtins.tuple[builtins.int], builtins.str]"
+    reveal_type(Fold.collect_all(x2, acc))  # N: Revealed type is "returns.result.Result[builtins.tuple[builtins.int], builtins.str]"
+    reveal_type(Fold.collect_all(x3, acc))  # N: Revealed type is "returns.result.Result[builtins.tuple[builtins.int], builtins.str]"
+    reveal_type(Fold.collect_all(x4, acc))  # N: Revealed type is "returns.result.Result[builtins.tuple[builtins.int], builtins.str]"
+    reveal_type(Fold.collect_all(x5, acc))  # N: Revealed type is "returns.result.Result[builtins.tuple[builtins.int], builtins.str]"
+    reveal_type(Fold.collect_all(x6, acc))  # N: Revealed type is "returns.result.Result[builtins.tuple[builtins.int], builtins.str]"
+    reveal_type(Fold.collect_all(x7, acc))  # N: Revealed type is "returns.result.Result[builtins.tuple[builtins.int], builtins.str]"
 
 
 - case: fold_collect_all_wrong_type
@@ -45,7 +45,7 @@
 
     acc = Maybe.from_value(())
     x: Iterable[Maybe[float]]
-    reveal_type(Fold.collect_all(x, acc))  # N: Revealed type is 'returns.maybe.Maybe[builtins.tuple[builtins.float]]'
+    reveal_type(Fold.collect_all(x, acc))  # N: Revealed type is "returns.maybe.Maybe[builtins.tuple[builtins.float]]"
 
 
 - case: fold_collect_all_result
@@ -57,7 +57,7 @@
 
     acc: Result[Tuple[()], str]
     x: Iterable[Result[float, str]]
-    reveal_type(Fold.collect_all(x, acc))  # N: Revealed type is 'returns.result.Result[builtins.tuple[builtins.float], builtins.str]'
+    reveal_type(Fold.collect_all(x, acc))  # N: Revealed type is "returns.result.Result[builtins.tuple[builtins.float], builtins.str]"
 
 
 - case: fold_collect_all_ioresult
@@ -69,7 +69,7 @@
 
     acc: IOResult[Tuple[()], str]
     x: Iterable[IOResult[float, str]]
-    reveal_type(Fold.collect_all(x, acc))  # N: Revealed type is 'returns.io.IOResult[builtins.tuple[builtins.float], builtins.str]'
+    reveal_type(Fold.collect_all(x, acc))  # N: Revealed type is "returns.io.IOResult[builtins.tuple[builtins.float], builtins.str]"
 
 
 - case: fold_collect_all_requires_context_result
@@ -81,7 +81,7 @@
 
     acc: RequiresContextResult[Tuple[()], str, bool]
     x: Iterable[RequiresContextResult[float, str, bool]]
-    reveal_type(Fold.collect_all(x, acc))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.tuple[builtins.float], builtins.str, builtins.bool]'
+    reveal_type(Fold.collect_all(x, acc))  # N: Revealed type is "returns.context.requires_context_result.RequiresContextResult[builtins.tuple[builtins.float], builtins.str, builtins.bool]"
 
 
 - case: fold_collect_all_requires_context_ioresult
@@ -93,7 +93,7 @@
 
     acc: RequiresContextIOResult[Tuple[()], str, bool]
     x: Iterable[RequiresContextIOResult[float, str, bool]]
-    reveal_type(Fold.collect_all(x, acc))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.tuple[builtins.float], builtins.str, builtins.bool]'
+    reveal_type(Fold.collect_all(x, acc))  # N: Revealed type is "returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.tuple[builtins.float], builtins.str, builtins.bool]"
 
 
 - case: fold_collect_all_requires_context_future_result
@@ -105,7 +105,7 @@
 
     acc: RequiresContextFutureResult[Tuple[()], str, bool]
     x: Iterable[RequiresContextFutureResult[float, str, bool]]
-    reveal_type(Fold.collect_all(x, acc))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.tuple[builtins.float], builtins.str, builtins.bool]'
+    reveal_type(Fold.collect_all(x, acc))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.tuple[builtins.float], builtins.str, builtins.bool]"
 
 
 - case: fold_collect_all_future_result
@@ -117,7 +117,7 @@
 
     acc: FutureResult[Tuple[()], str]
     x: Iterable[FutureResult[float, str]]
-    reveal_type(Fold.collect_all(x, acc))  # N: Revealed type is 'returns.future.FutureResult[builtins.tuple[builtins.float], builtins.str]'
+    reveal_type(Fold.collect_all(x, acc))  # N: Revealed type is "returns.future.FutureResult[builtins.tuple[builtins.float], builtins.str]"
 
 
 - case: fold_collect_all_custom_type
@@ -136,4 +136,4 @@
 
     acc: MyClass[Tuple[()], str]
     x: Iterable[MyClass[float, str]]
-    reveal_type(Fold.collect_all(x, acc))  # N: Revealed type is 'main.MyClass[builtins.tuple[builtins.float], builtins.str]'
+    reveal_type(Fold.collect_all(x, acc))  # N: Revealed type is "main.MyClass[builtins.tuple[builtins.float], builtins.str]"

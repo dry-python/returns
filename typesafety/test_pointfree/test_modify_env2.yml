@@ -37,7 +37,7 @@
         ...
 
     r: RequiresContext[int, int]
-    reveal_type(flow(r, modify_env2(modify), bind(test)))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[builtins.float, builtins.str]'
+    reveal_type(flow(r, modify_env2(modify), bind(test)))  # N: Revealed type is "returns.context.requires_context.RequiresContext[builtins.float, builtins.str]"
 
 
 - case: modify_env2_requires_context
@@ -47,7 +47,7 @@
     from returns.context import RequiresContext
 
     x: RequiresContext[float, int]
-    reveal_type(modify_env2(int)(x))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[builtins.float, Union[builtins.str, typing.SupportsInt, builtins._SupportsIndex, builtins._SupportsTrunc]]'
+    reveal_type(modify_env2(int)(x))  # N: Revealed type is "returns.context.requires_context.RequiresContext[builtins.float, Union[builtins.str, builtins.bytes, typing.SupportsInt, typing_extensions.SupportsIndex, builtins._SupportsTrunc]]"
 
 
 - case: modify_env2_custom_type
@@ -68,4 +68,4 @@
         ...
 
     x: MyClass[float, int]
-    reveal_type(modify_env2(int)(x))  # N: Revealed type is 'main.MyClass[builtins.float, Union[builtins.str, typing.SupportsInt, builtins._SupportsIndex, builtins._SupportsTrunc]]'
+    reveal_type(modify_env2(int)(x))  # N: Revealed type is "main.MyClass[builtins.float, Union[builtins.str, builtins.bytes, typing.SupportsInt, typing_extensions.SupportsIndex, builtins._SupportsTrunc]]"

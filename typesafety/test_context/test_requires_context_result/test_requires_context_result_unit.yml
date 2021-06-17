@@ -3,7 +3,7 @@
   main: |
     from returns.context import RequiresContextResult
 
-    reveal_type(RequiresContextResult.from_value(1))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.int*, Any, Any]'
+    reveal_type(RequiresContextResult.from_value(1))  # N: Revealed type is "returns.context.requires_context_result.RequiresContextResult[builtins.int*, Any, Any]"
 
 
 - case: requires_context_result_failure
@@ -11,7 +11,7 @@
   main: |
     from returns.context import RequiresContextResult
 
-    reveal_type(RequiresContextResult.from_failure(1))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[Any, builtins.int*, Any]'
+    reveal_type(RequiresContextResult.from_failure(1))  # N: Revealed type is "returns.context.requires_context_result.RequiresContextResult[Any, builtins.int*, Any]"
 
 
 - case: requires_context_result_result
@@ -22,7 +22,7 @@
 
     r: Result[int, str]
 
-    reveal_type(RequiresContextResult.from_result(r))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.int*, builtins.str*, Any]'
+    reveal_type(RequiresContextResult.from_result(r))  # N: Revealed type is "returns.context.requires_context_result.RequiresContextResult[builtins.int*, builtins.str*, Any]"
 
 
 - case: requires_context_result_typecast
@@ -33,7 +33,7 @@
 
     r: RequiresContext[Result[int, str], float]
 
-    reveal_type(RequiresContextResult.from_typecast(r))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.int*, builtins.str*, builtins.float*]'
+    reveal_type(RequiresContextResult.from_typecast(r))  # N: Revealed type is "returns.context.requires_context_result.RequiresContextResult[builtins.int*, builtins.str*, builtins.float*]"
 
 
 - case: requires_context_result_successful_context
@@ -43,7 +43,7 @@
 
     r: RequiresContext[str, float]
 
-    reveal_type(RequiresContextResult.from_context(r))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.str*, Any, builtins.float*]'
+    reveal_type(RequiresContextResult.from_context(r))  # N: Revealed type is "returns.context.requires_context_result.RequiresContextResult[builtins.str*, Any, builtins.float*]"
 
 
 - case: requires_context_result_failed_context
@@ -53,4 +53,4 @@
 
     r: RequiresContext[str, float]
 
-    reveal_type(RequiresContextResult.from_failed_context(r))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[Any, builtins.str*, builtins.float*]'
+    reveal_type(RequiresContextResult.from_failed_context(r))  # N: Revealed type is "returns.context.requires_context_result.RequiresContextResult[Any, builtins.str*, builtins.float*]"

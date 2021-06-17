@@ -3,4 +3,4 @@
   main: |
     from returns.functions import identity
 
-    reveal_type(identity(1))  # N: Revealed type is 'builtins.int*'
+    reveal_type(identity(1))  # N: Revealed type is "builtins.int*"

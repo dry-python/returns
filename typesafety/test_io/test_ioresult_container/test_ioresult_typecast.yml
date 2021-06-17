@@ -4,7 +4,7 @@
     from returns.io import IOResult, IOSuccess
 
     first: IOResult[int, Exception] = IOSuccess(1)
-    reveal_type(first)  # N: Revealed type is 'returns.io.IOResult[builtins.int, builtins.Exception]'
+    reveal_type(first)  # N: Revealed type is "returns.io.IOResult[builtins.int, builtins.Exception]"
 
 
 - case: ioresult_failure_cast1
@@ -13,7 +13,7 @@
     from returns.io import IOResult, IOFailure
 
     first: IOResult[int, Exception] = IOFailure(Exception())
-    reveal_type(first)  # N: Revealed type is 'returns.io.IOResult[builtins.int, builtins.Exception]'
+    reveal_type(first)  # N: Revealed type is "returns.io.IOResult[builtins.int, builtins.Exception]"
 
 
 - case: ioresult_failure_cast2
@@ -22,7 +22,7 @@
     from returns.io import IOResult, IOFailure
 
     first: IOResult[int, Exception] = IOFailure(TypeError())
-    reveal_type(first)  # N: Revealed type is 'returns.io.IOResult[builtins.int, builtins.Exception]'
+    reveal_type(first)  # N: Revealed type is "returns.io.IOResult[builtins.int, builtins.Exception]"
 
 
 - case: ioresult_swap
@@ -31,7 +31,7 @@
     from returns.io import IOResult
 
     x: IOResult[int, str]
-    reveal_type(x.swap())  # N: Revealed type is 'returns.io.IOResult[builtins.str*, builtins.int*]'
+    reveal_type(x.swap())  # N: Revealed type is "returns.io.IOResult[builtins.str*, builtins.int*]"
 
 
 - case: ioresult_getattr
@@ -48,7 +48,7 @@
   main: |
     from returns.io import IOResult
 
-    reveal_type(IOResult.from_value(1))  # N: Revealed type is 'returns.io.IOResult[builtins.int*, Any]'
+    reveal_type(IOResult.from_value(1))  # N: Revealed type is "returns.io.IOResult[builtins.int*, Any]"
 
 
 - case: ioresult_from_failure
@@ -56,7 +56,7 @@
   main: |
     from returns.io import IOResult
 
-    reveal_type(IOResult.from_failure(1))  # N: Revealed type is 'returns.io.IOResult[Any, builtins.int*]'
+    reveal_type(IOResult.from_failure(1))  # N: Revealed type is "returns.io.IOResult[Any, builtins.int*]"
 
 
 - case: ioresult_covariant_cast
@@ -66,7 +66,7 @@
 
     first: IOResult[TypeError, ValueError]  # we cast both values
     second: IOResult[Exception, Exception] = first
-    reveal_type(second)  # N: Revealed type is 'returns.io.IOResult[builtins.Exception, builtins.Exception]'
+    reveal_type(second)  # N: Revealed type is "returns.io.IOResult[builtins.Exception, builtins.Exception]"
 
 
 - case: ioresult_success_bind_contra1
@@ -78,7 +78,7 @@
       ...
 
     first: IOResult[int, str] = IOSuccess(4)
-    reveal_type(first.bind(test))  # N: Revealed type is 'returns.io.IOResult[builtins.float*, builtins.str]'
+    reveal_type(first.bind(test))  # N: Revealed type is "returns.io.IOResult[builtins.float*, builtins.str]"
 
 
 - case: ioresult_success_bind_contra2
@@ -91,7 +91,7 @@
 
     first: IOResult[int, Exception]
     second = first.bind(test)
-    reveal_type(second)  # N: Revealed type is 'returns.io.IOResult[builtins.int*, builtins.Exception]'
+    reveal_type(second)  # N: Revealed type is "returns.io.IOResult[builtins.int*, builtins.Exception]"
 
 
 - case: ioresult_correct_usage
@@ -104,7 +104,7 @@
             return IOSuccess(inner_value * 2)
         return IOFailure(str(inner_value))
 
-    reveal_type(factory(1))  # N: Revealed type is 'returns.io.IOResult[builtins.int, builtins.str]'
+    reveal_type(factory(1))  # N: Revealed type is "returns.io.IOResult[builtins.int, builtins.str]"
 
 
 - case: ioresulte_typecast1
@@ -118,7 +118,7 @@
         return IOFailure(ValueError(arg))
 
     result: IOResult[int, Exception] = function(1)
-    reveal_type(result)  # N: Revealed type is 'returns.io.IOResult[builtins.int, builtins.Exception]'
+    reveal_type(result)  # N: Revealed type is "returns.io.IOResult[builtins.int, builtins.Exception]"
 
 
 - case: ioresulte_typecast2
@@ -132,4 +132,4 @@
         return IOFailure(ValueError(arg))
 
     result: IOResultE[int] = function(1)
-    reveal_type(result)  # N: Revealed type is 'returns.io.IOResult[builtins.int, builtins.Exception]'
+    reveal_type(result)  # N: Revealed type is "returns.io.IOResult[builtins.int, builtins.Exception]"

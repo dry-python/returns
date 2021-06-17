@@ -9,7 +9,7 @@
     def second(num: float) -> str:
         return str(num)
 
-    reveal_type(compose(first, second))  # N: Revealed type is 'def (builtins.int*) -> builtins.str*'
+    reveal_type(compose(first, second))  # N: Revealed type is "def (builtins.int*) -> builtins.str*"
 
 
 - case: compose_two_wrong_functions
@@ -25,7 +25,7 @@
     reveal_type(compose(first, second))
   out: |
     main:9: error: Cannot infer type argument 2 of "compose"
-    main:9: note: Revealed type is 'def (Any) -> Any'
+    main:9: note: Revealed type is "def (Any) -> Any"
 
 
 - case: compose_optional_functions
@@ -40,4 +40,4 @@
     def second(num: float) -> str:
         return str(num)
 
-    reveal_type(compose(first, second))  # N: Revealed type is 'def (builtins.int*) -> builtins.str*'
+    reveal_type(compose(first, second))  # N: Revealed type is "def (builtins.int*) -> builtins.str*"

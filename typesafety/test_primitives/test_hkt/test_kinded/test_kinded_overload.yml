@@ -31,5 +31,5 @@
 
     test = kinded(_test)
     x: Maybe[int]
-    reveal_type(test(x))  # N: Revealed type is 'returns.maybe.Maybe[None]'
-    reveal_type(test(x, 'a'))  # N: Revealed type is 'returns.maybe.Maybe[builtins.str]'
+    reveal_type(test(x))  # N: Revealed type is "returns.maybe.Maybe[None]"
+    reveal_type(test(x, 'a'))  # N: Revealed type is "returns.maybe.Maybe[builtins.str]"

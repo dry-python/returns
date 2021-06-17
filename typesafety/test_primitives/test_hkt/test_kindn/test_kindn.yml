@@ -35,5 +35,5 @@
     def test(
         arg: KindN[I, T1, T2, T3],
     ) -> KindN[I, N1, T2, T3]:
-        reveal_type(arg.map(example)) # N: Revealed type is 'returns.primitives.hkt.KindN[I`-1, N1`-2, T2`-3, T3`-4]'
+        reveal_type(arg.map(example)) # N: Revealed type is "returns.primitives.hkt.KindN[I`-1, N1`-2, T2`-3, T3`-4]"
         return arg.map(example)

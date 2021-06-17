@@ -3,7 +3,7 @@
   main: |
     from returns.io import IO
 
-    reveal_type(IO(1))  # N: Revealed type is 'returns.io.IO[builtins.int*]'
+    reveal_type(IO(1))  # N: Revealed type is "returns.io.IO[builtins.int*]"
 
 
 - case: io_constructor2
@@ -11,7 +11,7 @@
   main: |
     from returns.io import IO
 
-    reveal_type(IO.from_value(1))  # N: Revealed type is 'returns.io.IO[builtins.int*]'
+    reveal_type(IO.from_value(1))  # N: Revealed type is "returns.io.IO[builtins.int*]"
 
 
 - case: io_constructor3
@@ -19,7 +19,7 @@
   main: |
     from returns.io import IO
 
-    reveal_type(IO.from_io(IO(1)))  # N: Revealed type is 'returns.io.IO[builtins.int*]'
+    reveal_type(IO.from_io(IO(1)))  # N: Revealed type is "returns.io.IO[builtins.int*]"
 
 
 - case: io_bind
@@ -30,7 +30,7 @@
     def bind_io(input_io: int) -> IO[str]:
         ...
 
-    reveal_type(IO(1).bind(bind_io))  # N: Revealed type is 'returns.io.IO[builtins.str*]'
+    reveal_type(IO(1).bind(bind_io))  # N: Revealed type is "returns.io.IO[builtins.str*]"
 
 
 
@@ -42,7 +42,7 @@
     def bind_io(input_io: int) -> IO[str]:
         ...
 
-    reveal_type(IO(1).bind_io(bind_io))  # N: Revealed type is 'returns.io.IO[builtins.str*]'
+    reveal_type(IO(1).bind_io(bind_io))  # N: Revealed type is "returns.io.IO[builtins.str*]"
 
 
 - case: io_map
@@ -50,7 +50,7 @@
   main: |
     from returns.io import IO
 
-    reveal_type(IO(1).map(str))  # N: Revealed type is 'returns.io.IO[builtins.str*]'
+    reveal_type(IO(1).map(str))  # N: Revealed type is "returns.io.IO[builtins.str*]"
 
 
 - case: io_apply
@@ -61,4 +61,4 @@
     def transform(arg: int) -> str:
         ...
 
-    reveal_type(IO(1).apply(IO(transform)))  # N: Revealed type is 'returns.io.IO[builtins.str*]'
+    reveal_type(IO(1).apply(IO(transform)))  # N: Revealed type is "returns.io.IO[builtins.str*]"

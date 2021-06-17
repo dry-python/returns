@@ -15,7 +15,7 @@
         def map(self, function: Callable[[V], N]) -> 'MyClass[N]':
             return MyClass(function(self.value))
 
-    reveal_type(MyClass('1').map(int))  # N: Revealed type is 'main.MyClass[builtins.int*]'
+    reveal_type(MyClass('1').map(int))  # N: Revealed type is "main.MyClass[builtins.int*]"
 
 
 - case: mappable_inheritance_correct2
@@ -37,7 +37,7 @@
         def map(self, function: Callable[[V], N]) -> 'MyClass[N, E]':
             return MyClass(function(self.value), self.error)
 
-    reveal_type(MyClass('1', 1).map(int))  # N: Revealed type is 'main.MyClass[builtins.int*, builtins.int]'
+    reveal_type(MyClass('1', 1).map(int))  # N: Revealed type is "main.MyClass[builtins.int*, builtins.int]"
 
 
 - case: mappable_inheritance_correct3
@@ -61,7 +61,7 @@
         def map(self, function: Callable[[V], N]) -> 'MyClass[N, E, K]':
             return MyClass(function(self.value), self.error, self.last)
 
-    reveal_type(MyClass('1', 1, True).map(int))  # N: Revealed type is 'main.MyClass[builtins.int*, builtins.int, builtins.bool]'
+    reveal_type(MyClass('1', 1, True).map(int))  # N: Revealed type is "main.MyClass[builtins.int*, builtins.int, builtins.bool]"
 
 
 - case: mappable_inheritance_missing
@@ -78,7 +78,7 @@
 
     MyClass()
   out: |
-    main:10: error: Cannot instantiate abstract class 'MyClass' with abstract attribute 'map'
+    main:10: error: Cannot instantiate abstract class "MyClass" with abstract attribute "map"
 
 
 - case: mappable_inheritance_wrong1

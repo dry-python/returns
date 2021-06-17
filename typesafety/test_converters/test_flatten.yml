@@ -26,7 +26,7 @@
 
     x: Result[Result[int, str], float]
     # TODO: I am pretty sure we can later fix this to be an error:
-    reveal_type(flatten(x))  # N: Revealed type is 'returns.result.Result[builtins.int, builtins.object]'
+    reveal_type(flatten(x))  # N: Revealed type is "returns.result.Result[builtins.int, builtins.object]"
 
 
 - case: flatten_custom_type
@@ -43,7 +43,7 @@
         ...
 
     x: MyClass[MyClass[int]]
-    reveal_type(flatten(x))  # N: Revealed type is 'main.MyClass[builtins.int]'
+    reveal_type(flatten(x))  # N: Revealed type is "main.MyClass[builtins.int]"
 
 
 - case: flatten_wrong_flatten_error_type
@@ -66,7 +66,7 @@
     from returns.converters import flatten
     from returns.io import IO
 
-    reveal_type(flatten(IO(IO(1))))  # N: Revealed type is 'returns.io.IO[builtins.int]'
+    reveal_type(flatten(IO(IO(1))))  # N: Revealed type is "returns.io.IO[builtins.int]"
 
 
 - case: flatten_maybe
@@ -75,7 +75,7 @@
     from returns.converters import flatten
     from returns.maybe import Some
 
-    reveal_type(flatten(Some(Some(1))))  # N: Revealed type is 'returns.maybe.Maybe[builtins.int]'
+    reveal_type(flatten(Some(Some(1))))  # N: Revealed type is "returns.maybe.Maybe[builtins.int]"
 
 
 - case: flatten_result
@@ -87,7 +87,7 @@
     def returns_result() -> Result[Result[int, str], str]:
         ...
 
-    reveal_type(flatten(returns_result()))  # N: Revealed type is 'returns.result.Result[builtins.int, builtins.str]'
+    reveal_type(flatten(returns_result()))  # N: Revealed type is "returns.result.Result[builtins.int, builtins.str]"
 
 
 - case: flatten_ioresult
@@ -99,7 +99,7 @@
     def returns_ioresult() -> IOResult[IOResult[int, str], str]:
         ...
 
-    reveal_type(flatten(returns_ioresult()))  # N: Revealed type is 'returns.io.IOResult[builtins.int, builtins.str]'
+    reveal_type(flatten(returns_ioresult()))  # N: Revealed type is "returns.io.IOResult[builtins.int, builtins.str]"
 
 
 - case: flatten_context
@@ -110,7 +110,7 @@
 
     x: RequiresContext[RequiresContext[str, int], int]
 
-    reveal_type(flatten(x))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[builtins.str, builtins.int]'
+    reveal_type(flatten(x))  # N: Revealed type is "returns.context.requires_context.RequiresContext[builtins.str, builtins.int]"
 
 
 - case: flatten_context_result
@@ -121,7 +121,7 @@
 
     x: RequiresContextResult[RequiresContextResult[str, int, float], int, float]
 
-    reveal_type(flatten(x))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.str, builtins.int, builtins.float]'
+    reveal_type(flatten(x))  # N: Revealed type is "returns.context.requires_context_result.RequiresContextResult[builtins.str, builtins.int, builtins.float]"
 
 
 - case: flatten_context_ioresult
@@ -132,7 +132,7 @@
 
     x: RequiresContextIOResult[RequiresContextIOResult[str, int, float], int, float]
 
-    reveal_type(flatten(x))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.str, builtins.int, builtins.float]'
+    reveal_type(flatten(x))  # N: Revealed type is "returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.str, builtins.int, builtins.float]"
 
 
 - case: flatten_context_ioresult
@@ -143,7 +143,7 @@
 
     x: RequiresContextIOResult[RequiresContextIOResult[str, int, float], int, float]
 
-    reveal_type(flatten(x))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.str, builtins.int, builtins.float]'
+    reveal_type(flatten(x))  # N: Revealed type is "returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.str, builtins.int, builtins.float]"
 
 
 - case: flatten_future_result
@@ -154,7 +154,7 @@
 
     x: ReaderFutureResult[ReaderFutureResult[int, bool, str], bool, str]
 
-    reveal_type(flatten(x))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.int, builtins.bool, builtins.str]'
+    reveal_type(flatten(x))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.int, builtins.bool, builtins.str]"
 
 
 - case: flatten_future_result
@@ -165,4 +165,4 @@
 
     x: FutureResult[FutureResult[int, str], str]
 
-    reveal_type(flatten(x))  # N: Revealed type is 'returns.future.FutureResult[builtins.int, builtins.str]'
+    reveal_type(flatten(x))  # N: Revealed type is "returns.future.FutureResult[builtins.int, builtins.str]"

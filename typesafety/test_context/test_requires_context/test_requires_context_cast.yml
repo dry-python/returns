@@ -6,7 +6,7 @@
     first: RequiresContext[TypeError, int]  # we can only cast return type
     second: RequiresContext[Exception, int] = first
 
-    reveal_type(second)  # N: Revealed type is 'returns.context.requires_context.RequiresContext[builtins.Exception, builtins.int]'
+    reveal_type(second)  # N: Revealed type is "returns.context.requires_context.RequiresContext[builtins.Exception, builtins.int]"
 
 
 - case: context_wrong_cast
@@ -47,6 +47,6 @@
     reveal_type(func().bind(third))
   out: |
     main:21: error: Argument 1 to "bind" of "RequiresContext" has incompatible type "Callable[[int], RequiresContext[int, A]]"; expected "Callable[[int], KindN[RequiresContext[Any, Any], int, B, Any]]"
-    main:21: note: Revealed type is 'returns.context.requires_context.RequiresContext[builtins.int*, main.B]'
+    main:21: note: Revealed type is "returns.context.requires_context.RequiresContext[builtins.int*, main.B]"
     main:22: error: Argument 1 to "bind" of "RequiresContext" has incompatible type "Callable[[int], RequiresContext[int, C]]"; expected "Callable[[int], KindN[RequiresContext[Any, Any], int, B, Any]]"
-    main:22: note: Revealed type is 'returns.context.requires_context.RequiresContext[builtins.int*, main.B]'
+    main:22: note: Revealed type is "returns.context.requires_context.RequiresContext[builtins.int*, main.B]"

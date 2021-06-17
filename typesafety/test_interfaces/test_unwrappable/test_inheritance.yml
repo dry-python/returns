@@ -22,8 +22,8 @@
             ...
 
     x = MyOwn(1, 'a')
-    reveal_type(x.unwrap())  # N: Revealed type is 'builtins.int*'
-    reveal_type(x.failure())  # N: Revealed type is 'builtins.str*'
+    reveal_type(x.unwrap())  # N: Revealed type is "builtins.int*"
+    reveal_type(x.failure())  # N: Revealed type is "builtins.str*"
 
 
 - case: unwrappable_missing_inheritance
@@ -42,7 +42,7 @@
     ):
       ...
 
-    MyOwn()  # E: Cannot instantiate abstract class 'MyOwn' with abstract attributes 'failure' and 'unwrap'
+    MyOwn()  # E: Cannot instantiate abstract class "MyOwn" with abstract attributes "failure" and "unwrap"
 
 
 - case: unwrappable_wrong_inheritance

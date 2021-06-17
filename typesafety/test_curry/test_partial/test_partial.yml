@@ -6,7 +6,7 @@
     def two_args(first: int, second: float) -> str:
         ...
 
-    reveal_type(partial(two_args))  # N: Revealed type is 'def (first: builtins.int, second: builtins.float) -> builtins.str'
+    reveal_type(partial(two_args))  # N: Revealed type is "def (first: builtins.int, second: builtins.float) -> builtins.str"
 
 
 - case: partial_single_arg
@@ -17,7 +17,7 @@
     def two_args(first: int, second: float) -> str:
         ...
 
-    reveal_type(partial(two_args, 1))  # N: Revealed type is 'def (second: builtins.float) -> builtins.str'
+    reveal_type(partial(two_args, 1))  # N: Revealed type is "def (second: builtins.float) -> builtins.str"
 
 
 - case: partial_all_args
@@ -28,7 +28,7 @@
     def two_args(first: int, second: float) -> str:
         ...
 
-    reveal_type(partial(two_args, 1, second=0.5))  # N: Revealed type is 'def () -> builtins.str'
+    reveal_type(partial(two_args, 1, second=0.5))  # N: Revealed type is "def () -> builtins.str"
 
 
 - case: partial_single_named_arg
@@ -39,7 +39,7 @@
     def two_args(first: int, second: float) -> str:
         ...
 
-    reveal_type(partial(two_args, second=1.0))  # N: Revealed type is 'def (first: builtins.int) -> builtins.str'
+    reveal_type(partial(two_args, second=1.0))  # N: Revealed type is "def (first: builtins.int) -> builtins.str"
 
 
 - case: partial_multiple_args
@@ -57,7 +57,7 @@
     ) -> str:
         ...
 
-    reveal_type(partial(multiple, 1, 0.4, flag3=int, flag2=True))  # N: Revealed type is 'def (third: builtins.str, flag1: builtins.bool) -> builtins.str'
+    reveal_type(partial(multiple, 1, 0.4, flag3=int, flag2=True))  # N: Revealed type is "def (third: builtins.str, flag1: builtins.bool) -> builtins.str"
 
 
 - case: partial_not_callable_type
@@ -67,7 +67,7 @@
 
     curried_int = partial(int, 10)
 
-    reveal_type(curried_int)  # N: Revealed type is 'def () -> builtins.int'
+    reveal_type(curried_int)  # N: Revealed type is "def () -> builtins.int"
 
 
 - case: partial_explicit_noreturn
@@ -79,7 +79,7 @@
     def exit(x: int) -> NoReturn:
         ...
 
-    reveal_type(partial(exit, 1))  # N: Revealed type is 'def () -> <nothing>'
+    reveal_type(partial(exit, 1))  # N: Revealed type is "def () -> <nothing>"
 
 
 - case: partial_wrong_argument_types
@@ -149,4 +149,4 @@
         default: _SecondType,
         function: Callable[[_SecondType, _FirstType], _SecondType],
     ):
-        reveal_type(partial(function, default))  # N: Revealed type is 'def (_FirstType`-2) -> _SecondType`-1'
+        reveal_type(partial(function, default))  # N: Revealed type is "def (_FirstType`-2) -> _SecondType`-1"
