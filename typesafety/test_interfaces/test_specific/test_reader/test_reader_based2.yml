@@ -49,7 +49,7 @@
         ...
 
     x: Reader[int, str]
-    reveal_type(MyClass.from_context(x).bind_context(test))  # N: Revealed type is 'main.MyClass[builtins.float*, builtins.str]'
+    reveal_type(MyClass.from_context(x).bind_context(test))  # N: Revealed type is "main.MyClass[builtins.float*, builtins.str]"
 
 
 - case: reader_inheritance_missing

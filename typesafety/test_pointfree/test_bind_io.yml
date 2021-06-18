@@ -12,7 +12,7 @@
         ...
 
     x: IO[B]
-    reveal_type(bind_io(test)(x))  # N: Revealed type is 'returns.io.IO[main.C]'
+    reveal_type(bind_io(test)(x))  # N: Revealed type is "returns.io.IO[main.C]"
 
 
 - case: bind_io_with_flow
@@ -26,7 +26,7 @@
         ...
 
     x: IO[float]
-    reveal_type(flow(x, bind_io(test)))  # N: Revealed type is 'returns.io.IO[builtins.int]'
+    reveal_type(flow(x, bind_io(test)))  # N: Revealed type is "returns.io.IO[builtins.int]"
 
 
 - case: bind_io_wrong_instance_type
@@ -71,7 +71,7 @@
         ...
 
     x: IO[float]
-    reveal_type(bind_io(test)(x))  # N: Revealed type is 'returns.io.IO[builtins.int]'
+    reveal_type(bind_io(test)(x))  # N: Revealed type is "returns.io.IO[builtins.int]"
 
 - case: bind_io_ioresult
   disable_cache: false
@@ -83,7 +83,7 @@
         ...
 
     x: IOResult[float, str]
-    reveal_type(bind_io(test)(x))  # N: Revealed type is 'returns.io.IOResult[builtins.int, builtins.str]'
+    reveal_type(bind_io(test)(x))  # N: Revealed type is "returns.io.IOResult[builtins.int, builtins.str]"
 
 
 - case: bind_io_requires_context_ioresult
@@ -97,7 +97,7 @@
         ...
 
     x: RequiresContextIOResult[float, bool, str]
-    reveal_type(bind_io(test)(x))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int, builtins.bool, builtins.str]'
+    reveal_type(bind_io(test)(x))  # N: Revealed type is "returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int, builtins.bool, builtins.str]"
 
 
 - case: bind_io_requires_context_future_result
@@ -111,7 +111,7 @@
         ...
 
     x: RequiresContextFutureResult[float, bool, str]
-    reveal_type(bind_io(test)(x))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.int, builtins.bool, builtins.str]'
+    reveal_type(bind_io(test)(x))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.int, builtins.bool, builtins.str]"
 
 
 - case: bind_io_future
@@ -125,7 +125,7 @@
         ...
 
     x: Future[float]
-    reveal_type(bind_io(test)(x))  # N: Revealed type is 'returns.future.Future[builtins.int]'
+    reveal_type(bind_io(test)(x))  # N: Revealed type is "returns.future.Future[builtins.int]"
 
 
 - case: bind_io_future_result
@@ -139,7 +139,7 @@
         ...
 
     x: FutureResult[float, str]
-    reveal_type(bind_io(test)(x))  # N: Revealed type is 'returns.future.FutureResult[builtins.int, builtins.str]'
+    reveal_type(bind_io(test)(x))  # N: Revealed type is "returns.future.FutureResult[builtins.int, builtins.str]"
 
 
 - case: bind_io_custom_type
@@ -163,4 +163,4 @@
         ...
 
     x: MyClass[float]
-    reveal_type(bind_io(test)(x))  # N: Revealed type is 'main.MyClass[builtins.int]'
+    reveal_type(bind_io(test)(x))  # N: Revealed type is "main.MyClass[builtins.int]"

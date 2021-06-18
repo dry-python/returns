@@ -5,7 +5,7 @@
     from typing import List
 
     container: Kind1[List, int]
-    reveal_type(container.pop)  # N: Revealed type is 'def (builtins.int =) -> builtins.int*'
+    reveal_type(container.pop)  # N: Revealed type is "def (builtins.int =) -> builtins.int*"
 
 
 - case: kind_missing_getattr
@@ -25,4 +25,4 @@
     from typing import Any
 
     container: Kind1[Any, int]
-    reveal_type(container.missing)  # N: Revealed type is 'Any'
+    reveal_type(container.missing)  # N: Revealed type is "Any"

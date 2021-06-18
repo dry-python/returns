@@ -17,8 +17,8 @@
 
         equals = container_equality
 
-    reveal_type(MyOwn(1).equals(MyOwn(1)))  # N: Revealed type is 'builtins.bool'
-    reveal_type(MyOwn(1).equals(MyOwn('a')))  # N: Revealed type is 'builtins.bool'
+    reveal_type(MyOwn(1).equals(MyOwn(1)))  # N: Revealed type is "builtins.bool"
+    reveal_type(MyOwn(1).equals(MyOwn('a')))  # N: Revealed type is "builtins.bool"
     MyOwn(1).equals(1)  # E: Argument 1 has incompatible type "int"; expected "KindN[MyOwn[Any], Any, Any, Any]"
 
 
@@ -42,8 +42,8 @@
         def equals(self, other: MyOwn[V]) -> bool:
             ...
 
-    reveal_type(MyOwn(1).equals(MyOwn(1)))  # N: Revealed type is 'builtins.bool'
-    reveal_type(MyOwn(1).equals(MyOwn('a')))  # N: Revealed type is 'builtins.bool'
+    reveal_type(MyOwn(1).equals(MyOwn(1)))  # N: Revealed type is "builtins.bool"
+    reveal_type(MyOwn(1).equals(MyOwn('a')))  # N: Revealed type is "builtins.bool"
 
 
 - case: equable_inheritance_missing

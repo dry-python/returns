@@ -3,7 +3,7 @@
   main: |
     from returns.context import RequiresContextIOResult
 
-    reveal_type(RequiresContextIOResult.from_value(1))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int*, Any, Any]'
+    reveal_type(RequiresContextIOResult.from_value(1))  # N: Revealed type is "returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int*, Any, Any]"
 
 
 - case: requires_context_ioresult_failure
@@ -11,7 +11,7 @@
   main: |
     from returns.context import RequiresContextIOResult
 
-    reveal_type(RequiresContextIOResult.from_failure(1))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[Any, builtins.int*, Any]'
+    reveal_type(RequiresContextIOResult.from_failure(1))  # N: Revealed type is "returns.context.requires_context_ioresult.RequiresContextIOResult[Any, builtins.int*, Any]"
 
 
 - case: requires_context_ioresult_result
@@ -22,7 +22,7 @@
 
     r: Result[int, str]
 
-    reveal_type(RequiresContextIOResult.from_result(r))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int*, builtins.str*, Any]'
+    reveal_type(RequiresContextIOResult.from_result(r))  # N: Revealed type is "returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int*, builtins.str*, Any]"
 
 
 - case: requires_context_ioresult_io
@@ -33,7 +33,7 @@
 
     r: IO[int]
 
-    reveal_type(RequiresContextIOResult.from_io(r))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int*, Any, Any]'
+    reveal_type(RequiresContextIOResult.from_io(r))  # N: Revealed type is "returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int*, Any, Any]"
 
 
 - case: requires_context_ioresult_failed_io
@@ -44,7 +44,7 @@
 
     r: IO[int]
 
-    reveal_type(RequiresContextIOResult.from_failed_io(r))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[Any, builtins.int*, Any]'
+    reveal_type(RequiresContextIOResult.from_failed_io(r))  # N: Revealed type is "returns.context.requires_context_ioresult.RequiresContextIOResult[Any, builtins.int*, Any]"
 
 
 - case: requires_context_ioresult_ioresult
@@ -55,7 +55,7 @@
 
     r: IOResult[int, str]
 
-    reveal_type(RequiresContextIOResult.from_ioresult(r))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int*, builtins.str*, Any]'
+    reveal_type(RequiresContextIOResult.from_ioresult(r))  # N: Revealed type is "returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int*, builtins.str*, Any]"
 
 
 - case: requires_context_ioresult_typecast
@@ -66,7 +66,7 @@
 
     r: RequiresContext[IOResult[int, str], float]
 
-    reveal_type(RequiresContextIOResult.from_typecast(r))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int*, builtins.str*, builtins.float*]'
+    reveal_type(RequiresContextIOResult.from_typecast(r))  # N: Revealed type is "returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int*, builtins.str*, builtins.float*]"
 
 
 - case: requires_context_ioresult_successful_context
@@ -76,7 +76,7 @@
 
     r: RequiresContext[str, float]
 
-    reveal_type(RequiresContextIOResult.from_context(r))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.str*, Any, builtins.float*]'
+    reveal_type(RequiresContextIOResult.from_context(r))  # N: Revealed type is "returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.str*, Any, builtins.float*]"
 
 
 - case: requires_context_ioresult_failed_context
@@ -86,7 +86,7 @@
 
     r: RequiresContext[str, float]
 
-    reveal_type(RequiresContextIOResult.from_failed_context(r))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[Any, builtins.str*, builtins.float*]'
+    reveal_type(RequiresContextIOResult.from_failed_context(r))  # N: Revealed type is "returns.context.requires_context_ioresult.RequiresContextIOResult[Any, builtins.str*, builtins.float*]"
 
 
 - case: requires_context_ioresult_from_result_context
@@ -96,4 +96,4 @@
 
     r: RequiresContextResult[int, str, float]
 
-    reveal_type(RequiresContextIOResult.from_result_context(r))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int*, builtins.str*, builtins.float*]'
+    reveal_type(RequiresContextIOResult.from_result_context(r))  # N: Revealed type is "returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int*, builtins.str*, builtins.float*]"

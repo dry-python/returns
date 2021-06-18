@@ -9,8 +9,8 @@
     test1: FutureResultE[int] = first
     test2: FutureResult[int, Exception] = second
 
-    reveal_type(first)  # N: Revealed type is 'returns.future.FutureResult[builtins.int, builtins.Exception]'
-    reveal_type(second)  # N: Revealed type is 'returns.future.FutureResult[builtins.int, builtins.Exception]'
+    reveal_type(first)  # N: Revealed type is "returns.future.FutureResult[builtins.int, builtins.Exception]"
+    reveal_type(second)  # N: Revealed type is "returns.future.FutureResult[builtins.int, builtins.Exception]"
 
 
 - case: future_result_covariant_cast
@@ -20,7 +20,7 @@
 
     first: FutureResult[TypeError, ValueError]  # we cast both values
     second: FutureResult[Exception, Exception] = first
-    reveal_type(second)  # N: Revealed type is 'returns.future.FutureResult[builtins.Exception, builtins.Exception]'
+    reveal_type(second)  # N: Revealed type is "returns.future.FutureResult[builtins.Exception, builtins.Exception]"
 
 
 - case: future_result_from_typecast
@@ -31,7 +31,7 @@
 
     first: Result[int, str]
 
-    reveal_type(FutureResult.from_typecast(Future.from_value(first)))  # N: Revealed type is 'returns.future.FutureResult[builtins.int*, builtins.str*]'
+    reveal_type(FutureResult.from_typecast(Future.from_value(first)))  # N: Revealed type is "returns.future.FutureResult[builtins.int*, builtins.str*]"
 
 
 - case: future_result_constructor
@@ -43,9 +43,9 @@
     async def test() -> Result[int, str]:
         ...
 
-    reveal_type(FutureResult(test()))  # N: Revealed type is 'returns.future.FutureResult[builtins.int*, builtins.str*]'
-    reveal_type(FutureResult.from_value(1))  # N: Revealed type is 'returns.future.FutureResult[builtins.int*, Any]'
-    reveal_type(FutureResult.from_failure(1))  # N: Revealed type is 'returns.future.FutureResult[Any, builtins.int*]'
+    reveal_type(FutureResult(test()))  # N: Revealed type is "returns.future.FutureResult[builtins.int*, builtins.str*]"
+    reveal_type(FutureResult.from_value(1))  # N: Revealed type is "returns.future.FutureResult[builtins.int*, Any]"
+    reveal_type(FutureResult.from_failure(1))  # N: Revealed type is "returns.future.FutureResult[Any, builtins.int*]"
 
 
 - case: future_result_unit_functions
@@ -53,8 +53,8 @@
   main: |
     from returns.future import FutureSuccess, FutureFailure
 
-    reveal_type(FutureSuccess(1))  # N: Revealed type is 'returns.future.FutureResult[builtins.int*, Any]'
-    reveal_type(FutureFailure(1))  # N: Revealed type is 'returns.future.FutureResult[Any, builtins.int*]'
+    reveal_type(FutureSuccess(1))  # N: Revealed type is "returns.future.FutureResult[builtins.int*, Any]"
+    reveal_type(FutureFailure(1))  # N: Revealed type is "returns.future.FutureResult[Any, builtins.int*]"
 
 
 - case: future_result_from_result
@@ -63,8 +63,8 @@
     from returns.future import FutureResult
     from returns.result import Result, Success, Failure
 
-    reveal_type(FutureResult.from_result(Success(1)))  # N: Revealed type is 'returns.future.FutureResult[builtins.int*, Any]'
-    reveal_type(FutureResult.from_result(Failure(1)))  # N: Revealed type is 'returns.future.FutureResult[Any, builtins.int*]'
+    reveal_type(FutureResult.from_result(Success(1)))  # N: Revealed type is "returns.future.FutureResult[builtins.int*, Any]"
+    reveal_type(FutureResult.from_result(Failure(1)))  # N: Revealed type is "returns.future.FutureResult[Any, builtins.int*]"
 
 
 - case: future_result_from_io
@@ -73,10 +73,10 @@
     from returns.future import FutureResult
     from returns.io import IO, IOSuccess, IOFailure
 
-    reveal_type(FutureResult.from_ioresult(IOSuccess(1)))  # N: Revealed type is 'returns.future.FutureResult[builtins.int*, Any]'
-    reveal_type(FutureResult.from_ioresult(IOFailure(1)))  # N: Revealed type is 'returns.future.FutureResult[Any, builtins.int*]'
-    reveal_type(FutureResult.from_io(IO(1)))  # N: Revealed type is 'returns.future.FutureResult[builtins.int*, Any]'
-    reveal_type(FutureResult.from_failed_io(IO(1)))  # N: Revealed type is 'returns.future.FutureResult[Any, builtins.int*]'
+    reveal_type(FutureResult.from_ioresult(IOSuccess(1)))  # N: Revealed type is "returns.future.FutureResult[builtins.int*, Any]"
+    reveal_type(FutureResult.from_ioresult(IOFailure(1)))  # N: Revealed type is "returns.future.FutureResult[Any, builtins.int*]"
+    reveal_type(FutureResult.from_io(IO(1)))  # N: Revealed type is "returns.future.FutureResult[builtins.int*, Any]"
+    reveal_type(FutureResult.from_failed_io(IO(1)))  # N: Revealed type is "returns.future.FutureResult[Any, builtins.int*]"
 
 
 - case: future_result_from_future
@@ -84,5 +84,5 @@
   main: |
     from returns.future import Future, FutureResult
 
-    reveal_type(FutureResult.from_future(Future.from_value(1)))  # N: Revealed type is 'returns.future.FutureResult[builtins.int*, Any]'
-    reveal_type(FutureResult.from_failed_future(Future.from_value(1)))  # N: Revealed type is 'returns.future.FutureResult[Any, builtins.int*]'
+    reveal_type(FutureResult.from_future(Future.from_value(1)))  # N: Revealed type is "returns.future.FutureResult[builtins.int*, Any]"
+    reveal_type(FutureResult.from_failed_future(Future.from_value(1)))  # N: Revealed type is "returns.future.FutureResult[Any, builtins.int*]"

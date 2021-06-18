@@ -38,7 +38,7 @@
         ...
 
     x: RequiresContextResult[float, Exception, int]
-    reveal_type(modify_env3(test)(x))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.float, builtins.Exception, builtins.str]'
+    reveal_type(modify_env3(test)(x))  # N: Revealed type is "returns.context.requires_context_result.RequiresContextResult[builtins.float, builtins.Exception, builtins.str]"
 
 
 - case: modify_env_and_flow
@@ -55,7 +55,7 @@
         ...
 
     r: RequiresContextResult[int, Exception, int]
-    reveal_type(flow(r, modify_env(modify), bind(test)))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.float, builtins.Exception, builtins.str]'
+    reveal_type(flow(r, modify_env(modify), bind(test)))  # N: Revealed type is "returns.context.requires_context_result.RequiresContextResult[builtins.float, builtins.Exception, builtins.str]"
 
 
 - case: modify_env_requires_context_result
@@ -68,7 +68,7 @@
         ...
 
     x: RequiresContextResult[float, Exception, int]
-    reveal_type(modify_env(test)(x))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.float, builtins.Exception, builtins.str]'
+    reveal_type(modify_env(test)(x))  # N: Revealed type is "returns.context.requires_context_result.RequiresContextResult[builtins.float, builtins.Exception, builtins.str]"
 
 
 - case: modify_env_requires_context_ioresult
@@ -81,7 +81,7 @@
         ...
 
     x: RequiresContextIOResult[float, Exception, int]
-    reveal_type(modify_env(test)(x))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.float, builtins.Exception, builtins.str]'
+    reveal_type(modify_env(test)(x))  # N: Revealed type is "returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.float, builtins.Exception, builtins.str]"
 
 
 - case: modify_env_requires_context_future_result
@@ -94,7 +94,7 @@
         ...
 
     x: RequiresContextFutureResult[float, Exception, int]
-    reveal_type(modify_env(test)(x))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.float, builtins.Exception, builtins.str]'
+    reveal_type(modify_env(test)(x))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.float, builtins.Exception, builtins.str]"
 
 
 - case: modify_env_custom_type
@@ -119,4 +119,4 @@
         ...
 
     x: MyClass[int, Exception, int]
-    reveal_type(modify_env(test)(x))  # N: Revealed type is 'main.MyClass[builtins.int, builtins.Exception, builtins.str]'
+    reveal_type(modify_env(test)(x))  # N: Revealed type is "main.MyClass[builtins.int, builtins.Exception, builtins.str]"

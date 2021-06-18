@@ -12,7 +12,7 @@
         ...
 
     x: Maybe[B]
-    reveal_type(bind(test)(x))  # N: Revealed type is 'returns.maybe.Maybe[main.C]'
+    reveal_type(bind(test)(x))  # N: Revealed type is "returns.maybe.Maybe[main.C]"
 
 
 - case: bind_wrong_instance_type
@@ -56,7 +56,7 @@
         ...
 
     x: Result[float, str]
-    reveal_type(flow(x, bind(test)))  # N: Revealed type is 'returns.result.Result[builtins.int, builtins.str]'
+    reveal_type(flow(x, bind(test)))  # N: Revealed type is "returns.result.Result[builtins.int, builtins.str]"
 
 
 - case: bind_io
@@ -69,7 +69,7 @@
         ...
 
     x: IO[float]
-    reveal_type(bind(test)(x))  # N: Revealed type is 'returns.io.IO[builtins.int]'
+    reveal_type(bind(test)(x))  # N: Revealed type is "returns.io.IO[builtins.int]"
 
 
 - case: bind_maybe
@@ -82,7 +82,7 @@
         ...
 
     x: Maybe[float]
-    reveal_type(bind(test)(x))  # N: Revealed type is 'returns.maybe.Maybe[builtins.int]'
+    reveal_type(bind(test)(x))  # N: Revealed type is "returns.maybe.Maybe[builtins.int]"
 
 
 - case: bind_result
@@ -95,7 +95,7 @@
         ...
 
     x: Result[float, str]
-    reveal_type(bind(test)(x))  # N: Revealed type is 'returns.result.Result[builtins.int, builtins.str]'
+    reveal_type(bind(test)(x))  # N: Revealed type is "returns.result.Result[builtins.int, builtins.str]"
 
 
 - case: bind_ioresult
@@ -108,7 +108,7 @@
         ...
 
     x: IOResult[float, str]
-    reveal_type(bind(test)(x))  # N: Revealed type is 'returns.io.IOResult[builtins.int, builtins.str]'
+    reveal_type(bind(test)(x))  # N: Revealed type is "returns.io.IOResult[builtins.int, builtins.str]"
 
 
 - case: bind_requires_context
@@ -121,7 +121,7 @@
         ...
 
     x: RequiresContext[float, str]
-    reveal_type(bind(test)(x))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[builtins.int, builtins.str]'
+    reveal_type(bind(test)(x))  # N: Revealed type is "returns.context.requires_context.RequiresContext[builtins.int, builtins.str]"
 
 
 - case: bind_requires_context_result
@@ -134,7 +134,7 @@
         ...
 
     x: RequiresContextResult[float, bool, str]
-    reveal_type(bind(test)(x))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.int, builtins.bool, builtins.str]'
+    reveal_type(bind(test)(x))  # N: Revealed type is "returns.context.requires_context_result.RequiresContextResult[builtins.int, builtins.bool, builtins.str]"
 
 
 - case: bind_requires_context_ioresult
@@ -147,7 +147,7 @@
         ...
 
     x: RequiresContextIOResult[float, bool, str]
-    reveal_type(bind(test)(x))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int, builtins.bool, builtins.str]'
+    reveal_type(bind(test)(x))  # N: Revealed type is "returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int, builtins.bool, builtins.str]"
 
 
 - case: bind_requires_context_future_result
@@ -160,7 +160,7 @@
         ...
 
     x: RequiresContextFutureResult[float, bool, str]
-    reveal_type(bind(test)(x))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.int, builtins.bool, builtins.str]'
+    reveal_type(bind(test)(x))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.int, builtins.bool, builtins.str]"
 
 
 - case: bind_future
@@ -173,7 +173,7 @@
         ...
 
     x: Future[float]
-    reveal_type(bind(test)(x))  # N: Revealed type is 'returns.future.Future[builtins.int]'
+    reveal_type(bind(test)(x))  # N: Revealed type is "returns.future.Future[builtins.int]"
 
 
 - case: bind_future_result
@@ -186,7 +186,7 @@
         ...
 
     x: FutureResult[float, str]
-    reveal_type(bind(test)(x))  # N: Revealed type is 'returns.future.FutureResult[builtins.int, builtins.str]'
+    reveal_type(bind(test)(x))  # N: Revealed type is "returns.future.FutureResult[builtins.int, builtins.str]"
 
 
 - case: bind_custom_type
@@ -210,4 +210,4 @@
         ...
 
     x: MyOwn[float]
-    reveal_type(bind(test)(x))  # N: Revealed type is 'main.MyOwn[builtins.int]'
+    reveal_type(bind(test)(x))  # N: Revealed type is "main.MyOwn[builtins.int]"

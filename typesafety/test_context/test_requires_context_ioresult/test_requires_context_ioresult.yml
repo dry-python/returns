@@ -5,7 +5,7 @@
 
     x: RequiresContextIOResult[int, float, str]
 
-    reveal_type(x('a'))  # N: Revealed type is 'returns.io.IOResult[builtins.int*, builtins.float*]'
+    reveal_type(x('a'))  # N: Revealed type is "returns.io.IOResult[builtins.int*, builtins.float*]"
 
 
 - case: requires_context_ioresult_getattr
@@ -24,7 +24,7 @@
 
     x: RequiresContextIOResult[int, float, str]
 
-    reveal_type(x.swap())  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.float*, builtins.int*, builtins.str*]'
+    reveal_type(x.swap())  # N: Revealed type is "returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.float*, builtins.int*, builtins.str*]"
 
 
 - case: requires_context_ioresult_bind
@@ -37,7 +37,7 @@
     def test(param: int) -> RequiresContextIOResult[bool, float, str]:
         ...
 
-    reveal_type(x.bind(test))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.bool*, builtins.float, builtins.str]'
+    reveal_type(x.bind(test))  # N: Revealed type is "returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.bool*, builtins.float, builtins.str]"
 
 
 - case: requires_context_ioresult_bind_result
@@ -51,7 +51,7 @@
     def test(param: int) -> Result[bool, float]:
         ...
 
-    reveal_type(x.bind_result(test))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.bool*, builtins.float, builtins.str]'
+    reveal_type(x.bind_result(test))  # N: Revealed type is "returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.bool*, builtins.float, builtins.str]"
 
 
 - case: requires_context_ioresult_bind_ioresult
@@ -65,7 +65,7 @@
     def test(param: int) -> IOResult[bool, float]:
         ...
 
-    reveal_type(x.bind_ioresult(test))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.bool*, builtins.float, builtins.str]'
+    reveal_type(x.bind_ioresult(test))  # N: Revealed type is "returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.bool*, builtins.float, builtins.str]"
 
 
 - case: requires_context_ioresult_bind_io
@@ -79,7 +79,7 @@
     def test(param: int) -> IO[bool]:
         ...
 
-    reveal_type(x.bind_io(test))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.bool*, builtins.float, builtins.str]'
+    reveal_type(x.bind_io(test))  # N: Revealed type is "returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.bool*, builtins.float, builtins.str]"
 
 
 - case: requires_context_ioresult_bind_context
@@ -92,7 +92,7 @@
     def test(param: int) -> RequiresContext[bool, str]:
         ...
 
-    reveal_type(x.bind_context(test))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.bool*, builtins.float, builtins.str]'
+    reveal_type(x.bind_context(test))  # N: Revealed type is "returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.bool*, builtins.float, builtins.str]"
 
 
 
@@ -106,7 +106,7 @@
     def test(param: int) -> RequiresContextResult[bool, float, str]:
         ...
 
-    reveal_type(x.bind_context_result(test))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.bool*, builtins.float, builtins.str]'
+    reveal_type(x.bind_context_result(test))  # N: Revealed type is "returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.bool*, builtins.float, builtins.str]"
 
 
 - case: requires_context_ioresult_map
@@ -116,7 +116,7 @@
 
     x: RequiresContextIOResult[int, float, str]
 
-    reveal_type(x.map(bool))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.bool*, builtins.float, builtins.str]'
+    reveal_type(x.map(bool))  # N: Revealed type is "returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.bool*, builtins.float, builtins.str]"
 
 
 - case: requires_context_ioresult_apply
@@ -128,7 +128,7 @@
     x: RequiresContextIOResult[int, float, str]
     y: RequiresContextIOResult[Callable[[int], bool], float, str]
 
-    reveal_type(x.apply(y))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.bool*, builtins.float, builtins.str]'
+    reveal_type(x.apply(y))  # N: Revealed type is "returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.bool*, builtins.float, builtins.str]"
 
 
 - case: requires_context_ioresult_lash
@@ -141,7 +141,7 @@
     def test(param: float) -> RequiresContextIOResult[int, bool, str]:
         ...
 
-    reveal_type(x.lash(test))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int, builtins.bool*, builtins.str]'
+    reveal_type(x.lash(test))  # N: Revealed type is "returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int, builtins.bool*, builtins.str]"
 
 
 - case: requires_context_ioresult_alt
@@ -154,7 +154,7 @@
     def test(param: float) -> bool:
         ...
 
-    reveal_type(x.alt(test))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int, builtins.bool*, builtins.str]'
+    reveal_type(x.alt(test))  # N: Revealed type is "returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int, builtins.bool*, builtins.str]"
 
 
 - case: requires_context_ioresult_modify_env
@@ -163,4 +163,4 @@
     from returns.context import RequiresContextIOResult
 
     first: RequiresContextIOResult[float, bool, int]
-    reveal_type(first.modify_env(int)('1'))  # N: Revealed type is 'returns.io.IOResult[builtins.float*, builtins.bool*]'
+    reveal_type(first.modify_env(int)('1'))  # N: Revealed type is "returns.io.IOResult[builtins.float*, builtins.bool*]"

@@ -12,7 +12,7 @@
         ...
 
     x: FutureResult[float, str]
-    reveal_type(flow(x, bind_future(test1), bind_future(test2)))  # N: Revealed type is 'returns.future.FutureResult[builtins.str, builtins.str]'
+    reveal_type(flow(x, bind_future(test1), bind_future(test2)))  # N: Revealed type is "returns.future.FutureResult[builtins.str, builtins.str]"
 
 
 - case: bind_future_wrong_function
@@ -39,7 +39,7 @@
         ...
 
     x: RequiresContextFutureResult[float, bool, str]
-    reveal_type(bind_future(test)(x))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.int, builtins.bool, builtins.str]'
+    reveal_type(bind_future(test)(x))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.int, builtins.bool, builtins.str]"
 
 
 - case: bind_future_future
@@ -52,7 +52,7 @@
         ...
 
     x: Future[float]
-    reveal_type(bind_future(test)(x))  # N: Revealed type is 'returns.future.Future[builtins.int]'
+    reveal_type(bind_future(test)(x))  # N: Revealed type is "returns.future.Future[builtins.int]"
 
 
 - case: bind_future_future_result
@@ -65,7 +65,7 @@
         ...
 
     x: FutureResult[float, str]
-    reveal_type(bind_future(test)(x))  # N: Revealed type is 'returns.future.FutureResult[builtins.int, builtins.str]'
+    reveal_type(bind_future(test)(x))  # N: Revealed type is "returns.future.FutureResult[builtins.int, builtins.str]"
 
 
 - case: bind_future_custom_type
@@ -89,4 +89,4 @@
         ...
 
     x: MyClass[float]
-    reveal_type(bind_future(test)(x))  # N: Revealed type is 'main.MyClass[builtins.int]'
+    reveal_type(bind_future(test)(x))  # N: Revealed type is "main.MyClass[builtins.int]"

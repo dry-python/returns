@@ -7,7 +7,7 @@
         ...
 
     first: IOResult[str, int] = IOFailure(1)
-    reveal_type(first.lash(returns_result))  # N: Revealed type is 'returns.io.IOResult[builtins.str, builtins.Exception*]'
+    reveal_type(first.lash(returns_result))  # N: Revealed type is "returns.io.IOResult[builtins.str, builtins.Exception*]"
 
 
 - case: iofailure_alt
@@ -15,7 +15,7 @@
   main: |
     from returns.io import IOFailure
 
-    reveal_type(IOFailure(1).alt(str))  # N: Revealed type is 'returns.io.IOResult[Any, builtins.str*]'
+    reveal_type(IOFailure(1).alt(str))  # N: Revealed type is "returns.io.IOResult[Any, builtins.str*]"
 
 
 - case: iofailure_iofailure
@@ -23,4 +23,4 @@
   main: |
     from returns.io import IOFailure
 
-    reveal_type(IOFailure(1).failure())  # N: Revealed type is 'returns.io.IO[builtins.int*]'
+    reveal_type(IOFailure(1).failure())  # N: Revealed type is "returns.io.IO[builtins.int*]"

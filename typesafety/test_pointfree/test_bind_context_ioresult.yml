@@ -21,7 +21,7 @@
         ...
 
     x: RequiresContextIOResult[float, str, bool]
-    reveal_type(bind_context_ioresult(test)(x))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int, builtins.str, builtins.bool]'
+    reveal_type(bind_context_ioresult(test)(x))  # N: Revealed type is "returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int, builtins.str, builtins.bool]"
 
 
 - case: bind_context_ioresult_requires_context_future_result
@@ -34,4 +34,4 @@
         ...
 
     x: RequiresContextFutureResult[float, str, bool]
-    reveal_type(bind_context_ioresult(test)(x))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.int, builtins.str, builtins.bool]'
+    reveal_type(bind_context_ioresult(test)(x))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.int, builtins.str, builtins.bool]"

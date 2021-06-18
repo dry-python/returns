@@ -9,7 +9,7 @@
     def curried(a: int, b: int) -> float:
         ...
 
-    reveal_type(flow(1, curried)(1))  # N: Revealed type is 'builtins.float'
+    reveal_type(flow(1, curried)(1))  # N: Revealed type is "builtins.float"
 
 
 - case: flow_function_with_curried2
@@ -23,4 +23,4 @@
     def curried(a: int, b: int) -> float:
         ...
 
-    reveal_type(flow(1, curried, identity)(1))  # N: Revealed type is 'builtins.float'
+    reveal_type(flow(1, curried, identity)(1))  # N: Revealed type is "builtins.float"

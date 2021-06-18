@@ -5,7 +5,7 @@
 
     first: IO[ValueError]
     second: IO[Exception] = first
-    reveal_type(second)  # N: Revealed type is 'returns.io.IO[builtins.Exception]'
+    reveal_type(second)  # N: Revealed type is "returns.io.IO[builtins.Exception]"
 
 
 - case: io_from_ioresult
@@ -15,7 +15,7 @@
 
     x: IOResult[int, str]
 
-    reveal_type(IO.from_ioresult(x))  # N: Revealed type is 'returns.io.IO[returns.result.Result[builtins.int*, builtins.str*]]'
+    reveal_type(IO.from_ioresult(x))  # N: Revealed type is "returns.io.IO[returns.result.Result[builtins.int*, builtins.str*]]"
 
 
 - case: io_getattr

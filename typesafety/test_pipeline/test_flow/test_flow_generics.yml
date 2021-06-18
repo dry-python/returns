@@ -9,7 +9,7 @@
 
     def test(arg: _NewValueType) -> _NewValueType:
         x = flow(arg, identity)
-        reveal_type(x)  # N: Revealed type is '_NewValueType`-1'
+        reveal_type(x)  # N: Revealed type is "_NewValueType`-1"
         return x
 
 
@@ -24,5 +24,5 @@
 
     def test(arg: _NewValueType) -> _NewValueType:
         x = flow(arg, str)
-        reveal_type(x)  # N: Revealed type is 'builtins.str*'
+        reveal_type(x)  # N: Revealed type is "builtins.str*"
         return arg

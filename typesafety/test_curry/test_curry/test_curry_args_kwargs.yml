@@ -7,7 +7,7 @@
     def zero(*args) -> str:
         ...
 
-    reveal_type(zero)  # N: Revealed type is 'Any'
+    reveal_type(zero)  # N: Revealed type is "Any"
 
 
 - case: curry_kwargs
@@ -19,7 +19,7 @@
     def zero(**kwargs) -> str:
         ...
 
-    reveal_type(zero)  # N: Revealed type is 'Any'
+    reveal_type(zero)  # N: Revealed type is "Any"
 
 
 - case: curry_args_kwargs
@@ -31,4 +31,4 @@
     def zero(*args, **kwargs) -> str:
         ...
 
-    reveal_type(zero)  # N: Revealed type is 'Any'
+    reveal_type(zero)  # N: Revealed type is "Any"

@@ -7,4 +7,4 @@
     def returns_result() -> Result[int, str]:
         ...
 
-    reveal_type(result_to_maybe(returns_result()))  # N: Revealed type is 'returns.maybe.Maybe[builtins.int*]'
+    reveal_type(result_to_maybe(returns_result()))  # N: Revealed type is "returns.maybe.Maybe[builtins.int*]"

@@ -4,7 +4,7 @@
     from returns.context import RequiresContextFutureResult
 
     first: RequiresContextFutureResult[object, Exception, str] = RequiresContextFutureResult.from_value(1)
-    reveal_type(first)  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.object, builtins.Exception, builtins.str]'
+    reveal_type(first)  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.object, builtins.Exception, builtins.str]"
 
 
 - case: requires_context_future_result_failure_cast
@@ -13,7 +13,7 @@
     from returns.context import RequiresContextFutureResult
 
     first: RequiresContextFutureResult[object, Exception, str] = RequiresContextFutureResult.from_failure(TypeError())
-    reveal_type(first)  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.object, builtins.Exception, builtins.str]'
+    reveal_type(first)  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.object, builtins.Exception, builtins.str]"
 
 
 - case: requires_context_future_result_env_cast
@@ -24,7 +24,7 @@
     first: RequiresContextFutureResult[object, Exception, object]
     second: RequiresContextFutureResult[object, Exception, str] = first
 
-    reveal_type(second)  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.object, builtins.Exception, builtins.str]'
+    reveal_type(second)  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.object, builtins.Exception, builtins.str]"
 
 
 - case: requires_context_future_result_wrong_cast

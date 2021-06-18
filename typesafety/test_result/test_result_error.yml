@@ -8,4 +8,4 @@
             return Success(arg)
         return Failure(ValueError('test'))
 
-    reveal_type(some(1))  # N: Revealed type is 'returns.result.Result[builtins.int, builtins.Exception]'
+    reveal_type(some(1))  # N: Revealed type is "returns.result.Result[builtins.int, builtins.Exception]"

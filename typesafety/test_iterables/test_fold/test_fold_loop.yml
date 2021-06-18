@@ -20,13 +20,13 @@
     def div(first: int) -> Callable[[float], float]:
         return lambda second: first / second
 
-    reveal_type(Fold.loop(x1, acc, div))  # N: Revealed type is 'returns.result.Result[builtins.float, builtins.str]'
-    reveal_type(Fold.loop(x2, acc, div))  # N: Revealed type is 'returns.result.Result[builtins.float, builtins.str]'
-    reveal_type(Fold.loop(x3, acc, div))  # N: Revealed type is 'returns.result.Result[builtins.float, builtins.str]'
-    reveal_type(Fold.loop(x4, acc, div))  # N: Revealed type is 'returns.result.Result[builtins.float, builtins.str]'
-    reveal_type(Fold.loop(x5, acc, div))  # N: Revealed type is 'returns.result.Result[builtins.float, builtins.str]'
-    reveal_type(Fold.loop(x6, acc, div))  # N: Revealed type is 'returns.result.Result[builtins.float, builtins.str]'
-    reveal_type(Fold.loop(x7, acc, div))  # N: Revealed type is 'returns.result.Result[builtins.float, builtins.str]'
+    reveal_type(Fold.loop(x1, acc, div))  # N: Revealed type is "returns.result.Result[builtins.float, builtins.str]"
+    reveal_type(Fold.loop(x2, acc, div))  # N: Revealed type is "returns.result.Result[builtins.float, builtins.str]"
+    reveal_type(Fold.loop(x3, acc, div))  # N: Revealed type is "returns.result.Result[builtins.float, builtins.str]"
+    reveal_type(Fold.loop(x4, acc, div))  # N: Revealed type is "returns.result.Result[builtins.float, builtins.str]"
+    reveal_type(Fold.loop(x5, acc, div))  # N: Revealed type is "returns.result.Result[builtins.float, builtins.str]"
+    reveal_type(Fold.loop(x6, acc, div))  # N: Revealed type is "returns.result.Result[builtins.float, builtins.str]"
+    reveal_type(Fold.loop(x7, acc, div))  # N: Revealed type is "returns.result.Result[builtins.float, builtins.str]"
 
 
 - case: fold_loop_io
@@ -41,7 +41,7 @@
 
     acc: IO[float]
     x: Iterable[IO[int]]
-    reveal_type(Fold.loop(x, acc, div))  # N: Revealed type is 'returns.io.IO[builtins.float]'
+    reveal_type(Fold.loop(x, acc, div))  # N: Revealed type is "returns.io.IO[builtins.float]"
 
 
 - case: fold_loop_maybe
@@ -56,7 +56,7 @@
 
     acc: Maybe[float]
     x: Iterable[Maybe[int]]
-    reveal_type(Fold.loop(x, acc, div))  # N: Revealed type is 'returns.maybe.Maybe[builtins.float]'
+    reveal_type(Fold.loop(x, acc, div))  # N: Revealed type is "returns.maybe.Maybe[builtins.float]"
 
 
 - case: fold_loop_result
@@ -71,7 +71,7 @@
 
     acc: Result[float, str]
     x: Iterable[Result[int, str]]
-    reveal_type(Fold.loop(x, acc, div))  # N: Revealed type is 'returns.result.Result[builtins.float, builtins.str]'
+    reveal_type(Fold.loop(x, acc, div))  # N: Revealed type is "returns.result.Result[builtins.float, builtins.str]"
 
 
 - case: fold_loop_ioresult
@@ -86,7 +86,7 @@
 
     acc: IOResult[float, str]
     x: Iterable[IOResult[int, str]]
-    reveal_type(Fold.loop(x, acc, div))  # N: Revealed type is 'returns.io.IOResult[builtins.float, builtins.str]'
+    reveal_type(Fold.loop(x, acc, div))  # N: Revealed type is "returns.io.IOResult[builtins.float, builtins.str]"
 
 
 - case: fold_loop_requires_context
@@ -101,7 +101,7 @@
 
     acc: RequiresContext[float, str]
     x: Iterable[RequiresContext[int, str]]
-    reveal_type(Fold.loop(x, acc, div))  # N: Revealed type is 'returns.context.requires_context.RequiresContext[builtins.float, builtins.str]'
+    reveal_type(Fold.loop(x, acc, div))  # N: Revealed type is "returns.context.requires_context.RequiresContext[builtins.float, builtins.str]"
 
 
 - case: fold_loop_requires_context_result
@@ -116,7 +116,7 @@
 
     acc: RequiresContextResult[float, str, bool]
     x: Iterable[RequiresContextResult[int, str, bool]]
-    reveal_type(Fold.loop(x, acc, div))  # N: Revealed type is 'returns.context.requires_context_result.RequiresContextResult[builtins.float, builtins.str, builtins.bool]'
+    reveal_type(Fold.loop(x, acc, div))  # N: Revealed type is "returns.context.requires_context_result.RequiresContextResult[builtins.float, builtins.str, builtins.bool]"
 
 
 - case: fold_loop_requires_context_ioresult
@@ -131,7 +131,7 @@
 
     acc: RequiresContextIOResult[float, str, bool]
     x: Iterable[RequiresContextIOResult[int, str, bool]]
-    reveal_type(Fold.loop(x, acc, div))  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.float, builtins.str, builtins.bool]'
+    reveal_type(Fold.loop(x, acc, div))  # N: Revealed type is "returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.float, builtins.str, builtins.bool]"
 
 
 - case: fold_loop_requires_context_future_result
@@ -146,7 +146,7 @@
 
     acc: RequiresContextFutureResult[float, str, bool]
     x: Iterable[RequiresContextFutureResult[int, str, bool]]
-    reveal_type(Fold.loop(x, acc, div))  # N: Revealed type is 'returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.float, builtins.str, builtins.bool]'
+    reveal_type(Fold.loop(x, acc, div))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.float, builtins.str, builtins.bool]"
 
 
 - case: fold_loop_future
@@ -161,7 +161,7 @@
 
     acc: Future[float]
     x: Iterable[Future[int]]
-    reveal_type(Fold.loop(x, acc, div))  # N: Revealed type is 'returns.future.Future[builtins.float]'
+    reveal_type(Fold.loop(x, acc, div))  # N: Revealed type is "returns.future.Future[builtins.float]"
 
 
 - case: fold_loop_future_result
@@ -176,7 +176,7 @@
 
     acc: FutureResult[float, str]
     x: Iterable[FutureResult[int, str]]
-    reveal_type(Fold.loop(x, acc, div))  # N: Revealed type is 'returns.future.FutureResult[builtins.float, builtins.str]'
+    reveal_type(Fold.loop(x, acc, div))  # N: Revealed type is "returns.future.FutureResult[builtins.float, builtins.str]"
 
 
 - case: fold_loop_custom_type
@@ -197,4 +197,4 @@
 
     acc: MyClass[float]
     x: Iterable[MyClass[int]]
-    reveal_type(Fold.loop(x, acc, div))  # N: Revealed type is 'main.MyClass[builtins.float]'
+    reveal_type(Fold.loop(x, acc, div))  # N: Revealed type is "main.MyClass[builtins.float]"

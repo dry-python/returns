@@ -13,7 +13,7 @@
         ...
 
     x: ReaderIOResult[int, str, bool]
-    reveal_type(test(x))  # N: Revealed type is 'typing.Sequence[returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int, builtins.str, builtins.bool]]'
+    reveal_type(test(x))  # N: Revealed type is "typing.Sequence[returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int, builtins.str, builtins.bool]]"
 
 
 - case: kinded_with_nested_kind_instance
@@ -27,7 +27,7 @@
     def test() -> Sequence[KindN[ReaderIOResult, int, str, bool]]:
         ...
 
-    reveal_type(test())  # N: Revealed type is 'typing.Sequence[returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int, builtins.str, builtins.bool]]'
+    reveal_type(test())  # N: Revealed type is "typing.Sequence[returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int, builtins.str, builtins.bool]]"
 
 
 
@@ -47,7 +47,7 @@
     ]:
         ...
 
-    reveal_type(test())  # N: Revealed type is 'typing.Sequence[def (returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int, builtins.str, builtins.bool]) -> returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int, builtins.str, builtins.bool]]'
+    reveal_type(test())  # N: Revealed type is "typing.Sequence[def (returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int, builtins.str, builtins.bool]) -> returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int, builtins.str, builtins.bool]]"
 
 
 - case: kinded_with_nested_kind_tuple
@@ -64,7 +64,7 @@
     ]:
         ...
 
-    reveal_type(test())  # N: Revealed type is 'Tuple[returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int, builtins.str, builtins.bool], returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.float, builtins.bytes, builtins.object]]'
+    reveal_type(test())  # N: Revealed type is "Tuple[returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int, builtins.str, builtins.bool], returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.float, builtins.bytes, builtins.object]]"
 
 
 - case: kinded_with_nested_kind_union
@@ -81,7 +81,7 @@
     ]:
         ...
 
-    reveal_type(test())  # N: Revealed type is 'Union[returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int, builtins.str, builtins.bool], returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.float, builtins.bytes, builtins.object]]'
+    reveal_type(test())  # N: Revealed type is "Union[returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int, builtins.str, builtins.bool], returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.float, builtins.bytes, builtins.object]]"
 
 
 - case: kinded_with_nested_kind_type
@@ -95,4 +95,4 @@
     def test() -> Type[KindN[ReaderIOResult, int, str, bool]]:
         ...
 
-    reveal_type(test())  # N: Revealed type is 'Type[returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int, builtins.str, builtins.bool]]'
+    reveal_type(test())  # N: Revealed type is "Type[returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int, builtins.str, builtins.bool]]"

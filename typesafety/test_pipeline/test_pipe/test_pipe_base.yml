@@ -7,7 +7,7 @@
         ...
 
     predefined = pipe(convert, int, bool)
-    reveal_type(predefined('1.0'))  # N: Revealed type is 'builtins.bool*'
+    reveal_type(predefined('1.0'))  # N: Revealed type is "builtins.bool*"
 
 
 - case: pipe_function2
@@ -20,7 +20,7 @@
         ...
 
     predefined = pipe(identity, convert, identity, identity, int, identity, bool, identity)
-    reveal_type(predefined('1.0'))  # N: Revealed type is 'builtins.bool*'
+    reveal_type(predefined('1.0'))  # N: Revealed type is "builtins.bool*"
 
 
 - case: pipe_callable_instances
@@ -42,7 +42,7 @@
         ...
 
     predefined = pipe(Test, with_instance, convert, Test(1))
-    reveal_type(predefined(1))  # N: Revealed type is 'builtins.bool'
+    reveal_type(predefined(1))  # N: Revealed type is "builtins.bool"
 
 
 - case: pipe_star_args
@@ -52,7 +52,7 @@
     from returns.functions import identity
 
     reveal_type(
-        pipe(  # N: Revealed type is 'builtins.int*'
+        pipe(  # N: Revealed type is "builtins.int*"
             identity,
             identity,
             identity,
@@ -78,7 +78,7 @@
     from returns.pipeline import pipe
 
     reveal_type(
-        pipe(  # N: Revealed type is 'builtins.float*'
+        pipe(  # N: Revealed type is "builtins.float*"
             lambda x: x,
             str,
             lambda y: y.split(' '),
@@ -107,7 +107,7 @@
             ...
 
     reveal_type(
-        pipe(  # N: Revealed type is 'builtins.int'
+        pipe(  # N: Revealed type is "builtins.int"
             Test().method,
             Test.method_class,
             Test.method_static,
@@ -124,7 +124,7 @@
     def test(arg: int) -> Any:
         ...
 
-    reveal_type(pipe(test)(1))  # N: Revealed type is 'Any'
+    reveal_type(pipe(test)(1))  # N: Revealed type is "Any"
 
 
 - case: pipe_with_overloads
@@ -133,8 +133,8 @@
     from returns.pipeline import pipe
 
     x = pipe(int, str, int)
-    reveal_type(x(1.0))  # N: Revealed type is 'builtins.int*'
-    reveal_type(x('a'))  # N: Revealed type is 'builtins.int*'
+    reveal_type(x(1.0))  # N: Revealed type is "builtins.int*"
+    reveal_type(x('a'))  # N: Revealed type is "builtins.int*"
 
 
 - case: pipe_with_containers
@@ -153,7 +153,7 @@
     def mappable(arg: float) -> bool:
         ...
 
-    reveal_type(pipe(bind(bound), identity, map_(mappable))(x))  # N: Revealed type is 'returns.result.Result[builtins.bool, builtins.str]'
+    reveal_type(pipe(bind(bound), identity, map_(mappable))(x))  # N: Revealed type is "returns.result.Result[builtins.bool, builtins.str]"
 
 
 - case: pipe_with_containers2
@@ -172,4 +172,4 @@
         ...
 
     r: IOResult[int, str]
-    reveal_type(pipe(bind_result(test), bind_result(second))(r))  # N: Revealed type is 'returns.io.IOResult[builtins.bool, builtins.str]'
+    reveal_type(pipe(bind_result(test), bind_result(second))(r))  # N: Revealed type is "returns.io.IOResult[builtins.bool, builtins.str]"

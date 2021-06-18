@@ -4,7 +4,7 @@
     from returns.context import RequiresContextIOResult
 
     first: RequiresContextIOResult[object, Exception, str] = RequiresContextIOResult.from_value(1)
-    reveal_type(first)  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.object, builtins.Exception, builtins.str]'
+    reveal_type(first)  # N: Revealed type is "returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.object, builtins.Exception, builtins.str]"
 
 
 - case: requires_context_ioresult_failure_cast
@@ -13,7 +13,7 @@
     from returns.context import RequiresContextIOResult
 
     first: RequiresContextIOResult[object, Exception, str] = RequiresContextIOResult.from_failure(TypeError())
-    reveal_type(first)  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.object, builtins.Exception, builtins.str]'
+    reveal_type(first)  # N: Revealed type is "returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.object, builtins.Exception, builtins.str]"
 
 
 - case: requires_context_ioresult_env_cast
@@ -24,7 +24,7 @@
     first: RequiresContextIOResult[object, Exception, object]
     second: RequiresContextIOResult[object, Exception, str] = first
 
-    reveal_type(second)  # N: Revealed type is 'returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.object, builtins.Exception, builtins.str]'
+    reveal_type(second)  # N: Revealed type is "returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.object, builtins.Exception, builtins.str]"
 
 
 - case: requires_context_ioresult_wrong_cast

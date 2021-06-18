@@ -10,7 +10,7 @@
     ) -> int:
         return 1
 
-    reveal_type(test)  # N: Revealed type is 'def (first: builtins.int, second: Union[builtins.str, None] =, *, kw: builtins.bool =) -> returns.future.FutureResult[builtins.int, builtins.Exception]'
+    reveal_type(test)  # N: Revealed type is "def (first: builtins.int, second: Union[builtins.str, None] =, *, kw: builtins.bool =) -> returns.future.FutureResult[builtins.int, builtins.Exception]"
 
 
 - case: future_safe_composition_with_args
@@ -24,4 +24,4 @@
     ) -> int:
         return 1
 
-    reveal_type(future_safe(test))  # N: Revealed type is 'def (first: builtins.int, second: Union[builtins.str, None] =, *, kw: builtins.bool =) -> returns.future.FutureResult[builtins.int, builtins.Exception]'
+    reveal_type(future_safe(test))  # N: Revealed type is "def (first: builtins.int, second: Union[builtins.str, None] =, *, kw: builtins.bool =) -> returns.future.FutureResult[builtins.int, builtins.Exception]"

@@ -23,7 +23,7 @@
     def test(arg: str) -> MyClass[int, int]:
         ...
 
-    reveal_type(MyClass(1, '1').lash(test))  # N: Revealed type is 'main.MyClass[builtins.int, builtins.int*]'
+    reveal_type(MyClass(1, '1').lash(test))  # N: Revealed type is "main.MyClass[builtins.int, builtins.int*]"
 
 
 - case: lashable_inheritance_correct3
@@ -53,7 +53,7 @@
     def test(arg: str) -> MyClass[int, float, bool]:
         ...
 
-    reveal_type(MyClass(1, 'a', True).lash(test))  # N: Revealed type is 'main.MyClass[builtins.int, builtins.float*, builtins.bool]'
+    reveal_type(MyClass(1, 'a', True).lash(test))  # N: Revealed type is "main.MyClass[builtins.int, builtins.float*, builtins.bool]"
 
 
 - case: lashable_inheritance_missing
@@ -71,7 +71,7 @@
 
     MyClass()
   out: |
-    main:11: error: Cannot instantiate abstract class 'MyClass' with abstract attribute 'lash'
+    main:11: error: Cannot instantiate abstract class "MyClass" with abstract attribute "lash"
 
 
 - case: lashable_inheritance_wrong2

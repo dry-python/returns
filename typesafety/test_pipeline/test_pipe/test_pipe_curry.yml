@@ -9,4 +9,4 @@
     def curried(a: int, b: int) -> float:
         ...
 
-    reveal_type(pipe(curried, identity)(1)(2))  # N: Revealed type is 'builtins.float'
+    reveal_type(pipe(curried, identity)(1)(2))  # N: Revealed type is "builtins.float"

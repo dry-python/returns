@@ -17,7 +17,7 @@
             ...
 
     x: Mappable[int]
-    reveal_type(x.map(str))  # N: Revealed type is 'main.Mappable[builtins.str]'
+    reveal_type(x.map(str))  # N: Revealed type is "main.Mappable[builtins.str]"
 
 
 - case: kinded_with_unannotated_self_method
@@ -39,7 +39,7 @@
             ...
 
     x: Mappable[int]
-    reveal_type(x.map(str))  # N: Revealed type is 'Any'
+    reveal_type(x.map(str))  # N: Revealed type is "Any"
 
 
 - case: kinded_with_two_params
@@ -66,7 +66,7 @@
 
     x: Mappable
     y: My[int]
-    reveal_type(x.map(y, str))  # N: Revealed type is 'main.My[builtins.str]'
+    reveal_type(x.map(y, str))  # N: Revealed type is "main.My[builtins.str]"
 
 
 - case: kinded_classmethod_with_two_params1
@@ -93,9 +93,9 @@
         ...
 
     y: My[int]
-    reveal_type(Mappable.map(y, str))  # N: Revealed type is 'main.My[builtins.str]'
-    reveal_type(My.map(y, str))  # N: Revealed type is 'main.My[builtins.str]'
-    reveal_type(y.map(y, str))  # N: Revealed type is 'main.My[builtins.str]'
+    reveal_type(Mappable.map(y, str))  # N: Revealed type is "main.My[builtins.str]"
+    reveal_type(My.map(y, str))  # N: Revealed type is "main.My[builtins.str]"
+    reveal_type(y.map(y, str))  # N: Revealed type is "main.My[builtins.str]"
 
 
 - case: kinded_classmethod_with_two_params2
@@ -122,9 +122,9 @@
         ...
 
     y: My[int]
-    reveal_type(Mappable.map(y, str))  # N: Revealed type is 'main.My[builtins.str]'
-    reveal_type(My.map(y, str))  # N: Revealed type is 'main.My[builtins.str]'
-    reveal_type(y.map(y, str))  # N: Revealed type is 'main.My[builtins.str]'
+    reveal_type(Mappable.map(y, str))  # N: Revealed type is "main.My[builtins.str]"
+    reveal_type(My.map(y, str))  # N: Revealed type is "main.My[builtins.str]"
+    reveal_type(y.map(y, str))  # N: Revealed type is "main.My[builtins.str]"
 
 
 - case: kinded_with_wrong_self_type1
