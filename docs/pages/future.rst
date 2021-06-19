@@ -248,7 +248,7 @@ The only difference is that ``FutureResult[a, b]`` is a handy wrapper
 around ``Future[Result[a, b]]``,
 so you won't need to use methods like ``.map`` and ``.bind`` twice.
 
-You can always covert it with methods like
+You can always convert it with methods like
 ``.from_typecast`` and ``.from_future_result``.
 
 
