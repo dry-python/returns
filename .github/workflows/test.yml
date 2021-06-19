@@ -10,10 +10,14 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    continue-on-error: ${{ matrix.allow-failure }}
     strategy:
       matrix:
         python-version: [3.7, 3.8, 3.9]
+        allow-failure: [false]
+        include:
+          - python-version: 3.10.0-beta.2
+            allow-failure: true
 
     steps:
     - uses: actions/checkout@v2
@@ -25,7 +29,7 @@ jobs:
     - name: Install poetry
       run: |
         curl -sSL \
-          "https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py" | python
+          "https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py" | python
 
         # Adding `poetry` to `$PATH`:
         echo "$HOME/.poetry/bin" >> $GITHUB_PATH
@@ -37,14 +41,20 @@ jobs:
         key: venv-${{ matrix.python-version }}-${{ hashFiles('poetry.lock') }}
     - name: Install dependencies
       run: |
+        poetry config experimental.new-installer false
         poetry config virtualenvs.in-project true
         poetry install
 
         poetry run pip install -U pip
 
+      # Some checks can't be perfomed yet on Python 3.10 version like `flake8`
+      # that fails on importing `WPS`!
+    - name: Run lint
+      if: matrix.python-version != '3.10.0-beta.2'
+      run: poetry run flake8 .
+
     - name: Run tests
       run: |
-        poetry run flake8 .
         poetry run mypy returns ./tests/**/*.py
         # Different python versions are covered differently:
         poetry run pytest returns docs/pages tests
