@@ -629,7 +629,6 @@ Lovely, isn't it?
 
 Want more?
 [Go to the docs!](https://returns.readthedocs.io)
-Or [try our demo](https://repl.it/@sobolevn/returns#ex.py).
 Or read these articles:
 
 - [Python exceptions considered an anti-pattern](https://sobolevn.me/2019/02/python-exceptions-considered-an-antipattern)
