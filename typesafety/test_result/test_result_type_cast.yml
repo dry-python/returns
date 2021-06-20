@@ -130,7 +130,7 @@
   main: |
     from returns.result import Result
 
-    reveal_type(Result.success_type)  # N: Revealed type is "Type[returns.result._Success[Any]]"
+    reveal_type(Result.success_type)  # N: Revealed type is "Type[returns.result.Success[Any]]"
 
 
 - case: result_failure_type
@@ -138,7 +138,7 @@
   main: |
     from returns.result import Result
 
-    reveal_type(Result.failure_type)  # N: Revealed type is "Type[returns.result._Failure[Any]]"
+    reveal_type(Result.failure_type)  # N: Revealed type is "Type[returns.result.Failure[Any]]"
 
 
 - case: resulte_typecast1

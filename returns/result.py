@@ -2,6 +2,7 @@ from abc import ABCMeta
 from functools import wraps
 from inspect import FrameInfo
 from typing import (
+    TYPE_CHECKING,
     Any,
     Callable,
     ClassVar,
@@ -38,7 +39,7 @@ class Result(
     metaclass=ABCMeta,
 ):
     """
-    Base class for :class:`~_Failure` and :class:`~_Success`.
+    Base class for :class:`~Failure` and :class:`~_Success`.
 
     :class:`~Result` does not have a public constructor.
     Use :func:`~Success` and :func:`~Failure` to construct the needed values.
@@ -50,15 +51,16 @@ class Result(
     """
 
     __slots__ = ('_trace',)
+    __match_args__ = ('_inner_value',)
 
     _inner_value: Union[_ValueType, _ErrorType]
     _trace: Optional[List[FrameInfo]]
 
     # These two are required for projects like `classes`:
     #: Success type that is used to represent the successful computation.
-    success_type: ClassVar[Type['_Success']]
+    success_type: ClassVar[Type['Success']]
     #: Failure type that is used to represent the failed computation.
-    failure_type: ClassVar[Type['_Failure']]
+    failure_type: ClassVar[Type['Failure']]
 
     #: Typesafe equality comparison with other `Result` objects.
     equals = container_equality
@@ -309,63 +311,52 @@ class Result(
         return inner_value
 
 
-@final
-class _Failure(Result[Any, _ErrorType]):
+@final  # noqa: WPS338
+class Failure(Result[Any, _ErrorType]):  # noqa: WPS338
     """
     Represents a calculation which has failed.
 
     It should contain an error code or message.
-    Should not be used directly.
-
-    This is an implementation detail, please, do not use it directly.
-    This class only has methods that are logically dependent on the
-    current container state: successful or failed.
-
-    Use public data types instead!
     """
 
     _inner_value: _ErrorType
 
     def __init__(self, inner_value: _ErrorType) -> None:
-        """
-        Private type constructor.
-
-        Use :func:`~Success` and :func:`~Failure` instead.
-        Required for typing.
-        """
+        """Failure constructor."""
         super().__init__(inner_value)
         object.__setattr__(self, '_trace', self._get_trace())  # noqa: WPS609
 
+    if not TYPE_CHECKING:  # noqa: C901, WPS604  # pragma: no branch
+        def alt(self, function):
+            """Composes failed container with a pure function to modify failure."""  # noqa: E501
+            return Failure(function(self._inner_value))
+
+        def map(self, function):
+            """Does nothing for ``Failure``."""
+            return self
+
+        def bind(self, function):
+            """Does nothing for ``Failure``."""
+            return self
+
+        #: Alias for `bind` method. Part of the `ResultBasedN` interface.
+        bind_result = bind
+
+        def lash(self, function):
+            """Composes this container with a function returning container."""
+            return function(self._inner_value)
+
+        def apply(self, container):
+            """Does nothing for ``Failure``."""
+            return self
+
+        def value_or(self, default_value):
+            """Returns default value for failed container."""
+            return default_value
+
     def swap(self):
         """Failures swap to :class:`_Success`."""
-        return _Success(self._inner_value)
-
-    def map(self, function):
-        """Does nothing for ``Failure``."""
-        return self
-
-    def apply(self, container):
-        """Does nothing for ``Failure``."""
-        return self
-
-    def bind(self, function):
-        """Does nothing for ``Failure``."""
-        return self
-
-    #: Alias for `bind` method. Part of the `ResultBasedN` interface.
-    bind_result = bind
-
-    def lash(self, function):
-        """Composes this container with a function returning container."""
-        return function(self._inner_value)
-
-    def alt(self, function):
-        """Composes failed container with a pure function to modify failure."""
-        return _Failure(function(self._inner_value))
-
-    def value_or(self, default_value: _NewValueType) -> _NewValueType:
-        """Returns default value for failed container."""
-        return default_value
+        return Success(self._inner_value)
 
     def unwrap(self) -> NoReturn:
         """Raises an exception, since it does not have a value inside."""
@@ -383,63 +374,52 @@ class _Failure(Result[Any, _ErrorType]):
 
 
 @final
-class _Success(Result[_ValueType, Any]):
+class Success(Result[_ValueType, Any]):
     """
     Represents a calculation which has succeeded and contains the result.
 
     Contains the computation value.
-    Should not be used directly.
-
-    This is an implementation detail, please, do not use it directly.
-    This class only has method that are logically
-    dependent on the current container state: successful or failed.
-
-    Use public data types instead!
     """
 
     _inner_value: _ValueType
 
     def __init__(self, inner_value: _ValueType) -> None:
-        """
-        Private type constructor.
-
-        Use :func:`~Success` and :func:`~Failure` instead.
-        Required for typing.
-        """
+        """Success constructor."""
         super().__init__(inner_value)
 
+    if not TYPE_CHECKING:  # noqa: C901, WPS604  # pragma: no branch
+        def alt(self, function):
+            """Does nothing for ``Success``."""
+            return self
+
+        def map(self, function):
+            """Composes current container with a pure function."""
+            return Success(function(self._inner_value))
+
+        def bind(self, function):
+            """Binds current container to a function that returns container."""
+            return function(self._inner_value)
+
+        #: Alias for `bind` method. Part of the `ResultBasedN` interface.
+        bind_result = bind
+
+        def lash(self, function):
+            """Does nothing for ``Success``."""
+            return self
+
+        def apply(self, container):
+            """Calls a wrapped function in a container on this container."""
+            if isinstance(container, self.success_type):
+                return self.map(container.unwrap())
+            return container
+
+        def value_or(self, default_value):
+            """Returns the value for successful container."""
+            return self._inner_value
+
     def swap(self):
-        """Successes swap to :class:`_Failure`."""
-        return _Failure(self._inner_value)
-
-    def map(self, function):
-        """Composes current container with a pure function."""
-        return _Success(function(self._inner_value))
-
-    def apply(self, container):
-        """Calls a wrapped function in a container on this container."""
-        if isinstance(container, self.success_type):
-            return self.map(container.unwrap())  # type: ignore
-        return container
-
-    def bind(self, function):
-        """Binds current container to a function that returns container."""
-        return function(self._inner_value)
-
-    #: Alias for `bind` method. Part of the `ResultBasedN` interface.
-    bind_result = bind
-
-    def lash(self, function):
-        """Does nothing for ``Success``."""
-        return self
-
-    def alt(self, function):
-        """Does nothing for ``Success``."""
-        return self
-
-    def value_or(self, default_value: _NewValueType) -> _ValueType:
-        """Returns the value for successful container."""
-        return self._inner_value
+        """Successes swap to :class:`Failure`."""
+        return Failure(self._inner_value)
 
     def unwrap(self) -> _ValueType:
         """Returns the unwrapped value from successful container."""
@@ -450,41 +430,8 @@ class _Success(Result[_ValueType, Any]):
         raise UnwrapFailedError(self)
 
 
-Result.success_type = _Success
-Result.failure_type = _Failure
-
-
-# Public constructors:
-
-def Success(  # noqa: N802
-    inner_value: _NewValueType,
-) -> Result[_NewValueType, Any]:
-    """
-    Public unit function of protected :class:`~_Success` type.
-
-    .. code:: python
-
-      >>> from returns.result import Success
-      >>> assert str(Success(1)) == '<Success: 1>'
-
-    """
-    return _Success(inner_value)
-
-
-def Failure(  # noqa: N802
-    inner_value: _NewErrorType,
-) -> Result[Any, _NewErrorType]:
-    """
-    Public unit function of protected :class:`~_Failure` type.
-
-    .. code:: python
-
-      >>> from returns.result import Failure
-      >>> assert str(Failure(1)) == '<Failure: 1>'
-
-    """
-    return _Failure(inner_value)
-
+Result.success_type = Success
+Result.failure_type = Failure
 
 # Aliases:
 

@@ -12,7 +12,7 @@ from typing import (
     overload,
 )
 
-from returns.result import _Failure
+from returns.result import Failure
 
 _FunctionType = TypeVar('_FunctionType', bound=Callable)
 
@@ -60,28 +60,28 @@ def collect_traces(
     """
     @contextmanager
     def factory() -> Iterator[None]:
-        unpatched_get_trace = getattr(_Failure, '_get_trace')  # noqa: B009
-        substitute_get_trace = types.MethodType(_get_trace, _Failure)
-        setattr(_Failure, '_get_trace', substitute_get_trace)  # noqa: B010
+        unpatched_get_trace = getattr(Failure, '_get_trace')  # noqa: B009
+        substitute_get_trace = types.MethodType(_get_trace, Failure)
+        setattr(Failure, '_get_trace', substitute_get_trace)  # noqa: B010
         try:  # noqa: WPS501
             yield
         finally:
-            setattr(_Failure, '_get_trace', unpatched_get_trace)  # noqa: B010
+            setattr(Failure, '_get_trace', unpatched_get_trace)  # noqa: B010
     return factory()(function) if function else factory()
 
 
-def _get_trace(_self: _Failure) -> Optional[List[FrameInfo]]:
+def _get_trace(_self: Failure) -> Optional[List[FrameInfo]]:
     """
     Function to be used on Monkey Patching.
 
-    This function is the substitute for '_get_trace' method from ``_Failure``
+    This function is the substitute for '_get_trace' method from ``Failure``
     class on Monkey Patching promoted by
     :func:`returns.primitives.tracing.collect_traces` function.
 
     We get all the call stack from the current call and return it from the
     third position, to avoid two useless calls on the call stack.
     Those useless calls are a call to this function and a call to `__init__`
-    method from ``_Failure`` class. We're just interested in the call stack
+    method from ``Failure`` class. We're just interested in the call stack
     ending on ``Failure`` function call!
 
     See also:
