@@ -43,6 +43,7 @@ Make sure to check out how to compose container with
 ``flow`` or :ref:`pipe`!
 Read more about them if you want to compose your containers easily.
 
+
 Pattern Matching
 ----------------
 
@@ -63,13 +64,13 @@ see the example below:
       case Success(10):
           print('Result is "10"')
 
-      # Same as above but using match-by-name
+      # Same as above but using match-by-name  and a different value
       case Success(inner_value=20):
           print('Result is "20"')
 
       # Matches any `Success` instance and binds its value to the ``value`` variable
       case Success(value):
-          print('Result is "{}"'.format(value))
+          print('Result is "{0}"'.format(value))
 
       # Matches if the result stored inside `Failure` is `ZeroDivisionError`
       case Failure(ZeroDivisionError):
@@ -215,6 +216,7 @@ See the example below:
   >>> assert Success(1).map(cast_to_bool) == Success(True)
   >>> assert Success('{"example": "example"}').bind(parse_json) == Success({"example": "example"})
   >>> assert Success('').bind(parse_json).alt(str) == Failure('Expecting value: line 1 column 1 (char 0)')
+
 
 Further reading
 ---------------
