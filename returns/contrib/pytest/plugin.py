@@ -3,7 +3,7 @@ import sys
 from contextlib import contextmanager
 from functools import partial, wraps
 from types import FrameType
-from typing import TYPE_CHECKING, Any, Callable, Iterator, TypeVar
+from typing import TYPE_CHECKING, Any, Callable, Iterator, TypeVar, Union
 
 import pytest
 from typing_extensions import Final, final
@@ -22,7 +22,8 @@ _ERRORS_COPIERS: Final = (
 
 _FunctionType = TypeVar('_FunctionType', bound=Callable)
 _ReturnsResultType = TypeVar(
-    '_ReturnsResultType', bound=Callable[..., 'ResultLikeN'],
+    '_ReturnsResultType',
+    bound=Union['ResultLikeN', Callable[..., 'ResultLikeN']],
 )
 
 
@@ -128,7 +129,16 @@ def _trace_function(
     arg: Any,
 ) -> None:
     is_desired_type_call = (
-        event == 'call' and frame.f_code is trace_type.__code__
+        event == 'call' and
+        (
+            # Some containers is created through functions and others
+            # is created directly using class constructors!
+            # The first line covers when it's created through a function
+            # The second line covers when it's created through a
+            # class constructor
+            frame.f_code is getattr(trace_type, '__code__', None) or
+            frame.f_code is getattr(trace_type.__init__, '__code__', None)  # type: ignore[misc]  # noqa: E501
+        )
     )
     if is_desired_type_call:
         current_call_stack = inspect.stack()
