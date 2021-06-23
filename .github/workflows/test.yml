@@ -21,6 +21,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
@@ -39,6 +40,7 @@ jobs:
       with:
         path: .venv
         key: venv-${{ matrix.python-version }}-${{ hashFiles('poetry.lock') }}
+
     - name: Install dependencies
       run: |
         poetry config experimental.new-installer false
@@ -47,14 +49,9 @@ jobs:
 
         poetry run pip install -U pip
 
-      # Some checks can't be perfomed yet on Python 3.10 version like `flake8`
-      # that fails on importing `WPS`!
-    - name: Run lint
-      if: matrix.python-version != '3.10.0-beta.2'
-      run: poetry run flake8 .
-
     - name: Run tests
       run: |
+        poetry run flake8 .
         poetry run mypy returns ./tests/**/*.py
         # Different python versions are covered differently:
         poetry run pytest returns docs/pages tests
