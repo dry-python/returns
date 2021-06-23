@@ -6,6 +6,12 @@ incremental in minor, bugfixes only are patches.
 See [0Ver](https://0ver.org/).
 
 
+## 0.17.0 [WIP]
+
+### Features
+
+- Enables Pattern Matching for `Result` containers
+
 ## 0.16.0
 
 ### Features
