@@ -44,6 +44,16 @@ Make sure to check out how to compose container with
 Read more about them if you want to compose your containers easily.
 
 
+Pattern Matching
+----------------
+
+``Result`` values can be matched using the new feature of Python 3.10,
+`Structural Pattern Matching <https://www.python.org/dev/peps/pep-0622/>`_,
+see the example below:
+
+.. literalinclude:: ../../tests/test_examples/test_result/test_pattern_matching.py
+
+
 Aliases
 -------
 
@@ -119,40 +129,6 @@ Python's type system does not allow us to do much, so this is required:
 Otherwise ``first`` will have ``Result[int, Any]`` type.
 Which is okay in some situations.
 
-What is the difference between ``Success`` and ``_Success``?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-You might wonder why ``Success`` is a function
-and ``_Success`` is internal type, that should not be used directly.
-
-Well, that's a complicated question. Let's find out.
-
-Let's begin with ``haskell`` definition:
-
-.. code:: haskell
-
-  Prelude> :t Left 1
-  Left 1 :: Num a => Either a b
-  Prelude> :t Right 1
-  Right 1 :: Num b => Either a b
-
-As you can see: ``Left`` (``Failure``) and ``Right`` (``Success``)
-are type constructors: that return ``Either a b`` (``Result[b, a]``) value.
-
-It means, that there's no single type ``Left a`` that makes
-sense without ``Right b``. Only their duality makes sense to us.
-
-In ``python`` we have functions that can be used as type constructors.
-That's why we use ``Success`` and ``Failure`` functions.
-But, when we need to implement
-the behaviour of these types - we use real classes inside.
-That's how we know what to do in each particular case.
-In ``haskell`` we use pattern matching for this.
-
-That's why we have public
-type constructor functions: ``Success`` and ``Failure``
-and internal implementation.
-
 How to compose error types?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -213,6 +189,7 @@ See the example below:
   >>> assert Success(1).map(cast_to_bool) == Success(True)
   >>> assert Success('{"example": "example"}').bind(parse_json) == Success({"example": "example"})
   >>> assert Success('').bind(parse_json).alt(str) == Failure('Expecting value: line 1 column 1 (char 0)')
+
 
 Further reading
 ---------------
