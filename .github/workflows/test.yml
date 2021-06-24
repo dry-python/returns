@@ -52,7 +52,10 @@ jobs:
     - name: Run tests
       run: |
         poetry run flake8 .
-        poetry run mypy returns ./tests/**/*.py
+        # In order to make `exclude` option works we need to separate the checks
+        # of returns and its tests in a two separated commands
+        poetry run mypy returns
+        poetry run mypy tests
         # Different python versions are covered differently:
         poetry run pytest returns docs/pages tests
         poetry run doc8 -q docs
