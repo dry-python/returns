@@ -24,10 +24,6 @@ PATHS_TO_IGNORE: Final = MappingProxyType({
         Path('tests/test_examples/test_result/test_pattern_matching.py'),
         Path('tests/test_examples/test_maybe/test_pattern_matching.py'),
     )),
-    (3, 10): frozenset((
-        Path('tests/test_examples/test_result/test_pattern_matching.py'),
-        Path('tests/test_examples/test_maybe/test_pattern_matching.py'),
-    )),
 })
 PATHS_TO_IGNORE_NOW: Final = frozenset(
     path.absolute() for path in PATHS_TO_IGNORE.get(PYTHON_VERSION, frozenset())
