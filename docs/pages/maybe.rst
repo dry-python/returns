@@ -94,6 +94,16 @@ It looks way uglier and can grow even more uglier and complex
 when new logic will be introduced.
 
 
+Pattern Matching
+----------------
+
+``Maybe`` values can be matched using the new feature of Python 3.10,
+`Structural Pattern Matching <https://www.python.org/dev/peps/pep-0622/>`_,
+see the example below:
+
+.. literalinclude:: ../../tests/test_examples/test_maybe/test_pattern_matching.py
+
+
 Decorators
 ----------
 

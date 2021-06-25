@@ -1,6 +1,7 @@
 from abc import ABCMeta
 from functools import wraps
 from typing import (
+    TYPE_CHECKING,
     Any,
     Callable,
     ClassVar,
@@ -46,6 +47,7 @@ class Maybe(
     """
 
     _inner_value: Optional[_ValueType]
+    __match_args__ = ('_inner_value',)
 
     #: Alias for `Nothing`
     empty: ClassVar['Maybe[Any]']
@@ -53,7 +55,7 @@ class Maybe(
     # These two are required for projects like `classes`:
 
     #: Success type that is used to represent the successful computation.
-    success_type: ClassVar[Type['_Some']]
+    success_type: ClassVar[Type['Some']]
     #: Failure type that is used to represent the failed computation.
     failure_type: ClassVar[Type['_Nothing']]
 
@@ -259,7 +261,7 @@ class Maybe(
           >>> assert Maybe.from_value(None) == Some(None)
 
         """
-        return _Some(inner_value)
+        return Some(inner_value)
 
     @classmethod
     def from_optional(
@@ -277,7 +279,7 @@ class Maybe(
         """
         if inner_value is None:
             return _Nothing(inner_value)
-        return _Some(inner_value)
+        return Some(inner_value)
 
 
 @final
@@ -354,7 +356,7 @@ class _Nothing(Maybe[Any]):
 
 
 @final
-class _Some(Maybe[_ValueType]):
+class Some(Maybe[_ValueType]):
     """
     Represents a calculation which has succeeded and contains the value.
 
@@ -364,31 +366,31 @@ class _Some(Maybe[_ValueType]):
     _inner_value: _ValueType
 
     def __init__(self, inner_value: _ValueType) -> None:
-        """
-        Private type constructor.
-
-        Please, use :func:`~Some` instead.
-        Required for typing.
-        """
+        """Some constructor."""
         super().__init__(inner_value)
+
+    if not TYPE_CHECKING:  # noqa: WPS604  # pragma: no branch
+        def bind(self, function):
+            """Binds current container to a function that returns container."""
+            return function(self._inner_value)
+
+        def bind_optional(self, function):
+            """Binds a function returning an optional value over a container."""
+            return Maybe.from_optional(function(self._inner_value))
+
+        def unwrap(self):
+            """Returns inner value for successful container."""
+            return self._inner_value
 
     def map(self, function):
         """Composes current container with a pure function."""
-        return _Some(function(self._inner_value))
+        return Some(function(self._inner_value))
 
     def apply(self, container):
         """Calls a wrapped function in a container on this container."""
         if isinstance(container, self.success_type):
             return self.map(container.unwrap())  # type: ignore
         return container
-
-    def bind(self, function):
-        """Binds current container to a function that returns container."""
-        return function(self._inner_value)
-
-    def bind_optional(self, function):
-        """Binds a function returning an optional value over a container."""
-        return Maybe.from_optional(function(self._inner_value))
 
     def lash(self, function):
         """Does nothing for ``Some``."""
@@ -402,37 +404,13 @@ class _Some(Maybe[_ValueType]):
         """Returns inner value for successful container."""
         return self._inner_value
 
-    def unwrap(self):
-        """Returns inner value for successful container."""
-        return self._inner_value
-
     def failure(self):
         """Raises exception for successful container."""
         raise UnwrapFailedError(self)
 
 
-Maybe.success_type = _Some
+Maybe.success_type = Some
 Maybe.failure_type = _Nothing
-
-
-def Some(  # noqa: N802
-    inner_value: _NewValueType,
-) -> Maybe[_NewValueType]:
-    """
-    Public unit function of protected :class:`~_Some` type.
-
-    Can return ``Some(None)`` for passed ``None`` argument.
-    Because ``Some(None)`` does make sense.
-
-    .. code:: python
-
-      >>> from returns.maybe import Some
-      >>> assert str(Some(1)) == '<Some: 1>'
-      >>> assert str(Some(None)) == '<Some: None>'
-
-    """
-    return _Some(inner_value)
-
 
 #: Public unit value of protected :class:`~_Nothing` type.
 Nothing: Maybe[NoReturn] = _Nothing()

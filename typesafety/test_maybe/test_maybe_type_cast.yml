@@ -22,7 +22,7 @@
   main: |
     from returns.maybe import Some
 
-    reveal_type(Some(1))  # N: Revealed type is "returns.maybe.Maybe[builtins.int*]"
+    reveal_type(Some(1))  # N: Revealed type is "returns.maybe.Some[builtins.int*]"
 
 
 - case: maybe_nothing_const
@@ -38,7 +38,7 @@
   main: |
     from returns.maybe import Maybe
 
-    reveal_type(Maybe.success_type)  # N: Revealed type is "Type[returns.maybe._Some[Any]]"
+    reveal_type(Maybe.success_type)  # N: Revealed type is "Type[returns.maybe.Some[Any]]"
 
 
 - case: maybe_result_failure_type
