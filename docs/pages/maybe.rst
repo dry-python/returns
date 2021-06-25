@@ -101,7 +101,7 @@ Pattern Matching
 `Structural Pattern Matching <https://www.python.org/dev/peps/pep-0622/>`_,
 see the example below:
 
-.. literalinclude:: ../../tests/test_examples/test_maybe/test_pattern_matching.py
+.. literalinclude:: ../../tests/test_examples/test_maybe/test_maybe_pattern_matching.py
 
 
 Decorators
