@@ -10,7 +10,8 @@ See [0Ver](https://0ver.org/).
 
 ### Features
 
-- Enables Pattern Matching for `Result` containers
+- Enables Pattern Matching support for `Result` containers
+- Enables Pattern Matching support for `Maybe` container
 
 ## 0.16.0
 
