@@ -13,16 +13,16 @@ pytest_plugins = ['hypothesis.extra.pytestplugin']
 PYTHON_VERSION: Final = (sys.version_info.major, sys.version_info.minor)
 PATHS_TO_IGNORE: Final = MappingProxyType({
     (3, 7): frozenset((
-        Path('tests/test_examples/test_result/test_pattern_matching.py'),
+        Path('tests/test_examples/test_result/test_result_pattern_matching.py'),
+        Path('tests/test_examples/test_maybe/test_maybe_pattern_matching.py'),
     )),
     (3, 8): frozenset((
-        Path('tests/test_examples/test_result/test_pattern_matching.py'),
+        Path('tests/test_examples/test_result/test_result_pattern_matching.py'),
+        Path('tests/test_examples/test_maybe/test_maybe_pattern_matching.py'),
     )),
     (3, 9): frozenset((
-        Path('tests/test_examples/test_result/test_pattern_matching.py'),
-    )),
-    (3, 10): frozenset((
-        Path('tests/test_examples/test_result/test_pattern_matching.py'),
+        Path('tests/test_examples/test_result/test_result_pattern_matching.py'),
+        Path('tests/test_examples/test_maybe/test_maybe_pattern_matching.py'),
     )),
 })
 PATHS_TO_IGNORE_NOW: Final = frozenset(
