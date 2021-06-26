@@ -39,7 +39,7 @@ class Result(
     metaclass=ABCMeta,
 ):
     """
-    Base class for :class:`~Failure` and :class:`~_Success`.
+    Base class for :class:`~Failure` and :class:`~Success`.
 
     :class:`~Result` does not have a public constructor.
     Use :func:`~Success` and :func:`~Failure` to construct the needed values.
@@ -355,7 +355,7 @@ class Failure(Result[Any, _ErrorType]):  # noqa: WPS338
             return default_value
 
     def swap(self):
-        """Failures swap to :class:`_Success`."""
+        """Failures swap to :class:`Success`."""
         return Success(self._inner_value)
 
     def unwrap(self) -> NoReturn:
