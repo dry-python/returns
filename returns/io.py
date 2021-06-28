@@ -1,7 +1,17 @@
 from abc import ABCMeta
 from functools import wraps
 from inspect import FrameInfo
-from typing import Any, Callable, ClassVar, List, Optional, Type, TypeVar, Union
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Callable,
+    ClassVar,
+    List,
+    Optional,
+    Type,
+    TypeVar,
+    Union,
+)
 
 from typing_extensions import final
 
@@ -297,12 +307,13 @@ class IOResult(
     """
 
     _inner_value: Result[_ValueType, _ErrorType]
+    __match_args__ = ('_inner_value',)
 
     # These two are required for projects like `classes`:
     #: Success type that is used to represent the successful computation.
-    success_type: ClassVar[Type['_IOSuccess']]
+    success_type: ClassVar[Type['IOSuccess']]
     #: Failure type that is used to represent the failed computation.
-    failure_type: ClassVar[Type['_IOFailure']]
+    failure_type: ClassVar[Type['IOFailure']]
 
     #: Typesafe equality comparison with other `IOResult` objects.
     equals = container_equality
@@ -676,8 +687,8 @@ class IOResult(
 
         """
         if isinstance(inner_value, inner_value.success_type):
-            return _IOSuccess(inner_value)
-        return _IOFailure(inner_value)
+            return IOSuccess(inner_value._inner_value)  # noqa: WPS437
+        return IOFailure(inner_value._inner_value)  # type: ignore[arg-type]  # noqa: WPS437, E501
 
     @classmethod
     def from_ioresult(
@@ -738,121 +749,69 @@ class IOResult(
 
 
 @final
-class _IOFailure(IOResult):
-    """
-    Internal ``IOFailure`` representation.
+class IOFailure(IOResult[Any, _ErrorType]):
+    """``IOFailure`` representation."""
 
-    This is an implementation detail, please, do not use it directly.
-    This class only has method that are logically
-    dependent on the current container state: successful or failed.
+    _inner_value: Result[Any, _ErrorType]
 
-    Use public data types instead!
-    """
+    def __init__(self, inner_value: _ErrorType) -> None:
+        """IOFailure constructor."""  # noqa: D403
+        super().__init__(Failure(inner_value))
 
-    def __init__(self, inner_value) -> None:
-        """
-        Private type constructor.
+    if not TYPE_CHECKING:  # noqa: WPS604  # pragma: no branch
+        def bind(self, function):
+            """Does nothing for ``IOFailure``."""
+            return self
 
-        Use :func:`~IOSuccess` and :func:`~IOFailure` instead.
-        Or :meth:`~IOResult.from_result` factory.
-        """
-        super().__init__(inner_value)
+        #: Alias for `bind_ioresult` method. Part of the `IOResultBasedN` interface.  # noqa: E501
+        bind_ioresult = bind
 
-    def bind(self, function):
-        """Does nothing for ``IOFailure``."""
-        return self
+        def bind_result(self, function):
+            """Does nothing for ``IOFailure``."""
+            return self
 
-    #: Alias for `bind_ioresult` method. Part of the `IOResultBasedN` interface.
-    bind_ioresult = bind
+        def bind_io(self, function):
+            """Does nothing for ``IOFailure``."""
+            return self
 
-    def bind_result(self, function):
-        """Does nothing for ``IOFailure``."""
-        return self
-
-    def bind_io(self, function):
-        """Does nothing for ``IOFailure``."""
-        return self
-
-    def lash(self, function):
-        """Composes this container with a function returning ``IOResult``."""
-        return function(self._inner_value.failure())
+        def lash(self, function):
+            """Composes this container with a function returning ``IOResult``."""  # noqa: E501
+            return function(self._inner_value.failure())
 
 
 @final
-class _IOSuccess(IOResult):
-    """
-    Internal ``IOSuccess`` representation.
+class IOSuccess(IOResult[_ValueType, Any]):
+    """``IOSuccess`` representation."""
 
-    This is an implementation detail, please, do not use it directly.
-    This class only has method that are logically
-    dependent on the current container state: successful or failed.
+    _inner_value: Result[_ValueType, Any]
 
-    Use public data types instead!
-    """
+    def __init__(self, inner_value: _ValueType) -> None:
+        """IOSuccess constructor."""  # noqa: D403
+        super().__init__(Success(inner_value))
 
-    def __init__(self, inner_value) -> None:
-        """
-        Private type constructor.
+    if not TYPE_CHECKING:  # noqa: WPS604  # pragma: no branch
+        def bind(self, function):
+            """Composes this container with a function returning ``IOResult``."""  # noqa: E501
+            return function(self._inner_value.unwrap())
 
-        Use :func:`~IOSuccess` and :func:`~IOFailure` instead.
-        Or :meth:`~IOResult.from_result` factory.
-        """
-        super().__init__(inner_value)
+        #: Alias for `bind_ioresult` method. Part of the `IOResultBasedN` interface.  # noqa: E501
+        bind_ioresult = bind
 
-    def bind(self, function):
-        """Composes this container with a function returning ``IOResult``."""
-        return function(self._inner_value.unwrap())
+        def bind_result(self, function):
+            """Binds ``Result`` returning function to current container."""
+            return self.from_result(function(self._inner_value.unwrap()))
 
-    #: Alias for `bind_ioresult` method. Part of the `IOResultBasedN` interface.
-    bind_ioresult = bind
+        def bind_io(self, function):
+            """Binds ``IO`` returning function to current container."""
+            return self.from_io(function(self._inner_value.unwrap()))
 
-    def bind_result(self, function):
-        """Binds ``Result`` returning function to current container."""
-        return self.from_result(function(self._inner_value.unwrap()))
-
-    def bind_io(self, function):
-        """Binds ``IO`` returning function to current container."""
-        return self.from_io(function(self._inner_value.unwrap()))
-
-    def lash(self, function):
-        """Does nothing for ``IOSuccess``."""
-        return self
+        def lash(self, function):
+            """Does nothing for ``IOSuccess``."""
+            return self
 
 
-# Public type constructors:
-
-def IOSuccess(  # noqa: N802
-    inner_value: _NewValueType,
-) -> IOResult[_NewValueType, Any]:
-    """
-    Public unit function of successful :class:`~IOResult` container.
-
-    .. code:: python
-
-      >>> from returns.io import IOSuccess
-      >>> assert str(IOSuccess(1)) == '<IOResult: <Success: 1>>'
-
-    """
-    return _IOSuccess(Success(inner_value))
-
-
-def IOFailure(  # noqa: N802
-    inner_value: _NewErrorType,
-) -> IOResult[Any, _NewErrorType]:
-    """
-    Public unit function of failed :class:`~IOResult` container.
-
-    .. code:: python
-
-      >>> from returns.io import IOFailure
-      >>> assert str(IOFailure(1)) == '<IOResult: <Failure: 1>>'
-
-    """
-    return _IOFailure(Failure(inner_value))
-
-
-IOResult.success_type = _IOSuccess
-IOResult.failure_type = _IOFailure
+IOResult.success_type = IOSuccess
+IOResult.failure_type = IOFailure
 
 
 # Aliases:

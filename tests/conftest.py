@@ -15,14 +15,17 @@ PATHS_TO_IGNORE: Final = MappingProxyType({
     (3, 7): frozenset((
         Path('tests/test_examples/test_result/test_result_pattern_matching.py'),
         Path('tests/test_examples/test_maybe/test_maybe_pattern_matching.py'),
+        Path('tests/test_examples/test_io/test_ioresult_container/test_ioresult_pattern_matching.py'),  # noqa: E501
     )),
     (3, 8): frozenset((
         Path('tests/test_examples/test_result/test_result_pattern_matching.py'),
         Path('tests/test_examples/test_maybe/test_maybe_pattern_matching.py'),
+        Path('tests/test_examples/test_io/test_ioresult_container/test_ioresult_pattern_matching.py'),  # noqa: E501
     )),
     (3, 9): frozenset((
         Path('tests/test_examples/test_result/test_result_pattern_matching.py'),
         Path('tests/test_examples/test_maybe/test_maybe_pattern_matching.py'),
+        Path('tests/test_examples/test_io/test_ioresult_container/test_ioresult_pattern_matching.py'),  # noqa: E501
     )),
 })
 PATHS_TO_IGNORE_NOW: Final = frozenset(
