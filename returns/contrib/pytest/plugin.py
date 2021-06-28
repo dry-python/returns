@@ -163,14 +163,14 @@ class _PatchedContainer(object):
             RequiresContextResult,
         )
         from returns.future import FutureResult
-        from returns.io import _IOFailure, _IOSuccess
+        from returns.io import IOFailure, IOSuccess
         from returns.result import Failure, Success
 
         return (
             Success,
             Failure,
-            _IOSuccess,
-            _IOFailure,
+            IOSuccess,
+            IOFailure,
             RequiresContextResult,
             RequiresContextIOResult,
             RequiresContextFutureResult,

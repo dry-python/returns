@@ -254,6 +254,16 @@ Lifting is useful when using :func:`returns.pipeline.pipe`
 and other different declarative tools.
 
 
+Pattern Matching
+----------------
+
+``IOResult`` values can be matched using the new feature of Python 3.10,
+`Structural Pattern Matching <https://www.python.org/dev/peps/pep-0622/>`_,
+see the example below:
+
+.. literalinclude:: ../../tests/test_examples/test_io/test_ioresult_container/test_ioresult_pattern_matching.py
+
+
 Aliases
 -------
 

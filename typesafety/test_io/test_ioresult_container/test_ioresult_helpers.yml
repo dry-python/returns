@@ -34,7 +34,7 @@
   main: |
     from returns.io import IOResult
 
-    reveal_type(IOResult.success_type)  # N: Revealed type is "Type[returns.io._IOSuccess]"
+    reveal_type(IOResult.success_type)  # N: Revealed type is "Type[returns.io.IOSuccess[Any]]"
 
 
 - case: ioresult_failure_type
@@ -42,4 +42,4 @@
   main: |
     from returns.io import IOResult
 
-    reveal_type(IOResult.failure_type)  # N: Revealed type is "Type[returns.io._IOFailure]"
+    reveal_type(IOResult.failure_type)  # N: Revealed type is "Type[returns.io.IOFailure[Any]]"
