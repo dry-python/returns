@@ -1,9 +1,13 @@
 from returns.io import IOFailure, IOResult, IOSuccess
+from returns.result import Success
 
 container: IOResult[int, str] = IOSuccess(42)
 match container:
     # Matches if the result stored inside `IOSuccess` is `42`
-    case IOSuccess(42):
+    # We need to use `Success` until the custom matching protocol
+    # is released. For more information, please visit:
+    # https://www.python.org/dev/peps/pep-0622/#custom-matching-protocol
+    case IOSuccess(Success(42)):
         print('Result is "42"')
 
     # Matches any `IOSuccess` instance
