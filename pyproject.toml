@@ -86,7 +86,7 @@ hypothesis = "^6.14"
 
 sphinx = "^4.1"
 sphinx-autodoc-typehints = "^1.12"
-sphinxcontrib-mermaid = "0.7"
+sphinxcontrib-mermaid = "0.7.1"
 sphinx-typlog-theme = "^0.8"
 sphinx-hoverxref = "^0.7b1"
 doc8 = "^0.8"
