@@ -81,6 +81,8 @@ class AbstractFold(object):
         Looks like ``foldl`` in some other languages with some more specifics.
         See: https://philipschwarz.dev/fpilluminated/?page_id=348#bwg3/137
 
+        .. image:: https://i.imgur.com/Tza1isS.jpg
+
         Is also quite similar to ``reduce``.
 
         Public interface for ``_loop`` method. Cannot be modified directly.
