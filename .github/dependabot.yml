@@ -5,42 +5,11 @@ updates:
   schedule:
     interval: daily
   open-pull-requests-limit: 10
-  ignore:
-  - dependency-name: flake8-pytest-style
-    versions:
-    - 1.4.0
-  - dependency-name: hypothesis
-    versions:
-    - 6.3.3
-    - 6.3.4
-    - 6.4.0
-  - dependency-name: nitpick
-    versions:
-    - 0.24.0
-  - dependency-name: pytest-xdist
-    versions:
-    - 2.2.1
-  - dependency-name: wemake-python-styleguide
-    versions:
-    - 0.15.0
-  - dependency-name: sphinxcontrib-mermaid
-    versions:
-    - 0.6.1
-  - dependency-name: anyio
-    versions:
-    - 2.1.0
 - package-ecosystem: pip
   directory: "/docs"
   schedule:
     interval: daily
   open-pull-requests-limit: 10
-  ignore:
-  - dependency-name: sphinx
-    versions:
-    - 3.5.0
-  - dependency-name: sphinxcontrib-mermaid
-    versions:
-    - 0.6.1
 - package-ecosystem: github-actions
   directory: "/"
   schedule:
