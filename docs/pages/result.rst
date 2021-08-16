@@ -85,7 +85,7 @@ that return :class:`Result <returns.result.Result>` type.
 
 Supports only regular functions.
 If you need to mark ``async`` functions as ``safe``,
-use `future_safe <returns.future.future_safe>` instead.
+use :func:`future_safe <returns.future.future_safe>` instead.
 
 .. code:: python
 
