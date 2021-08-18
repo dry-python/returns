@@ -14,6 +14,7 @@ _NewValueType = TypeVar('_NewValueType')
 
 
 class _WithInitNoFlag(
+    BaseContainer,
     SupportsKind1['_WithInitNoFlag', _ValueType],
     mappable.Mappable1[_ValueType],
 ):
