@@ -97,6 +97,10 @@ def container_strategies(
         for base_type in container_type.__mro__
         if (
             getattr(base_type, '__module__', '').startswith('returns.') and
+            # We don't register `Lawful` type, it is not a container:
+            base_type != Lawful and
+            # We will register the container itself later with
+            # `maybe_register_container` function:
             base_type != container_type
         )
     }
@@ -109,7 +113,10 @@ def container_strategies(
             ),
         )
 
-    with maybe_register_container(container_type, use_init=settings.use_init):
+    with maybe_register_container(
+        container_type,
+        use_init=settings.use_init,
+    ):
         yield
 
     for interface in our_interfaces:
@@ -127,7 +134,10 @@ def maybe_register_container(
     if unknown_container:
         st.register_type_strategy(
             container_type,
-            strategy_from_container(container_type, use_init=use_init),
+            strategy_from_container(
+                container_type,
+                use_init=use_init,
+            ),
         )
 
     yield

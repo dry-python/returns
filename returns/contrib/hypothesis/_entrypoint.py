@@ -40,4 +40,7 @@ REGISTERED_TYPES: Sequence[Type[Lawful]] = (
 )
 
 for type_ in REGISTERED_TYPES:
-    st.register_type_strategy(type_, strategy_from_container(type_))
+    st.register_type_strategy(
+        type_,
+        strategy_from_container(type_),
+    )

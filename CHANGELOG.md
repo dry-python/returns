@@ -13,6 +13,9 @@ See [0Ver](https://0ver.org/).
 - Enables Pattern Matching support for `Result` containers
 - Enables Pattern Matching support for `Maybe` container
 - Enables Pattern Matching support for `IOResult` container
+- Improves `hypothesis` plugin, now we detect
+  when type cannot be constructed and give a clear error message
+
 
 ## 0.16.0
 
