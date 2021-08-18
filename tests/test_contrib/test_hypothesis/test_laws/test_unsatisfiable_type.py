@@ -1,13 +1,14 @@
 from typing import Callable, TypeVar
 
 import pytest
+from hypothesis.errors import ResolutionFailed
 
 from returns.contrib.hypothesis.laws import check_all_laws
 from returns.interfaces import mappable
 from returns.primitives.container import BaseContainer
 from returns.primitives.hkt import SupportsKind1
 
-pytestmark = pytest.mark.xfail(raises=RuntimeError)
+pytestmark = pytest.mark.xfail(raises=ResolutionFailed)
 
 _ValueType = TypeVar('_ValueType')
 _NewValueType = TypeVar('_NewValueType')
