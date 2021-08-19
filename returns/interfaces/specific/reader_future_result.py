@@ -11,6 +11,8 @@ from typing import (
     TypeVar,
 )
 
+from typing_extensions import final
+
 from returns.interfaces.specific import future_result, reader, reader_ioresult
 from returns.primitives.asserts import assert_equal
 from returns.primitives.hkt import KindN
@@ -98,6 +100,7 @@ ReaderFutureResultLike3 = ReaderFutureResultLikeN[
 ]
 
 
+@final
 class _LawSpec(LawSpecDef):
     """
     Concrete laws for ``ReaderFutureResultBasedN``.

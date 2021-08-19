@@ -37,6 +37,8 @@ from typing import (
     TypeVar,
 )
 
+from typing_extensions import final
+
 from returns.interfaces.container import Container2, Container3
 from returns.primitives.hkt import Kind2, Kind3
 from returns.primitives.laws import (
@@ -206,6 +208,7 @@ class CallableReader3(
     """
 
 
+@final
 class _LawSpec(LawSpecDef):
     """
     Concrete laws for ``ReaderBased2``.

@@ -3,6 +3,8 @@ from __future__ import annotations
 from abc import abstractmethod
 from typing import TYPE_CHECKING, Callable, ClassVar, Sequence, Type, TypeVar
 
+from typing_extensions import final
+
 from returns.interfaces.specific import ioresult, reader, reader_result
 from returns.primitives.hkt import KindN
 from returns.primitives.laws import (
@@ -65,6 +67,7 @@ class ReaderIOResultLikeN(
 ReaderIOResultLike3 = ReaderIOResultLikeN[_FirstType, _SecondType, _ThirdType]
 
 
+@final
 class _LawSpec(LawSpecDef):
     """
     Concrete laws for ``ReaderIOResultBasedN``.
