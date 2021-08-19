@@ -4,6 +4,7 @@ from abc import abstractmethod
 from typing import TYPE_CHECKING, Callable, ClassVar, Sequence, Type, TypeVar
 
 from typing_extensions import final
+
 from returns.interfaces.specific import reader, result
 from returns.primitives.hkt import KindN
 from returns.primitives.laws import (
