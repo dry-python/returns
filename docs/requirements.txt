@@ -14,7 +14,7 @@ pygments==2.10.0
 # Dependencies of our project:
 typing-extensions==3.10.0.1
 mypy==0.910
-pytest==6.2.4
+pytest==6.2.5
 hypothesis==6.17.2
 
 # TODO: Remove this lock when we found and fix the route case.
