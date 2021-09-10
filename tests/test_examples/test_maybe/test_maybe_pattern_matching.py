@@ -37,5 +37,5 @@ if __name__ == '__main__':
             print('Book found: {0}'.format(book.name))
 
         # Matches `Nothing` instance
-        case Nothing:
+        case Maybe.empty:
             print('Not found the desired book!')
