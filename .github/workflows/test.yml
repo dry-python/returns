@@ -4,7 +4,11 @@ on:
   push:
     branches:
       - master
+    paths-ignore:
+      - 'docs/requirements.txt'
   pull_request:
+    paths-ignore:
+      - 'docs/requirements.txt'
   workflow_dispatch:
 
 jobs:
