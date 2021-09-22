@@ -201,9 +201,9 @@ And here are our two containers:
   >>> one = IO(1)
   >>> two = IO(2)
 
-Naive approach to compose two ``IO`` containers and a function
-would be two hard to show here.
-Luckily, we support partial application and ``.apply()`` method.
+The naive approach to compose two ``IO`` containers and a function
+would be too hard to show here.
+Luckily, we support partial application and the ``.apply()`` method.
 
 Here are the required steps:
 
