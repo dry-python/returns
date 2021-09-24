@@ -2,7 +2,7 @@
 
 ##Regulations
 
-The dry-python conference was created as a place where participants can discuss development and everything related to it with each other. All people are different, and in the heat of discussion it is easy to upset another participant with a word or deed. To make the conference comfortable for attendees, we all agree to abide by the following rules:
+The dry-python community was created as a place where participants can discuss development and everything related to it with each other. All people are different, and in the heat of discussion it is easy to upset another participant with a word or deed. To make our community comfortable for other people, we all agree to abide by the following rules:
 
 * We do not give subjective assessments to people and do not discriminate against them
 * We do not discuss politics
