@@ -1,6 +1,6 @@
-# Contributor Covenant Code of Conduct
+# Code of Conduct
 
-##Regulations
+## Regulations
 
 The dry-python community was created as a place where participants can discuss development and everything related to it with each other. All people are different, and in the heat of discussion it is easy to upset another participant with a word or deed. To make our community comfortable for other people, we all agree to abide by the following rules:
 
