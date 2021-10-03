@@ -157,7 +157,7 @@ class Maybe(
           >>> assert Nothing.lash(lashable) == Some('b')
 
         We need this feature to make ``Maybe`` compatible
-        with different ``Result`` like oeprations.
+        with different ``Result`` like operations.
 
         """
 
