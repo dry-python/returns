@@ -59,7 +59,7 @@ Adding configuration
 ~~~~~~~~~~~~~~~~~~~~
 
 But, later you decide to make the game more fun:
-let's make the minimal accoutable letters threshold
+let's make the minimal accountable letters threshold
 configurable for an extra challenge.
 
 You can just do it directly:
@@ -167,7 +167,7 @@ Let's see the final result:
 
 .. code:: python
 
-  from returns.context import RequiresContext, RequiresContext
+  from returns.context import RequiresContext
 
   class _Deps(Protocol):  # we rely on abstractions, not direct values or types
       WORD_THRESHOLD: int
@@ -631,7 +631,7 @@ Here's an example that might give you a better understanding of how
   from returns.io import IOResultE
   from returns.context import ReaderIOResultE
 
-  @final
+
   class _SyncPermissionsDeps(Protocol):
       fetch_metadata: Callable[[], IOResultE['Metadata']]
       get_user_permissions: Callable[['Metadata'], Dict[int, str]]  # pure
