@@ -71,7 +71,7 @@ flake8-pytest-style = "^1.5"
 flake8-pyi = "^20.10"
 # TODO: Remove this restriction when `ruamel.yaml.clib` works
 # correctly with Python 3.10. That lib is a dependency of `nitpick`!
-nitpick = { version = "^0.28", python = "<3.10" }
+nitpick = { version = "^0.29", python = "<3.10" }
 codespell = "^2.1"
 
 safety = "^1.10"
