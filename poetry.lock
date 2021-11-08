@@ -836,7 +836,7 @@ python-versions = "*"
 
 [[package]]
 name = "nitpick"
-version = "0.28.0"
+version = "0.29.0"
 description = "Enforce the same settings across multiple language-independent projects"
 category = "dev"
 optional = false
@@ -1567,7 +1567,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pyt
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "9f2f5a578aad2530f9d812c174c4eb2519fcc1038bdd4952f622a27f3c8e61db"
+content-hash = "854449a89fce2ff367d6fc1a2cbcc00899a69c11f9ac9dfdca32f3e1c1e71bc0"
 
 [metadata.files]
 alabaster = [
@@ -2017,8 +2017,8 @@ mypy-extensions = [
     {file = "mypy_extensions-0.4.3.tar.gz", hash = "sha256:2d82818f5bb3e369420cb3c4060a7970edba416647068eb4c5343488a6c604a8"},
 ]
 nitpick = [
-    {file = "nitpick-0.28.0-py3-none-any.whl", hash = "sha256:93ff80ee9ead995e09480f64832d3dab990575238e9aaf829f8b8aad038ad1fd"},
-    {file = "nitpick-0.28.0.tar.gz", hash = "sha256:99b5b1efc6856dcc5a898f0215cbd5f3422a84d2e4044996a1b8a97e5b835c23"},
+    {file = "nitpick-0.29.0-py3-none-any.whl", hash = "sha256:d3f4677aaa5bd3a9bb83bf967555400aad2493694b2550f265010016e5365ae2"},
+    {file = "nitpick-0.29.0.tar.gz", hash = "sha256:7b3acb6079a62492000fb7f6e3eea549d5b91b391da121839bc0164a7d2eac6a"},
 ]
 outcome = [
     {file = "outcome-1.1.0-py2.py3-none-any.whl", hash = "sha256:c7dd9375cfd3c12db9801d080a3b63d4b0a261aa996c4c13152380587288d958"},
