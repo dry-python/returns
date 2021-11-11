@@ -84,7 +84,7 @@ pytest-subtests = "^0.5"
 pytest-xdist = "^2.4"
 hypothesis = "^6.24"
 
-sphinx = "^4.2"
+sphinx = "^4.3"
 sphinx-autodoc-typehints = "^1.12"
 sphinxcontrib-mermaid = "0.7.1"
 sphinx-typlog-theme = "^0.8"
