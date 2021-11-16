@@ -141,6 +141,20 @@ class Maybe(
 
         """
 
+    def filter(self,
+               function: Callable[[_ValueType], bool],
+               ) -> 'Maybe[_ValueType]':
+        """
+        Apply a predicate over the value. If the predicate returns true it returns the original value wrapped with Some.
+        If the predicate returns false, Nothing is returned
+
+        .. code:: python
+            >>> from returns.maybe import Maybe, Nothing, Some
+
+            >>> assert Some(5).filter(lambda x: x % 2 == 0) == Nothing
+            >>> assert Some(6).filter(lambda x: x % 2 == 0) == Some(6)
+            >>> assert Nothing.filter(lambda x: True) == Nothing
+        """
     def lash(
         self,
         function: Callable[[Any], Kind1['Maybe', _ValueType]],
@@ -338,6 +352,10 @@ class _Nothing(Maybe[Any]):
         """Does nothing."""
         return self
 
+    def filter(self, function):
+        """Does nothing for ``Nothing`` """
+        return self
+
     def lash(self, function):
         """Composes this container with a function returning container."""
         return function(None)
@@ -413,6 +431,12 @@ class Some(Maybe[_ValueType]):
     def failure(self):
         """Raises exception for successful container."""
         raise UnwrapFailedError(self)
+
+    def filter(self, function):
+        if function(self._inner_value):
+            return self
+        else:
+            return _Nothing()
 
 
 Maybe.success_type = Some
