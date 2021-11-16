@@ -149,8 +149,10 @@ class Maybe(
         If the predicate returns false, Nothing is returned
 
         .. code:: python
+
+            >>> from returns.maybe import Maybe, Some, Nothing
             >>> def predicate(value):
-            >>>     return value % 2 == 0
+            ...     return value % 2 == 0
 
             >>> assert Some(5).filter(predicate) == Nothing
             >>> assert Some(6).filter(predicate) == Some(6)
