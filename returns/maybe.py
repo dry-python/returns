@@ -141,23 +141,29 @@ class Maybe(
 
         """
 
-    def filter(self,
-               function: Callable[[_ValueType], bool],
-               ) -> 'Maybe[_ValueType]':
+    def filter(
+        self,
+        function: Callable[[_ValueType], bool],
+    ) -> 'Maybe[_ValueType]':
         """
-        Apply a predicate over the value. If the predicate returns true it returns the original value wrapped with Some.
+        Apply a predicate over the value.
+
+        If the predicate returns true,
+        it returns the original value wrapped with Some.
         If the predicate returns false, Nothing is returned
 
         .. code:: python
 
-            >>> from returns.maybe import Maybe, Some, Nothing
+            >>> from returns.maybe import Some, Nothing
             >>> def predicate(value):
             ...     return value % 2 == 0
 
             >>> assert Some(5).filter(predicate) == Nothing
             >>> assert Some(6).filter(predicate) == Some(6)
             >>> assert Nothing.filter(predicate) == Nothing
+
         """
+
     def lash(
         self,
         function: Callable[[Any], Kind1['Maybe', _ValueType]],
@@ -356,7 +362,7 @@ class _Nothing(Maybe[Any]):
         return self
 
     def filter(self, function):
-        """Does nothing for ``Nothing`` """
+        """Does nothing."""
         return self
 
     def lash(self, function):
@@ -436,10 +442,10 @@ class Some(Maybe[_ValueType]):
         raise UnwrapFailedError(self)
 
     def filter(self, function):
+        """Filters internal value."""
         if function(self._inner_value):
             return self
-        else:
-            return _Nothing()
+        return _Nothing()
 
 
 Maybe.success_type = Some
@@ -475,7 +481,9 @@ def maybe(
     Requires our :ref:`mypy plugin <mypy-plugins>`.
 
     """
+
     @wraps(function)
     def decorator(*args, **kwargs):
         return Maybe.from_optional(function(*args, **kwargs))
+
     return decorator
