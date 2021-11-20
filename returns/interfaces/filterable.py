@@ -1,14 +1,17 @@
 from abc import abstractmethod
-from typing import Callable, Generic, TypeVar
+from typing import Callable, NoReturn, TypeVar
 
+from returns.interfaces.specific.maybe import MaybeLikeN
 from returns.primitives.hkt import Kind1
 
-_InnerType = TypeVar('_InnerType')
+_FirstType = TypeVar('_FirstType')
+_SecondType = TypeVar('_SecondType')
+_ThirdType = TypeVar('_ThirdType')
 
-_FilterableType = TypeVar('_FilterableType', bound='Filterable')
+_FilterableType = TypeVar('_FilterableType', bound='FilterableN')
 
 
-class Filterable(Generic[_InnerType]):
+class FilterableN(MaybeLikeN[_FirstType, _SecondType, _ThirdType]):
     """
     Represents container that can apply filter over inner value.
 
@@ -36,6 +39,16 @@ class Filterable(Generic[_InnerType]):
     @abstractmethod
     def filter(
         self: _FilterableType,
-        predicate: Callable[[_InnerType], bool],
-    ) -> Kind1[_FilterableType, _InnerType]:
+        predicate: Callable[[_FirstType], bool],
+    ) -> Kind1[_FilterableType, _FirstType]:
         """Applies 'predicate' to the result fo a previous computation."""
+
+
+#: Type alias for kinds with one type argument.
+Filterable1 = FilterableN[_FirstType, NoReturn, NoReturn]
+
+#: Type alias for kinds with two type arguments.
+Filterable2 = FilterableN[_FirstType, _SecondType, NoReturn]
+
+#: Type alias for kinds with three type arguments.
+Filterable3 = FilterableN[_FirstType, _SecondType, _ThirdType]
