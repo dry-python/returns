@@ -3,7 +3,7 @@ from returns.maybe import Nothing, Some
 
 def test_maybe_filter():
     """Ensures that .filter works correctly."""
-    def factory(argument: int) -> bool:
+    def factory(argument):
         return argument % 2 == 0
 
     assert Some(5).filter(factory) == Nothing
