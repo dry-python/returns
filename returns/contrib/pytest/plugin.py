@@ -43,7 +43,7 @@ class ReturnsAsserts(object):
 
     __slots__ = ()
 
-    @staticmethod
+    @staticmethod  # noqa: WPS602
     def assert_equal(  # noqa: WPS602
         first,
         second,
@@ -55,12 +55,12 @@ class ReturnsAsserts(object):
         from returns.primitives.asserts import assert_equal
         assert_equal(first, second, deps=deps, backend=backend)
 
-    @staticmethod
+    @staticmethod  # noqa: WPS602
     def is_error_handled(container) -> bool:  # noqa: WPS602
         """Ensures that container has its error handled in the end."""
         return id(container) in _ERRORS_HANDLED
 
-    @staticmethod
+    @staticmethod  # noqa: WPS602
     @contextmanager
     def assert_trace(  # noqa: WPS602
         trace_type: _ReturnsResultType,
