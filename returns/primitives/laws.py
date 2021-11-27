@@ -45,6 +45,8 @@ class Law1(
 ):
     """Law definition for functions with a single argument."""
 
+    __slots__ = ()
+
     definition: Callable[['Law1', _TypeArgType1], _ReturnType]
 
     def __init__(
@@ -62,6 +64,8 @@ class Law2(
 ):
     """Law definition for functions with two arguments."""
 
+    __slots__ = ()
+
     definition: Callable[['Law2', _TypeArgType1, _TypeArgType2], _ReturnType]
 
     def __init__(
@@ -78,6 +82,8 @@ class Law3(
     Generic[_TypeArgType1, _TypeArgType2, _TypeArgType3, _ReturnType],
 ):
     """Law definition for functions with three argument."""
+
+    __slots__ = ()
 
     definition: Callable[
         ['Law3', _TypeArgType1, _TypeArgType2, _TypeArgType3],
@@ -101,6 +107,8 @@ class Lawful(Generic[_Caps]):
 
     Allows to smartly collect all defined laws from all parent classes.
     """
+
+    __slots__ = ()
 
     #: Some classes and interfaces might have laws, some might not have any.
     _laws: ClassVar[Sequence[Law]]

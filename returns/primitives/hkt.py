@@ -126,6 +126,8 @@ class SupportsKindN(
     Needless to say, that ``__getattr__`` during runtime - never exists at all.
     """
 
+    __slots__ = ()
+
     __getattr__: None  # type: ignore
 
 
@@ -193,6 +195,8 @@ class Kinded(Protocol[_FunctionDefType]):  # type: ignore
     We use a custom ``mypy`` plugin to make sure types are correct.
     Otherwise, it is currently impossible to properly type this.
     """
+
+    __slots__ = ()
 
     #: Used to translate `KindN` into real types.
     __call__: _FunctionDefType

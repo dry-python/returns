@@ -48,6 +48,8 @@ class _LawSpec(LawSpecDef):
     works correctly for both successful and failed types.
     """
 
+    __slots__ = ()
+
     @law_definition
     def map_short_circuit_law(
         container: 'MaybeLikeN[_FirstType, _SecondType, _ThirdType]',
@@ -122,6 +124,8 @@ class MaybeLikeN(
     Cannot be unwrapped or compared.
     """
 
+    __slots__ = ()
+
     _laws: ClassVar[Sequence[Law]] = (
         Law2(_LawSpec.map_short_circuit_law),
         Law2(_LawSpec.bind_short_circuit_law),
@@ -163,6 +167,8 @@ class MaybeBasedN(
 
     Can be unwrapped and compared.
     """
+
+    __slots__ = ()
 
     @abstractmethod
     def or_else_call(

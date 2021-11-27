@@ -32,6 +32,8 @@ class _LawSpec(LawSpecDef):
     Good explanation: https://bit.ly/2Qsi5re
     """
 
+    __slots__ = ()
+
     @law_definition
     def left_identity_law(
         raw_value: _FirstType,
@@ -110,6 +112,8 @@ class ContainerN(
         - https://bit.ly/2CTEVov
 
     """
+
+    __slots__ = ()
 
     _laws: ClassVar[Sequence[Law]] = (
         Law3(_LawSpec.left_identity_law),

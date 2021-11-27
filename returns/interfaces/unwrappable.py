@@ -18,6 +18,8 @@ class Unwrappable(Generic[_FirstType, _SecondType]):
     to raise ``UnwrapFailedError`` if unwrap is not possible.
     """
 
+    __slots__ = ()
+
     @abstractmethod
     def unwrap(self: _UnwrappableType) -> _FirstType:
         """

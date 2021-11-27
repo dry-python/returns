@@ -319,6 +319,8 @@ class Failure(Result[Any, _ErrorType]):  # noqa: WPS338
     It should contain an error code or message.
     """
 
+    __slots__ = ()
+
     _inner_value: _ErrorType
 
     def __init__(self, inner_value: _ErrorType) -> None:
@@ -380,6 +382,8 @@ class Success(Result[_ValueType, Any]):
 
     Contains the computation value.
     """
+
+    __slots__ = ()
 
     _inner_value: _ValueType
 

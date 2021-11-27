@@ -23,6 +23,8 @@ class LashableN(Generic[_FirstType, _SecondType, _ThirdType]):
     works with the second type value.
     """
 
+    __slots__ = ()
+
     @abstractmethod
     def lash(
         self: _LashableType,

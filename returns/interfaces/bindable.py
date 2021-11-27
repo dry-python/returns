@@ -23,6 +23,8 @@ class BindableN(Generic[_FirstType, _SecondType, _ThirdType]):
     works with the first type argument.
     """
 
+    __slots__ = ()
+
     @abstractmethod
     def bind(
         self: _BindableType,

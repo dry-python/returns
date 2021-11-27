@@ -37,6 +37,8 @@ class _FailableLawSpec(LawSpecDef):
     We need to be sure that ``.lash`` won't lash success types.
     """
 
+    __slots__ = ()
+
     @law_definition
     def lash_short_circuit_law(
         raw_value: _FirstType,
@@ -65,6 +67,8 @@ class FailableN(
     Use ``SingleFailableN`` and ``DiverseFailableN`` instead.
     """
 
+    __slots__ = ()
+
     _laws: ClassVar[Sequence[Law]] = (
         Law3(_FailableLawSpec.lash_short_circuit_law),
     )
@@ -85,6 +89,8 @@ class _SingleFailableLawSpec(LawSpecDef):
     We need to be sure that ``.map`` and ``.bind``
     works correctly for ``empty`` property.
     """
+
+    __slots__ = ()
 
     @law_definition
     def map_short_circuit_law(
@@ -133,6 +139,8 @@ class SingleFailableN(
     Like ``Maybe`` types where the only failed value is ``Nothing``.
     """
 
+    __slots__ = ()
+
     _laws: ClassVar[Sequence[Law]] = (
         Law2(_SingleFailableLawSpec.map_short_circuit_law),
         Law2(_SingleFailableLawSpec.bind_short_circuit_law),
@@ -162,6 +170,8 @@ class _DiverseFailableLawSpec(LawSpecDef):
     We need to be sure that ``.map``, ``.bind``, ``.apply`` and ``.alt``
     works correctly for both success and failure types.
     """
+
+    __slots__ = ()
 
     @law_definition
     def map_short_circuit_law(
@@ -230,6 +240,8 @@ class DiverseFailableN(
 
     Like ``Result`` types.
     """
+
+    __slots__ = ()
 
     _laws: ClassVar[Sequence[Law]] = (
         Law3(_DiverseFailableLawSpec.map_short_circuit_law),

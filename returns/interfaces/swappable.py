@@ -25,6 +25,8 @@ _SwappableType = TypeVar('_SwappableType', bound='SwappableN')
 class _LawSpec(LawSpecDef):
     """Laws for :class:`~SwappableN` type."""
 
+    __slots__ = ()
+
     @law_definition
     def double_swap_law(
         container: 'SwappableN[_FirstType, _SecondType, _ThirdType]',
@@ -46,6 +48,8 @@ class SwappableN(
     Lawful['SwappableN[_FirstType, _SecondType, _ThirdType]'],
 ):
     """Interface that allows swapping first and second type values."""
+
+    __slots__ = ()
 
     _laws: ClassVar[Sequence[Law]] = (
         Law1(_LawSpec.double_swap_law),

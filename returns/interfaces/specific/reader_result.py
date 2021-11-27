@@ -44,6 +44,8 @@ class ReaderResultLikeN(
     Cannot be called.
     """
 
+    __slots__ = ()
+
     @abstractmethod
     def bind_context_result(
         self: _ReaderResultLikeType,
@@ -82,6 +84,8 @@ class _LawSpec(LawSpecDef):
 
     See: https://github.com/haskell/mtl/pull/61/files
     """
+
+    __slots__ = ()
 
     @law_definition
     def purity_law(
@@ -122,6 +126,8 @@ class ReaderResultBasedN(
 
     In this case the return type of ``__call__`` is ``Result``.
     """
+
+    __slots__ = ()
 
     _laws: ClassVar[Sequence[Law]] = (
         Law2(_LawSpec.purity_law),

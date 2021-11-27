@@ -95,6 +95,8 @@ class RequiresContextFutureResult(
 
     """
 
+    __slots__ = ()
+
     #: Inner value of `RequiresContext`
     #: is just a function that returns `FutureResult`.
     #: This field has an extra 'RequiresContext' just because `mypy` needs it.

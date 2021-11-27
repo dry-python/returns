@@ -82,6 +82,8 @@ class Contextable(Generic[_ValueType, _EnvType]):
     And so on.
     """
 
+    __slots__ = ()
+
     @abstractmethod
     def __call__(self, deps: _EnvType) -> _ValueType:
         """Receives one parameter, returns a value. As simple as that."""
@@ -93,6 +95,8 @@ class ReaderLike2(Container2[_FirstType, _SecondType]):
 
     It has two type arguments and treats the second type argument as env type.
     """
+
+    __slots__ = ()
 
     @property
     @abstractmethod
@@ -146,6 +150,8 @@ class CallableReader2(
     other than defining your own ``Reader`` interfaces.
     """
 
+    __slots__ = ()
+
 
 class ReaderLike3(Container3[_FirstType, _SecondType, _ThirdType]):
     """
@@ -154,6 +160,8 @@ class ReaderLike3(Container3[_FirstType, _SecondType, _ThirdType]):
     It has three type arguments and treats the third type argument as env type.
     The second type argument is not used here.
     """
+
+    __slots__ = ()
 
     @property
     @abstractmethod
@@ -207,6 +215,8 @@ class CallableReader3(
     other than defining your own ``Reader`` interfaces.
     """
 
+    __slots__ = ()
+
 
 @final
 class _LawSpec(LawSpecDef):
@@ -215,6 +225,8 @@ class _LawSpec(LawSpecDef):
 
     See: https://github.com/haskell/mtl/pull/61/files
     """
+
+    __slots__ = ()
 
     @law_definition
     def purity_law(
@@ -251,6 +263,8 @@ class ReaderBased2(
     The only thing that differs from ``ReaderLike2`` is that we know
     the specific types for its ``__call__`` method.
     """
+
+    __slots__ = ()
 
     _laws: ClassVar[Sequence[Law]] = (
         Law2(_LawSpec.purity_law),

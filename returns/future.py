@@ -85,6 +85,8 @@ class Future(
 
     """
 
+    __slots__ = ()
+
     _inner_value: Awaitable[_ValueType]
 
     def __init__(self, inner_value: Awaitable[_ValueType]) -> None:
@@ -521,6 +523,8 @@ class FutureResult(
         - https://zio.dev/docs/overview/overview_basic_concurrency
 
     """
+
+    __slots__ = ()
 
     _inner_value: Awaitable[Result[_ValueType, _ErrorType]]
 

@@ -46,6 +46,8 @@ class Maybe(
 
     """
 
+    __slots__ = ()
+
     _inner_value: Optional[_ValueType]
     __match_args__ = ('_inner_value',)
 
@@ -286,6 +288,8 @@ class Maybe(
 class _Nothing(Maybe[Any]):
     """Represents an empty state."""
 
+    __slots__ = ()
+
     _inner_value: None
     _instance: Optional['_Nothing'] = None
 
@@ -362,6 +366,8 @@ class Some(Maybe[_ValueType]):
 
     Quite similar to ``Success`` type.
     """
+
+    __slots__ = ()
 
     _inner_value: _ValueType
 

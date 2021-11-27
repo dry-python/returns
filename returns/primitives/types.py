@@ -27,6 +27,8 @@ class Immutable(object):
 
     """  # noqa: RST307
 
+    __slots__ = ()
+
     def __copy__(self) -> 'Immutable':
         """Returns itself."""
         return self

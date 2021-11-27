@@ -53,6 +53,8 @@ class ReaderFutureResultLikeN(
     Cannot be called.
     """
 
+    __slots__ = ()
+
     @abstractmethod
     def bind_context_future_result(
         self: _ReaderFutureResultLikeType,
@@ -108,6 +110,8 @@ class _LawSpec(LawSpecDef):
     See: https://github.com/haskell/mtl/pull/61/files
     """
 
+    __slots__ = ()
+
     @law_definition
     def asking_law(
         container:
@@ -141,6 +145,8 @@ class ReaderFutureResultBasedN(
 
     In this case the return type of ``__call__`` is ``FutureResult``.
     """
+
+    __slots__ = ()
 
     _laws: ClassVar[Sequence[Law]] = (
         Law2(_LawSpec.asking_law),

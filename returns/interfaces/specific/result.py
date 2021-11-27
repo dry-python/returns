@@ -41,6 +41,8 @@ class ResultLikeN(
     Like ``RequiresContextResult`` or ``FutureResult``.
     """
 
+    __slots__ = ()
+
     @abstractmethod
     def bind_result(
         self: _ResultLikeType,
@@ -76,6 +78,8 @@ class UnwrappableResult(
     Use ``ResultBasedN`` and ``IOResultBasedN`` instead.
     """
 
+    __slots__ = ()
+
 
 class ResultBasedN(
     UnwrappableResult[
@@ -92,6 +96,8 @@ class ResultBasedN(
 
     Can be unwrapped.
     """
+
+    __slots__ = ()
 
 
 #: Type alias for kinds with two type arguments.

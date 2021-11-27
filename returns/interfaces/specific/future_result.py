@@ -41,6 +41,8 @@ class FutureResultLikeN(
     It is also cannot be unwrapped, because it is not a real ``IOResult``.
     """
 
+    __slots__ = ()
+
     @abstractmethod
     def bind_future_result(
         self: _FutureResultLikeType,
@@ -94,6 +96,8 @@ class FutureResultBasedN(
     They can be awaited.
     Still cannot be unwrapped.
     """
+
+    __slots__ = ()
 
 
 #: Type alias for kinds with two type arguments.
