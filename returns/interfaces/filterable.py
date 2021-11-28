@@ -27,12 +27,12 @@ class FilterableN(MaybeLikeN[_FirstType, _SecondType, _ThirdType]):
         >>> from returns.maybe import Nothing, Some
         >>> from returns.pointfree import filter_
 
-        >>> def example(argument: int) -> bool:
+        >>> def is_even(argument: int) -> bool:
         ...     return argument % 2 == 0
 
-        >>> assert filter_(example)(Some(5)) == Nothing
-        >>> assert filter_(example)(Some(6)) == Some(6)
-        >>> assert filter_(example)(Nothing) == Nothing
+        >>> assert filter_(is_even)(Some(5)) == Nothing
+        >>> assert filter_(is_even)(Some(6)) == Some(6)
+        >>> assert filter_(is_even)(Nothing) == Nothing
 
     """
 
@@ -41,7 +41,7 @@ class FilterableN(MaybeLikeN[_FirstType, _SecondType, _ThirdType]):
         self: _FilterableType,
         predicate: Callable[[_FirstType], bool],
     ) -> Kind1[_FilterableType, _FirstType]:
-        """Applies 'predicate' to the result fo a previous computation."""
+        """Applies 'predicate' to the result of a previous computation."""
 
 
 #: Type alias for kinds with one type argument.
