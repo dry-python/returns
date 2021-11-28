@@ -44,6 +44,8 @@ class AbstractFold(object):
     change an implementation of any unkinded protected method.
     """
 
+    __slots__ = ()
+
     @final
     @kinded
     @classmethod
@@ -313,6 +315,8 @@ class Fold(AbstractFold):
 
     Use it by default.
     """
+
+    __slots__ = ()
 
     @classmethod
     def _loop(

@@ -93,6 +93,8 @@ class RequiresContextResult(
 
     """
 
+    __slots__ = ()
+
     #: This field has an extra 'RequiresContext' just because `mypy` needs it.
     _inner_value: Callable[
         [RequiresContextResult, _EnvType],

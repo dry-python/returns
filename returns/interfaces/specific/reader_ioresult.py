@@ -44,6 +44,8 @@ class ReaderIOResultLikeN(
     Cannot be called.
     """
 
+    __slots__ = ()
+
     @abstractmethod
     def bind_context_ioresult(
         self: _ReaderIOResultLikeType,
@@ -74,6 +76,8 @@ class _LawSpec(LawSpecDef):
 
     See: https://github.com/haskell/mtl/pull/61/files
     """
+
+    __slots__ = ()
 
     @law_definition
     def asking_law(
@@ -106,6 +110,8 @@ class ReaderIOResultBasedN(
 
     In this case the return type of ``__call__`` is ``IOResult``.
     """
+
+    __slots__ = ()
 
     _laws: ClassVar[Sequence[Law]] = (
         Law2(_LawSpec.asking_law),

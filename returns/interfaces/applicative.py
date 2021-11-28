@@ -37,6 +37,8 @@ class _LawSpec(LawSpecDef):
     Discussion: https://bit.ly/3jffz3L
     """
 
+    __slots__ = ()
+
     @law_definition
     def identity_law(
         container: 'ApplicativeN[_FirstType, _SecondType, _ThirdType]',
@@ -130,6 +132,8 @@ class ApplicativeN(
         - http://learnyouahaskell.com/functors-applicative-functors-and-monoids
 
     """
+
+    __slots__ = ()
 
     _laws: ClassVar[Sequence[Law]] = (
         Law1(_LawSpec.identity_law),

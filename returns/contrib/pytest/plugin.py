@@ -3,7 +3,7 @@ import sys
 from contextlib import contextmanager
 from functools import partial, wraps
 from types import FrameType
-from typing import TYPE_CHECKING, Any, Callable, Iterator, TypeVar, Union
+from typing import TYPE_CHECKING, Any, Callable, Dict, Iterator, TypeVar, Union
 
 import pytest
 from typing_extensions import Final, final
@@ -11,7 +11,6 @@ from typing_extensions import Final, final
 if TYPE_CHECKING:
     from returns.interfaces.specific.result import ResultLikeN
 
-_ERROR_FIELD: Final = '_error_handled'
 _ERROR_HANDLERS: Final = (
     'lash',
 )
@@ -19,6 +18,17 @@ _ERRORS_COPIERS: Final = (
     'map',
     'alt',
 )
+
+# We keep track of errors handled by keeping a mapping of <object id>: object.
+# If an error is handled, it is in the mapping.
+# If it isn't in the mapping, the error is not handled.
+#
+# Note only storing object IDs would not work, as objects may be GC'ed
+# and their object id assigned to another object.
+# Also, the object itself cannot be (in) the key because
+# (1) we cannot always assume hashability and
+# (2) we need to track the object identity, not its value
+_ERRORS_HANDLED: Final[Dict[int, Any]] = {}  # noqa: WPS407
 
 _FunctionType = TypeVar('_FunctionType', bound=Callable)
 _ReturnsResultType = TypeVar(
@@ -33,8 +43,8 @@ class ReturnsAsserts(object):
 
     __slots__ = ()
 
-    def assert_equal(
-        self,
+    @staticmethod  # noqa: WPS602
+    def assert_equal(  # noqa: WPS602
         first,
         second,
         *,
@@ -45,13 +55,14 @@ class ReturnsAsserts(object):
         from returns.primitives.asserts import assert_equal
         assert_equal(first, second, deps=deps, backend=backend)
 
-    def is_error_handled(self, container) -> bool:
+    @staticmethod  # noqa: WPS602
+    def is_error_handled(container) -> bool:  # noqa: WPS602
         """Ensures that container has its error handled in the end."""
-        return bool(getattr(container, _ERROR_FIELD, False))
+        return id(container) in _ERRORS_HANDLED
 
+    @staticmethod  # noqa: WPS602
     @contextmanager
-    def assert_trace(
-        self,
+    def assert_trace(  # noqa: WPS602
         trace_type: _ReturnsResultType,
         function_to_search: _FunctionType,
     ) -> Iterator[None]:
@@ -76,9 +87,16 @@ class ReturnsAsserts(object):
 
 
 @pytest.fixture(scope='session')
-def returns(_patch_containers) -> ReturnsAsserts:  # noqa: WPS442
+def returns(_patch_containers) -> ReturnsAsserts:
     """Returns our own class with helpers assertions to check containers."""
     return ReturnsAsserts()
+
+
+@pytest.fixture(autouse=True)
+def _clear_errors_handled():
+    """Ensures the 'errors handled' registry doesn't leak memory."""
+    yield
+    _ERRORS_HANDLED.clear()
 
 
 def pytest_configure(config) -> None:
@@ -182,16 +200,12 @@ class _PatchedContainer(object):
         if inspect.iscoroutinefunction(original):
             async def factory(self, *args, **kwargs):
                 original_result = await original(self, *args, **kwargs)
-                object.__setattr__(
-                    original_result, _ERROR_FIELD, True,  # noqa: WPS425
-                )
+                _ERRORS_HANDLED[id(original_result)] = original_result
                 return original_result
         else:
             def factory(self, *args, **kwargs):
                 original_result = original(self, *args, **kwargs)
-                object.__setattr__(
-                    original_result, _ERROR_FIELD, True,  # noqa: WPS425
-                )
+                _ERRORS_HANDLED[id(original_result)] = original_result
                 return original_result
         return wraps(original)(factory)
 
@@ -200,20 +214,14 @@ class _PatchedContainer(object):
         if inspect.iscoroutinefunction(original):
             async def factory(self, *args, **kwargs):
                 original_result = await original(self, *args, **kwargs)
-                object.__setattr__(
-                    original_result,
-                    _ERROR_FIELD,
-                    getattr(self, _ERROR_FIELD, False),
-                )
+                if id(self) in _ERRORS_HANDLED:
+                    _ERRORS_HANDLED[id(original_result)] = original_result
                 return original_result
         else:
             def factory(self, *args, **kwargs):
                 original_result = original(self, *args, **kwargs)
-                object.__setattr__(
-                    original_result,
-                    _ERROR_FIELD,
-                    getattr(self, _ERROR_FIELD, False),
-                )
+                if id(self) in _ERRORS_HANDLED:
+                    _ERRORS_HANDLED[id(original_result)] = original_result
                 return original_result
         return wraps(original)(factory)
 

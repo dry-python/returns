@@ -35,6 +35,8 @@ class _LawSpec(LawSpecDef):
     https://en.wikibooks.org/wiki/Haskell/The_Functor_class#The_functor_laws
     """
 
+    __slots__ = ()
+
     @law_definition
     def identity_law(
         altable: 'AltableN[_FirstType, _SecondType, _ThirdType]',
@@ -60,6 +62,8 @@ class AltableN(
     Lawful['AltableN[_FirstType, _SecondType, _ThirdType]'],
 ):
     """Modifies the second type argument with a pure function."""
+
+    __slots__ = ()
 
     _laws: ClassVar[Sequence[Law]] = (
         Law1(_LawSpec.identity_law),

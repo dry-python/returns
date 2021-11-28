@@ -35,6 +35,8 @@ class _LawSpec(LawSpecDef):
     https://en.wikibooks.org/wiki/Haskell/The_Functor_class#The_functor_laws
     """
 
+    __slots__ = ()
+
     @law_definition
     def identity_law(
         mappable: 'MappableN[_FirstType, _SecondType, _ThirdType]',
@@ -68,6 +70,8 @@ class MappableN(
         - https://en.wikipedia.org/wiki/Functor
 
     """
+
+    __slots__ = ()
 
     _laws: ClassVar[Sequence[Law]] = (
         Law1(_LawSpec.identity_law),

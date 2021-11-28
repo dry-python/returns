@@ -24,6 +24,8 @@ class _LawSpec(LawSpecDef):
     Description: https://bit.ly/34D40iT
     """
 
+    __slots__ = ()
+
     @law_definition
     def reflexive_law(
         first: _EqualType,
@@ -61,6 +63,8 @@ class Equable(Lawful['Equable']):
     - ``Reader`` has to be called to get the value
 
     """
+
+    __slots__ = ()
 
     _laws: ClassVar[Sequence[Law]] = (
         Law1(_LawSpec.reflexive_law),

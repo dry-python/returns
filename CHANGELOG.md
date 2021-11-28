@@ -5,6 +5,11 @@ Versions before `1.0.0` are `0Ver`-based:
 incremental in minor, bugfixes only are patches.
 See [0Ver](https://0ver.org/).
 
+## 0.17.1
+
+### Bugfixes
+
+- Fixes `__slots__` not being set properly in containers and their base classes
 
 ## 0.17.0
 

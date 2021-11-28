@@ -68,6 +68,8 @@ class IO(
 
     """
 
+    __slots__ = ()
+
     _inner_value: _ValueType
 
     #: Typesafe equality comparison with other `Result` objects.
@@ -305,6 +307,8 @@ class IOResult(
     Do not rely on them! Use public functions and types instead.
 
     """
+
+    __slots__ = ()
 
     _inner_value: Result[_ValueType, _ErrorType]
     __match_args__ = ('_inner_value',)
@@ -752,6 +756,8 @@ class IOResult(
 class IOFailure(IOResult[Any, _ErrorType]):
     """``IOFailure`` representation."""
 
+    __slots__ = ()
+
     _inner_value: Result[Any, _ErrorType]
 
     def __init__(self, inner_value: _ErrorType) -> None:
@@ -782,6 +788,8 @@ class IOFailure(IOResult[Any, _ErrorType]):
 @final
 class IOSuccess(IOResult[_ValueType, Any]):
     """``IOSuccess`` representation."""
+
+    __slots__ = ()
 
     _inner_value: Result[_ValueType, Any]
 

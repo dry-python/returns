@@ -27,6 +27,8 @@ class IOLikeN(container.ContainerN[_FirstType, _SecondType, _ThirdType]):
 
     """
 
+    __slots__ = ()
+
     @abstractmethod
     def bind_io(
         self: _IOLikeType,
@@ -68,6 +70,8 @@ class IOBasedN(
     While ``IOLikeN`` is different. It can be lazy and cannot be compared.
 
     """
+
+    __slots__ = ()
 
 
 #: Type alias for kinds with one type argument.

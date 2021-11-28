@@ -44,6 +44,8 @@ class FutureLikeN(io.IOLikeN[_FirstType, _SecondType, _ThirdType]):
     But at the time this is not a real ``Future`` and cannot be awaited.
     """
 
+    __slots__ = ()
+
     @abstractmethod
     def bind_future(
         self: _FutureLikeType,
@@ -103,6 +105,8 @@ class AwaitableFutureN(Generic[_FirstType, _SecondType, _ThirdType]):
     Should not be used directly. Use ``FutureBasedN`` instead.
     """
 
+    __slots__ = ()
+
     @abstractmethod
     def __await__(self: _AsyncFutureType) -> Generator[
         Any, Any, io.IOLikeN[_FirstType, _SecondType, _ThirdType],
@@ -135,6 +139,8 @@ class FutureBasedN(
 
     They can be awaited.
     """
+
+    __slots__ = ()
 
 
 #: Type alias for kinds with one type argument.

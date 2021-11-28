@@ -37,6 +37,8 @@ class IOResultLikeN(
     Like ``FutureResult`` or ``RequiresContextIOResult``.
     """
 
+    __slots__ = ()
+
     @abstractmethod
     def bind_ioresult(
         self: _IOResultLikeType,
@@ -95,6 +97,8 @@ class IOResultBasedN(
 
     Can be unwrapped.
     """
+
+    __slots__ = ()
 
 
 #: Type alias for kinds with two type arguments.
