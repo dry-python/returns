@@ -12,7 +12,7 @@ tomlkit==0.7.2
 pygments==2.10.0
 
 # Dependencies of our project:
-typing-extensions==4.0.0
+typing-extensions==4.0.1
 mypy==0.910
 pytest==6.2.5
 hypothesis==6.29.0
