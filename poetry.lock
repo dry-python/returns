@@ -1313,7 +1313,7 @@ type_comments = ["typed-ast (>=1.4.0)"]
 
 [[package]]
 name = "sphinx-hoverxref"
-version = "0.9b1"
+version = "1.0.0"
 description = "Sphinx extension to embed content in a tooltip on xref hover"
 category = "dev"
 optional = false
@@ -1568,7 +1568,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pyt
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "f3789128210919e05bc2a29ad78189a782d60bdf26e5988a5c97d5a5f8ca2d84"
+content-hash = "8410c049fc485023160976db4bac50409a68480dd9d41011f3b1ebf412b2b3d1"
 
 [metadata.files]
 alabaster = [
@@ -2284,8 +2284,8 @@ sphinx-autodoc-typehints = [
     {file = "sphinx_autodoc_typehints-1.12.0-py3-none-any.whl", hash = "sha256:5e81776ec422dd168d688ab60f034fccfafbcd94329e9537712c93003bddc04a"},
 ]
 sphinx-hoverxref = [
-    {file = "sphinx-hoverxref-0.9b1.tar.gz", hash = "sha256:7741645323be4f9d8c6a35878946dd433bc081b8ed359c08fc3fa589c594831a"},
-    {file = "sphinx_hoverxref-0.9b1-py3-none-any.whl", hash = "sha256:2e13bf776a044ecabfb32632f5c6cb72677fceeb67bafc498e3f4985dd5fb810"},
+    {file = "sphinx-hoverxref-1.0.0.tar.gz", hash = "sha256:0af239b93e8dcae0caffe99a6beea4dc7d1efb738c085e9f6bcdf46fe7ae1195"},
+    {file = "sphinx_hoverxref-1.0.0-py3-none-any.whl", hash = "sha256:a8a052dfd755efd47d24acf7a8e0271c8781f3d990628d85758ea1ee0e83bc9e"},
 ]
 sphinx-typlog-theme = [
     {file = "sphinx_typlog_theme-0.8.0-py2.py3-none-any.whl", hash = "sha256:b0ab728ab31d071523af0229bcb6427a13493958b3fc2bb7db381520fab77de4"},
