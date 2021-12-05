@@ -38,7 +38,7 @@ Here's how typing works there:
   # => functools.partial[builtins.float*]
   # => Which is really: `def (*Any, **Any) -> builtins.float`
 
-And compare it with out solution:
+And compare it with our solution:
 
 .. code:: python
 
