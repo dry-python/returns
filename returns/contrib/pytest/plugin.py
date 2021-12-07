@@ -2,17 +2,8 @@ import inspect
 import sys
 from contextlib import ExitStack, contextmanager
 from functools import partial, wraps
-from types import FrameType
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    Callable,
-    Dict,
-    Generator,
-    Iterator,
-    TypeVar,
-    Union,
-)
+from types import FrameType, MappingProxyType
+from typing import TYPE_CHECKING, Any, Callable, Dict, Iterator, TypeVar, Union
 from unittest import mock
 
 import pytest
@@ -139,14 +130,14 @@ def pytest_configure(config) -> None:
 
 
 @pytest.fixture()
-def returns() -> Generator[ReturnsAsserts, None, None]:
+def returns() -> Iterator[ReturnsAsserts]:
     """Returns class with helpers assertions to check containers."""
     with _spy_error_handling() as errors_handled:
         yield ReturnsAsserts(errors_handled)
 
 
 @contextmanager
-def _spy_error_handling() -> Generator[_ErrorsHandled, None, None]:
+def _spy_error_handling() -> Iterator[_ErrorsHandled]:
     """Track error handling of containers."""
     errs: _ErrorsHandled = {}
     with ExitStack() as cleanup:
@@ -217,8 +208,8 @@ def _patched_error_copier(
     return wraps(original)(wrapper)  # type: ignore
 
 
-_ERROR_HANDLING_PATCHERS: Final = {  # noqa: WPS407
+_ERROR_HANDLING_PATCHERS: Final = MappingProxyType({
     'lash': _patched_error_handler,
     'map': _patched_error_copier,
     'alt': _patched_error_copier,
-}
+})
