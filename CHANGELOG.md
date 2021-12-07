@@ -10,6 +10,7 @@ See [0Ver](https://0ver.org/).
 ### Bugfixes
 
 - Fixes `__slots__` not being set properly in containers and their base classes
+- Fixes patching of containers in pytest plugin not undone after each test
 
 ## 0.17.0
 

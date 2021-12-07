@@ -20,3 +20,7 @@ hypothesis==6.30.1
 # TODO: Remove this lock when we found and fix the route case.
 # See: https://github.com/typlog/sphinx-typlog-theme/issues/22
 jinja2==3.0.3
+
+# TODO: Remove this lock when this dependency issue is resolved.
+# See: https://github.com/miyakogi/m2r/issues/66
+mistune<2.0.0
