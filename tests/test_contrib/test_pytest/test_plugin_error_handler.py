@@ -6,7 +6,6 @@ from returns.context import (
     RequiresContextResult,
 )
 from returns.contrib.pytest import ReturnsAsserts
-from returns.contrib.pytest.plugin import _ERRORS_HANDLED
 from returns.functions import identity
 from returns.future import FutureResult
 from returns.io import IOFailure, IOSuccess
@@ -42,12 +41,14 @@ def _under_test(
 ])
 def test_error_handled(returns: ReturnsAsserts, container, kwargs):
     """Demo on how to use ``pytest`` helpers to work with error handling."""
-    assert not _ERRORS_HANDLED
+    assert not returns._errors_handled  # noqa: WPS437
     error_handled = _under_test(container, **kwargs)
 
     assert returns.is_error_handled(error_handled)
     assert returns.is_error_handled(error_handled.map(identity))
     assert returns.is_error_handled(error_handled.alt(identity))
+
+    assert returns._errors_handled  # noqa: WPS437
 
 
 @pytest.mark.parametrize('container', [
@@ -64,13 +65,15 @@ def test_error_handled(returns: ReturnsAsserts, container, kwargs):
 ])
 def test_error_not_handled(returns: ReturnsAsserts, container):
     """Demo on how to use ``pytest`` helpers to work with error handling."""
-    assert not _ERRORS_HANDLED
+    assert not returns._errors_handled  # noqa: WPS437
     error_handled = _under_test(container)
 
     assert not returns.is_error_handled(container)
     assert not returns.is_error_handled(error_handled)
     assert not returns.is_error_handled(error_handled.map(identity))
     assert not returns.is_error_handled(error_handled.alt(identity))
+
+    assert not returns._errors_handled  # noqa: WPS437
 
 
 @pytest.mark.anyio()
