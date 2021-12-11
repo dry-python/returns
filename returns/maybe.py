@@ -402,7 +402,7 @@ class Some(Maybe[_ValueType]):
         """Some constructor."""
         super().__init__(inner_value)
 
-    if not TYPE_CHECKING:  # noqa: WPS604  # pragma: no branch
+    if not TYPE_CHECKING:  # noqa: WPS604,C901  # pragma: no branch
         def bind(self, function):
             """Binds current container to a function that returns container."""
             return function(self._inner_value)
@@ -414,6 +414,12 @@ class Some(Maybe[_ValueType]):
         def unwrap(self):
             """Returns inner value for successful container."""
             return self._inner_value
+
+        def filter(self, function):
+            """Filters internal value."""
+            if function(self._inner_value):
+                return self
+            return _Nothing()
 
     def map(self, function):
         """Composes current container with a pure function."""
@@ -440,12 +446,6 @@ class Some(Maybe[_ValueType]):
     def failure(self):
         """Raises exception for successful container."""
         raise UnwrapFailedError(self)
-
-    def filter(self, function):
-        """Filters internal value."""
-        if function(self._inner_value):
-            return self
-        return _Nothing()
 
 
 Maybe.success_type = Some
