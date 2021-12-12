@@ -36,6 +36,8 @@ class FilterableN(MaybeLikeN[_FirstType, _SecondType, _ThirdType]):
 
     """
 
+    __slots__ = ()
+
     @abstractmethod
     def filter(
         self: _FilterableType,
