@@ -66,7 +66,7 @@ attrs = "^21.2"
 httpx = "^0.21"
 
 mypy = "^0.910"
-wemake-python-styleguide = "^0.15"
+wemake-python-styleguide = "^0.16"
 flake8-pytest-style = "^1.5"
 flake8-pyi = "^20.10"
 # TODO: Remove this restriction when `ruamel.yaml.clib` works

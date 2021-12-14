@@ -372,7 +372,6 @@ class Failure(Result[Any, _ErrorType]):  # noqa: WPS338
 
     def _get_trace(self) -> Optional[List[FrameInfo]]:
         """Method that will be monkey patched when trace is active."""
-        return None  # noqa: WPS324
 
 
 @final
