@@ -152,7 +152,7 @@ def _spy_error_handling() -> Iterator[_ErrorsHandled]:
 
 
 # delayed imports are needed to prevent messing up coverage
-def _containers_to_patch() -> tuple:
+def _containers_to_patch() -> list:
     from returns.context import (
         RequiresContextFutureResult,
         RequiresContextIOResult,
@@ -162,7 +162,7 @@ def _containers_to_patch() -> tuple:
     from returns.io import IOFailure, IOSuccess
     from returns.result import Failure, Success
 
-    return (
+    return [
         Success,
         Failure,
         IOSuccess,
@@ -171,7 +171,7 @@ def _containers_to_patch() -> tuple:
         RequiresContextIOResult,
         RequiresContextFutureResult,
         FutureResult,
-    )
+    ]
 
 
 def _patched_error_handler(
