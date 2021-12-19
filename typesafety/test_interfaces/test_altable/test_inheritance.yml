@@ -93,9 +93,9 @@
             ...
   out: |
     main:10: error: Argument 1 of "alt" is incompatible with supertype "AltableN"; supertype defines the argument type as "Callable[[E], _UpdatedType]"
-    main:10: error: Return type "MyClass[N, E]" of "alt" incompatible with return type "KindN[MyClass[V, E], V, _UpdatedType, NoReturn]" in supertype "AltableN"
-    main:10: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
     main:10: note: This violates the Liskov substitution principle
+    main:10: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:10: error: Return type "MyClass[N, E]" of "alt" incompatible with return type "KindN[MyClass[V, E], V, _UpdatedType, NoReturn]" in supertype "AltableN"
 
 
 - case: altable_inheritance_wrong3
@@ -118,6 +118,6 @@
             ...
   out: |
     main:11: error: Argument 1 of "alt" is incompatible with supertype "AltableN"; supertype defines the argument type as "Callable[[E], _UpdatedType]"
-    main:11: error: Return type "MyClass[N, E, T]" of "alt" incompatible with return type "KindN[MyClass[V, E, T], V, _UpdatedType, T]" in supertype "AltableN"
-    main:11: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
     main:11: note: This violates the Liskov substitution principle
+    main:11: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:11: error: Return type "MyClass[N, E, T]" of "alt" incompatible with return type "KindN[MyClass[V, E, T], V, _UpdatedType, T]" in supertype "AltableN"

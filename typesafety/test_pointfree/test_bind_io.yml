@@ -57,8 +57,8 @@
     x: Maybe[str]
     bind_io(test)(x)
   out: |
-    main:9: error: Argument 1 has incompatible type "Maybe[str]"; expected "KindN[Maybe[Any], float, NoReturn, NoReturn]"
     main:9: error: Value of type variable "_IOLikeKind" of function cannot be "Maybe[Any]"
+    main:9: error: Argument 1 has incompatible type "Maybe[str]"; expected "KindN[Maybe[Any], float, NoReturn, NoReturn]"
 
 
 - case: bind_io_io

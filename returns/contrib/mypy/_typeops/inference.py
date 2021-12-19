@@ -3,7 +3,7 @@ from typing import List, Mapping, Optional, Tuple, cast
 from mypy.argmap import map_actuals_to_formals
 from mypy.constraints import infer_constraints_for_callable
 from mypy.expandtype import expand_type
-from mypy.nodes import ARG_POS
+from mypy.nodes import ARG_POS, ArgKind
 from mypy.plugin import FunctionContext
 from mypy.types import CallableType, FunctionLike
 from mypy.types import Type as MypyType
@@ -86,6 +86,7 @@ class CallableInference(object):
             [arg.type for arg in applied_args],
             kinds,
             formal_to_actual,
+            checker.argument_infer_context(),
         )
         return {
             constraint.type_var: constraint.target
@@ -109,7 +110,7 @@ class PipelineInference(object):
     def from_callable_sequence(
         self,
         pipeline_types: Tuple[MypyType, ...],
-        pipeline_kinds: List[int],
+        pipeline_kinds: List[ArgKind],
         ctx: CallableContext,
     ) -> MypyType:
         """Pass pipeline functions to infer them one by one."""

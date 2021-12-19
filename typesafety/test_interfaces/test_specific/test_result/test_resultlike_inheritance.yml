@@ -133,11 +133,14 @@
             ...
   out: |
     main:17: error: Argument 1 of "bind_result" is incompatible with supertype "ResultLikeN"; supertype defines the argument type as "Callable[[_ValueType], Result[_UpdatedType, _ErrorType]]"
-    main:17: error: Return type "MyClass[_ValueType, _ErrorType]" of "bind_result" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType], _UpdatedType, _ErrorType, NoReturn]" in supertype "ResultLikeN"
-    main:17: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
     main:17: note: This violates the Liskov substitution principle
+    main:17: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:17: error: Return type "MyClass[_ValueType, _ErrorType]" of "bind_result" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType], _UpdatedType, _ErrorType, NoReturn]" in supertype "ResultLikeN"
     main:26: error: Signature of "from_result" incompatible with supertype "ResultLikeN"
-
+    main:26: note:      Superclass:
+    main:26: note:          def [_ValueType, _ErrorType] from_result(cls, inner_value: Result[_ValueType, _ErrorType]) -> KindN[MyClass[_ValueType, _ErrorType], _ValueType, _ErrorType, NoReturn]
+    main:26: note:      Subclass:
+    main:26: note:          def [_NewValueType, _NewErrorType] from_result(self, inner_value: Result[_NewValueType, _NewErrorType]) -> MyClass[_NewValueType, _NewErrorType]
 
 - case: result_inheritance_wrong3
   disable_cache: false

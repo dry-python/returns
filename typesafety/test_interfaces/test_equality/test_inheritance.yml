@@ -85,6 +85,6 @@
             ...
   out: |
     main:13: error: Argument 1 of "equals" is incompatible with supertype "Equable"; supertype defines the argument type as "MyOwn[T]"
-    main:13: error: Return type "T" of "equals" incompatible with return type "bool" in supertype "Equable"
-    main:13: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
     main:13: note: This violates the Liskov substitution principle
+    main:13: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:13: error: Return type "T" of "equals" incompatible with return type "bool" in supertype "Equable"

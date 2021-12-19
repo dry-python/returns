@@ -1,7 +1,7 @@
 from typing import ClassVar, FrozenSet, List
 
 from mypy.checker import detach_callable
-from mypy.nodes import ARG_OPT, ARG_POS, ARG_STAR, ARG_STAR2
+from mypy.nodes import ARG_OPT, ARG_POS, ARG_STAR, ARG_STAR2, ArgKind
 from mypy.types import CallableType, FunctionLike, Overloaded
 from mypy.types import Type as MypyType
 from typing_extensions import final
@@ -28,7 +28,7 @@ class Intermediate(object):
     """
 
     #: Positional arguments can be of this kind.
-    _positional_kinds: ClassVar[FrozenSet[int]] = frozenset((
+    _positional_kinds: ClassVar[FrozenSet[ArgKind]] = frozenset((
         ARG_POS,
         ARG_OPT,
         ARG_STAR,

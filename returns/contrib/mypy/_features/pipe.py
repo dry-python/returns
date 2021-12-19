@@ -110,7 +110,7 @@ def _unify_type(
 ) -> MypyType:
     return UnionType.make_union([
         fetch_type(case)
-        for case in function.items()
+        for case in function.items
     ])
 
 

@@ -105,18 +105,18 @@
             ...
   out: |
     main:16: error: Argument 1 of "bind_future_result" is incompatible with supertype "FutureResultLikeN"; supertype defines the argument type as "Callable[[T], FutureResult[_UpdatedType, E]]"
-    main:16: error: Return type "MyClass[E, N]" of "bind_future_result" incompatible with return type "KindN[MyClass[T, E], _UpdatedType, E, NoReturn]" in supertype "FutureResultLikeN"
-    main:16: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
     main:16: note: This violates the Liskov substitution principle
+    main:16: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:16: error: Return type "MyClass[E, N]" of "bind_future_result" incompatible with return type "KindN[MyClass[T, E], _UpdatedType, E, NoReturn]" in supertype "FutureResultLikeN"
     main:21: error: Argument 1 of "bind_async_future_result" is incompatible with supertype "FutureResultLikeN"; supertype defines the argument type as "Callable[[T], Awaitable[FutureResult[_UpdatedType, E]]]"
-    main:21: error: Return type "MyClass[E, N]" of "bind_async_future_result" incompatible with return type "KindN[MyClass[T, E], _UpdatedType, E, NoReturn]" in supertype "FutureResultLikeN"
-    main:21: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
     main:21: note: This violates the Liskov substitution principle
+    main:21: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:21: error: Return type "MyClass[E, N]" of "bind_async_future_result" incompatible with return type "KindN[MyClass[T, E], _UpdatedType, E, NoReturn]" in supertype "FutureResultLikeN"
     main:26: error: Argument 1 of "from_future_result" is incompatible with supertype "FutureResultLikeN"; supertype defines the argument type as "FutureResult[_ValueType, _ErrorType]"
-    main:26: error: Return type "MyClass[T, E]" of "from_future_result" incompatible with return type "KindN[MyClass[T, E], _ValueType, _ErrorType, NoReturn]" in supertype "FutureResultLikeN"
-    main:26: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
     main:26: note: This violates the Liskov substitution principle
+    main:26: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:26: error: Return type "MyClass[T, E]" of "from_future_result" incompatible with return type "KindN[MyClass[T, E], _ValueType, _ErrorType, NoReturn]" in supertype "FutureResultLikeN"
     main:32: error: Argument 1 of "from_failed_future" is incompatible with supertype "FutureResultLikeN"; supertype defines the argument type as "Future[_ErrorType]"
-    main:32: error: Return type "FutureResult[Any, E]" of "from_failed_future" incompatible with return type "KindN[MyClass[T, E], T, _ErrorType, NoReturn]" in supertype "FutureResultLikeN"
-    main:32: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
     main:32: note: This violates the Liskov substitution principle
+    main:32: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:32: error: Return type "FutureResult[Any, E]" of "from_failed_future" incompatible with return type "KindN[MyClass[T, E], T, _ErrorType, NoReturn]" in supertype "FutureResultLikeN"
