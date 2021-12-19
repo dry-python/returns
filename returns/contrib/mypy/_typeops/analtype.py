@@ -88,11 +88,10 @@ def safe_translate_to_function(
     This function also resolves all type arguments.
     """
     checker = ctx.api.expr_checker  # type: ignore
-    checker.msg.disable_errors()
-    _return_type, function_def = checker.check_call(
-        function_def, [], [], ctx.context, [],
-    )
-    checker.msg.enable_errors()
+    with checker.msg.disable_errors():
+        _return_type, function_def = checker.check_call(
+            function_def, [], [], ctx.context, [],
+        )
     return function_def
 
 

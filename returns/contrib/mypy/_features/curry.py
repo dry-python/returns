@@ -154,7 +154,7 @@ class _CurryFunctionOverloads(object):
                 ) and ret_type.type_of_any == TypeOfAny.implementation_artifact
                 argtree.case = Intermediate(argtree.case).with_ret_type(
                     child.case if temp_any else Overloaded(
-                        [child.case, *cast(FunctionLike, ret_type).items()],
+                        [child.case, *cast(FunctionLike, ret_type).items],
                     ),
                 )
             else:  # Root is reached, we need to save the result:

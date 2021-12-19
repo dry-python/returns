@@ -106,7 +106,7 @@ def translate_kind_instance(typ: Type) -> Type:  # noqa: WPS, C901
         return UnionType(_translate_types(typ.items), typ.line, typ.column)
     elif isinstance(typ, Overloaded):
         functions: List[CallableType] = []
-        for func in typ.items():
+        for func in typ.items:
             new = translate_kind_instance(func)
             assert isinstance(new, CallableType)
             functions.append(new)

@@ -127,7 +127,7 @@ class _PartialFunctionReducer(object):
         where each overloaded spec is processed inducidually.
         Then we combine everything back together removing unfit parts.
         """
-        for case_function in self._original.items():
+        for case_function in self._original.items:
             fallback, intermediate = self._create_intermediate(case_function)
             self._fallbacks.append(fallback)
 

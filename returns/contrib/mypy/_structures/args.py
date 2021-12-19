@@ -1,7 +1,7 @@
 from collections import namedtuple
 from typing import List, Optional
 
-from mypy.nodes import Context, TempNode
+from mypy.nodes import ArgKind, Context, TempNode
 from mypy.types import CallableType
 from mypy.types import Type as MypyType
 from typing_extensions import final
@@ -16,7 +16,7 @@ class FuncArg(_FuncArgStruct):
 
     name: Optional[str]
     type: MypyType  # noqa: WPS125
-    kind: int
+    kind: ArgKind
 
     def expression(self, context: Context) -> TempNode:
         """Hack to pass unexisting `Expression` to typechecker."""

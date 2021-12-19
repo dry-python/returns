@@ -76,7 +76,9 @@ class ReturnsAsserts(object):
             pass  # noqa: WPS420
         else:
             pytest.fail(
-                'No container {0} was created'.format(trace_type.__name__),
+                'No container {0} was created'.format(
+                    trace_type.__class__.__name__,
+                ),
             )
         finally:
             sys.settrace(old_tracer)
