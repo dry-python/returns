@@ -25,8 +25,8 @@
     x: RequiresContextResult[float, str, int]
     bind_context2(test)(x)
   out: |
-    main:8: error: Argument 1 has incompatible type "RequiresContextResult[float, str, int]"; expected "KindN[RequiresContextResult[Any, Any, Any], float, int, Any]"
     main:8: error: Value of type variable "_Reader2Kind" of function cannot be "RequiresContextResult[Any, Any, Any]"
+    main:8: error: Argument 1 has incompatible type "RequiresContextResult[float, str, int]"; expected "KindN[RequiresContextResult[Any, Any, Any], float, int, Any]"
 
 
 - case: bind_context2_and_flow

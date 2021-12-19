@@ -17,8 +17,8 @@
 
     reveal_type(partial(multiple, x)(y))
   out: |
-    main:15: error: Argument 1 to "multiple" has incompatible type "List[str]"; expected "List[int]"
     main:15: note: Revealed type is "builtins.int*"
+    main:15: error: Argument 1 to "multiple" has incompatible type "List[str]"; expected "List[int]"
 
 
 - case: partial_correct_generic

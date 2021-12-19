@@ -18,9 +18,9 @@
     reveal_type(partial(two_args, None))
   out: |
     main:15: error: No overload variant of "two_args" matches argument type "None"
+    main:15: note: Possible overload variants:
     main:15: note:     def two_args(a, a: int) -> int
     main:15: note:     def two_args(a, a: str) -> str
-    main:15: note: Possible overload variants:
     main:15: note: Revealed type is "def (*Any, **Any) -> builtins.int*"
 
 
@@ -44,9 +44,9 @@
     reveal_type(partial(two_args, 1)(None))
   out: |
     main:15: error: No overload variant of "two_args" matches argument type "None"
+    main:15: note: Possible overload variants:
     main:15: note:     def two_args(a, b: int) -> int
     main:15: note:     def two_args(a, b: str) -> str
-    main:15: note: Possible overload variants:
     main:15: note: Revealed type is "Any"
 
 

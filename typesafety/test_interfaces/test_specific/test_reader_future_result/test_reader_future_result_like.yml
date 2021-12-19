@@ -104,13 +104,13 @@
             ...
   out: |
     main:17: error: Argument 1 of "bind_context_future_result" is incompatible with supertype "ReaderFutureResultLikeN"; supertype defines the argument type as "Callable[[T], RequiresContextFutureResult[_UpdatedType, V, U]]"
-    main:17: error: Return type "MyClass[T, V, U]" of "bind_context_future_result" incompatible with return type "KindN[MyClass[T, V, U], _UpdatedType, V, U]" in supertype "ReaderFutureResultLikeN"
-    main:17: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
     main:17: note: This violates the Liskov substitution principle
+    main:17: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:17: error: Return type "MyClass[T, V, U]" of "bind_context_future_result" incompatible with return type "KindN[MyClass[T, V, U], _UpdatedType, V, U]" in supertype "ReaderFutureResultLikeN"
     main:23: error: Argument 1 of "bind_async_context_future_result" is incompatible with supertype "ReaderFutureResultLikeN"; supertype defines the argument type as "Callable[[T], Awaitable[RequiresContextFutureResult[_UpdatedType, V, U]]]"
-    main:23: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
     main:23: note: This violates the Liskov substitution principle
+    main:23: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
     main:30: error: Argument 1 of "from_future_result_context" is incompatible with supertype "ReaderFutureResultLikeN"; supertype defines the argument type as "RequiresContextFutureResult[_ValueType, _ErrorType, _EnvType]"
-    main:30: error: Return type "MyClass[T, V, U]" of "from_future_result_context" incompatible with return type "KindN[MyClass[T, V, U], _ValueType, _ErrorType, _EnvType]" in supertype "ReaderFutureResultLikeN"
-    main:30: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
     main:30: note: This violates the Liskov substitution principle
+    main:30: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:30: error: Return type "MyClass[T, V, U]" of "from_future_result_context" incompatible with return type "KindN[MyClass[T, V, U], _ValueType, _ErrorType, _EnvType]" in supertype "ReaderFutureResultLikeN"

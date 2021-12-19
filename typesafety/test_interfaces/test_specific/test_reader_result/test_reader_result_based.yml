@@ -60,6 +60,6 @@
             ...
   out: |
     main:14: error: Argument 1 of "__call__" is incompatible with supertype "Contextable"; supertype defines the argument type as "U"
-    main:14: error: Return type "Result[V, U]" of "__call__" incompatible with return type "Result[T, V]" in supertype "Contextable"
-    main:14: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
     main:14: note: This violates the Liskov substitution principle
+    main:14: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:14: error: Return type "Result[V, U]" of "__call__" incompatible with return type "Result[T, V]" in supertype "Contextable"

@@ -66,6 +66,6 @@
             ...
   out: |
     main:16: error: Argument 1 of "__call__" is incompatible with supertype "Contextable"; supertype defines the argument type as "U"
-    main:16: error: Return type "FutureResult[V, U]" of "__call__" incompatible with return type "FutureResult[T, V]" in supertype "Contextable"
-    main:16: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
     main:16: note: This violates the Liskov substitution principle
+    main:16: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:16: error: Return type "FutureResult[V, U]" of "__call__" incompatible with return type "FutureResult[T, V]" in supertype "Contextable"

@@ -36,8 +36,8 @@
     x: IO[float]
     bind_async(test)(x)
   out: |
-    main:8: error: Argument 1 has incompatible type "IO[float]"; expected "KindN[IO[Any], str, NoReturn, NoReturn]"
     main:8: error: Value of type variable "_FutureKind" of "bind_async" cannot be "IO[Any]"
+    main:8: error: Argument 1 has incompatible type "IO[float]"; expected "KindN[IO[Any], str, NoReturn, NoReturn]"
 
 
 - case: bind_async_wrong_function_type
@@ -52,8 +52,8 @@
     x: Future[float]
     bind_async(test)(x)
   out: |
-    main:8: error: Argument 1 has incompatible type "Future[float]"; expected "KindN[IO[Any], float, NoReturn, NoReturn]"
     main:8: error: Value of type variable "_FutureKind" of "bind_async" cannot be "IO[Any]"
+    main:8: error: Argument 1 has incompatible type "Future[float]"; expected "KindN[IO[Any], float, NoReturn, NoReturn]"
 
 
 - case: bind_async_with_flow

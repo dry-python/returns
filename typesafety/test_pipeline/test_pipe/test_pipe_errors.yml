@@ -44,9 +44,9 @@
 
     reveal_type(pipe(convert)(1))
   out: |
-    main:6: error: Argument 1 to "__call__" of "_Pipe" has incompatible type "int"; expected "str"
     main:6: error: Argument 1 to "convert" has incompatible type "int"; expected "str"
     main:6: note: Revealed type is "builtins.float"
+    main:6: error: Argument 1 to "__call__" of "_Pipe" has incompatible type "int"; expected "str"
 
 
 - case: pipe_function_without_args_error
@@ -73,7 +73,7 @@
 
     reveal_type(pipe(convert)(1))
   out: |
-    main:6: error: Argument 1 to "__call__" of "_Pipe" has incompatible type "int"; expected "str"
-    main:6: error: Argument 1 to "convert" has incompatible type "int"; expected "str"
     main:6: error: Missing positional argument "other" in call to "convert"
+    main:6: error: Argument 1 to "convert" has incompatible type "int"; expected "str"
     main:6: note: Revealed type is "builtins.float"
+    main:6: error: Argument 1 to "__call__" of "_Pipe" has incompatible type "int"; expected "str"
