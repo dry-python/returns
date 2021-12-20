@@ -2,7 +2,7 @@ Quickstart
 ==========
 
 Starting is really fast!
-You can intergrate ``returns`` into any project at any stage.
+You can integrate ``returns`` into any project at any stage.
 You can use it fully or partially. With or without types.
 
 ``returns`` is a very flexible library!
@@ -87,7 +87,7 @@ Building your own stuff
 -----------------------
 
 You can extend ``returns`` and build your own stuff!
-Particullary, you can add new interfaces, new containers, and new integrations.
+Particularly, you can add new interfaces, new containers, and new integrations.
 See :ref:`this guide <create-your-own-container>`.
 
 |Telegram chat|
