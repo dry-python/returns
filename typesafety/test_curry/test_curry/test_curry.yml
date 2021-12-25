@@ -67,14 +67,14 @@
     reveal_type(zero(1, 2.0, 2.0))
   out: |
     main:7: error: No overload variant of "zero" matches argument type "str"
-    main:7: note: Possible overload variant:
+    main:7: note: Possible overload variants:
     main:7: note:     def zero(arg: int) -> Callable[..., str]
-    main:7: note:     <1 more non-matching overload not shown>
+    main:7: note:     def zero(arg: int, other: float) -> str
     main:7: note: Revealed type is "Any"
     main:8: error: No overload variant of "zero" matches argument types "float", "int"
-    main:8: note: Possible overload variant:
+    main:8: note: Possible overload variants:
+    main:8: note:     def zero(arg: int) -> Callable[..., str]
     main:8: note:     def zero(arg: int, other: float) -> str
-    main:8: note:     <1 more non-matching overload not shown>
     main:8: note: Revealed type is "Any"
     main:9: error: No overload variant of "zero" matches argument types "int", "float", "float"
     main:9: note: Possible overload variants:
