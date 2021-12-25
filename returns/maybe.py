@@ -141,6 +141,29 @@ class Maybe(
 
         """
 
+    def filter(
+        self,
+        function: Callable[[_ValueType], bool],
+    ) -> 'Maybe[_ValueType]':
+        """
+        Apply a predicate over the value.
+
+        If the predicate returns true,
+        it returns the original value wrapped with Some.
+        If the predicate returns false, Nothing is returned
+
+        .. code:: python
+
+            >>> from returns.maybe import Some, Nothing
+            >>> def predicate(value):
+            ...     return value % 2 == 0
+
+            >>> assert Some(5).filter(predicate) == Nothing
+            >>> assert Some(6).filter(predicate) == Some(6)
+            >>> assert Nothing.filter(predicate) == Nothing
+
+        """
+
     def lash(
         self,
         function: Callable[[Any], Kind1['Maybe', _ValueType]],
@@ -338,6 +361,10 @@ class _Nothing(Maybe[Any]):
         """Does nothing."""
         return self
 
+    def filter(self, function):
+        """Does nothing."""
+        return self
+
     def lash(self, function):
         """Composes this container with a function returning container."""
         return function(None)
@@ -375,7 +402,7 @@ class Some(Maybe[_ValueType]):
         """Some constructor."""
         super().__init__(inner_value)
 
-    if not TYPE_CHECKING:  # noqa: WPS604  # pragma: no branch
+    if not TYPE_CHECKING:  # noqa: WPS604,C901  # pragma: no branch
         def bind(self, function):
             """Binds current container to a function that returns container."""
             return function(self._inner_value)
@@ -387,6 +414,12 @@ class Some(Maybe[_ValueType]):
         def unwrap(self):
             """Returns inner value for successful container."""
             return self._inner_value
+
+        def filter(self, function):
+            """Filters internal value."""
+            if function(self._inner_value):
+                return self
+            return _Nothing()
 
     def map(self, function):
         """Composes current container with a pure function."""
@@ -448,7 +481,9 @@ def maybe(
     Requires our :ref:`mypy plugin <mypy-plugins>`.
 
     """
+
     @wraps(function)
     def decorator(*args, **kwargs):
         return Maybe.from_optional(function(*args, **kwargs))
+
     return decorator
