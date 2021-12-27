@@ -47,7 +47,7 @@ You might face recursion problems with it:
   >>> Fold.loop(items, Reader.from_value(0), lambda x: lambda y: x + y)(...)
   Traceback (most recent call last):
     ...
-  RecursionError: maximum recursion depth exceeded in comparison
+  RecursionError: ...
 
 So, let's change how it works for this specific type:
 
