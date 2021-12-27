@@ -147,10 +147,10 @@ def not_(function: Callable[_FuncParams, bool]) -> Callable[_FuncParams, bool]:
       >>> assert not_(is_successful)(Failure(1)) is True
 
     """
-    @wraps(function)  # noqa: WPS430
-    def wrapped_function(
+    @wraps(function)
+    def decorator(
         *args: _FuncParams.args,
         **kwargs: _FuncParams.kwargs,
-    ) -> bool:  # noqa: WPS430
+    ) -> bool:
         return not function(*args, **kwargs)
-    return wrapped_function
+    return decorator
