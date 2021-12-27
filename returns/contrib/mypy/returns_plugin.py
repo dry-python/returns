@@ -25,13 +25,7 @@ from mypy.types import Type as MypyType
 from typing_extensions import final
 
 from returns.contrib.mypy import _consts
-from returns.contrib.mypy._features import (
-    curry,
-    flow,
-    kind,
-    partial,
-    pipe,
-)
+from returns.contrib.mypy._features import curry, flow, kind, partial, pipe
 
 # Type aliases
 # ============
