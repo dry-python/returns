@@ -58,8 +58,6 @@ Supported features
   with ``flow`` function
 - ``pipe`` feature allows to write better typed functional pipelines
   with ``pipe`` function
-- ``decorators`` allows to infer types of functions that are decorated
-  with ``@safe``, ``@maybe``, ``@impure``, etc
 
 
 Further reading
@@ -127,13 +125,4 @@ Pipe
    :strict:
 
 .. automodule:: returns.contrib.mypy._features.pipe
-   :members:
-
-Decorators
-~~~~~~~~~~
-
-.. autoclasstree:: returns.contrib.mypy._features.decorators
-   :strict:
-
-.. automodule:: returns.contrib.mypy._features.decorators
    :members:

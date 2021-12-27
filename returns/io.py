@@ -13,7 +13,7 @@ from typing import (
     Union,
 )
 
-from typing_extensions import final
+from typing_extensions import ParamSpec, final
 
 from returns.interfaces.specific import io, ioresult
 from returns.primitives.container import BaseContainer, container_equality
@@ -29,13 +29,11 @@ from returns.result import Failure, Result, Success
 _ValueType = TypeVar('_ValueType', covariant=True)
 _NewValueType = TypeVar('_NewValueType')
 
+_FuncParams = ParamSpec('_FuncParams')
+
 # Result related:
 _ErrorType = TypeVar('_ErrorType', covariant=True)
 _NewErrorType = TypeVar('_NewErrorType')
-
-# Helpers:
-_FirstType = TypeVar('_FirstType')
-_SecondType = TypeVar('_SecondType')
 
 
 class IO(
@@ -216,8 +214,8 @@ class IO(
 # Helper functions:
 
 def impure(
-    function: Callable[..., _NewValueType],
-) -> Callable[..., IO[_NewValueType]]:
+    function: Callable[_FuncParams, _NewValueType],
+) -> Callable[_FuncParams, IO[_NewValueType]]:
     """
     Decorator to mark function that it returns :class:`~IO` container.
 
@@ -236,11 +234,12 @@ def impure(
 
       >>> assert function(1) == IO(2)
 
-    Requires our :ref:`mypy plugin <mypy-plugins>`.
-
     """
     @wraps(function)
-    def decorator(*args, **kwargs):
+    def decorator(
+        *args: _FuncParams.args,
+        **kwargs: _FuncParams.kwargs,
+    ) -> IO[_NewValueType]:
         return IO(function(*args, **kwargs))
     return decorator
 
@@ -831,8 +830,8 @@ IOResultE = IOResult[_ValueType, Exception]
 # impure_safe decorator:
 
 def impure_safe(
-    function: Callable[..., _NewValueType],
-) -> Callable[..., IOResultE[_NewValueType]]:
+    function: Callable[_FuncParams, _NewValueType],
+) -> Callable[_FuncParams, IOResultE[_NewValueType]]:
     """
     Decorator to mark function that it returns :class:`~IOResult` container.
 
@@ -857,11 +856,12 @@ def impure_safe(
 
     Similar to :func:`returns.future.future_safe`
     and :func:`returns.result.safe` decorators.
-
-    Requires our :ref:`mypy plugin <mypy-plugins>`.
     """
     @wraps(function)
-    def decorator(*args, **kwargs):
+    def decorator(
+        *args: _FuncParams.args,
+        **kwargs: _FuncParams.kwargs,
+    ) -> IOResultE[_NewValueType]:
         try:
             return IOSuccess(function(*args, **kwargs))
         except Exception as exc:

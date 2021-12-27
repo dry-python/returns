@@ -3,18 +3,6 @@ from typing_extensions import Final
 # Constant fullnames for typechecking
 # ===================================
 
-#: Set of full names of our decorators.
-TYPED_DECORATORS: Final = frozenset((
-    'returns.result.safe',
-    'returns.io.impure',
-    'returns.io.impure_safe',
-    'returns.maybe.maybe',
-    'returns.future.future',
-    'returns.future.asyncify',
-    'returns.future.future_safe',
-    'returns.functions.not_',
-))
-
 #: Used for typed ``partial`` function.
 TYPED_PARTIAL_FUNCTION: Final = 'returns.curry.partial'
 

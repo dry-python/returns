@@ -1,10 +1,14 @@
 from functools import wraps
 from typing import Any, Callable, NoReturn, TypeVar
 
+from typing_extensions import ParamSpec
+
 # Aliases:
 _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')
 _ThirdType = TypeVar('_ThirdType')
+
+_FuncParams = ParamSpec('_FuncParams')
 
 
 def identity(instance: _FirstType) -> _FirstType:
@@ -128,7 +132,7 @@ def raise_exception(exception: Exception) -> NoReturn:
     raise exception
 
 
-def not_(function: Callable[..., bool]) -> Callable[..., bool]:
+def not_(function: Callable[_FuncParams, bool]) -> Callable[_FuncParams, bool]:
     """
     Denies the function returns.
 
@@ -143,7 +147,10 @@ def not_(function: Callable[..., bool]) -> Callable[..., bool]:
       >>> assert not_(is_successful)(Failure(1)) is True
 
     """
-    @wraps(function)  # noqa: WPS430
-    def wrapped_function(*args, **kwargs) -> bool:  # noqa: WPS430
+    @wraps(function)
+    def decorator(
+        *args: _FuncParams.args,
+        **kwargs: _FuncParams.kwargs,
+    ) -> bool:
         return not function(*args, **kwargs)
-    return wrapped_function
+    return decorator

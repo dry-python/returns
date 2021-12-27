@@ -12,7 +12,7 @@ from typing import (
     Union,
 )
 
-from typing_extensions import final
+from typing_extensions import ParamSpec, final
 
 from returns.interfaces.specific.maybe import MaybeBased2
 from returns.primitives.container import BaseContainer, container_equality
@@ -23,9 +23,7 @@ from returns.primitives.hkt import Kind1, SupportsKind1
 _ValueType = TypeVar('_ValueType', covariant=True)
 _NewValueType = TypeVar('_NewValueType')
 
-# Aliases:
-_FirstType = TypeVar('_FirstType')
-_SecondType = TypeVar('_SecondType')
+_FuncParams = ParamSpec('_FuncParams')
 
 
 class Maybe(
@@ -424,8 +422,8 @@ Maybe.empty = Nothing
 
 
 def maybe(
-    function: Callable[..., Optional[_ValueType]],
-) -> Callable[..., Maybe[_ValueType]]:
+    function: Callable[_FuncParams, Optional[_ValueType]],
+) -> Callable[_FuncParams, Maybe[_ValueType]]:
     """
     Decorator to convert ``None``-returning function to ``Maybe`` container.
 
@@ -445,10 +443,11 @@ def maybe(
       >>> assert might_be_none(0) == Nothing
       >>> assert might_be_none(1) == Some(1.0)
 
-    Requires our :ref:`mypy plugin <mypy-plugins>`.
-
     """
     @wraps(function)
-    def decorator(*args, **kwargs):
+    def decorator(
+        *args: _FuncParams.args,
+        **kwargs: _FuncParams.kwargs,
+    ) -> Maybe[_ValueType]:
         return Maybe.from_optional(function(*args, **kwargs))
     return decorator
