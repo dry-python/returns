@@ -27,7 +27,6 @@ from typing_extensions import final
 from returns.contrib.mypy import _consts
 from returns.contrib.mypy._features import (
     curry,
-    decorators,
     flow,
     kind,
     partial,
@@ -71,10 +70,6 @@ class _ReturnsPlugin(Plugin):
         _consts.TYPED_KIND_DEKIND: kind.dekind,
     }
 
-    _function_hook_def_plugins: ClassVar[Mapping[str, _FunctionDefCallback]] = {
-        **dict.fromkeys(_consts.TYPED_DECORATORS, decorators.analyze),
-    }
-
     _method_sig_hook_plugins: ClassVar[Mapping[str, _MethodSigCallback]] = {
         _consts.TYPED_PIPE_METHOD: pipe.signature,
         _consts.TYPED_KIND_KINDED_CALL: kind.kinded_signature,
@@ -99,10 +94,6 @@ class _ReturnsPlugin(Plugin):
 
         Otherwise, we return ``None``.
         """
-        if fullname in self._function_hook_def_plugins:
-            definition = self.lookup_fully_qualified(fullname)
-            plugin = self._function_hook_def_plugins.get(fullname)
-            return plugin(definition) if plugin else None
         return self._function_hook_plugins.get(fullname)
 
     def get_attribute_hook(

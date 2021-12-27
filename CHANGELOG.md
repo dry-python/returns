@@ -5,12 +5,21 @@ Versions before `1.0.0` are `0Ver`-based:
 incremental in minor, bugfixes only are patches.
 See [0Ver](https://0ver.org/).
 
-## 0.17.1
+
+## 0.18.0
+
+### Features
+
+- Now requires `typing_extensions>=4.0`
+- Now requires `mypy>=0.930`
+- Removes plugin for `@safe`, `@maybe`, `@future`, etc.
+  Because we now use `ParamSpec` type to properly type decorators
 
 ### Bugfixes
 
 - Fixes `__slots__` not being set properly in containers and their base classes
 - Fixes patching of containers in pytest plugin not undone after each test
+
 
 ## 0.17.0
 

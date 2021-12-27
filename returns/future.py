@@ -1,7 +1,7 @@
 from functools import wraps
 from typing import Any, Awaitable, Callable, Coroutine, Generator, TypeVar
 
-from typing_extensions import final
+from typing_extensions import ParamSpec, final
 
 from returns._internal.futures import _future, _future_result
 from returns.interfaces.specific.future import FutureBased1
@@ -23,6 +23,8 @@ _ValueType = TypeVar('_ValueType', covariant=True)
 _NewValueType = TypeVar('_NewValueType')
 _ErrorType = TypeVar('_ErrorType', covariant=True)
 _NewErrorType = TypeVar('_NewErrorType')
+
+_FuncParams = ParamSpec('_FuncParams')
 
 # Aliases:
 _FirstType = TypeVar('_FirstType')
@@ -414,10 +416,10 @@ class Future(
 
 def future(
     function: Callable[
-        ...,
+        _FuncParams,
         Coroutine[_FirstType, _SecondType, _ValueType],
     ],
-) -> Callable[..., Future[_ValueType]]:
+) -> Callable[_FuncParams, Future[_ValueType]]:
     """
     Decorator to turn a coroutine definition into ``Future`` container.
 
@@ -433,19 +435,19 @@ def future(
 
       >>> assert anyio.run(test(1).awaitable) == IO(2)
 
-    Requires our :ref:`mypy plugin <mypy-plugins>`.
-
     """
     @wraps(function)
-    def decorator(*args, **kwargs):
+    def decorator(
+        *args: _FuncParams.args,
+        **kwargs: _FuncParams.kwargs,
+    ) -> Future[_ValueType]:
         return Future(function(*args, **kwargs))
     return decorator
 
 
-def asyncify(function: Callable[..., _ValueType]) -> Callable[
-    ...,
-    Coroutine[Any, Any, _ValueType],
-]:
+def asyncify(
+    function: Callable[_FuncParams, _ValueType],
+) -> Callable[_FuncParams, Coroutine[Any, Any, _ValueType]]:
     """
     Decorator to turn a common function into an asynchronous function.
 
@@ -473,14 +475,15 @@ def asyncify(function: Callable[..., _ValueType]) -> Callable[
 
       >>> assert anyio.run(test, 1) == 2
 
-    Requires our :ref:`mypy plugin <mypy-plugins>`.
-
     Read more about async and sync functions:
     https://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function/
 
     """
     @wraps(function)
-    async def decorator(*args, **kwargs):
+    async def decorator(
+        *args: _FuncParams.args,
+        **kwargs: _FuncParams.kwargs,
+    ) -> _ValueType:
         return function(*args, **kwargs)
     return decorator
 
@@ -1360,8 +1363,11 @@ FutureResultE = FutureResult[_ValueType, Exception]
 # Decorators:
 
 def future_safe(
-    function: Callable[..., Coroutine[_FirstType, _SecondType, _ValueType]],
-) -> Callable[..., FutureResultE[_ValueType]]:
+    function: Callable[
+        _FuncParams,
+        Coroutine[_FirstType, _SecondType, _ValueType],
+    ],
+) -> Callable[_FuncParams, FutureResultE[_ValueType]]:
     """
     Decorator to convert exception-throwing coroutine to ``FutureResult``.
 
@@ -1392,10 +1398,11 @@ def future_safe(
     Similar to :func:`returns.io.impure_safe` and :func:`returns.result.safe`
     decorators, but works with ``async`` functions.
 
-    Requires our :ref:`mypy plugin <mypy-plugins>`.
-
     """
-    async def factory(*args, **kwargs) -> Result[_ValueType, Exception]:
+    async def factory(
+        *args: _FuncParams.args,
+        **kwargs: _FuncParams.kwargs,
+    ) -> Result[_ValueType, Exception]:
         try:
             return Success(await function(*args, **kwargs))
         except Exception as exc:

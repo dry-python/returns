@@ -14,7 +14,7 @@ from typing import (
     Union,
 )
 
-from typing_extensions import final
+from typing_extensions import ParamSpec, final
 
 from returns.interfaces.specific import result
 from returns.primitives.container import BaseContainer, container_equality
@@ -27,9 +27,7 @@ _NewValueType = TypeVar('_NewValueType')
 _ErrorType = TypeVar('_ErrorType', covariant=True)
 _NewErrorType = TypeVar('_NewErrorType')
 
-# Aliases:
-_FirstType = TypeVar('_FirstType')
-_SecondType = TypeVar('_SecondType')
+_FuncParams = ParamSpec('_FuncParams')
 
 
 class Result(
@@ -445,8 +443,8 @@ ResultE = Result[_ValueType, Exception]
 # Decorators:
 
 def safe(
-    function: Callable[..., _ValueType],
-) -> Callable[..., ResultE[_ValueType]]:
+    function: Callable[_FuncParams, _ValueType],
+) -> Callable[_FuncParams, ResultE[_ValueType]]:
     """
     Decorator to convert exception-throwing function to ``Result`` container.
 
@@ -470,12 +468,12 @@ def safe(
 
     Similar to :func:`returns.io.impure_safe`
     and :func:`returns.future.future_safe` decorators.
-
-    Requires our :ref:`mypy plugin <mypy-plugins>`.
-
     """
     @wraps(function)
-    def decorator(*args, **kwargs):
+    def decorator(
+        *args: _FuncParams.args,
+        **kwargs: _FuncParams.kwargs,
+    ) -> ResultE[_ValueType]:
         try:
             return Success(function(*args, **kwargs))
         except Exception as exc:
