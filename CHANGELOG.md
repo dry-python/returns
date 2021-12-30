@@ -30,6 +30,7 @@ See [0Ver](https://0ver.org/).
 - Enables Pattern Matching support for `IOResult` container
 - Improves `hypothesis` plugin, now we detect
   when type cannot be constructed and give a clear error message
+- Adds the option to pass what exceptions `@safe` will handle
 
 
 ## 0.16.0
