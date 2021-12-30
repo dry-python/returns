@@ -9,7 +9,7 @@ sphinx-hoverxref==1.0.0
 recommonmark==0.7.1
 m2r2==0.3.2
 tomlkit==0.8.0
-pygments==2.10.0
+pygments==2.11.0
 
 # Dependencies of our project:
 typing-extensions==4.0.1
