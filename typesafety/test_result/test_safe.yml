@@ -10,6 +10,18 @@
     reveal_type(test)  # N: Revealed type is "def () -> returns.result.Result[builtins.int, builtins.Exception]"
 
 
+- case: safe_decorator_passing_exceptions_no_params
+  disable_cache: false
+  main: |
+    from returns.result import safe
+
+    @safe((ValueError,))
+    def test() -> int:
+        return 1
+
+    reveal_type(test)  # N: Revealed type is "def () -> returns.result.Result[builtins.int, builtins.Exception]"
+
+
 - case: safe_composition_no_params
   disable_cache: false
   main: |
@@ -21,6 +33,17 @@
     reveal_type(safe(test))  # N: Revealed type is "def () -> returns.result.Result[builtins.int, builtins.Exception]"
 
 
+- case: safe_composition_passing_exceptions_no_params
+  disable_cache: false
+  main: |
+    from returns.result import safe
+
+    def test() -> int:
+        return 1
+
+    reveal_type(safe((EOFError,))(test))  # N: Revealed type is "def () -> returns.result.Result[builtins.int, builtins.Exception]"
+
+
 - case: safe_decorator_with_args
   disable_cache: false
   main: |
@@ -28,6 +51,19 @@
     from returns.result import safe
 
     @safe
+    def test(first: int, second: Optional[str] = None, *, kw: bool = True) -> int:
+        return 1
+
+    reveal_type(test)  # N: Revealed type is "def (first: builtins.int, second: Union[builtins.str, None] =, *, kw: builtins.bool =) -> returns.result.Result[builtins.int, builtins.Exception]"
+
+
+- case: safe_decorator_passing_exceptions_with_args
+  disable_cache: false
+  main: |
+    from typing import Optional
+    from returns.result import safe
+
+    @safe((ValueError, EOFError))
     def test(first: int, second: Optional[str] = None, *, kw: bool = True) -> int:
         return 1
 
@@ -46,6 +82,18 @@
     reveal_type(safe(test))  # N: Revealed type is "def (first: builtins.int, second: Union[builtins.str, None] =, *, kw: builtins.bool =) -> returns.result.Result[builtins.int, builtins.Exception]"
 
 
+- case: safe_composition_passing_exceptions_with_args
+  disable_cache: false
+  main: |
+    from typing import Optional
+    from returns.result import safe
+
+    def test(first: int, second: Optional[str] = None, *, kw: bool = True) -> int:
+        return 1
+
+    reveal_type(safe((ValueError,))(test))  # N: Revealed type is "def (first: builtins.int, second: Union[builtins.str, None] =, *, kw: builtins.bool =) -> returns.result.Result[builtins.int, builtins.Exception]"
+
+
 - case: safe_regression333
   disable_cache: false
   main: |
@@ -53,6 +101,19 @@
     from typing import Any
 
     @safe
+    def send(text: str) -> Any:
+        return "test"
+
+    reveal_type(send)  # N: Revealed type is "def (text: builtins.str) -> returns.result.Result[Any, builtins.Exception]"
+
+
+- case: safe_passing_exceptions_regression333
+  disable_cache: false
+  main: |
+    from returns.result import safe
+    from typing import Any
+
+    @safe((Exception,))
     def send(text: str) -> Any:
         return "test"
 
@@ -72,12 +133,37 @@
     reveal_type(safe(tap(Response.raise_for_status)))  # N: Revealed type is "def (main.Response*) -> returns.result.Result[main.Response, builtins.Exception]"
 
 
+- case: safe_passing_exceptions_regression641
+  disable_cache: false
+  main: |
+    from returns.result import safe
+    from returns.functions import tap
+
+    class Response(object):
+        def raise_for_status(self) -> None:
+            ...
+
+    reveal_type(safe((EOFError,))(tap(Response.raise_for_status)))  # N: Revealed type is "def (main.Response*) -> returns.result.Result[main.Response, builtins.Exception]"
+
+
 - case: safe_decorator_with_args_kwargs
   disable_cache: false
   main: |
     from returns.result import safe
 
     @safe
+    def test(*args, **kwargs) -> int:
+        return 1
+
+    reveal_type(test)  # N: Revealed type is "def (*args: Any, **kwargs: Any) -> returns.result.Result[builtins.int, builtins.Exception]"
+
+
+- case: safe_decorator_passing_exceptions_with_args_kwargs
+  disable_cache: false
+  main: |
+    from returns.result import safe
+
+    @safe((EOFError,))
     def test(*args, **kwargs) -> int:
         return 1
 
@@ -96,6 +182,18 @@
     reveal_type(test)  # N: Revealed type is "def (*args: builtins.int, **kwargs: builtins.str) -> returns.result.Result[builtins.int, builtins.Exception]"
 
 
+- case: safe_decorator_passing_exceptions_with_args_kwargs
+  disable_cache: false
+  main: |
+    from returns.result import safe
+
+    @safe((Exception,))
+    def test(*args: int, **kwargs: str) -> int:
+        return 1
+
+    reveal_type(test)  # N: Revealed type is "def (*args: builtins.int, **kwargs: builtins.str) -> returns.result.Result[builtins.int, builtins.Exception]"
+
+
 - case: safe_decorator_composition
   disable_cache: false
   main: |
@@ -104,6 +202,20 @@
 
     @impure
     @safe
+    def test(*args: int, **kwargs: str) -> int:
+        return 1
+
+    reveal_type(test)  # N: Revealed type is "def (*args: builtins.int, **kwargs: builtins.str) -> returns.io.IO[returns.result.Result*[builtins.int*, builtins.Exception]]"
+
+
+- case: safe_decorator_passing_exceptions_composition
+  disable_cache: false
+  main: |
+    from returns.io import impure
+    from returns.result import safe
+
+    @impure
+    @safe((ValueError,))
     def test(*args: int, **kwargs: str) -> int:
         return 1
 

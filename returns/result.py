@@ -9,9 +9,11 @@ from typing import (
     List,
     NoReturn,
     Optional,
+    Tuple,
     Type,
     TypeVar,
     Union,
+    overload,
 )
 
 from typing_extensions import ParamSpec, final
@@ -442,9 +444,35 @@ ResultE = Result[_ValueType, Exception]
 
 # Decorators:
 
+@overload
 def safe(
-    function: Callable[_FuncParams, _ValueType],
+    arg: Callable[_FuncParams, _ValueType],
 ) -> Callable[_FuncParams, ResultE[_ValueType]]:
+    """Decorator to convert exception-throwing for any kind of Exception."""
+
+
+@overload
+def safe(
+    arg: Tuple[Type[Exception], ...],
+) -> Callable[
+    [Callable[_FuncParams, _ValueType]],
+    Callable[_FuncParams, ResultE[_ValueType]],
+]:
+    """Decorator to convert exception-throwing just for a set of Exceptions."""
+
+
+def safe(  # noqa: WPS234
+    arg: Union[
+        Callable[_FuncParams, _ValueType],
+        Tuple[Type[Exception], ...],
+    ],
+) -> Union[
+    Callable[_FuncParams, ResultE[_ValueType]],
+    Callable[
+        [Callable[_FuncParams, _ValueType]],
+        Callable[_FuncParams, ResultE[_ValueType]],
+    ],
+]:
     """
     Decorator to convert exception-throwing function to ``Result`` container.
 
@@ -469,13 +497,18 @@ def safe(
     Similar to :func:`returns.io.impure_safe`
     and :func:`returns.future.future_safe` decorators.
     """
-    @wraps(function)
-    def decorator(
-        *args: _FuncParams.args,
-        **kwargs: _FuncParams.kwargs,
-    ) -> ResultE[_ValueType]:
-        try:
-            return Success(function(*args, **kwargs))
-        except Exception as exc:
-            return Failure(exc)
-    return decorator
+    def factory(
+        function: Callable[_FuncParams, _ValueType],
+        exceptions: Tuple[Type[Exception], ...] = (Exception,),
+    ) -> Callable[_FuncParams, ResultE[_ValueType]]:
+        @wraps(function)
+        def decorator(*args: _FuncParams.args, **kwargs: _FuncParams.kwargs):
+            try:
+                return Success(function(*args, **kwargs))
+            except exceptions as exc:
+                return Failure(exc)
+        return decorator
+
+    if callable(arg):
+        return factory(arg)
+    return lambda func: factory(func, arg)
