@@ -506,7 +506,7 @@ def safe(  # type: ignore # noqa: WPS234, C901
       >>> assert isinstance(might_raise(0), Result.failure_type)
 
     In this case, only exceptions that are explicitly
-    listed are going to be catched.
+    listed are going to be caught.
 
     Similar to :func:`returns.io.impure_safe`
     and :func:`returns.future.future_safe` decorators.
