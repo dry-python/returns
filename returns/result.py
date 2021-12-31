@@ -526,6 +526,6 @@ def safe(  # type: ignore # noqa: WPS234, C901
     if callable(function):
         return factory(function, (Exception,))
     if isinstance(function, tuple):
-        exceptions = function
+        exceptions = function  # type: ignore
         function = None
     return lambda function: factory(function, exceptions)  # type: ignore
