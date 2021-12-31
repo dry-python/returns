@@ -461,7 +461,7 @@ def safe(
     """Decorator to convert exception-throwing just for a set of Exceptions."""
 
 
-def safe(  # type: ignore # noqa: WPS234
+def safe(  # type: ignore # noqa: WPS234, C901
     function: Optional[Callable[_FuncParams, _ValueType]] = None,
     exceptions: Optional[Tuple[Type[Exception], ...]] = None,
 ) -> Union[
