@@ -446,14 +446,14 @@ ResultE = Result[_ValueType, Exception]
 
 @overload
 def safe(
-    arg: Callable[_FuncParams, _ValueType],
+    function: Callable[_FuncParams, _ValueType],
 ) -> Callable[_FuncParams, ResultE[_ValueType]]:
     """Decorator to convert exception-throwing for any kind of Exception."""
 
 
 @overload
 def safe(
-    arg: Tuple[Type[Exception], ...],
+    exceptions: Tuple[Type[Exception], ...],
 ) -> Callable[
     [Callable[_FuncParams, _ValueType]],
     Callable[_FuncParams, ResultE[_ValueType]],
@@ -461,11 +461,9 @@ def safe(
     """Decorator to convert exception-throwing just for a set of Exceptions."""
 
 
-def safe(  # noqa: WPS234
-    arg: Union[
-        Callable[_FuncParams, _ValueType],
-        Tuple[Type[Exception], ...],
-    ],
+def safe(  # type: ignore # noqa: WPS234
+    function: Optional[Callable[_FuncParams, _ValueType]] = None,
+    exceptions: Optional[Tuple[Type[Exception], ...]] = None,
 ) -> Union[
     Callable[_FuncParams, ResultE[_ValueType]],
     Callable[
@@ -494,21 +492,40 @@ def safe(  # noqa: WPS234
       >>> assert might_raise(1) == Success(1.0)
       >>> assert isinstance(might_raise(0), Result.failure_type)
 
+    You can also use it with explicit exception types as the first argument:
+
+    .. code:: python
+
+      >>> from returns.result import Result, Success, safe
+
+      >>> @safe(exceptions=(ZeroDivisionError,))
+      ... def might_raise(arg: int) -> float:
+      ...     return 1 / arg
+
+      >>> assert might_raise(1) == Success(1.0)
+      >>> assert isinstance(might_raise(0), Result.failure_type)
+
+    In this case, only exceptions that are explicitly
+    listed are going to be catched.
+
     Similar to :func:`returns.io.impure_safe`
     and :func:`returns.future.future_safe` decorators.
     """
     def factory(
-        function: Callable[_FuncParams, _ValueType],
-        exceptions: Tuple[Type[Exception], ...] = (Exception,),
+        inner_function: Callable[_FuncParams, _ValueType],
+        inner_exceptions: Tuple[Type[Exception], ...],
     ) -> Callable[_FuncParams, ResultE[_ValueType]]:
-        @wraps(function)
+        @wraps(inner_function)
         def decorator(*args: _FuncParams.args, **kwargs: _FuncParams.kwargs):
             try:
-                return Success(function(*args, **kwargs))
-            except exceptions as exc:
+                return Success(inner_function(*args, **kwargs))
+            except inner_exceptions as exc:
                 return Failure(exc)
         return decorator
 
-    if callable(arg):
-        return factory(arg)
-    return lambda func: factory(func, arg)
+    if callable(function):
+        return factory(function, (Exception,))
+    if isinstance(function, tuple):
+        exceptions = function
+        function = None
+    return lambda function: factory(function, exceptions)  # type: ignore

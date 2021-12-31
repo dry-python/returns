@@ -21,6 +21,12 @@
 
     reveal_type(test)  # N: Revealed type is "def () -> returns.result.Result[builtins.int, builtins.Exception]"
 
+    @safe(exceptions=(ValueError,))
+    def test2() -> int:
+        return 1
+
+    reveal_type(test2)  # N: Revealed type is "def () -> returns.result.Result[builtins.int, builtins.Exception]"
+
 
 - case: safe_composition_no_params
   disable_cache: false

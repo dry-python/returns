@@ -103,9 +103,18 @@ If you want to `safe` handle only a set of exceptions:
 
 .. code:: python
 
-  >>> @safe((ZeroDivisionError,))  # It'll handle only `ZeroDivisionError`
+  >>> @safe(exceptions=(ZeroDivisionError,))  # Other exceptions will be raised
   ... def divide(number: int) -> float:
+  ...     if number > 10:
+  ...         raise ValueError('Too big')
   ...     return number / number
+
+  >>> assert divide(5) == Success(1.0)
+  >>> assert divide(0).failure()
+  >>> divide(15)
+  Traceback (most recent call last):
+    ...
+  ValueError: Too big
 
 FAQ
 ---
