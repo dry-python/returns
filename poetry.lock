@@ -1292,7 +1292,7 @@ test = ["pytest", "pytest-cov", "html5lib", "cython", "typed-ast"]
 
 [[package]]
 name = "sphinx-autodoc-typehints"
-version = "1.13.1"
+version = "1.14.0"
 description = "Type hints (PEP 484) support for the Sphinx autodoc extension"
 category = "dev"
 optional = false
@@ -1302,7 +1302,7 @@ python-versions = ">=3.7"
 Sphinx = ">=4"
 
 [package.extras]
-testing = ["covdefaults (>=2)", "coverage (>=6)", "pytest (>=6)", "pytest-cov (>=3)", "sphobjinv (>=2)", "typing-extensions (>=3.5)"]
+testing = ["covdefaults (>=2)", "coverage (>=6)", "diff-cover (>=6.4)", "pytest (>=6)", "pytest-cov (>=3)", "sphobjinv (>=2)", "typing-extensions (>=3.5)"]
 type_comments = ["typed-ast (>=1.4.0)"]
 
 [[package]]
@@ -1562,7 +1562,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "2d0ee9c82381768bafe6523af1830845758bf897a10366a2d1c523b8b8aa1d48"
+content-hash = "6dc29b0031af03004c751bd667f8b068b46936cc5a54a6f6c9725d197cb76483"
 
 [metadata.files]
 alabaster = [
@@ -2314,8 +2314,8 @@ sphinx = [
     {file = "Sphinx-4.3.2.tar.gz", hash = "sha256:0a8836751a68306b3fe97ecbe44db786f8479c3bf4b80e3a7f5c838657b4698c"},
 ]
 sphinx-autodoc-typehints = [
-    {file = "sphinx_autodoc_typehints-1.13.1-py3-none-any.whl", hash = "sha256:4edf1914cedcaf7d573ee441850999a8f5b5862b72f59e3c207b4ec22a28f955"},
-    {file = "sphinx_autodoc_typehints-1.13.1.tar.gz", hash = "sha256:cff26fb3425550d8c8c9ae0426e5e29cba8e92505710c1f6d397b86cf20f034f"},
+    {file = "sphinx_autodoc_typehints-1.14.0-py3-none-any.whl", hash = "sha256:2780ed346f0bc056fd922131a41e5370dce76ddfa7fbd8ff3ff4c3f36c4c328f"},
+    {file = "sphinx_autodoc_typehints-1.14.0.tar.gz", hash = "sha256:e10069d8c13a5b11021bb27f78cc69975d45c47d0a6b6343d9764acbcdc9a1fa"},
 ]
 sphinx-hoverxref = [
     {file = "sphinx-hoverxref-1.0.0.tar.gz", hash = "sha256:0af239b93e8dcae0caffe99a6beea4dc7d1efb738c085e9f6bcdf46fe7ae1195"},
