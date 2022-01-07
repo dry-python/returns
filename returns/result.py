@@ -529,3 +529,41 @@ def safe(  # type: ignore # noqa: WPS234, C901
         exceptions = function  # type: ignore
         function = None
     return lambda function: factory(function, exceptions)  # type: ignore
+
+
+_ParamType = TypeVar('_ParamType')
+
+
+def attempt(
+    func: Callable[[_ParamType], _ValueType],
+) -> Callable[[_ParamType], Result[_ValueType, _ParamType]]:
+    """
+    Decorator to convert exception-throwing function to ``Result`` container.
+
+    It's very similar with :func:`returns.result.safe`, the difference is when
+    an exception is raised it won't wrap that given exception into a Failure,
+    it'll wrap the argument that lead to the exception.
+
+    .. code:: python
+
+        >>> import json
+        >>> from typing import Dict, Any
+
+        >>> from returns.result import Failure, Success, attempt
+
+        >>> @attempt
+        ... def parse_json(string: str) -> Dict[str, Any]:
+        ...     return json.loads(string)
+
+        >>> assert parse_json('{"key": "value"}') == Success({'key': 'value'})
+        >>> assert parse_json('incorrect input') == Failure('incorrect input')
+
+    """
+    @wraps(func)
+    def decorator(arg: _ParamType) -> Result[_ValueType, _ParamType]:
+        try:
+            return Success(func(arg))
+        except Exception:
+            return Failure(arg)
+
+    return decorator

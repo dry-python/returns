@@ -1,0 +1,45 @@
+- case: attempt_decorator_no_params
+  disable_cache: false
+  main: |
+    from returns.result import attempt
+
+    @attempt
+    def test() -> int:
+        return 1
+  out: |
+    main:3: error: Argument 1 to "attempt" has incompatible type "Callable[[], int]"; expected "Callable[[<nothing>], int]"
+
+
+- case: attempt_decorator_one_param
+  disable_cache: false
+  main: |
+    from returns.result import attempt
+
+    @attempt
+    def test(param: str) -> int:
+        return 1
+
+    reveal_type(test)  # N: Revealed type is "def (builtins.str*) -> returns.result.Result[builtins.int*, builtins.str*]"
+
+
+- case: attempt_decorator_one_param_using_as_function
+  disable_cache: false
+  main: |
+    from returns.result import attempt
+
+    def test(param: int) -> str:
+        return 'str'
+
+    reveal_type(attempt(test))  # N: Revealed type is "def (builtins.int*) -> returns.result.Result[builtins.str*, builtins.int*]"
+
+
+- case: attempt_decorator_two_params
+  disable_cache: false
+  main: |
+    from returns.result import attempt
+
+    @attempt
+    def test(first: str, second: float) -> int:
+        return 1
+  out: |
+    main:3: error: Argument 1 to "attempt" has incompatible type "Callable[[str, float], int]"; expected "Callable[[str], int]"
