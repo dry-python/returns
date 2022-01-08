@@ -116,6 +116,28 @@ If you want to `safe` handle only a set of exceptions:
     ...
   ValueError: Too big
 
+attempt
+~~~~~~~
+
+Similar to :func:`safe <returns.result.safe>` function but instead
+of wrapping the exception error in a :class:`Failure <returns.result.Failure>` container it'll wrap the
+argument that lead to that exception.
+
+.. code:: python
+
+  >>> from returns.result import Failure, Success, attempt
+
+  >>> @attempt
+  ... def divide_itself(number: int) -> float:
+  ...     return number / number
+
+  >>> assert divide_itself(2) == Success(1.0)
+  >>> assert divide_itself(0) == Failure(0)
+
+.. warning::
+
+  This decorator works only with functions that has just one argument.
+
 FAQ
 ---
 
