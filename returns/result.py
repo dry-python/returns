@@ -29,6 +29,7 @@ _NewValueType = TypeVar('_NewValueType')
 _ErrorType = TypeVar('_ErrorType', covariant=True)
 _NewErrorType = TypeVar('_NewErrorType')
 
+_FirstType = TypeVar('_FirstType')
 _FuncParams = ParamSpec('_FuncParams')
 
 
@@ -531,12 +532,9 @@ def safe(  # type: ignore # noqa: WPS234, C901
     return lambda function: factory(function, exceptions)  # type: ignore
 
 
-_ParamType = TypeVar('_ParamType')
-
-
 def attempt(
-    func: Callable[[_ParamType], _ValueType],
-) -> Callable[[_ParamType], Result[_ValueType, _ParamType]]:
+    func: Callable[[_FirstType], _NewValueType],
+) -> Callable[[_FirstType], Result[_NewValueType, _FirstType]]:
     """
     Decorator to convert exception-throwing function to ``Result`` container.
 
@@ -560,7 +558,7 @@ def attempt(
 
     """
     @wraps(func)
-    def decorator(arg: _ParamType) -> Result[_ValueType, _ParamType]:
+    def decorator(arg: _FirstType) -> Result[_NewValueType, _FirstType]:
         try:
             return Success(func(arg))
         except Exception:
