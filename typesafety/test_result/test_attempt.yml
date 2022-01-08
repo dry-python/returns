@@ -21,12 +21,6 @@
 
     reveal_type(test)  # N: Revealed type is "def (builtins.str*) -> returns.result.Result[builtins.int*, builtins.str*]"
 
-
-- case: attempt_decorator_one_param_using_as_function
-  disable_cache: false
-  main: |
-    from returns.result import attempt
-
     def test(param: int) -> str:
         return 'str'
 
