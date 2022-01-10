@@ -76,9 +76,7 @@ autodoc_default_options = {
     'show-inheritance': True,
 }
 
-# Set `typing.TYPE_CHECKING` to `True`:
 # https://pypi.org/project/sphinx-autodoc-typehints/
-set_type_checking_flag = False
 always_document_param_types = True
 
 # See https://sphinx-hoverxref.readthedocs.io/en/latest/configuration.html
