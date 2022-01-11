@@ -1046,7 +1046,7 @@ pytest = ">=3.10"
 
 [[package]]
 name = "pytest-mypy-plugins"
-version = "1.9.2"
+version = "1.9.3"
 description = "pytest plugin for writing tests for mypy plugins"
 category = "dev"
 optional = false
@@ -1562,7 +1562,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "b479835583f7cfaf167798ef6db08d8562b9e58b4d74eaabaac94510e09add2d"
+content-hash = "80d2a90ef70e079fe33e9dacc796d9a902ee6298bccc833253e7f035f588eab3"
 
 [metadata.files]
 alabaster = [
@@ -2109,8 +2109,8 @@ pytest-forked = [
     {file = "pytest_forked-1.4.0-py3-none-any.whl", hash = "sha256:bbbb6717efc886b9d64537b41fb1497cfaf3c9601276be8da2cccfea5a3c8ad8"},
 ]
 pytest-mypy-plugins = [
-    {file = "pytest-mypy-plugins-1.9.2.tar.gz", hash = "sha256:26528ab66549ade53badae2ab396f426379f921bf5ddd91534c669a25b4b7e69"},
-    {file = "pytest_mypy_plugins-1.9.2-py3-none-any.whl", hash = "sha256:1985d27d84c92c14b1604eda2adf2d1c9d0c050633fd48183d661eb5deac23ee"},
+    {file = "pytest-mypy-plugins-1.9.3.tar.gz", hash = "sha256:c2c6590ee68fd634013fdd0b47a5c83df300afd8b38d5aabd3b29e21b7907221"},
+    {file = "pytest_mypy_plugins-1.9.3-py3-none-any.whl", hash = "sha256:10e60bd59a2b043ebda70f9a0ad1a8c9324ce6d0b46b93cae3b1172df2d4d81b"},
 ]
 pytest-randomly = [
     {file = "pytest-randomly-3.11.0.tar.gz", hash = "sha256:9f013b8c1923130f3d0a286fde56e1fc52cfb3547b8eedf2765c460cee979c7f"},
