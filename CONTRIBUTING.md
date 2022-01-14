@@ -118,6 +118,7 @@ Before submitting your code please do the following steps:
 7. Run `mypy` to ensure that types are correct
 8. Run `flake8` to ensure that style is correct
 9. Run `doc8` to ensure that docs are correct
+10. Run `slotscheck` to ensure that slots are correct
 
 
 ## Other help
