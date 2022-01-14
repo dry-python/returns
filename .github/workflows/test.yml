@@ -62,7 +62,7 @@ jobs:
         poetry run poetry check
         poetry run pip check
         poetry run safety check --full-report
-        poetry run slotscheck --verbose
+        poetry run slotscheck returns --verbose
         # We do this to speed up the build:
         poetry run pytest typesafety -p no:cov -o addopts="" --mypy-ini-file=setup.cfg
 
