@@ -11,6 +11,11 @@ See [0Ver](https://0ver.org/).
 
 - Adds `attempt` decorator
 
+### Misc
+
+- Check ``__slots__`` correctness with `slotscheck`
+
+
 ## 0.18.0
 
 New Year Release! 🎄
