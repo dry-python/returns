@@ -1,4 +1,4 @@
-from typing import Generic, Tuple, TypeVar
+from typing import Generic, TypeVar
 
 _InstanceType = TypeVar('_InstanceType')
 _ReturnType = TypeVar('_ReturnType')
@@ -56,7 +56,7 @@ class _Pipe(Generic[
     See docs on ``pipe`` feature in ``mypy`` plugin.
     """
 
-    def __init__(self, __functions: Tuple[
+    def __init__(self, __functions: tuple[
         _PipelineStepType1,
         _PipelineStepType2,
         _PipelineStepType3,
