@@ -80,7 +80,7 @@ flake8-pyi = "^22.1"
 # correctly with Python 3.10. That lib is a dependency of `nitpick`!
 nitpick = { version = "^0.31", python = "<3.10" }
 codespell = "^2.1"
-slotscheck = "^0.10.2"
+slotscheck = "^0.12.0"
 
 safety = "^1.10"
 
