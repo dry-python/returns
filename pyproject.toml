@@ -68,7 +68,7 @@ typing-extensions = ">=4.0,<5.0"
 [tool.poetry.dev-dependencies]
 anyio = "^3.5"
 curio = "^1.5"
-trio = "^0.19"
+trio = "^0.20"
 attrs = "^21.4"
 httpx = "^0.22"
 
