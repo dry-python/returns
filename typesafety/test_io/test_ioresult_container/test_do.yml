@@ -66,6 +66,7 @@
 
 
 - case: do_with_if
+  skip: sys.version_info[:2] < (3, 8)
   disable_cache: false
   main: |
     from returns.io import IOSuccess, IOResult

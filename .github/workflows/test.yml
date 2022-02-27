@@ -18,6 +18,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    fast-fail: false
     strategy:
       matrix:
         python-version: ['3.7', '3.8', '3.9', '3.10']
