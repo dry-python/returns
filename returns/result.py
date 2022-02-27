@@ -6,6 +6,8 @@ from typing import (
     Any,
     Callable,
     ClassVar,
+    Generator,
+    Iterator,
     List,
     NoReturn,
     Optional,
@@ -203,6 +205,43 @@ class Result(
           >>> assert Failure('aa').lash(lashable) == Success('aab')
 
         """
+
+    def __iter__(self) -> Iterator[_ValueType]:
+        """API for :ref:`do-notation`."""
+        yield self.unwrap()
+
+    @classmethod
+    def do(
+        cls,
+        expr: Generator[_NewValueType, None, None],
+    ) -> 'Result[_NewValueType, _NewErrorType]':
+        """
+        Allows working with unwrapped values of containers in a safe way.
+
+        .. code:: python
+
+          >>> from returns.result import Result, Failure, Success
+
+          >>> assert Result.do(
+          ...     first + second
+          ...     for first in Success(2)
+          ...     for second in Success(3)
+          ... ) == Success(5)
+
+          >>> assert Result.do(
+          ...     first + second
+          ...     for first in Failure('a')
+          ...     for second in Success(3)
+          ... ) == Failure('a')
+
+        See :ref:`do-notation` to learn more.
+        This feature requires our :ref:`mypy plugin <mypy-plugins>`.
+
+        """
+        try:
+            return Result.from_value(next(expr))
+        except UnwrapFailedError as exc:
+            return exc.halted_container  # type: ignore
 
     def value_or(
         self,

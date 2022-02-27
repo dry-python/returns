@@ -25,7 +25,14 @@ from mypy.types import Type as MypyType
 from typing_extensions import final
 
 from returns.contrib.mypy import _consts
-from returns.contrib.mypy._features import curry, flow, kind, partial, pipe
+from returns.contrib.mypy._features import (
+    curry,
+    do_notation,
+    flow,
+    kind,
+    partial,
+    pipe,
+)
 
 # Type aliases
 # ============
@@ -73,6 +80,7 @@ class _ReturnsPlugin(Plugin):
         _consts.TYPED_PIPE_METHOD: pipe.infer,
         _consts.TYPED_KIND_KINDED_CALL: kind.kinded_call,
         _consts.TYPED_KIND_KINDED_GET: kind.kinded_get_descriptor,
+        **dict.fromkeys(_consts.DO_NOTATION_METHODS, do_notation.analyze),
     }
 
     def get_function_hook(

@@ -252,7 +252,7 @@ class RequiresContext(
           ...         lambda deps: deps['message'] if lg else 'error',
           ...     )
 
-          >>> def second(text: str) -> RequiresContext[int, int]:
+          >>> def second(text: str) -> RequiresContext[int, Deps]:
           ...     return first(len(text) > 3)
 
           >>> assert second('abc')({'message': 'ok'}) == 'error'
@@ -275,7 +275,7 @@ class RequiresContext(
           ...         lambda deps: deps['message'] if lg else 'err',
           ...     )
 
-          >>> def new_second(text: str) -> RequiresContext[int, int]:
+          >>> def new_second(text: str) -> RequiresContext[int, Deps]:
           ...     return RequiresContext[int, Deps].ask().bind(
           ...         lambda deps: new_first(len(text) > deps.get('limit', 3)),
           ...     )

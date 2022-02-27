@@ -11,7 +11,7 @@ on:
       - 'docs/requirements.txt'
   workflow_dispatch:
 
-concurrency: 
+concurrency:
   group: ${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
@@ -73,7 +73,7 @@ jobs:
         poetry run pytest typesafety -p no:cov -o addopts="" --mypy-ini-file=setup.cfg
 
     - name: Upload coverage to Codecov
-      if: matrix.python-version == 3.8
+      if: ${{ matrix.python-version }} == 3.8
       uses: codecov/codecov-action@v2.1.0
       with:
         file: ./coverage.xml
