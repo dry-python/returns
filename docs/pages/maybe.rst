@@ -237,6 +237,8 @@ Choose wisely between ``.from_value`` and ``.map``,
 and ``.from_optional`` and ``.bind_optional``.
 They are similar, but do different things.
 
+Note that you can also use :meth:`returns.pipeline.is_successful` to check if the value is present.
+
 See the
 `original issue about Some(None) <https://github.com/dry-python/returns/issues/314>`_
 for more details and the full history.
