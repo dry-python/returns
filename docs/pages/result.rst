@@ -229,7 +229,7 @@ See the example below:
   >>> assert Success('').bind(parse_json).alt(str) == Failure('Expecting value: line 1 column 1 (char 0)')
 
 How to check if your result is a success or failure?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``Result`` is a container and you can use :meth:`returns.pipeline.is_successful` like so:
 
