@@ -12,13 +12,13 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: ${{ github.head_ref || github.run_id }}
+  group: test-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    fast-fail: false
+    fail-fast: false
     strategy:
       matrix:
         python-version: ['3.7', '3.8', '3.9', '3.10']
