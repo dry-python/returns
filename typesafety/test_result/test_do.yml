@@ -1,0 +1,78 @@
+- case: do_all_errors
+  disable_cache: false
+  main: |
+    from returns.result import Result, Failure
+
+    reveal_type(Result.do(  # N: Revealed type is "returns.result.Result[Any, Union[builtins.int*, builtins.str*]]"
+        first / second
+        for first in Failure(1)
+        for second in Failure('a')
+    ))
+
+
+- case: do_no_errors
+  disable_cache: false
+  main: |
+    from returns.result import Success, Result
+
+    reveal_type(Result.do(  # N: Revealed type is "returns.result.Result[builtins.float*, <nothing>]"
+        x + y
+        for x in Success(1)
+        for y in Success(2.5)
+    ))
+
+
+- case: do_with_errors
+  disable_cache: false
+  main: |
+    from returns.result import Success, Result
+
+    a: Result[int, str]
+    b: Result[float, bytes]
+
+    reveal_type(Result.do(  # N: Revealed type is "returns.result.Result[builtins.float*, Union[builtins.str, builtins.bytes]]"
+        x + y
+        for x in a
+        for y in b
+    ))
+
+
+- case: do_types_missmatch
+  disable_cache: false
+  main: |
+    from returns.result import Success, Result
+    from returns.io import IOSuccess
+
+    Result.do(
+        x + y
+        for x in IOSuccess(1)  # E: Invalid type supplied in do-notation: expected "returns.result.Result[Any, Any]", got "returns.io.IOSuccess[builtins.int*]"
+        for y in Success(2.5)
+    )
+
+
+- case: do_with_if
+  skip: sys.version_info[:2] < (3, 8)
+  disable_cache: false
+  main: |
+    from returns.result import Success, Result
+
+    Result.do(  # E: Using "if" conditions inside a generator is not allowed
+        x + y
+        for x in Success(1)
+        for y in Success(2.5)
+        if y > 5
+    )
+
+
+- case: do_with_var
+  disable_cache: false
+  main: |
+    from returns.result import Success, Result
+
+    x = (
+        x + y
+        for x in Success(1)
+        for y in Success(2.5)
+    )
+
+    Result.do(x)  # E: Literal generator expression is required, not a variable or function call

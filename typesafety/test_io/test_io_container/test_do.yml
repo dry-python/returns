@@ -1,0 +1,39 @@
+- case: do_types_missmatch
+  disable_cache: false
+  main: |
+    from returns.io import IO
+    from returns.result import Success
+
+    IO.do(
+        x + y
+        for x in Success(1)  # E: Invalid type supplied in do-notation: expected "returns.io.IO[Any]", got "returns.result.Success[builtins.int*]"
+        for y in IO(2.5)
+    )
+
+
+- case: do_with_if
+  skip: sys.version_info[:2] < (3, 8)
+  disable_cache: false
+  main: |
+    from returns.io import IO
+
+    IO.do(  # E: Using "if" conditions inside a generator is not allowed
+        x + y
+        for x in IO(1)
+        for y in IO(2.5)
+        if y > 5
+    )
+
+
+- case: do_with_var
+  disable_cache: false
+  main: |
+    from returns.io import IO
+
+    x = (
+        x + y
+        for x in IO(1)
+        for y in IO(2.5)
+    )
+
+    IO.do(x)  # E: Literal generator expression is required, not a variable or function call

@@ -22,3 +22,16 @@ TYPED_KINDN_ACCESS: Final = '{0}.'.format(TYPED_KINDN)
 TYPED_KIND_DEKIND: Final = 'returns.primitives.hkt.dekind'
 TYPED_KIND_KINDED_CALL: Final = 'returns.primitives.hkt.Kinded.__call__'
 TYPED_KIND_KINDED_GET: Final = 'returns.primitives.hkt.Kinded.__get__'
+
+#: Used for :ref:`do-notation`.
+DO_NOTATION_METHODS: Final = (
+    # Just validation:
+    'returns.io.IO.do',
+    'returns.maybe.Maybe.do',
+    'returns.future.Future.do',
+
+    # Also infer error types:
+    'returns.result.Result.do',
+    'returns.io.IOResult.do',
+    'returns.future.FutureResult.do',
+)

@@ -5,10 +5,12 @@ Versions before `1.0.0` are `0Ver`-based:
 incremental in minor, bugfixes only are patches.
 See [0Ver](https://0ver.org/).
 
+
 ## 0.19.0 WIP
 
 ### Features
 
+- Adds `do` notation
 - Adds `attempt` decorator
 
 ### Misc

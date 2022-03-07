@@ -1,5 +1,14 @@
 from functools import wraps
-from typing import Any, Awaitable, Callable, Coroutine, Generator, TypeVar
+from typing import (
+    Any,
+    AsyncGenerator,
+    AsyncIterator,
+    Awaitable,
+    Callable,
+    Coroutine,
+    Generator,
+    TypeVar,
+)
 
 from typing_extensions import ParamSpec, final
 
@@ -8,6 +17,7 @@ from returns.interfaces.specific.future import FutureBased1
 from returns.interfaces.specific.future_result import FutureResultBased2
 from returns.io import IO, IOResult
 from returns.primitives.container import BaseContainer
+from returns.primitives.exceptions import UnwrapFailedError
 from returns.primitives.hkt import (
     Kind1,
     Kind2,
@@ -326,6 +336,42 @@ class Future(
 
         """
         return Future(_future.async_bind_io(function, self._inner_value))
+
+    def __aiter__(self) -> AsyncIterator[_ValueType]:  # noqa: WPS611
+        """API for :ref:`do-notation`."""
+        async def factory() -> AsyncGenerator[_ValueType, None]:
+            yield await self._inner_value
+        return factory()
+
+    @classmethod
+    def do(
+        cls,
+        expr: AsyncGenerator[_NewValueType, None],
+    ) -> 'Future[_NewValueType]':
+        """
+        Allows working with unwrapped values of containers in a safe way.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.future import Future
+          >>> from returns.io import IO
+
+          >>> async def main() -> bool:
+          ...     return await Future.do(
+          ...         first + second
+          ...         async for first in Future.from_value(2)
+          ...         async for second in Future.from_value(3)
+          ...     ) == IO(5)
+
+          >>> assert anyio.run(main) is True
+
+        See :ref:`do-notation` to learn more.
+
+        """
+        async def factory() -> _NewValueType:
+            return await expr.__anext__()  # noqa: WPS609
+        return Future(factory())
 
     @classmethod
     def from_value(cls, inner_value: _NewValueType) -> 'Future[_NewValueType]':
@@ -1058,6 +1104,55 @@ class FutureResult(
             function,
             self._inner_value,
         ))
+
+    def __aiter__(self) -> AsyncIterator[_ValueType]:  # noqa: WPS611
+        """API for :ref:`do-notation`."""
+        async def factory() -> AsyncGenerator[_ValueType, None]:
+            for inner_value in (await self._inner_value):
+                yield inner_value  # will only yield once
+        return factory()
+
+    @classmethod
+    def do(
+        cls,
+        expr: AsyncGenerator[_NewValueType, None],
+    ) -> 'FutureResult[_NewValueType, _NewErrorType]':
+        """
+        Allows working with unwrapped values of containers in a safe way.
+
+        .. code:: python
+
+          >>> import anyio
+          >>> from returns.future import FutureResult
+          >>> from returns.io import IOSuccess, IOFailure
+
+          >>> async def success() -> bool:
+          ...     return await FutureResult.do(
+          ...         first + second
+          ...         async for first in FutureResult.from_value(2)
+          ...         async for second in FutureResult.from_value(3)
+          ...     ) == IOSuccess(5)
+
+          >>> assert anyio.run(success) is True
+
+          >>> async def failure() -> bool:
+          ...     return await FutureResult.do(
+          ...         first + second
+          ...         async for first in FutureResult.from_value(2)
+          ...         async for second in FutureResult.from_failure(3)
+          ...     ) == IOFailure(3)
+
+          >>> assert anyio.run(failure) is True
+
+        See :ref:`do-notation` to learn more.
+
+        """
+        async def factory() -> Result[_NewValueType, _NewErrorType]:
+            try:
+                return Success(await expr.__anext__())  # noqa: WPS609
+            except UnwrapFailedError as exc:
+                return exc.halted_container  # type: ignore
+        return FutureResult(factory())
 
     @classmethod
     def from_typecast(

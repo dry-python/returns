@@ -6,6 +6,8 @@ from typing import (
     Any,
     Callable,
     ClassVar,
+    Generator,
+    Iterator,
     List,
     Optional,
     Type,
@@ -17,6 +19,7 @@ from typing_extensions import ParamSpec, final
 
 from returns.interfaces.specific import io, ioresult
 from returns.primitives.container import BaseContainer, container_equality
+from returns.primitives.exceptions import UnwrapFailedError
 from returns.primitives.hkt import (
     Kind1,
     Kind2,
@@ -157,6 +160,32 @@ class IO(
 
     #: Alias for `bind` method. Part of the `IOLikeN` interface.
     bind_io = bind
+
+    def __iter__(self) -> Iterator[_ValueType]:
+        """API for :ref:`do-notation`."""
+        yield self._inner_value
+
+    @classmethod
+    def do(
+        cls,
+        expr: Generator[_NewValueType, None, None],
+    ) -> 'IO[_NewValueType]':
+        """
+        Allows working with unwrapped values of containers in a safe way.
+
+        .. code:: python
+
+          >>> from returns.io import IO
+          >>> assert IO.do(
+          ...     first + second
+          ...     for first in IO(2)
+          ...     for second in IO(3)
+          ... ) == IO(5)
+
+        See :ref:`do-notation` to learn more.
+
+        """
+        return IO(next(expr))
 
     @classmethod
     def from_value(cls, inner_value: _NewValueType) -> 'IO[_NewValueType]':
@@ -618,6 +647,44 @@ class IOResult(
 
         """
         return dekind(function(self._inner_value))
+
+    def __iter__(self) -> Iterator[_ValueType]:
+        """API for :ref:`do-notation`."""
+        # We also unwrap `IO` here.
+        yield self.unwrap()._inner_value  # noqa: WPS437
+
+    @classmethod
+    def do(
+        cls,
+        expr: Generator[_NewValueType, None, None],
+    ) -> 'IOResult[_NewValueType, _NewErrorType]':
+        """
+        Allows working with unwrapped values of containers in a safe way.
+
+        .. code:: python
+
+          >>> from returns.io import IOResult, IOFailure, IOSuccess
+
+          >>> assert IOResult.do(
+          ...     first + second
+          ...     for first in IOSuccess(2)
+          ...     for second in IOSuccess(3)
+          ... ) == IOSuccess(5)
+
+          >>> assert IOResult.do(
+          ...     first + second
+          ...     for first in IOFailure('a')
+          ...     for second in IOSuccess(3)
+          ... ) == IOFailure('a')
+
+        See :ref:`do-notation` to learn more.
+        This feature requires our :ref:`mypy plugin <mypy-plugins>`.
+
+        """
+        try:
+            return IOResult.from_value(next(expr))
+        except UnwrapFailedError as exc:
+            return IOResult.from_result(exc.halted_container)  # type: ignore
 
     @classmethod
     def from_typecast(

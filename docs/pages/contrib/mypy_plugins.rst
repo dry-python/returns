@@ -126,3 +126,12 @@ Pipe
 
 .. automodule:: returns.contrib.mypy._features.pipe
    :members:
+
+Do notation
+~~~~~~~~~~~
+
+.. autoclasstree:: returns.contrib.mypy._features.do_notation
+   :strict:
+
+.. automodule:: returns.contrib.mypy._features.do_notation
+   :members:
