@@ -236,7 +236,6 @@ like so:
 
 .. code:: python
 
-
   >>> from returns.result import Success, Failure
   >>> from returns.pipeline import is_successful
 
