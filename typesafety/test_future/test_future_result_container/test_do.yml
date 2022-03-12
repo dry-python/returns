@@ -1,0 +1,107 @@
+- case: do_sync_error
+  skip: sys.version_info[:2] < (3, 8)
+  disable_cache: false
+  main: |
+    from returns.future import FutureResult, FutureSuccess
+
+    FutureResult.do(
+        first / 2
+        for first in FutureSuccess(1)
+    )
+  out: |
+    main:3: error: Argument 1 to "do" of "FutureResult" has incompatible type "Generator[Any, None, None]"; expected "AsyncGenerator[<nothing>, None]"
+    main:5: error: "FutureResult[int, Any]" has no attribute "__iter__"; maybe "__aiter__"? (not iterable)
+
+
+- case: do_all_errors
+  disable_cache: false
+  main: |
+    from returns.future import FutureResult, FutureFailure
+
+    reveal_type(FutureResult.do(  # N: Revealed type is "returns.future.FutureResult[Any, Union[builtins.int*, builtins.str*]]"
+        first / second
+        async for first in FutureFailure(1)
+        async for second in FutureFailure('a')
+    ))
+
+
+- case: do_no_errors
+  disable_cache: false
+  main: |
+    from returns.future import FutureSuccess, FutureResult
+
+    reveal_type(FutureResult.do(  # N: Revealed type is "returns.future.FutureResult[builtins.float*, <nothing>]"
+        x + y
+        async for x in FutureSuccess(1)
+        async for y in FutureSuccess(2.5)
+    ))
+
+
+- case: do_with_errors
+  disable_cache: false
+  main: |
+    from returns.future import FutureSuccess, FutureResult
+
+    a: FutureResult[int, str]
+    b: FutureResult[float, bytes]
+
+    reveal_type(FutureResult.do(  # N: Revealed type is "returns.future.FutureResult[builtins.float*, Union[builtins.str, builtins.bytes]]"
+        x + y
+        async for x in a
+        async for y in b
+    ))
+
+
+- case: do_types_missmatch
+  disable_cache: false
+  main: |
+    from returns.future import FutureSuccess, FutureResult, Future
+
+    FutureResult.do(
+        x + y
+        async for x in Future.from_value(1)  # E: Invalid type supplied in do-notation: expected "returns.future.FutureResult[Any, Any]", got "returns.future.Future[builtins.int*]"
+        async for y in FutureSuccess(2.5)
+    )
+
+
+- case: do_types_converted
+  disable_cache: false
+  main: |
+    from returns.future import FutureSuccess, FutureResult
+    from returns.result import Result
+
+    a: Result[int, str]
+
+    reveal_type(FutureResult.do(  # N: Revealed type is "returns.future.FutureResult[builtins.float*, builtins.str*]"
+        x + y
+        async for x in FutureResult.from_result(a)
+        async for y in FutureSuccess(2.5)
+    ))
+
+
+- case: do_with_if
+  skip: sys.version_info[:2] < (3, 8)
+  disable_cache: false
+  main: |
+    from returns.future import FutureSuccess, FutureResult
+
+    FutureResult.do(  # E: Using "if" conditions inside a generator is not allowed
+        x + y
+        async for x in FutureSuccess(1)
+        async for y in FutureSuccess(2.5)
+        if y > 5
+    )
+
+
+- case: do_with_var
+  disable_cache: false
+  main: |
+    from returns.future import FutureSuccess, FutureResult
+
+    x = (
+        x + y
+        async for x in FutureSuccess(1)
+        async for y in FutureSuccess(2.5)
+    )
+
+    FutureResult.do(x)  # E: Literal generator expression is required, not a variable or function call

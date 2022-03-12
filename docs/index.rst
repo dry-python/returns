@@ -36,6 +36,7 @@ Contents
   pages/converters.rst
   pages/pointfree.rst
   pages/methods.rst
+  pages/do-notation.rst
   pages/functions.rst
   pages/curry.rst
   pages/types.rst

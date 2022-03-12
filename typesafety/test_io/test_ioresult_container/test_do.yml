@@ -1,0 +1,93 @@
+- case: do_all_errors
+  disable_cache: false
+  main: |
+    from returns.io import IOResult, IOFailure
+
+    reveal_type(IOResult.do(  # N: Revealed type is "returns.io.IOResult[Any, Union[builtins.int*, builtins.str*]]"
+        first / second
+        for first in IOFailure(1)
+        for second in IOFailure('a')
+    ))
+
+
+- case: do_no_errors
+  disable_cache: false
+  main: |
+    from returns.io import IOSuccess, IOResult
+
+    reveal_type(IOResult.do(  # N: Revealed type is "returns.io.IOResult[builtins.float*, <nothing>]"
+        x + y
+        for x in IOSuccess(1)
+        for y in IOSuccess(2.5)
+    ))
+
+
+- case: do_with_errors
+  disable_cache: false
+  main: |
+    from returns.io import IOSuccess, IOResult
+
+    a: IOResult[int, str]
+    b: IOResult[float, bytes]
+
+    reveal_type(IOResult.do(  # N: Revealed type is "returns.io.IOResult[builtins.float*, Union[builtins.str, builtins.bytes]]"
+        x + y
+        for x in a
+        for y in b
+    ))
+
+
+- case: do_types_missmatch
+  disable_cache: false
+  main: |
+    from returns.io import IOSuccess, IOResult
+    from returns.result import Success
+
+    IOResult.do(
+        x + y
+        for x in Success(1)  # E: Invalid type supplied in do-notation: expected "returns.io.IOResult[Any, Any]", got "returns.result.Success[builtins.int*]"
+        for y in IOSuccess(2.5)
+    )
+
+
+- case: do_types_converted
+  disable_cache: false
+  main: |
+    from returns.io import IOSuccess, IOResult
+    from returns.result import Result
+
+    a: Result[int, str]
+
+    reveal_type(IOResult.do(  # N: Revealed type is "returns.io.IOResult[builtins.float*, builtins.str*]"
+        x + y
+        for x in IOResult.from_result(a)
+        for y in IOSuccess(2.5)
+    ))
+
+
+- case: do_with_if
+  skip: sys.version_info[:2] < (3, 8)
+  disable_cache: false
+  main: |
+    from returns.io import IOSuccess, IOResult
+
+    IOResult.do(  # E: Using "if" conditions inside a generator is not allowed
+        x + y
+        for x in IOSuccess(1)
+        for y in IOSuccess(2.5)
+        if y > 5
+    )
+
+
+- case: do_with_var
+  disable_cache: false
+  main: |
+    from returns.io import IOSuccess, IOResult
+
+    x = (
+        x + y
+        for x in IOSuccess(1)
+        for y in IOSuccess(2.5)
+    )
+
+    IOResult.do(x)  # E: Literal generator expression is required, not a variable or function call

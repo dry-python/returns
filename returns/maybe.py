@@ -5,6 +5,8 @@ from typing import (
     Any,
     Callable,
     ClassVar,
+    Generator,
+    Iterator,
     NoReturn,
     Optional,
     Type,
@@ -160,6 +162,42 @@ class Maybe(
         with different ``Result`` like operations.
 
         """
+
+    def __iter__(self) -> Iterator[_ValueType]:
+        """API for :ref:`do-notation`."""
+        yield self.unwrap()
+
+    @classmethod
+    def do(
+        cls,
+        expr: Generator[_NewValueType, None, None],
+    ) -> 'Maybe[_NewValueType]':
+        """
+        Allows working with unwrapped values of containers in a safe way.
+
+        .. code:: python
+
+          >>> from returns.maybe import Maybe, Some, Nothing
+
+          >>> assert Maybe.do(
+          ...     first + second
+          ...     for first in Some(2)
+          ...     for second in Some(3)
+          ... ) == Some(5)
+
+          >>> assert Maybe.do(
+          ...     first + second
+          ...     for first in Some(2)
+          ...     for second in Nothing
+          ... ) == Nothing
+
+        See :ref:`do-notation` to learn more.
+
+        """
+        try:
+            return Maybe.from_value(next(expr))
+        except UnwrapFailedError as exc:
+            return exc.halted_container  # type: ignore
 
     def value_or(
         self,
