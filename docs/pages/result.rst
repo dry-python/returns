@@ -231,7 +231,8 @@ See the example below:
 How to check if your result is a success or failure?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-``Result`` is a container and you can use :meth:`returns.pipeline.is_successful` like so:
+``Result`` is a container and you can use :meth:`returns.pipeline.is_successful`
+like so:
 
 .. code:: python
 
