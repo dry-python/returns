@@ -6,7 +6,7 @@ incremental in minor, bugfixes only are patches.
 See [0Ver](https://0ver.org/).
 
 
-## 0.19.0 WIP
+## 0.19.0 aka The Do Notation
 
 ### Features
 
