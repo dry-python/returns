@@ -15,7 +15,7 @@ pygments==2.11.2
 typing-extensions==4.1.1
 mypy==0.931
 pytest==7.0.1
-hypothesis==6.39.2
+hypothesis==6.39.3
 
 # TODO: Remove this lock when we found and fix the route case.
 # See: https://github.com/typlog/sphinx-typlog-theme/issues/22
