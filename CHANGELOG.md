@@ -6,6 +6,14 @@ incremental in minor, bugfixes only are patches.
 See [0Ver](https://0ver.org/).
 
 
+## 0.19.1
+
+### Bugfixes
+
+- Fixes compat with mypy `0.94x`,
+  also provides exhaustiveness pattern matching out of the box for `python3.10`
+
+
 ## 0.19.0 aka The Do Notation
 
 ### Features

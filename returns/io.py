@@ -15,7 +15,7 @@ from typing import (
     Union,
 )
 
-from typing_extensions import ParamSpec, final
+from typing_extensions import Final, ParamSpec, final
 
 from returns.interfaces.specific import io, ioresult
 from returns.primitives.container import BaseContainer, container_equality
@@ -339,7 +339,7 @@ class IOResult(
     __slots__ = ()
 
     _inner_value: Result[_ValueType, _ErrorType]
-    __match_args__ = ('_inner_value',)
+    __match_args__: Final = ('_inner_value',)
 
     # These two are required for projects like `classes`:
     #: Success type that is used to represent the successful computation.
