@@ -14,7 +14,7 @@ from typing import (
     Union,
 )
 
-from typing_extensions import ParamSpec, final
+from typing_extensions import Final, ParamSpec, final
 
 from returns.interfaces.specific.maybe import MaybeBased2
 from returns.primitives.container import BaseContainer, container_equality
@@ -49,7 +49,7 @@ class Maybe(
     __slots__ = ()
 
     _inner_value: Optional[_ValueType]
-    __match_args__ = ('_inner_value',)
+    __match_args__: Final = ('_inner_value',)
 
     #: Alias for `Nothing`
     empty: ClassVar['Maybe[Any]']

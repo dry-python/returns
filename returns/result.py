@@ -18,7 +18,7 @@ from typing import (
     overload,
 )
 
-from typing_extensions import ParamSpec, final
+from typing_extensions import Final, ParamSpec, final
 
 from returns.interfaces.specific import result
 from returns.primitives.container import BaseContainer, container_equality
@@ -54,7 +54,7 @@ class Result(
     """
 
     __slots__ = ('_trace',)
-    __match_args__ = ('_inner_value',)
+    __match_args__: Final = ('_inner_value',)
 
     _inner_value: Union[_ValueType, _ErrorType]
     _trace: Optional[List[FrameInfo]]
