@@ -269,7 +269,7 @@ tests = ["check-manifest (>=0.42)", "mock (>=1.3.0)", "pytest-cov (>=2.10.1)", "
 
 [[package]]
 name = "doc8"
-version = "0.11.0"
+version = "0.11.1"
 description = "Style checker for Sphinx (or other) RST documentation"
 category = "dev"
 optional = false
@@ -1875,8 +1875,8 @@ dictdiffer = [
     {file = "dictdiffer-0.9.0.tar.gz", hash = "sha256:17bacf5fbfe613ccf1b6d512bd766e6b21fb798822a133aa86098b8ac9997578"},
 ]
 doc8 = [
-    {file = "doc8-0.11.0-py3-none-any.whl", hash = "sha256:1e533c6c8a112f030032b8ba0af3ea4f15d4c94f54f53eeeef7946aa6b543696"},
-    {file = "doc8-0.11.0.tar.gz", hash = "sha256:282c1375e414292683738125d0d150b6639039be83ea0ee12def745d235ff1e7"},
+    {file = "doc8-0.11.1-py3-none-any.whl", hash = "sha256:eb1199522e5b018b359ad932a07722f1f78a4da3f6a2d182ae02791aff993427"},
+    {file = "doc8-0.11.1.tar.gz", hash = "sha256:6dbcb5472efd332763ffb2862b4fdeec40c8a6fdc6bb67e68713ad749ca5808c"},
 ]
 docutils = [
     {file = "docutils-0.17.1-py2.py3-none-any.whl", hash = "sha256:cf316c8370a737a022b72b56874f6602acf974a37a9fba42ec2876387549fc61"},
