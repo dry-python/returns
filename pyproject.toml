@@ -90,7 +90,7 @@ pytest-randomly = "^3.11"
 pytest-mypy-plugins = "^1.9.2"
 pytest-subtests = "^0.7"
 pytest-xdist = "^2.5"
-hypothesis = "^6.40"
+hypothesis = "^6.41"
 
 sphinx = "^4.5"
 sphinx-autodoc-typehints = "^1.17"
