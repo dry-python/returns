@@ -1390,7 +1390,7 @@ test = ["pytest", "pytest-cov", "html5lib", "cython", "typed-ast"]
 
 [[package]]
 name = "sphinx-autodoc-typehints"
-version = "1.18.0"
+version = "1.18.1"
 description = "Type hints (PEP 484) support for the Sphinx autodoc extension"
 category = "dev"
 optional = false
@@ -2410,8 +2410,8 @@ sphinx = [
     {file = "Sphinx-4.5.0.tar.gz", hash = "sha256:7bf8ca9637a4ee15af412d1a1d9689fec70523a68ca9bb9127c2f3eeb344e2e6"},
 ]
 sphinx-autodoc-typehints = [
-    {file = "sphinx_autodoc_typehints-1.18.0-py3-none-any.whl", hash = "sha256:539c71a3cf387dec0890923cc024b2f3906f5b02ee8f1c9640a49424802f00aa"},
-    {file = "sphinx_autodoc_typehints-1.18.0.tar.gz", hash = "sha256:685e175e39be81312deb9780e7d76150deb7c3c803afd42346b6149e75e56e21"},
+    {file = "sphinx_autodoc_typehints-1.18.1-py3-none-any.whl", hash = "sha256:f8f5bb7c13a9a71537dc2be2eb3b9e28a9711e2454df63587005eacf6fbac453"},
+    {file = "sphinx_autodoc_typehints-1.18.1.tar.gz", hash = "sha256:07631c5f0c6641e5ba27143494aefc657e029bed3982138d659250e617f6f929"},
 ]
 sphinx-hoverxref = [
     {file = "sphinx-hoverxref-1.0.1.tar.gz", hash = "sha256:d5ccca48e2133ca0f3a20fccfbab235fe2d8a951ed9b7bf837802a88bdaaaa4e"},
