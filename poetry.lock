@@ -746,11 +746,11 @@ plugins = ["setuptools"]
 
 [[package]]
 name = "jinja2"
-version = "3.0.3"
+version = "3.1.1"
 description = "A very fast and expressive template engine."
 category = "dev"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 
 [package.dependencies]
 MarkupSafe = ">=2.0"
@@ -2025,8 +2025,8 @@ isort = [
     {file = "isort-5.10.1.tar.gz", hash = "sha256:e8443a5e7a020e9d7f97f1d7d9cd17c88bcb3bc7e218bf9cf5095fe550be2951"},
 ]
 jinja2 = [
-    {file = "Jinja2-3.0.3-py3-none-any.whl", hash = "sha256:077ce6014f7b40d03b47d1f1ca4b0fc8328a692bd284016f806ed0eaca390ad8"},
-    {file = "Jinja2-3.0.3.tar.gz", hash = "sha256:611bb273cd68f3b993fabdc4064fc858c5b47a973cb5aa7999ec1ba405c87cd7"},
+    {file = "Jinja2-3.1.1-py3-none-any.whl", hash = "sha256:539835f51a74a69f41b848a9645dbdc35b4f20a3b601e2d9a7e22947b15ff119"},
+    {file = "Jinja2-3.1.1.tar.gz", hash = "sha256:640bed4bb501cbd17194b3cace1dc2126f5b619cf068a726b98192a0fde74ae9"},
 ]
 jmespath = [
     {file = "jmespath-0.10.0-py2.py3-none-any.whl", hash = "sha256:cdf6525904cc597730141d61b36f2e4b8ecc257c420fa2f4549bac2c2d0cb72f"},
