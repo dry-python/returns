@@ -111,9 +111,11 @@ def _extract_error_type(
     typ: MypyType,
     type_info: TypeInfo,
 ) -> Tuple[bool, Optional[MypyType]]:
+    typ = get_proper_type(typ)
     if isinstance(typ, Instance):
-        mapped = map_instance_to_supertype(typ, type_info)
-        return True, _decide_error_type(mapped)
+        return True, _decide_error_type(
+            map_instance_to_supertype(typ, type_info),
+        )
 
     if isinstance(typ, UnionType):
         types = []

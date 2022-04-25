@@ -6,6 +6,13 @@ incremental in minor, bugfixes only are patches.
 See [0Ver](https://0ver.org/).
 
 
+## 0.19.1 WIP
+
+### Bugfixes
+
+- Fixes a problem with `do-notation` and type aliases
+
+
 ## 0.19.0 aka The Do Notation
 
 ### Features
