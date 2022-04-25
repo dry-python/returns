@@ -91,3 +91,20 @@
     )
 
     IOResult.do(x)  # E: Literal generator expression is required, not a variable or function call
+
+
+- case: do_with_var
+  disable_cache: false
+  main: |
+    from returns.io import IOResult, IOResultE, IOSuccess
+
+    x: IOResultE[int]
+    reveal_type(IOResult.do(  # N: Revealed type is "returns.io.IOResult[builtins.int*, builtins.Exception]"
+        a * 2
+        for a in x
+    ))
+
+    reveal_type(IOResultE.do(  # N: Revealed type is "returns.io.IOResult[builtins.int*, builtins.Exception]"
+        a * 2
+        for a in x
+    ))
