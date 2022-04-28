@@ -22,8 +22,8 @@
             ...
 
     x = MyOwn(1, 'a')
-    reveal_type(x.unwrap())  # N: Revealed type is "builtins.int*"
-    reveal_type(x.failure())  # N: Revealed type is "builtins.str*"
+    reveal_type(x.unwrap())  # N: Revealed type is "builtins.int"
+    reveal_type(x.failure())  # N: Revealed type is "builtins.str"
 
 
 - case: unwrappable_missing_inheritance

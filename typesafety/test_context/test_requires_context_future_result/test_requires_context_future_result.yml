@@ -5,7 +5,7 @@
 
     x: RequiresContextFutureResult[int, float, str]
 
-    reveal_type(x('a'))  # N: Revealed type is "returns.future.FutureResult[builtins.int*, builtins.float*]"
+    reveal_type(x('a'))  # N: Revealed type is "returns.future.FutureResult[builtins.int, builtins.float]"
 
 
 - case: requires_context_future_result_getattr
@@ -24,7 +24,7 @@
 
     x: RequiresContextFutureResult[int, float, str]
 
-    reveal_type(x.swap())  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.float*, builtins.int*, builtins.str*]"
+    reveal_type(x.swap())  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.float, builtins.int, builtins.str]"
 
 
 - case: requires_context_future_result_map
@@ -34,7 +34,7 @@
 
     x: RequiresContextFutureResult[int, float, str]
 
-    reveal_type(x.map(bool))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool*, builtins.float, builtins.str]"
+    reveal_type(x.map(bool))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool, builtins.float, builtins.str]"
 
 
 - case: requires_context_future_result_apply
@@ -46,7 +46,7 @@
     x: RequiresContextFutureResult[int, float, str]
     y: RequiresContextFutureResult[Callable[[int], bool], float, str]
 
-    reveal_type(x.apply(y))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool*, builtins.float, builtins.str]"
+    reveal_type(x.apply(y))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool, builtins.float, builtins.str]"
 
 
 - case: requires_context_future_result_bind
@@ -59,7 +59,7 @@
     def test(param: int) -> RequiresContextFutureResult[bool, float, str]:
         ...
 
-    reveal_type(x.bind(test))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool*, builtins.float, builtins.str]"
+    reveal_type(x.bind(test))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool, builtins.float, builtins.str]"
 
 
 - case: requires_context_future_result_bind_awaitable
@@ -72,7 +72,7 @@
 
     first: RequiresContextFutureResult[int, str, bool]
 
-    reveal_type(first.bind_awaitable(bind_awaitable))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.float*, builtins.str, builtins.bool]"
+    reveal_type(first.bind_awaitable(bind_awaitable))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.float, builtins.str, builtins.bool]"
 
 
 - case: requires_context_future_result_bind_async
@@ -85,7 +85,7 @@
 
     first: RequiresContextFutureResult[int, str, bool]
 
-    reveal_type(first.bind_async(bind_async))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.float*, builtins.str, builtins.bool]"
+    reveal_type(first.bind_async(bind_async))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.float, builtins.str, builtins.bool]"
 
 
 - case: requires_context_future_result_bind_result
@@ -99,7 +99,7 @@
     def test(param: int) -> Result[bool, float]:
         ...
 
-    reveal_type(x.bind_result(test))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool*, builtins.float, builtins.str]"
+    reveal_type(x.bind_result(test))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool, builtins.float, builtins.str]"
 
 
 - case: requires_context_future_result_bind_ioresult
@@ -113,7 +113,7 @@
     def test(param: int) -> IOResult[bool, float]:
         ...
 
-    reveal_type(x.bind_ioresult(test))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool*, builtins.float, builtins.str]"
+    reveal_type(x.bind_ioresult(test))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool, builtins.float, builtins.str]"
 
 
 - case: requires_context_future_result_bind_io
@@ -127,7 +127,7 @@
     def test(param: int) -> IO[bool]:
         ...
 
-    reveal_type(x.bind_io(test))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool*, builtins.float, builtins.str]"
+    reveal_type(x.bind_io(test))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool, builtins.float, builtins.str]"
 
 
 - case: requires_context_future_result_bind_future
@@ -141,7 +141,7 @@
     def test(param: int) -> Future[bool]:
         ...
 
-    reveal_type(x.bind_future(test))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool*, builtins.float, builtins.str]"
+    reveal_type(x.bind_future(test))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool, builtins.float, builtins.str]"
 
 
 - case: requires_context_future_result_bind_future_result
@@ -155,7 +155,7 @@
     def test(param: int) -> FutureResult[bool, float]:
         ...
 
-    reveal_type(x.bind_future_result(test))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool*, builtins.float, builtins.str]"
+    reveal_type(x.bind_future_result(test))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool, builtins.float, builtins.str]"
 
 
 - case: requires_context_future_result_bind_async_future
@@ -169,7 +169,7 @@
     async def test(param: int) -> Future[bool]:
         ...
 
-    reveal_type(x.bind_async_future(test))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool*, builtins.float, builtins.str]"
+    reveal_type(x.bind_async_future(test))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool, builtins.float, builtins.str]"
 
 
 - case: requires_context_future_result_bind_async_future_result
@@ -183,7 +183,7 @@
     async def test(param: int) -> FutureResult[bool, float]:
         ...
 
-    reveal_type(x.bind_async_future_result(test))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool*, builtins.float, builtins.str]"
+    reveal_type(x.bind_async_future_result(test))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool, builtins.float, builtins.str]"
 
 
 - case: requires_context_future_result_bind_context
@@ -196,7 +196,7 @@
     def test(param: int) -> RequiresContext[bool, str]:
         ...
 
-    reveal_type(x.bind_context(test))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool*, builtins.float, builtins.str]"
+    reveal_type(x.bind_context(test))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool, builtins.float, builtins.str]"
 
 
 - case: requires_context_future_result_bind_context_result
@@ -209,7 +209,7 @@
     def test(param: int) -> RequiresContextResult[bool, float, str]:
         ...
 
-    reveal_type(x.bind_context_result(test))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool*, builtins.float, builtins.str]"
+    reveal_type(x.bind_context_result(test))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool, builtins.float, builtins.str]"
 
 
 - case: requires_context_future_result_bind_context_ioresult
@@ -222,7 +222,7 @@
     def test(param: int) -> RequiresContextIOResult[bool, float, str]:
         ...
 
-    reveal_type(x.bind_context_ioresult(test))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool*, builtins.float, builtins.str]"
+    reveal_type(x.bind_context_ioresult(test))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.bool, builtins.float, builtins.str]"
 
 
 - case: requires_context_future_result_lash
@@ -235,7 +235,7 @@
     def test(param: float) -> RequiresContextFutureResult[int, bool, str]:
         ...
 
-    reveal_type(x.lash(test))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.int, builtins.bool*, builtins.str]"
+    reveal_type(x.lash(test))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.int, builtins.bool, builtins.str]"
 
 
 - case: requires_context_future_result_alt
@@ -248,7 +248,7 @@
     def test(param: float) -> bool:
         ...
 
-    reveal_type(x.alt(test))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.int, builtins.bool*, builtins.str]"
+    reveal_type(x.alt(test))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.int, builtins.bool, builtins.str]"
 
 
 - case: requires_context_future_result_modify_env
@@ -257,4 +257,4 @@
     from returns.context import RequiresContextFutureResult
 
     first: RequiresContextFutureResult[float, bool, int]
-    reveal_type(first.modify_env(int)('1'))  # N: Revealed type is "returns.future.FutureResult[builtins.float*, builtins.bool*]"
+    reveal_type(first.modify_env(int)('1'))  # N: Revealed type is "returns.future.FutureResult[builtins.float, builtins.bool]"

@@ -12,5 +12,5 @@
     reveal_type(my_pair.map(str))
     reveal_type(map_(str)(my_pair))
   out: |
-    main:5: note: Revealed type is "test_pair4.Pair[builtins.str*, builtins.int]"
+    main:5: note: Revealed type is "test_pair4.Pair[builtins.str, builtins.int]"
     main:6: note: Revealed type is "test_pair4.Pair[builtins.str, builtins.int]"

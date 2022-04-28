@@ -59,7 +59,7 @@
         ...
 
     r: Result[int, str]
-    reveal_type(flow(r, map_(test), map_(stringify), identity))  # N: Revealed type is "returns.result.Result*[builtins.str, builtins.str]"
+    reveal_type(flow(r, map_(test), map_(stringify), identity))  # N: Revealed type is "returns.result.Result[builtins.str, builtins.str]"
 
 
 - case: map_and_bind

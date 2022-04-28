@@ -9,7 +9,7 @@
     test: Result[Callable[[float], int], str]
     x: Result[float, str]
 
-    reveal_type(flow(test, x.apply))  # N: Revealed type is "returns.result.Result[builtins.int*, builtins.str]"
+    reveal_type(flow(test, x.apply))  # N: Revealed type is "returns.result.Result[builtins.int, builtins.str]"
 
 
 - case: apply_wrong_extra_types

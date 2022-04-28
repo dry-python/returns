@@ -29,7 +29,7 @@
         ...
 
     x: IO[int]
-    reveal_type(MyClass.from_io(x).bind_io(test))  # N: Revealed type is "main.MyClass[builtins.float*]"
+    reveal_type(MyClass.from_io(x).bind_io(test))  # N: Revealed type is "main.MyClass[builtins.float]"
 
 
 - case: io_inheritance_missing

@@ -6,11 +6,11 @@
 
     @future
     async def test(
-        first: int, second: Optional[str] = None, *, kw: bool = True,
+        first: int, second: Optional[str] = None, , kw: bool = True,
     ) -> int:
         ...
 
-    reveal_type(test)  # N: Revealed type is "def (first: builtins.int, second: Union[builtins.str, None] =, *, kw: builtins.bool =) -> returns.future.Future[builtins.int*]"
+    reveal_type(test)  # N: Revealed type is "def (first: builtins.int, second: Union[builtins.str, None] =, , kw: builtins.bool =) -> returns.future.Future[builtins.int]"
 
 
 - case: future_composition
@@ -21,4 +21,4 @@
     async def test(first: int) -> str:
         ...
 
-    reveal_type(future(test))  # N: Revealed type is "def (first: builtins.int) -> returns.future.Future[builtins.str*]"
+    reveal_type(future(test))  # N: Revealed type is "def (first: builtins.int) -> returns.future.Future[builtins.str]"

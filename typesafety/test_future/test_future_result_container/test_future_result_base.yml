@@ -4,10 +4,10 @@
     from returns.future import FutureResult
 
     async def main() -> None:
-        reveal_type(await FutureResult.from_value(1))  # N: Revealed type is "returns.io.IOResult[builtins.int*, Any]"
-        reveal_type(await FutureResult.from_value(1).awaitable())  # N: Revealed type is "returns.io.IOResult*[builtins.int*, Any]"
-        reveal_type(await FutureResult.from_failure(1))  # N: Revealed type is "returns.io.IOResult[Any, builtins.int*]"
-        reveal_type(await FutureResult.from_failure(1).awaitable())  # N: Revealed type is "returns.io.IOResult*[Any, builtins.int*]"
+        reveal_type(await FutureResult.from_value(1))  # N: Revealed type is "returns.io.IOResult[builtins.int, Any]"
+        reveal_type(await FutureResult.from_value(1).awaitable())  # N: Revealed type is "returns.io.IOResult[builtins.int, Any]"
+        reveal_type(await FutureResult.from_failure(1))  # N: Revealed type is "returns.io.IOResult[Any, builtins.int]"
+        reveal_type(await FutureResult.from_failure(1).awaitable())  # N: Revealed type is "returns.io.IOResult[Any, builtins.int]"
 
 
 - case: future_result_swap
@@ -16,7 +16,7 @@
     from returns.future import FutureResult
 
     x: FutureResult[int, str]
-    reveal_type(x.swap())  # N: Revealed type is "returns.future.FutureResult[builtins.str*, builtins.int*]"
+    reveal_type(x.swap())  # N: Revealed type is "returns.future.FutureResult[builtins.str, builtins.int]"
 
 
 - case: future_result_bind
@@ -29,7 +29,7 @@
 
     first: FutureResult[int, str]
 
-    reveal_type(first.bind(bind))  # N: Revealed type is "returns.future.FutureResult[builtins.float*, builtins.str]"
+    reveal_type(first.bind(bind))  # N: Revealed type is "returns.future.FutureResult[builtins.float, builtins.str]"
 
 
 - case: future_result_bind_awaitable
@@ -42,7 +42,7 @@
 
     first: FutureResult[int, str]
 
-    reveal_type(first.bind_awaitable(bind_awaitable))  # N: Revealed type is "returns.future.FutureResult[builtins.float*, builtins.str]"
+    reveal_type(first.bind_awaitable(bind_awaitable))  # N: Revealed type is "returns.future.FutureResult[builtins.float, builtins.str]"
 
 
 - case: future_result_bind_async
@@ -55,7 +55,7 @@
 
     first: FutureResult[int, str]
 
-    reveal_type(first.bind_async(bind_async))  # N: Revealed type is "returns.future.FutureResult[builtins.float*, builtins.str]"
+    reveal_type(first.bind_async(bind_async))  # N: Revealed type is "returns.future.FutureResult[builtins.float, builtins.str]"
 
 
 - case: future_result_bind_result
@@ -69,7 +69,7 @@
 
     first: FutureResult[int, str]
 
-    reveal_type(first.bind_result(bind))  # N: Revealed type is "returns.future.FutureResult[builtins.float*, builtins.str]"
+    reveal_type(first.bind_result(bind))  # N: Revealed type is "returns.future.FutureResult[builtins.float, builtins.str]"
 
 
 - case: future_result_bind_ioresult
@@ -83,7 +83,7 @@
 
     first: FutureResult[int, str]
 
-    reveal_type(first.bind_ioresult(bind))  # N: Revealed type is "returns.future.FutureResult[builtins.float*, builtins.str]"
+    reveal_type(first.bind_ioresult(bind))  # N: Revealed type is "returns.future.FutureResult[builtins.float, builtins.str]"
 
 
 - case: future_result_bind_future
@@ -96,7 +96,7 @@
 
     first: FutureResult[int, str]
 
-    reveal_type(first.bind_future(bind_future))  # N: Revealed type is "returns.future.FutureResult[builtins.float*, builtins.str]"
+    reveal_type(first.bind_future(bind_future))  # N: Revealed type is "returns.future.FutureResult[builtins.float, builtins.str]"
 
 
 - case: future_result_bind_async_future
@@ -109,7 +109,7 @@
 
     first: FutureResult[int, str]
 
-    reveal_type(first.bind_async_future(bind_future))  # N: Revealed type is "returns.future.FutureResult[builtins.float*, builtins.str]"
+    reveal_type(first.bind_async_future(bind_future))  # N: Revealed type is "returns.future.FutureResult[builtins.float, builtins.str]"
 
 
 - case: future_result_map
@@ -119,7 +119,7 @@
 
     first: FutureResult[int, str]
 
-    reveal_type(first.map(float))  # N: Revealed type is "returns.future.FutureResult[builtins.float*, builtins.str]"
+    reveal_type(first.map(float))  # N: Revealed type is "returns.future.FutureResult[builtins.float, builtins.str]"
 
 
 - case: future_result_apply
@@ -131,7 +131,7 @@
     first: FutureResult[int, str]
     second: FutureResult[Callable[[int], float], str]
 
-    reveal_type(first.apply(second))  # N: Revealed type is "returns.future.FutureResult[builtins.float*, builtins.str]"
+    reveal_type(first.apply(second))  # N: Revealed type is "returns.future.FutureResult[builtins.float, builtins.str]"
 
 
 - case: future_result_alt
@@ -141,7 +141,7 @@
 
     first: FutureResult[int, int]
 
-    reveal_type(first.alt(float))  # N: Revealed type is "returns.future.FutureResult[builtins.int, builtins.float*]"
+    reveal_type(first.alt(float))  # N: Revealed type is "returns.future.FutureResult[builtins.int, builtins.float]"
 
 
 - case: future_result_lash
@@ -154,4 +154,4 @@
 
     first: FutureResult[int, str]
 
-    reveal_type(first.lash(bind))  # N: Revealed type is "returns.future.FutureResult[builtins.int, builtins.float*]"
+    reveal_type(first.lash(bind))  # N: Revealed type is "returns.future.FutureResult[builtins.int, builtins.float]"

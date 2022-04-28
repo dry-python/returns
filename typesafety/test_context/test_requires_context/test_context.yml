@@ -11,7 +11,7 @@
   main: |
     from returns.context import RequiresContext
 
-    reveal_type(RequiresContext[int, str].ask())  # N: Revealed type is "returns.context.requires_context.RequiresContext[builtins.str*, builtins.str*]"
+    reveal_type(RequiresContext[int, str].ask())  # N: Revealed type is "returns.context.requires_context.RequiresContext[builtins.str, builtins.str]"
 
 
 - case: requires_context_from_value
@@ -19,7 +19,7 @@
   main: |
     from returns.context import RequiresContext
 
-    reveal_type(RequiresContext.from_value(1))  # N: Revealed type is "returns.context.requires_context.RequiresContext[builtins.int*, Any]"
+    reveal_type(RequiresContext.from_value(1))  # N: Revealed type is "returns.context.requires_context.RequiresContext[builtins.int, Any]"
 
 
 - case: requires_context_from_context
@@ -28,4 +28,4 @@
     from returns.context import RequiresContext
 
     x: RequiresContext[int, str]
-    reveal_type(RequiresContext.from_context(x))  # N: Revealed type is "returns.context.requires_context.RequiresContext[builtins.int*, builtins.str*]"
+    reveal_type(RequiresContext.from_context(x))  # N: Revealed type is "returns.context.requires_context.RequiresContext[builtins.int, builtins.str]"

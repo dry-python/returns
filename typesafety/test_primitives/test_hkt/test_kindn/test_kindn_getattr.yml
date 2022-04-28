@@ -5,7 +5,7 @@
     from typing import List
 
     container: Kind1[List, int]
-    reveal_type(container.pop)  # N: Revealed type is "def (typing_extensions.SupportsIndex =) -> builtins.int*"
+    reveal_type(container.pop)  # N: Revealed type is "def (typing_extensions.SupportsIndex =) -> builtins.int"
 
 
 - case: kind_missing_getattr

@@ -9,7 +9,7 @@
     def second(num: float) -> str:
         return str(num)
 
-    reveal_type(compose(first, second))  # N: Revealed type is "def (builtins.int*) -> builtins.str*"
+    reveal_type(compose(first, second))  # N: Revealed type is "def (builtins.int) -> builtins.str"
 
 
 - case: compose_two_wrong_functions
@@ -40,4 +40,4 @@
     def second(num: float) -> str:
         return str(num)
 
-    reveal_type(compose(first, second))  # N: Revealed type is "def (builtins.int*) -> builtins.str*"
+    reveal_type(compose(first, second))  # N: Revealed type is "def (builtins.int) -> builtins.str"

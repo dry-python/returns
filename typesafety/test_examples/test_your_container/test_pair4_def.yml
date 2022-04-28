@@ -14,4 +14,4 @@
     my_pair: Pair[int, str] = Pair.from_paired(1, 'a')
     reveal_type(my_pair.pair(function))
   out: |
-    main:8: note: Revealed type is "test_pair4.Pair[builtins.float*, builtins.bool*]"
+    main:8: note: Revealed type is "test_pair4.Pair[builtins.float, builtins.bool]"

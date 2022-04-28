@@ -19,12 +19,12 @@
     def test(param: str) -> int:
         return 1
 
-    reveal_type(test)  # N: Revealed type is "def (builtins.str*) -> returns.result.Result[builtins.int*, builtins.str*]"
+    reveal_type(test)  # N: Revealed type is "def (builtins.str) -> returns.result.Result[builtins.int, builtins.str]"
 
     def test2(param: int) -> str:
         return 'str'
 
-    reveal_type(attempt(test2))  # N: Revealed type is "def (builtins.int*) -> returns.result.Result[builtins.str*, builtins.int*]"
+    reveal_type(attempt(test2))  # N: Revealed type is "def (builtins.int) -> returns.result.Result[builtins.str, builtins.int]"
 
 
 - case: attempt_decorator_two_params

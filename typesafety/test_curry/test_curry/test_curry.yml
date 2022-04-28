@@ -104,13 +104,13 @@
     from returns.curry import curry
 
     @curry
-    def zero(arg: int, other: float, *, kw: bool) -> str:
+    def zero(arg: int, other: float, , kw: bool) -> str:
         ...
 
-    reveal_type(zero)  # N: Revealed type is "Overload(def (arg: builtins.int) -> Overload(def (other: builtins.float, *, kw: builtins.bool) -> builtins.str, def (other: builtins.float) -> def (*, kw: builtins.bool) -> builtins.str), def (arg: builtins.int, other: builtins.float) -> def (*, kw: builtins.bool) -> builtins.str, def (arg: builtins.int, other: builtins.float, *, kw: builtins.bool) -> builtins.str)"
-    reveal_type(zero(1))  # N: Revealed type is "Overload(def (other: builtins.float, *, kw: builtins.bool) -> builtins.str, def (other: builtins.float) -> def (*, kw: builtins.bool) -> builtins.str)"
-    reveal_type(zero(1, 2.0))  # N: Revealed type is "def (*, kw: builtins.bool) -> builtins.str"
-    reveal_type(zero(1)(2.0))  # N: Revealed type is "def (*, kw: builtins.bool) -> builtins.str"
+    reveal_type(zero)  # N: Revealed type is "Overload(def (arg: builtins.int) -> Overload(def (other: builtins.float, , kw: builtins.bool) -> builtins.str, def (other: builtins.float) -> def (, kw: builtins.bool) -> builtins.str), def (arg: builtins.int, other: builtins.float) -> def (, kw: builtins.bool) -> builtins.str, def (arg: builtins.int, other: builtins.float, , kw: builtins.bool) -> builtins.str)"
+    reveal_type(zero(1))  # N: Revealed type is "Overload(def (other: builtins.float, , kw: builtins.bool) -> builtins.str, def (other: builtins.float) -> def (, kw: builtins.bool) -> builtins.str)"
+    reveal_type(zero(1, 2.0))  # N: Revealed type is "def (, kw: builtins.bool) -> builtins.str"
+    reveal_type(zero(1)(2.0))  # N: Revealed type is "def (, kw: builtins.bool) -> builtins.str"
     reveal_type(zero(1, 2.0)(kw=True))  # N: Revealed type is "builtins.str"
     reveal_type(zero(1)(2.0)(kw=True))  # N: Revealed type is "builtins.str"
     reveal_type(zero(1, 2.0, kw=True))  # N: Revealed type is "builtins.str"

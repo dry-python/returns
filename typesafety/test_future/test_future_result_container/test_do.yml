@@ -18,7 +18,7 @@
   main: |
     from returns.future import FutureResult, FutureFailure
 
-    reveal_type(FutureResult.do(  # N: Revealed type is "returns.future.FutureResult[Any, Union[builtins.int*, builtins.str*]]"
+    reveal_type(FutureResult.do(  # N: Revealed type is "returns.future.FutureResult[Any, Union[builtins.int, builtins.str]]"
         first / second
         async for first in FutureFailure(1)
         async for second in FutureFailure('a')
@@ -30,7 +30,7 @@
   main: |
     from returns.future import FutureSuccess, FutureResult
 
-    reveal_type(FutureResult.do(  # N: Revealed type is "returns.future.FutureResult[builtins.float*, <nothing>]"
+    reveal_type(FutureResult.do(  # N: Revealed type is "returns.future.FutureResult[builtins.float, <nothing>]"
         x + y
         async for x in FutureSuccess(1)
         async for y in FutureSuccess(2.5)
@@ -45,7 +45,7 @@
     a: FutureResult[int, str]
     b: FutureResult[float, bytes]
 
-    reveal_type(FutureResult.do(  # N: Revealed type is "returns.future.FutureResult[builtins.float*, Union[builtins.str, builtins.bytes]]"
+    reveal_type(FutureResult.do(  # N: Revealed type is "returns.future.FutureResult[builtins.float, Union[builtins.str, builtins.bytes]]"
         x + y
         async for x in a
         async for y in b
@@ -59,7 +59,7 @@
 
     FutureResult.do(
         x + y
-        async for x in Future.from_value(1)  # E: Invalid type supplied in do-notation: expected "returns.future.FutureResult[Any, Any]", got "returns.future.Future[builtins.int*]"
+        async for x in Future.from_value(1)  # E: Invalid type supplied in do-notation: expected "returns.future.FutureResult[Any, Any]", got "returns.future.Future[builtins.int]"
         async for y in FutureSuccess(2.5)
     )
 
@@ -72,7 +72,7 @@
 
     a: Result[int, str]
 
-    reveal_type(FutureResult.do(  # N: Revealed type is "returns.future.FutureResult[builtins.float*, builtins.str*]"
+    reveal_type(FutureResult.do(  # N: Revealed type is "returns.future.FutureResult[builtins.float, builtins.str]"
         x + y
         async for x in FutureResult.from_result(a)
         async for y in FutureSuccess(2.5)
