@@ -91,7 +91,7 @@
 
     def multiple(
         a: int,
-        ,
+        *,
         b: List[B],
         c: List[A],
     ) -> Union[A, B]:
