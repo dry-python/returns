@@ -4,6 +4,13 @@
     # We only need this because we store this example in `tests/`
     # and not in our source code. Please, do not copy this line!
     - MYPYPATH=./tests/test_examples/test_your_container
+
+  # TODO: remove this config after
+  #     mypy/typeshed/stdlib/unittest/mock.pyi:120:
+  #     error: Class cannot subclass "Any" (has type "Any")
+  # is fixed.
+  mypy_config:
+    disallow_subclassing_any = False
   main: |
     from test_pair4 import Pair
     from returns.pointfree import map_
