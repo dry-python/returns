@@ -5,7 +5,7 @@
     from returns.primitives.reawaitable import reawaitable
 
     @reawaitable
-    async def test(first: int, second: Optional[str] = None, *,  kw: bool = True) -> int:
+    async def test(first: int, second: Optional[str] = None, *, kw: bool = True) -> int:
         ...
 
-    reveal_type(test)  # N: Revealed type is "def (first: builtins.int, second: Union[builtins.str, None] =, *,  kw: builtins.bool =) -> typing.Coroutine[Any, Any, builtins.int]"
+    reveal_type(test)  # N: Revealed type is "def (first: builtins.int, second: Union[builtins.str, None] =, *, kw: builtins.bool =) -> typing.Coroutine[Any, Any, builtins.int]"

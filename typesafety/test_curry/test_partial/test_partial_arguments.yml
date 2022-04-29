@@ -25,16 +25,16 @@
     reveal_type(partial(multiple, 1, 2, 3, 4.0, 5.0))
     reveal_type(partial(multiple, 1, 2, 3, m='m', q='q', long='long'))
   out: |
-    main:14: note: Revealed type is "def (a: builtins.int, b: builtins.int, c: builtins.int =, *args: builtins.float, *,  d: builtins.str, e: builtins.bool =, **kwargs: builtins.str) -> builtins.str"
-    main:15: note: Revealed type is "def (b: builtins.int, c: builtins.int =, *args: builtins.float, *,  d: builtins.str, e: builtins.bool =, **kwargs: builtins.str) -> builtins.str"
-    main:16: note: Revealed type is "def (c: builtins.int =, *args: builtins.float, *,  d: builtins.str, e: builtins.bool =, **kwargs: builtins.str) -> builtins.str"
-    main:17: note: Revealed type is "def (*args: builtins.float, *,  d: builtins.str, e: builtins.bool =, **kwargs: builtins.str) -> builtins.str"
-    main:18: note: Revealed type is "def (*args: builtins.float, *,  e: builtins.bool =, **kwargs: builtins.str) -> builtins.str"
-    main:19: note: Revealed type is "def (*args: builtins.float, *,  d: builtins.str, **kwargs: builtins.str) -> builtins.str"
-    main:20: note: Revealed type is "def (c: builtins.int =, *args: builtins.float, *,  e: builtins.bool =, **kwargs: builtins.str) -> builtins.str"
-    main:21: note: Revealed type is "def (c: builtins.int =, *args: builtins.float, *,  d: builtins.str, **kwargs: builtins.str) -> builtins.str"
-    main:22: note: Revealed type is "def (*args: builtins.float, *,  d: builtins.str, e: builtins.bool =, **kwargs: builtins.str) -> builtins.str"
-    main:23: note: Revealed type is "def (*args: builtins.float, *,  d: builtins.str, e: builtins.bool =, **kwargs: builtins.str) -> builtins.str"
+    main:14: note: Revealed type is "def (a: builtins.int, b: builtins.int, c: builtins.int =, *args: builtins.float, *, d: builtins.str, e: builtins.bool =, **kwargs: builtins.str) -> builtins.str"
+    main:15: note: Revealed type is "def (b: builtins.int, c: builtins.int =, *args: builtins.float, *, d: builtins.str, e: builtins.bool =, **kwargs: builtins.str) -> builtins.str"
+    main:16: note: Revealed type is "def (c: builtins.int =, *args: builtins.float, *, d: builtins.str, e: builtins.bool =, **kwargs: builtins.str) -> builtins.str"
+    main:17: note: Revealed type is "def (*args: builtins.float, *, d: builtins.str, e: builtins.bool =, **kwargs: builtins.str) -> builtins.str"
+    main:18: note: Revealed type is "def (*args: builtins.float, *, e: builtins.bool =, **kwargs: builtins.str) -> builtins.str"
+    main:19: note: Revealed type is "def (*args: builtins.float, *, d: builtins.str, **kwargs: builtins.str) -> builtins.str"
+    main:20: note: Revealed type is "def (c: builtins.int =, *args: builtins.float, *, e: builtins.bool =, **kwargs: builtins.str) -> builtins.str"
+    main:21: note: Revealed type is "def (c: builtins.int =, *args: builtins.float, *, d: builtins.str, **kwargs: builtins.str) -> builtins.str"
+    main:22: note: Revealed type is "def (*args: builtins.float, *, d: builtins.str, e: builtins.bool =, **kwargs: builtins.str) -> builtins.str"
+    main:23: note: Revealed type is "def (*args: builtins.float, *, d: builtins.str, e: builtins.bool =, **kwargs: builtins.str) -> builtins.str"
 
 
 - case: partial_args_kwargs
