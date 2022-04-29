@@ -52,10 +52,10 @@
     from returns.io import impure
 
     @impure
-    def test(args, kwargs) -> int:
+    def test(*args, **kwargs) -> int:
         return 1
 
-    reveal_type(test)  # N: Revealed type is "def (args: Any, kwargs: Any) -> returns.io.IO[builtins.int]"
+    reveal_type(test)  # N: Revealed type is "def (*args: Any, **kwargs: Any) -> returns.io.IO[builtins.int]"
 
 
 - case: impure_decorator_with_typed_args_kwargs
@@ -64,7 +64,7 @@
     from returns.io import impure
 
     @impure
-    def test(args: int, kwargs: str) -> int:
+    def test(*args: int, **kwargs: str) -> int:
         return 1
 
-    reveal_type(test)  # N: Revealed type is "def (args: builtins.int, kwargs: builtins.str) -> returns.io.IO[builtins.int]"
+    reveal_type(test)  # N: Revealed type is "def (*args: builtins.int, **kwargs: builtins.str) -> returns.io.IO[builtins.int]"

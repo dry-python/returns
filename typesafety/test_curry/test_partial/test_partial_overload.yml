@@ -21,7 +21,7 @@
     main:15: note: Possible overload variants:
     main:15: note:     def two_args(a, a: int) -> int
     main:15: note:     def two_args(a, a: str) -> str
-    main:15: note: Revealed type is "def (Any, Any) -> builtins.int"
+    main:15: note: Revealed type is "def (*Any, **Any) -> builtins.int"
 
 
 - case: partial_wrong_overload2

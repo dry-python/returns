@@ -65,10 +65,10 @@
     from returns.maybe import maybe
 
     @maybe
-    def test(args, kwargs) -> int:
+    def test(*args, **kwargs) -> int:
         return 1
 
-    reveal_type(test)  # N: Revealed type is "def (args: Any, kwargs: Any) -> returns.maybe.Maybe[builtins.int]"
+    reveal_type(test)  # N: Revealed type is "def (*args: Any, **kwargs: Any) -> returns.maybe.Maybe[builtins.int]"
 
 
 - case: maybe_decorator_with_typed_args_kwargs
@@ -77,10 +77,10 @@
     from returns.maybe import maybe
 
     @maybe
-    def test(args: int, kwargs: str) -> int:
+    def test(*args: int, **kwargs: str) -> int:
         return 1
 
-    reveal_type(test)  # N: Revealed type is "def (args: builtins.int, kwargs: builtins.str) -> returns.maybe.Maybe[builtins.int]"
+    reveal_type(test)  # N: Revealed type is "def (*args: builtins.int, **kwargs: builtins.str) -> returns.maybe.Maybe[builtins.int]"
 
 
 - case: maybe_decorator_with_optional
