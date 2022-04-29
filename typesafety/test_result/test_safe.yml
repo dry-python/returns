@@ -57,10 +57,10 @@
     from returns.result import safe
 
     @safe
-    def test(first: int, second: Optional[str] = None, , kw: bool = True) -> int:
+    def test(first: int, second: Optional[str] = None, *,  kw: bool = True) -> int:
         return 1
 
-    reveal_type(test)  # N: Revealed type is "def (first: builtins.int, second: Union[builtins.str, None] =, , kw: builtins.bool =) -> returns.result.Result[builtins.int, builtins.Exception]"
+    reveal_type(test)  # N: Revealed type is "def (first: builtins.int, second: Union[builtins.str, None] =, *,  kw: builtins.bool =) -> returns.result.Result[builtins.int, builtins.Exception]"
 
 
 - case: safe_decorator_passing_exceptions_with_args
@@ -70,10 +70,10 @@
     from returns.result import safe
 
     @safe((ValueError, EOFError))
-    def test(first: int, second: Optional[str] = None, , kw: bool = True) -> int:
+    def test(first: int, second: Optional[str] = None, *,  kw: bool = True) -> int:
         return 1
 
-    reveal_type(test)  # N: Revealed type is "def (first: builtins.int, second: Union[builtins.str, None] =, , kw: builtins.bool =) -> returns.result.Result[builtins.int, builtins.Exception]"
+    reveal_type(test)  # N: Revealed type is "def (first: builtins.int, second: Union[builtins.str, None] =, *,  kw: builtins.bool =) -> returns.result.Result[builtins.int, builtins.Exception]"
 
 
 - case: safe_composition_with_args
@@ -82,10 +82,10 @@
     from typing import Optional
     from returns.result import safe
 
-    def test(first: int, second: Optional[str] = None, , kw: bool = True) -> int:
+    def test(first: int, second: Optional[str] = None, *,  kw: bool = True) -> int:
         return 1
 
-    reveal_type(safe(test))  # N: Revealed type is "def (first: builtins.int, second: Union[builtins.str, None] =, , kw: builtins.bool =) -> returns.result.Result[builtins.int, builtins.Exception]"
+    reveal_type(safe(test))  # N: Revealed type is "def (first: builtins.int, second: Union[builtins.str, None] =, *,  kw: builtins.bool =) -> returns.result.Result[builtins.int, builtins.Exception]"
 
 
 - case: safe_composition_passing_exceptions_with_args
@@ -94,10 +94,10 @@
     from typing import Optional
     from returns.result import safe
 
-    def test(first: int, second: Optional[str] = None, , kw: bool = True) -> int:
+    def test(first: int, second: Optional[str] = None, *,  kw: bool = True) -> int:
         return 1
 
-    reveal_type(safe((ValueError,))(test))  # N: Revealed type is "def (first: builtins.int, second: Union[builtins.str, None] =, , kw: builtins.bool =) -> returns.result.Result[builtins.int, builtins.Exception]"
+    reveal_type(safe((ValueError,))(test))  # N: Revealed type is "def (first: builtins.int, second: Union[builtins.str, None] =, *,  kw: builtins.bool =) -> returns.result.Result[builtins.int, builtins.Exception]"
 
 
 - case: safe_regression333

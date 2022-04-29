@@ -41,10 +41,10 @@
     from returns.maybe import maybe
 
     @maybe
-    def test(first: int, second: Optional[str] = None, , kw: bool = True) -> int:
+    def test(first: int, second: Optional[str] = None, *,  kw: bool = True) -> int:
         return 1
 
-    reveal_type(test)  # N: Revealed type is "def (first: builtins.int, second: Union[builtins.str, None] =, , kw: builtins.bool =) -> returns.maybe.Maybe[builtins.int]"
+    reveal_type(test)  # N: Revealed type is "def (first: builtins.int, second: Union[builtins.str, None] =, *,  kw: builtins.bool =) -> returns.maybe.Maybe[builtins.int]"
 
 
 - case: maybe_composition_with_args
@@ -53,10 +53,10 @@
     from typing import Optional
     from returns.maybe import maybe
 
-    def test(first: int, second: Optional[str] = None, , kw: bool = True) -> int:
+    def test(first: int, second: Optional[str] = None, *,  kw: bool = True) -> int:
         return 1
 
-    reveal_type(maybe(test))  # N: Revealed type is "def (first: builtins.int, second: Union[builtins.str, None] =, , kw: builtins.bool =) -> returns.maybe.Maybe[builtins.int]"
+    reveal_type(maybe(test))  # N: Revealed type is "def (first: builtins.int, second: Union[builtins.str, None] =, *,  kw: builtins.bool =) -> returns.maybe.Maybe[builtins.int]"
 
 
 - case: maybe_decorator_with_args_kwargs

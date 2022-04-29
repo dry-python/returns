@@ -107,7 +107,7 @@
     reveal_type(partial(multiple, 1, b=y))
     reveal_type(partial(multiple, 1, c=y))
   out: |
-    main:18: note: Revealed type is "def [B, A] (a: builtins.int, , b: builtins.list[B`-1], c: builtins.list[A`-2]) -> Union[A`-2, B`-1]"
+    main:18: note: Revealed type is "def [B, A] (a: builtins.int, *,  b: builtins.list[B`-1], c: builtins.list[A`-2]) -> Union[A`-2, B`-1]"
     main:19: note: Revealed type is "def [A, B] (, b: builtins.list[B`-1], c: builtins.list[A`-2]) -> Union[A`-2, B`-1]"
     main:20: note: Revealed type is "def [A] (, c: builtins.list[A`-2]) -> Union[A`-2, builtins.int]"
     main:21: note: Revealed type is "def [B] (, b: builtins.list[B`-1]) -> Union[builtins.int, B`-1]"
@@ -144,7 +144,7 @@
     reveal_type(partial(multiple, 1, b=y))
     reveal_type(partial(multiple, 1, c=y))
   out: |
-    main:18: note: Revealed type is "def [B, A] (a: builtins.int, , b: builtins.list[B`-1], c: builtins.list[A`-2]) -> Union[A`-2, B`-1]"
+    main:18: note: Revealed type is "def [B, A] (a: builtins.int, *,  b: builtins.list[B`-1], c: builtins.list[A`-2]) -> Union[A`-2, B`-1]"
     main:19: note: Revealed type is "def [B, A] (, b: builtins.list[B`-1], c: builtins.list[A`-2]) -> Union[A`-2, B`-1]"
     main:20: note: Revealed type is "def [A] (, c: builtins.list[A`-2]) -> Union[A`-2, builtins.int]"
     main:21: note: Revealed type is "def [B] (, b: builtins.list[B`-1]) -> Union[builtins.int, B`-1]"
