@@ -23,7 +23,7 @@
     def test(arg: str) -> int:
         ...
 
-    reveal_type(MyClass(1, '1').alt(test))  # N: Revealed type is "main.MyClass[builtins.int, builtins.int*]"
+    reveal_type(MyClass(1, '1').alt(test))  # N: Revealed type is "main.MyClass[builtins.int, builtins.int]"
 
 
 - case: altable_inheritance_correct3
@@ -53,7 +53,7 @@
     def test(arg: str) -> float:
         ...
 
-    reveal_type(MyClass(1, 'a', True).alt(test))  # N: Revealed type is "main.MyClass[builtins.int, builtins.float*, builtins.bool]"
+    reveal_type(MyClass(1, 'a', True).alt(test))  # N: Revealed type is "main.MyClass[builtins.int, builtins.float, builtins.bool]"
 
 
 - case: altable_inheritance_missing

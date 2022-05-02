@@ -7,7 +7,7 @@
         ...
 
     first: Result[int, Exception] = Success(1)
-    reveal_type(first.bind(returns_result))  # N: Revealed type is "returns.result.Result[builtins.str*, builtins.Exception]"
+    reveal_type(first.bind(returns_result))  # N: Revealed type is "returns.result.Result[builtins.str, builtins.Exception]"
 
 
 - case: success_bind_result
@@ -19,7 +19,7 @@
         ...
 
     first: Result[int, Exception] = Success(1)
-    reveal_type(first.bind_result(returns_result))  # N: Revealed type is "returns.result.Result[builtins.str*, builtins.Exception]"
+    reveal_type(first.bind_result(returns_result))  # N: Revealed type is "returns.result.Result[builtins.str, builtins.Exception]"
 
 
 - case: success_map
@@ -27,7 +27,7 @@
   main: |
     from returns.result import Success, Result
 
-    reveal_type(Success(1).map(str))  # N: Revealed type is "returns.result.Result[builtins.str*, Any]"
+    reveal_type(Success(1).map(str))  # N: Revealed type is "returns.result.Result[builtins.str, Any]"
 
 
 - case: success_apply1
@@ -35,7 +35,7 @@
   main: |
     from returns.result import Success, Result
 
-    reveal_type(Success(1).apply(Success(str)))  # N: Revealed type is "returns.result.Result[builtins.str*, Any]"
+    reveal_type(Success(1).apply(Success(str)))  # N: Revealed type is "returns.result.Result[builtins.str, Any]"
 
 
 - case: success_apply2
@@ -48,7 +48,7 @@
     def sum_two(first: int, second: float) -> str:
         ...
 
-    reveal_type(Success(2.0).apply(Success(1).apply(Success(sum_two))))  # N: Revealed type is "returns.result.Result[builtins.str*, Any]"
+    reveal_type(Success(2.0).apply(Success(1).apply(Success(sum_two))))  # N: Revealed type is "returns.result.Result[builtins.str, Any]"
 
 
 - case: success_value_or
@@ -64,4 +64,4 @@
   main: |
     from returns.result import Success
 
-    reveal_type(Success(1).unwrap())  # N: Revealed type is "builtins.int*"
+    reveal_type(Success(1).unwrap())  # N: Revealed type is "builtins.int"

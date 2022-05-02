@@ -136,7 +136,7 @@
         def raise_for_status(self) -> None:
             ...
 
-    reveal_type(safe(tap(Response.raise_for_status)))  # N: Revealed type is "def (main.Response*) -> returns.result.Result[main.Response, builtins.Exception]"
+    reveal_type(safe(tap(Response.raise_for_status)))  # N: Revealed type is "def (main.Response) -> returns.result.Result[main.Response, builtins.Exception]"
 
 
 - case: safe_passing_exceptions_regression641
@@ -149,7 +149,7 @@
         def raise_for_status(self) -> None:
             ...
 
-    reveal_type(safe((EOFError,))(tap(Response.raise_for_status)))  # N: Revealed type is "def (main.Response*) -> returns.result.Result[main.Response, builtins.Exception]"
+    reveal_type(safe((EOFError,))(tap(Response.raise_for_status)))  # N: Revealed type is "def (main.Response) -> returns.result.Result[main.Response, builtins.Exception]"
 
 
 - case: safe_decorator_with_args_kwargs
@@ -211,7 +211,7 @@
     def test(*args: int, **kwargs: str) -> int:
         return 1
 
-    reveal_type(test)  # N: Revealed type is "def (*args: builtins.int, **kwargs: builtins.str) -> returns.io.IO[returns.result.Result*[builtins.int*, builtins.Exception]]"
+    reveal_type(test)  # N: Revealed type is "def (*args: builtins.int, **kwargs: builtins.str) -> returns.io.IO[returns.result.Result[builtins.int, builtins.Exception]]"
 
 
 - case: safe_decorator_passing_exceptions_composition
@@ -225,4 +225,4 @@
     def test(*args: int, **kwargs: str) -> int:
         return 1
 
-    reveal_type(test)  # N: Revealed type is "def (*args: builtins.int, **kwargs: builtins.str) -> returns.io.IO[returns.result.Result*[builtins.int*, builtins.Exception]]"
+    reveal_type(test)  # N: Revealed type is "def (*args: builtins.int, **kwargs: builtins.str) -> returns.io.IO[returns.result.Result[builtins.int, builtins.Exception]]"

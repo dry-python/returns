@@ -18,7 +18,7 @@
 
     Maybe.do(
         x + y
-        for x in Success(1)  # E: Invalid type supplied in do-notation: expected "returns.maybe.Maybe[Any]", got "returns.result.Success[builtins.int*]"
+        for x in Success(1)  # E: Invalid type supplied in do-notation: expected "returns.maybe.Maybe[Any]", got "returns.result.Success[builtins.int]"
         for y in Maybe.from_value(2.5)
     )
 
@@ -32,7 +32,7 @@
 
     a: Result[int, str]
 
-    reveal_type(Maybe.do(  # N: Revealed type is "returns.maybe.Maybe[builtins.float*]"
+    reveal_type(Maybe.do(  # N: Revealed type is "returns.maybe.Maybe[builtins.float]"
         x + y
         for x in result_to_maybe(a)
         for y in Maybe.from_value(2.5)

@@ -20,7 +20,7 @@
     reveal_type(flow('a', [], int))
   out: |
     main:3: error: "List[<nothing>]" not callable
-    main:3: note: Revealed type is "builtins.int*"
+    main:3: note: Revealed type is "builtins.int"
 
 
 - case: flow_function_first_arg_error

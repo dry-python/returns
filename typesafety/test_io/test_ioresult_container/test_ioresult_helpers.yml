@@ -6,7 +6,7 @@
 
     container: IO[Result[int, str]]
 
-    reveal_type(IOResult.from_typecast(container))  # N: Revealed type is "returns.io.IOResult[builtins.int*, builtins.str*]"
+    reveal_type(IOResult.from_typecast(container))  # N: Revealed type is "returns.io.IOResult[builtins.int, builtins.str]"
 
 
 - case: ioresult_from_io
@@ -16,7 +16,7 @@
 
     container: IO[str]
 
-    reveal_type(IOResult.from_io(container))  # N: Revealed type is "returns.io.IOResult[builtins.str*, Any]"
+    reveal_type(IOResult.from_io(container))  # N: Revealed type is "returns.io.IOResult[builtins.str, Any]"
 
 
 - case: ioresult_from_failed_io
@@ -26,7 +26,7 @@
 
     container: IO[str]
 
-    reveal_type(IOResult.from_failed_io(container))  # N: Revealed type is "returns.io.IOResult[Any, builtins.str*]"
+    reveal_type(IOResult.from_failed_io(container))  # N: Revealed type is "returns.io.IOResult[Any, builtins.str]"
 
 
 - case: ioresult_success_type

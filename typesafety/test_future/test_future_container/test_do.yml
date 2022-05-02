@@ -20,7 +20,7 @@
 
     Future.do(
         x + y
-        async for x in FutureSuccess(1)  # E: Invalid type supplied in do-notation: expected "returns.future.Future[Any]", got "returns.future.FutureResult[builtins.int*, Any]"
+        async for x in FutureSuccess(1)  # E: Invalid type supplied in do-notation: expected "returns.future.Future[Any]", got "returns.future.FutureResult[builtins.int, Any]"
         async for y in Future.from_value(2.5)
     )
 

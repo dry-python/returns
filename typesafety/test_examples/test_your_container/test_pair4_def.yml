@@ -4,9 +4,18 @@
     # We only need this because we store this example in `tests/`
     # and not in our source code. Please, do not copy this line!
     - MYPYPATH=./tests/test_examples/test_your_container
+
+  # TODO: remove this config after
+  #     mypy/typeshed/stdlib/unittest/mock.pyi:120:
+  #     error: Class cannot subclass "Any" (has type "Any")
+  # is fixed.
+  mypy_config:
+    disallow_subclassing_any = False
   main: |
     # Let's import our `Pair` type we defined earlier:
     from test_pair4 import Pair
+
+    reveal_type(Pair)
 
     def function(first: int, second: str) -> Pair[float, bool]:
         ...
@@ -14,4 +23,5 @@
     my_pair: Pair[int, str] = Pair.from_paired(1, 'a')
     reveal_type(my_pair.pair(function))
   out: |
-    main:8: note: Revealed type is "test_pair4.Pair[builtins.float*, builtins.bool*]"
+    main:4: note: Revealed type is "def [_FirstType, _SecondType] (inner_value: Tuple[_FirstType`1, _SecondType`2]) -> test_pair4.Pair[_FirstType`1, _SecondType`2]"
+    main:10: note: Revealed type is "test_pair4.Pair[builtins.float, builtins.bool]"

@@ -48,7 +48,7 @@
         ...
 
     x: IOResult[int, str]
-    reveal_type(MyClass.from_ioresult(x).bind_ioresult(test))  # N: Revealed type is "main.MyClass[builtins.float*, builtins.str]"
+    reveal_type(MyClass.from_ioresult(x).bind_ioresult(test))  # N: Revealed type is "main.MyClass[builtins.float, builtins.str]"
 
 
 - case: ioresult_inheritance_correct3
@@ -102,7 +102,7 @@
         ...
 
     x: IOResult[int, str]
-    reveal_type(MyClass.from_ioresult(x).bind_ioresult(test))  # N: Revealed type is "main.MyClass[builtins.float*, builtins.str, Any]"
+    reveal_type(MyClass.from_ioresult(x).bind_ioresult(test))  # N: Revealed type is "main.MyClass[builtins.float, builtins.str, Any]"
 
 
 - case: ioresult_inheritance_missing
@@ -128,6 +128,8 @@
 
 - case: ioresult_inheritance_wrong2
   disable_cache: false
+  # TODO: unskip, mypy fails sometimes on different python versions
+  skip: True
   main: |
     from typing import Callable, TypeVar, Any
     from returns.interfaces.specific.ioresult import IOResultBased2

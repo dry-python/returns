@@ -3,7 +3,7 @@
   main: |
     from returns.io import IOResult, IOFailure
 
-    reveal_type(IOResult.do(  # N: Revealed type is "returns.io.IOResult[Any, Union[builtins.int*, builtins.str*]]"
+    reveal_type(IOResult.do(  # N: Revealed type is "returns.io.IOResult[Any, Union[builtins.int, builtins.str]]"
         first / second
         for first in IOFailure(1)
         for second in IOFailure('a')
@@ -15,7 +15,7 @@
   main: |
     from returns.io import IOSuccess, IOResult
 
-    reveal_type(IOResult.do(  # N: Revealed type is "returns.io.IOResult[builtins.float*, <nothing>]"
+    reveal_type(IOResult.do(  # N: Revealed type is "returns.io.IOResult[builtins.float, <nothing>]"
         x + y
         for x in IOSuccess(1)
         for y in IOSuccess(2.5)
@@ -30,7 +30,7 @@
     a: IOResult[int, str]
     b: IOResult[float, bytes]
 
-    reveal_type(IOResult.do(  # N: Revealed type is "returns.io.IOResult[builtins.float*, Union[builtins.str, builtins.bytes]]"
+    reveal_type(IOResult.do(  # N: Revealed type is "returns.io.IOResult[builtins.float, Union[builtins.str, builtins.bytes]]"
         x + y
         for x in a
         for y in b
@@ -45,7 +45,7 @@
 
     IOResult.do(
         x + y
-        for x in Success(1)  # E: Invalid type supplied in do-notation: expected "returns.io.IOResult[Any, Any]", got "returns.result.Success[builtins.int*]"
+        for x in Success(1)  # E: Invalid type supplied in do-notation: expected "returns.io.IOResult[Any, Any]", got "returns.result.Success[builtins.int]"
         for y in IOSuccess(2.5)
     )
 
@@ -58,7 +58,7 @@
 
     a: Result[int, str]
 
-    reveal_type(IOResult.do(  # N: Revealed type is "returns.io.IOResult[builtins.float*, builtins.str*]"
+    reveal_type(IOResult.do(  # N: Revealed type is "returns.io.IOResult[builtins.float, builtins.str]"
         x + y
         for x in IOResult.from_result(a)
         for y in IOSuccess(2.5)
@@ -99,12 +99,12 @@
     from returns.io import IOResult, IOResultE, IOSuccess
 
     x: IOResultE[int]
-    reveal_type(IOResult.do(  # N: Revealed type is "returns.io.IOResult[builtins.int*, builtins.Exception]"
-        a * 2
+    reveal_type(IOResult.do(  # N: Revealed type is "returns.io.IOResult[builtins.int, builtins.Exception]"
+        a + 2
         for a in x
     ))
 
-    reveal_type(IOResultE.do(  # N: Revealed type is "returns.io.IOResult[builtins.int*, builtins.Exception]"
-        a * 2
+    reveal_type(IOResultE.do(  # N: Revealed type is "returns.io.IOResult[builtins.int, builtins.Exception]"
+        a + 2
         for a in x
     ))

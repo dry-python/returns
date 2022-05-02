@@ -17,7 +17,7 @@
     def convert(arg: str) -> float:
         ...
 
-    reveal_type(flow('1.0', convert, int, bool))  # N: Revealed type is "builtins.bool*"
+    reveal_type(flow('1.0', convert, int, bool))  # N: Revealed type is "builtins.bool"
 
 
 - case: flow_function_with_overloads2
@@ -29,7 +29,7 @@
     def convert(arg: str) -> float:
         ...
 
-    reveal_type(flow('1.0', identity, convert, identity, int, identity, bool, identity))  # N: Revealed type is "builtins.bool*"
+    reveal_type(flow('1.0', identity, convert, identity, int, identity, bool, identity))  # N: Revealed type is "builtins.bool"
 
 
 - case: flow_with_object1
@@ -62,7 +62,7 @@
     from returns.pipeline import flow
 
     reveal_type(
-        flow(  # N: Revealed type is "builtins.float*"
+        flow(  # N: Revealed type is "builtins.float"
             1,
             lambda x: x,
             str,

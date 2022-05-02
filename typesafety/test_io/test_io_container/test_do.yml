@@ -6,7 +6,7 @@
 
     IO.do(
         x + y
-        for x in Success(1)  # E: Invalid type supplied in do-notation: expected "returns.io.IO[Any]", got "returns.result.Success[builtins.int*]"
+        for x in Success(1)  # E: Invalid type supplied in do-notation: expected "returns.io.IO[Any]", got "returns.result.Success[builtins.int]"
         for y in IO(2.5)
     )
 

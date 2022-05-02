@@ -24,4 +24,4 @@ def test_regression394():
     See: https://github.com/dry-python/returns/issues/394
 
     """
-    assert RequiresContextIOResultE(lambda _: IOSuccess(1))
+    RequiresContextIOResultE(lambda _: IOSuccess(1))

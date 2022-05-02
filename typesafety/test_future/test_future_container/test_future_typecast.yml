@@ -13,7 +13,7 @@
   main: |
     from returns.future import Future
 
-    reveal_type(Future.from_value(1))  # N: Revealed type is "returns.future.Future[builtins.int*]"
+    reveal_type(Future.from_value(1))  # N: Revealed type is "returns.future.Future[builtins.int]"
 
 
 - case: future_from_io
@@ -22,7 +22,7 @@
     from returns.future import Future
     from returns.io import IO
 
-    reveal_type(Future.from_io(IO(1)))  # N: Revealed type is "returns.future.Future[builtins.int*]"
+    reveal_type(Future.from_io(IO(1)))  # N: Revealed type is "returns.future.Future[builtins.int]"
 
 
 - case: future_from_downcast
@@ -31,4 +31,4 @@
     from returns.future import Future, FutureResult
 
     first: FutureResult[int, ValueError]
-    reveal_type(Future.from_future_result(first))  # N: Revealed type is "returns.future.Future[returns.result.Result[builtins.int*, builtins.ValueError*]]"
+    reveal_type(Future.from_future_result(first))  # N: Revealed type is "returns.future.Future[returns.result.Result[builtins.int, builtins.ValueError]]"

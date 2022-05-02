@@ -28,6 +28,12 @@
 
 - case: test_all_laws_sig
   disable_cache: false
+  # TODO: remove this config after
+  #     mypy/typeshed/stdlib/unittest/mock.pyi:120:
+  #     error: Class cannot subclass "Any" (has type "Any")
+  # is fixed.
+  mypy_config:
+    disallow_subclassing_any = False
   main: |
     from returns.contrib.hypothesis.laws import check_all_laws
 

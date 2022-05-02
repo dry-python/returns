@@ -18,7 +18,7 @@ def test_unwrap_iosuccess():
 def test_unwrap_iofailure():
     """Ensures that unwrap works for IOFailure container."""
     with pytest.raises(UnwrapFailedError):
-        assert IOFailure(5).unwrap()
+        IOFailure(5).unwrap()
 
 
 def test_unwrap_iofailure_with_exception():

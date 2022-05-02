@@ -33,7 +33,7 @@
         ...
 
     predefined = pipe(first, second)
-    reveal_type(callback(predefined, 1))  # N: Revealed type is "builtins.str*"
+    reveal_type(callback(predefined, 1))  # N: Revealed type is "builtins.str"
 
 
 - case: pipe_generic_callable2
@@ -55,4 +55,4 @@
         ...
 
     predefined = pipe(first, second)
-    reveal_type(callback(predefined))  # N: Revealed type is "builtins.str*"
+    reveal_type(callback(predefined))  # N: Revealed type is "builtins.str"

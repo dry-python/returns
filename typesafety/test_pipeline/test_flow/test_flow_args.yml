@@ -27,7 +27,7 @@
     from returns.functions import identity
 
     reveal_type(
-        flow(  # N: Revealed type is "builtins.int*"
+        flow(  # N: Revealed type is "builtins.int"
             1,
             identity,
             identity,

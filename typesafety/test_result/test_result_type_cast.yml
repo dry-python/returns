@@ -40,7 +40,7 @@
     from returns.result import Result
 
     x: Result[int, str]
-    reveal_type(x.swap())  # N: Revealed type is "returns.result.Result[builtins.str*, builtins.int*]"
+    reveal_type(x.swap())  # N: Revealed type is "returns.result.Result[builtins.str, builtins.int]"
 
 
 - case: result_getattr
@@ -57,7 +57,7 @@
   main: |
     from returns.result import Result
 
-    reveal_type(Result.from_value(1))  # N: Revealed type is "returns.result.Result[builtins.int*, Any]"
+    reveal_type(Result.from_value(1))  # N: Revealed type is "returns.result.Result[builtins.int, Any]"
 
 
 - case: result_from_failure
@@ -65,7 +65,7 @@
   main: |
     from returns.result import Result
 
-    reveal_type(Result.from_failure(1))  # N: Revealed type is "returns.result.Result[Any, builtins.int*]"
+    reveal_type(Result.from_failure(1))  # N: Revealed type is "returns.result.Result[Any, builtins.int]"
 
 
 - case: result_from_result
@@ -74,7 +74,7 @@
     from returns.result import Result
 
     x: Result[int ,str]
-    reveal_type(Result.from_result(x))  # N: Revealed type is "returns.result.Result[builtins.int*, builtins.str*]"
+    reveal_type(Result.from_result(x))  # N: Revealed type is "returns.result.Result[builtins.int, builtins.str]"
 
 
 - case: result_covariant_cast
@@ -96,7 +96,7 @@
       ...
 
     first: Result[int, str] = Success(4)
-    reveal_type(first.bind(test))  # N: Revealed type is "returns.result.Result[builtins.float*, builtins.str]"
+    reveal_type(first.bind(test))  # N: Revealed type is "returns.result.Result[builtins.float, builtins.str]"
 
 
 - case: result_success_bind_contra2
@@ -109,7 +109,7 @@
 
     first: Result[int, Exception]
     second = first.bind(test)
-    reveal_type(second)  # N: Revealed type is "returns.result.Result[builtins.int*, builtins.Exception]"
+    reveal_type(second)  # N: Revealed type is "returns.result.Result[builtins.int, builtins.Exception]"
 
 
 - case: result_correct_usage
@@ -119,7 +119,7 @@
 
     def factory(inner_value: int) -> Result[int, str]:
         if inner_value > 0:
-            return Success(inner_value * 2)
+            return Success(inner_value + 2)
         return Failure(str(inner_value))
 
     reveal_type(factory(1))  # N: Revealed type is "returns.result.Result[builtins.int, builtins.str]"

@@ -3,7 +3,7 @@
   main: |
     from returns.result import Result, Failure
 
-    reveal_type(Result.do(  # N: Revealed type is "returns.result.Result[Any, Union[builtins.int*, builtins.str*]]"
+    reveal_type(Result.do(  # N: Revealed type is "returns.result.Result[Any, Union[builtins.int, builtins.str]]"
         first / second
         for first in Failure(1)
         for second in Failure('a')
@@ -15,7 +15,7 @@
   main: |
     from returns.result import Success, Result
 
-    reveal_type(Result.do(  # N: Revealed type is "returns.result.Result[builtins.float*, <nothing>]"
+    reveal_type(Result.do(  # N: Revealed type is "returns.result.Result[builtins.float, <nothing>]"
         x + y
         for x in Success(1)
         for y in Success(2.5)
@@ -30,7 +30,7 @@
     a: Result[int, str]
     b: Result[float, bytes]
 
-    reveal_type(Result.do(  # N: Revealed type is "returns.result.Result[builtins.float*, Union[builtins.str, builtins.bytes]]"
+    reveal_type(Result.do(  # N: Revealed type is "returns.result.Result[builtins.float, Union[builtins.str, builtins.bytes]]"
         x + y
         for x in a
         for y in b
@@ -45,7 +45,7 @@
 
     Result.do(
         x + y
-        for x in IOSuccess(1)  # E: Invalid type supplied in do-notation: expected "returns.result.Result[Any, Any]", got "returns.io.IOSuccess[builtins.int*]"
+        for x in IOSuccess(1)  # E: Invalid type supplied in do-notation: expected "returns.result.Result[Any, Any]", got "returns.io.IOSuccess[builtins.int]"
         for y in Success(2.5)
     )
 

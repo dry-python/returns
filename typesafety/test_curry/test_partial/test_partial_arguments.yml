@@ -192,7 +192,7 @@
     def multiple(a: int, b: int) -> int:
         ...
 
-    reveal_type(partial(multiple, *(1, 2)))  # N: Revealed type is "def (*Any, **Any) -> builtins.int*"
+    reveal_type(partial(multiple, *(1, 2)))  # N: Revealed type is "def (*Any, **Any) -> builtins.int"
 
 
 - case: partial_star2_arg
@@ -203,7 +203,7 @@
     def multiple(a: int, b: int) -> int:
         ...
 
-    reveal_type(partial(multiple, **{'a': 1, 'b': 2}))  # N: Revealed type is "def (*Any, **Any) -> builtins.int*"
+    reveal_type(partial(multiple, **{'a': 1, 'b': 2}))  # N: Revealed type is "def (*Any, **Any) -> builtins.int"
 
 
 - case: partial_lambda
