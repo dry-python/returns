@@ -66,7 +66,7 @@ python = "^3.7"
 typing-extensions = ">=4.0,<5.0"
 
 [tool.poetry.dev-dependencies]
-anyio = "^3.5"
+anyio = "^3.6"
 curio = "^1.5"
 trio = "^0.20"
 attrs = "^21.4"
