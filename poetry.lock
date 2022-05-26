@@ -1108,7 +1108,7 @@ pytest = "*"
 
 [[package]]
 name = "pytest-subtests"
-version = "0.7.0"
+version = "0.8.0"
 description = "unittest subTest() support and subtests fixture"
 category = "dev"
 optional = false
@@ -1643,7 +1643,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "e3fdfff8c2ce52adc1ef8eb2a4513c64539077d1b1f1e703e369db8c26b5b8e0"
+content-hash = "3537f9e14998f4483f1cce38513b5e22712246629586848cb683f5dc76a98b83"
 
 [metadata.files]
 alabaster = [
@@ -2160,8 +2160,8 @@ pytest-randomly = [
     {file = "pytest_randomly-3.12.0-py3-none-any.whl", hash = "sha256:f4f2e803daf5d1ba036cc22bf4fe9dbbf99389ec56b00e5cba732fb5c1d07fdd"},
 ]
 pytest-subtests = [
-    {file = "pytest-subtests-0.7.0.tar.gz", hash = "sha256:95c44c77e3fbede9848bb88ca90b384815fcba8090ef9a9f55659ab163b1681c"},
-    {file = "pytest_subtests-0.7.0-py3-none-any.whl", hash = "sha256:2e3691caedea0c464fe96ffffd14bf872df1406b88d1930971dafe1966095bad"},
+    {file = "pytest-subtests-0.8.0.tar.gz", hash = "sha256:46eb376022e926950816ccc23502de3277adcc1396652ddb3328ce0289052c4d"},
+    {file = "pytest_subtests-0.8.0-py3-none-any.whl", hash = "sha256:4e28ca52cf7a46645c1ded7933745b69334cdc97a412ed4431f7be7cef9a0994"},
 ]
 python-slugify = [
     {file = "python-slugify-6.1.2.tar.gz", hash = "sha256:272d106cb31ab99b3496ba085e3fea0e9e76dcde967b5e9992500d1f785ce4e1"},
