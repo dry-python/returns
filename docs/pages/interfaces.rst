@@ -575,7 +575,7 @@ do not have type aliases for one type argument in a form of ``ResultLike1``.
 Why does ``Mappable1`` exists and ``ResultLike1`` does not?
 
 Because ``Mappable1`` does make sense.
-But, ``ResultLike1`` requiers at least two (value and error) types to exist.
+But, ``ResultLike1`` requires at least two (value and error) types to exist.
 The same applies for ``ReaderLike1`` and ``ReaderResultLike1``
 and ``ReaderResultLike2``.
 
