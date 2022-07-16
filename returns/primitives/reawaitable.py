@@ -16,7 +16,7 @@ class ReAwaitable(object):
     Allows to write coroutines that can be awaited multiple times.
 
     It works by actually caching the ``await`` result and reusing it.
-    So, in reallity we still ``await`` once,
+    So, in reality we still ``await`` once,
     but pretending to do it multiple times.
 
     Why is that required? Because otherwise,
