@@ -187,8 +187,8 @@ optional = false
 python-versions = ">=3.5"
 
 [package.extras]
-dev = ["check-manifest", "flake8", "pytest", "pytest-cov", "pytest-dependency"]
 hard-encoding-detection = ["chardet"]
+dev = ["pytest-dependency", "pytest-cov", "pytest", "flake8", "check-manifest"]
 
 [[package]]
 name = "colorama"
@@ -262,10 +262,10 @@ optional = false
 python-versions = "*"
 
 [package.extras]
-all = ["Sphinx (>=3)", "sphinx-rtd-theme (>=0.2)", "check-manifest (>=0.42)", "mock (>=1.3.0)", "pytest-cov (>=2.10.1)", "pytest-isort (>=1.2.0)", "sphinx (>=3)", "tox (>=3.7.0)", "numpy (>=1.13.0)", "numpy (>=1.15.0)", "numpy (>=1.18.0)", "pytest (==5.4.3)", "pytest-pycodestyle (>=2)", "pytest-pydocstyle (>=2)", "pytest (>=6)", "pytest-pycodestyle (>=2.2.0)", "pytest-pydocstyle (>=2.2.0)", "numpy (>=1.20.0)"]
-docs = ["Sphinx (>=3)", "sphinx-rtd-theme (>=0.2)"]
-numpy = ["numpy (>=1.13.0)", "numpy (>=1.15.0)", "numpy (>=1.18.0)", "numpy (>=1.20.0)"]
-tests = ["check-manifest (>=0.42)", "mock (>=1.3.0)", "pytest-cov (>=2.10.1)", "pytest-isort (>=1.2.0)", "sphinx (>=3)", "tox (>=3.7.0)", "pytest (==5.4.3)", "pytest-pycodestyle (>=2)", "pytest-pydocstyle (>=2)", "pytest (>=6)", "pytest-pycodestyle (>=2.2.0)", "pytest-pydocstyle (>=2.2.0)"]
+tests = ["pytest-pydocstyle (>=2.2.0)", "pytest-pycodestyle (>=2.2.0)", "pytest (>=6)", "pytest-pydocstyle (>=2)", "pytest-pycodestyle (>=2)", "pytest (==5.4.3)", "tox (>=3.7.0)", "sphinx (>=3)", "pytest-isort (>=1.2.0)", "pytest-cov (>=2.10.1)", "mock (>=1.3.0)", "check-manifest (>=0.42)"]
+numpy = ["numpy (>=1.20.0)", "numpy (>=1.18.0)", "numpy (>=1.15.0)", "numpy (>=1.13.0)"]
+docs = ["sphinx-rtd-theme (>=0.2)", "Sphinx (>=3)"]
+all = ["numpy (>=1.20.0)", "pytest-pydocstyle (>=2.2.0)", "pytest-pycodestyle (>=2.2.0)", "pytest (>=6)", "pytest-pydocstyle (>=2)", "pytest-pycodestyle (>=2)", "pytest (==5.4.3)", "numpy (>=1.18.0)", "numpy (>=1.15.0)", "numpy (>=1.13.0)", "tox (>=3.7.0)", "sphinx (>=3)", "pytest-isort (>=1.2.0)", "pytest-cov (>=2.10.1)", "mock (>=1.3.0)", "check-manifest (>=0.42)", "sphinx-rtd-theme (>=0.2)", "Sphinx (>=3)"]
 
 [[package]]
 name = "doc8"
@@ -484,14 +484,14 @@ flake8 = "*"
 
 [[package]]
 name = "flake8-pyi"
-version = "22.5.1"
+version = "22.7.0"
 description = "A plugin for flake8 to enable linting .pyi files."
 category = "dev"
 optional = false
 python-versions = ">=3.7"
 
 [package.dependencies]
-ast-decompiler = {version = ">=0.4.0,<0.5.0", markers = "python_version < \"3.9\""}
+ast-decompiler = {version = "<1.0", markers = "python_version < \"3.9\""}
 flake8 = ">=3.2.1"
 pyflakes = ">=2.1.1"
 
@@ -779,7 +779,7 @@ colorama = {version = ">=0.3.4", markers = "sys_platform == \"win32\""}
 win32-setctime = {version = ">=1.0.0", markers = "sys_platform == \"win32\""}
 
 [package.extras]
-dev = ["colorama (>=0.3.4)", "docutils (==0.16)", "flake8 (>=3.7.7)", "tox (>=3.9.0)", "pytest (>=4.6.2)", "pytest-cov (>=2.7.1)", "black (>=19.10b0)", "isort (>=5.1.1)", "Sphinx (>=4.1.1)", "sphinx-autobuild (>=0.7.1)", "sphinx-rtd-theme (>=0.4.3)"]
+dev = ["sphinx-rtd-theme (>=0.4.3)", "sphinx-autobuild (>=0.7.1)", "Sphinx (>=4.1.1)", "isort (>=5.1.1)", "black (>=19.10b0)", "pytest-cov (>=2.7.1)", "pytest (>=4.6.2)", "tox (>=3.9.0)", "flake8 (>=3.7.7)", "docutils (==0.16)", "colorama (>=0.3.4)"]
 
 [[package]]
 name = "m2r2"
@@ -985,8 +985,8 @@ python-versions = ">=3.6"
 importlib-metadata = {version = ">=0.12", markers = "python_version < \"3.8\""}
 
 [package.extras]
-dev = ["pre-commit", "tox"]
-testing = ["pytest", "pytest-benchmark"]
+testing = ["pytest-benchmark", "pytest"]
+dev = ["tox", "pre-commit"]
 
 [[package]]
 name = "py"
@@ -1088,7 +1088,7 @@ coverage = {version = ">=5.2.1", extras = ["toml"]}
 pytest = ">=4.6"
 
 [package.extras]
-testing = ["fields", "hunter", "process-tests", "six", "pytest-xdist", "virtualenv"]
+testing = ["virtualenv", "pytest-xdist", "six", "process-tests", "hunter", "fields"]
 
 [[package]]
 name = "pytest-mypy-plugins"
@@ -1387,8 +1387,8 @@ python-versions = "*"
 sphinx = ">=1.8"
 
 [package.extras]
-doc = ["sphinx", "sphinx-autoapi", "sphinx-rtd-theme", "sphinx-tabs (==3.3.1)", "sphinx-prompt", "sphinx-version-warning", "sphinx-notfound-page", "sphinx-autobuild", "sphinxcontrib-bibtex"]
 test = ["tox"]
+doc = ["sphinxcontrib-bibtex", "sphinx-autobuild", "sphinx-notfound-page", "sphinx-version-warning", "sphinx-prompt", "sphinx-tabs (==3.3.1)", "sphinx-rtd-theme", "sphinx-autoapi", "sphinx"]
 
 [[package]]
 name = "sphinx-typlog-theme"
@@ -1399,7 +1399,7 @@ optional = false
 python-versions = "*"
 
 [package.extras]
-dev = ["sphinx", "livereload"]
+dev = ["livereload", "sphinx"]
 
 [[package]]
 name = "sphinxcontrib-applehelp"
@@ -1410,8 +1410,8 @@ optional = false
 python-versions = ">=3.5"
 
 [package.extras]
-lint = ["flake8", "mypy", "docutils-stubs"]
 test = ["pytest"]
+lint = ["docutils-stubs", "mypy", "flake8"]
 
 [[package]]
 name = "sphinxcontrib-devhelp"
@@ -1422,8 +1422,8 @@ optional = false
 python-versions = ">=3.5"
 
 [package.extras]
-lint = ["flake8", "mypy", "docutils-stubs"]
 test = ["pytest"]
+lint = ["docutils-stubs", "mypy", "flake8"]
 
 [[package]]
 name = "sphinxcontrib-htmlhelp"
@@ -1434,8 +1434,8 @@ optional = false
 python-versions = ">=3.6"
 
 [package.extras]
-lint = ["flake8", "mypy", "docutils-stubs"]
-test = ["pytest", "html5lib"]
+test = ["html5lib", "pytest"]
+lint = ["docutils-stubs", "mypy", "flake8"]
 
 [[package]]
 name = "sphinxcontrib-jsmath"
@@ -1446,7 +1446,7 @@ optional = false
 python-versions = ">=3.5"
 
 [package.extras]
-test = ["pytest", "flake8", "mypy"]
+test = ["mypy", "flake8", "pytest"]
 
 [[package]]
 name = "sphinxcontrib-mermaid"
@@ -1465,8 +1465,8 @@ optional = false
 python-versions = ">=3.5"
 
 [package.extras]
-lint = ["flake8", "mypy", "docutils-stubs"]
 test = ["pytest"]
+lint = ["docutils-stubs", "mypy", "flake8"]
 
 [[package]]
 name = "sphinxcontrib-serializinghtml"
@@ -1646,7 +1646,7 @@ optional = false
 python-versions = ">=3.5"
 
 [package.extras]
-dev = ["pytest (>=4.6.2)", "black (>=19.3b0)"]
+dev = ["black (>=19.3b0)", "pytest (>=4.6.2)"]
 
 [[package]]
 name = "zipp"
@@ -1663,7 +1663,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "eb0941805263b60ed7272c058cd42ecb55e2d1aedbab19389bb86f30ba982c71"
+content-hash = "f2abae2e039d52e8301450cbcdf88dd7a796d47a7207fba00aecb68688ede716"
 
 [metadata.files]
 alabaster = [
@@ -1926,8 +1926,8 @@ flake8-polyfill = [
     {file = "flake8_polyfill-1.0.2-py2.py3-none-any.whl", hash = "sha256:12be6a34ee3ab795b19ca73505e7b55826d5f6ad7230d31b18e106400169b9e9"},
 ]
 flake8-pyi = [
-    {file = "flake8-pyi-22.5.1.tar.gz", hash = "sha256:52152ae25efbd6329c6426a3b29a9073a696ba744502fb3e48581a47426ad4c8"},
-    {file = "flake8_pyi-22.5.1-py37-none-any.whl", hash = "sha256:dfd385389f7bfed6c6666df1bc0a1a70fb03577e4e3ccd79229053d1e2854a96"},
+    {file = "flake8-pyi-22.7.0.tar.gz", hash = "sha256:f610d80ebebc33ed118b08ec36a12067b36cf7578c49b7cad577b2b965738595"},
+    {file = "flake8_pyi-22.7.0-py37-none-any.whl", hash = "sha256:edfdf31c38a9e50a56be99075f75f20217d2c49fe5f5bd71938126f1a1e0c22e"},
 ]
 flake8-pytest-style = [
     {file = "flake8-pytest-style-1.6.0.tar.gz", hash = "sha256:c1175713e9e11b78cd1a035ed0bca0d1e41d09c4af329a952750b61d4194ddac"},
