@@ -89,7 +89,7 @@ pytest-cov = "^3.0"
 pytest-randomly = "^3.12"
 pytest-mypy-plugins = "^1.9.2"
 pytest-subtests = "^0.8"
-hypothesis = "^6.52"
+hypothesis = "^6.53"
 
 sphinx = "^5.0"
 sphinx-autodoc-typehints = "^1.18"
