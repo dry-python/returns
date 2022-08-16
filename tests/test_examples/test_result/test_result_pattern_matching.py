@@ -16,7 +16,7 @@ match div(1, 0):
         print('Result is "{0}"'.format(value))
 
     # Matches if the result stored inside `Failure` is `ZeroDivisionError`
-    case Failure(ZeroDivisionError):
+    case Failure(ZeroDivisionError()):
         print('"ZeroDivisionError" was raised')
 
     # Matches any `Failure` instance
