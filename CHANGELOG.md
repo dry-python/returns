@@ -11,6 +11,7 @@ See [0Ver](https://0ver.org/).
 ### Bugfixes
 
 - Fixes a problem with `do-notation` and type aliases
+- Fixes custom pickle protocol to handle `None` values gracefully
 
 
 ## 0.19.0 aka The Do Notation
