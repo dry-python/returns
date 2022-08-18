@@ -26,7 +26,7 @@ class _CustomClass(object):
         st.booleans(),
         st.lists(st.text()),
         st.dictionaries(st.text(), st.integers()),
-        st.builds(_CustomClass, st.text()),
+        st.from_type(_CustomClass),
     ),
 )
 @example(None)
