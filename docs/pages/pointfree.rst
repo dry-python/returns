@@ -105,7 +105,7 @@ This means we can compose functions in a pipeline.
   >>> # Still passes along Nothing
   >>> assert flow(
   ...     '006',
-  ...     index_of_1,    # Nothing
+  ...     index_of_7,    # Nothing
   ...     map_(double),  # Nothing
   ... ) == Nothing
 
