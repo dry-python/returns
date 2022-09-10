@@ -114,7 +114,7 @@ bind
 
 Pointfree ``bind()`` is an alternative to the container method ``.bind()``.
 
-It binds a function that returns a container so that is accepts the same 
+It binds a function that returns a container so that is accepts the same
 container type as input.
 
 In other words, it modifies the function's signature from:
