@@ -144,7 +144,7 @@ but how can we do it independently?
   >>> # 1. Via ``.bind``:
   >>> assert container.bind(index_of_1) == Some(1)
   >>> # 2. Or via the ``bind`` function.
-  >>> assert bind(always_one)(container) == Some(1)
+  >>> assert bind(index_of_1)(container) == Some(1)
   >>> # This produces the same result, but in a different order
 
 That's it!
@@ -198,7 +198,7 @@ You can think of it like ``map``, but for the second type of a container.
   >>> assert alt(half_as_bad)(IOFailure(4)) == IOFailure(2.0)
 
   >>> # This is equivalent to IOFailure(4).alt(half_as_bad)
-  >>> assert alt(half_as_bad)(IOFailure(4)) == IOFailure(2.0).alt(half_as_bad)
+  >>> assert alt(half_as_bad)(IOFailure(4)) == IOFailure(4).alt(half_as_bad)
 
 This inverse syntax lets us easily compose functions in a pipeline
 
@@ -278,6 +278,7 @@ here's how it might look:
   >>> from returns.pointfree import apply
   >>> from returns.pipeline import flow
   >>> from returns.maybe import Some, Nothing, Maybe
+  >>> from typing import Callable
 
   >>> def wow(arg: int) -> str:
   ...     return chr(arg) + '!'
@@ -289,12 +290,12 @@ here's how it might look:
 
   >>> assert flow(
   ...     Some(97),
-  ...     apply(my_response(true)),
+  ...     apply(my_response(True)),
   ... ) == Some('a!')
 
   >>> assert flow(
   ...     Nothing,
-  ...     apply(my_response(false)),
+  ...     apply(my_response(False)),
   ... ) == Nothing
 
 Or with a function as the first parameter:
