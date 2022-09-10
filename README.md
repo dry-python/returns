@@ -639,7 +639,3 @@ Or read these articles:
 - [Make Tests a Part of Your App](https://sobolevn.me/2021/02/make-tests-a-part-of-your-app)
 
 Do you have an article to submit? Feel free to open a pull request!
-
-<p align="center">&mdash; ⭐️ &mdash;</p>
-<p align="center"><i>Drylabs maintains dry-python and helps those who want to use it inside their organizations.</i></p>
-<p align="center"><i>Read more at <a href="https://drylabs.io">drylabs.io</a></i></p>
