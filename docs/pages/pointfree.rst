@@ -98,9 +98,9 @@ This means we can compose functions in a pipeline.
 
   >>> assert flow(
   ...     '007',
-  ...     index_of_7,    # Some(3)
-  ...     map_(double),  # Some(6)
-  ... ) == Some(6)
+  ...     index_of_7,    # Some(2)
+  ...     map_(double),  # Some(4)
+  ... ) == Some(4)
 
   >>> # Still passes along Nothing
   >>> assert flow(
