@@ -139,7 +139,7 @@ but how can we do it independently?
   ...         return Some(arg.index('1'))
   ...     return Nothing
 
-  >>> container: Maybe[str] = Some('A1 Steak Sauce')
+  >>> container = Some('A1 Steak Sauce')
   >>> # We now have two way of composing these entities.
   >>> # 1. Via ``.bind``:
   >>> assert container.bind(index_of_1) == Some(1)
