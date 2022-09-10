@@ -12,6 +12,7 @@ See [0Ver](https://0ver.org/).
 
 - Fixes a problem with `do-notation` and type aliases
 - Fixes custom pickle protocol to handle `None` values gracefully
+- Fixes RTD builds
 
 
 ## 0.19.0 aka The Do Notation

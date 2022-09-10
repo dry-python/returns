@@ -11,8 +11,14 @@ build:
       - asdf install poetry latest
       - asdf global poetry latest
       - poetry config virtualenvs.create false
+      - poetry export --with dev --format=requirements.txt --output=requirements.txt
     post_install:
       - poetry install
+
+python:
+  version: 3.8
+  install:
+    - requirements: requirements.txt
 
 # Build documentation in the docs/ directory with Sphinx
 sphinx:
