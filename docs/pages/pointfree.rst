@@ -11,7 +11,7 @@ Container methods are difficult to compose with other functions
 or methods.
 
 Instead we can use functions that produce the same result but have
-the reverse semantics. 
+the reverse semantics.
 
 Usually, this means changing something like ``x.f(y)`` to ``f(x)(y)``.
 
@@ -114,7 +114,8 @@ bind
 
 Pointfree ``bind()`` is an alternative to the container method ``.bind()``.
 
-It binds a function that returns a container so that is accepts the same container type as input.
+It binds a function that returns a container so that is accepts the same 
+container type as input.
 
 In other words, it modifies the function's signature from:
 ``a -> Container[b]``
@@ -230,8 +231,8 @@ lash
 Pointfree ``lash()`` function is an alternative
 to ``.lash()`` container method.
 
-It allows better composition by lifting a function that returns a 
-container to act on the failed state of a container. 
+It allows better composition by lifting a function that returns a
+container to act on the failed state of a container.
 
 You can think of it like ``bind``, but for the second type of a container.
 
