@@ -5,17 +5,18 @@ Pointfree
 
 This module provides a bunch of primitives to work with containers.
 
-It is centered around the composition idea.
+It makes composing functions with containers easier.
 Sometimes using methods on containers is not very helpful.
-Instead we can use functions that has the reverse semantics,
-but the same end result.
+Container methods are difficult to compose with other functions
+or methods.
+
+Instead we can use functions that produce the same result but have
+the reverse semantics.
+
+Usually, this means changing something like ``x.f(y)`` to ``f(x)(y)``.
 
 Why would anyone need these functions when you can use methods?
 To create pipelines!
-
-Without pointfree functions you cannot easily
-work with containers inside pipelines.
-Because they do not compose well:
 
 .. code:: python
 
@@ -33,69 +34,119 @@ Because they do not compose well:
 
   pipe(
       returns_result,
-      works_with_result,  # does not compose!
+      works_with_result,  # does not compose! Needs a container for input
       finish_work,  # does not compose either!
   )
 
-In a normal situation you would probably write:
+Without pointfree functions you would probably have to write:
 
 .. code:: python
 
   returns_result().bind(works_with_result).bind(notifies_user)
 
-And you need a way to somehow do this in the pipeline.
+And you need a way to somehow do this in the pipeline syntax.
+Remember that pipeline syntax helps make composing functions more readable
+and pythonic.
 That's where pointfree functions become really useful.
 
 
 map_
 ----
 
-Allows to compose containers and functions, but in a reverse manner.
+``map_()`` is a pointfree alternative to the container method ``.map()``.
+
+It lifts a function to work from container to container. ``map_(f)``
+would return f lifted to work on a container.
+
+In other words, it modifies the function's signature from:
+``a -> b``
+to:
+``Container[a] -> Container[b]``
+
+Doing this lets us compose regular functions and containers.
 
 .. code:: python
 
   >>> from returns.pointfree import map_
   >>> from returns.maybe import Maybe, Some
 
-  >>> def mappable(arg: str) -> int:
+  >>> def as_int(arg: str) -> int:
   ...     return ord(arg)
 
   >>> container: Maybe[str] = Some('a')
-  >>> # We now have two way of composining these entities.
-  >>> # 1. Via ``.map``:
-  >>> assert container.map(mappable) == Some(97)
-  >>> # 2. Or via ``bind`` function, the same but in the inverse way:
-  >>> assert map_(mappable)(container) == Some(97)
+  >>> # We now have two ways to compose container and as_int
+  >>> # 1. Via ``.map()``:
+  >>> assert container.map(as_int) == Some(97)
+  >>> # 2. Or via ``map_()``, like above but in the reverse order:
+  >>> assert map_(as_int)(container) == Some(97)
 
+This means we can compose functions in a pipeline.
+
+.. code:: python
+
+  >>> from returns.pointfree import map_
+  >>> from returns.pipeline import flow
+  >>> from returns.maybe import Maybe, Some, Nothing
+
+  >>> def index_of_7(arg: str) -> Maybe[int]:
+  ...     if '7' in arg:
+  ...         return Some(arg.index('7'))
+  ...     return Nothing
+
+  >>> def double(num: int) -> int:
+  ...     return num * 2
+
+  >>> assert flow(
+  ...     '007',
+  ...     index_of_7,    # Some(2)
+  ...     map_(double),  # Some(4)
+  ... ) == Some(4)
+
+  >>> # Still passes along Nothing
+  >>> assert flow(
+  ...     '006',
+  ...     index_of_7,    # Nothing
+  ...     map_(double),  # Nothing
+  ... ) == Nothing
 
 bind
 ----
 
-Allows to bind a function that returns a container of the same type.
+Pointfree ``bind()`` is an alternative to the container method ``.bind()``.
 
-Without ``bind()`` function
-it would be very hard to declaratively compose two entities:
+It binds a function that returns a container so that is accepts the same
+container type as input.
+
+In other words, it modifies the function's signature from:
+``a -> Container[b]``
+to:
+``Container[a] -> Container[b]``
+
+Without ``bind()`` it would be very hard to declaratively compose two entities:
 
 1. Existing containers
 2. Existing functions that accept a regular value and return a container
 
-We can compose these entities with ``.bind`` when calling it directly,
-but how can we do it inversely?
+We can compose these entities with ``.bind()`` when calling it on a container,
+but how can we do it independently?
 
 .. code:: python
 
   >>> from returns.pointfree import bind
   >>> from returns.maybe import Maybe, Some
 
-  >>> def bindable(arg: str) -> Maybe[int]:
-  ...     return Some(1)
+  >>> def index_of_1(arg: str) -> Maybe[int]:
+  ...     if '1' in arg:
+  ...         return Some(arg.index('1'))
+  ...     return Nothing
 
-  >>> container: Maybe[str] = Some('a')
+  >>> container = Some('A1 Steak Sauce')
   >>> # We now have two way of composing these entities.
   >>> # 1. Via ``.bind``:
-  >>> assert container.bind(bindable) == Some(1)
-  >>> # 2. Or via ``bind`` function, the same but in the inverse way:
-  >>> assert bind(bindable)(container) == Some(1)
+  >>> assert container.bind(index_of_1) == Some(1)
+  >>> # 2. Or via the ``bind`` function.
+  >>> assert bind(index_of_1)(container) == Some(1)
+  >>> # This produces the same result, but in a different order
 
 That's it!
 
@@ -119,27 +170,86 @@ We also have a long list of other ``bind_*`` functions, like:
 - ``bind_awaitable`` to bind async non-container functions
 
 
+alt
+----
+
+Pointfree ``alt()`` is an alternative to the container method ``.alt()``.
+
+It lifts a function to act on the error contents of a container.
+
+In other words, it modifies the function's signature from:
+``a -> b``
+to:
+``Container[_, a] -> Container[_, b]``
+
+You can think of it like ``map``, but for the second type of a container.
+
+.. code:: python
+
+  >>> from returns.io import IOFailure, IOSuccess
+  >>> from returns.pointfree import alt
+
+  >>> def half_as_bad(error_code: int) -> float:
+  ...     return error_code / 2
+
+  >>> # When acting on a successful state, nothing happens.
+  >>> assert alt(half_as_bad)(IOSuccess(1)) == IOSuccess(1)
+
+  >>> # When acting on a failed state, the result changes
+  >>> assert alt(half_as_bad)(IOFailure(4)) == IOFailure(2.0)
+
+  >>> # This is equivalent to IOFailure(4).alt(half_as_bad)
+  >>> assert alt(half_as_bad)(IOFailure(4)) == IOFailure(4).alt(half_as_bad)
+
+This inverse syntax lets us easily compose functions in a pipeline
+
+.. code:: python
+
+  >>> from returns.io import IOFailure, IOSuccess, IOResult
+  >>> from returns.pointfree import alt
+
+  >>> def always_errors(user_input: str) -> IOResult:
+  ...     return IOFailure(len(user_input))
+
+  >>> def twice_as_bad(exit_code: int) -> int:
+  ...     return exit_code * 2
+
+  >>> def make_error_message(exit_code: int) -> str:
+  ...     return f'Badness level: {exit_code}'
+
+  >>> assert flow(
+  ...     '12345',
+  ...     always_errors,
+  ...     alt(twice_as_bad),
+  ...     alt(make_error_message)
+  ... ) == IOFailure('Badness level: 10')
+
+
 lash
 ----
 
 Pointfree ``lash()`` function is an alternative
 to ``.lash()`` container method.
-It is also required for better declarative programming.
+
+It allows better composition by lifting a function that returns a
+container to act on the failed state of a container.
+
+You can think of it like ``bind``, but for the second type of a container.
 
 .. code:: python
 
   >>> from returns.pointfree import lash
   >>> from returns.result import Success, Failure, Result
 
-  >>> def function(arg: str) -> Result[int, str]:
+  >>> def always_succeeds(arg: str) -> Result[int, str]:
   ...     return Success(1)
 
-  >>> container: Result[int, str] = Failure('a')
+  >>> failed: Result[int, str] = Failure('a')
   >>> # We now have two way of composing these entities.
   >>> # 1. Via ``.lash``:
-  >>> assert container.lash(function) == Success(1)
+  >>> assert failed.lash(always_succeeds) == Success(1)
   >>> # 2. Or via ``lash`` function, the same but in the inverse way:
-  >>> assert lash(function)(container) == Success(1)
+  >>> assert lash(always_succeeds)(failed) == Success(1)
 
 
 apply
@@ -153,32 +263,43 @@ to use ``.apply()`` container method like a function:
   >>> from returns.pointfree import apply
   >>> from returns.maybe import Some, Nothing
 
-  >>> def function(arg: int) -> str:
+  >>> def wow(arg: int) -> str:
   ...     return chr(arg) + '!'
 
-  >>> assert apply(Some(function))(Some(97)) == Some('a!')
-  >>> assert apply(Some(function))(Some(98)) == Some('b!')
-  >>> assert apply(Some(function))(Nothing) == Nothing
+  >>> assert apply(Some(wow))(Some(97)) == Some('a!')
+  >>> assert apply(Some(wow))(Some(98)) == Some('b!')
+  >>> assert apply(Some(wow))(Nothing) == Nothing
   >>> assert apply(Nothing)(Nothing) == Nothing
 
 If you wish to use ``apply`` inside a pipeline
-that's how it would probably look like:
+here's how it might look:
 
 .. code:: python
 
   >>> from returns.pointfree import apply
   >>> from returns.pipeline import flow
-  >>> from returns.maybe import Some
+  >>> from returns.maybe import Some, Nothing, Maybe
+  >>> from typing import Callable
 
-  >>> def function(arg: int) -> str:
+  >>> def wow(arg: int) -> str:
   ...     return chr(arg) + '!'
+
+  >>> def my_response(is_excited: bool) -> Maybe[Callable[[int], str]]:
+  ...     if is_excited:
+  ...         return Some(wow)
+  ...     return Nothing
 
   >>> assert flow(
   ...     Some(97),
-  ...     apply(Some(function)),
+  ...     apply(my_response(True)),
   ... ) == Some('a!')
 
-Or with function as the first parameter:
+  >>> assert flow(
+  ...     Nothing,
+  ...     apply(my_response(False)),
+  ... ) == Nothing
+
+Or with a function as the first parameter:
 
 .. code:: python
 
@@ -187,11 +308,11 @@ Or with function as the first parameter:
   >>> from returns.maybe import Some
 
   >>> @curry
-  ... def function(first: int, second: int) -> int:
+  ... def add_curried(first: int, second: int) -> int:
   ...     return first + second
 
   >>> assert flow(
-  ...     Some(function),
+  ...     Some(add_curried),
   ...     Some(2).apply,
   ...     Some(3).apply,
   ... ) == Some(5)
@@ -200,7 +321,7 @@ compose_result
 --------------
 
 Sometimes we need to manipulate the inner ``Result`` of some containers like
-``IOResult`` or ``FutureResult``, with ``compose_result`` we're able to do this
+``IOResult`` or ``FutureResult``. With ``compose_result`` we can do this
 kind of manipulation.
 
 .. code:: python
@@ -317,6 +438,8 @@ API Reference
 .. autofunction:: returns.pointfree.compose_result
 
 .. autofunction:: returns.pointfree.cond
+
+.. autofunction:: returns.pointfree.alt
 
 .. autofunction:: returns.pointfree.lash
 
