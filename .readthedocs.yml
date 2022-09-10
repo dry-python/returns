@@ -16,7 +16,6 @@ build:
       - poetry install
 
 python:
-  version: 3.8
   install:
     - requirements: requirements.txt
 
