@@ -12,6 +12,8 @@ See [0Ver](https://0ver.org/).
 
 - Fixes a problem with `do-notation` and type aliases
 - Fixes custom pickle protocol to handle `None` values gracefully
+- Removes broken drylabs.io link in README
+- Revises pointfree documentation
 - Fixes RTD builds
 
 
