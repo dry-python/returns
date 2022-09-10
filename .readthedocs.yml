@@ -12,8 +12,6 @@ build:
       - asdf global poetry latest
       - poetry config virtualenvs.create false
       - poetry export --with dev --format=requirements.txt --output=requirements.txt
-    post_install:
-      - poetry install
 
 python:
   install:
