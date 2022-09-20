@@ -82,7 +82,7 @@ nitpick = { version = "^0.32", python = "<3.10" }
 codespell = "^2.2"
 slotscheck = "^0.15.0"
 
-safety = "^2.1"
+safety = "^2.2"
 
 pytest = "^7.1"
 pytest-cov = "^3.0"
