@@ -284,7 +284,7 @@ python-versions = ">=3.7"
 
 [[package]]
 name = "dparse"
-version = "0.5.1"
+version = "0.6.2"
 description = "A parser for Python dependency files"
 category = "dev"
 optional = false
@@ -292,10 +292,10 @@ python-versions = ">=3.5"
 
 [package.dependencies]
 packaging = "*"
-pyyaml = "*"
 toml = "*"
 
 [package.extras]
+conda = ["pyyaml"]
 pipenv = ["pipenv"]
 
 [[package]]
@@ -1255,7 +1255,7 @@ python-versions = ">=3.5"
 
 [[package]]
 name = "safety"
-version = "2.1.1"
+version = "2.2.0"
 description = "Checks installed dependencies for known vulnerabilities and licenses."
 category = "dev"
 optional = false
@@ -1263,7 +1263,7 @@ python-versions = "*"
 
 [package.dependencies]
 Click = ">=8.0.2"
-dparse = ">=0.5.1"
+dparse = ">=0.6.2"
 packaging = ">=21.0"
 requests = "*"
 "ruamel.yaml" = ">=0.17.21"
@@ -1670,7 +1670,7 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=6)", "pytest-black (>=
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "72eb7430dcb2e56dd73a71881d901847c6766f4190353a98fc5127883b390f93"
+content-hash = "81ef755e11aa1dde67b0a578a680227a9bf50ec8ad12e7084a7fba6b2b248a97"
 
 [metadata.files]
 alabaster = [
@@ -1874,8 +1874,8 @@ docutils = [
     {file = "docutils-0.19.tar.gz", hash = "sha256:33995a6753c30b7f577febfc2c50411fec6aac7f7ffeb7c4cfe5991072dcf9e6"},
 ]
 dparse = [
-    {file = "dparse-0.5.1-py3-none-any.whl", hash = "sha256:e953a25e44ebb60a5c6efc2add4420c177f1d8404509da88da9729202f306994"},
-    {file = "dparse-0.5.1.tar.gz", hash = "sha256:a1b5f169102e1c894f9a7d5ccf6f9402a836a5d24be80a986c7ce9eaed78f367"},
+    {file = "dparse-0.6.2-py3-none-any.whl", hash = "sha256:8097076f1dd26c377f30d4745e6ec18fef42f3bf493933b842ac5bafad8c345f"},
+    {file = "dparse-0.6.2.tar.gz", hash = "sha256:d45255bda21f998bc7ddf2afd5e62505ba6134756ba2d42a84c56b0826614dfe"},
 ]
 dpath = [
     {file = "dpath-2.0.6-py3-none-any.whl", hash = "sha256:8c439bb1c3b3222427e9b8812701cd99a0ef3415ddbb7c03a2379f6989a03965"},
@@ -2377,8 +2377,8 @@ rfc3986 = [
     {file = "ruamel.yaml.clib-0.2.6.tar.gz", hash = "sha256:4ff604ce439abb20794f05613c374759ce10e3595d1867764dd1ae675b85acbd"},
 ]
 safety = [
-    {file = "safety-2.1.1-py3-none-any.whl", hash = "sha256:05ba551fb61ef24c864835d21089f75bc8b37292680047b9f29693a6552e2fc7"},
-    {file = "safety-2.1.1.tar.gz", hash = "sha256:dbc5dffa2e47da76cc43dfe8cbbbfca99d29118d0c6c54dfcfa11c2bd349dff6"},
+    {file = "safety-2.2.0-py3-none-any.whl", hash = "sha256:b1a0f4c34fb41c502a7a5c54774c18376da382bc9d866ee26b39b2c747c0de40"},
+    {file = "safety-2.2.0.tar.gz", hash = "sha256:6745de12acbd60a58001fe66cb540355187d7b991b30104d9ef14ff4e4826073"},
 ]
 setuptools = [
     {file = "setuptools-65.3.0-py3-none-any.whl", hash = "sha256:2e24e0bec025f035a2e72cdd1961119f557d78ad331bb00ff82efb2ab8da8e82"},
