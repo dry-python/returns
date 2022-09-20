@@ -112,7 +112,7 @@ Let's look at the result:
 
 .. note::
   A special note on :class:`returns.primitives.container.BaseContainer`.
-  It is a very useful class with lots of pre-defined feaatures, like:
+  It is a very useful class with lots of pre-defined features, like:
   immutability, better cloning, serialization, and comparison.
 
   You can skip it if you wish, but it is highlighly recommended.
