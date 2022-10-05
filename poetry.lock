@@ -1255,7 +1255,7 @@ python-versions = ">=3.5"
 
 [[package]]
 name = "safety"
-version = "2.2.0"
+version = "2.2.1"
 description = "Checks installed dependencies for known vulnerabilities and licenses."
 category = "dev"
 optional = false
@@ -2379,8 +2379,8 @@ rfc3986 = [
     {file = "ruamel.yaml.clib-0.2.6.tar.gz", hash = "sha256:4ff604ce439abb20794f05613c374759ce10e3595d1867764dd1ae675b85acbd"},
 ]
 safety = [
-    {file = "safety-2.2.0-py3-none-any.whl", hash = "sha256:b1a0f4c34fb41c502a7a5c54774c18376da382bc9d866ee26b39b2c747c0de40"},
-    {file = "safety-2.2.0.tar.gz", hash = "sha256:6745de12acbd60a58001fe66cb540355187d7b991b30104d9ef14ff4e4826073"},
+    {file = "safety-2.2.1-py3-none-any.whl", hash = "sha256:b0049b3f0af4128834f6bc5e6cd23a20ccc28303d6c92cbc019b71f1f06bc038"},
+    {file = "safety-2.2.1.tar.gz", hash = "sha256:d8b48c46ac6628bb83441b7dddc4756cfe2582abe13a112ee6e4ef1a34aad032"},
 ]
 setuptools = [
     {file = "setuptools-65.3.0-py3-none-any.whl", hash = "sha256:2e24e0bec025f035a2e72cdd1961119f557d78ad331bb00ff82efb2ab8da8e82"},
