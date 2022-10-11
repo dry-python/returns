@@ -110,7 +110,7 @@ Forget about `None`-related errors forever!
 We can also bind a `Optional`-returning function over a container.
 To achieve this, we are going to use `.bind_optional` method.
 
-And that's how your initial refactored code will look like:
+And here's how your initial refactored code will look:
 
 ```python
 user: Optional[User]
