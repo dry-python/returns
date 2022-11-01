@@ -172,15 +172,16 @@ importlib-metadata = {version = "*", markers = "python_version < \"3.8\""}
 
 [[package]]
 name = "codespell"
-version = "2.2.1"
+version = "2.2.2"
 description = "Codespell"
 category = "dev"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 
 [package.extras]
-dev = ["check-manifest", "flake8", "pytest", "pytest-cov", "pytest-dependency"]
+dev = ["check-manifest", "flake8", "pytest", "pytest-cov", "pytest-dependency", "tomli"]
 hard-encoding-detection = ["chardet"]
+toml = ["tomli"]
 
 [[package]]
 name = "colorama"
@@ -1789,8 +1790,8 @@ click = [
     {file = "click-8.1.3.tar.gz", hash = "sha256:7682dc8afb30297001674575ea00d1814d808d6a36af415a82bd481d37ba7b8e"},
 ]
 codespell = [
-    {file = "codespell-2.2.1-py3-none-any.whl", hash = "sha256:0c53a70f466952706407383d87142a78f319a0e18602802c4aadd3d93158bfc6"},
-    {file = "codespell-2.2.1.tar.gz", hash = "sha256:569b67e5e5c3ade02a1e23f6bbc56c64b608a3ab48ddd943ece0a03e6c346ed1"},
+    {file = "codespell-2.2.2-py3-none-any.whl", hash = "sha256:87dfcd9bdc9b3cb8b067b37f0af22044d7a84e28174adfc8eaa203056b7f9ecc"},
+    {file = "codespell-2.2.2.tar.gz", hash = "sha256:c4d00c02b5a2a55661f00d5b4b3b5a710fa803ced9a9d7e45438268b099c319c"},
 ]
 colorama = [
     {file = "colorama-0.4.5-py2.py3-none-any.whl", hash = "sha256:854bf444933e37f5824ae7bfc1e98d5bce2ebe4160d46b5edf346a89358e99da"},
