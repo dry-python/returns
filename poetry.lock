@@ -220,7 +220,7 @@ toml = ["tomli"]
 
 [[package]]
 name = "curio"
-version = "1.5"
+version = "1.6"
 description = "Curio"
 category = "dev"
 optional = false
@@ -1672,7 +1672,7 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=6)", "pytest-black (>=
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "d9fad4e9ff236a401dc72f2e3121e58e0d5a0438369ce909351d662bbdce7bb5"
+content-hash = "444d46c4deabce90b25831c8722ccaf97d9c80ba79fec08c33d6dcdfb6963790"
 
 [metadata.files]
 alabaster = [
@@ -1853,7 +1853,7 @@ coverage = [
     {file = "coverage-6.4.4.tar.gz", hash = "sha256:e16c45b726acb780e1e6f88b286d3c10b3914ab03438f32117c4aa52d7f30d58"},
 ]
 curio = [
-    {file = "curio-1.5.tar.gz", hash = "sha256:af08212e590bb7da8e4cc39c42012711494dc20d622f162155ba296cc2e3bc10"},
+    {file = "curio-1.6.tar.gz", hash = "sha256:562a586db20216ba7d2be8263deb9eb079e56048f9b8906d11d5f45aa81c5247"},
 ]
 darglint = [
     {file = "darglint-1.8.1-py3-none-any.whl", hash = "sha256:5ae11c259c17b0701618a20c3da343a3eb98b3bc4b5a83d31cdd94f5ebdced8d"},
