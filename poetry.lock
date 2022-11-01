@@ -1329,8 +1329,8 @@ optional = false
 python-versions = "*"
 
 [[package]]
-name = "Sphinx"
-version = "5.2.3"
+name = "sphinx"
+version = "5.3.0"
 description = "Python documentation generator"
 category = "dev"
 optional = false
@@ -1665,7 +1665,7 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=6)", "pytest-black (>=
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "60de321d2aa90ef77fd17391cbbd37926d45259f578094786caa835bbbba857a"
+content-hash = "ecfb8942e224d473fde8d8baef1b68fb482c942226f53a8e2abe3e2682d847e2"
 
 [metadata.files]
 alabaster = [
@@ -2399,9 +2399,9 @@ sortedcontainers = [
     {file = "sortedcontainers-2.4.0-py2.py3-none-any.whl", hash = "sha256:a163dcaede0f1c021485e957a39245190e74249897e2ae4b2aa38595db237ee0"},
     {file = "sortedcontainers-2.4.0.tar.gz", hash = "sha256:25caa5a06cc30b6b83d11423433f65d1f9d76c4c6a0c90e3379eaa43b9bfdb88"},
 ]
-Sphinx = [
-    {file = "Sphinx-5.2.3.tar.gz", hash = "sha256:5b10cb1022dac8c035f75767799c39217a05fc0fe2d6fe5597560d38e44f0363"},
-    {file = "sphinx-5.2.3-py3-none-any.whl", hash = "sha256:7abf6fabd7b58d0727b7317d5e2650ef68765bbe0ccb63c8795fa8683477eaa2"},
+sphinx = [
+    {file = "Sphinx-5.3.0.tar.gz", hash = "sha256:51026de0a9ff9fc13c05d74913ad66047e104f56a129ff73e174eb5c3ee794b5"},
+    {file = "sphinx-5.3.0-py3-none-any.whl", hash = "sha256:060ca5c9f7ba57a08a1219e547b269fadf125ae25b06b9fa7f66768efb652d6d"},
 ]
 sphinx-autodoc-typehints = [
     {file = "sphinx_autodoc_typehints-1.19.4-py3-none-any.whl", hash = "sha256:e190d8ee8204c3de05a64f41cf10e592e987e4063c8ec0de7e4b11f6e036b2e2"},
