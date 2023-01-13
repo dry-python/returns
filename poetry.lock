@@ -745,19 +745,19 @@ flake8 = "*"
 
 [[package]]
 name = "flake8-pyi"
-version = "22.10.0"
+version = "22.11.0"
 description = "A plugin for flake8 to enable linting .pyi files."
 category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "flake8-pyi-22.10.0.tar.gz", hash = "sha256:9dff4e126b2657c0b1e1c8c781199310e56fdc38f51669112849a557de3be543"},
-    {file = "flake8_pyi-22.10.0-py37-none-any.whl", hash = "sha256:11daccd581a2e543cb35624022a143d5b4d7a3a930cf75b33f10b61b6ec853cb"},
+    {file = "flake8-pyi-22.11.0.tar.gz", hash = "sha256:ded2e4d947f0605abe9095ae3d38b01b7880b112bc3da0b4f888cd4a717c7acd"},
+    {file = "flake8_pyi-22.11.0-py37-none-any.whl", hash = "sha256:67920f7186097b2bccfa6605ef876ab5874c2f43115b13460b525a6d8da5ddb0"},
 ]
 
 [package.dependencies]
 ast-decompiler = {version = ">=0.7.0,<1.0", markers = "python_version < \"3.9\""}
-flake8 = ">=3.2.1,<6.0.0"
+flake8 = ">=3.2.1,<7.0.0"
 pyflakes = ">=2.1.1"
 
 [[package]]
@@ -2544,4 +2544,4 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=6)", "pytest-black (>=
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.7"
-content-hash = "16e2a516218ba58074d73bcefdf5f7bc85d0db28a4ba414a4539ba190bd7d4ca"
+content-hash = "470e9b69d1ea7e21aba5ae16f7b5bbc231e085cb8509333c0bffd09649c7bcaa"
