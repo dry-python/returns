@@ -2103,14 +2103,14 @@ test = ["cython", "html5lib", "pytest (>=4.6)", "typed_ast"]
 
 [[package]]
 name = "sphinx-autodoc-typehints"
-version = "1.20.0"
+version = "1.20.1"
 description = "Type hints (PEP 484) support for the Sphinx autodoc extension"
 category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "sphinx_autodoc_typehints-1.20.0-py3-none-any.whl", hash = "sha256:2fb4f460b0dcd9c7e83f48e72d5f741441ddb858b73eb9159ef3bc1e7a22ec78"},
-    {file = "sphinx_autodoc_typehints-1.20.0.tar.gz", hash = "sha256:776a6439f1f602d4685f5046d00a90b38d8c075884ee81fe075260e92d152d9b"},
+    {file = "sphinx_autodoc_typehints-1.20.1-py3-none-any.whl", hash = "sha256:3d7a8005058f4eaf3d540d1467f2b2d909992c6256e927cbf15a7aec62cb5c2a"},
+    {file = "sphinx_autodoc_typehints-1.20.1.tar.gz", hash = "sha256:a41d36bb0c592bdf3e3afb545567587c92ea4fe895ecce26d0409899adf45efb"},
 ]
 
 [package.dependencies]
