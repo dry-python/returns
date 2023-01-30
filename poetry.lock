@@ -1135,14 +1135,14 @@ dev = ["Sphinx (>=4.1.1)", "black (>=19.10b0)", "colorama (>=0.3.4)", "docutils 
 
 [[package]]
 name = "m2r2"
-version = "0.3.3"
+version = "0.3.3.post2"
 description = "Markdown and reStructuredText in a single file."
 category = "dev"
 optional = false
-python-versions = "*"
+python-versions = ">=3.7"
 files = [
-    {file = "m2r2-0.3.3-py3-none-any.whl", hash = "sha256:2ee32a5928c3598b67c70e6d22981ec936c03d5bfd2f64229e77678731952f16"},
-    {file = "m2r2-0.3.3.tar.gz", hash = "sha256:f9b6e9efbc2b6987dbd43d2fd15a6d115ba837d8158ae73295542635b4086e75"},
+    {file = "m2r2-0.3.3.post2-py3-none-any.whl", hash = "sha256:86157721eb6eabcd54d4eea7195890cc58fa6188b8d0abea633383cfbb5e11e3"},
+    {file = "m2r2-0.3.3.post2.tar.gz", hash = "sha256:e62bcb0e74b3ce19cda0737a0556b04cf4a43b785072fcef474558f2c1482ca8"},
 ]
 
 [package.dependencies]
