@@ -2236,14 +2236,14 @@ test = ["flake8", "mypy", "pytest"]
 
 [[package]]
 name = "sphinxcontrib-mermaid"
-version = "0.7.1"
+version = "0.8"
 description = "Mermaid diagrams in yours Sphinx powered docs"
 category = "dev"
 optional = false
-python-versions = "*"
+python-versions = ">=3.7"
 files = [
-    {file = "sphinxcontrib-mermaid-0.7.1.tar.gz", hash = "sha256:aa8a40b50ec86ad12824b62180240ca52a9bda8424455d7eb252eae9aa5d293c"},
-    {file = "sphinxcontrib_mermaid-0.7.1-py2.py3-none-any.whl", hash = "sha256:3e20de1937c30dfa807e446bf99983d73d0dd3dc5c6524addda59800fe928762"},
+    {file = "sphinxcontrib-mermaid-0.8.tar.gz", hash = "sha256:e30e86c4cb1b8724380e4ca839b7ab3d1e80eb0f2255a1c2cc49a42133ab2193"},
+    {file = "sphinxcontrib_mermaid-0.8-py3-none-any.whl", hash = "sha256:e0b58fe4522a68e12137e94a5e3a284877573a4bc71ca80849a30c3cec8f83dd"},
 ]
 
 [[package]]
@@ -2544,4 +2544,4 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=6)", "pytest-black (>=
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.7"
-content-hash = "16e2a516218ba58074d73bcefdf5f7bc85d0db28a4ba414a4539ba190bd7d4ca"
+content-hash = "95a4e8ba18d178bfe4c7d2632659d8cd37f2b486de96f044d79bb80e0276389d"
