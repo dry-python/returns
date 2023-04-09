@@ -8,7 +8,7 @@
         ...
 
     x: Future[float]
-    bind_awaitable(test)(x)  # E: Argument 1 has incompatible type "Future[float]"; expected "KindN[Future[Any], str, NoReturn, NoReturn]"
+    bind_awaitable(test)(x)  # E: Argument 1 has incompatible type "Future[float]"; expected "KindN[Future[Any], str, NoReturn, NoReturn]"  [arg-type]
 
 
 - case: bind_awaitable_wrong_instance_type
@@ -23,8 +23,8 @@
     x: IO[float]
     bind_awaitable(test)(x)
   out: |
-    main:8: error: Value of type variable "_FutureKind" of function cannot be "IO[Any]"
-    main:8: error: Argument 1 has incompatible type "IO[float]"; expected "KindN[IO[Any], str, NoReturn, NoReturn]"
+    main:8: error: Value of type variable "_FutureKind" of function cannot be "IO[Any]"  [type-var]
+    main:8: error: Argument 1 has incompatible type "IO[float]"; expected "KindN[IO[Any], str, NoReturn, NoReturn]"  [arg-type]
 
 
 - case: bind_awaitable_wrong_function_type
@@ -37,7 +37,7 @@
         ...
 
     x: Future[float]
-    bind_awaitable(test)(x)  # E: Argument 1 to "bind_awaitable" has incompatible type "Callable[[float], int]"; expected "Callable[[float], Awaitable[<nothing>]]"
+    bind_awaitable(test)(x)  # E: Argument 1 to "bind_awaitable" has incompatible type "Callable[[float], int]"; expected "Callable[[float], Awaitable[<nothing>]]"  [arg-type]
 
 
 - case: bind_awaitable_with_flow

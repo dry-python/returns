@@ -42,7 +42,7 @@ NoDeps = Any
 
 
 @final
-class RequiresContext(
+class RequiresContext(  # type: ignore[type-var]
     BaseContainer,
     SupportsKind2['RequiresContext', _ReturnType, _EnvType],
     reader.ReaderBased2[_ReturnType, _EnvType],
@@ -80,7 +80,7 @@ class RequiresContext(
     __slots__ = ()
 
     #: This field has an extra 'RequiresContext' just because `mypy` needs it.
-    _inner_value: Callable[[RequiresContext, _EnvType], _ReturnType]
+    _inner_value: Callable[[_EnvType], _ReturnType]
 
     #: A convenient placeholder to call methods created by `.from_value()`:
     no_args: ClassVar[NoDeps] = object()

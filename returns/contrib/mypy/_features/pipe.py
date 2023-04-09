@@ -38,7 +38,6 @@ Here's when it works:
 """
 from typing import Callable, List, Tuple
 
-from mypy.checker import detach_callable
 from mypy.nodes import ARG_POS
 from mypy.plugin import FunctionContext, MethodContext, MethodSigContext
 from mypy.types import AnyType, CallableType, FunctionLike, Instance
@@ -47,6 +46,7 @@ from mypy.types import TypeOfAny, UnionType, get_proper_type
 
 from returns.contrib.mypy._typeops.analtype import translate_to_function
 from returns.contrib.mypy._typeops.inference import PipelineInference
+from returns.contrib.mypy._typeops.transform_callable import detach_callable
 
 
 def analyze(ctx: FunctionContext) -> MypyType:

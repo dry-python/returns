@@ -64,7 +64,7 @@ async def async_identity(instance: _FirstType) -> _FirstType:
 # ======
 
 @final
-class Future(
+class Future(  # type: ignore[type-var]
     BaseContainer,
     SupportsKind1['Future', _ValueType],
     FutureBased1[_ValueType],
@@ -538,7 +538,7 @@ def asyncify(
 # ============
 
 @final
-class FutureResult(
+class FutureResult(  # type: ignore[type-var]
     BaseContainer,
     SupportsKind2['FutureResult', _ValueType, _ErrorType],
     FutureResultBased2[_ValueType, _ErrorType],

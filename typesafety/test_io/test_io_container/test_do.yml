@@ -6,7 +6,7 @@
 
     IO.do(
         x + y
-        for x in Success(1)  # E: Invalid type supplied in do-notation: expected "returns.io.IO[Any]", got "returns.result.Success[builtins.int]"
+        for x in Success(1)  # E: Invalid type supplied in do-notation: expected "returns.io.IO[Any]", got "returns.result.Success[builtins.int]"  [misc]
         for y in IO(2.5)
     )
 
@@ -17,7 +17,7 @@
   main: |
     from returns.io import IO
 
-    IO.do(  # E: Using "if" conditions inside a generator is not allowed
+    IO.do(  # E: Using "if" conditions inside a generator is not allowed  [misc]
         x + y
         for x in IO(1)
         for y in IO(2.5)
@@ -36,4 +36,4 @@
         for y in IO(2.5)
     )
 
-    IO.do(x)  # E: Literal generator expression is required, not a variable or function call
+    IO.do(x)  # E: Literal generator expression is required, not a variable or function call  [misc]

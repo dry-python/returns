@@ -71,7 +71,7 @@
 
     MyClass()
   out: |
-    main:11: error: Cannot instantiate abstract class "MyClass" with abstract attribute "lash"
+    main:11: error: Cannot instantiate abstract class "MyClass" with abstract attribute "lash"  [abstract]
 
 
 - case: lashable_inheritance_wrong2
@@ -92,10 +92,10 @@
         ) -> MyClass[N, E]:
             ...
   out: |
-    main:10: error: Argument 1 of "lash" is incompatible with supertype "LashableN"; supertype defines the argument type as "Callable[[E], KindN[MyClass[V, E], V, _UpdatedType, NoReturn]]"
-    main:10: note: This violates the Liskov substitution principle
-    main:10: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
-    main:10: error: Return type "MyClass[N, E]" of "lash" incompatible with return type "KindN[MyClass[V, E], V, _UpdatedType, NoReturn]" in supertype "LashableN"
+    main:10: error: Return type "MyClass[N, E]" of "lash" incompatible with return type "KindN[MyClass[V, E], V, _UpdatedType, NoReturn]" in supertype "LashableN"  [override]
+    main:12: error: Argument 1 of "lash" is incompatible with supertype "LashableN"; supertype defines the argument type as "Callable[[E], KindN[MyClass[V, E], V, _UpdatedType, NoReturn]]"  [override]
+    main:12: note: This violates the Liskov substitution principle
+    main:12: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
 
 
 - case: lashable_inheritance_wrong3
@@ -117,7 +117,7 @@
         ) -> MyClass[N, E, T]:
             ...
   out: |
-    main:11: error: Argument 1 of "lash" is incompatible with supertype "LashableN"; supertype defines the argument type as "Callable[[E], KindN[MyClass[V, E, T], V, _UpdatedType, T]]"
-    main:11: note: This violates the Liskov substitution principle
-    main:11: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
-    main:11: error: Return type "MyClass[N, E, T]" of "lash" incompatible with return type "KindN[MyClass[V, E, T], V, _UpdatedType, T]" in supertype "LashableN"
+    main:11: error: Return type "MyClass[N, E, T]" of "lash" incompatible with return type "KindN[MyClass[V, E, T], V, _UpdatedType, T]" in supertype "LashableN"  [override]
+    main:13: error: Argument 1 of "lash" is incompatible with supertype "LashableN"; supertype defines the argument type as "Callable[[E], KindN[MyClass[V, E, T], V, _UpdatedType, T]]"  [override]
+    main:13: note: This violates the Liskov substitution principle
+    main:13: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides

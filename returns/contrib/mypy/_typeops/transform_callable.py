@@ -1,9 +1,10 @@
-from typing import ClassVar, FrozenSet, List
+from typing import ClassVar, Dict, FrozenSet, List
 
-from mypy.checker import detach_callable
 from mypy.nodes import ARG_OPT, ARG_POS, ARG_STAR, ARG_STAR2, ArgKind
+from mypy.typeops import get_type_vars
 from mypy.types import CallableType, FunctionLike, Overloaded
 from mypy.types import Type as MypyType
+from mypy.types import TypeVarType
 from typing_extensions import final
 
 from returns.contrib.mypy._structures.args import FuncArg
@@ -88,7 +89,7 @@ class Intermediate(object):
         for arg in FuncArg.from_callable(self._case_function):
             has_named_arg_def = any(
                 # Argument can either be used as a named argument
-                # or passed to `**kwrgs` if it exists.
+                # or passed to `**kwargs` if it exists.
                 arg.name == rdc.name or arg.kind == ARG_STAR2
                 for rdc in callee_args
             )
@@ -143,3 +144,55 @@ class Functions(object):
         return Intermediate(self._original).with_signature(
             new_function_args,
         )
+
+
+# TODO: Remove this function once `mypy` order the TypeVars
+# by their appearance sequence
+def detach_callable(typ: CallableType) -> CallableType:  # noqa: C901, WPS210
+    """
+    THIS IS A COPY OF `mypy.checker.detach_callable` FUNCTION.
+
+    THE ONLY PURPOSE WE'VE COPIED IS TO GUARANTEE A DETERMINISTIC FOR OUR
+    TYPE VARIABLES!
+    AS YOU CAN SEE, WE ORDER THE TYPE VARS BY THEIR APPEARANCE SEQUENCE.
+    """
+    type_list = typ.arg_types + [typ.ret_type]
+
+    appear_map: Dict[str, List[int]] = {}
+    for idx, inner_type in enumerate(type_list):
+        typevars_available = get_type_vars(inner_type)
+        for var in typevars_available:  # noqa: WPS110
+            if var.fullname not in appear_map:
+                appear_map[var.fullname] = []
+            appear_map[var.fullname].append(idx)
+
+    used_type_var_names = set()
+    for var_name, _ in appear_map.items():
+        used_type_var_names.add(var_name)
+
+    all_type_vars = get_type_vars(typ)
+    new_variables = []
+    for var in set(all_type_vars):  # noqa: WPS110
+        if var.fullname not in used_type_var_names:
+            continue
+        new_variables.append(
+            TypeVarType(
+                name=var.name,
+                fullname=var.fullname,
+                id=var.id,
+                values=var.values,
+                upper_bound=var.upper_bound,
+                variance=var.variance,
+            ),
+        )
+
+    new_variables = sorted(
+        new_variables,
+        key=lambda item: appear_map[item.fullname][0],  # noqa: WPS110
+    )
+
+    return typ.copy_modified(
+        variables=new_variables,
+        arg_types=type_list[:-1],
+        ret_type=type_list[-1],
+    )

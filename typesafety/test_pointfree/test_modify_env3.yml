@@ -10,7 +10,7 @@
     x: RequiresContextResult[float, bool, str]
     modify_env(test)(x)
   out: |
-    main:8: error: Argument 1 has incompatible type "RequiresContextResult[float, bool, str]"; expected "KindN[RequiresContextResult[Any, Any, Any], float, bool, int]"
+    main:8: error: Argument 1 has incompatible type "RequiresContextResult[float, bool, str]"; expected "KindN[RequiresContextResult[Any, Any, Any], float, bool, int]"  [arg-type]
 
 
 - case: modify_env_wrong_type
@@ -25,7 +25,7 @@
     x: RequiresContext[float, int]
     modify_env(test)(x)
   out: |
-    main:8: error: Value of type variable "_Reader3Kind" of function cannot be "RequiresContext[Any, Any]"
+    main:8: error: Value of type variable "_Reader3Kind" of function cannot be "RequiresContext[Any, Any]"  [type-var]
 
 
 - case: modify_env_alias

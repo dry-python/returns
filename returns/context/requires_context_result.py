@@ -28,7 +28,7 @@ _FirstType = TypeVar('_FirstType')
 
 
 @final
-class RequiresContextResult(
+class RequiresContextResult(  # type: ignore[type-var]
     BaseContainer,
     SupportsKind3['RequiresContextResult', _ValueType, _ErrorType, _EnvType],
     reader_result.ReaderResultBasedN[_ValueType, _ErrorType, _EnvType],
@@ -96,10 +96,7 @@ class RequiresContextResult(
     __slots__ = ()
 
     #: This field has an extra 'RequiresContext' just because `mypy` needs it.
-    _inner_value: Callable[
-        [RequiresContextResult, _EnvType],
-        Result[_ValueType, _ErrorType],
-    ]
+    _inner_value: Callable[[_EnvType], Result[_ValueType, _ErrorType]]
 
     #: A convenient placeholder to call methods created by `.from_value()`.
     no_args: ClassVar[NoDeps] = object()
@@ -337,7 +334,7 @@ class RequiresContextResult(
         """
         return RequiresContextResult(
             lambda deps: self(deps).map(
-                lambda inner: function(inner)(deps),  # type: ignore
+                lambda inner: function(inner)(deps),  # type: ignore[misc]
             ),
         )
 

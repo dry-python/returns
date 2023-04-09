@@ -5,7 +5,7 @@
     from typing import List
 
     container: SupportsKind1[List, int]
-    container.pop  # E: "SupportsKindN[List[Any], int, NoReturn, NoReturn]" has no attribute "pop"
+    container.pop  # E: "SupportsKindN[List[Any], int, NoReturn, NoReturn]" has no attribute "pop"  [attr-defined]
 
 
 - case: supports_kind_getattr_missing
@@ -16,7 +16,7 @@
     container: SupportsKindN[object, int, str, bool]
     container.missing
   out: |
-    main:4: error: "SupportsKindN[object, int, str, bool]" has no attribute "missing"
+    main:4: error: "SupportsKindN[object, int, str, bool]" has no attribute "missing"  [attr-defined]
 
 
 - case: supports_kind_getattr_subclass
@@ -35,5 +35,5 @@
     reveal_type(container.missing)
   out: |
     main:10: note: Revealed type is "builtins.int"
-    main:11: error: "Custom[int]" has no attribute "missing"
+    main:11: error: "Custom[int]" has no attribute "missing"  [attr-defined]
     main:11: note: Revealed type is "Any"

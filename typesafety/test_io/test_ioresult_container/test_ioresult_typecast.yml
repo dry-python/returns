@@ -40,7 +40,7 @@
     from returns.io import IOResult
 
     x: IOResult[int, str]
-    x.missing  # E: "IOResult[int, str]" has no attribute "missing"
+    x.missing  # E: "IOResult[int, str]" has no attribute "missing"  [attr-defined]
 
 
 - case: ioresult_from_value

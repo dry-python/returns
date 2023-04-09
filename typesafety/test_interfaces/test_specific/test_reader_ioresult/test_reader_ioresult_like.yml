@@ -52,7 +52,7 @@
     ):
         ...
   out: |
-    main:11: error: Final class main.MyClass has abstract attributes "alt", "apply", "ask", "bind", "bind_context", "bind_context_ioresult", "bind_context_result", "bind_io", "bind_ioresult", "bind_result", "compose_result", "from_context", "from_failed_context", "from_failed_io", "from_failure", "from_io", "from_ioresult", "from_ioresult_context", "from_result", "from_result_context", "from_value", "lash", "map", "modify_env", "no_args", "swap"
+    main:11: error: Final class main.MyClass has abstract attributes "alt", "apply", "ask", "bind", "bind_context", "bind_context_ioresult", "bind_context_result", "bind_io", "bind_ioresult", "bind_result", "compose_result", "from_context", "from_failed_context", "from_failed_io", "from_failure", "from_io", "from_ioresult", "from_ioresult_context", "from_result", "from_result_context", "from_value", "lash", "map", "modify_env", "no_args", "swap"  [misc]
 
 
 - case: reader_ioresult_like_inheritance_wrong
@@ -85,11 +85,11 @@
         ) -> MyClass[T, V, U]:
             ...
   out: |
-    main:15: error: Argument 1 of "bind_context_ioresult" is incompatible with supertype "ReaderIOResultLikeN"; supertype defines the argument type as "Callable[[T], RequiresContextIOResult[_UpdatedType, V, U]]"
-    main:15: note: This violates the Liskov substitution principle
-    main:15: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
-    main:15: error: Return type "MyClass[N, U, V]" of "bind_context_ioresult" incompatible with return type "KindN[MyClass[T, V, U], _UpdatedType, V, U]" in supertype "ReaderIOResultLikeN"
-    main:22: error: Argument 1 of "from_ioresult_context" is incompatible with supertype "ReaderIOResultLikeN"; supertype defines the argument type as "RequiresContextIOResult[_ValueType, _ErrorType, _EnvType]"
-    main:22: note: This violates the Liskov substitution principle
-    main:22: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
-    main:22: error: Return type "MyClass[T, V, U]" of "from_ioresult_context" incompatible with return type "KindN[MyClass[T, V, U], _ValueType, _ErrorType, _EnvType]" in supertype "ReaderIOResultLikeN"
+    main:15: error: Return type "MyClass[N, U, V]" of "bind_context_ioresult" incompatible with return type "KindN[MyClass[T, V, U], _UpdatedType, V, U]" in supertype "ReaderIOResultLikeN"  [override]
+    main:17: error: Argument 1 of "bind_context_ioresult" is incompatible with supertype "ReaderIOResultLikeN"; supertype defines the argument type as "Callable[[T], RequiresContextIOResult[_UpdatedType, V, U]]"  [override]
+    main:17: note: This violates the Liskov substitution principle
+    main:17: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:22: error: Return type "MyClass[T, V, U]" of "from_ioresult_context" incompatible with return type "KindN[MyClass[T, V, U], _ValueType, _ErrorType, _EnvType]" in supertype "ReaderIOResultLikeN"  [override]
+    main:24: error: Argument 1 of "from_ioresult_context" is incompatible with supertype "ReaderIOResultLikeN"; supertype defines the argument type as "RequiresContextIOResult[_ValueType, _ErrorType, _EnvType]"  [override]
+    main:24: note: This violates the Liskov substitution principle
+    main:24: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides

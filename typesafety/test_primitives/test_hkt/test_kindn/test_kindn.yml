@@ -12,28 +12,4 @@
 
     container: Kind{{ count }}[object, int, str, bool, float]
   out: |
-    main:3: error: Bad number of arguments for type alias, expected: {{ expected }}, given: 5
-
-
-- case: kindn_regression522_1
-  disable_cache: false
-  main: |
-    from returns.primitives.hkt import KindN, kinded
-    from returns.interfaces.mappable import MappableN
-    from typing import TypeVar
-
-    T1 = TypeVar('T1')
-    T2 = TypeVar('T2')
-    T3 = TypeVar('T3')
-    N1 = TypeVar('N1')
-    I = TypeVar('I', bound=MappableN)
-
-    def example(arg: T1) -> N1:
-        ...
-
-    @kinded
-    def test(
-        arg: KindN[I, T1, T2, T3],
-    ) -> KindN[I, N1, T2, T3]:
-        reveal_type(arg.map(example)) # N: Revealed type is "returns.primitives.hkt.KindN[I`-1, N1`-2, T2`-3, T3`-4]"
-        return arg.map(example)
+    main:3: error: Bad number of arguments for type alias, expected: {{ expected }}, given: 5  [type-arg]

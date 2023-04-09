@@ -59,8 +59,7 @@ class CallableInference(object):
     ) -> CallableType:
         """Infers function constrains from its usage: passed arguments."""
         constraints = self._infer_constraints(applied_args)
-        inferred = expand_type(self._case_function, constraints)
-        return cast(CallableType, inferred)
+        return expand_type(self._case_function, constraints)
 
     def _infer_constraints(
         self,

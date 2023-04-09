@@ -35,4 +35,4 @@
     first: RequiresContextFutureResult[ValueError, TypeError, IndexError]
     second: RequiresContextFutureResult[Exception, Exception, Exception] = first
   out: |
-    main:4: error: Incompatible types in assignment (expression has type "RequiresContextFutureResult[ValueError, TypeError, IndexError]", variable has type "RequiresContextFutureResult[Exception, Exception, Exception]")
+    main:4: error: Incompatible types in assignment (expression has type "RequiresContextFutureResult[ValueError, TypeError, IndexError]", variable has type "RequiresContextFutureResult[Exception, Exception, Exception]")  [assignment]

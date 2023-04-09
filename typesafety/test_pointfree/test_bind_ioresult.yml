@@ -28,7 +28,7 @@
         ...
 
     x: RequiresContextFutureResult[str, str, bool]
-    bind_ioresult(test)(x)  # E: Argument 1 has incompatible type "RequiresContextFutureResult[str, str, bool]"; expected "KindN[RequiresContextFutureResult[Any, Any, Any], float, str, bool]"
+    bind_ioresult(test)(x)  # E: Argument 1 has incompatible type "RequiresContextFutureResult[str, str, bool]"; expected "KindN[RequiresContextFutureResult[Any, Any, Any], float, str, bool]"  [arg-type]
 
 
 - case: bind_ioresult_wrong_second_type
@@ -42,7 +42,7 @@
         ...
 
     x: RequiresContextFutureResult[float, int, bool]
-    bind_ioresult(test)(x)  # E: Argument 1 has incompatible type "RequiresContextFutureResult[float, int, bool]"; expected "KindN[RequiresContextFutureResult[Any, Any, Any], float, str, bool]"
+    bind_ioresult(test)(x)  # E: Argument 1 has incompatible type "RequiresContextFutureResult[float, int, bool]"; expected "KindN[RequiresContextFutureResult[Any, Any, Any], float, str, bool]"  [arg-type]
 
 
 - case: bind_ioresult_wrong_type
@@ -56,7 +56,7 @@
         ...
 
     x: RequiresContextResult[float, str, bool]
-    bind_ioresult(test)(x)  # E: Value of type variable "_IOResultLikeKind" of function cannot be "RequiresContextResult[Any, Any, Any]"
+    bind_ioresult(test)(x)  # E: Value of type variable "_IOResultLikeKind" of function cannot be "RequiresContextResult[Any, Any, Any]"  [type-var]
 
 
 - case: bind_ioresult_ioresult

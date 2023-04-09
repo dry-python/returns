@@ -33,7 +33,7 @@
 
     acc = IO(())
     x: Iterable[IO[float]]
-    Fold.collect_all(x, acc)  # E: Value of type variable "_FailableKind" of "collect_all" of "AbstractFold" cannot be "IO[Any]"
+    Fold.collect_all(x, acc)  # E: Value of type variable "_FailableKind" of "collect_all" of "AbstractFold" cannot be "IO[Any]"  [type-var]
 
 
 - case: fold_collect_all_maybe

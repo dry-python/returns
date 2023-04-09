@@ -12,7 +12,7 @@
     _NewValueType = TypeVar('_NewValueType')
     _ErrorType = TypeVar('_ErrorType', covariant=True)
 
-    class MyClass(
+    class MyClass(  # type: ignore[type-var]
         SupportsKind3['MyClass', _ValueType, _ErrorType, _EnvType],
         ReaderLike3[_ValueType, _ErrorType, _EnvType],
     ):
@@ -72,7 +72,7 @@
     ):
         ...
   out: |
-    main:11: error: Final class main.MyClass has abstract attributes "apply", "ask", "bind", "bind_context", "from_context", "from_value", "map", "modify_env", "no_args"
+    main:11: error: Final class main.MyClass has abstract attributes "apply", "ask", "bind", "bind_context", "from_context", "from_value", "map", "modify_env", "no_args"  [misc]
 
 
 - case: reader_inheritance_wrong
@@ -89,7 +89,7 @@
     _NewValueType = TypeVar('_NewValueType')
     _ErrorType = TypeVar('_ErrorType', covariant=True)
 
-    class MyClass(
+    class MyClass(  # type: ignore[type-var]
         SupportsKind3['MyClass', _ValueType, _ErrorType, _EnvType],
         ReaderLike3[_ValueType, _ErrorType, _EnvType],
     ):
@@ -121,16 +121,16 @@
         ) -> MyClass[_ValueType, Exception, _EnvType]:
             ...
   out: |
-    main:16: error: Cannot use a covariant type variable as a parameter
-    main:19: error: Argument 1 of "bind_context" is incompatible with supertype "ReaderLike3"; supertype defines the argument type as "Callable[[_ValueType], RequiresContext[_UpdatedType, _EnvType]]"
-    main:19: note: This violates the Liskov substitution principle
-    main:19: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
-    main:19: error: Return type "MyClass[_ValueType, _ErrorType, _EnvType]" of "bind_context" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType, _EnvType], _UpdatedType, _ErrorType, _EnvType]" in supertype "ReaderLike3"
-    main:28: error: Argument 1 of "modify_env" is incompatible with supertype "ReaderLike3"; supertype defines the argument type as "Callable[[_UpdatedType], _EnvType]"
-    main:28: note: This violates the Liskov substitution principle
-    main:28: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
-    main:35: error: Return type "MyClass[_ValueType, _ErrorType, _EnvType]" of "ask" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType, _EnvType], _EnvType, _ErrorType, _EnvType]" in supertype "ReaderLike3"
-    main:39: error: Argument 1 of "from_context" is incompatible with supertype "ReaderLike3"; supertype defines the argument type as "RequiresContext[_ValueType, _EnvType]"
-    main:39: note: This violates the Liskov substitution principle
-    main:39: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
-    main:39: error: Return type "MyClass[_ValueType, Exception, _EnvType]" of "from_context" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType, _EnvType], _ValueType, _ErrorType, _EnvType]" in supertype "ReaderLike3"
+    main:16: error: Cannot use a covariant type variable as a parameter  [misc]
+    main:19: error: Return type "MyClass[_ValueType, _ErrorType, _EnvType]" of "bind_context" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType, _EnvType], _UpdatedType, _ErrorType, _EnvType]" in supertype "ReaderLike3"  [override]
+    main:21: error: Argument 1 of "bind_context" is incompatible with supertype "ReaderLike3"; supertype defines the argument type as "Callable[[_ValueType], RequiresContext[_UpdatedType, _EnvType]]"  [override]
+    main:21: note: This violates the Liskov substitution principle
+    main:21: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:30: error: Argument 1 of "modify_env" is incompatible with supertype "ReaderLike3"; supertype defines the argument type as "Callable[[_UpdatedType], _EnvType]"  [override]
+    main:30: note: This violates the Liskov substitution principle
+    main:30: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:35: error: Return type "MyClass[_ValueType, _ErrorType, _EnvType]" of "ask" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType, _EnvType], _EnvType, _ErrorType, _EnvType]" in supertype "ReaderLike3"  [override]
+    main:39: error: Return type "MyClass[_ValueType, Exception, _EnvType]" of "from_context" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType, _EnvType], _ValueType, _ErrorType, _EnvType]" in supertype "ReaderLike3"  [override]
+    main:40: error: Argument 1 of "from_context" is incompatible with supertype "ReaderLike3"; supertype defines the argument type as "RequiresContext[_ValueType, _EnvType]"  [override]
+    main:40: note: This violates the Liskov substitution principle
+    main:40: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides

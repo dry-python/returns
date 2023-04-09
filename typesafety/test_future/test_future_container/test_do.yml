@@ -9,8 +9,9 @@
         for x in Future.from_value(1)
     )
   out: |
-    main:3: error: Argument 1 to "do" of "Future" has incompatible type "Generator[Any, None, None]"; expected "AsyncGenerator[<nothing>, None]"
-    main:5: error: "Future[int]" has no attribute "__iter__"; maybe "__aiter__"? (not iterable)
+    main:3: error: Argument 1 to "do" of "Future" has incompatible type "Generator[Any, None, None]"; expected "AsyncGenerator[<nothing>, None]"  [arg-type]
+    main:5: error: "Future[int]" has no attribute "__iter__"; maybe "__aiter__"? (not iterable)  [attr-defined]
+    main:5: note: Maybe you forgot to use "await"?
 
 
 - case: do_types_missmatch
@@ -20,7 +21,7 @@
 
     Future.do(
         x + y
-        async for x in FutureSuccess(1)  # E: Invalid type supplied in do-notation: expected "returns.future.Future[Any]", got "returns.future.FutureResult[builtins.int, Any]"
+        async for x in FutureSuccess(1)  # E: Invalid type supplied in do-notation: expected "returns.future.Future[Any]", got "returns.future.FutureResult[builtins.int, Any]"  [misc]
         async for y in Future.from_value(2.5)
     )
 
@@ -31,7 +32,7 @@
   main: |
     from returns.future import Future
 
-    Future.do(  # E: Using "if" conditions inside a generator is not allowed
+    Future.do(  # E: Using "if" conditions inside a generator is not allowed  [misc]
         x + y
         async for x in Future.from_value(1)
         async for y in Future.from_value(2.5)
@@ -50,4 +51,4 @@
         async for y in Future.from_value(2.5)
     )
 
-    Future.do(x)  # E: Literal generator expression is required, not a variable or function call
+    Future.do(x)  # E: Literal generator expression is required, not a variable or function call  [misc]

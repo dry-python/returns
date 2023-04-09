@@ -34,7 +34,7 @@
     class MyClass(SupportsKind2['MyClass', V, None], MaybeLike2[V, None]):
         ...
   out: |
-    main:9: error: Final class main.MyClass has abstract attributes "apply", "bind", "bind_optional", "empty", "from_optional", "from_value", "lash", "map"
+    main:9: error: Final class main.MyClass has abstract attributes "apply", "bind", "bind_optional", "empty", "from_optional", "from_value", "lash", "map"  [misc]
 
 
 - case: maybe_like_inheritance_wrong
@@ -57,8 +57,8 @@
         def from_optional(self, inner_value: Optional[N]) -> MyClass[N]:
             ...
   out: |
-    main:9: error: Return type "MyClass[Optional[N]]" of "bind_optional" incompatible with return type "KindN[MyClass[V], _UpdatedType, None, NoReturn]" in supertype "MaybeLikeN"
-    main:15: error: Signature of "from_optional" incompatible with supertype "MaybeLikeN"
+    main:9: error: Return type "MyClass[Optional[N]]" of "bind_optional" incompatible with return type "KindN[MyClass[V], _UpdatedType, None, NoReturn]" in supertype "MaybeLikeN"  [override]
+    main:15: error: Signature of "from_optional" incompatible with supertype "MaybeLikeN"  [override]
     main:15: note:      Superclass:
     main:15: note:          def [_ValueType] from_optional(cls, inner_value: Optional[_ValueType]) -> KindN[MyClass[V], _ValueType, None, NoReturn]
     main:15: note:      Subclass:

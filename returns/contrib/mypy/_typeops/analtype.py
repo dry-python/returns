@@ -52,17 +52,20 @@ def analyze_call(function, args, ctx, *, show_errors):
     This might be helpful for cases when we run intermediate analysis.
     """
     checker = ctx.api.expr_checker
-    messages = checker.msg if show_errors else checker.msg.clean_copy()
-    return_type, checked_function = checker.check_call(
-        function,
-        [arg.expression(ctx.context) for arg in args],
-        [_KIND_MAPPING.get(arg.kind, arg.kind) for arg in args],
-        ctx.context,
-        [arg.name for arg in args],
-        arg_messages=messages,
-    )
-    if not show_errors and messages.is_errors():
+    with checker.msg.filter_errors(save_filtered_errors=True) as local_errors:
+        return_type, checked_function = checker.check_call(
+            function,
+            [arg.expression(ctx.context) for arg in args],
+            [_KIND_MAPPING.get(arg.kind, arg.kind) for arg in args],
+            ctx.context,
+            [arg.name for arg in args],
+        )
+
+    if not show_errors and local_errors.has_new_errors():  # noqa: WPS441
         return None
+
+    checker.msg.add_errors(local_errors.filtered_errors())  # noqa: WPS441
+
     return checked_function
 
 
@@ -88,7 +91,7 @@ def safe_translate_to_function(
     This function also resolves all type arguments.
     """
     checker = ctx.api.expr_checker  # type: ignore
-    with checker.msg.disable_errors():
+    with checker.msg.filter_errors():
         _return_type, function_def = checker.check_call(
             function_def, [], [], ctx.context, [],
         )

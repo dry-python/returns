@@ -111,7 +111,7 @@
     ):
         ...
   out: |
-    main:10: error: Final class main.MyClass has abstract attributes "alt", "apply", "bind", "bind_io", "bind_ioresult", "bind_result", "compose_result", "from_failed_io", "from_failure", "from_io", "from_ioresult", "from_result", "from_value", "lash", "map", "swap"
+    main:10: error: Final class main.MyClass has abstract attributes "alt", "apply", "bind", "bind_io", "bind_ioresult", "bind_result", "compose_result", "from_failed_io", "from_failure", "from_io", "from_ioresult", "from_result", "from_value", "lash", "map", "swap"  [misc]
 
 
 - case: ioresult_inheritance_wrong
@@ -214,6 +214,6 @@
         ) -> MyClass[Any, _NewErrorType, Exception]:
             ...
   out: |
-    main:18: error: Return type "MyClass[_NewValueType, _ErrorType, int]" of "bind_ioresult" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType, _T], _UpdatedType, _ErrorType, _T]" in supertype "IOResultLikeN"
-    main:28: error: Return type "MyClass[_NewValueType, _NewErrorType, str]" of "from_ioresult" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType, _T], _ValueType, _ErrorType, _T]" in supertype "IOResultLikeN"
-    main:34: error: Return type "MyClass[Any, _NewErrorType, Exception]" of "from_failed_io" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType, _T], _ValueType, _ErrorType, _T]" in supertype "IOResultLikeN"
+    main:18: error: Return type "MyClass[_NewValueType, _ErrorType, int]" of "bind_ioresult" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType, _T], _UpdatedType, _ErrorType, _T]" in supertype "IOResultLikeN"  [override]
+    main:28: error: Return type "MyClass[_NewValueType, _NewErrorType, str]" of "from_ioresult" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType, _T], _ValueType, _ErrorType, _T]" in supertype "IOResultLikeN"  [override]
+    main:34: error: Return type "MyClass[Any, _NewErrorType, Exception]" of "from_failed_io" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType, _T], _ValueType, _ErrorType, _T]" in supertype "IOResultLikeN"  [override]

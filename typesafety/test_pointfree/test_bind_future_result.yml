@@ -8,7 +8,7 @@
         ...
 
     x: FutureResult[float, str]
-    bind_future_result(test)(x)  # E: Argument 1 has incompatible type "FutureResult[float, str]"; expected "KindN[FutureResult[Any, Any], str, str, NoReturn]"
+    bind_future_result(test)(x)  # E: Argument 1 has incompatible type "FutureResult[float, str]"; expected "KindN[FutureResult[Any, Any], str, str, NoReturn]"  [arg-type]
 
 
 - case: bind_future_result_wrong_error
@@ -21,7 +21,7 @@
         ...
 
     x: FutureResult[float, bool]
-    bind_future_result(test)(x)  # E: Argument 1 has incompatible type "FutureResult[float, bool]"; expected "KindN[FutureResult[Any, Any], float, str, NoReturn]"
+    bind_future_result(test)(x)  # E: Argument 1 has incompatible type "FutureResult[float, bool]"; expected "KindN[FutureResult[Any, Any], float, str, NoReturn]"  [arg-type]
 
 
 - case: bind_future_result_requires_context_future_result

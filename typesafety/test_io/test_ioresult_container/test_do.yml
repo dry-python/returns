@@ -45,7 +45,7 @@
 
     IOResult.do(
         x + y
-        for x in Success(1)  # E: Invalid type supplied in do-notation: expected "returns.io.IOResult[Any, Any]", got "returns.result.Success[builtins.int]"
+        for x in Success(1)  # E: Invalid type supplied in do-notation: expected "returns.io.IOResult[Any, Any]", got "returns.result.Success[builtins.int]"  [misc]
         for y in IOSuccess(2.5)
     )
 
@@ -71,7 +71,7 @@
   main: |
     from returns.io import IOSuccess, IOResult
 
-    IOResult.do(  # E: Using "if" conditions inside a generator is not allowed
+    IOResult.do(  # E: Using "if" conditions inside a generator is not allowed  [misc]
         x + y
         for x in IOSuccess(1)
         for y in IOSuccess(2.5)
@@ -90,7 +90,7 @@
         for y in IOSuccess(2.5)
     )
 
-    IOResult.do(x)  # E: Literal generator expression is required, not a variable or function call
+    IOResult.do(x)  # E: Literal generator expression is required, not a variable or function call  [misc]
 
 
 - case: do_with_var

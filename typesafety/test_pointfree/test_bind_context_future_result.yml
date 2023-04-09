@@ -8,7 +8,7 @@
         ...
 
     x: RequiresContextFutureResult[float, bool, bool]
-    bind_context_future_result(test)(x)  # E: Argument 1 has incompatible type "RequiresContextFutureResult[float, bool, bool]"; expected "KindN[RequiresContextFutureResult[Any, Any, Any], float, str, str]"
+    bind_context_future_result(test)(x)  # E: Argument 1 has incompatible type "RequiresContextFutureResult[float, bool, bool]"; expected "KindN[RequiresContextFutureResult[Any, Any, Any], float, str, str]"  [arg-type]
 
 
 - case: bind_context_future_result_requires_context_future_result

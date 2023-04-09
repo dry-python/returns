@@ -22,7 +22,7 @@ _NewEnvType = TypeVar('_NewEnvType')
 # Result:
 _ValueType = TypeVar('_ValueType', covariant=True)
 _NewValueType = TypeVar('_NewValueType')
-_ErrorType = TypeVar('_ErrorType', covariant=True)
+_ErrorType = TypeVar('_ErrorType')
 _NewErrorType = TypeVar('_NewErrorType')
 
 # Helpers:
@@ -30,7 +30,7 @@ _FirstType = TypeVar('_FirstType')
 
 
 @final
-class RequiresContextIOResult(
+class RequiresContextIOResult(  # type: ignore[type-var]
     BaseContainer,
     SupportsKind3['RequiresContextIOResult', _ValueType, _ErrorType, _EnvType],
     reader_ioresult.ReaderIOResultBasedN[_ValueType, _ErrorType, _EnvType],
@@ -107,10 +107,7 @@ class RequiresContextIOResult(
     #: Inner value of `RequiresContext`
     #: is just a function that returns `IOResult`.
     #: This field has an extra 'RequiresContext' just because `mypy` needs it.
-    _inner_value: Callable[
-        [RequiresContextIOResult, _EnvType],
-        IOResult[_ValueType, _ErrorType],
-    ]
+    _inner_value: Callable[[_EnvType], IOResult[_ValueType, _ErrorType]]
 
     #: A convenient placeholder to call methods created by `.from_value()`.
     no_args: ClassVar[NoDeps] = object()

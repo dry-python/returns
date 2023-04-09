@@ -24,4 +24,4 @@
     from returns.io import IO
 
     x: IO[int]
-    x.missing  # E: "IO[int]" has no attribute "missing"
+    x.missing  # E: "IO[int]" has no attribute "missing"  [attr-defined]

@@ -19,7 +19,7 @@
 
     reveal_type(MyOwn(1).equals(MyOwn(1)))  # N: Revealed type is "builtins.bool"
     reveal_type(MyOwn(1).equals(MyOwn('a')))  # N: Revealed type is "builtins.bool"
-    MyOwn(1).equals(1)  # E: Argument 1 has incompatible type "int"; expected "KindN[MyOwn[Any], Any, Any, Any]"
+    MyOwn(1).equals(1)  # E: Argument 1 has incompatible type "int"; expected "KindN[MyOwn[Any], Any, Any, Any]"  [arg-type]
 
 
 - case: equable_correct_inheritance2
@@ -63,7 +63,7 @@
     ):
         ...
   out: |
-    main:9: error: Final class main.MyOwn has abstract attributes "equals"
+    main:9: error: Final class main.MyOwn has abstract attributes "equals"  [misc]
 
 
 - case: equable_inheritance_wrong
@@ -84,7 +84,7 @@
         def equals(self, other: bool) -> T:
             ...
   out: |
-    main:13: error: Argument 1 of "equals" is incompatible with supertype "Equable"; supertype defines the argument type as "MyOwn[T]"
+    main:13: error: Return type "T" of "equals" incompatible with return type "bool" in supertype "Equable"  [override]
+    main:13: error: Argument 1 of "equals" is incompatible with supertype "Equable"; supertype defines the argument type as "MyOwn[T]"  [override]
     main:13: note: This violates the Liskov substitution principle
     main:13: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
-    main:13: error: Return type "T" of "equals" incompatible with return type "bool" in supertype "Equable"
