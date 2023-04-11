@@ -96,7 +96,7 @@
     class MyClass(SupportsKind2['MyClass', V, N], ResultLike2[V, N]):
         ...
   out: |
-    main:10: error: Final class main.MyClass has abstract attributes "alt", "apply", "bind", "bind_result", "from_failure", "from_result", "from_value", "lash", "map", "swap"
+    main:10: error: Final class main.MyClass has abstract attributes "alt", "apply", "bind", "bind_result", "from_failure", "from_result", "from_value", "lash", "map", "swap"  [misc]
 
 
 - case: result_inheritance_wrong2
@@ -114,7 +114,7 @@
     _ErrorType = TypeVar('_ErrorType', covariant=True)
     _NewErrorType = TypeVar('_NewErrorType')
 
-    class MyClass(
+    class MyClass(  # type: ignore[type-var]
         SupportsKind2['MyClass', _ValueType, _ErrorType],
         ResultLike2[_ValueType, _ErrorType],
     ):
@@ -132,11 +132,11 @@
         ) -> MyClass[_NewValueType, _NewErrorType]:
             ...
   out: |
-    main:17: error: Argument 1 of "bind_result" is incompatible with supertype "ResultLikeN"; supertype defines the argument type as "Callable[[_ValueType], Result[_UpdatedType, _ErrorType]]"
-    main:17: note: This violates the Liskov substitution principle
-    main:17: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
-    main:17: error: Return type "MyClass[_ValueType, _ErrorType]" of "bind_result" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType], _UpdatedType, _ErrorType, NoReturn]" in supertype "ResultLikeN"
-    main:26: error: Signature of "from_result" incompatible with supertype "ResultLikeN"
+    main:17: error: Return type "MyClass[_ValueType, _ErrorType]" of "bind_result" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType], _UpdatedType, _ErrorType, NoReturn]" in supertype "ResultLikeN"  [override]
+    main:19: error: Argument 1 of "bind_result" is incompatible with supertype "ResultLikeN"; supertype defines the argument type as "Callable[[_ValueType], Result[_UpdatedType, _ErrorType]]"  [override]
+    main:19: note: This violates the Liskov substitution principle
+    main:19: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+    main:26: error: Signature of "from_result" incompatible with supertype "ResultLikeN"  [override]
     main:26: note:      Superclass:
     main:26: note:          def [_ValueType, _ErrorType] from_result(cls, inner_value: Result[_ValueType, _ErrorType]) -> KindN[MyClass[_ValueType, _ErrorType], _ValueType, _ErrorType, NoReturn]
     main:26: note:      Subclass:
@@ -158,7 +158,7 @@
     _ErrorType = TypeVar('_ErrorType', covariant=True)
     _NewErrorType = TypeVar('_NewErrorType')
 
-    class MyClass(
+    class MyClass(  # type: ignore[type-var]
         SupportsKind3['MyClass', _ValueType, _ErrorType, _T],
         ResultLike3[_ValueType, _ErrorType, _T],
     ):
@@ -177,5 +177,5 @@
         ) -> MyClass[_NewValueType, _NewErrorType, bool]:
             ...
   out: |
-    main:18: error: Return type "MyClass[_NewValueType, _ErrorType, str]" of "bind_result" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType, _T], _UpdatedType, _ErrorType, _T]" in supertype "ResultLikeN"
-    main:28: error: Return type "MyClass[_NewValueType, _NewErrorType, bool]" of "from_result" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType, _T], _ValueType, _ErrorType, _T]" in supertype "ResultLikeN"
+    main:18: error: Return type "MyClass[_NewValueType, _ErrorType, str]" of "bind_result" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType, _T], _UpdatedType, _ErrorType, _T]" in supertype "ResultLikeN"  [override]
+    main:28: error: Return type "MyClass[_NewValueType, _NewErrorType, bool]" of "from_result" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType, _T], _ValueType, _ErrorType, _T]" in supertype "ResultLikeN"  [override]

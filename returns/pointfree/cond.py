@@ -37,7 +37,7 @@ def cond(
     """Reduce the boilerplate when choosing paths with ``DiverseFailableN``."""
 
 
-def cond(  # type: ignore
+def cond(
     container_type: Union[
         Type[_SingleFailableKind], Type[_DiverseFailableKind],
     ],

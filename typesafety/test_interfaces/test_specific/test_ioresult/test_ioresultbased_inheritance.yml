@@ -123,7 +123,7 @@
     ):
         ...
   out: |
-    main:10: error: Final class main.MyClass has abstract attributes "alt", "apply", "bind", "bind_io", "bind_ioresult", "bind_result", "compose_result", "equals", "failure", "from_failed_io", "from_failure", "from_io", "from_ioresult", "from_result", "from_value", "lash", "map", "swap", "unwrap"
+    main:10: error: Final class main.MyClass has abstract attributes "alt", "apply", "bind", "bind_io", "bind_ioresult", "bind_result", "compose_result", "equals", "failure", "from_failed_io", "from_failure", "from_io", "from_ioresult", "from_result", "from_value", "lash", "map", "swap", "unwrap"  [misc]
 
 
 - case: ioresult_inheritance_wrong2
@@ -232,8 +232,8 @@
         ) -> MyClass[Any, _NewErrorType, Exception]:
             ...
   out: |
-    main:18: error: Return type "MyClass[_NewValueType, _ErrorType, int]" of "bind_ioresult" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType, _T], _UpdatedType, _ErrorType, _T]" in supertype "IOResultLikeN"
-    main:27: error: Return type "IO[_ErrorType]" of "unwrap" incompatible with return type "IO[_ValueType]" in supertype "Unwrappable"
-    main:30: error: Return type "IO[_ValueType]" of "failure" incompatible with return type "IO[_ErrorType]" in supertype "Unwrappable"
-    main:34: error: Return type "MyClass[_NewValueType, _NewErrorType, str]" of "from_ioresult" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType, _T], _ValueType, _ErrorType, _T]" in supertype "IOResultLikeN"
-    main:40: error: Return type "MyClass[Any, _NewErrorType, Exception]" of "from_failed_io" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType, _T], _ValueType, _ErrorType, _T]" in supertype "IOResultLikeN"
+    main:18: error: Return type "MyClass[_NewValueType, _ErrorType, int]" of "bind_ioresult" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType, _T], _UpdatedType, _ErrorType, _T]" in supertype "IOResultLikeN"  [override]
+    main:27: error: Return type "IO[_ErrorType]" of "unwrap" incompatible with return type "IO[_ValueType]" in supertype "Unwrappable"  [override]
+    main:30: error: Return type "IO[_ValueType]" of "failure" incompatible with return type "IO[_ErrorType]" in supertype "Unwrappable"  [override]
+    main:34: error: Return type "MyClass[_NewValueType, _NewErrorType, str]" of "from_ioresult" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType, _T], _ValueType, _ErrorType, _T]" in supertype "IOResultLikeN"  [override]
+    main:40: error: Return type "MyClass[Any, _NewErrorType, Exception]" of "from_failed_io" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType, _T], _ValueType, _ErrorType, _T]" in supertype "IOResultLikeN"  [override]

@@ -68,5 +68,5 @@
         container: Kind2[T, int, str]
         reveal_type(dekind(container))
   out: |
-    main:8: error: dekind must be used with Instance as the first type argument
+    main:8: error: dekind must be used with Instance as the first type argument  [misc]
     main:8: note: Revealed type is "Any"

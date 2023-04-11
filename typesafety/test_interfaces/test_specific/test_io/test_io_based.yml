@@ -15,4 +15,4 @@
     ):
         ...
   out: |
-    main:9: error: Final class main.MyClass has abstract attributes "apply", "bind", "bind_io", "equals", "from_io", "from_value", "map"
+    main:9: error: Final class main.MyClass has abstract attributes "apply", "bind", "bind_io", "equals", "from_io", "from_value", "map"  [misc]

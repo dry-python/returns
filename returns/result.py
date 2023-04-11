@@ -35,7 +35,7 @@ _FirstType = TypeVar('_FirstType')
 _FuncParams = ParamSpec('_FuncParams')
 
 
-class Result(
+class Result(  # type: ignore[type-var]
     BaseContainer,
     SupportsKind2['Result', _ValueType, _ErrorType],
     result.ResultBased2[_ValueType, _ErrorType],

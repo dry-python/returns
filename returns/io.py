@@ -39,7 +39,7 @@ _ErrorType = TypeVar('_ErrorType', covariant=True)
 _NewErrorType = TypeVar('_NewErrorType')
 
 
-class IO(
+class IO(  # type: ignore[type-var]
     BaseContainer,
     SupportsKind1['IO', _ValueType],
     io.IOLike1[_ValueType],
@@ -275,7 +275,7 @@ def impure(
 
 # IO and Result:
 
-class IOResult(
+class IOResult(  # type: ignore[type-var]
     BaseContainer,
     SupportsKind2['IOResult', _ValueType, _ErrorType],
     ioresult.IOResultBased2[_ValueType, _ErrorType],

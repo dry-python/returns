@@ -18,7 +18,7 @@
 
     Maybe.do(
         x + y
-        for x in Success(1)  # E: Invalid type supplied in do-notation: expected "returns.maybe.Maybe[Any]", got "returns.result.Success[builtins.int]"
+        for x in Success(1)  # E: Invalid type supplied in do-notation: expected "returns.maybe.Maybe[Any]", got "returns.result.Success[builtins.int]"  [misc]
         for y in Maybe.from_value(2.5)
     )
 
@@ -45,7 +45,7 @@
   main: |
     from returns.maybe import Maybe
 
-    Maybe.do(  # E: Using "if" conditions inside a generator is not allowed
+    Maybe.do(  # E: Using "if" conditions inside a generator is not allowed  [misc]
         x + y
         for x in Maybe.from_value(1)
         for y in Maybe.from_value(2.5)
@@ -64,4 +64,4 @@
         for y in Maybe.from_value(2.5)
     )
 
-    Maybe.do(x)  # E: Literal generator expression is required, not a variable or function call
+    Maybe.do(x)  # E: Literal generator expression is required, not a variable or function call  [misc]

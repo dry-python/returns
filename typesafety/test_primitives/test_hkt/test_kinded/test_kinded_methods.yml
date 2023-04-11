@@ -146,7 +146,7 @@
         ) -> Kind1[_MappableType, _UpdatedType]:
             ...
   out: |
-    main:10: error: The erased type of self "builtins.int" is not a supertype of its class "main.Mappable"
+    main:10: error: The erased type of self "builtins.int" is not a supertype of its class "main.Mappable"  [misc]
 
 
 - case: kinded_with_wrong_self_type2
@@ -169,4 +169,4 @@
         ) -> Kind1[_MappableType, _UpdatedType]:
             ...
   out: |
-    main:11: error: The erased type of self "Type[builtins.int]" is not a supertype of its class "Type[main.Mappable]"
+    main:11: error: The erased type of self "Type[builtins.int]" is not a supertype of its class "Type[main.Mappable]"  [misc]

@@ -24,7 +24,7 @@
 
     reveal_type(compose(first, second))
   out: |
-    main:9: error: Cannot infer type argument 2 of "compose"
+    main:9: error: Cannot infer type argument 2 of "compose"  [misc]
     main:9: note: Revealed type is "def (Any) -> Any"
 
 

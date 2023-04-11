@@ -14,7 +14,7 @@
     from returns.context import RequiresContextResult
 
     x: RequiresContextResult[int, str, bool]
-    x.missing  # E: "RequiresContextResult[int, str, bool]" has no attribute "missing"
+    x.missing  # E: "RequiresContextResult[int, str, bool]" has no attribute "missing"  [attr-defined]
 
 
 - case: requires_context_result_swap

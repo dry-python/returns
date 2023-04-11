@@ -36,7 +36,7 @@ _FirstType = TypeVar('_FirstType')
 
 
 @final
-class RequiresContextFutureResult(
+class RequiresContextFutureResult(  # type: ignore[type-var]
     BaseContainer,
     SupportsKind3[
         'RequiresContextFutureResult', _ValueType, _ErrorType, _EnvType,
@@ -100,10 +100,7 @@ class RequiresContextFutureResult(
     #: Inner value of `RequiresContext`
     #: is just a function that returns `FutureResult`.
     #: This field has an extra 'RequiresContext' just because `mypy` needs it.
-    _inner_value: Callable[
-        [RequiresContextFutureResult, _EnvType],
-        FutureResult[_ValueType, _ErrorType],
-    ]
+    _inner_value: Callable[[_EnvType], FutureResult[_ValueType, _ErrorType]]
 
     #: A convenient placeholder to call methods created by `.from_value()`.
     no_args: ClassVar[NoDeps] = object()

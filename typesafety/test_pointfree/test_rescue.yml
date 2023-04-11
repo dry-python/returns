@@ -8,7 +8,7 @@
         ...
 
     x: RequiresContextIOResult[float, str, int]
-    lash(test)(x)  # E: Argument 1 has incompatible type "RequiresContextIOResult[float, str, int]"; expected "KindN[RequiresContextIOResult[Any, Any, Any], float, float, int]"
+    lash(test)(x)  # E: Argument 1 has incompatible type "RequiresContextIOResult[float, str, int]"; expected "KindN[RequiresContextIOResult[Any, Any, Any], float, float, int]"  [arg-type]
 
 
 - case: lash_wrong_else_types
@@ -21,7 +21,7 @@
         ...
 
     x: RequiresContextIOResult[str, float, str]
-    lash(test)(x)  # E: Argument 1 has incompatible type "RequiresContextIOResult[str, float, str]"; expected "KindN[RequiresContextIOResult[Any, Any, Any], float, float, int]"
+    lash(test)(x)  # E: Argument 1 has incompatible type "RequiresContextIOResult[str, float, str]"; expected "KindN[RequiresContextIOResult[Any, Any, Any], float, float, int]"  [arg-type]
 
 
 - case: lash_maybe

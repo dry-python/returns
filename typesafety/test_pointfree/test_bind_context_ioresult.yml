@@ -8,7 +8,7 @@
         ...
 
     x: RequiresContextIOResult[float, bool, bool]
-    bind_context_ioresult(test)(x)  # E: Argument 1 has incompatible type "RequiresContextIOResult[float, bool, bool]"; expected "KindN[RequiresContextIOResult[Any, Any, Any], float, str, str]"
+    bind_context_ioresult(test)(x)  # E: Argument 1 has incompatible type "RequiresContextIOResult[float, bool, bool]"; expected "KindN[RequiresContextIOResult[Any, Any, Any], float, str, str]"  [arg-type]
 
 
 - case: bind_context_ioresult_requires_context_ioresult

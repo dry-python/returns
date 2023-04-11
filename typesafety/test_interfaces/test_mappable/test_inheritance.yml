@@ -78,7 +78,7 @@
 
     MyClass()
   out: |
-    main:10: error: Cannot instantiate abstract class "MyClass" with abstract attribute "map"
+    main:10: error: Cannot instantiate abstract class "MyClass" with abstract attribute "map"  [abstract]
 
 
 - case: mappable_inheritance_wrong1
@@ -95,10 +95,10 @@
         def map(self, function: Callable[[V], int]) -> 'MyClass[V]':
             ...
   out: |
-    main:9: error: Argument 1 of "map" is incompatible with supertype "MappableN"; supertype defines the argument type as "Callable[[V], _UpdatedType]"
+    main:9: error: Return type "MyClass[V]" of "map" incompatible with return type "KindN[MyClass[V], _UpdatedType, NoReturn, NoReturn]" in supertype "MappableN"  [override]
+    main:9: error: Argument 1 of "map" is incompatible with supertype "MappableN"; supertype defines the argument type as "Callable[[V], _UpdatedType]"  [override]
     main:9: note: This violates the Liskov substitution principle
     main:9: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
-    main:9: error: Return type "MyClass[V]" of "map" incompatible with return type "KindN[MyClass[V], _UpdatedType, NoReturn, NoReturn]" in supertype "MappableN"
 
 
 - case: mappable_inheritance_wrong2
@@ -116,10 +116,10 @@
         def map(self, function: Callable[[E], N]) -> 'MyClass[E, N]':
             ...
   out: |
-    main:10: error: Argument 1 of "map" is incompatible with supertype "MappableN"; supertype defines the argument type as "Callable[[V], _UpdatedType]"
+    main:10: error: Return type "MyClass[E, N]" of "map" incompatible with return type "KindN[MyClass[V, E], _UpdatedType, E, NoReturn]" in supertype "MappableN"  [override]
+    main:10: error: Argument 1 of "map" is incompatible with supertype "MappableN"; supertype defines the argument type as "Callable[[V], _UpdatedType]"  [override]
     main:10: note: This violates the Liskov substitution principle
     main:10: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
-    main:10: error: Return type "MyClass[E, N]" of "map" incompatible with return type "KindN[MyClass[V, E], _UpdatedType, E, NoReturn]" in supertype "MappableN"
 
 
 - case: mappable_inheritance_wrong3
@@ -138,7 +138,7 @@
         def map(self, function: Callable[[E], N]) -> 'MyClass[E, N, T]':
             ...
   out: |
-    main:11: error: Argument 1 of "map" is incompatible with supertype "MappableN"; supertype defines the argument type as "Callable[[V], _UpdatedType]"
+    main:11: error: Return type "MyClass[E, N, T]" of "map" incompatible with return type "KindN[MyClass[V, E, T], _UpdatedType, E, T]" in supertype "MappableN"  [override]
+    main:11: error: Argument 1 of "map" is incompatible with supertype "MappableN"; supertype defines the argument type as "Callable[[V], _UpdatedType]"  [override]
     main:11: note: This violates the Liskov substitution principle
     main:11: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
-    main:11: error: Return type "MyClass[E, N, T]" of "map" incompatible with return type "KindN[MyClass[V, E, T], _UpdatedType, E, T]" in supertype "MappableN"

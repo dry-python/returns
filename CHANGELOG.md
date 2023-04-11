@@ -8,6 +8,10 @@ See [0Ver](https://0ver.org/).
 
 ## 0.19.1 WIP
 
+### Features
+
+- Now requires `mypy>=1.2`
+
 ### Bugfixes
 
 - Fixes a problem with `do-notation` and type aliases

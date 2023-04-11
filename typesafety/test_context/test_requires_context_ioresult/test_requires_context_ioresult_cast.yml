@@ -35,4 +35,4 @@
     first: RequiresContextIOResult[ValueError, TypeError, IndexError]
     second: RequiresContextIOResult[Exception, Exception, Exception] = first
   out: |
-    main:4: error: Incompatible types in assignment (expression has type "RequiresContextIOResult[ValueError, TypeError, IndexError]", variable has type "RequiresContextIOResult[Exception, Exception, Exception]")
+    main:4: error: Incompatible types in assignment (expression has type "RequiresContextIOResult[ValueError, TypeError, IndexError]", variable has type "RequiresContextIOResult[Exception, Exception, Exception]")  [assignment]

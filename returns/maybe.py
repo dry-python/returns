@@ -28,7 +28,7 @@ _NewValueType = TypeVar('_NewValueType')
 _FuncParams = ParamSpec('_FuncParams')
 
 
-class Maybe(
+class Maybe(  # type: ignore[type-var]
     BaseContainer,
     SupportsKind1['Maybe', _ValueType],
     MaybeBased2[_ValueType, None],

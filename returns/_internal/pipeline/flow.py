@@ -9,7 +9,7 @@ _ReturnType = TypeVar('_ReturnType')
 def flow(
     instance: _InstanceType,
     *functions: _PipelineStepType,
-) -> _ReturnType:
+) -> _ReturnType:  # type: ignore[type-var]
     """
     Allows to compose a value and up to multiple functions that use this value.
 

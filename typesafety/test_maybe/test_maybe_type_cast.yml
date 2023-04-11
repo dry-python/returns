@@ -14,7 +14,7 @@
     from returns.maybe import Maybe
 
     x: Maybe[int]
-    x.missing  # E: "Maybe[int]" has no attribute "missing"
+    x.missing  # E: "Maybe[int]" has no attribute "missing"  [attr-defined]
 
 
 - case: maybe_some_constructor

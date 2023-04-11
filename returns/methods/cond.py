@@ -30,7 +30,7 @@ def internal_cond(
     """Reduce the boilerplate when choosing paths with ``DiverseFailableN``."""
 
 
-def internal_cond(  # type: ignore
+def internal_cond(
     container_type: Union[
         Type[_SingleFailableKind], Type[_DiverseFailableKind],
     ],

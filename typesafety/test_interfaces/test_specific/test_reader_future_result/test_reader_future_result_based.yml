@@ -41,7 +41,7 @@
     ):
         ...
   out: |
-    main:13: error: Final class main.MyClass has abstract attributes "__call__", "alt", "apply", "ask", "bind", "bind_async", "bind_async_context_future_result", "bind_async_future", "bind_async_future_result", "bind_awaitable", "bind_context", "bind_context_future_result", "bind_context_ioresult", "bind_context_result", "bind_future", "bind_future_result", "bind_io", "bind_ioresult", "bind_result", "compose_result", "from_context", "from_failed_context", "from_failed_future", "from_failed_io", "from_failure", "from_future", "from_future_result_context", "from_io", "from_ioresult", "from_ioresult_context", "from_result", "from_result_context", "from_value", "lash", "map", "modify_env", "no_args", "swap"
+    main:13: error: Final class main.MyClass has abstract attributes "__call__", "alt", "apply", "ask", "bind", "bind_async", "bind_async_context_future_result", "bind_async_future", "bind_async_future_result", "bind_awaitable", "bind_context", "bind_context_future_result", "bind_context_ioresult", "bind_context_result", "bind_future", "bind_future_result", "bind_io", "bind_ioresult", "bind_result", "compose_result", "from_context", "from_failed_context", "from_failed_future", "from_failed_io", "from_failure", "from_future", "from_future_result_context", "from_io", "from_ioresult", "from_ioresult_context", "from_result", "from_result_context", "from_value", "lash", "map", "modify_env", "no_args", "swap"  [misc]
 
 
 - case: reader_future_result_based_inheritance_wrong
@@ -65,7 +65,7 @@
         def __call__(self, deps: T) -> FutureResult[V, U]:
             ...
   out: |
-    main:16: error: Argument 1 of "__call__" is incompatible with supertype "Contextable"; supertype defines the argument type as "U"
+    main:16: error: Return type "FutureResult[V, U]" of "__call__" incompatible with return type "FutureResult[T, V]" in supertype "Contextable"  [override]
+    main:16: error: Argument 1 of "__call__" is incompatible with supertype "Contextable"; supertype defines the argument type as "U"  [override]
     main:16: note: This violates the Liskov substitution principle
     main:16: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
-    main:16: error: Return type "FutureResult[V, U]" of "__call__" incompatible with return type "FutureResult[T, V]" in supertype "Contextable"

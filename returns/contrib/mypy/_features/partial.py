@@ -1,6 +1,5 @@
 from typing import Iterator, List, Optional, Tuple
 
-from mypy.checker import detach_callable
 from mypy.nodes import ARG_STAR, ARG_STAR2
 from mypy.plugin import FunctionContext
 from mypy.types import CallableType, FunctionLike, Instance, Overloaded
@@ -17,6 +16,7 @@ from returns.contrib.mypy._typeops.inference import CallableInference
 from returns.contrib.mypy._typeops.transform_callable import (
     Functions,
     Intermediate,
+    detach_callable,
     proper_type,
 )
 

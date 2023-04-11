@@ -69,7 +69,7 @@
     ):
         ...
   out: |
-    main:10: error: Final class main.MyClass has abstract attributes "__await__", "alt", "apply", "awaitable", "bind", "bind_async", "bind_async_future", "bind_async_future_result", "bind_awaitable", "bind_future", "bind_future_result", "bind_io", "bind_ioresult", "bind_result", "compose_result", "from_failed_future", "from_failed_io", "from_failure", "from_future", "from_io", "from_ioresult", "from_result", "from_value", "lash", "map", "swap"
+    main:10: error: Final class main.MyClass has abstract attributes "__await__", "alt", "apply", "awaitable", "bind", "bind_async", "bind_async_future", "bind_async_future_result", "bind_awaitable", "bind_future", "bind_future_result", "bind_io", "bind_ioresult", "bind_result", "compose_result", "from_failed_future", "from_failed_io", "from_failure", "from_future", "from_io", "from_ioresult", "from_result", "from_value", "lash", "map", "swap"  [misc]
 
 
 - case: future_result_inheritance_wrong2
@@ -95,5 +95,5 @@
         async def awaitable(self) -> IOResult[int, E]:
             ...
   out: |
-    main:15: error: Return type "Generator[None, None, Result[T, E]]" of "__await__" incompatible with return type "Generator[Any, Any, IOLikeN[T, E, NoReturn]]" in supertype "AwaitableFutureN"
-    main:18: error: Return type "Coroutine[Any, Any, IOResult[int, E]]" of "awaitable" incompatible with return type "Coroutine[Any, Any, IOLikeN[T, E, NoReturn]]" in supertype "AwaitableFutureN"
+    main:15: error: Return type "Generator[None, None, Result[T, E]]" of "__await__" incompatible with return type "Generator[Any, Any, IOLikeN[T, E, NoReturn]]" in supertype "AwaitableFutureN"  [override]
+    main:18: error: Return type "Coroutine[Any, Any, IOResult[int, E]]" of "awaitable" incompatible with return type "Coroutine[Any, Any, IOLikeN[T, E, NoReturn]]" in supertype "AwaitableFutureN"  [override]

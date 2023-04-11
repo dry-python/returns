@@ -34,7 +34,7 @@
     ):
         ...
   out: |
-    main:10: error: Final class main.MyClass has abstract attributes "alt", "map", "swap"
+    main:10: error: Final class main.MyClass has abstract attributes "alt", "map", "swap"  [misc]
 
 
 - case: swappable_inheritance_incorrect2
@@ -55,4 +55,4 @@
         def swap(self) -> MyClass[_FirstType, _SecondType]:
             ...
   out: |
-    main:13: error: Return type "MyClass[_FirstType, _SecondType]" of "swap" incompatible with return type "KindN[MyClass[_FirstType, _SecondType], _SecondType, _FirstType, NoReturn]" in supertype "SwappableN"
+    main:13: error: Return type "MyClass[_FirstType, _SecondType]" of "swap" incompatible with return type "KindN[MyClass[_FirstType, _SecondType], _SecondType, _FirstType, NoReturn]" in supertype "SwappableN"  [override]

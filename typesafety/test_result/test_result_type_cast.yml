@@ -49,7 +49,7 @@
     from returns.result import Result
 
     x: Result[int, str]
-    x.missing  # E: "Result[int, str]" has no attribute "missing"
+    x.missing  # E: "Result[int, str]" has no attribute "missing"  [attr-defined]
 
 
 - case: result_from_value

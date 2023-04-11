@@ -37,7 +37,7 @@
     ):
         ...
   out: |
-    main:11: error: Final class main.MyClass has abstract attributes "__call__", "alt", "apply", "ask", "bind", "bind_context", "bind_context_result", "bind_result", "from_context", "from_failed_context", "from_failure", "from_result", "from_result_context", "from_value", "lash", "map", "modify_env", "no_args", "swap"
+    main:11: error: Final class main.MyClass has abstract attributes "__call__", "alt", "apply", "ask", "bind", "bind_context", "bind_context_result", "bind_result", "from_context", "from_failed_context", "from_failure", "from_result", "from_result_context", "from_value", "lash", "map", "modify_env", "no_args", "swap"  [misc]
 
 
 - case: reader_result_based_inheritance_wrong
@@ -59,7 +59,7 @@
         def __call__(self, deps: T) -> Result[V, U]:
             ...
   out: |
-    main:14: error: Argument 1 of "__call__" is incompatible with supertype "Contextable"; supertype defines the argument type as "U"
+    main:14: error: Return type "Result[V, U]" of "__call__" incompatible with return type "Result[T, V]" in supertype "Contextable"  [override]
+    main:14: error: Argument 1 of "__call__" is incompatible with supertype "Contextable"; supertype defines the argument type as "U"  [override]
     main:14: note: This violates the Liskov substitution principle
     main:14: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
-    main:14: error: Return type "Result[V, U]" of "__call__" incompatible with return type "Result[T, V]" in supertype "Contextable"

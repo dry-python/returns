@@ -42,7 +42,7 @@
     ):
       ...
 
-    MyOwn()  # E: Cannot instantiate abstract class "MyOwn" with abstract attributes "failure" and "unwrap"
+    MyOwn()  # E: Cannot instantiate abstract class "MyOwn" with abstract attributes "failure" and "unwrap"  [abstract]
 
 
 - case: unwrappable_wrong_inheritance
@@ -68,5 +68,5 @@
         def failure(self) -> T:
             ...
   out: |
-    main:15: error: Return type "int" of "unwrap" incompatible with return type "T" in supertype "Unwrappable"
-    main:18: error: Return type "T" of "failure" incompatible with return type "N" in supertype "Unwrappable"
+    main:15: error: Return type "int" of "unwrap" incompatible with return type "T" in supertype "Unwrappable"  [override]
+    main:18: error: Return type "T" of "failure" incompatible with return type "N" in supertype "Unwrappable"  [override]

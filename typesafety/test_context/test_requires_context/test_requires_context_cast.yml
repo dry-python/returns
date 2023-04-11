@@ -17,7 +17,7 @@
     first: RequiresContext[ValueError, TypeError]  # we can only cast return type
     second: RequiresContext[Exception, Exception] = first
   out: |
-    main:4: error: Incompatible types in assignment (expression has type "RequiresContext[ValueError, TypeError]", variable has type "RequiresContext[Exception, Exception]")
+    main:4: error: Incompatible types in assignment (expression has type "RequiresContext[ValueError, TypeError]", variable has type "RequiresContext[Exception, Exception]")  [assignment]
 
 
 - case: context_covariant_cast
@@ -47,6 +47,6 @@
     reveal_type(func().bind(third))
   out: |
     main:21: note: Revealed type is "returns.context.requires_context.RequiresContext[builtins.int, main.B]"
-    main:21: error: Argument 1 to "bind" of "RequiresContext" has incompatible type "Callable[[int], RequiresContext[int, A]]"; expected "Callable[[int], KindN[RequiresContext[Any, Any], int, B, Any]]"
+    main:21: error: Argument 1 to "bind" of "RequiresContext" has incompatible type "Callable[[int], RequiresContext[int, A]]"; expected "Callable[[int], KindN[RequiresContext[Any, Any], int, B, Any]]"  [arg-type]
     main:22: note: Revealed type is "returns.context.requires_context.RequiresContext[builtins.int, main.B]"
-    main:22: error: Argument 1 to "bind" of "RequiresContext" has incompatible type "Callable[[int], RequiresContext[int, C]]"; expected "Callable[[int], KindN[RequiresContext[Any, Any], int, B, Any]]"
+    main:22: error: Argument 1 to "bind" of "RequiresContext" has incompatible type "Callable[[int], RequiresContext[int, C]]"; expected "Callable[[int], KindN[RequiresContext[Any, Any], int, B, Any]]"  [arg-type]

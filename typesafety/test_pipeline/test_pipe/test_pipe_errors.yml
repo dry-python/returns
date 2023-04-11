@@ -8,7 +8,7 @@
 
     reveal_type(pipe(int, convert)('a'))
   out: |
-    main:6: error: Argument 1 to "convert" has incompatible type "int"; expected "str"
+    main:6: error: Argument 1 to "convert" has incompatible type "int"; expected "str"  [arg-type]
     main:6: note: Revealed type is "builtins.float"
 
 
@@ -19,9 +19,9 @@
 
     pipe([], int)('a')
   out: |
-    main:3: error: "List[<nothing>]" not callable
-    main:3: error: <nothing> not callable
-    main:3: error: Argument 1 to "__call__" of "_Pipe" has incompatible type "str"; expected <nothing>
+    main:3: error: "List[<nothing>]" not callable  [operator]
+    main:3: error: <nothing> not callable  [misc]
+    main:3: error: Argument 1 to "__call__" of "_Pipe" has incompatible type "str"; expected <nothing>  [arg-type]
 
 
 - case: pipe_function_without_steps
@@ -31,7 +31,7 @@
 
     pipe()
   out: |
-    main:3: error: Too few arguments for "pipe"
+    main:3: error: Too few arguments for "pipe"  [call-arg]
 
 
 - case: pipe_function_first_arg_error
@@ -44,9 +44,9 @@
 
     reveal_type(pipe(convert)(1))
   out: |
-    main:6: error: Argument 1 to "convert" has incompatible type "int"; expected "str"
+    main:6: error: Argument 1 to "convert" has incompatible type "int"; expected "str"  [arg-type]
     main:6: note: Revealed type is "builtins.float"
-    main:6: error: Argument 1 to "__call__" of "_Pipe" has incompatible type "int"; expected "str"
+    main:6: error: Argument 1 to "__call__" of "_Pipe" has incompatible type "int"; expected "str"  [arg-type]
 
 
 - case: pipe_function_without_args_error
@@ -59,7 +59,7 @@
 
     reveal_type(pipe(convert)(1))
   out: |
-    main:6: error: Too many arguments for "convert"
+    main:6: error: Too many arguments for "convert"  [call-arg]
     main:6: note: Revealed type is "builtins.float"
 
 
@@ -73,7 +73,7 @@
 
     reveal_type(pipe(convert)(1))
   out: |
-    main:6: error: Missing positional argument "other" in call to "convert"
-    main:6: error: Argument 1 to "convert" has incompatible type "int"; expected "str"
+    main:6: error: Missing positional argument "other" in call to "convert"  [call-arg]
+    main:6: error: Argument 1 to "convert" has incompatible type "int"; expected "str"  [arg-type]
     main:6: note: Revealed type is "builtins.float"
-    main:6: error: Argument 1 to "__call__" of "_Pipe" has incompatible type "int"; expected "str"
+    main:6: error: Argument 1 to "__call__" of "_Pipe" has incompatible type "int"; expected "str"  [arg-type]

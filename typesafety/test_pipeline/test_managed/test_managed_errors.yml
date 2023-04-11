@@ -15,7 +15,7 @@
         ...
 
     x: IOResult[int, str]
-    managed(use, release)(x)  # E: Argument 2 to "managed" has incompatible type "Callable[[int, Result[float, str]], IOResult[float, str]]"; expected "Callable[[int, Result[float, str]], KindN[IOResult[Any, Any], None, str, NoReturn]]"
+    managed(use, release)(x)  # E: Argument 2 to "managed" has incompatible type "Callable[[int, Result[float, str]], IOResult[float, str]]"; expected "Callable[[int, Result[float, str]], KindN[IOResult[Any, Any], None, str, NoReturn]]"  [arg-type]
 
 
 - case: managed_with_non_matching_use_release_types
@@ -35,7 +35,7 @@
         ...
 
     x: IOResult[int, str]
-    managed(use, release)(x)  # E: Cannot infer type argument 3 of "managed"
+    managed(use, release)(x)  # E: Cannot infer type argument 3 of "managed"  [misc]
 
 
 - case: managed_with_wrong_container_input
@@ -55,4 +55,4 @@
         ...
 
     x: IOResult[str, str]
-    managed(use, release)(x)  # E: Argument 1 has incompatible type "IOResult[str, str]"; expected "KindN[IOResult[Any, Any], int, str, NoReturn]"
+    managed(use, release)(x)  # E: Argument 1 has incompatible type "IOResult[str, str]"; expected "KindN[IOResult[Any, Any], int, str, NoReturn]"  [arg-type]

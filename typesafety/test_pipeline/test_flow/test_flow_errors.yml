@@ -8,7 +8,7 @@
 
     reveal_type(flow('1', int, convert))
   out: |
-    main:6: error: Argument 1 to "convert" has incompatible type "int"; expected "str"
+    main:6: error: Argument 1 to "convert" has incompatible type "int"; expected "str"  [arg-type]
     main:6: note: Revealed type is "builtins.float"
 
 
@@ -19,7 +19,7 @@
 
     reveal_type(flow('a', [], int))
   out: |
-    main:3: error: "List[<nothing>]" not callable
+    main:3: error: "List[<nothing>]" not callable  [operator]
     main:3: note: Revealed type is "builtins.int"
 
 
@@ -33,7 +33,7 @@
 
     reveal_type(flow(1, convert))
   out: |
-    main:6: error: Argument 1 to "convert" has incompatible type "int"; expected "str"
+    main:6: error: Argument 1 to "convert" has incompatible type "int"; expected "str"  [arg-type]
     main:6: note: Revealed type is "builtins.float"
 
 
@@ -47,7 +47,7 @@
 
     reveal_type(flow(1, convert))
   out: |
-    main:6: error: Too many arguments for "convert"
+    main:6: error: Too many arguments for "convert"  [call-arg]
     main:6: note: Revealed type is "builtins.float"
 
 
@@ -61,6 +61,6 @@
 
     reveal_type(flow(1, convert))
   out: |
-    main:6: error: Missing positional argument "other" in call to "convert"
-    main:6: error: Argument 1 to "convert" has incompatible type "int"; expected "str"
+    main:6: error: Missing positional argument "other" in call to "convert"  [call-arg]
+    main:6: error: Argument 1 to "convert" has incompatible type "int"; expected "str"  [arg-type]
     main:6: note: Revealed type is "builtins.float"
