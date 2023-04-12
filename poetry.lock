@@ -1780,17 +1780,18 @@ pytest = "*"
 
 [[package]]
 name = "pytest-subtests"
-version = "0.9.0"
+version = "0.10.0"
 description = "unittest subTest() support and subtests fixture"
 category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "pytest-subtests-0.9.0.tar.gz", hash = "sha256:c0317cd5f6a5eb3e957e89dbe4fc3322a9afddba2db8414355ed2a2cb91a844e"},
-    {file = "pytest_subtests-0.9.0-py3-none-any.whl", hash = "sha256:f5f616b92c13405909d210569d6d3914db6fe156333ff5426534f97d5b447861"},
+    {file = "pytest-subtests-0.10.0.tar.gz", hash = "sha256:d9961a67c1791e8c1e32dce7a70ed1e54f3b1e641087f2094f2d37087ab7fb17"},
+    {file = "pytest_subtests-0.10.0-py3-none-any.whl", hash = "sha256:03a50a14f7981cd03090e8ca94205d783e290266d828728210c3d79f4d00c46f"},
 ]
 
 [package.dependencies]
+attrs = ">=19.2.0"
 pytest = ">=7.0"
 
 [[package]]
@@ -2704,4 +2705,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.7"
-content-hash = "aeef8b89c7e108771cf0971824e9ac1c991689639e3df3a6524e01e88a287357"
+content-hash = "10e1ba292e95ee0d8d5c3ad10fc1cecf76e418289ee805b10a6539769670fcc7"
