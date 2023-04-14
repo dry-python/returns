@@ -2281,22 +2281,22 @@ test = ["cython", "html5lib", "pytest (>=4.6)", "typed_ast"]
 
 [[package]]
 name = "sphinx-autodoc-typehints"
-version = "1.22"
+version = "1.23.0"
 description = "Type hints (PEP 484) support for the Sphinx autodoc extension"
 category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "sphinx_autodoc_typehints-1.22-py3-none-any.whl", hash = "sha256:ef4a8b9d52de66065aa7d3adfabf5a436feb8a2eff07c2ddc31625d8807f2b69"},
-    {file = "sphinx_autodoc_typehints-1.22.tar.gz", hash = "sha256:71fca2d5eee9b034204e4c686ab20b4d8f5eb9409396216bcae6c87c38e18ea6"},
+    {file = "sphinx_autodoc_typehints-1.23.0-py3-none-any.whl", hash = "sha256:ac099057e66b09e51b698058ba7dd76e57e1fe696cd91b54e121d3dad188f91d"},
+    {file = "sphinx_autodoc_typehints-1.23.0.tar.gz", hash = "sha256:5d44e2996633cdada499b6d27a496ddf9dbc95dd1f0f09f7b37940249e61f6e9"},
 ]
 
 [package.dependencies]
 sphinx = ">=5.3"
 
 [package.extras]
-docs = ["furo (>=2022.12.7)", "sphinx (>=6.1.3)", "sphinx-autodoc-typehints (>=1.21)"]
-testing = ["covdefaults (>=2.2.2)", "coverage (>=7.0.5)", "diff-cover (>=7.3)", "nptyping (>=2.4.1)", "pytest (>=7.2.1)", "pytest-cov (>=4)", "sphobjinv (>=2.3.1)", "typing-extensions (>=4.4)"]
+docs = ["furo (>=2022.12.7)", "sphinx (>=6.1.3)", "sphinx-autodoc-typehints (>=1.23.4)"]
+testing = ["covdefaults (>=2.2.2)", "coverage (>=7.2.2)", "diff-cover (>=7.5)", "nptyping (>=2.5)", "pytest (>=7.2.2)", "pytest-cov (>=4)", "sphobjinv (>=2.3.1)", "typing-extensions (>=4.5)"]
 type-comment = ["typed-ast (>=1.5.4)"]
 
 [[package]]
@@ -2705,4 +2705,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.7"
-content-hash = "10e1ba292e95ee0d8d5c3ad10fc1cecf76e418289ee805b10a6539769670fcc7"
+content-hash = "0dd078a6eaecf91b8690ca4bf2fd452d5fb134d9ae8f0e0cc2f2cefd08c48f53"
