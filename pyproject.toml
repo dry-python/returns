@@ -69,7 +69,7 @@ typing-extensions = ">=4.0,<5.0"
 anyio = "^3.6"
 curio = "^1.6"
 trio = "^0.22"
-attrs = "^22.1"
+attrs = "^23.1"
 httpx = "^0.24"
 
 mypy = "^1.2.0"
