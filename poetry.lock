@@ -1025,14 +1025,14 @@ socks = ["socksio (>=1.0.0,<2.0.0)"]
 
 [[package]]
 name = "hypothesis"
-version = "6.71.0"
+version = "6.72.1"
 description = "A library for property-based testing"
 category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "hypothesis-6.71.0-py3-none-any.whl", hash = "sha256:06235b8ab3c4090bec96b07dfc2347611c1392e5b4ffa48c069f2c1337968725"},
-    {file = "hypothesis-6.71.0.tar.gz", hash = "sha256:b2c3bbead72189c0bba6e12848b484ceafadb6e872ac31e40013228239366221"},
+    {file = "hypothesis-6.72.1-py3-none-any.whl", hash = "sha256:1901688aac1fc8d78d5431c4a1d48cc50940e247dd8b6ebc3d4167ef31204e10"},
+    {file = "hypothesis-6.72.1.tar.gz", hash = "sha256:2fd2c9640ea4b64d06fafc8d9aa8e9cbae365879d109a859afd37dda5c1ffb55"},
 ]
 
 [package.dependencies]
@@ -2705,4 +2705,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.7"
-content-hash = "0dd078a6eaecf91b8690ca4bf2fd452d5fb134d9ae8f0e0cc2f2cefd08c48f53"
+content-hash = "4c5e0439fef9b74ce19756c499195ff7a297dda971da09837ddf8ef3ea0db3bb"
