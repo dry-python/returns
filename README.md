@@ -40,6 +40,11 @@ You are also required to [configure](https://returns.readthedocs.io/en/latest/pa
 `mypy` correctly and install our plugin
 to fix [this existing issue](https://github.com/python/mypy/issues/3157):
 
+```bash
+pip install returns[compatible-mypy]
+```
+and
+
 ```ini
 # In setup.cfg or mypy.ini:
 [mypy]
