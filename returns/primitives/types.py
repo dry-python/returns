@@ -1,5 +1,7 @@
 from typing import Any, Dict, NoReturn
 
+from typing_extensions import Self
+
 from returns.primitives.exceptions import ImmutableStateError
 
 
@@ -29,11 +31,11 @@ class Immutable(object):
 
     __slots__ = ()
 
-    def __copy__(self) -> 'Immutable':
+    def __copy__(self) -> Self:
         """Returns itself."""
         return self
 
-    def __deepcopy__(self, memo: Dict[Any, Any]) -> 'Immutable':
+    def __deepcopy__(self, memo: Dict[Any, Any]) -> Self:
         """Returns itself."""
         return self
 
