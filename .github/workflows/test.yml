@@ -1,80 +1,84 @@
 name: test
 
 on:
-push:
-branches:
-- master
-paths-ignore:
-- 'docs/requirements.txt'
-pull_request:
- paths-ignore:
-  - 'docs/requirements.txt'
-workflow_dispatch:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - 'docs/requirements.txt'
+  pull_request:
+    paths-ignore:
+      - 'docs/requirements.txt'
+  workflow_dispatch:
 
 concurrency:
-group: test-${{ github.head_ref || github.run_id }}
-cancel-in-progress: true
+  group: test-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
 
 jobs:
-build:
-runs-on: ubuntu-20.04
-strategy:
-fail-fast: false
-matrix:
-python-version: ['3.7', '3.8', '3.9', '3.10', '3.11']
+  build:
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.7', '3.8', '3.9', '3.10', '3.11']
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-steps:
-  - name: Checkout code
-    uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
 
-  - name: Set up Python ${{ matrix.python-version }}
-    uses: actions/setup-python@v2
-    with:
-    python-version: ${{ matrix.python-version }}
+      - name: Install Poetry
+        run: |
+          curl -sSL \
+          "https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py" | python
 
-  - name: Install Poetry
-    run: |
-     curl -sSL \
-      "https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py" | python
-    # Adding `poetry` to `$PATH`:
+        # Adding `poetry` to `$PATH`:
 echo "$HOME/.poetry/bin" >> $GITHUB_PATH
 
-- name: Set up cache
-  uses: actions/cache@v2
-  with:
-    path: .venv
-    key: venv-${{ matrix.python-version }}-${{ hashFiles('poetry.lock') }}
-    restore-keys: |
-      venv-${{ matrix.python-version }}-${{ hashFiles('poetry.lock') }}
-      venv-${{ matrix.python-version }}-
+      - name: Set up cache
+        uses: actions/cache@v2
+        with:
+          path: .venv
+          key: venv-${{ matrix.python-version }}-${{ hashFiles('poetry.lock') }}
+          restore-keys: |
+            venv-${{ matrix.python-version }}-${{ hashFiles('poetry.lock') }}
+            venv-${{ matrix.python-version }}-
 
-- name: Install dependencies
-  run: |
-    poetry config virtualenvs.in-project true
-    poetry install
-    poetry run pip install -U pip
+      - name: Install dependencies
+        run: |
+          poetry config virtualenvs.in-project true
+          poetry install
+          poetry run pip install -U pip
 
-- name: Run tests
-  run: |
-    poetry run flake8 .
-    # In order to make `exclude` option work, we need to separate the checks
-    # of returns and its tests into two separated commands
-    poetry run mypy --enable-error-code=unused-awaitable returns
-    poetry run mypy tests
-    # Different python versions are covered differently:
-    poetry run pytest returns docs/pages tests
-    poetry run doc8 -q docs
-    poetry run codespell returns tests docs typesafety README.md CONTRIBUTING.md CHANGELOG.md
-    poetry run poetry check
-    poetry run pip check
-    poetry run safety check --full-report
-    poetry run python -m slotscheck returns --verbose
-    # We do this to speed up the build:
-    poetry run pytest typesafety -p no:cov -o addopts="" --mypy-ini-file=setup.cfg
+      - name: Run tests
+        run: |
+          poetry run flake8 .
 
-- name: Upload coverage to Codecov
-  if: ${{ matrix.python-version }} == '3.8'
-  uses: codecov/codecov-action@v2.1.0
-  with:
-    file: ./coverage.xml
+          # In order to make `exclude` option work, we need to separate the checks
+          # of returns and its tests into two separated commands
+          poetry run mypy --enable-error-code=unused-awaitable returns
+          poetry run mypy tests
 
+          # Different python versions are covered differently:
+          poetry run pytest returns docs/pages tests
+          poetry run doc8 -q docs
+
+          poetry run codespell returns tests docs typesafety README.md CONTRIBUTING.md CHANGELOG.md
+
+          poetry run poetry check
+          poetry run pip check
+          poetry run safety check --full-report
+          poetry run python -m slotscheck returns --verbose
+
+          # We do this to speed up the build:
+          poetry run pytest typesafety -p no:cov -o addopts="" --mypy-ini-file=setup.cfg
+
+      - name: Upload coverage to Codecov
+        if: ${{ matrix.python-version }} == '3.8'
+        uses: codecov/codecov-action@v2.1.0
+        with:
+          file: ./coverage.xml
