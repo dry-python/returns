@@ -37,13 +37,15 @@ classifiers = [
 [tool.poetry.urls]
 "Funding" = "https://github.com/sponsors/dry-python"
 
-[tool.poetry.plugins]
-pytest11 = {version = "^0.14", marker = "returns"}
-hypothesis = {version = "^4.51", marker = "returns"}
+[tool.poetry.plugins.pytest11]
+returns = "returns.contrib.pytest.plugin"
+
+[tool.poetry.plugins.hypothesis]
+_ = "returns.contrib.hypothesis._entrypoint"
+
 
 [tool.poetry.dependencies]
 python = "^3.7"
-returns = "^0.20.0"
 
 typing-extensions = ">=4.0,<5.0"
 
