@@ -1747,21 +1747,22 @@ testing = ["fields", "hunter", "process-tests", "pytest-xdist", "six", "virtuale
 
 [[package]]
 name = "pytest-mypy-plugins"
-version = "1.10.1"
+version = "1.11.0"
 description = "pytest plugin for writing tests for mypy plugins"
 category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "pytest-mypy-plugins-1.10.1.tar.gz", hash = "sha256:1f258ccd784341dee93d4baaedafe715ead2a1f730c59282c45abd025612cf16"},
-    {file = "pytest_mypy_plugins-1.10.1-py3-none-any.whl", hash = "sha256:d32e26927bea6646cd1c79f7115cd6e9dcf583fa07d2ab6d4cbeb70bccb42942"},
+    {file = "pytest-mypy-plugins-1.11.0.tar.gz", hash = "sha256:dbd2a4ddf665cd68b185a0ad79ca1f18149b05952eb656249f0ca3129147d9ea"},
+    {file = "pytest_mypy_plugins-1.11.0-py3-none-any.whl", hash = "sha256:7f681c5dec7f95ab05c82b701d33d5d378bc24ce78a98db3b1a6ab15e1b5455f"},
 ]
 
 [package.dependencies]
 chevron = "*"
 decorator = "*"
 mypy = ">=0.970"
-pytest = ">=6.0.0"
+packaging = "*"
+pytest = ">=6.2.0"
 pyyaml = "*"
 regex = "*"
 
@@ -2708,4 +2709,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.7"
-content-hash = "f054eb724f5d22eec31321b5caa1b728a7487adbc4b91e3560864eb378bb21ce"
+content-hash = "af6dfb09d4c03845ea063503ee06af6e4e28b875247f16c710c05ee7273c049d"
