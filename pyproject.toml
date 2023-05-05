@@ -69,7 +69,7 @@ safety = "^2.3"
 pytest = "^7.3"
 pytest-cov = "^4.0"
 pytest-randomly = "^3.12"
-pytest-mypy-plugins = "^1.11.0"
+pytest-mypy-plugins = "^1.11.1"
 pytest-subtests = "^0.10"
 hypothesis = "^6.75"
 
