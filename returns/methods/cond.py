@@ -80,7 +80,7 @@ def internal_cond(
 
     if issubclass(container_type, DiverseFailableN):
         return container_type.from_failure(error_value)
-    return container_type.empty  # type: ignore
+    return container_type.empty
 
 
 #: Kinded version of :func:`~internal_cond`, use it to infer real return type.
