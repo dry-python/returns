@@ -70,7 +70,7 @@ pytest = "^7.3"
 pytest-cov = "^4.1"
 pytest-randomly = "^3.12"
 pytest-mypy-plugins = "^1.11.1"
-pytest-subtests = "^0.10"
+pytest-subtests = "^0.11"
 hypothesis = "^6.75"
 
 sphinx = "^5.2"
