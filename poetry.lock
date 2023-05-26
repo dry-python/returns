@@ -1014,14 +1014,14 @@ socks = ["socksio (>=1.0.0,<2.0.0)"]
 
 [[package]]
 name = "hypothesis"
-version = "6.75.2"
+version = "6.75.4"
 description = "A library for property-based testing"
 category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "hypothesis-6.75.2-py3-none-any.whl", hash = "sha256:29fee1fabf764eb021665d20e633ef7ba931c5841de20f9ff3e01e8a512d6a4d"},
-    {file = "hypothesis-6.75.2.tar.gz", hash = "sha256:50c270b38d724ce0fefa71b8e3511d123f7a31a9af9ea003447d4e1489292fbc"},
+    {file = "hypothesis-6.75.4-py3-none-any.whl", hash = "sha256:46759ad07de8ff26b11c48e0c4c9449b900f33ff0923fa44195813f74602792d"},
+    {file = "hypothesis-6.75.4.tar.gz", hash = "sha256:69364e655a121a87613c5d63894a2edaff20acbe49fba1c57a761def2a9d1317"},
 ]
 
 [package.dependencies]
