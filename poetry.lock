@@ -1451,14 +1451,14 @@ files = [
 
 [[package]]
 name = "nitpick"
-version = "0.33.1"
+version = "0.33.2"
 description = "Enforce the same settings across multiple language-independent projects"
 category = "dev"
 optional = false
 python-versions = ">=3.7,<4.0"
 files = [
-    {file = "nitpick-0.33.1-py3-none-any.whl", hash = "sha256:bc0fe670f77111b6205cc16d23ef541f087dd317e8b3c941f83f7913643d06cb"},
-    {file = "nitpick-0.33.1.tar.gz", hash = "sha256:859f7e1ab119d9d9405106f42872f17214f3f0030b76ea50d19fff3411ffc46e"},
+    {file = "nitpick-0.33.2-py3-none-any.whl", hash = "sha256:8b77d5968c36384c7a4cc957dc45c22bb8024e8cab83fb58fa7fbef45d3aae98"},
+    {file = "nitpick-0.33.2.tar.gz", hash = "sha256:e0f9f96128f390f95409a3d27fa922484e900ac8b974646b50ea4b8a3458cad7"},
 ]
 
 [package.dependencies]
@@ -2697,4 +2697,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.7"
-content-hash = "1dc04dae24af4df307e0690014a9af68528e487eff0349a5f4354aeb7ff08e1d"
+content-hash = "4eadb0c3e7726b5e1018f7534c6875d9c8c5bb22c46c0661101fcff157d6f14f"
