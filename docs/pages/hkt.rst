@@ -184,13 +184,13 @@ Let's see how it works:
 .. code:: python
 
   >>> from returns.primitives.hkt import Kind1
-  >>> from returns.interfaces.container import Container1
+  >>> from returns.interfaces.container import ContainerN
   >>> from typing import TypeVar
 
-  >>> T = TypeVar('T', bound=Container1)
+  >>> T = TypeVar('T', bound=ContainerN)
 
-  >>> def to_str(arg: Kind1[T, int]) -> Kind1[T, str]:
-  ...   ...
+  >>> def to_str(container: Kind1[T, int]) -> Kind1[T, str]:
+  ...     return container.map(str)
 
 Now, this will work almost correctly!
 Why almost? Because the revealed type will be ``Kind1``.
@@ -210,8 +210,8 @@ The final solution is to decorate ``to_str`` with ``@kinded``:
   >>> from returns.primitives.hkt import kinded
 
   >>> @kinded
-  ... def to_str(arg: Kind1[T, int]) -> Kind1[T, str]:
-  ...   ...
+  ... def to_str(container: Kind1[T, int]) -> Kind1[T, str]:
+  ...     return container.map(str)
 
 Now, it will be fully working:
 
@@ -222,7 +222,7 @@ Now, it will be fully working:
 
 And the thing about this approach is that it will be:
 
-1. Fully type-safe. It works with correct interface ``Container1``,
+1. Fully type-safe. It works with correct interface ``ContainerN``,
    returns the correct type, has correct type transformation
 2. Is opened for further extension and even custom types
 
