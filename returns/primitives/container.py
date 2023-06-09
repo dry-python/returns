@@ -58,9 +58,13 @@ class BaseContainer(Immutable, metaclass=ABCMeta):
 
     def __setstate__(self, state: _PickleState) -> None:
         """Loading state from pickled data."""
-        object.__setattr__(  # noqa: WPS609
-            self, '_inner_value', state['container_value'],
-        )
+        if isinstance(state, dict) and 'container_value' in state:
+            object.__setattr__(  # noqa: WPS609
+                self, '_inner_value', state['container_value'],
+            )
+        else:
+            # backward compatibility with 0.19.0 and earlier
+            object.__setattr__(self, '_inner_value', state)  # noqa: WPS609
 
 
 def container_equality(
