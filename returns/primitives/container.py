@@ -1,5 +1,5 @@
 from abc import ABCMeta
-from typing import Any, TypeVar
+from typing import Any, TypeVar, Union
 
 from typing_extensions import TypedDict
 
@@ -56,11 +56,15 @@ class BaseContainer(Immutable, metaclass=ABCMeta):
         """That's how this object will be pickled."""
         return {'container_value': self._inner_value}  # type: ignore
 
-    def __setstate__(self, state: _PickleState) -> None:
+    def __setstate__(self, state: Union[_PickleState, Any]) -> None:
         """Loading state from pickled data."""
-        object.__setattr__(  # noqa: WPS609
-            self, '_inner_value', state['container_value'],
-        )
+        if isinstance(state, dict) and 'container_value' in state:
+            object.__setattr__(  # noqa: WPS609
+                self, '_inner_value', state['container_value'],
+            )
+        else:
+            # backward compatibility with 0.19.0 and earlier
+            object.__setattr__(self, '_inner_value', state)  # noqa: WPS609
 
 
 def container_equality(

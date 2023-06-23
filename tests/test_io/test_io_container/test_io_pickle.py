@@ -9,5 +9,5 @@ def test_io_pickle():
 def test_io_pickle_restore():
     """Ensures that object can be restored."""
     container = IO(2)
-    container.__setstate__({'container_value': 1})  # type: ignore  # noqa: WPS609, E501
+    container.__setstate__({'container_value': 1})  # noqa: WPS609, E501
     assert container == IO(1)

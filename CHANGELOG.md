@@ -11,6 +11,7 @@ See [0Ver](https://0ver.org/).
 ### Bugfixes
 
 - Fixed HKT `to_str` example in documentation
+- Fixed backward deserialization compatibility for BaseContainer
 
 
 ## 0.20.0
