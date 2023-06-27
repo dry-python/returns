@@ -58,6 +58,7 @@ Supported features
   with ``flow`` function
 - ``pipe`` feature allows to write better typed functional pipelines
   with ``pipe`` function
+- ``do-notation`` feature allows using :ref:`do-notation`
 
 
 Further reading

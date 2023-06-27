@@ -42,29 +42,19 @@
 
 - case: modify_env2_requires_context
   disable_cache: false
-  skip: sys.version_info[:2] < (3, 8)
   main: |
     from returns.pointfree import modify_env2
     from returns.context import RequiresContext
 
-    x: RequiresContext[float, int]
-    reveal_type(modify_env2(int)(x))  # N: Revealed type is "returns.context.requires_context.RequiresContext[builtins.float, Union[builtins.str, builtins.bytes, builtins.bytearray, builtins.memoryview, array.array[Any], mmap.mmap, ctypes._CData, pickle.PickleBuffer, typing.SupportsInt, typing_extensions.SupportsIndex, _typeshed.SupportsTrunc]]"
+    class A: ...
+    def mod(arg: A) -> bool: ...
 
-
-- case: modify_env2_requires_context_py37
-  disable_cache: false
-  skip: sys.version_info[:2] >= (3, 8)
-  main: |
-    from returns.pointfree import modify_env2
-    from returns.context import RequiresContext
-
-    x: RequiresContext[float, int]
-    reveal_type(modify_env2(int)(x))  # N: Revealed type is "returns.context.requires_context.RequiresContext[builtins.float, Union[builtins.str, builtins.bytes, builtins.bytearray, builtins.memoryview, array.array[Any], mmap.mmap, ctypes._CData, typing.SupportsInt, typing_extensions.SupportsIndex, _typeshed.SupportsTrunc]]"
+    x: RequiresContext[float, bool]
+    reveal_type(modify_env2(mod)(x))  # N: Revealed type is "returns.context.requires_context.RequiresContext[builtins.float, main.A]"
 
 
 - case: modify_env2_custom_type
   disable_cache: false
-  skip: sys.version_info[:2] < (3, 8)
   main: |
     from typing import TypeVar
     from returns.interfaces.specific.reader import ReaderBased2
@@ -80,27 +70,8 @@
     ):
         ...
 
-    x: MyClass[float, int]
-    reveal_type(modify_env2(int)(x))  # N: Revealed type is "main.MyClass[builtins.float, Union[builtins.str, builtins.bytes, builtins.bytearray, builtins.memoryview, array.array[Any], mmap.mmap, ctypes._CData, pickle.PickleBuffer, typing.SupportsInt, typing_extensions.SupportsIndex, _typeshed.SupportsTrunc]]"
+    class A: ...
+    def mod(arg: A) -> bool: ...
 
-
-- case: modify_env2_custom_type_py37
-  disable_cache: false
-  skip: sys.version_info[:2] >= (3, 8)
-  main: |
-    from typing import TypeVar
-    from returns.interfaces.specific.reader import ReaderBased2
-    from returns.primitives.hkt import SupportsKind2
-    from returns.pointfree import modify_env2
-
-    _EnvType = TypeVar('_EnvType')
-    _ReturnType = TypeVar('_ReturnType')
-
-    class MyClass(
-        SupportsKind2['MyClass', _ReturnType, _EnvType],
-        ReaderBased2[_ReturnType, _EnvType],
-    ):
-        ...
-
-    x: MyClass[float, int]
-    reveal_type(modify_env2(int)(x))  # N: Revealed type is "main.MyClass[builtins.float, Union[builtins.str, builtins.bytes, builtins.bytearray, builtins.memoryview, array.array[Any], mmap.mmap, ctypes._CData, typing.SupportsInt, typing_extensions.SupportsIndex, _typeshed.SupportsTrunc]]"
+    x: MyClass[float, bool]
+    reveal_type(modify_env2(mod)(x))  # N: Revealed type is "main.MyClass[builtins.float, main.A]"
