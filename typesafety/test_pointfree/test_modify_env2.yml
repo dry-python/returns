@@ -58,8 +58,11 @@
     from returns.pointfree import modify_env2
     from returns.context import RequiresContext
 
-    x: RequiresContext[float, int]
-    reveal_type(modify_env2(int)(x))  # N: Revealed type is "returns.context.requires_context.RequiresContext[builtins.float, Union[builtins.str, builtins.bytes, builtins.bytearray, builtins.memoryview, array.array[Any], mmap.mmap, ctypes._CData, typing.SupportsInt, typing_extensions.SupportsIndex, _typeshed.SupportsTrunc]]"
+    class A: ...
+    def mod(arg: A) -> bool: ...
+
+    x: RequiresContext[float, bool]
+    reveal_type(modify_env2(mod)(x))  # N: Revealed type is "returns.context.requires_context.RequiresContext[builtins.float, main.A]"
 
 
 - case: modify_env2_custom_type
@@ -102,5 +105,8 @@
     ):
         ...
 
-    x: MyClass[float, int]
-    reveal_type(modify_env2(int)(x))  # N: Revealed type is "main.MyClass[builtins.float, Union[builtins.str, builtins.bytes, builtins.bytearray, builtins.memoryview, array.array[Any], mmap.mmap, ctypes._CData, typing.SupportsInt, typing_extensions.SupportsIndex, _typeshed.SupportsTrunc]]"
+    class A: ...
+    def mod(arg: A) -> bool: ...
+
+    x: MyClass[float, bool]
+    reveal_type(modify_env2(mod)(x))  # N: Revealed type is "main.MyClass[builtins.float, main.A]"
