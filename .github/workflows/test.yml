@@ -56,7 +56,7 @@ jobs:
         poetry run pip install -U pip
 
     - name: Run tests
-      if: ${{ matrix.task }} == 'tests'
+      if: matrix.task == 'tests'
       run: |
         poetry run flake8 .
 
@@ -77,13 +77,13 @@ jobs:
         poetry run python -m slotscheck returns --verbose
 
     - name: Run typesafety tests
-      if: ${{ matrix.task }} == 'typesafety'
+      if: matrix.task == 'typesafety'
       run: |
         # We do this to speed up the build:
         poetry run pytest typesafety -p no:cov -o addopts="" --mypy-ini-file=setup.cfg
 
     - name: Upload coverage to Codecov
-      if: ${{ matrix.task }} == 'tests' && ${{ matrix.python-version }} == 3.11
+      if: matrix.task == 'tests' && matrix.python-version == 3.11
       uses: codecov/codecov-action@v3
       with:
         file: ./coverage.xml
