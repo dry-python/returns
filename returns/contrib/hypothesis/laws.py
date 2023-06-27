@@ -164,13 +164,23 @@ def pure_functions() -> Iterator[None]:
             pure=True,
         )
 
-    used = types._global_type_lookup[Callable]  # type: ignore
-    st.register_type_strategy(Callable, factory)  # type: ignore
+    callable_type = _get_callable_type()
+    used = types._global_type_lookup[callable_type]
+    st.register_type_strategy(callable_type, factory)
 
     yield
 
-    types._global_type_lookup.pop(Callable)  # type: ignore
-    st.register_type_strategy(Callable, used)  # type: ignore
+    types._global_type_lookup.pop(callable_type)
+    st.register_type_strategy(callable_type, used)
+
+
+def _get_callable_type() -> Any:
+    # Helper to accommodate changes in `hypothesis@6.79.0`
+    if Callable in types._global_type_lookup:  # type: ignore
+        return Callable
+    elif Callable.__origin__ in types._global_type_lookup:  # type: ignore
+        return Callable.__origin__  # type: ignore
+    raise RuntimeError('Failed to find Callable type strategy')
 
 
 @contextmanager
