@@ -83,7 +83,7 @@ jobs:
         poetry run pytest typesafety -p no:cov -o addopts="" --mypy-ini-file=setup.cfg
 
     - name: Upload coverage to Codecov
-      if: matrix.task == 'tests' && matrix.python-version == 3.11
+      if: "matrix.task == 'tests' && matrix.python-version == 3.11"
       uses: codecov/codecov-action@v3
       with:
         file: ./coverage.xml
