@@ -183,7 +183,7 @@ def detach_callable(typ: CallableType) -> CallableType:  # noqa: C901, WPS210
                 values=var.values,
                 upper_bound=var.upper_bound,
                 variance=var.variance,
-                default=AnyType(TypeOfAny.implementation_artifact),
+                default=AnyType(TypeOfAny.from_omitted_generics),
             ),
         )
 
