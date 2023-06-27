@@ -6,6 +6,14 @@ incremental in minor, bugfixes only are patches.
 See [0Ver](https://0ver.org/).
 
 
+## 0.21.0
+
+### Features
+
+- Now requires `mypy>=1.4`
+- Adds `[compatible-mypy]` extra for installation
+
+
 ## 0.20.1
 
 ### Bugfixes
