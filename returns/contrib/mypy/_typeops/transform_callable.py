@@ -2,9 +2,9 @@ from typing import ClassVar, Dict, FrozenSet, List
 
 from mypy.nodes import ARG_OPT, ARG_POS, ARG_STAR, ARG_STAR2, ArgKind
 from mypy.typeops import get_type_vars
-from mypy.types import CallableType, FunctionLike, Overloaded
+from mypy.types import AnyType, CallableType, FunctionLike, Overloaded
 from mypy.types import Type as MypyType
-from mypy.types import TypeVarType
+from mypy.types import TypeOfAny, TypeVarType
 from typing_extensions import final
 
 from returns.contrib.mypy._structures.args import FuncArg
@@ -183,6 +183,7 @@ def detach_callable(typ: CallableType) -> CallableType:  # noqa: C901, WPS210
                 values=var.values,
                 upper_bound=var.upper_bound,
                 variance=var.variance,
+                default=AnyType(TypeOfAny.implementation_artifact),
             ),
         )
 
