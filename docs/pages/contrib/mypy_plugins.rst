@@ -15,7 +15,7 @@ You will need to install ``mypy`` separately.
 It is not bundled with ``returns``.
 
 To install any ``mypy`` plugin add it
-to the ``plugins`` section of the config file.
+to the ``plugins`` section of the config file (``setup.cfg`` or ``mypy.ini``):
 
 .. code:: ini
 
@@ -23,7 +23,7 @@ to the ``plugins`` section of the config file.
   plugins =
     returns.contrib.mypy.returns_plugin
 
-Or
+Or in ``pyproject.toml``:
 
 .. code:: toml
 
