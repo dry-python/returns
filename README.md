@@ -36,20 +36,26 @@ Make your functions return something meaningful, typed, and safe!
 pip install returns
 ```
 
-You are also required to [configure](https://returns.readthedocs.io/en/latest/pages/container.html#type-safety)
-`mypy` correctly and install our plugin
-to fix [this existing issue](https://github.com/python/mypy/issues/3157):
+You can also install `returns` with the latest supported `mypy` version:
 
 ```bash
 pip install returns[compatible-mypy]
 ```
-and
+
+You would also need to configure our [`mypy` plugin](https://returns.readthedocs.io/en/latest/pages/contrib/mypy_plugins.html):
 
 ```ini
 # In setup.cfg or mypy.ini:
 [mypy]
 plugins =
   returns.contrib.mypy.returns_plugin
+```
+
+or:
+
+```toml
+[tool.mypy]
+plugins = ["returns.contrib.mypy.returns_plugin"]
 ```
 
 We also recommend to use the same `mypy` settings [we use](https://github.com/wemake-services/wemake-python-styleguide/blob/master/styles/mypy.toml).
