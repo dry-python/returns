@@ -23,6 +23,13 @@ to the ``plugins`` section of the config file.
   plugins =
     returns.contrib.mypy.returns_plugin
 
+Or
+
+.. code:: toml
+
+  [tool.mypy]
+  plugins = ["returns.contrib.mypy.returns_plugin"]
+
 We recommend to always add our plugin as the first one in chain.
 
 
