@@ -56,17 +56,6 @@ files = [
 ]
 
 [[package]]
-name = "async-generator"
-version = "1.10"
-description = "Async generators and context managers for Python 3.5+"
-optional = false
-python-versions = ">=3.5"
-files = [
-    {file = "async_generator-1.10-py3-none-any.whl", hash = "sha256:01c7bf666359b4967d2cda0000cc2e4af16a0ae098cbffcb8472fb9e8ad6585b"},
-    {file = "async_generator-1.10.tar.gz", hash = "sha256:6ebb3d106c12920aaae42ccb6f787ef5eefdcdd166ea3d628fa8476abe712144"},
-]
-
-[[package]]
 name = "attrs"
 version = "23.1.0"
 description = "Classes Without Boilerplate"
@@ -2409,18 +2398,17 @@ files = [
 
 [[package]]
 name = "trio"
-version = "0.22.0"
+version = "0.22.1"
 description = "A friendly Python library for async concurrency and I/O"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "trio-0.22.0-py3-none-any.whl", hash = "sha256:f1dd0780a89bfc880c7c7994519cb53f62aacb2c25ff487001c0052bd721cdf0"},
-    {file = "trio-0.22.0.tar.gz", hash = "sha256:ce68f1c5400a47b137c5a4de72c7c901bd4e7a24fbdebfe9b41de8c6c04eaacf"},
+    {file = "trio-0.22.1-py3-none-any.whl", hash = "sha256:1270da4a4a33caf33f85c6a255f2ef5f71629a3ec9aea31a052062b673ae58d3"},
+    {file = "trio-0.22.1.tar.gz", hash = "sha256:eb5f641b313eb502a16de176d84cecd9ccf2394a7c8655d2297398376bb15eca"},
 ]
 
 [package.dependencies]
-async-generator = ">=1.9"
-attrs = ">=19.2.0"
+attrs = ">=20.1.0"
 cffi = {version = ">=1.14", markers = "os_name == \"nt\" and implementation_name != \"pypy\""}
 exceptiongroup = {version = ">=1.0.0rc9", markers = "python_version < \"3.11\""}
 idna = "*"
