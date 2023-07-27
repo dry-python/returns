@@ -80,7 +80,7 @@ sphinx-typlog-theme = "^0.8"
 sphinx-hoverxref = "^1.3"
 doc8 = "^1.0"
 m2r2 = "^0.3"
-tomlkit = "^0.11"
+tomlkit = "^0.12"
 
 [tool.poetry.extras]
 compatible-mypy = ["mypy"]
