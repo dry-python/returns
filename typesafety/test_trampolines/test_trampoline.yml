@@ -1,0 +1,47 @@
+- case: trampoline_missing_args
+  disable_cache: false
+  main: |
+    from typing import List, Union
+    from returns.trampolines import Trampoline, trampoline
+
+    @trampoline
+    def _accumulate(
+        numbers: List[int],
+        acc: int = 0,
+    ) -> Union[int, Trampoline[int]]:
+        return Trampoline(_accumulate)
+  out: |
+    main:9: error: Missing positional argument "numbers" in call to "Trampoline"  [call-arg]
+
+
+- case: trampoline_wrong_args
+  disable_cache: false
+  main: |
+    from typing import List, Union
+    from returns.trampolines import Trampoline, trampoline
+
+    @trampoline
+    def _accumulate(
+        numbers: List[int],
+        acc: int = 0,
+    ) -> Union[int, Trampoline[int]]:
+        return Trampoline(_accumulate, ['a'], 'b')
+  out: |
+    main:9: error: List item 0 has incompatible type "str"; expected "int"  [list-item]
+    main:9: error: Argument 3 to "Trampoline" has incompatible type "str"; expected "int"  [arg-type]
+
+
+- case: trampoline_return_type
+  disable_cache: false
+  main: |
+    from typing import List, Union
+    from returns.trampolines import Trampoline, trampoline
+
+    @trampoline
+    def _accumulate(
+        numbers: List[int],
+        acc: int = 0,
+    ) -> Union[int, Trampoline[int]]:
+        return Trampoline(_accumulate, [1], 2)
+
+    reveal_type(_accumulate([1, 2]))  # N: Revealed type is "builtins.int"

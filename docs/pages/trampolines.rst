@@ -33,6 +33,10 @@ Example:
   >>> assert accumulate([1, 2]) == 3
   >>> assert accumulate([1, 2, 3]) == 6
 
+The following function is still fully type-safe:
+- ``Trampoline`` object uses ``ParamSpec`` to be sure that passed arguments are correct
+- Final return type of the function is narrowed to contain only an original type (without ``Trampoline`` implementation detail)
+
 API Reference
 -------------
 
