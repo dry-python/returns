@@ -6,6 +6,14 @@ incremental in minor, bugfixes only are patches.
 See [0Ver](https://0ver.org/).
 
 
+## 0.22.0 WIP
+
+### Features
+
+- *Breaking*: Drops `python3.7` support
+- Adds `trampolines` support
+
+
 ## 0.21.0
 
 ### Features
