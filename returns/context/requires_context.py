@@ -1,8 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Callable, ClassVar, TypeVar
-
-from typing_extensions import final
+from typing import TYPE_CHECKING, Any, Callable, ClassVar, TypeVar, final
 
 from returns.functions import identity
 from returns.future import FutureResult
@@ -153,7 +151,7 @@ class RequiresContext(  # type: ignore[type-var]
     def apply(
         self,
         container: Kind2[
-            'RequiresContext',
+            RequiresContext,
             Callable[[_ReturnType], _NewReturnType],
             _EnvType,
         ],
@@ -177,7 +175,7 @@ class RequiresContext(  # type: ignore[type-var]
         self,
         function: Callable[
             [_ReturnType],
-            Kind2['RequiresContext', _NewReturnType, _EnvType],
+            Kind2[RequiresContext, _NewReturnType, _EnvType],
         ],
     ) -> RequiresContext[_NewReturnType, _EnvType]:
         """
@@ -355,7 +353,7 @@ class RequiresContext(  # type: ignore[type-var]
     @classmethod
     def from_requires_context_result(
         cls,
-        inner_value: 'RequiresContextResult[_ValueType, _ErrorType, _EnvType]',
+        inner_value: RequiresContextResult[_ValueType, _ErrorType, _EnvType],
     ) -> RequiresContext[Result[_ValueType, _ErrorType], _EnvType]:
         """
         Typecasts ``RequiresContextResult`` to ``RequiresContext`` instance.
@@ -381,7 +379,7 @@ class RequiresContext(  # type: ignore[type-var]
     def from_requires_context_ioresult(
         cls,
         inner_value:
-            'RequiresContextIOResult[_ValueType, _ErrorType, _EnvType]',
+            RequiresContextIOResult[_ValueType, _ErrorType, _EnvType],
     ) -> RequiresContext[IOResult[_ValueType, _ErrorType], _EnvType]:
         """
         Typecasts ``RequiresContextIOResult`` to ``RequiresContext`` instance.
@@ -406,8 +404,9 @@ class RequiresContext(  # type: ignore[type-var]
     @classmethod
     def from_requires_context_future_result(
         cls,
-        inner_value:
-            'RequiresContextFutureResult[_ValueType, _ErrorType, _EnvType]',
+        inner_value: RequiresContextFutureResult[
+            _ValueType, _ErrorType, _EnvType,
+        ],
     ) -> RequiresContext[FutureResult[_ValueType, _ErrorType], _EnvType]:
         """
         Typecasts ``RequiresContextIOResult`` to ``RequiresContext`` instance.

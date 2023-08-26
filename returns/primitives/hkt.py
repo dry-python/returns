@@ -1,6 +1,12 @@
-from typing import TYPE_CHECKING, Any, Callable, Generic, NoReturn, TypeVar
-
-from typing_extensions import Protocol
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Callable,
+    Generic,
+    NoReturn,
+    Protocol,
+    TypeVar,
+)
 
 _InstanceType = TypeVar('_InstanceType', covariant=True)
 _TypeArgType1 = TypeVar('_TypeArgType1', covariant=True)

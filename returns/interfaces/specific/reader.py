@@ -33,11 +33,9 @@ from typing import (
     ClassVar,
     Generic,
     Sequence,
-    Type,
     TypeVar,
+    final,
 )
-
-from typing_extensions import final
 
 from returns.interfaces.container import Container2, Container3
 from returns.primitives.hkt import Kind2, Kind3
@@ -100,7 +98,7 @@ class ReaderLike2(Container2[_FirstType, _SecondType]):
 
     @property
     @abstractmethod
-    def no_args(self: _ReaderLike2Type) -> 'NoDeps':
+    def no_args(self: _ReaderLike2Type) -> NoDeps:
         """Is required to call ``Reader`` with no explicit arguments."""
 
     @abstractmethod
@@ -108,7 +106,7 @@ class ReaderLike2(Container2[_FirstType, _SecondType]):
         self: _ReaderLike2Type,
         function: Callable[
             [_FirstType],
-            'RequiresContext[_UpdatedType, _SecondType]',
+            RequiresContext[_UpdatedType, _SecondType],
         ],
     ) -> Kind2[_ReaderLike2Type, _UpdatedType, _SecondType]:
         """Allows to apply a wrapped function over a ``Reader`` container."""
@@ -123,15 +121,15 @@ class ReaderLike2(Container2[_FirstType, _SecondType]):
     @classmethod
     @abstractmethod
     def ask(
-        cls: Type[_ReaderLike2Type],
+        cls: type[_ReaderLike2Type],
     ) -> Kind2[_ReaderLike2Type, _SecondType, _SecondType]:
         """Returns the dependencies inside the container."""
 
     @classmethod
     @abstractmethod
     def from_context(
-        cls: Type[_ReaderLike2Type],  # noqa: N805
-        inner_value: 'RequiresContext[_ValueType, _EnvType]',
+        cls: type[_ReaderLike2Type],  # noqa: N805
+        inner_value: RequiresContext[_ValueType, _EnvType],
     ) -> Kind2[_ReaderLike2Type, _ValueType, _EnvType]:
         """Unit method to create new containers from successful ``Reader``."""
 
@@ -165,7 +163,7 @@ class ReaderLike3(Container3[_FirstType, _SecondType, _ThirdType]):
 
     @property
     @abstractmethod
-    def no_args(self: _ReaderLike3Type) -> 'NoDeps':
+    def no_args(self: _ReaderLike3Type) -> NoDeps:
         """Is required to call ``Reader`` with no explicit arguments."""
 
     @abstractmethod
@@ -173,7 +171,7 @@ class ReaderLike3(Container3[_FirstType, _SecondType, _ThirdType]):
         self: _ReaderLike3Type,
         function: Callable[
             [_FirstType],
-            'RequiresContext[_UpdatedType, _ThirdType]',
+            RequiresContext[_UpdatedType, _ThirdType],
         ],
     ) -> Kind3[_ReaderLike3Type, _UpdatedType, _SecondType, _ThirdType]:
         """Allows to apply a wrapped function over a ``Reader`` container."""
@@ -188,15 +186,15 @@ class ReaderLike3(Container3[_FirstType, _SecondType, _ThirdType]):
     @classmethod
     @abstractmethod
     def ask(
-        cls: Type[_ReaderLike3Type],
+        cls: type[_ReaderLike3Type],
     ) -> Kind3[_ReaderLike3Type, _ThirdType, _SecondType, _ThirdType]:
         """Returns the dependencies inside the container."""
 
     @classmethod
     @abstractmethod
     def from_context(
-        cls: Type[_ReaderLike3Type],  # noqa: N805
-        inner_value: 'RequiresContext[_ValueType, _EnvType]',
+        cls: type[_ReaderLike3Type],  # noqa: N805
+        inner_value: RequiresContext[_ValueType, _EnvType],
     ) -> Kind3[_ReaderLike3Type, _ValueType, _SecondType, _EnvType]:
         """Unit method to create new containers from successful ``Reader``."""
 

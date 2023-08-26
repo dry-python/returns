@@ -9,7 +9,7 @@ Use this type to mark that this specific async opetaion can fail.
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import TYPE_CHECKING, Awaitable, Callable, NoReturn, Type, TypeVar
+from typing import TYPE_CHECKING, Awaitable, Callable, NoReturn, TypeVar
 
 from returns.interfaces.specific import future, ioresult
 from returns.primitives.hkt import KindN
@@ -48,7 +48,7 @@ class FutureResultLikeN(
         self: _FutureResultLikeType,
         function: Callable[
             [_FirstType],
-            'FutureResult[_UpdatedType, _SecondType]',
+            FutureResult[_UpdatedType, _SecondType],
         ],
     ) -> KindN[_FutureResultLikeType, _UpdatedType, _SecondType, _ThirdType]:
         """Allows to bind ``FutureResult`` functions over a container."""
@@ -58,7 +58,7 @@ class FutureResultLikeN(
         self: _FutureResultLikeType,
         function: Callable[
             [_FirstType],
-            Awaitable['FutureResult[_UpdatedType, _SecondType]'],
+            Awaitable[FutureResult[_UpdatedType, _SecondType]],
         ],
     ) -> KindN[_FutureResultLikeType, _UpdatedType, _SecondType, _ThirdType]:
         """Allows to bind async ``FutureResult`` functions over container."""
@@ -66,15 +66,15 @@ class FutureResultLikeN(
     @classmethod
     @abstractmethod
     def from_failed_future(
-        cls: Type[_FutureResultLikeType],  # noqa: N805
-        inner_value: 'Future[_ErrorType]',
+        cls: type[_FutureResultLikeType],  # noqa: N805
+        inner_value: Future[_ErrorType],
     ) -> KindN[_FutureResultLikeType, _FirstType, _ErrorType, _ThirdType]:
         """Creates new container from a failed ``Future``."""
 
     @classmethod
     def from_future_result(
-        cls: Type[_FutureResultLikeType],  # noqa: N805
-        inner_value: 'FutureResult[_ValueType, _ErrorType]',
+        cls: type[_FutureResultLikeType],  # noqa: N805
+        inner_value: FutureResult[_ValueType, _ErrorType],
     ) -> KindN[_FutureResultLikeType, _ValueType, _ErrorType, _ThirdType]:
         """Creates container from ``FutureResult`` instance."""
 

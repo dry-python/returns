@@ -84,8 +84,7 @@
 - case: result_inheritance_missing
   disable_cache: false
   main: |
-    from typing import TypeVar
-    from typing_extensions import final
+    from typing import TypeVar, final
     from returns.interfaces.specific.result import ResultLike2
     from returns.primitives.hkt import SupportsKind2
 

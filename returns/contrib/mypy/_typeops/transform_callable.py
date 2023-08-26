@@ -1,11 +1,10 @@
-from typing import ClassVar, Dict, FrozenSet, List
+from typing import ClassVar, Dict, FrozenSet, List, final
 
 from mypy.nodes import ARG_OPT, ARG_POS, ARG_STAR, ARG_STAR2, ArgKind
 from mypy.typeops import get_type_vars
 from mypy.types import AnyType, CallableType, FunctionLike, Overloaded
 from mypy.types import Type as MypyType
 from mypy.types import TypeOfAny, TypeVarType
-from typing_extensions import final
 
 from returns.contrib.mypy._structures.args import FuncArg
 

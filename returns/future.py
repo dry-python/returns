@@ -8,9 +8,10 @@ from typing import (
     Coroutine,
     Generator,
     TypeVar,
+    final,
 )
 
-from typing_extensions import ParamSpec, final
+from typing_extensions import ParamSpec
 
 from returns._internal.futures import _future, _future_result
 from returns.interfaces.specific.future import FutureBased1

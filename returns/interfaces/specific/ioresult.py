@@ -7,7 +7,7 @@ It is a base interface for both sync and async ``IO`` stacks.
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import TYPE_CHECKING, Callable, NoReturn, Type, TypeVar
+from typing import TYPE_CHECKING, Callable, NoReturn, TypeVar
 
 from returns.interfaces.specific import io, result
 from returns.primitives.hkt import KindN
@@ -42,7 +42,7 @@ class IOResultLikeN(
     @abstractmethod
     def bind_ioresult(
         self: _IOResultLikeType,
-        function: Callable[[_FirstType], 'IOResult[_UpdatedType, _SecondType]'],
+        function: Callable[[_FirstType], IOResult[_UpdatedType, _SecondType]],
     ) -> KindN[_IOResultLikeType, _UpdatedType, _SecondType, _ThirdType]:
         """Runs ``IOResult`` returning function over a container."""
 
@@ -50,7 +50,7 @@ class IOResultLikeN(
     def compose_result(
         self: _IOResultLikeType,
         function: Callable[
-            ['Result[_FirstType, _SecondType]'],
+            [Result[_FirstType, _SecondType]],
             KindN[_IOResultLikeType, _UpdatedType, _SecondType, _ThirdType],
         ],
     ) -> KindN[_IOResultLikeType, _UpdatedType, _SecondType, _ThirdType]:
@@ -59,16 +59,16 @@ class IOResultLikeN(
     @classmethod
     @abstractmethod
     def from_ioresult(
-        cls: Type[_IOResultLikeType],  # noqa: N805
-        inner_value: 'IOResult[_ValueType, _ErrorType]',
+        cls: type[_IOResultLikeType],  # noqa: N805
+        inner_value: IOResult[_ValueType, _ErrorType],
     ) -> KindN[_IOResultLikeType, _ValueType, _ErrorType, _ThirdType]:
         """Unit method to create new containers from ``IOResult`` type."""
 
     @classmethod
     @abstractmethod
     def from_failed_io(
-        cls: Type[_IOResultLikeType],  # noqa: N805
-        inner_value: 'IO[_ErrorType]',
+        cls: type[_IOResultLikeType],  # noqa: N805
+        inner_value: IO[_ErrorType],
     ) -> KindN[_IOResultLikeType, _FirstType, _ErrorType, _ThirdType]:
         """Unit method to create new containers from failed ``IO``."""
 

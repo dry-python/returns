@@ -1,7 +1,5 @@
 from abc import abstractmethod
-from typing import ClassVar, NoReturn, Sequence, TypeVar
-
-from typing_extensions import final
+from typing import ClassVar, NoReturn, Sequence, TypeVar, final
 
 from returns.interfaces import bimappable
 from returns.primitives.asserts import assert_equal

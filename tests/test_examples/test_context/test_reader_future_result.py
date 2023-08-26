@@ -1,8 +1,8 @@
-from typing import Sequence, cast
+from typing import Final, Sequence, cast
 
 import anyio  # you would need to `pip install anyio`
 import httpx  # you would need to `pip install httpx`
-from typing_extensions import Final, TypedDict
+from typing_extensions import TypedDict
 
 from returns.context import RequiresContextFutureResultE
 from returns.functions import tap
@@ -12,12 +12,13 @@ from returns.pipeline import managed
 from returns.result import ResultE, safe
 
 _URL: Final = 'https://jsonplaceholder.typicode.com/posts/{0}'
-_Post = TypedDict('_Post', {
-    'id': int,
-    'userId': int,
-    'title': str,
-    'body': str,
-})
+
+
+class _Post(TypedDict):
+    id: int
+    user_id: int
+    title: str
+    body: str
 
 
 def _close(

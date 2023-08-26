@@ -17,7 +17,7 @@ _IOResultLikeKind = TypeVar('_IOResultLikeKind', bound=IOResultLikeN)
 
 
 def bind_ioresult(
-    function: Callable[[_FirstType], 'IOResult[_UpdatedType, _SecondType]'],
+    function: Callable[[_FirstType], IOResult[_UpdatedType, _SecondType]],
 ) -> Kinded[Callable[
     [KindN[_IOResultLikeKind, _FirstType, _SecondType, _ThirdType]],
     KindN[_IOResultLikeKind, _UpdatedType, _SecondType, _ThirdType],

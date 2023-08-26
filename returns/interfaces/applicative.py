@@ -1,7 +1,5 @@
 from abc import abstractmethod
-from typing import Callable, ClassVar, NoReturn, Sequence, Type, TypeVar
-
-from typing_extensions import final
+from typing import Callable, ClassVar, NoReturn, Sequence, Type, TypeVar, final
 
 from returns.functions import compose, identity
 from returns.interfaces import mappable

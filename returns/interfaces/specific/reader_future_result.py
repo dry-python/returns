@@ -7,11 +7,9 @@ from typing import (
     Callable,
     ClassVar,
     Sequence,
-    Type,
     TypeVar,
+    final,
 )
-
-from typing_extensions import final
 
 from returns.interfaces.specific import future_result, reader, reader_ioresult
 from returns.primitives.asserts import assert_equal
@@ -60,7 +58,7 @@ class ReaderFutureResultLikeN(
         self: _ReaderFutureResultLikeType,
         function: Callable[
             [_FirstType],
-            'ReaderFutureResult[_UpdatedType, _SecondType, _ThirdType]',
+            ReaderFutureResult[_UpdatedType, _SecondType, _ThirdType],
         ],
     ) -> KindN[
         _ReaderFutureResultLikeType,
@@ -76,7 +74,7 @@ class ReaderFutureResultLikeN(
         function: Callable[
             [_FirstType],
             Awaitable[
-                'ReaderFutureResult[_UpdatedType, _SecondType, _ThirdType]',
+                ReaderFutureResult[_UpdatedType, _SecondType, _ThirdType],
             ],
         ],
     ) -> KindN[
@@ -90,8 +88,8 @@ class ReaderFutureResultLikeN(
     @classmethod
     @abstractmethod
     def from_future_result_context(
-        cls: Type[_ReaderFutureResultLikeType],  # noqa: N805
-        inner_value: 'ReaderFutureResult[_ValueType, _ErrorType, _EnvType]',
+        cls: type[_ReaderFutureResultLikeType],  # noqa: N805
+        inner_value: ReaderFutureResult[_ValueType, _ErrorType, _EnvType],
     ) -> KindN[_ReaderFutureResultLikeType, _ValueType, _ErrorType, _EnvType]:
         """Unit method to create new containers from ``ReaderFutureResult``."""
 

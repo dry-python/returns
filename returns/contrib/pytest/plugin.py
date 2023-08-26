@@ -3,11 +3,20 @@ import sys
 from contextlib import ExitStack, contextmanager
 from functools import partial, wraps
 from types import FrameType, MappingProxyType
-from typing import TYPE_CHECKING, Any, Callable, Dict, Iterator, TypeVar, Union
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Callable,
+    Dict,
+    Final,
+    Iterator,
+    TypeVar,
+    Union,
+    final,
+)
 from unittest import mock
 
 import pytest
-from typing_extensions import Final, final
 
 if TYPE_CHECKING:
     from returns.interfaces.specific.result import ResultLikeN

@@ -11,7 +11,7 @@ class UnwrapFailedError(Exception):
 
     __slots__ = ('halted_container',)
 
-    def __init__(self, container: 'Unwrappable') -> None:
+    def __init__(self, container: Unwrappable) -> None:
         """
         Saves halted container in the inner state.
 

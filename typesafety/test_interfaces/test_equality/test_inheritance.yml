@@ -51,8 +51,7 @@
   main: |
     from returns.primitives.hkt import SupportsKind1
     from returns.interfaces.equable import Equable
-    from typing import TypeVar
-    from typing_extensions import final
+    from typing import TypeVar, final
 
     T = TypeVar('T')
 
@@ -71,8 +70,7 @@
   main: |
     from returns.primitives.hkt import SupportsKind1
     from returns.interfaces.equable import Equable
-    from typing import TypeVar
-    from typing_extensions import final
+    from typing import TypeVar, final
 
     T = TypeVar('T')
 

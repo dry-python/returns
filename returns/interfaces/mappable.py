@@ -1,7 +1,13 @@
 from abc import abstractmethod
-from typing import Callable, ClassVar, Generic, NoReturn, Sequence, TypeVar
-
-from typing_extensions import final
+from typing import (
+    Callable,
+    ClassVar,
+    Generic,
+    NoReturn,
+    Sequence,
+    TypeVar,
+    final,
+)
 
 from returns.functions import compose, identity
 from returns.primitives.asserts import assert_equal

@@ -1,7 +1,5 @@
 from abc import abstractmethod
-from typing import Callable, ClassVar, NoReturn, Sequence, Type, TypeVar
-
-from typing_extensions import final
+from typing import Callable, ClassVar, NoReturn, Sequence, Type, TypeVar, final
 
 from returns.interfaces import container as _container
 from returns.interfaces import lashable, swappable

@@ -1,8 +1,7 @@
 - case: bimappable_inheritance_missing
   disable_cache: false
   main: |
-    from typing import TypeVar
-    from typing_extensions import final
+    from typing import TypeVar, final
     from returns.interfaces.bimappable import BiMappable2
     from returns.primitives.hkt import SupportsKind2
 

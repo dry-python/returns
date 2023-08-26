@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Callable, List, Type, TypeVar
+from typing import TYPE_CHECKING, Any, Callable, TypeVar
 
 from hypothesis import strategies as st
 
@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 
 
 def strategy_from_container(
-    container_type: Type['Lawful'],
+    container_type: type[Lawful],
     *,
     use_init: bool = False,
 ) -> Callable[[type], st.SearchStrategy]:
@@ -37,7 +37,7 @@ def strategy_from_container(
     def factory(type_: type) -> st.SearchStrategy:
         value_type, error_type = _get_type_vars(type_)
 
-        strategies: List[st.SearchStrategy[Any]] = []
+        strategies: list[st.SearchStrategy[Any]] = []
         if use_init and getattr(container_type, '__init__', None):
             strategies.append(st.builds(container_type))
         if issubclass(container_type, ApplicativeN):

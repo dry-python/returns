@@ -1,7 +1,7 @@
 from functools import wraps
-from typing import Callable, Generic, TypeVar, Union
+from typing import Callable, Generic, TypeVar, Union, final
 
-from typing_extensions import ParamSpec, final
+from typing_extensions import ParamSpec
 
 _ReturnType = TypeVar('_ReturnType')
 _FuncParams = ParamSpec('_FuncParams')

@@ -21,8 +21,7 @@
 - case: reader_result_based_inheritance_missing
   disable_cache: false
   main: |
-    from typing import TypeVar
-    from typing_extensions import final
+    from typing import TypeVar, final
     from returns.interfaces.specific.reader_result import ReaderResultBased3
     from returns.primitives.hkt import SupportsKind3
 

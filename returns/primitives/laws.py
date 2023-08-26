@@ -1,6 +1,13 @@
-from typing import Callable, ClassVar, Dict, Generic, Sequence, Type, TypeVar
-
-from typing_extensions import final
+from typing import (
+    Callable,
+    ClassVar,
+    Dict,
+    Generic,
+    Sequence,
+    Type,
+    TypeVar,
+    final,
+)
 
 from returns.primitives.types import Immutable
 

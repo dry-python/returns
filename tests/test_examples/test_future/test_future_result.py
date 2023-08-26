@@ -1,20 +1,21 @@
 import asyncio  # we use `asyncio` only as an example, you can use any io lib
-from typing import Sequence, cast
+from typing import Final, Sequence, cast
 
 import httpx  # you would need to `pip install httpx`
-from typing_extensions import Final, TypedDict
+from typing_extensions import TypedDict
 
 from returns.future import FutureResultE, future_safe
 from returns.io import IOResultE
 from returns.iterables import Fold
 
 _URL: Final = 'https://jsonplaceholder.typicode.com/posts/{0}'
-_Post = TypedDict('_Post', {
-    'id': int,
-    'userId': int,
-    'title': str,
-    'body': str,
-})
+
+
+class _Post(TypedDict):
+    id: int
+    user_id: int
+    title: str
+    body: str
 
 
 @future_safe

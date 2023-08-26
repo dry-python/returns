@@ -1,11 +1,10 @@
 import sys
 from pathlib import Path
 from types import MappingProxyType
-from typing import Optional
+from typing import Final, Optional
 
 from _pytest.config import Config
 from py import path as pypath
-from typing_extensions import Final
 
 # See https://github.com/HypothesisWorks/hypothesis/pull/2567
 pytest_plugins = ['hypothesis.extra.pytestplugin']

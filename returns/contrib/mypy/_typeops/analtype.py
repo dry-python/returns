@@ -1,11 +1,11 @@
 from types import MappingProxyType
-from typing import List, Optional, overload
+from typing import Final, List, Optional, overload
 
 from mypy.checkmember import analyze_member_access
 from mypy.nodes import ARG_NAMED, ARG_OPT
 from mypy.types import CallableType, FunctionLike
 from mypy.types import Type as MypyType
-from typing_extensions import Final, Literal
+from typing_extensions import Literal
 
 from returns.contrib.mypy._structures.args import FuncArg
 from returns.contrib.mypy._structures.types import CallableContext

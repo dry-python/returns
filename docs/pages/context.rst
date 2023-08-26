@@ -119,7 +119,7 @@ Let's see how our code changes:
 
   # Somewhere in your `words_app/logic.py`:
 
-  from typing_extensions import Protocol
+  from typing import Protocol
   from returns.context import RequiresContext
 
   class _Deps(Protocol):  # we rely on abstractions, not direct values or types

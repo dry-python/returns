@@ -1,7 +1,5 @@
 from abc import abstractmethod
-from typing import Callable, NoReturn, Tuple, Type, TypeVar
-
-from typing_extensions import final
+from typing import Callable, NoReturn, Tuple, Type, TypeVar, final
 
 from returns.interfaces import bindable, equable, lashable, swappable
 from returns.primitives.container import BaseContainer, container_equality
