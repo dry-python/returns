@@ -71,7 +71,7 @@
     ):
         ...
   out: |
-    main:11: error: Final class main.MyClass has abstract attributes "apply", "ask", "bind", "bind_context", "from_context", "from_value", "map", "modify_env", "no_args"  [misc]
+    main:10: error: Final class main.MyClass has abstract attributes "apply", "ask", "bind", "bind_context", "from_context", "from_value", "map", "modify_env", "no_args"  [misc]
 
 
 - case: reader_inheritance_wrong

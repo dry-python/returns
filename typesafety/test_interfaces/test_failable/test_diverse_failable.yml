@@ -68,7 +68,7 @@
     ):
         ...
   out: |
-    main:10: error: Final class main.MyClass has abstract attributes "alt", "apply", "bind", "from_failure", "from_value", "lash", "map", "swap"  [misc]
+    main:9: error: Final class main.MyClass has abstract attributes "alt", "apply", "bind", "from_failure", "from_value", "lash", "map", "swap"  [misc]
 
 
 - case: diverse_failable_inheritance_wrong2

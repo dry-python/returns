@@ -36,7 +36,7 @@
     ):
         ...
   out: |
-    main:11: error: Final class main.MyClass has abstract attributes "__call__", "alt", "apply", "ask", "bind", "bind_context", "bind_context_ioresult", "bind_context_result", "bind_io", "bind_ioresult", "bind_result", "compose_result", "from_context", "from_failed_context", "from_failed_io", "from_failure", "from_io", "from_ioresult", "from_ioresult_context", "from_result", "from_result_context", "from_value", "lash", "map", "modify_env", "no_args", "swap"  [misc]
+    main:10: error: Final class main.MyClass has abstract attributes "__call__", "alt", "apply", "ask", "bind", "bind_context", "bind_context_ioresult", "bind_context_result", "bind_io", "bind_ioresult", "bind_result", "compose_result", "from_context", "from_failed_context", "from_failed_io", "from_failure", "from_io", "from_ioresult", "from_ioresult_context", "from_result", "from_result_context", "from_value", "lash", "map", "modify_env", "no_args", "swap"  [misc]
 
 
 - case: reader_ioresult_based_inheritance_wrong

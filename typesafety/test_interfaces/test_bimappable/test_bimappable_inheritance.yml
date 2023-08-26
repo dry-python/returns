@@ -12,4 +12,4 @@
     class MyClass(SupportsKind2['MyClass', V, T], BiMappable2[V, T]):
         ...
   out: |
-    main:10: error: Final class main.MyClass has abstract attributes "alt", "map"  [misc]
+    main:9: error: Final class main.MyClass has abstract attributes "alt", "map"  [misc]

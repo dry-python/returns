@@ -80,7 +80,7 @@
     class MyClass(SupportsKind1['MyClass', V], Applicative1[V]):
         ...
   out: |
-    main:9: error: Final class main.MyClass has abstract attributes "apply", "from_value", "map"  [misc]
+    main:8: error: Final class main.MyClass has abstract attributes "apply", "from_value", "map"  [misc]
 
 
 - case: applicative_inheritance_wrong

@@ -50,4 +50,4 @@
     ):
         ...
   out: |
-    main:10: error: Final class main.MyClass has abstract attributes "apply", "bind", "empty", "from_value", "lash", "map"  [misc]
+    main:9: error: Final class main.MyClass has abstract attributes "apply", "bind", "empty", "from_value", "lash", "map"  [misc]
