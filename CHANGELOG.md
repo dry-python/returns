@@ -6,11 +6,12 @@ incremental in minor, bugfixes only are patches.
 See [0Ver](https://0ver.org/).
 
 
-## 0.22.0 WIP
+## 0.22.0
 
 ### Features
 
 - *Breaking*: Drops `python3.7` support
+- Now requires `mypy>=1.5`
 - Adds `trampolines` support
 
 
