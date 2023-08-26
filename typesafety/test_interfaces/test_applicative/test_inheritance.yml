@@ -70,8 +70,7 @@
 - case: applicative_inheritance_missing
   disable_cache: false
   main: |
-    from typing import TypeVar
-    from typing_extensions import final
+    from typing import TypeVar, final
     from returns.interfaces.applicative import Applicative1
     from returns.primitives.hkt import SupportsKind1
 
@@ -81,7 +80,7 @@
     class MyClass(SupportsKind1['MyClass', V], Applicative1[V]):
         ...
   out: |
-    main:9: error: Final class main.MyClass has abstract attributes "apply", "from_value", "map"  [misc]
+    main:8: error: Final class main.MyClass has abstract attributes "apply", "from_value", "map"  [misc]
 
 
 - case: applicative_inheritance_wrong

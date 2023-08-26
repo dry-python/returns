@@ -50,7 +50,13 @@ def collect_traces(
         >>> assert all(isinstance(trace_line, FrameInfo) for trace_line in traced_failure.trace)
 
         >>> for trace_line in traced_failure.trace:
-        ...     print(f'{trace_line.filename}:{trace_line.lineno} in `{trace_line.function}`') # doctest: +SKIP
+        ...     print(  # doctest: +SKIP
+        ...         '{0}:{1} in `{2}`'.format(
+        ...             trace_line.filename,
+        ...             trace_line.lineno,
+        ...             trace_line.function,
+        ...         ),
+        ...     )
         ...
         /returns/returns/result.py:525 in `Failure`
         /returns/returns/result.py:322 in `from_failure`

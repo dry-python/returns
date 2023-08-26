@@ -1,10 +1,9 @@
 from collections import namedtuple
-from typing import List, Optional
+from typing import List, Optional, final
 
 from mypy.nodes import ArgKind, Context, TempNode
 from mypy.types import CallableType
 from mypy.types import Type as MypyType
-from typing_extensions import final
 
 #: Basic struct to represent function arguments.
 _FuncArgStruct = namedtuple('_FuncArgStruct', ('name', 'type', 'kind'))

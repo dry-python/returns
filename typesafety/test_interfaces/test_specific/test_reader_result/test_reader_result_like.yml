@@ -43,8 +43,7 @@
 - case: reader_result_like_inheritance_missing
   disable_cache: false
   main: |
-    from typing import TypeVar
-    from typing_extensions import final
+    from typing import TypeVar, final
     from returns.interfaces.specific.reader_result import ReaderResultLike3
     from returns.primitives.hkt import SupportsKind3
 
@@ -59,7 +58,7 @@
     ):
         ...
   out: |
-    main:11: error: Final class main.MyClass has abstract attributes "alt", "apply", "ask", "bind", "bind_context", "bind_context_result", "bind_result", "from_context", "from_failed_context", "from_failure", "from_result", "from_result_context", "from_value", "lash", "map", "modify_env", "no_args", "swap"  [misc]
+    main:10: error: Final class main.MyClass has abstract attributes "alt", "apply", "ask", "bind", "bind_context", "bind_context_result", "bind_result", "from_context", "from_failed_context", "from_failure", "from_result", "from_result_context", "from_value", "lash", "map", "modify_env", "no_args", "swap"  [misc]
 
 
 - case: reader_result_like_inheritance_wrong

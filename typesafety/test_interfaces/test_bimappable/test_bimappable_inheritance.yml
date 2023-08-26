@@ -1,8 +1,7 @@
 - case: bimappable_inheritance_missing
   disable_cache: false
   main: |
-    from typing import TypeVar
-    from typing_extensions import final
+    from typing import TypeVar, final
     from returns.interfaces.bimappable import BiMappable2
     from returns.primitives.hkt import SupportsKind2
 
@@ -13,4 +12,4 @@
     class MyClass(SupportsKind2['MyClass', V, T], BiMappable2[V, T]):
         ...
   out: |
-    main:10: error: Final class main.MyClass has abstract attributes "alt", "map"  [misc]
+    main:9: error: Final class main.MyClass has abstract attributes "alt", "map"  [misc]

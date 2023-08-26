@@ -1,8 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Callable, ClassVar, TypeVar
-
-from typing_extensions import final
+from typing import TYPE_CHECKING, Any, Callable, ClassVar, TypeVar, final
 
 from returns.context import NoDeps
 from returns.interfaces.specific import reader_result
@@ -307,7 +305,7 @@ class RequiresContextResult(  # type: ignore[type-var]
         self,
         function: Callable[
             [_ValueType],
-            'RequiresContext[_NewValueType, _EnvType]',
+            RequiresContext[_NewValueType, _EnvType],
         ],
     ) -> RequiresContextResult[_NewValueType, _ErrorType, _EnvType]:
         """
@@ -481,8 +479,9 @@ class RequiresContextResult(  # type: ignore[type-var]
     @classmethod
     def from_typecast(
         cls,
-        inner_value:
-            'RequiresContext[Result[_NewValueType, _NewErrorType], _EnvType]',
+        inner_value: RequiresContext[
+            Result[_NewValueType, _NewErrorType], _EnvType,
+        ],
     ) -> RequiresContextResult[_NewValueType, _NewErrorType, _EnvType]:
         """
         You might end up with ``RequiresContext[Result[...]]`` as a value.
@@ -510,7 +509,7 @@ class RequiresContextResult(  # type: ignore[type-var]
 
     @classmethod
     def from_context(
-        cls, inner_value: 'RequiresContext[_NewValueType, _NewEnvType]',
+        cls, inner_value: RequiresContext[_NewValueType, _NewEnvType],
     ) -> RequiresContextResult[_NewValueType, Any, _NewEnvType]:
         """
         Creates new container from ``RequiresContext`` as a success unit.
@@ -528,7 +527,7 @@ class RequiresContextResult(  # type: ignore[type-var]
 
     @classmethod
     def from_failed_context(
-        cls, inner_value: 'RequiresContext[_NewValueType, _NewEnvType]',
+        cls, inner_value: RequiresContext[_NewValueType, _NewEnvType],
     ) -> RequiresContextResult[Any, _NewValueType, _NewEnvType]:
         """
         Creates new container from ``RequiresContext`` as a failure unit.
@@ -547,8 +546,9 @@ class RequiresContextResult(  # type: ignore[type-var]
     @classmethod
     def from_result_context(
         cls,
-        inner_value:
-            RequiresContextResult[_NewValueType, _NewErrorType, _NewEnvType],
+        inner_value: RequiresContextResult[
+            _NewValueType, _NewErrorType, _NewEnvType,
+        ],
     ) -> RequiresContextResult[_NewValueType, _NewErrorType, _NewEnvType]:
         """
         Creates ``RequiresContextResult`` from another instance of it.

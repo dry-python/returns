@@ -1,7 +1,14 @@
 from abc import abstractmethod
-from typing import Callable, ClassVar, NoReturn, Sequence, Tuple, Type, TypeVar
-
-from typing_extensions import final
+from typing import (
+    Callable,
+    ClassVar,
+    NoReturn,
+    Sequence,
+    Tuple,
+    Type,
+    TypeVar,
+    final,
+)
 
 from returns.contrib.hypothesis.laws import check_all_laws
 from returns.interfaces import bindable, equable, lashable, swappable

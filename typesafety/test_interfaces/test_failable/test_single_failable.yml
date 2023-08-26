@@ -36,8 +36,7 @@
 - case: single_failable_inheritance_missing
   disable_cache: false
   main: |
-    from typing import TypeVar
-    from typing_extensions import final
+    from typing import TypeVar, final
     from returns.interfaces.failable import SingleFailable2
     from returns.primitives.hkt import SupportsKind2
 
@@ -51,4 +50,4 @@
     ):
         ...
   out: |
-    main:10: error: Final class main.MyClass has abstract attributes "apply", "bind", "empty", "from_value", "lash", "map"  [misc]
+    main:9: error: Final class main.MyClass has abstract attributes "apply", "bind", "empty", "from_value", "lash", "map"  [misc]

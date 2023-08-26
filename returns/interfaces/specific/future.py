@@ -17,7 +17,6 @@ from typing import (
     Generator,
     Generic,
     NoReturn,
-    Type,
     TypeVar,
 )
 
@@ -49,14 +48,14 @@ class FutureLikeN(io.IOLikeN[_FirstType, _SecondType, _ThirdType]):
     @abstractmethod
     def bind_future(
         self: _FutureLikeType,
-        function: Callable[[_FirstType], 'Future[_UpdatedType]'],
+        function: Callable[[_FirstType], Future[_UpdatedType]],
     ) -> KindN[_FutureLikeType, _UpdatedType, _SecondType, _ThirdType]:
         """Allows to bind ``Future`` returning function over a container."""
 
     @abstractmethod
     def bind_async_future(
         self: _FutureLikeType,
-        function: Callable[[_FirstType], Awaitable['Future[_UpdatedType]']],
+        function: Callable[[_FirstType], Awaitable[Future[_UpdatedType]]],
     ) -> KindN[_FutureLikeType, _UpdatedType, _SecondType, _ThirdType]:
         """Allows to bind async ``Future`` returning function over container."""
 
@@ -82,8 +81,8 @@ class FutureLikeN(io.IOLikeN[_FirstType, _SecondType, _ThirdType]):
     @classmethod
     @abstractmethod
     def from_future(
-        cls: Type[_FutureLikeType],  # noqa: N805
-        inner_value: 'Future[_UpdatedType]',
+        cls: type[_FutureLikeType],  # noqa: N805
+        inner_value: Future[_UpdatedType],
     ) -> KindN[_FutureLikeType, _UpdatedType, _SecondType, _ThirdType]:
         """Unit method to create new containers from successful ``Future``."""
 

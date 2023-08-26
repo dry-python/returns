@@ -105,8 +105,7 @@ but with ``__init__`` defined:
 
 .. code:: python
 
-  from typing import Callable, TypeVar
-  from typing_extensions import final
+  from typing import Callable, TypeVar, final
   from returns.interfaces.mappable import Mappable1
   from returns.primitives.container import BaseContainer
   from returns.primitives.hkt import SupportsKind1

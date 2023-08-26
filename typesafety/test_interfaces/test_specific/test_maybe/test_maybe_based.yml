@@ -19,8 +19,7 @@
 - case: maybe_based_inheritance_missing
   disable_cache: false
   main: |
-    from typing import TypeVar
-    from typing_extensions import final
+    from typing import TypeVar, final
     from returns.interfaces.specific.maybe import MaybeBased2
     from returns.primitives.hkt import SupportsKind2
 
@@ -30,7 +29,7 @@
     class MyClass(SupportsKind2['MyClass', V, None], MaybeBased2[V, None]):
         ...
   out: |
-    main:9: error: Final class main.MyClass has abstract attributes "apply", "bind", "bind_optional", "empty", "equals", "failure", "from_optional", "from_value", "lash", "map", "or_else_call", "unwrap"  [misc]
+    main:8: error: Final class main.MyClass has abstract attributes "apply", "bind", "bind_optional", "empty", "equals", "failure", "from_optional", "from_value", "lash", "map", "or_else_call", "unwrap"  [misc]
 
 
 - case: maybe_based_inheritance_wrong

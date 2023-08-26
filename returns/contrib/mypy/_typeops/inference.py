@@ -1,4 +1,4 @@
-from typing import List, Mapping, Optional, Tuple, cast
+from typing import List, Mapping, Optional, Tuple, cast, final
 
 from mypy.argmap import map_actuals_to_formals
 from mypy.constraints import infer_constraints_for_callable
@@ -8,7 +8,6 @@ from mypy.plugin import FunctionContext
 from mypy.types import CallableType, FunctionLike
 from mypy.types import Type as MypyType
 from mypy.types import TypeVarId
-from typing_extensions import final
 
 from returns.contrib.mypy._structures.args import FuncArg
 from returns.contrib.mypy._structures.types import CallableContext

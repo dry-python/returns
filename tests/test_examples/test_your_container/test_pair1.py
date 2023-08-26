@@ -1,6 +1,4 @@
-from typing import Callable, Tuple, TypeVar
-
-from typing_extensions import final
+from typing import Callable, Tuple, TypeVar, final
 
 from returns.interfaces import bindable, equable, lashable, swappable
 from returns.primitives.container import BaseContainer, container_equality

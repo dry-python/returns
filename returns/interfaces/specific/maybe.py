@@ -8,9 +8,8 @@ from typing import (
     Type,
     TypeVar,
     Union,
+    final,
 )
-
-from typing_extensions import final
 
 from returns.interfaces import equable, failable, unwrappable
 from returns.primitives.asserts import assert_equal

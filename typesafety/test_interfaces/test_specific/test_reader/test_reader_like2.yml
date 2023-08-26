@@ -52,8 +52,7 @@
 - case: reader_inheritance_missing
   disable_cache: false
   main: |
-    from typing import TypeVar
-    from typing_extensions import final
+    from typing import TypeVar, final
     from returns.interfaces.specific.reader import ReaderLike2
     from returns.primitives.hkt import SupportsKind2
 
@@ -67,7 +66,7 @@
     ):
         ...
   out: |
-    main:10: error: Final class main.MyClass has abstract attributes "apply", "ask", "bind", "bind_context", "from_context", "from_value", "map", "modify_env", "no_args"  [misc]
+    main:9: error: Final class main.MyClass has abstract attributes "apply", "ask", "bind", "bind_context", "from_context", "from_value", "map", "modify_env", "no_args"  [misc]
 
 
 - case: reader_inheritance_wrong

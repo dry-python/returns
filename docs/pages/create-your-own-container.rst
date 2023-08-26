@@ -83,8 +83,7 @@ Let's look at the result:
 
 .. code: python
 
-  >>> from typing_extensions import final
-  >>> from typing import Callable, TypeVar, Tuple
+  >>> from typing import Callable, TypeVar, Tuple, final
 
   >>> from returns.interfaces import bindable, equable, lashable, swappable
   >>> from returns.primitives.container import BaseContainer

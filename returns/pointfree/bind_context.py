@@ -20,7 +20,7 @@ _Reader3Kind = TypeVar('_Reader3Kind', bound=ReaderLike3)
 def bind_context2(
     function: Callable[
         [_FirstType],
-        'RequiresContext[_UpdatedType, _SecondType]',
+        RequiresContext[_UpdatedType, _SecondType],
     ],
 ) -> Kinded[Callable[
     [Kind2[_Reader2Kind, _FirstType, _SecondType]],
@@ -62,7 +62,7 @@ def bind_context2(
 def bind_context3(
     function: Callable[
         [_FirstType],
-        'RequiresContext[_UpdatedType, _ThirdType]',
+        RequiresContext[_UpdatedType, _ThirdType],
     ],
 ) -> Kinded[Callable[
     [Kind3[_Reader3Kind, _FirstType, _SecondType, _ThirdType]],

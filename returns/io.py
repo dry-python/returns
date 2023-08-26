@@ -13,9 +13,10 @@ from typing import (
     Type,
     TypeVar,
     Union,
+    final,
 )
 
-from typing_extensions import ParamSpec, final
+from typing_extensions import ParamSpec
 
 from returns.interfaces.specific import io, ioresult
 from returns.primitives.container import BaseContainer, container_equality

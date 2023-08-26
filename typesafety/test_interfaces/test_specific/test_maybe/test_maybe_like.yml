@@ -23,8 +23,7 @@
 - case: maybe_like_inheritance_missing
   disable_cache: false
   main: |
-    from typing import TypeVar
-    from typing_extensions import final
+    from typing import TypeVar, final
     from returns.interfaces.specific.maybe import MaybeLike2
     from returns.primitives.hkt import SupportsKind2
 
@@ -34,7 +33,7 @@
     class MyClass(SupportsKind2['MyClass', V, None], MaybeLike2[V, None]):
         ...
   out: |
-    main:9: error: Final class main.MyClass has abstract attributes "apply", "bind", "bind_optional", "empty", "from_optional", "from_value", "lash", "map"  [misc]
+    main:8: error: Final class main.MyClass has abstract attributes "apply", "bind", "bind_optional", "empty", "from_optional", "from_value", "lash", "map"  [misc]
 
 
 - case: maybe_like_inheritance_wrong

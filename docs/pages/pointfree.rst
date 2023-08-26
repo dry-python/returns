@@ -215,7 +215,7 @@ This inverse syntax lets us easily compose functions in a pipeline
   ...     return exit_code * 2
 
   >>> def make_error_message(exit_code: int) -> str:
-  ...     return f'Badness level: {exit_code}'
+  ...     return 'Badness level: {0}'.format(exit_code)
 
   >>> assert flow(
   ...     '12345',

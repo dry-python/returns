@@ -84,8 +84,7 @@
 - case: result_inheritance_missing
   disable_cache: false
   main: |
-    from typing import TypeVar
-    from typing_extensions import final
+    from typing import TypeVar, final
     from returns.interfaces.specific.result import ResultLike2
     from returns.primitives.hkt import SupportsKind2
 
@@ -96,7 +95,7 @@
     class MyClass(SupportsKind2['MyClass', V, N], ResultLike2[V, N]):
         ...
   out: |
-    main:10: error: Final class main.MyClass has abstract attributes "alt", "apply", "bind", "bind_result", "from_failure", "from_result", "from_value", "lash", "map", "swap"  [misc]
+    main:9: error: Final class main.MyClass has abstract attributes "alt", "apply", "bind", "bind_result", "from_failure", "from_result", "from_value", "lash", "map", "swap"  [misc]
 
 
 - case: result_inheritance_wrong2

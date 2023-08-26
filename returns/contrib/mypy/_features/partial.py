@@ -1,11 +1,10 @@
-from typing import Iterator, List, Optional, Tuple
+from typing import Final, Iterator, List, Optional, Tuple, final
 
 from mypy.nodes import ARG_STAR, ARG_STAR2
 from mypy.plugin import FunctionContext
 from mypy.types import CallableType, FunctionLike, Instance, Overloaded
 from mypy.types import Type as MypyType
 from mypy.types import TypeType
-from typing_extensions import Final, final
 
 from returns.contrib.mypy._structures.args import FuncArg
 from returns.contrib.mypy._typeops.analtype import (

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import TYPE_CHECKING, Callable, NoReturn, Type, TypeVar
+from typing import TYPE_CHECKING, Callable, NoReturn, TypeVar
 
 from returns.interfaces import container, equable
 from returns.primitives.hkt import KindN
@@ -32,15 +32,15 @@ class IOLikeN(container.ContainerN[_FirstType, _SecondType, _ThirdType]):
     @abstractmethod
     def bind_io(
         self: _IOLikeType,
-        function: Callable[[_FirstType], 'IO[_UpdatedType]'],
+        function: Callable[[_FirstType], IO[_UpdatedType]],
     ) -> KindN[_IOLikeType, _UpdatedType, _SecondType, _ThirdType]:
         """Allows to apply a wrapped function over a container."""
 
     @classmethod
     @abstractmethod
     def from_io(
-        cls: Type[_IOLikeType],  # noqa: N805
-        inner_value: 'IO[_UpdatedType]',
+        cls: type[_IOLikeType],  # noqa: N805
+        inner_value: IO[_UpdatedType],
     ) -> KindN[_IOLikeType, _UpdatedType, _SecondType, _ThirdType]:
         """Unit method to create new containers from successful ``IO``."""
 

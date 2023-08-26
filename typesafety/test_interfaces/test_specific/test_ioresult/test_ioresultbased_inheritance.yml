@@ -108,8 +108,7 @@
 - case: ioresult_inheritance_missing
   disable_cache: false
   main: |
-    from typing import TypeVar
-    from typing_extensions import final
+    from typing import TypeVar, final
     from returns.interfaces.specific.ioresult import IOResultBased2
     from returns.primitives.hkt import SupportsKind2
 
@@ -123,7 +122,7 @@
     ):
         ...
   out: |
-    main:10: error: Final class main.MyClass has abstract attributes "alt", "apply", "bind", "bind_io", "bind_ioresult", "bind_result", "compose_result", "equals", "failure", "from_failed_io", "from_failure", "from_io", "from_ioresult", "from_result", "from_value", "lash", "map", "swap", "unwrap"  [misc]
+    main:9: error: Final class main.MyClass has abstract attributes "alt", "apply", "bind", "bind_io", "bind_ioresult", "bind_result", "compose_result", "equals", "failure", "from_failed_io", "from_failure", "from_io", "from_ioresult", "from_result", "from_value", "lash", "map", "swap", "unwrap"  [misc]
 
 
 - case: ioresult_inheritance_wrong2

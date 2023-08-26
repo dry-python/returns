@@ -9,6 +9,7 @@ from typing import (
     Optional,
     Type,
     TypeVar,
+    final,
 )
 
 import pytest
@@ -16,7 +17,6 @@ from hypothesis import given
 from hypothesis import settings as hypothesis_settings
 from hypothesis import strategies as st
 from hypothesis.strategies._internal import types
-from typing_extensions import final
 
 from returns.contrib.hypothesis.containers import strategy_from_container
 from returns.primitives.laws import Law, Lawful

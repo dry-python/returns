@@ -22,7 +22,7 @@ _ReaderIOResultLikeKind = TypeVar(
 def bind_context_ioresult(
     function: Callable[
         [_FirstType],
-        'ReaderIOResult[_UpdatedType, _SecondType, _ThirdType]',
+        ReaderIOResult[_UpdatedType, _SecondType, _ThirdType],
     ],
 ) -> Kinded[Callable[
     [KindN[_ReaderIOResultLikeKind, _FirstType, _SecondType, _ThirdType]],

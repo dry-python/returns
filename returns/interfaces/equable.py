@@ -1,7 +1,5 @@
 from abc import abstractmethod
-from typing import ClassVar, Sequence, TypeVar
-
-from typing_extensions import final
+from typing import ClassVar, Sequence, TypeVar, final
 
 from returns.primitives.laws import (
     Law,

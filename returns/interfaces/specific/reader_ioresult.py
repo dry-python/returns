@@ -1,9 +1,7 @@
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import TYPE_CHECKING, Callable, ClassVar, Sequence, Type, TypeVar
-
-from typing_extensions import final
+from typing import TYPE_CHECKING, Callable, ClassVar, Sequence, TypeVar, final
 
 from returns.interfaces.specific import ioresult, reader, reader_result
 from returns.primitives.hkt import KindN
@@ -51,7 +49,7 @@ class ReaderIOResultLikeN(
         self: _ReaderIOResultLikeType,
         function: Callable[
             [_FirstType],
-            'ReaderIOResult[_UpdatedType, _SecondType, _ThirdType]',
+            ReaderIOResult[_UpdatedType, _SecondType, _ThirdType],
         ],
     ) -> KindN[_ReaderIOResultLikeType, _UpdatedType, _SecondType, _ThirdType]:
         """Binds a ``ReaderIOResult`` returning function over a container."""
@@ -59,8 +57,8 @@ class ReaderIOResultLikeN(
     @classmethod
     @abstractmethod
     def from_ioresult_context(
-        cls: Type[_ReaderIOResultLikeType],  # noqa: N805
-        inner_value: 'ReaderIOResult[_ValueType, _ErrorType, _EnvType]',
+        cls: type[_ReaderIOResultLikeType],  # noqa: N805
+        inner_value: ReaderIOResult[_ValueType, _ErrorType, _EnvType],
     ) -> KindN[_ReaderIOResultLikeType, _ValueType, _ErrorType, _EnvType]:
         """Unit method to create new containers from ``ReaderIOResult``."""
 

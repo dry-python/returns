@@ -1,8 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Callable, ClassVar, TypeVar
-
-from typing_extensions import final
+from typing import TYPE_CHECKING, Any, Callable, ClassVar, TypeVar, final
 
 from returns.context import NoDeps
 from returns.interfaces.specific import reader_ioresult
@@ -329,7 +327,7 @@ class RequiresContextIOResult(  # type: ignore[type-var]
         self,
         function: Callable[
             [_ValueType],
-            'RequiresContext[_NewValueType, _EnvType]',
+            RequiresContext[_NewValueType, _EnvType],
         ],
     ) -> RequiresContextIOResult[_NewValueType, _ErrorType, _EnvType]:
         """
@@ -364,7 +362,7 @@ class RequiresContextIOResult(  # type: ignore[type-var]
         self,
         function: Callable[
             [_ValueType],
-            'RequiresContextResult[_NewValueType, _ErrorType, _EnvType]',
+            RequiresContextResult[_NewValueType, _ErrorType, _EnvType],
         ],
     ) -> RequiresContextIOResult[_NewValueType, _ErrorType, _EnvType]:
         """
@@ -756,8 +754,9 @@ class RequiresContextIOResult(  # type: ignore[type-var]
     @classmethod
     def from_typecast(
         cls,
-        inner_value:
-            'RequiresContext[IOResult[_NewValueType, _NewErrorType], _EnvType]',
+        inner_value: RequiresContext[
+            IOResult[_NewValueType, _NewErrorType], _EnvType,
+        ],
     ) -> RequiresContextIOResult[_NewValueType, _NewErrorType, _EnvType]:
         """
         You might end up with ``RequiresContext[IOResult]`` as a value.
@@ -785,7 +784,7 @@ class RequiresContextIOResult(  # type: ignore[type-var]
 
     @classmethod
     def from_context(
-        cls, inner_value: 'RequiresContext[_NewValueType, _NewEnvType]',
+        cls, inner_value: RequiresContext[_NewValueType, _NewEnvType],
     ) -> RequiresContextIOResult[_NewValueType, Any, _NewEnvType]:
         """
         Creates new container from ``RequiresContext`` as a success unit.
@@ -806,7 +805,7 @@ class RequiresContextIOResult(  # type: ignore[type-var]
 
     @classmethod
     def from_failed_context(
-        cls, inner_value: 'RequiresContext[_NewValueType, _NewEnvType]',
+        cls, inner_value: RequiresContext[_NewValueType, _NewEnvType],
     ) -> RequiresContextIOResult[Any, _NewValueType, _NewEnvType]:
         """
         Creates new container from ``RequiresContext`` as a failure unit.
@@ -828,8 +827,9 @@ class RequiresContextIOResult(  # type: ignore[type-var]
     @classmethod
     def from_result_context(
         cls,
-        inner_value:
-            'RequiresContextResult[_NewValueType, _NewErrorType, _NewEnvType]',
+        inner_value: RequiresContextResult[
+            _NewValueType, _NewErrorType, _NewEnvType,
+        ],
     ) -> RequiresContextIOResult[_NewValueType, _NewErrorType, _NewEnvType]:
         """
         Creates new container from ``RequiresContextResult`` as a unit value.

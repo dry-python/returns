@@ -1,9 +1,7 @@
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import TYPE_CHECKING, Callable, ClassVar, Sequence, Type, TypeVar
-
-from typing_extensions import final
+from typing import TYPE_CHECKING, Callable, ClassVar, Sequence, TypeVar, final
 
 from returns.interfaces.specific import reader, result
 from returns.primitives.hkt import KindN
@@ -51,7 +49,7 @@ class ReaderResultLikeN(
         self: _ReaderResultLikeType,
         function: Callable[
             [_FirstType],
-            'ReaderResult[_UpdatedType, _SecondType, _ThirdType]',
+            ReaderResult[_UpdatedType, _SecondType, _ThirdType],
         ],
     ) -> KindN[_ReaderResultLikeType, _UpdatedType, _SecondType, _ThirdType]:
         """Binds a ``ReaderResult`` returning function over a container."""
@@ -59,16 +57,16 @@ class ReaderResultLikeN(
     @classmethod
     @abstractmethod
     def from_failed_context(
-        cls: Type[_ReaderResultLikeType],  # noqa: N805
-        inner_value: 'Reader[_ErrorType, _EnvType]',
+        cls: type[_ReaderResultLikeType],  # noqa: N805
+        inner_value: Reader[_ErrorType, _EnvType],
     ) -> KindN[_ReaderResultLikeType, _FirstType, _ErrorType, _EnvType]:
         """Unit method to create new containers from failed ``Reader``."""
 
     @classmethod
     @abstractmethod
     def from_result_context(
-        cls: Type[_ReaderResultLikeType],  # noqa: N805
-        inner_value: 'ReaderResult[_ValueType, _ErrorType, _EnvType]',
+        cls: type[_ReaderResultLikeType],  # noqa: N805
+        inner_value: ReaderResult[_ValueType, _ErrorType, _EnvType],
     ) -> KindN[_ReaderResultLikeType, _ValueType, _ErrorType, _EnvType]:
         """Unit method to create new containers from ``ReaderResult``."""
 

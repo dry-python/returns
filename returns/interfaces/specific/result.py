@@ -8,7 +8,7 @@ For impure result see
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import TYPE_CHECKING, Callable, NoReturn, Type, TypeVar
+from typing import TYPE_CHECKING, Callable, NoReturn, TypeVar
 
 from returns.interfaces import equable, failable, unwrappable
 from returns.primitives.hkt import KindN
@@ -46,15 +46,15 @@ class ResultLikeN(
     @abstractmethod
     def bind_result(
         self: _ResultLikeType,
-        function: Callable[[_FirstType], 'Result[_UpdatedType, _SecondType]'],
+        function: Callable[[_FirstType], Result[_UpdatedType, _SecondType]],
     ) -> KindN[_ResultLikeType, _UpdatedType, _SecondType, _ThirdType]:
         """Runs ``Result`` returning function over a container."""
 
     @classmethod
     @abstractmethod
     def from_result(
-        cls: Type[_ResultLikeType],  # noqa: N805
-        inner_value: 'Result[_ValueType, _ErrorType]',
+        cls: type[_ResultLikeType],  # noqa: N805
+        inner_value: Result[_ValueType, _ErrorType],
     ) -> KindN[_ResultLikeType, _ValueType, _ErrorType, _ThirdType]:
         """Unit method to create new containers from any raw value."""
 

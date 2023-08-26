@@ -1,6 +1,4 @@
-from typing import Callable, ClassVar, NoReturn, Sequence, TypeVar
-
-from typing_extensions import final
+from typing import Callable, ClassVar, NoReturn, Sequence, TypeVar, final
 
 from returns.interfaces import applicative, bindable
 from returns.primitives.asserts import assert_equal

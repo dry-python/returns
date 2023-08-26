@@ -1,4 +1,3 @@
-
 from returns.io import IOSuccess, impure_safe
 
 

@@ -1,7 +1,13 @@
-
-from typing import Awaitable, Callable, Generator, NewType, TypeVar, Union, cast
-
-from typing_extensions import final
+from typing import (
+    Awaitable,
+    Callable,
+    Generator,
+    NewType,
+    TypeVar,
+    Union,
+    cast,
+    final,
+)
 
 _ValueType = TypeVar('_ValueType')
 _FunctionCoroType = TypeVar('_FunctionCoroType', bound=Callable[..., Awaitable])

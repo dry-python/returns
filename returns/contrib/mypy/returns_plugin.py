@@ -10,7 +10,7 @@ https://mypy.readthedocs.io/en/latest/extending_mypy.html
 We use ``pytest-mypy-plugins`` to test that it works correctly, see:
 https://github.com/mkurnikov/pytest-mypy-plugins
 """
-from typing import Callable, ClassVar, Mapping, Optional, Type
+from typing import Callable, ClassVar, Mapping, Optional, Type, final
 
 from mypy.nodes import SymbolTableNode
 from mypy.plugin import (
@@ -22,7 +22,6 @@ from mypy.plugin import (
 )
 from mypy.types import CallableType
 from mypy.types import Type as MypyType
-from typing_extensions import final
 
 from returns.contrib.mypy import _consts
 from returns.contrib.mypy._features import (
