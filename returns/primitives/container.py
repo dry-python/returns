@@ -76,7 +76,7 @@ def container_equality(
 
     Compares both their types and their inner values.
     """
-    if type(self) != type(other):  # noqa: WPS516
+    if type(self) != type(other):  # noqa: WPS516, E721
         return False
     return bool(
         self._inner_value == other._inner_value,  # type: ignore # noqa: WPS437
