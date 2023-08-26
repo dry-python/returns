@@ -12,7 +12,7 @@ class _CustomClass(object):
         self.inner_value = inner_value
 
     def __eq__(self, other: Any) -> bool:
-        return (
+        return (  # noqa: E721
             type(other) == type(self) and  # noqa: WPS516
             self.inner_value == other.inner_value
         )
