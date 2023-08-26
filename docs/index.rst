@@ -39,6 +39,7 @@ Contents
   pages/do-notation.rst
   pages/functions.rst
   pages/curry.rst
+  pages/trampolines.rst
   pages/types.rst
 
 .. toctree::
