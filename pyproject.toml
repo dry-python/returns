@@ -62,7 +62,7 @@ flake8-pytest-style = "^1.6"
 flake8-pyi = "^23.6"
 nitpick = "^0.33"
 codespell = "^2.2"
-slotscheck = "^0.16"
+slotscheck = "^0.17"
 
 safety = "^2.3"
 
