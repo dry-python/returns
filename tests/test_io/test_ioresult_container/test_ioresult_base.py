@@ -1,7 +1,7 @@
-from returns.io import IOResult
+from returns.io import IOFailure, IOSuccess
 
 
 def test_ioresult_types():
     """Ensures that Result has two types inside a class."""
-    assert isinstance(IOResult.success_type, type)
-    assert isinstance(IOResult.failure_type, type)
+    assert isinstance(IOSuccess, type)
+    assert isinstance(IOFailure, type)

@@ -1,7 +1,7 @@
 import pytest
 
 from returns.future import FutureResult, future_safe
-from returns.io import IOResult, IOSuccess
+from returns.io import IOFailure, IOSuccess
 
 
 @future_safe
@@ -24,4 +24,4 @@ async def test_future_safe_decorator_failure():
     future_instance = _coro(0)
 
     assert isinstance(future_instance, FutureResult)
-    assert isinstance(await future_instance, IOResult.failure_type)
+    assert isinstance(await future_instance, IOFailure)
