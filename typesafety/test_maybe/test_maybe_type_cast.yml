@@ -36,15 +36,15 @@
 - case: maybe_result_success_type
   disable_cache: false
   main: |
-    from returns.maybe import Maybe
+    from returns.maybe import Some
 
-    reveal_type(Maybe.success_type)  # N: Revealed type is "Type[returns.maybe.Some[Any]]"
+    reveal_type(Some)  # N: Revealed type is "Type[returns.maybe.Some[Any]]"
 
 
 - case: maybe_result_failure_type
   disable_cache: false
   main: |
-    from returns.maybe import Maybe
+    from returns.maybe import _Nothing
 
-    reveal_type(Maybe.failure_type)  # N: Revealed type is "Type[returns.maybe._Nothing]"
+    reveal_type(_Nothing)  # N: Revealed type is "Type[returns.maybe._Nothing]"
 

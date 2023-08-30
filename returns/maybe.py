@@ -9,7 +9,6 @@ from typing import (
     Iterator,
     NoReturn,
     Optional,
-    Type,
     TypeVar,
     Union,
     final,
@@ -54,13 +53,6 @@ class Maybe(  # type: ignore[type-var]
 
     #: Alias for `Nothing`
     empty: ClassVar['Maybe[Any]']
-
-    # These two are required for projects like `classes`:
-
-    #: Success type that is used to represent the successful computation.
-    success_type: ClassVar[Type['Some']]
-    #: Failure type that is used to represent the failed computation.
-    failure_type: ClassVar[Type['_Nothing']]
 
     #: Typesafe equality comparison with other `Result` objects.
     equals = container_equality
@@ -431,7 +423,7 @@ class Some(Maybe[_ValueType]):
 
     def apply(self, container):
         """Calls a wrapped function in a container on this container."""
-        if isinstance(container, self.success_type):
+        if isinstance(container, Some):
             return self.map(container.unwrap())  # type: ignore
         return container
 
@@ -451,9 +443,6 @@ class Some(Maybe[_ValueType]):
         """Raises exception for successful container."""
         raise UnwrapFailedError(self)
 
-
-Maybe.success_type = Some
-Maybe.failure_type = _Nothing
 
 #: Public unit value of protected :class:`~_Nothing` type.
 Nothing: Maybe[NoReturn] = _Nothing()
