@@ -141,7 +141,7 @@ def not_(function: Callable[_FuncParams, bool]) -> Callable[_FuncParams, bool]:
       >>> from returns.result import Result, Success, Failure
 
       >>> def is_successful(result_container: Result[float, int]) -> bool:
-      ...     return isinstance(result_container, Result.success_type)
+      ...     return isinstance(result_container, Success)
 
       >>> assert not_(is_successful)(Success(1.0)) is False
       >>> assert not_(is_successful)(Failure(1)) is True

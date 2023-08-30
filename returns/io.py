@@ -757,7 +757,7 @@ class IOResult(  # type: ignore[type-var]
           >>> assert IOResult.from_result(Failure(2)) == IOFailure(2)
 
         """
-        if isinstance(inner_value, inner_value.success_type):
+        if isinstance(inner_value, Success):
             return IOSuccess(inner_value._inner_value)  # noqa: WPS437
         return IOFailure(inner_value._inner_value)  # type: ignore[arg-type]  # noqa: WPS437, E501
 

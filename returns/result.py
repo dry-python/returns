@@ -5,7 +5,6 @@ from typing import (
     TYPE_CHECKING,
     Any,
     Callable,
-    ClassVar,
     Generator,
     Iterator,
     List,
@@ -59,12 +58,6 @@ class Result(  # type: ignore[type-var]
 
     _inner_value: Union[_ValueType, _ErrorType]
     _trace: Optional[List[FrameInfo]]
-
-    # These two are required for projects like `classes`:
-    #: Success type that is used to represent the successful computation.
-    success_type: ClassVar[Type['Success']]
-    #: Failure type that is used to represent the failed computation.
-    failure_type: ClassVar[Type['Failure']]
 
     #: Typesafe equality comparison with other `Result` objects.
     equals = container_equality
@@ -453,7 +446,7 @@ class Success(Result[_ValueType, Any]):
 
         def apply(self, container):
             """Calls a wrapped function in a container on this container."""
-            if isinstance(container, self.success_type):
+            if isinstance(container, Success):
                 return self.map(container.unwrap())
             return container
 
@@ -473,9 +466,6 @@ class Success(Result[_ValueType, Any]):
         """Raises an exception for successful container."""
         raise UnwrapFailedError(self)
 
-
-Result.success_type = Success
-Result.failure_type = Failure
 
 # Aliases:
 
@@ -524,27 +514,27 @@ def safe(  # type: ignore # noqa: WPS234, C901
 
     .. code:: python
 
-      >>> from returns.result import Result, Success, safe
+      >>> from returns.result import Failure, Success, safe
 
       >>> @safe
       ... def might_raise(arg: int) -> float:
       ...     return 1 / arg
 
       >>> assert might_raise(1) == Success(1.0)
-      >>> assert isinstance(might_raise(0), Result.failure_type)
+      >>> assert isinstance(might_raise(0), Failure)
 
     You can also use it with explicit exception types as the first argument:
 
     .. code:: python
 
-      >>> from returns.result import Result, Success, safe
+      >>> from returns.result import Failure, Success, safe
 
       >>> @safe(exceptions=(ZeroDivisionError,))
       ... def might_raise(arg: int) -> float:
       ...     return 1 / arg
 
       >>> assert might_raise(1) == Success(1.0)
-      >>> assert isinstance(might_raise(0), Result.failure_type)
+      >>> assert isinstance(might_raise(0), Failure)
 
     In this case, only exceptions that are explicitly
     listed are going to be caught.

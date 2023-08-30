@@ -47,7 +47,7 @@ async def async_bind(
 ) -> Result[_NewValueType, _ErrorType]:
     """Async binds a container over a value."""
     container = await inner_value
-    if isinstance(container, Result.success_type):
+    if isinstance(container, Success):
         return (await dekind(function(container.unwrap())))._inner_value
     return container  # type: ignore[return-value]
 
@@ -58,7 +58,7 @@ async def async_bind_awaitable(
 ) -> Result[_NewValueType, _ErrorType]:
     """Async binds a coroutine over a value."""
     container = await inner_value
-    if isinstance(container, Result.success_type):
+    if isinstance(container, Success):
         return Result.from_value(await function(container.unwrap()))
     return container  # type: ignore[return-value]
 
@@ -72,7 +72,7 @@ async def async_bind_async(
 ) -> Result[_NewValueType, _ErrorType]:
     """Async binds a coroutine with container over a value."""
     container = await inner_value
-    if isinstance(container, Result.success_type):
+    if isinstance(container, Success):
         return await dekind(await function(container.unwrap()))._inner_value
     return container  # type: ignore[return-value]
 
@@ -91,7 +91,7 @@ async def async_bind_ioresult(
 ) -> Result[_NewValueType, _ErrorType]:
     """Async binds a container returning ``IOResult`` over a value."""
     container = await inner_value
-    if isinstance(container, Result.success_type):
+    if isinstance(container, Success):
         return function(container.unwrap())._inner_value
     return container  # type: ignore[return-value]
 
@@ -102,7 +102,7 @@ async def async_bind_io(
 ) -> Result[_NewValueType, _ErrorType]:
     """Async binds a container returning ``IO`` over a value."""
     container = await inner_value
-    if isinstance(container, Result.success_type):
+    if isinstance(container, Success):
         return Success(function(container.unwrap())._inner_value)
     return container  # type: ignore[return-value]
 
@@ -113,7 +113,7 @@ async def async_bind_future(
 ) -> Result[_NewValueType, _ErrorType]:
     """Async binds a container returning ``IO`` over a value."""
     container = await inner_value
-    if isinstance(container, Result.success_type):
+    if isinstance(container, Success):
         return await async_from_success(function(container.unwrap()))
     return container  # type: ignore[return-value]
 
@@ -124,7 +124,7 @@ async def async_bind_async_future(
 ) -> Result[_NewValueType, _ErrorType]:
     """Async binds a container returning ``IO`` over a value."""
     container = await inner_value
-    if isinstance(container, Result.success_type):
+    if isinstance(container, Success):
         return await async_from_success(await function(container.unwrap()))
     return container  # type: ignore[return-value]
 
@@ -135,7 +135,7 @@ async def async_alt(
 ) -> Result[_ValueType, _NewErrorType]:
     """Async alts a function over a value."""
     container = await inner_value
-    if isinstance(container, Result.success_type):
+    if isinstance(container, Success):
         return container
     return Failure(function(container.failure()))
 
@@ -149,7 +149,7 @@ async def async_lash(
 ) -> Result[_ValueType, _NewErrorType]:
     """Async lashes a function returning a container over a value."""
     container = await inner_value
-    if isinstance(container, Result.success_type):
+    if isinstance(container, Success):
         return container
     return (await dekind(function(container.failure())))._inner_value
 

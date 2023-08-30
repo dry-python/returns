@@ -128,17 +128,17 @@
 - case: result_success_type
   disable_cache: false
   main: |
-    from returns.result import Result
+    from returns.result import Success
 
-    reveal_type(Result.success_type)  # N: Revealed type is "Type[returns.result.Success[Any]]"
+    reveal_type(Success)  # N: Revealed type is "Type[returns.result.Success[Any]]"
 
 
 - case: result_failure_type
   disable_cache: false
   main: |
-    from returns.result import Result
+    from returns.result import Failure
 
-    reveal_type(Result.failure_type)  # N: Revealed type is "Type[returns.result.Failure[Any]]"
+    reveal_type(Failure)  # N: Revealed type is "Type[returns.result.Failure[Any]]"
 
 
 - case: resulte_typecast1

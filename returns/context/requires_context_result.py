@@ -202,7 +202,7 @@ class RequiresContextResult(  # type: ignore[type-var]
         .. code:: python
 
           >>> from returns.context import RequiresContextResult
-          >>> from returns.result import Success, Failure, Result
+          >>> from returns.result import Failure, Success
 
           >>> def transform(arg: str) -> str:
           ...     return arg + 'b'
@@ -217,7 +217,7 @@ class RequiresContextResult(  # type: ignore[type-var]
 
           >>> assert isinstance(RequiresContextResult.from_value('a').apply(
           ...    RequiresContextResult.from_failure(transform),
-          ... )(...), Result.failure_type) is True
+          ... )(...), Failure) is True
 
         """
         return RequiresContextResult(
