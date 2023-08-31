@@ -6,13 +6,13 @@ incremental in minor, bugfixes only are patches.
 See [0Ver](https://0ver.org/).
 
 
-## 0.23.0
+## 0.23.0 WIP
 
 ### Misc
 
 - *Breaking*: Remove `Result.success_type` and `Result.failure_type`
 - *Breaking*: Remove `Maybe.success_type` and `Maybe.failure_type`
-- *Breaking*: Remove `IOResult.success_type` and `Maybe.failure_type`
+- *Breaking*: Remove `IOResult.success_type` and `IOResult.failure_type`
 
 ## 0.22.0
 

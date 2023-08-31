@@ -31,20 +31,3 @@
     from returns.maybe import Nothing
 
     reveal_type(Nothing)  # N: Revealed type is "returns.maybe.Maybe[<nothing>]"
-
-
-- case: maybe_result_success_type
-  disable_cache: false
-  main: |
-    from returns.maybe import Some
-
-    reveal_type(Some)  # N: Revealed type is "Type[returns.maybe.Some[Any]]"
-
-
-- case: maybe_result_failure_type
-  disable_cache: false
-  main: |
-    from returns.maybe import _Nothing
-
-    reveal_type(_Nothing)  # N: Revealed type is "Type[returns.maybe._Nothing]"
-

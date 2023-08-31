@@ -125,22 +125,6 @@
     reveal_type(factory(1))  # N: Revealed type is "returns.result.Result[builtins.int, builtins.str]"
 
 
-- case: result_success_type
-  disable_cache: false
-  main: |
-    from returns.result import Success
-
-    reveal_type(Success)  # N: Revealed type is "Type[returns.result.Success[Any]]"
-
-
-- case: result_failure_type
-  disable_cache: false
-  main: |
-    from returns.result import Failure
-
-    reveal_type(Failure)  # N: Revealed type is "Type[returns.result.Failure[Any]]"
-
-
 - case: resulte_typecast1
   disable_cache: false
   main: |
