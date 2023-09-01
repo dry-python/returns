@@ -300,7 +300,7 @@ class RequiresContextIOResult(  # type: ignore[type-var]
         .. code:: python
 
           >>> from returns.context import RequiresContextIOResult
-          >>> from returns.result import Success, Failure, Result
+          >>> from returns.result import Failure, Result, Success
           >>> from returns.io import IOSuccess, IOFailure
 
           >>> def function(num: int) -> Result[int, str]:

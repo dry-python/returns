@@ -5,12 +5,10 @@ from typing import (
     TYPE_CHECKING,
     Any,
     Callable,
-    ClassVar,
     Generator,
     Iterator,
     List,
     Optional,
-    Type,
     TypeVar,
     Union,
     final,
@@ -342,12 +340,6 @@ class IOResult(  # type: ignore[type-var]
     _inner_value: Result[_ValueType, _ErrorType]
     __match_args__ = ('_inner_value',)
 
-    # These two are required for projects like `classes`:
-    #: Success type that is used to represent the successful computation.
-    success_type: ClassVar[Type['IOSuccess']]
-    #: Failure type that is used to represent the failed computation.
-    failure_type: ClassVar[Type['IOFailure']]
-
     #: Typesafe equality comparison with other `IOResult` objects.
     equals = container_equality
 
@@ -441,9 +433,9 @@ class IOResult(  # type: ignore[type-var]
           >>> assert IOFailure('a').apply(IOFailure('b')) == IOFailure('a')
 
         """
-        if isinstance(self, self.failure_type):
+        if isinstance(self, IOFailure):
             return self
-        if isinstance(container, self.success_type):
+        if isinstance(container, IOSuccess):
             return self.from_result(
                 self._inner_value.map(
                     container.unwrap()._inner_value,  # noqa: WPS437
@@ -757,7 +749,7 @@ class IOResult(  # type: ignore[type-var]
           >>> assert IOResult.from_result(Failure(2)) == IOFailure(2)
 
         """
-        if isinstance(inner_value, inner_value.success_type):
+        if isinstance(inner_value, Success):
             return IOSuccess(inner_value._inner_value)  # noqa: WPS437
         return IOFailure(inner_value._inner_value)  # type: ignore[arg-type]  # noqa: WPS437, E501
 
@@ -884,12 +876,8 @@ class IOSuccess(IOResult[_ValueType, Any]):
             """Does nothing for ``IOSuccess``."""
             return self
 
-
-IOResult.success_type = IOSuccess
-IOResult.failure_type = IOFailure
-
-
 # Aliases:
+
 
 #: Alias for a popular case when ``IOResult`` has ``Exception`` as error type.
 IOResultE = IOResult[_ValueType, Exception]

@@ -27,19 +27,3 @@
     container: IO[str]
 
     reveal_type(IOResult.from_failed_io(container))  # N: Revealed type is "returns.io.IOResult[Any, builtins.str]"
-
-
-- case: ioresult_success_type
-  disable_cache: false
-  main: |
-    from returns.io import IOResult
-
-    reveal_type(IOResult.success_type)  # N: Revealed type is "Type[returns.io.IOSuccess[Any]]"
-
-
-- case: ioresult_failure_type
-  disable_cache: false
-  main: |
-    from returns.io import IOResult
-
-    reveal_type(IOResult.failure_type)  # N: Revealed type is "Type[returns.io.IOFailure[Any]]"

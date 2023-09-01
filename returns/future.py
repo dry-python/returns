@@ -1478,7 +1478,7 @@ def future_safe(
 
       >>> import anyio
       >>> from returns.future import future_safe
-      >>> from returns.io import IOSuccess, IOResult
+      >>> from returns.io import IOFailure, IOSuccess
 
       >>> @future_safe
       ... async def might_raise(arg: int) -> float:
@@ -1488,7 +1488,7 @@ def future_safe(
       >>> assert anyio.run(might_raise(2).awaitable) == IOSuccess(0.5)
       >>> assert isinstance(
       ...     anyio.run(might_raise(0).awaitable),
-      ...     IOResult.failure_type,
+      ...     IOFailure,
       ... )
 
     Similar to :func:`returns.io.impure_safe` and :func:`returns.result.safe`

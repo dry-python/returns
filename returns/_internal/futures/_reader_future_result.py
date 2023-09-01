@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Awaitable, Callable, TypeVar
 
 from returns.primitives.hkt import Kind3, dekind
-from returns.result import Result
+from returns.result import Result, Success
 
 if TYPE_CHECKING:
     from returns.context import RequiresContextFutureResult  # noqa: F401
@@ -29,7 +29,7 @@ async def async_bind_async(
 ) -> Result[_NewValueType, _ErrorType]:
     """Async binds a coroutine with container over a value."""
     inner_value = await container(deps)._inner_value
-    if isinstance(inner_value, Result.success_type):
+    if isinstance(inner_value, Success):
         return await dekind(
             await function(inner_value.unwrap()),
         )(deps)._inner_value
