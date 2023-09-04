@@ -30,7 +30,7 @@ class _LawSpec(LawSpecDef):
         container: 'SwappableN[_FirstType, _SecondType, _ThirdType]',
     ) -> None:
         """
-        Swaping container twice.
+        Swapping container twice.
 
         It ensure that we get the initial value back.
         In other words, swapping twice does nothing.
