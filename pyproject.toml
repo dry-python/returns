@@ -71,7 +71,7 @@ pytest-cov = "^4.1"
 pytest-randomly = "^3.12"
 pytest-mypy-plugins = "^3.0"
 pytest-subtests = "^0.11"
-hypothesis = "^6.84"
+hypothesis = "^6.86"
 
 sphinx = "^5.2"
 sphinx-autodoc-typehints = "^1.23"
