@@ -22,7 +22,7 @@ hypothesis entrypoint
 We support a ``hypothesis`` entrypoint
 that is executed on ``hypothesis`` import.
 
-There we are regestering all our containers as strategies.
+There we are registering all our containers as strategies.
 So, you don't have to. Example:
 
 .. code:: python

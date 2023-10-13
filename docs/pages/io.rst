@@ -267,7 +267,7 @@ see the example below:
 Aliases
 -------
 
-There are several useful alises for ``IOResult`` type with some common values:
+There are several useful aliases for ``IOResult`` type with some common values:
 
 - :attr:`returns.io.IOResultE` is an alias for ``IOResult[... Exception]``,
   just use it when you want to work with ``IOResult`` containers

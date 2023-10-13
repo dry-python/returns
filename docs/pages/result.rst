@@ -57,7 +57,7 @@ see the example below:
 Aliases
 -------
 
-There are several useful alises for ``Result`` type with some common values:
+There are several useful aliases for ``Result`` type with some common values:
 
 - :attr:`returns.result.ResultE` is an alias for ``Result[... Exception]``,
   just use it when you want to work with ``Result`` containers
