@@ -220,7 +220,7 @@ async def test_fold_collect_future_result(subtests):
 
 
 def test_fold_loop_recursion_limit():
-    """Ensures that ``.loop`` method is recurion safe."""
+    """Ensures that ``.loop`` method is recursion safe."""
     limit = sys.getrecursionlimit() + 1
     iterable = (IO(1) for _ in range(limit))
     assert Fold.loop(iterable, IO(0), _sum_two) == IO(limit)

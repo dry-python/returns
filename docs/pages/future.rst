@@ -103,7 +103,7 @@ sync code that executes asynchronously without any magic at all.
 Aliases
 -------
 
-There are several useful alises for ``FutureResult`` type
+There are several useful aliases for ``FutureResult`` type
 with some common values:
 
 - :attr:`returns.future.FutureResultE` is an alias
