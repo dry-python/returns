@@ -8,9 +8,14 @@ See [0Ver](https://0ver.org/).
 
 ## 1.0.0 WIP
 
-### Misc
+### Features
 
 - *Breaking*: Remove `success_type` and `failure_type` fields from `IOResult`, `Maybe` and `Result` types
+
+### Misc
+
+- Support `mypy>=1.6.1,<1.7`
+
 
 ## 0.22.0
 
