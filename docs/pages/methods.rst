@@ -8,6 +8,11 @@ The following useful methods can be used to interact with interfaces.
 cond
 ----
 
+.. note::
+   ``cond`` is also the name of a function in the :ref:`pointfree` module.
+   Therefore we encourage to import the modules ``pointfree`` and ``methods``
+   directly instead of their functions.
+
 Reduce the boilerplate when choosing paths with ``DiverseFailableN``.
 Think of this method as a functional ``if`` alternative
 for successful or failed types.

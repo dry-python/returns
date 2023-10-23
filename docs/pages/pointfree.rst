@@ -339,6 +339,11 @@ kind of manipulation.
 cond
 ----
 
+.. note::
+   ``cond`` is also the name of a function in the :ref:`methods` module.
+   Therefore we encourage to import the modules ``pointfree`` and ``methods``
+   directly instead of their functions.
+
 Sometimes we need to create ``SingleFailableN`` or ``DiverseFailableN``
 containers (e.g. ``Maybe``, ``ResultLikeN``) based on a boolean expression,
 ``cond`` can help us.
