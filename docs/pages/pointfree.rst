@@ -144,7 +144,7 @@ but how can we do it independently?
   >>> # We now have two way of composing these entities.
   >>> # 1. Via ``.bind``:
   >>> assert container.bind(index_of_1) == Some(1)
-  >>> # 2. Or via the ``pointfree.bind`` function.
+  >>> # 2. Or via the ``bind`` function.
   >>> assert pointfree.bind(index_of_1)(container) == Some(1)
   >>> # This produces the same result, but in a different order
 
