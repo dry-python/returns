@@ -67,7 +67,7 @@ Doing this lets us compose regular functions and containers.
 
 .. code:: python
 
-  >>> from returns.pointfree import map_
+  >>> from returns import pointfree
   >>> from returns.maybe import Maybe, Some
 
   >>> def as_int(arg: str) -> int:
@@ -78,13 +78,13 @@ Doing this lets us compose regular functions and containers.
   >>> # 1. Via ``.map()``:
   >>> assert container.map(as_int) == Some(97)
   >>> # 2. Or via ``map_()``, like above but in the reverse order:
-  >>> assert map_(as_int)(container) == Some(97)
+  >>> assert pointfree.map_(as_int)(container) == Some(97)
 
 This means we can compose functions in a pipeline.
 
 .. code:: python
 
-  >>> from returns.pointfree import map_
+  >>> from returns import pointfree
   >>> from returns.pipeline import flow
   >>> from returns.maybe import Maybe, Some, Nothing
 
@@ -98,15 +98,15 @@ This means we can compose functions in a pipeline.
 
   >>> assert flow(
   ...     '007',
-  ...     index_of_7,    # Some(2)
-  ...     map_(double),  # Some(4)
+  ...     index_of_7,               # Some(2)
+  ...     pointfree.map_(double),   # Some(4)
   ... ) == Some(4)
 
   >>> # Still passes along Nothing
   >>> assert flow(
   ...     '006',
-  ...     index_of_7,    # Nothing
-  ...     map_(double),  # Nothing
+  ...     index_of_7,               # Nothing
+  ...     pointfree.map_(double),   # Nothing
   ... ) == Nothing
 
 bind
@@ -132,7 +132,7 @@ but how can we do it independently?
 
 .. code:: python
 
-  >>> from returns.pointfree import bind
+  >>> from returns import pointfree
   >>> from returns.maybe import Maybe, Some
 
   >>> def index_of_1(arg: str) -> Maybe[int]:
@@ -145,7 +145,7 @@ but how can we do it independently?
   >>> # 1. Via ``.bind``:
   >>> assert container.bind(index_of_1) == Some(1)
   >>> # 2. Or via the ``bind`` function.
-  >>> assert bind(index_of_1)(container) == Some(1)
+  >>> assert pointfree.bind(index_of_1)(container) == Some(1)
   >>> # This produces the same result, but in a different order
 
 That's it!
@@ -187,26 +187,26 @@ You can think of it like ``map``, but for the second type of a container.
 .. code:: python
 
   >>> from returns.io import IOFailure, IOSuccess
-  >>> from returns.pointfree import alt
+  >>> from returns import pointfree
 
   >>> def half_as_bad(error_code: int) -> float:
   ...     return error_code / 2
 
   >>> # When acting on a successful state, nothing happens.
-  >>> assert alt(half_as_bad)(IOSuccess(1)) == IOSuccess(1)
+  >>> assert pointfree.alt(half_as_bad)(IOSuccess(1)) == IOSuccess(1)
 
   >>> # When acting on a failed state, the result changes
-  >>> assert alt(half_as_bad)(IOFailure(4)) == IOFailure(2.0)
+  >>> assert pointfree.alt(half_as_bad)(IOFailure(4)) == IOFailure(2.0)
 
   >>> # This is equivalent to IOFailure(4).alt(half_as_bad)
-  >>> assert alt(half_as_bad)(IOFailure(4)) == IOFailure(4).alt(half_as_bad)
+  >>> assert pointfree.alt(half_as_bad)(IOFailure(4)) == IOFailure(4).alt(half_as_bad)
 
 This inverse syntax lets us easily compose functions in a pipeline
 
 .. code:: python
 
   >>> from returns.io import IOFailure, IOSuccess, IOResult
-  >>> from returns.pointfree import alt
+  >>> from returns import pointfree
 
   >>> def always_errors(user_input: str) -> IOResult:
   ...     return IOFailure(len(user_input))
@@ -220,8 +220,8 @@ This inverse syntax lets us easily compose functions in a pipeline
   >>> assert flow(
   ...     '12345',
   ...     always_errors,
-  ...     alt(twice_as_bad),
-  ...     alt(make_error_message)
+  ...     pointfree.alt(twice_as_bad),
+  ...     pointfree.alt(make_error_message)
   ... ) == IOFailure('Badness level: 10')
 
 
@@ -238,7 +238,7 @@ You can think of it like ``bind``, but for the second type of a container.
 
 .. code:: python
 
-  >>> from returns.pointfree import lash
+  >>> from returns import pointfree
   >>> from returns.result import Success, Failure, Result
 
   >>> def always_succeeds(arg: str) -> Result[int, str]:
@@ -249,7 +249,7 @@ You can think of it like ``bind``, but for the second type of a container.
   >>> # 1. Via ``.lash``:
   >>> assert failed.lash(always_succeeds) == Success(1)
   >>> # 2. Or via ``lash`` function, the same but in the inverse way:
-  >>> assert lash(always_succeeds)(failed) == Success(1)
+  >>> assert pointfree.lash(always_succeeds)(failed) == Success(1)
 
 
 apply
@@ -260,23 +260,23 @@ to use ``.apply()`` container method like a function:
 
 .. code:: python
 
-  >>> from returns.pointfree import apply
+  >>> from returns import pointfree
   >>> from returns.maybe import Some, Nothing
 
   >>> def wow(arg: int) -> str:
   ...     return chr(arg) + '!'
 
-  >>> assert apply(Some(wow))(Some(97)) == Some('a!')
-  >>> assert apply(Some(wow))(Some(98)) == Some('b!')
-  >>> assert apply(Some(wow))(Nothing) == Nothing
-  >>> assert apply(Nothing)(Nothing) == Nothing
+  >>> assert pointfree.apply(Some(wow))(Some(97)) == Some('a!')
+  >>> assert pointfree.apply(Some(wow))(Some(98)) == Some('b!')
+  >>> assert pointfree.apply(Some(wow))(Nothing) == Nothing
+  >>> assert pointfree.apply(Nothing)(Nothing) == Nothing
 
 If you wish to use ``apply`` inside a pipeline
 here's how it might look:
 
 .. code:: python
 
-  >>> from returns.pointfree import apply
+  >>> from returns import pointfree
   >>> from returns.pipeline import flow
   >>> from returns.maybe import Some, Nothing, Maybe
   >>> from typing import Callable
@@ -291,12 +291,12 @@ here's how it might look:
 
   >>> assert flow(
   ...     Some(97),
-  ...     apply(my_response(True)),
+  ...     pointfree.apply(my_response(True)),
   ... ) == Some('a!')
 
   >>> assert flow(
   ...     Nothing,
-  ...     apply(my_response(False)),
+  ...     pointfree.apply(my_response(False)),
   ... ) == Nothing
 
 Or with a function as the first parameter:
@@ -326,18 +326,23 @@ kind of manipulation.
 
 .. code:: python
 
-  >>> from returns.pointfree import compose_result
+  >>> from returns import pointfree
   >>> from returns.io import IOResult, IOSuccess, IOFailure
   >>> from returns.result import Result
 
   >>> def cast_to_str(container: Result[float, int]) -> IOResult[str, int]:
   ...     return IOResult.from_result(container.map(str))
 
-  >>> assert compose_result(cast_to_str)(IOSuccess(42.0)) == IOSuccess('42.0')
-  >>> assert compose_result(cast_to_str)(IOFailure(1)) == IOFailure(1)
+  >>> assert pointfree.compose_result(cast_to_str)(IOSuccess(42.0)) == IOSuccess('42.0')
+  >>> assert pointfree.compose_result(cast_to_str)(IOFailure(1)) == IOFailure(1)
 
 cond
 ----
+
+.. note::
+   ``cond`` is also the name of a function in the :ref:`methods` module.
+   Therefore we encourage to import the modules ``pointfree`` and ``methods``
+   directly instead of their functions.
 
 Sometimes we need to create ``SingleFailableN`` or ``DiverseFailableN``
 containers (e.g. ``Maybe``, ``ResultLikeN``) based on a boolean expression,
@@ -350,7 +355,7 @@ See the example below:
 .. code:: python
 
   >>> from returns.pipeline import flow
-  >>> from returns.pointfree import cond
+  >>> from returns import pointfree
   >>> from returns.result import Result, Failure, Success
 
   >>> def returns_boolean(arg: int) -> bool:
@@ -358,12 +363,12 @@ See the example below:
 
   >>> assert flow(
   ...     returns_boolean(1),
-  ...     cond(Result, 'success', 'failure')
+  ...     pointfree.cond(Result, 'success', 'failure')
   ... ) == Success('success')
 
   >>> assert flow(
   ...     returns_boolean(0),
-  ...     cond(Result, 'success', 'failure')
+  ...     pointfree.cond(Result, 'success', 'failure')
   ... ) == Failure('failure')
 
 Example using ``cond`` with the ``Maybe`` container:
@@ -371,17 +376,17 @@ Example using ``cond`` with the ``Maybe`` container:
 .. code:: python
 
   >>> from returns.pipeline import flow
-  >>> from returns.pointfree import cond
+  >>> from returns import pointfree
   >>> from returns.maybe import Maybe, Some, Nothing
 
   >>> assert flow(
   ...     returns_boolean(1),
-  ...     cond(Maybe, 'success')
+  ...     pointfree.cond(Maybe, 'success')
   ... ) == Some('success')
 
   >>> assert flow(
   ...     returns_boolean(0),
-  ...     cond(Maybe, 'success')
+  ...     pointfree.cond(Maybe, 'success')
   ... ) == Nothing
 
 
