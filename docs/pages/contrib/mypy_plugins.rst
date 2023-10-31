@@ -11,10 +11,19 @@ and improve type-safety of things developers commonly use.
 Installation
 ------------
 
-You will need to install ``mypy`` separately.
-It is not bundled with ``returns``.
+``returns`` has ``[compatible-mypy]`` extra to install the supported version.
 
-To install any ``mypy`` plugin add it
+.. code:: bash
+
+  pip install 'returns[compatible-mypy]'
+
+Or you can install ``mypy`` separately and check that version is supported.
+
+
+Enabling our mypy plugin
+------------------------
+
+To install our ``mypy`` plugin add it
 to the ``plugins`` section of the config file (``setup.cfg`` or ``mypy.ini``):
 
 .. code:: ini
