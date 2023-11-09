@@ -59,7 +59,7 @@ httpx = "^0.25"
 
 wemake-python-styleguide = "^0.18"
 flake8-pytest-style = "^1.6"
-flake8-pyi = "^23.10"
+flake8-pyi = "^23.11"
 nitpick = "^0.34"
 codespell = "^2.2"
 slotscheck = "^0.17"
