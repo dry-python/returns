@@ -67,7 +67,7 @@ if __name__ == '__main__':
     future_result = managed_httpx(
         FutureResultE.from_value(httpx.AsyncClient(timeout=5)),
     )
-    print(anyio.run(future_result.awaitable))  # noqa: WPS421
+    print(anyio.run(future_result.awaitable))  # type: ignore # noqa: WPS421
     # <IOResult: <Success: (
     #    'sunt aut facere repellat provident occaecati ...',
     #    'qui est esse',
