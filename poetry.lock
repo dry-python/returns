@@ -853,6 +853,16 @@ files = [
 smmap = ">=3.0.1,<6"
 
 [[package]]
+name = "gitignore-parser"
+version = "0.1.9"
+description = "A spec-compliant gitignore parser for Python 3.5+"
+optional = false
+python-versions = "*"
+files = [
+    {file = "gitignore_parser-0.1.9.tar.gz", hash = "sha256:270cb8cd09de410b8805c5f4183fd404c28f910dcbb94e1efc08226144fdff7d"},
+]
+
+[[package]]
 name = "gitpython"
 version = "3.1.37"
 description = "GitPython is a Python library used to interact with Git repositories"
@@ -1348,13 +1358,13 @@ files = [
 
 [[package]]
 name = "nitpick"
-version = "0.34.0"
+version = "0.35.0"
 description = "Enforce the same settings across multiple language-independent projects"
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "nitpick-0.34.0-py3-none-any.whl", hash = "sha256:ca346dfdd256dadb7c0e6d5c939ba4182a826c40ea395705d9653cf56469cdef"},
-    {file = "nitpick-0.34.0.tar.gz", hash = "sha256:ea01639a02a01e4a49e06e3018e2c0da8fb3a25068467884f5a178d8d8d81023"},
+    {file = "nitpick-0.35.0-py3-none-any.whl", hash = "sha256:9911d32c2d488b41914aa1a6d230531fa92bbe3d6610e4a468a5cb5e30fab907"},
+    {file = "nitpick-0.35.0.tar.gz", hash = "sha256:098167a4c65655aca52c0ea3876b1e71cf634a27d0e17b971bce9bfcc1f3febe"},
 ]
 
 [package.dependencies]
@@ -1367,6 +1377,7 @@ dpath = "*"
 flake8 = ">=3.0.0"
 flatten-dict = "*"
 furl = "*"
+gitignore_parser = "*"
 identify = "*"
 importlib-resources = {version = "*", markers = "python_version >= \"3.8\" and python_version < \"3.9\""}
 jmespath = "*"
@@ -1374,6 +1385,7 @@ loguru = "*"
 marshmallow = ">=3.0.0b10"
 marshmallow-polyfield = ">=5.10,<6.0"
 more-itertools = "*"
+packaging = "*"
 pluggy = "*"
 python-slugify = "*"
 requests = "*"
@@ -2500,4 +2512,4 @@ compatible-mypy = ["mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">= 3.8.1,<4.0"
-content-hash = "8bb431ede2ccdc738e176df1a8834a00af61957fb8af235ca3e0a474a30c4eaa"
+content-hash = "fbf775f90e8ed6afa54378c87fe84464d596efdb7470c401142c9817438509d2"
