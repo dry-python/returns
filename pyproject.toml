@@ -64,7 +64,7 @@ nitpick = "^0.35"
 codespell = "^2.2"
 slotscheck = "^0.17"
 
-safety = "^2.3"
+safety = "^3.0"
 
 pytest = "^7.4"
 pytest-cov = "^4.1"
