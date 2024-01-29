@@ -66,7 +66,7 @@ slotscheck = "^0.17"
 
 safety = "^3.0"
 
-pytest = "^7.4"
+pytest = "^8.0"
 pytest-cov = "^4.1"
 pytest-randomly = "^3.12"
 pytest-mypy-plugins = "^3.0"
