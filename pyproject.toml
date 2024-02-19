@@ -52,7 +52,7 @@ typing-extensions = ">=4.0,<5.0"
 mypy = { version = ">=1.5,<1.6", optional = true }
 
 [tool.poetry.dev-dependencies]
-anyio = "^4.2"
+anyio = "^4.3"
 trio = "^0.24"
 attrs = "^23.2"
 httpx = "^0.26"
