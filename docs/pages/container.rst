@@ -254,8 +254,8 @@ It would be faster, but not as elegant (and type-safe).
 Working with iterable of containers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Imagine that you have two take 10 random numbers
-and then sum they to get the final result.
+Imagine that you have to take 10 random numbers
+and then sum them to get the final result.
 
 So, here's how your code will look like:
 
