@@ -68,12 +68,12 @@ jobs:
         poetry run python -m slotscheck returns --verbose
 
     - name: Upload coverage to Codecov
-      if: matrix.python-version == 3.11"
+      if: matrix.python-version == 3.11
       uses: codecov/codecov-action@v4
       with:
         file: ./coverage.xml
 
-  typecheck-tests:
+  typesafety-tests:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
