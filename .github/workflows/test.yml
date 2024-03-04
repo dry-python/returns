@@ -54,7 +54,7 @@ jobs:
     - name: Install dependencies
       run: |
         poetry config virtualenvs.in-project true
-        poetry install --extras=compatible-mypy
+        poetry install --extras=compatible-mypy --extras=check-laws
 
         poetry run pip install -U pip
 
