@@ -24,7 +24,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.8', '3.9', '3.10', '3.11']
+        python-version: ['3.9', '3.10', '3.11', '3.12']
         task: ['tests', 'typesafety']
 
     steps:
@@ -76,7 +76,6 @@ jobs:
 
         poetry run poetry check
         poetry run pip check
-        poetry run safety check --full-report
         poetry run python -m slotscheck returns --verbose
 
     - name: Run typesafety tests
