@@ -882,7 +882,7 @@ socks = ["socksio (==1.*)"]
 name = "hypothesis"
 version = "6.98.17"
 description = "A library for property-based testing"
-optional = false
+optional = true
 python-versions = ">=3.8"
 files = [
     {file = "hypothesis-6.98.17-py3-none-any.whl", hash = "sha256:313f64b9f9f95e12c8b5342466bef7f352d2608afeeb434817c039602b45f0c4"},
@@ -2523,9 +2523,10 @@ docs = ["furo", "jaraco.packaging (>=9.3)", "jaraco.tidelift (>=1.4)", "rst.link
 testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "pytest (>=6)", "pytest-black (>=0.3.7)", "pytest-checkdocs (>=2.4)", "pytest-cov", "pytest-enabler (>=2.2)", "pytest-ignore-flaky", "pytest-mypy (>=0.9.1)", "pytest-ruff"]
 
 [extras]
+check-laws = ["hypothesis", "pytest"]
 compatible-mypy = ["mypy"]
 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "be750c4eb4ef351da4562696f765369810b0e4fc9fc564e1ae8c874c55cf695b"
+content-hash = "ce724df9198a5d4060948731d15fd93d7c40e24b3050304ed573c10ca152fb9f"
