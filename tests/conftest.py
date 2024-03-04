@@ -4,7 +4,6 @@ from types import MappingProxyType
 from typing import Final, Optional
 
 from _pytest.config import Config
-from py import path as pypath
 
 # See https://github.com/HypothesisWorks/hypothesis/pull/2567
 pytest_plugins = ['hypothesis.extra.pytestplugin']
@@ -27,7 +26,7 @@ PATHS_TO_IGNORE_NOW: Final = frozenset(
 
 
 def pytest_ignore_collect(
-    path: pypath.local,
+    collection_path: Path,
     config: Config,
 ) -> Optional[bool]:
     """
@@ -36,4 +35,4 @@ def pytest_ignore_collect(
     This hook is consulted for all files and directories prior to calling
     more specific hooks. Stops at first non-None result.
     """
-    return Path(path) in PATHS_TO_IGNORE_NOW
+    return collection_path in PATHS_TO_IGNORE_NOW

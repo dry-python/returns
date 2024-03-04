@@ -19,13 +19,12 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  tests:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.8', '3.9', '3.10', '3.11']
-        task: ['tests', 'typesafety']
+        python-version: ['3.9', '3.10', '3.11', '3.12']
 
     steps:
     - uses: actions/checkout@v4
@@ -42,24 +41,14 @@ jobs:
         # Adding `poetry` to `$PATH`:
         echo "$HOME/.poetry/bin" >> $GITHUB_PATH
 
-    - name: Set up cache
-      uses: actions/cache@v4
-      with:
-        path: .venv
-        key: venv-${{ matrix.python-version }}-${{ hashFiles('poetry.lock') }}
-        restore-keys: |
-          venv-${{ matrix.python-version }}-${{ hashFiles('poetry.lock') }}
-          venv-${{ matrix.python-version }}-
-
     - name: Install dependencies
       run: |
         poetry config virtualenvs.in-project true
-        poetry install --extras=compatible-mypy
+        poetry install --all-extras
 
         poetry run pip install -U pip
 
     - name: Run tests
-      if: matrix.task == 'tests'
       run: |
         poetry run flake8 .
 
@@ -76,17 +65,46 @@ jobs:
 
         poetry run poetry check
         poetry run pip check
-        poetry run safety check --full-report
         poetry run python -m slotscheck returns --verbose
 
-    - name: Run typesafety tests
-      if: matrix.task == 'typesafety'
-      run: |
-        # We do this to speed up the build:
-        poetry run pytest typesafety -p no:cov -o addopts="" --mypy-ini-file=setup.cfg
-
     - name: Upload coverage to Codecov
-      if: "matrix.task == 'tests' && matrix.python-version == 3.11"
+      if: matrix.python-version == 3.11
       uses: codecov/codecov-action@v4
       with:
         file: ./coverage.xml
+
+  typesafety-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.9', '3.10', '3.11', '3.12']
+        shard: [0, 1, 2, 3]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install poetry
+      run: |
+        curl -sSL "https://install.python-poetry.org" | python
+
+        # Adding `poetry` to `$PATH`:
+        echo "$HOME/.poetry/bin" >> $GITHUB_PATH
+
+    - name: Install dependencies
+      run: |
+        poetry config virtualenvs.in-project true
+        poetry install --all-extras
+
+        poetry run pip install -U pip
+
+    - name: Run typesafety tests
+      run: |
+        poetry run pytest typesafety \
+          --num-shards=4 --shard-id=${{ matrix.shard }} \
+          -p no:cov -o addopts="" --mypy-ini-file=setup.cfg

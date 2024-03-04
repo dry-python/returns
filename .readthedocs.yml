@@ -3,15 +3,16 @@ version: 2
 
 # Set the version of Python and other tools you might need
 build:
-  os: ubuntu-20.04
-  tools: {python: "3.9"}
+  os: ubuntu-lts-latest
+  tools: {python: "3.11"}
   jobs:
     pre_create_environment:
       - asdf plugin add poetry
       - asdf install poetry latest
       - asdf global poetry latest
       - poetry config virtualenvs.create false
-      - poetry export --with dev --format=requirements.txt --output=requirements.txt
+      - poetry self add poetry-plugin-export
+      - poetry export --only main --only docs --extras check_laws --format=requirements.txt --output=requirements.txt
 
 python:
   install:
