@@ -56,7 +56,7 @@ class _Pipe(Generic[
     See docs on ``pipe`` feature in ``mypy`` plugin.
     """
 
-    def __init__(self, __functions: tuple[
+    def __init__(self, functions: tuple[
         _PipelineStepType1,
         _PipelineStepType2,
         _PipelineStepType3,
@@ -85,26 +85,27 @@ class _Pipe(Generic[
 
 
 def pipe(
-    __function1: _PipelineStepType1,
-    __function2: _PipelineStepType2 = ...,
-    __function3: _PipelineStepType3 = ...,
-    __function4: _PipelineStepType4 = ...,
-    __function5: _PipelineStepType5 = ...,
-    __function6: _PipelineStepType6 = ...,
-    __function7: _PipelineStepType7 = ...,
-    __function8: _PipelineStepType8 = ...,
-    __function9: _PipelineStepType9 = ...,
-    __function10: _PipelineStepType10 = ...,
-    __function11: _PipelineStepType11 = ...,
-    __function12: _PipelineStepType12 = ...,
-    __function13: _PipelineStepType13 = ...,
-    __function14: _PipelineStepType14 = ...,
-    __function15: _PipelineStepType15 = ...,
-    __function16: _PipelineStepType16 = ...,
-    __function17: _PipelineStepType17 = ...,
-    __function18: _PipelineStepType18 = ...,
-    __function19: _PipelineStepType19 = ...,
-    __function20: _PipelineStepType20 = ...,
+    function1: _PipelineStepType1,
+    function2: _PipelineStepType2 = ...,
+    function3: _PipelineStepType3 = ...,
+    function4: _PipelineStepType4 = ...,
+    function5: _PipelineStepType5 = ...,
+    function6: _PipelineStepType6 = ...,
+    function7: _PipelineStepType7 = ...,
+    function8: _PipelineStepType8 = ...,
+    function9: _PipelineStepType9 = ...,
+    function10: _PipelineStepType10 = ...,
+    function11: _PipelineStepType11 = ...,
+    function12: _PipelineStepType12 = ...,
+    function13: _PipelineStepType13 = ...,
+    function14: _PipelineStepType14 = ...,
+    function15: _PipelineStepType15 = ...,
+    function16: _PipelineStepType16 = ...,
+    function17: _PipelineStepType17 = ...,
+    function18: _PipelineStepType18 = ...,
+    function19: _PipelineStepType19 = ...,
+    function20: _PipelineStepType20 = ...,
+    /,
 ) -> _Pipe[
     _InstanceType,
     _ReturnType,
