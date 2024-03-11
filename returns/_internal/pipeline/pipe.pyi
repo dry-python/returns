@@ -84,7 +84,7 @@ class _Pipe(Generic[
         ...
 
 
-def pipe(
+def pipe(  # noqa: WPS451
     function1: _PipelineStepType1,
     function2: _PipelineStepType2 = ...,
     function3: _PipelineStepType3 = ...,
