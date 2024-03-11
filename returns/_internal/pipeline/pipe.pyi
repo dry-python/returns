@@ -56,28 +56,31 @@ class _Pipe(Generic[
     See docs on ``pipe`` feature in ``mypy`` plugin.
     """
 
-    def __init__(self, functions: tuple[
-        _PipelineStepType1,
-        _PipelineStepType2,
-        _PipelineStepType3,
-        _PipelineStepType4,
-        _PipelineStepType5,
-        _PipelineStepType6,
-        _PipelineStepType7,
-        _PipelineStepType8,
-        _PipelineStepType9,
-        _PipelineStepType10,
-        _PipelineStepType11,
-        _PipelineStepType12,
-        _PipelineStepType13,
-        _PipelineStepType14,
-        _PipelineStepType15,
-        _PipelineStepType16,
-        _PipelineStepType17,
-        _PipelineStepType18,
-        _PipelineStepType19,
-        _PipelineStepType20,
-    ]) -> None:
+    def __init__(  # noqa: WPS451
+        self, 
+        functions: tuple[
+            _PipelineStepType1,
+            _PipelineStepType2,
+            _PipelineStepType3,
+            _PipelineStepType4,
+            _PipelineStepType5,
+            _PipelineStepType6,
+            _PipelineStepType7,
+            _PipelineStepType8,
+            _PipelineStepType9,
+            _PipelineStepType10,
+            _PipelineStepType11,
+            _PipelineStepType12,
+            _PipelineStepType13,
+            _PipelineStepType14,
+            _PipelineStepType15,
+            _PipelineStepType16,
+            _PipelineStepType17,
+            _PipelineStepType18,
+            _PipelineStepType19,
+            _PipelineStepType20,
+        ],
+    ) -> None:
         ...
 
     def __call__(self, instance: _InstanceType) -> _ReturnType:
