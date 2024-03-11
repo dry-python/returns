@@ -80,6 +80,7 @@ class _Pipe(Generic[
             _PipelineStepType19,
             _PipelineStepType20,
         ],
+        /,
     ) -> None:
         ...
 
