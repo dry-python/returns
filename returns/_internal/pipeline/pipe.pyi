@@ -57,7 +57,7 @@ class _Pipe(Generic[
     """
 
     def __init__(  # noqa: WPS451
-        self, 
+        self,
         functions: tuple[
             _PipelineStepType1,
             _PipelineStepType2,
