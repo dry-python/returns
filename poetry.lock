@@ -1558,13 +1558,13 @@ testing = ["fields", "hunter", "process-tests", "pytest-xdist", "six", "virtuale
 
 [[package]]
 name = "pytest-mypy-plugins"
-version = "3.1.0"
+version = "3.1.1"
 description = "pytest plugin for writing tests for mypy plugins"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "pytest-mypy-plugins-3.1.0.tar.gz", hash = "sha256:8146115f9b4bed02b299465a2c2b9326b367ea64b155e9d77562769af963d01b"},
-    {file = "pytest_mypy_plugins-3.1.0-py3-none-any.whl", hash = "sha256:fc22cd07f15c14d2311459619a3524a0355c7d13a0d782a5b8aa10a2526d0e16"},
+    {file = "pytest-mypy-plugins-3.1.1.tar.gz", hash = "sha256:968dbfafb7cce247571f53cfe6e4e7d947ab2f6424082a097a98d546c1669be0"},
+    {file = "pytest_mypy_plugins-3.1.1-py3-none-any.whl", hash = "sha256:7e4bac8843db9a39f035ab7d9d18bb63d54fd54c3217a18e131ac50e41450847"},
 ]
 
 [package.dependencies]
