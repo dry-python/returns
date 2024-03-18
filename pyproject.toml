@@ -55,7 +55,7 @@ hypothesis = { version = "^6.98", optional = true }
 
 [tool.poetry.group.dev.dependencies]
 anyio = "^4.3"
-trio = "^0.24"
+trio = ">=0.24,<0.26"
 attrs = "^23.2"
 httpx = "^0.27"
 
