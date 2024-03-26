@@ -59,7 +59,7 @@ trio = ">=0.24,<0.26"
 attrs = "^23.2"
 httpx = "^0.27"
 
-wemake-python-styleguide = "^0.18"
+wemake-python-styleguide = ">=0.18,<0.20"
 flake8-pytest-style = "^1.6"
 flake8-pyi = "^24.1"
 nitpick = "^0.35"

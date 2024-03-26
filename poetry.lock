@@ -585,13 +585,13 @@ flake8 = ">5"
 
 [[package]]
 name = "flake8-bugbear"
-version = "23.12.2"
+version = "24.2.6"
 description = "A plugin for flake8 finding likely bugs and design problems in your program. Contains warnings that don't belong in pyflakes and pycodestyle."
 optional = false
 python-versions = ">=3.8.1"
 files = [
-    {file = "flake8-bugbear-23.12.2.tar.gz", hash = "sha256:32b2903e22331ae04885dae25756a32a8c666c85142e933f43512a70f342052a"},
-    {file = "flake8_bugbear-23.12.2-py3-none-any.whl", hash = "sha256:83324bad4d90fee4bf64dd69c61aff94debf8073fbd807c8b6a36eec7a2f0719"},
+    {file = "flake8-bugbear-24.2.6.tar.gz", hash = "sha256:f9cb5f2a9e792dd80ff68e89a14c12eed8620af8b41a49d823b7a33064ac9658"},
+    {file = "flake8_bugbear-24.2.6-py3-none-any.whl", hash = "sha256:663ef5de80cd32aacd39d362212983bc4636435a6f83700b4ed35acbd0b7d1b8"},
 ]
 
 [package.dependencies]
@@ -2502,23 +2502,23 @@ zstd = ["zstandard (>=0.18.0)"]
 
 [[package]]
 name = "wemake-python-styleguide"
-version = "0.18.0"
+version = "0.19.1"
 description = "The strictest and most opinionated python linter ever"
 optional = false
-python-versions = ">=3.8.1,<4.0"
+python-versions = "<4.0,>=3.9"
 files = [
-    {file = "wemake_python_styleguide-0.18.0-py3-none-any.whl", hash = "sha256:2219be145185edcd5e01f4ce49e3dea11acc34f2c377face0c175bb6ea6ac988"},
-    {file = "wemake_python_styleguide-0.18.0.tar.gz", hash = "sha256:69139858cf5b2a9ba09dac136e2873a4685515768f68fdef2684ebefd7b1dafd"},
+    {file = "wemake_python_styleguide-0.19.1-py3-none-any.whl", hash = "sha256:b460b437ab9ff2789aba9a5aac7c9d3c85dfef80947fe1e5bc695f49b21a892a"},
+    {file = "wemake_python_styleguide-0.19.1.tar.gz", hash = "sha256:ab8cb806e0716c21b0266bb524236491546b4d067cded7264f23b3c51d8e9b77"},
 ]
 
 [package.dependencies]
 astor = ">=0.8,<0.9"
 attrs = "*"
 darglint = ">=1.2,<2.0"
-flake8 = ">5"
+flake8 = ">=7.0,<8.0"
 flake8-bandit = ">=4.1,<5.0"
 flake8-broken-line = ">=1.0,<2.0"
-flake8-bugbear = ">=23.5,<24.0"
+flake8-bugbear = ">=24.2,<25.0"
 flake8-commas = ">=2.0,<3.0"
 flake8-comprehensions = ">=3.1,<4.0"
 flake8-debugger = ">=4.0,<5.0"
@@ -2569,4 +2569,4 @@ compatible-mypy = ["mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "3645a3265209a61c35f32df79f5da38e7529f0b48b62867e879ce8b78e906353"
+content-hash = "c153a5e4d52f7f8c6a8a3d552513e8cdfa1822b4530c329b76df0189c632412c"
