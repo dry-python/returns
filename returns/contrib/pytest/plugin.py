@@ -40,7 +40,7 @@ _ReturnsResultType = TypeVar(
 
 
 @final
-class ReturnsAsserts(object):
+class ReturnsAsserts:
     """Class with helpers assertions to check containers."""
 
     __slots__ = ('_errors_handled', )

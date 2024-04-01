@@ -5,7 +5,7 @@ from typing_extensions import Self
 from returns.primitives.exceptions import ImmutableStateError
 
 
-class Immutable(object):
+class Immutable:
     """
     Helper type for objects that should be immutable.
 

@@ -19,7 +19,7 @@ def _use_failure(inner_value: str) -> ReaderIOResult[str, str, NoDeps]:
     return ReaderIOResult.from_failure('use failure')
 
 
-class _ReleaseSuccess(object):
+class _ReleaseSuccess:
     def __init__(self, logs: List[Tuple[str, Result[str, str]]]) -> None:
         self._logs = logs
 
@@ -32,7 +32,7 @@ class _ReleaseSuccess(object):
         return ReaderIOResult.from_value(None)
 
 
-class _ReleaseFailure(object):
+class _ReleaseFailure:
     def __init__(self, logs: List[Tuple[str, Result[str, str]]]) -> None:
         self._logs = logs
 

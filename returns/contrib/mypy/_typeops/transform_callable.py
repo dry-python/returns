@@ -19,7 +19,7 @@ def proper_type(
 
 
 @final
-class Intermediate(object):
+class Intermediate:
     """
     Allows to build a new callable from old one and different options.
 
@@ -98,7 +98,7 @@ class Intermediate(object):
 
 
 @final
-class Functions(object):
+class Functions:
     """
     Allows to create new callables based on two existing ones.
 

@@ -7,7 +7,7 @@ from hypothesis import strategies as st
 from returns.primitives.container import BaseContainer
 
 
-class _CustomClass(object):
+class _CustomClass:
     def __init__(self, inner_value: Any) -> None:
         self.inner_value = inner_value
 

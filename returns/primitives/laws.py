@@ -150,7 +150,7 @@ class Lawful(Generic[_Caps]):
         return laws
 
 
-class LawSpecDef(object):
+class LawSpecDef:
     """Base class for all collection of laws aka LawSpecs."""
 
     __slots__ = ()
