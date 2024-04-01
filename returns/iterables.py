@@ -14,7 +14,7 @@ _ApplicativeKind = TypeVar('_ApplicativeKind', bound=ApplicativeN)
 _FailableKind = TypeVar('_FailableKind', bound=FailableN)
 
 
-class AbstractFold(object):
+class AbstractFold:
     """
     A collection of different helpers to write declarative ``Iterable`` actions.
 

@@ -18,7 +18,7 @@ _Constraints = Mapping[TypeVarId, MypyType]
 
 
 @final
-class CallableInference(object):
+class CallableInference:
     """
     Used to infer function arguments and return type.
 
@@ -93,7 +93,7 @@ class CallableInference(object):
 
 
 @final
-class PipelineInference(object):
+class PipelineInference:
     """
     Very helpful tool to work with functions like ``flow`` and ``pipe``.
 

@@ -17,7 +17,7 @@ _sentinel: _Sentinel = cast(_Sentinel, object())
 
 
 @final
-class ReAwaitable(object):
+class ReAwaitable:
     """
     Allows to write coroutines that can be awaited multiple times.
 

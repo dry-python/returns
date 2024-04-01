@@ -31,7 +31,7 @@ def analyze(ctx: FunctionContext) -> MypyType:
 
 
 @final
-class _ArgTree(object):
+class _ArgTree:
     """Represents a node in tree of arguments."""
 
     def __init__(self, case: Optional[CallableType]) -> None:
@@ -40,7 +40,7 @@ class _ArgTree(object):
 
 
 @final
-class _CurryFunctionOverloads(object):
+class _CurryFunctionOverloads:
     """
     Implementation of ``@curry`` decorator typings.
 

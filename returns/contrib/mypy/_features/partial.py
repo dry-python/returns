@@ -67,7 +67,7 @@ def analyze(ctx: FunctionContext) -> MypyType:
 
 
 @final
-class _PartialFunctionReducer(object):
+class _PartialFunctionReducer:
     """
     Helper object to work with curring.
 
@@ -203,7 +203,7 @@ class _PartialFunctionReducer(object):
 
 
 @final
-class _AppliedArgs(object):
+class _AppliedArgs:
     """Builds applied args that were partially applied."""
 
     def __init__(self, function_ctx: FunctionContext) -> None:

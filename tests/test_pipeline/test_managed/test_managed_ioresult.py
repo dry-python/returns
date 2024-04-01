@@ -18,7 +18,7 @@ def _use_failure(inner_value: str) -> IOResult[str, str]:
     return IOFailure('use failure')
 
 
-class _ReleaseSuccess(object):
+class _ReleaseSuccess:
     def __init__(self, logs: List[Tuple[str, Result[str, str]]]) -> None:
         self._logs = logs
 
@@ -31,7 +31,7 @@ class _ReleaseSuccess(object):
         return IOSuccess(None)
 
 
-class _ReleaseFailure(object):
+class _ReleaseFailure:
     def __init__(self, logs: List[Tuple[str, Result[str, str]]]) -> None:
         self._logs = logs
 

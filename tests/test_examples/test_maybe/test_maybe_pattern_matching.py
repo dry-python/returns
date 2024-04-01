@@ -5,7 +5,7 @@ from returns.maybe import Maybe, Nothing, Some
 
 
 @dataclass
-class _Book(object):
+class _Book:
     book_id: int
     name: str
 
