@@ -64,7 +64,7 @@ flake8-pytest-style = "^1.6"
 flake8-pyi = "^24.1"
 nitpick = "^0.35"
 codespell = "^2.2"
-slotscheck = ">=0.17,<0.20"
+slotscheck = ">=0.17,<0.19"
 
 pytest-cov = ">=4.1,<6.0"
 pytest-randomly = "^3.12"
