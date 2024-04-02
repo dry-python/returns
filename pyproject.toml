@@ -60,7 +60,7 @@ attrs = "^23.2"
 httpx = "^0.27"
 
 wemake-python-styleguide = "^0.19"
-flake8-pytest-style = "^1.6"
+flake8-pytest-style = ">=1.6,<3.0"
 flake8-pyi = "^24.1"
 nitpick = "^0.35"
 codespell = "^2.2"
