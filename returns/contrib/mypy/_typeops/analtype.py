@@ -103,7 +103,7 @@ def translate_to_function(
     ctx: CallableContext,
 ) -> MypyType:
     """
-    Tryies to translate a type into callable by accessing ``__call__`` attr.
+    Tries to translate a type into callable by accessing ``__call__`` attr.
 
     This might fail with ``mypy`` errors and that's how it must work.
     This also preserves all type arguments as-is.
