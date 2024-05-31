@@ -2215,21 +2215,21 @@ type-comment = ["typed-ast (>=1.5.4)"]
 
 [[package]]
 name = "sphinx-hoverxref"
-version = "1.3.0"
+version = "1.4.0"
 description = "Sphinx extension to show tooltips with content embedded when hover a reference."
 optional = false
 python-versions = "*"
 files = [
-    {file = "sphinx-hoverxref-1.3.0.tar.gz", hash = "sha256:e517dab4cb8186da58d78c53781459ee1116ec9c8413580c7dc43e124c5f3177"},
-    {file = "sphinx_hoverxref-1.3.0-py2.py3-none-any.whl", hash = "sha256:1064e4b1da49422873de555d79dc544da1556820fee05ab56f39d36cc86ba6ad"},
+    {file = "sphinx_hoverxref-1.4.0-py2.py3-none-any.whl", hash = "sha256:7687522d0f2f81b9ace330e3d69f93b00acba4020e91c26c204fc0a547c6d04b"},
+    {file = "sphinx_hoverxref-1.4.0.tar.gz", hash = "sha256:1f6ea89b172a87ed15f082c0af9c2217284182529265d0a1b485584a11b96b56"},
 ]
 
 [package.dependencies]
-sphinx = ">=1.8"
+sphinx = ">=5.0"
 sphinxcontrib-jquery = "*"
 
 [package.extras]
-doc = ["sphinx", "sphinx-autoapi", "sphinx-autobuild", "sphinx-notfound-page", "sphinx-prompt", "sphinx-rtd-theme", "sphinx-tabs (==3.3.1)", "sphinx-version-warning", "sphinxcontrib-bibtex", "sphinxemoji"]
+doc = ["sphinx", "sphinx-autoapi", "sphinx-autobuild", "sphinx-notfound-page", "sphinx-prompt", "sphinx-rtd-theme", "sphinx-tabs", "sphinx-version-warning", "sphinxcontrib-bibtex (>=2.6.0)", "sphinxemoji"]
 test = ["tox"]
 
 [[package]]
