@@ -707,13 +707,13 @@ files = [
 
 [[package]]
 name = "flake8-pyi"
-version = "24.4.1"
+version = "24.6.0"
 description = "A plugin for flake8 to enable linting .pyi stub files."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "flake8_pyi-24.4.1-py3-none-any.whl", hash = "sha256:5cedbe226e961e0ca8f8d7f115da86b2745e3a1fd0b807e903c7af4b9dadc908"},
-    {file = "flake8_pyi-24.4.1.tar.gz", hash = "sha256:ac5678c4775e1d8aaefe17d1704e4783782729f39920c67560c11fae5653cbf9"},
+    {file = "flake8_pyi-24.6.0-py3-none-any.whl", hash = "sha256:0b6366b666109ef9a2af54b724e76472f81bfeb97b3040906932b24a98a1d145"},
+    {file = "flake8_pyi-24.6.0.tar.gz", hash = "sha256:74847fe88dba8dc3ccd27091dc5dcbe8993d7616214e4084f33afe469a675b14"},
 ]
 
 [package.dependencies]
@@ -721,7 +721,7 @@ flake8 = ">=6.0.0,<8.0.0"
 pyflakes = ">=2.1.1"
 
 [package.extras]
-dev = ["black (==24.3.0)", "flake8-bugbear (==24.2.6)", "flake8-noqa (==1.4.0)", "isort (==5.13.2)", "mypy (==1.9.0)", "pre-commit-hooks (==4.5.0)", "pytest (==8.1.1)", "pytest-xdist (==3.5.0)", "types-pyflakes (<4)"]
+dev = ["black (==24.4.2)", "flake8-bugbear (==24.4.26)", "flake8-noqa (==1.4.0)", "isort (==5.13.2)", "mypy (==1.10.0)", "pre-commit-hooks (==4.6.0)", "pytest (==8.2.2)", "pytest-xdist (==3.6.1)", "types-pyflakes (<4)"]
 
 [[package]]
 name = "flake8-pytest-style"
