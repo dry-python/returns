@@ -7,7 +7,7 @@
     def test() -> int:
         return 1
   out: |
-    main:3: error: Argument 1 to "attempt" has incompatible type "Callable[[], int]"; expected "Callable[[<nothing>], int]"  [arg-type]
+    main:3: error: Argument 1 to "attempt" has incompatible type "Callable[[], int]"; expected "Callable[[Never], int]"  [arg-type]
 
 
 - case: attempt_decorator_one_param

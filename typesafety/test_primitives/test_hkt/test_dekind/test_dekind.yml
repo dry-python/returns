@@ -23,7 +23,7 @@
         function: Callable[[T], Kind1[Bindable1, N]],
     ) -> Bindable1[N]:
         x = dekind(instance.bind(function))
-        reveal_type(x)  # N: Revealed type is "returns.interfaces.bindable.BindableN[N`-2, <nothing>, <nothing>]"
+        reveal_type(x)  # N: Revealed type is "returns.interfaces.bindable.BindableN[N`-2, Never, Never]"
         return x
 
 

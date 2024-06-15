@@ -294,7 +294,7 @@ class RequiresContext(  # type: ignore[type-var]
             RequiresContext[int, Dict[str, str]].ask()
 
         Otherwise, your ``.ask()`` method
-        will return ``RequiresContext[<nothing>, <nothing>]``,
+        will return ``RequiresContext[Never, Never]``,
         which is unusable:
 
         .. code:: python

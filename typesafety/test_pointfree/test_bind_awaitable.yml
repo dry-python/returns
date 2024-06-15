@@ -37,7 +37,7 @@
         ...
 
     x: Future[float]
-    bind_awaitable(test)(x)  # E: Argument 1 to "bind_awaitable" has incompatible type "Callable[[float], int]"; expected "Callable[[float], Awaitable[<nothing>]]"  [arg-type]
+    bind_awaitable(test)(x)  # E: Argument 1 to "bind_awaitable" has incompatible type "Callable[[float], int]"; expected "Callable[[float], Awaitable[Never]]"  [arg-type]
 
 
 - case: bind_awaitable_with_flow

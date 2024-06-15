@@ -159,7 +159,7 @@
     def test(func: C) -> C:
         # One can say, that this case is not supported,
         # but I don't know how to work with it
-        reveal_type(partial(func, 1))  # N: Revealed type is "def (*Any, **Any) -> <nothing>"
+        reveal_type(partial(func, 1))  # N: Revealed type is "def (*Any, **Any) -> Never"
         return func
 
     test(first)

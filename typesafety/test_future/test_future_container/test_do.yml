@@ -9,7 +9,7 @@
         for x in Future.from_value(1)
     )
   out: |
-    main:3: error: Argument 1 to "do" of "Future" has incompatible type "Generator[Any, None, None]"; expected "AsyncGenerator[<nothing>, None]"  [arg-type]
+    main:3: error: Argument 1 to "do" of "Future" has incompatible type "Generator[Any, None, None]"; expected "AsyncGenerator[Never, None]"  [arg-type]
     main:5: error: "Future[int]" has no attribute "__iter__"; maybe "__aiter__"? (not iterable)  [attr-defined]
     main:5: note: Maybe you forgot to use "await"?
 

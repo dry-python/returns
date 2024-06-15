@@ -3,7 +3,7 @@
   main: |
     from returns.context import RequiresContext
 
-    reveal_type(RequiresContext.ask())  # N: Revealed type is "returns.context.requires_context.RequiresContext[<nothing>, <nothing>]"
+    reveal_type(RequiresContext.ask())  # N: Revealed type is "returns.context.requires_context.RequiresContext[Never, Never]"
 
 
 - case: context_ask2
