@@ -111,8 +111,8 @@ def curry(function: Callable[..., _ReturnType]) -> Callable[..., _ReturnType]:
     when they know that they are doing.
 
     See also:
-        - https://en.wikipedia.org/wiki/Currying
-        - https://stackoverflow.com/questions/218025/
+    - https://en.wikipedia.org/wiki/Currying
+    - https://stackoverflow.com/questions/218025/
 
     """
     argspec = Signature.from_callable(function).bind_partial()

@@ -28,27 +28,27 @@ or we can fix the situation.
 .. mermaid::
   :caption: Railway oriented programming.
 
-   graph LR
-       S1 -- bind --> S3
-       S1 -- bind --> F2
-       S3 -- map --> S5
-       S5 -- bind --> S7
-       S5 -- bind --> F6
+  graph LR
+    S1 -- bind --> S3
+    S1 -- bind --> F2
+    S3 -- map --> S5
+    S5 -- bind --> S7
+    S5 -- bind --> F6
 
-       F2 -- alt --> F4
-       F4 -- lash --> F6
-       F4 -- lash --> S5
-       F6 -- lash --> F8
-       F6 -- lash --> S7
+    F2 -- alt --> F4
+    F4 -- lash --> F6
+    F4 -- lash --> S5
+    F6 -- lash --> F8
+    F6 -- lash --> S7
 
-       style S1 fill:green
-       style S3 fill:green
-       style S5 fill:green
-       style S7 fill:green
-       style F2 fill:red
-       style F4 fill:red
-       style F6 fill:red
-       style F8 fill:red
+    style S1 fill:green
+    style S3 fill:green
+    style S5 fill:green
+    style S7 fill:green
+    style F2 fill:red
+    style F4 fill:red
+    style F6 fill:red
+    style F8 fill:red
 
 Returning execution to the right track
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -69,11 +69,11 @@ Let's start from the first one:
 .. mermaid::
   :caption: Illustration of ``alt`` method.
 
-   graph LR
-      F1["Container[A]"] -- "alt(function)" --> F2["Container[B]"]
+  graph LR
+    F1["Container[A]"] -- "alt(function)" --> F2["Container[B]"]
 
-      style F1 fill:red
-      style F2 fill:red
+    style F1 fill:red
+    style F2 fill:red
 
 .. code:: python
 
@@ -89,13 +89,13 @@ It can also lash your flow and get on the successful track again:
 .. mermaid::
   :caption: Illustration of ``lash`` method.
 
-   graph LR
-      F1["Container[A]"] -- "lash(function)" --> F2["Container[B]"]
-      F1["Container[A]"] -- "lash(function)" --> F3["Container[C]"]
+  graph LR
+    F1["Container[A]"] -- "lash(function)" --> F2["Container[B]"]
+    F1["Container[A]"] -- "lash(function)" --> F3["Container[C]"]
 
-      style F1 fill:red
-      style F2 fill:green
-      style F3 fill:red
+    style F1 fill:red
+    style F2 fill:green
+    style F3 fill:red
 
 .. code:: python
 

@@ -9,7 +9,7 @@ async def _coro(arg: int) -> float:
     return arg / 2
 
 
-@pytest.mark.anyio()
+@pytest.mark.anyio
 async def test_safe_decorator():
     """Ensure that coroutine marked with ``@future`` returns ``Future``."""
     future_instance = _coro(1)

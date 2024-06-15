@@ -13,18 +13,16 @@
 import os
 import sys
 
+import tomli
+
 sys.path.insert(0, os.path.abspath('..'))
 
 
 # -- Project information -----------------------------------------------------
 
-def _get_project_meta() -> str:
-    import tomlkit  # noqa: WPS433
-
-    with open('../pyproject.toml') as pyproject:
-        file_contents = pyproject.read()
-
-    return tomlkit.parse(file_contents)['tool']['poetry']
+def _get_project_meta():
+    with open('../pyproject.toml', mode='rb') as pyproject:
+        return tomli.load(pyproject)['tool']['poetry']
 
 
 pkg_meta = _get_project_meta()
@@ -60,9 +58,6 @@ extensions = [
 
     # Used to build graphs:
     'sphinxcontrib.mermaid',
-
-    # Used to generate tooltips for our references:
-    'hoverxref.extension',
 ]
 
 autoclass_content = 'class'
@@ -78,10 +73,6 @@ autodoc_default_options = {
 
 # https://pypi.org/project/sphinx-autodoc-typehints/
 always_document_param_types = True
-
-# See https://sphinx-hoverxref.readthedocs.io/en/latest/configuration.html
-hoverxref_auto_ref = True
-hoverxref_domains = ['py']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -116,20 +107,12 @@ add_module_names = False
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'sphinx_typlog_theme'
+html_theme = 'furo'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-html_theme_options = {
-    'logo_name': 'returns',
-    'description': (
-        'Make your functions return something meaningful, typed, and safe!'
-    ),
-    'github_user': 'dry-python',
-    'github_repo': 'returns',
-    'color': '#E8371A',
-}
+html_theme_options = {}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -138,15 +121,7 @@ html_static_path = ['_static']
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
-html_sidebars = {
-    '**': [
-        'logo.html',
-        'globaltoc.html',
-        'github.html',
-        'searchbox.html',
-        'moreinfo.html',
-    ],
-}
+html_sidebars = {}
 
 
 # -- Extension configuration -------------------------------------------------

@@ -62,7 +62,7 @@ def test_flatten_context(container, merged):
     assert flatten(container)(...) == merged(...)
 
 
-@pytest.mark.anyio()
+@pytest.mark.anyio
 async def test_flatten_future(subtests):
     """Ensures that `flatten` is always returning the correct type."""
     futures = [
@@ -79,7 +79,7 @@ async def test_flatten_future(subtests):
             assert await flatten(container) == await merged  # type: ignore
 
 
-@pytest.mark.anyio()
+@pytest.mark.anyio
 async def test_flatten_context_future_result(subtests):
     """Ensures that `flatten` is always returning the correct type."""
     futures = [
@@ -99,7 +99,7 @@ async def test_flatten_context_future_result(subtests):
             )(...) == await merged(...)
 
 
-@pytest.mark.anyio()
+@pytest.mark.anyio
 async def test_non_flatten_future(subtests):
     """Ensures that `flatten` is always returning the correct type."""
     futures = [
@@ -116,7 +116,7 @@ async def test_non_flatten_future(subtests):
             )
 
 
-@pytest.mark.anyio()
+@pytest.mark.anyio
 async def test_non_flatten_context_future_result(subtests):
     """Ensures that `flatten` is always returning the correct type."""
     futures = [

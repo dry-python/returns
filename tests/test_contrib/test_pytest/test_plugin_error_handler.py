@@ -76,7 +76,7 @@ def test_error_not_handled(returns: ReturnsAsserts, container):
     assert not returns._errors_handled  # noqa: WPS437
 
 
-@pytest.mark.anyio()
+@pytest.mark.anyio
 @pytest.mark.parametrize('container', [
     FutureResult.from_value(1),
     FutureResult.from_failure(1),
