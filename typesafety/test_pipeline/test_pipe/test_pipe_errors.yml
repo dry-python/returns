@@ -19,9 +19,9 @@
 
     pipe([], int)('a')
   out: |
-    main:3: error: "List[<nothing>]" not callable  [operator]
-    main:3: error: <nothing> not callable  [misc]
-    main:3: error: Argument 1 to "__call__" of "_Pipe" has incompatible type "str"; expected <nothing>  [arg-type]
+    main:3: error: "List[Never]" not callable  [operator]
+    main:3: error: Never not callable  [misc]
+    main:3: error: Argument 1 to "__call__" of "_Pipe" has incompatible type "str"; expected Never  [arg-type]
 
 
 - case: pipe_function_without_steps

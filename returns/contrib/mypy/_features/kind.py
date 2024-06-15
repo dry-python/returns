@@ -120,8 +120,8 @@ def kinded_call(ctx: MethodContext) -> MypyType:
     Turns ``-> KindN[I, t1, t2, t3]`` into ``-> I[t1, t2, t3]``.
 
     Also strips unused type arguments for ``KindN``, so:
-    - ``KindN[IO, int, <nothing>, <nothing>]`` will be ``IO[int]``
-    - ``KindN[Result, int, str, <nothing>]`` will be ``Result[int, str]``
+    - ``KindN[IO, int, Never, Never]`` will be ``IO[int]``
+    - ``KindN[Result, int, str, Never]`` will be ``Result[int, str]``
 
     It also processes nested ``KindN`` with recursive strategy.
 

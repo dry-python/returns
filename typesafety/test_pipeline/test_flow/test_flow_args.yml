@@ -6,7 +6,7 @@
     reveal_type(flow())
   out: |
     main:3: error: Missing positional argument "instance" in call to "flow"  [call-arg]
-    main:3: note: Revealed type is "<nothing>"
+    main:3: note: Revealed type is "Never"
 
 
 - case: flow_one_arg
@@ -17,7 +17,7 @@
     reveal_type(flow(1))
   out: |
     main:3: error: Too few arguments for "flow"  [misc]
-    main:3: note: Revealed type is "<nothing>"
+    main:3: note: Revealed type is "Never"
 
 
 - case: flow_star_args

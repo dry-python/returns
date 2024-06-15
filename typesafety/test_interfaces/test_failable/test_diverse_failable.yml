@@ -21,7 +21,7 @@
             ...
 
     x: MyClass[str, int]
-    reveal_type(MyClass.from_failure(10))  # N: Revealed type is "main.MyClass[<nothing>, builtins.int]"
+    reveal_type(MyClass.from_failure(10))  # N: Revealed type is "main.MyClass[Never, builtins.int]"
 
 
 - case: diverse_failable_inheritance_correct3
@@ -48,7 +48,7 @@
             ...
 
     x: MyClass[float, bool, str]
-    reveal_type(MyClass.from_failure(10))  # N: Revealed type is "main.MyClass[<nothing>, builtins.int, <nothing>]"
+    reveal_type(MyClass.from_failure(10))  # N: Revealed type is "main.MyClass[Never, builtins.int, Never]"
 
 
 - case: diverse_failable_inheritance_missing

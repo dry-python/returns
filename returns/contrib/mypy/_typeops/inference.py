@@ -8,13 +8,14 @@ from mypy.plugin import FunctionContext
 from mypy.types import CallableType, FunctionLike
 from mypy.types import Type as MypyType
 from mypy.types import TypeVarId
+from typing_extensions import TypeAlias
 
 from returns.contrib.mypy._structures.args import FuncArg
 from returns.contrib.mypy._structures.types import CallableContext
 from returns.contrib.mypy._typeops.analtype import analyze_call
 
 #: Mapping of `typevar` to real type.
-_Constraints = Mapping[TypeVarId, MypyType]
+_Constraints: TypeAlias = Mapping[TypeVarId, MypyType]
 
 
 @final
@@ -81,10 +82,11 @@ class CallableInference:
         )
         constraints = infer_constraints_for_callable(
             self._fallback,
-            [arg.type for arg in applied_args],
-            kinds,
-            formal_to_actual,
-            checker.argument_infer_context(),
+            arg_types=[arg.type for arg in applied_args],
+            arg_kinds=kinds,
+            arg_names=[arg.name for arg in applied_args],
+            formal_to_actual=formal_to_actual,
+            context=checker.argument_infer_context(),
         )
         return {
             constraint.type_var: constraint.target

@@ -79,7 +79,7 @@
     def exit(x: int) -> NoReturn:
         ...
 
-    reveal_type(partial(exit, 1))  # N: Revealed type is "def () -> <nothing>"
+    reveal_type(partial(exit, 1))  # N: Revealed type is "def () -> Never"
 
 
 - case: partial_wrong_argument_types

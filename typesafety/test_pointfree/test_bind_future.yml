@@ -25,7 +25,7 @@
         ...
 
     x: Future[str]
-    bind_future(test)(x)  # E: Argument 1 to "bind_future" has incompatible type "Callable[[str], Coroutine[Any, Any, Future[int]]]"; expected "Callable[[str], Future[<nothing>]]"  [arg-type]
+    bind_future(test)(x)  # E: Argument 1 to "bind_future" has incompatible type "Callable[[str], Coroutine[Any, Any, Future[int]]]"; expected "Callable[[str], Future[Never]]"  [arg-type]
 
 
 - case: bind_future_requires_context_future_result

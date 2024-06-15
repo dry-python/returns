@@ -15,7 +15,7 @@
   main: |
     from returns.result import Success, Result
 
-    reveal_type(Result.do(  # N: Revealed type is "returns.result.Result[builtins.float, <nothing>]"
+    reveal_type(Result.do(  # N: Revealed type is "returns.result.Result[builtins.float, Never]"
         x + y
         for x in Success(1)
         for y in Success(2.5)

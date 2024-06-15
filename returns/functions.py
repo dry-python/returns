@@ -3,7 +3,6 @@ from typing import Any, Callable, NoReturn, TypeVar
 
 from typing_extensions import ParamSpec
 
-# Aliases:
 _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')
 _ThirdType = TypeVar('_ThirdType')

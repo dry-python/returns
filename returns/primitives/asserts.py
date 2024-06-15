@@ -37,7 +37,7 @@ def _convert(container, *, deps, backend: str):
         import anyio
 
         return _convert(
-            anyio.run(container.awaitable, backend=backend),  # type: ignore
+            anyio.run(container.awaitable, backend=backend),
             deps=deps,
             backend=backend,
         )

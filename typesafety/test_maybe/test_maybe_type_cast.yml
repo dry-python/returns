@@ -30,4 +30,4 @@
   main: |
     from returns.maybe import Nothing
 
-    reveal_type(Nothing)  # N: Revealed type is "returns.maybe.Maybe[<nothing>]"
+    reveal_type(Nothing)  # N: Revealed type is "returns.maybe.Maybe[Never]"

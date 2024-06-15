@@ -19,7 +19,7 @@
 
     reveal_type(flow('a', [], int))
   out: |
-    main:3: error: "List[<nothing>]" not callable  [operator]
+    main:3: error: "List[Never]" not callable  [operator]
     main:3: note: Revealed type is "builtins.int"
 
 

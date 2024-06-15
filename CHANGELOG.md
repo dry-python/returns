@@ -6,11 +6,18 @@ incremental in minor, bugfixes only are patches.
 See [0Ver](https://0ver.org/).
 
 
-## 1.0.0 WIP
+## 0.23.0
+
+### Features
+
+- *Breaking*: Remove `success_type` and `failure_type` fields from `IOResult`,
+  `Maybe` and `Result` types
 
 ### Misc
 
-- *Breaking*: Remove `success_type` and `failure_type` fields from `IOResult`, `Maybe` and `Result` types
+- Now requires `mypy>=1.10`
+- Adds `[check-laws]` extra for installation
+
 
 ## 0.22.0
 

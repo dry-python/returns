@@ -12,4 +12,4 @@
 
     container: Kind{{ count }}[object, int, str, bool, float]
   out: |
-    main:3: error: Bad number of arguments for type alias, expected: {{ expected }}, given: 5  [type-arg]
+    main:3: error: Bad number of arguments for type alias, expected {{ expected }}, given 5  [type-arg]

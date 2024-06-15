@@ -9,7 +9,7 @@
         for first in FutureSuccess(1)
     )
   out: |
-    main:3: error: Argument 1 to "do" of "FutureResult" has incompatible type "Generator[Any, None, None]"; expected "AsyncGenerator[<nothing>, None]"  [arg-type]
+    main:3: error: Argument 1 to "do" of "FutureResult" has incompatible type "Generator[Any, None, None]"; expected "AsyncGenerator[Never, None]"  [arg-type]
     main:5: error: "FutureResult[int, Any]" has no attribute "__iter__"; maybe "__aiter__"? (not iterable)  [attr-defined]
     main:5: note: Maybe you forgot to use "await"?
 
@@ -31,7 +31,7 @@
   main: |
     from returns.future import FutureSuccess, FutureResult
 
-    reveal_type(FutureResult.do(  # N: Revealed type is "returns.future.FutureResult[builtins.float, <nothing>]"
+    reveal_type(FutureResult.do(  # N: Revealed type is "returns.future.FutureResult[builtins.float, Never]"
         x + y
         async for x in FutureSuccess(1)
         async for y in FutureSuccess(2.5)
