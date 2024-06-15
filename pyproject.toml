@@ -66,10 +66,10 @@ nitpick = "^0.35"
 codespell = "^2.2"
 slotscheck = "0.18"
 
-pytest-cov = ">=4.1,<6.0"
+pytest-cov = "^5.0"
 pytest-randomly = "^3.12"
-pytest-mypy-plugins = "^3.0"
-pytest-subtests = ">=0.11,<0.13"
+pytest-mypy-plugins = "^3.1"
+pytest-subtests = "^0.12"
 pytest-shard = "^0.1"
 
 doc8 = "^1.1"
