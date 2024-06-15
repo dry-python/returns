@@ -60,9 +60,6 @@ extensions = [
 
     # Used to build graphs:
     'sphinxcontrib.mermaid',
-
-    # Used to generate tooltips for our references:
-    'hoverxref.extension',
 ]
 
 autoclass_content = 'class'
@@ -78,10 +75,6 @@ autodoc_default_options = {
 
 # https://pypi.org/project/sphinx-autodoc-typehints/
 always_document_param_types = True
-
-# See https://sphinx-hoverxref.readthedocs.io/en/latest/configuration.html
-hoverxref_auto_ref = True
-hoverxref_domains = ['py']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

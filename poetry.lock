@@ -494,13 +494,13 @@ tomli = {version = "*", markers = "python_version < \"3.11\""}
 
 [[package]]
 name = "docutils"
-version = "0.19"
+version = "0.20.1"
 description = "Docutils -- Python Documentation Utilities"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "docutils-0.19-py3-none-any.whl", hash = "sha256:5e1de4d849fee02c63b040a4a3fd567f4ab104defd8a5511fbbc24a8a017efbc"},
-    {file = "docutils-0.19.tar.gz", hash = "sha256:33995a6753c30b7f577febfc2c50411fec6aac7f7ffeb7c4cfe5991072dcf9e6"},
+    {file = "docutils-0.20.1-py3-none-any.whl", hash = "sha256:96f387a2c5562db4476f09f13bbab2192e764cac08ebbf3a34a95d9b1e4a59d6"},
+    {file = "docutils-0.20.1.tar.gz", hash = "sha256:f08a4e276c3a1583a86dce3e34aba3fe04d02bba2dd51ed16106244e8a923e3b"},
 ]
 
 [[package]]
@@ -2122,76 +2122,58 @@ files = [
 
 [[package]]
 name = "sphinx"
-version = "5.3.0"
+version = "7.3.7"
 description = "Python documentation generator"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.9"
 files = [
-    {file = "Sphinx-5.3.0.tar.gz", hash = "sha256:51026de0a9ff9fc13c05d74913ad66047e104f56a129ff73e174eb5c3ee794b5"},
-    {file = "sphinx-5.3.0-py3-none-any.whl", hash = "sha256:060ca5c9f7ba57a08a1219e547b269fadf125ae25b06b9fa7f66768efb652d6d"},
+    {file = "sphinx-7.3.7-py3-none-any.whl", hash = "sha256:413f75440be4cacf328f580b4274ada4565fb2187d696a84970c23f77b64d8c3"},
+    {file = "sphinx-7.3.7.tar.gz", hash = "sha256:a4a7db75ed37531c05002d56ed6948d4c42f473a36f46e1382b0bd76ca9627bc"},
 ]
 
 [package.dependencies]
-alabaster = ">=0.7,<0.8"
+alabaster = ">=0.7.14,<0.8.0"
 babel = ">=2.9"
 colorama = {version = ">=0.4.5", markers = "sys_platform == \"win32\""}
-docutils = ">=0.14,<0.20"
+docutils = ">=0.18.1,<0.22"
 imagesize = ">=1.3"
 importlib-metadata = {version = ">=4.8", markers = "python_version < \"3.10\""}
 Jinja2 = ">=3.0"
 packaging = ">=21.0"
-Pygments = ">=2.12"
-requests = ">=2.5.0"
+Pygments = ">=2.14"
+requests = ">=2.25.0"
 snowballstemmer = ">=2.0"
 sphinxcontrib-applehelp = "*"
 sphinxcontrib-devhelp = "*"
 sphinxcontrib-htmlhelp = ">=2.0.0"
 sphinxcontrib-jsmath = "*"
 sphinxcontrib-qthelp = "*"
-sphinxcontrib-serializinghtml = ">=1.1.5"
+sphinxcontrib-serializinghtml = ">=1.1.9"
+tomli = {version = ">=2", markers = "python_version < \"3.11\""}
 
 [package.extras]
 docs = ["sphinxcontrib-websupport"]
-lint = ["docutils-stubs", "flake8 (>=3.5.0)", "flake8-bugbear", "flake8-comprehensions", "flake8-simplify", "isort", "mypy (>=0.981)", "sphinx-lint", "types-requests", "types-typed-ast"]
-test = ["cython", "html5lib", "pytest (>=4.6)", "typed_ast"]
+lint = ["flake8 (>=3.5.0)", "importlib_metadata", "mypy (==1.9.0)", "pytest (>=6.0)", "ruff (==0.3.7)", "sphinx-lint", "tomli", "types-docutils", "types-requests"]
+test = ["cython (>=3.0)", "defusedxml (>=0.7.1)", "pytest (>=6.0)", "setuptools (>=67.0)"]
 
 [[package]]
 name = "sphinx-autodoc-typehints"
-version = "1.23.0"
+version = "1.25.3"
 description = "Type hints (PEP 484) support for the Sphinx autodoc extension"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 files = [
-    {file = "sphinx_autodoc_typehints-1.23.0-py3-none-any.whl", hash = "sha256:ac099057e66b09e51b698058ba7dd76e57e1fe696cd91b54e121d3dad188f91d"},
-    {file = "sphinx_autodoc_typehints-1.23.0.tar.gz", hash = "sha256:5d44e2996633cdada499b6d27a496ddf9dbc95dd1f0f09f7b37940249e61f6e9"},
+    {file = "sphinx_autodoc_typehints-1.25.3-py3-none-any.whl", hash = "sha256:d3da7fa9a9761eff6ff09f8b1956ae3090a2d4f4ad54aebcade8e458d6340835"},
+    {file = "sphinx_autodoc_typehints-1.25.3.tar.gz", hash = "sha256:70db10b391acf4e772019765991d2de0ff30ec0899b9ba137706dc0b3c4835e0"},
 ]
 
 [package.dependencies]
-sphinx = ">=5.3"
+sphinx = ">=7.1.2"
 
 [package.extras]
-docs = ["furo (>=2022.12.7)", "sphinx (>=6.1.3)", "sphinx-autodoc-typehints (>=1.23.4)"]
-testing = ["covdefaults (>=2.2.2)", "coverage (>=7.2.2)", "diff-cover (>=7.5)", "nptyping (>=2.5)", "pytest (>=7.2.2)", "pytest-cov (>=4)", "sphobjinv (>=2.3.1)", "typing-extensions (>=4.5)"]
-type-comment = ["typed-ast (>=1.5.4)"]
-
-[[package]]
-name = "sphinx-hoverxref"
-version = "1.4.0"
-description = "Sphinx extension to show tooltips with content embedded when hover a reference."
-optional = false
-python-versions = "*"
-files = [
-    {file = "sphinx_hoverxref-1.4.0-py2.py3-none-any.whl", hash = "sha256:7687522d0f2f81b9ace330e3d69f93b00acba4020e91c26c204fc0a547c6d04b"},
-    {file = "sphinx_hoverxref-1.4.0.tar.gz", hash = "sha256:1f6ea89b172a87ed15f082c0af9c2217284182529265d0a1b485584a11b96b56"},
-]
-
-[package.dependencies]
-sphinx = ">=5.0"
-sphinxcontrib-jquery = "*"
-
-[package.extras]
-doc = ["sphinx", "sphinx-autoapi", "sphinx-autobuild", "sphinx-notfound-page", "sphinx-prompt", "sphinx-rtd-theme", "sphinx-tabs", "sphinx-version-warning", "sphinxcontrib-bibtex (>=2.6.0)", "sphinxemoji"]
-test = ["tox"]
+docs = ["furo (>=2023.9.10)"]
+numpy = ["nptyping (>=2.5)"]
+testing = ["covdefaults (>=2.3)", "coverage (>=7.3.2)", "diff-cover (>=8.0.1)", "pytest (>=7.4.3)", "pytest-cov (>=4.1)", "sphobjinv (>=2.3.1)", "typing-extensions (>=4.8)"]
 
 [[package]]
 name = "sphinx-typlog-theme"
@@ -2254,20 +2236,6 @@ files = [
 lint = ["docutils-stubs", "flake8", "mypy"]
 standalone = ["Sphinx (>=5)"]
 test = ["html5lib", "pytest"]
-
-[[package]]
-name = "sphinxcontrib-jquery"
-version = "4.1"
-description = "Extension to include jQuery on newer Sphinx releases"
-optional = false
-python-versions = ">=2.7"
-files = [
-    {file = "sphinxcontrib-jquery-4.1.tar.gz", hash = "sha256:1620739f04e36a2c779f1a131a2dfd49b2fd07351bf1968ced074365933abc7a"},
-    {file = "sphinxcontrib_jquery-4.1-py2.py3-none-any.whl", hash = "sha256:f936030d7d0147dd026a4f2b5a57343d233f1fc7b363f68b3d4f1cb0993878ae"},
-]
-
-[package.dependencies]
-Sphinx = ">=1.8"
 
 [[package]]
 name = "sphinxcontrib-jsmath"
@@ -2531,4 +2499,4 @@ compatible-mypy = ["mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "958b17abc2df1833afcf53b08676af4589c35d920b4d772a449de889564f77e6"
+content-hash = "b5f7aaf87bcda23e4e566e8515fad7a031da0a05b42612b46c5dd8ed58d75663"
