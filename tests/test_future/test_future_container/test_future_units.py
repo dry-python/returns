@@ -6,7 +6,7 @@ from returns.future import Future, FutureResult
 from returns.io import IO
 
 
-@pytest.mark.anyio()
+@pytest.mark.anyio
 async def test_inner_value(subtests):
     """Ensure that coroutine correct value is preserved for all units."""
     containers: List[Awaitable[Any]] = [

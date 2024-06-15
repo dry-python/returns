@@ -9,7 +9,7 @@ async def _coro(arg: int) -> float:
     return 1 / arg
 
 
-@pytest.mark.anyio()
+@pytest.mark.anyio
 async def test_future_safe_decorator():
     """Ensure that coroutine marked with ``@future_safe``."""
     future_instance = _coro(2)
@@ -18,7 +18,7 @@ async def test_future_safe_decorator():
     assert await future_instance == IOSuccess(0.5)
 
 
-@pytest.mark.anyio()
+@pytest.mark.anyio
 async def test_future_safe_decorator_failure():
     """Ensure that coroutine marked with ``@future_safe``."""
     future_instance = _coro(0)

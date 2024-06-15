@@ -140,7 +140,7 @@ def pytest_configure(config) -> None:
     )
 
 
-@pytest.fixture()
+@pytest.fixture
 def returns() -> Iterator[ReturnsAsserts]:
     """Returns class with helpers assertions to check containers."""
     with _spy_error_handling() as errors_handled:
