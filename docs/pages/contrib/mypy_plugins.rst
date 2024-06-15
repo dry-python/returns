@@ -1,7 +1,6 @@
 .. _mypy-plugins:
 
 mypy plugin
-mypy plugin
 ===========
 
 We provide a custom ``mypy`` plugin to fix existing issues,
