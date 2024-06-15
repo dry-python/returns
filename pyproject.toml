@@ -104,5 +104,5 @@ style = "https://raw.githubusercontent.com/wemake-services/wemake-python-stylegu
 strict-imports = true
 require-subclass = true
 require-superclass = true
-exclude-modules = 'returns\.contrib\.mypy'
+exclude-modules = 'returns\.contrib\.'
 exclude-classes = 'returns\.primitives\.exceptions:UnwrapFailedError'
