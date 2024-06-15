@@ -91,64 +91,64 @@ Plugin definition
 ~~~~~~~~~~~~~~~~~
 
 .. automodule:: returns.contrib.mypy._consts
-   :members:
+  :members:
 
 .. autoclasstree:: returns.contrib.mypy.returns_plugin
-   :strict:
+  :strict:
 
 .. automodule:: returns.contrib.mypy.returns_plugin
-   :members:
+  :members:
 
 Kind
 ~~~~
 
 .. autoclasstree:: returns.contrib.mypy._features.kind
-   :strict:
+  :strict:
 
 .. automodule:: returns.contrib.mypy._features.kind
-   :members:
+  :members:
 
 Curry
 ~~~~~
 
 .. autoclasstree:: returns.contrib.mypy._features.curry
-   :strict:
+  :strict:
 
 .. automodule:: returns.contrib.mypy._features.curry
-   :members:
+  :members:
 
 Partial
 ~~~~~~~
 
 .. autoclasstree:: returns.contrib.mypy._features.partial
-   :strict:
+  :strict:
 
 .. automodule:: returns.contrib.mypy._features.partial
-   :members:
+  :members:
 
 Flow
 ~~~~
 
 .. autoclasstree:: returns.contrib.mypy._features.flow
-   :strict:
+  :strict:
 
 .. automodule:: returns.contrib.mypy._features.flow
-   :members:
+  :members:
 
 Pipe
 ~~~~
 
 .. autoclasstree:: returns.contrib.mypy._features.pipe
-   :strict:
+  :strict:
 
 .. automodule:: returns.contrib.mypy._features.pipe
-   :members:
+  :members:
 
 Do notation
 ~~~~~~~~~~~
 
 .. autoclasstree:: returns.contrib.mypy._features.do_notation
-   :strict:
+  :strict:
 
 .. automodule:: returns.contrib.mypy._features.do_notation
-   :members:
+  :members:

@@ -725,13 +725,13 @@ dev = ["black (==24.4.2)", "flake8-bugbear (==24.4.26)", "flake8-noqa (==1.4.0)"
 
 [[package]]
 name = "flake8-pytest-style"
-version = "1.7.2"
+version = "2.0.0"
 description = "A flake8 plugin checking common style issues or inconsistencies with pytest-based tests."
 optional = false
-python-versions = ">=3.7.2,<4.0.0"
+python-versions = "<4.0.0,>=3.8.1"
 files = [
-    {file = "flake8_pytest_style-1.7.2-py3-none-any.whl", hash = "sha256:f5d2aa3219163a052dd92226589d45fab8ea027a3269922f0c4029f548ea5cd1"},
-    {file = "flake8_pytest_style-1.7.2.tar.gz", hash = "sha256:b924197c99b951315949920b0e5547f34900b1844348432e67a44ab191582109"},
+    {file = "flake8_pytest_style-2.0.0-py3-none-any.whl", hash = "sha256:abcb9f56f277954014b749e5a0937fae215be01a21852e9d05e7600c3de6aae5"},
+    {file = "flake8_pytest_style-2.0.0.tar.gz", hash = "sha256:919c328cacd4bc4f873ea61ab4db0d8f2c32e0db09a3c73ab46b1de497556464"},
 ]
 
 [package.dependencies]
@@ -2074,13 +2074,13 @@ files = [
 
 [[package]]
 name = "slotscheck"
-version = "0.18.0"
+version = "0.19.0"
 description = "Ensure your __slots__ are working properly."
 optional = false
 python-versions = ">=3.8.1"
 files = [
-    {file = "slotscheck-0.18.0-py3-none-any.whl", hash = "sha256:7de369ce0ad269b05a20d34789dc8df102391a232a88cdb2901c5eac335f1570"},
-    {file = "slotscheck-0.18.0.tar.gz", hash = "sha256:b36e14954e5c973c192208ee2898b663732a8f529af2c80cb33d6bc8bc9ad560"},
+    {file = "slotscheck-0.19.0-py3-none-any.whl", hash = "sha256:53fbc9befacb331a2ab25b385004d99ea72b5cee4f3deb6da676c8f08d0fcdd9"},
+    {file = "slotscheck-0.19.0.tar.gz", hash = "sha256:707b4339d280664139ffd2c78fef99b3028e215f13cc77244147dd6126fe2e0d"},
 ]
 
 [package.dependencies]
@@ -2285,13 +2285,13 @@ test = ["flake8", "mypy", "pytest"]
 
 [[package]]
 name = "sphinxcontrib-mermaid"
-version = "0.8.1"
+version = "0.9.2"
 description = "Mermaid diagrams in yours Sphinx powered docs"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "sphinxcontrib-mermaid-0.8.1.tar.gz", hash = "sha256:fa3e5325d4ba395336e6137d113f55026b1a03ccd115dc54113d1d871a580466"},
-    {file = "sphinxcontrib_mermaid-0.8.1-py3-none-any.whl", hash = "sha256:15491c24ec78cf1626b1e79e797a9ce87cb7959cf38f955eb72dd5512aeb6ce9"},
+    {file = "sphinxcontrib-mermaid-0.9.2.tar.gz", hash = "sha256:252ef13dd23164b28f16d8b0205cf184b9d8e2b714a302274d9f59eb708e77af"},
+    {file = "sphinxcontrib_mermaid-0.9.2-py3-none-any.whl", hash = "sha256:6795a72037ca55e65663d2a2c1a043d636dc3d30d418e56dd6087d1459d98a5d"},
 ]
 
 [[package]]
@@ -2531,4 +2531,4 @@ compatible-mypy = ["mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "42db5b38693543a85180829970df730f45956c2bbe6e56d348b7f6fe6d133eb4"
+content-hash = "958b17abc2df1833afcf53b08676af4589c35d920b4d772a449de889564f77e6"
