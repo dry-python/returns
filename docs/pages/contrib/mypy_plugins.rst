@@ -102,17 +102,11 @@ Plugin definition
 Kind
 ~~~~
 
-.. autoclasstree:: returns.contrib.mypy._features.kind
-  :strict:
-
 .. automodule:: returns.contrib.mypy._features.kind
   :members:
 
 Curry
 ~~~~~
-
-.. autoclasstree:: returns.contrib.mypy._features.curry
-  :strict:
 
 .. automodule:: returns.contrib.mypy._features.curry
   :members:
@@ -120,17 +114,11 @@ Curry
 Partial
 ~~~~~~~
 
-.. autoclasstree:: returns.contrib.mypy._features.partial
-  :strict:
-
 .. automodule:: returns.contrib.mypy._features.partial
   :members:
 
 Flow
 ~~~~
-
-.. autoclasstree:: returns.contrib.mypy._features.flow
-  :strict:
 
 .. automodule:: returns.contrib.mypy._features.flow
   :members:
@@ -138,17 +126,11 @@ Flow
 Pipe
 ~~~~
 
-.. autoclasstree:: returns.contrib.mypy._features.pipe
-  :strict:
-
 .. automodule:: returns.contrib.mypy._features.pipe
   :members:
 
 Do notation
 ~~~~~~~~~~~
-
-.. autoclasstree:: returns.contrib.mypy._features.do_notation
-  :strict:
 
 .. automodule:: returns.contrib.mypy._features.do_notation
   :members:

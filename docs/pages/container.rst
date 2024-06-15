@@ -42,11 +42,11 @@ And we can see how this state is evolving during the execution.
 .. mermaid::
   :caption: State evolution.
 
-   graph LR
-       F1["Container(Initial)"] --> F2["Container(UserId(1))"]
-       F2                       --> F3["Container(UserAccount(156))"]
-       F3                       --> F4["Container(FailedLoginAttempt(1))"]
-       F4                       --> F5["Container(SentNotificationId(992))"]
+  graph LR
+    F1["Container(Initial)"] --> F2["Container(UserId(1))"]
+    F2                       --> F3["Container(UserAccount(156))"]
+    F3                       --> F4["Container(FailedLoginAttempt(1))"]
+    F4                       --> F5["Container(SentNotificationId(992))"]
 
 
 Working with a container
@@ -68,11 +68,11 @@ Here's how it looks:
 .. mermaid::
   :caption: Illustration of ``map`` method.
 
-   graph LR
-      F1["Container[A]"] -- "map(function)" --> F2["Container[B]"]
+  graph LR
+    F1["Container[A]"] -- "map(function)" --> F2["Container[B]"]
 
-      style F1 fill:green
-      style F2 fill:green
+    style F1 fill:green
+    style F2 fill:green
 
 .. code:: python
 
@@ -108,13 +108,13 @@ Here's how it looks:
 .. mermaid::
   :caption: Illustration of ``bind`` method.
 
-   graph LR
-      F1["Container[A]"] -- "bind(function)" --> F2["Container[B]"]
-      F1["Container[A]"] -- "bind(function)" --> F3["Container[C]"]
+  graph LR
+    F1["Container[A]"] -- "bind(function)" --> F2["Container[B]"]
+    F1["Container[A]"] -- "bind(function)" --> F3["Container[C]"]
 
-      style F1 fill:green
-      style F2 fill:green
-      style F3 fill:red
+    style F1 fill:green
+    style F2 fill:green
+    style F3 fill:red
 
 .. code:: python
 

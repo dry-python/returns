@@ -246,12 +246,12 @@ There's how execution flows:
 .. mermaid::
   :caption: RequiresContext execution flow.
 
-   graph LR
-       F1["first(1)"] --> F2["RequiresContext(inner)"]
-       F2 --> F3
-       F3["container('abc')"] --> F4["True"]
-       F4 --> F5
-       F5["bool_to_str(True)"] --> F6["'ok'"]
+  graph LR
+    F1["first(1)"] --> F2["RequiresContext(inner)"]
+    F2 --> F3
+    F3["container('abc')"] --> F4["True"]
+    F4 --> F5
+    F5["bool_to_str(True)"] --> F6["'ok'"]
 
 The rule is: the dependencies are injected at the very last moment in time.
 And then normal logical execution happens.
