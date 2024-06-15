@@ -82,9 +82,9 @@ optional = true
 sphinx = "^7.3"
 sphinx-autodoc-typehints = "^1.23"
 sphinxcontrib-mermaid = "^0.9"
-sphinx-typlog-theme = "^0.8"
+furo = "^2024.5"
 m2r2 = "^0.3"
-tomlkit = "^0.12"
+tomli = "^2.0"
 
 [tool.poetry.extras]
 compatible-mypy = ["mypy"]

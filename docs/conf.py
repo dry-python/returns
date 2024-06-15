@@ -13,18 +13,16 @@
 import os
 import sys
 
+import tomli
+
 sys.path.insert(0, os.path.abspath('..'))
 
 
 # -- Project information -----------------------------------------------------
 
-def _get_project_meta() -> str:
-    import tomlkit  # noqa: WPS433
-
-    with open('../pyproject.toml') as pyproject:
-        file_contents = pyproject.read()
-
-    return tomlkit.parse(file_contents)['tool']['poetry']
+def _get_project_meta():
+    with open('../pyproject.toml', mode='rb') as pyproject:
+        return tomli.load(pyproject)['tool']['poetry']
 
 
 pkg_meta = _get_project_meta()
@@ -109,7 +107,7 @@ add_module_names = False
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'sphinx_typlog_theme'
+html_theme = 'furo'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
