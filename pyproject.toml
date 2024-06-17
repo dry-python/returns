@@ -80,7 +80,7 @@ optional = true
 [tool.poetry.group.docs.dependencies]
 
 sphinx = "^7.3"
-sphinx-autodoc-typehints = "^1.23"
+sphinx-autodoc-typehints = ">=1.23,<3.0"
 sphinxcontrib-mermaid = "^0.9"
 furo = "^2024.5"
 m2r2 = "^0.3"
