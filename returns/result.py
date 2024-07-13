@@ -479,7 +479,7 @@ ResultE = Result[_ValueType, Exception]
 def safe(
     function: Callable[_FuncParams, _ValueType],
 ) -> Callable[_FuncParams, ResultE[_ValueType]]:
-    """Decorator to convert exception-throwing for any kind of Exception except ``BaseException`` subclasses."""
+    """Decorator to convert exception-throwing for any kind of Exception."""
 
 
 @overload

@@ -892,7 +892,7 @@ IOResultE = IOResult[_ValueType, Exception]
 def impure_safe(
     function: Callable[_FuncParams, _NewValueType],
 ) -> Callable[_FuncParams, IOResultE[_NewValueType]]:
-    """Decorator to convert exception-throwing for any kind of Exception except ``BaseException`` subclasses."""
+    """Decorator to convert exception-throwing for any kind of Exception."""
 
 
 @overload
@@ -903,6 +903,7 @@ def impure_safe(
     Callable[_FuncParams, IOResultE[_NewValueType]],
 ]:
     """Decorator to convert exception-throwing just for a set of Exceptions."""
+
 
 def impure_safe(  # type: ignore # noqa: WPS234, C901
     function: Optional[Callable[_FuncParams, _NewValueType]] = None,
@@ -940,14 +941,14 @@ def impure_safe(  # type: ignore # noqa: WPS234, C901
 
     .. code:: python
 
-      >>> from returns.result import Failure, Success, safe
+      >>> from returns.io import IOSuccess, IOFailure, impure_safe
 
-      >>> @safe(exceptions=(ZeroDivisionError,))
+      >>> @impure_safe(exceptions=(ZeroDivisionError,))
       ... def might_raise(arg: int) -> float:
       ...     return 1 / arg
 
-      >>> assert might_raise(1) == Success(1.0)
-      >>> assert isinstance(might_raise(0), Failure)
+      >>> assert might_raise(1) == IOSuccess(1.0)
+      >>> assert isinstance(might_raise(0), IOFailure)
 
     In this case, only exceptions that are explicitly
     listed are going to be caught.
@@ -966,7 +967,7 @@ def impure_safe(  # type: ignore # noqa: WPS234, C901
             except inner_exceptions as exc:
                 return IOFailure(exc)
         return decorator
-    
+
     if callable(function):
         return factory(function, exceptions or (Exception,))
     if isinstance(function, tuple):
