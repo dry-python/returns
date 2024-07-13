@@ -12,6 +12,7 @@ See [0Ver](https://0ver.org/).
 
 - Add picky exceptions to `impure_safe` decorator like `safe` has. Issue #1543
 
+
 ## 0.23.0
 
 ### Features
