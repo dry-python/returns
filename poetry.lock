@@ -1649,13 +1649,13 @@ pytest = "*"
 
 [[package]]
 name = "pytest-subtests"
-version = "0.13.0"
+version = "0.13.1"
 description = "unittest subTest() support and subtests fixture"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "pytest_subtests-0.13.0-py3-none-any.whl", hash = "sha256:5a142064218df37a52299ddb393b1a6b2c1161ca19e71ca60c3a8040eb17e811"},
-    {file = "pytest_subtests-0.13.0.tar.gz", hash = "sha256:9e02b9d243c0379b02abf3e0887da122bcb2714b021c3608a37f17ce210adce5"},
+    {file = "pytest_subtests-0.13.1-py3-none-any.whl", hash = "sha256:ab616a22f64cd17c1aee65f18af94dbc30c444f8683de2b30895c3778265e3bd"},
+    {file = "pytest_subtests-0.13.1.tar.gz", hash = "sha256:989e38f0f1c01bc7c6b2e04db7d9fd859db35d77c2c1a430c831a70cbf3fde2d"},
 ]
 
 [package.dependencies]
