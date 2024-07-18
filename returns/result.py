@@ -475,6 +475,9 @@ ResultE = Result[_ValueType, Exception]
 
 # Decorators:
 
+_ExceptionType = TypeVar('_ExceptionType', bound=Exception)
+
+
 @overload
 def safe(
     function: Callable[_FuncParams, _ValueType],
@@ -484,22 +487,22 @@ def safe(
 
 @overload
 def safe(
-    exceptions: Tuple[Type[Exception], ...],
+    exceptions: Tuple[Type[_ExceptionType], ...],
 ) -> Callable[
     [Callable[_FuncParams, _ValueType]],
-    Callable[_FuncParams, ResultE[_ValueType]],
+    Callable[_FuncParams, Result[_ValueType, _ExceptionType]],
 ]:
     """Decorator to convert exception-throwing just for a set of Exceptions."""
 
 
 def safe(  # type: ignore # noqa: WPS234, C901
     function: Optional[Callable[_FuncParams, _ValueType]] = None,
-    exceptions: Optional[Tuple[Type[Exception], ...]] = None,
+    exceptions: Optional[Tuple[Type[_ExceptionType], ...]] = None,
 ) -> Union[
     Callable[_FuncParams, ResultE[_ValueType]],
     Callable[
         [Callable[_FuncParams, _ValueType]],
-        Callable[_FuncParams, ResultE[_ValueType]],
+        Callable[_FuncParams, Result[_ValueType, _ExceptionType]],
     ],
 ]:
     """
