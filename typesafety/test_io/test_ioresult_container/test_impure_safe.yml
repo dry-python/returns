@@ -8,6 +8,8 @@
         return 1
 
     reveal_type(test)  # N: Revealed type is "def (arg: builtins.str) -> returns.io.IOResult[builtins.int, builtins.Exception]"
+
+
 - case: impure_decorator_passing_exceptions_no_params
   disable_cache: false
   main: |
