@@ -7,8 +7,13 @@ from typing import (
     Callable,
     Coroutine,
     Generator,
+    Optional,
+    Tuple,
+    Type,
     TypeVar,
+    Union,
     final,
+    overload,
 )
 
 from typing_extensions import ParamSpec
@@ -1458,12 +1463,37 @@ FutureResultE = FutureResult[_ValueType, Exception]
 
 # Decorators:
 
+@overload
 def future_safe(
     function: Callable[
         _FuncParams,
         Coroutine[_FirstType, _SecondType, _ValueType],
     ],
 ) -> Callable[_FuncParams, FutureResultE[_ValueType]]:
+    """Decorator to convert exception-throwing for any kind of Exception."""
+
+@overload
+def future_safe(
+    exceptions: Tuple[Type[Exception], ...],
+) -> Callable[[Callable[
+        _FuncParams,
+        Coroutine[_FirstType, _SecondType, _ValueType],
+    ]],Callable[_FuncParams,FutureResultE[_ValueType]]]:
+    """Decorator to convert exception-throwing just for a set of Exceptions."""
+
+def future_safe(  # type: ignore # noqa: WPS234, C901
+    function: Callable[
+        _FuncParams,
+        Coroutine[_FirstType, _SecondType, _ValueType],
+    ],
+    exceptions: Optional[Tuple[Type[Exception], ...]] = None,
+) -> Union[
+    Callable[_FuncParams, FutureResultE[_ValueType]],
+    Callable[[Callable[
+        _FuncParams,
+        Coroutine[_FirstType, _SecondType, _ValueType],
+    ]], Callable[_FuncParams, FutureResultE[_ValueType]]],
+    ]:
     """
     Decorator to convert exception-throwing coroutine to ``FutureResult``.
 
@@ -1496,15 +1526,22 @@ def future_safe(
 
     """
     async def factory(
+        inner_function: Awaitable[_FuncParams, _ValueType],
+        inner_exceptions: Tuple[Type[Exception], ...],
         *args: _FuncParams.args,
         **kwargs: _FuncParams.kwargs,
     ) -> Result[_ValueType, Exception]:
         try:
-            return Success(await function(*args, **kwargs))
+            return Success(await inner_function(*args, **kwargs))
         except Exception as exc:
             return Failure(exc)
 
-    @wraps(function)
-    def decorator(*args, **kwargs):
-        return FutureResult(factory(*args, **kwargs))
-    return decorator
+    if callable(function):
+        @wraps(function)
+        def decorator(*args, **kwargs):
+            return FutureResult(factory(function,inner_exceptions=(Exception,)))
+        return decorator
+    if isinstance(function, tuple):
+        exceptions = function  # type: ignore
+        function = None
+    return lambda function: factory(function, exceptions)  # type: ignore
