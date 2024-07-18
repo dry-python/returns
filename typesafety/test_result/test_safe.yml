@@ -19,13 +19,13 @@
     def test() -> int:
         return 1
 
-    reveal_type(test)  # N: Revealed type is "def () -> returns.result.Result[builtins.int, builtins.Exception]"
+    reveal_type(test)  # N: Revealed type is "def () -> returns.result.Result[builtins.int, builtins.ValueError]"
 
     @safe(exceptions=(ValueError,))
     def test2() -> int:
         return 1
 
-    reveal_type(test2)  # N: Revealed type is "def () -> returns.result.Result[builtins.int, builtins.Exception]"
+    reveal_type(test2)  # N: Revealed type is "def () -> returns.result.Result[builtins.int, builtins.ValueError]"
 
 
 - case: safe_composition_no_params
@@ -97,7 +97,7 @@
     def test(first: int, second: Optional[str] = None, *, kw: bool = True) -> int:
         return 1
 
-    reveal_type(safe((ValueError,))(test))  # N: Revealed type is "def (first: builtins.int, second: Union[builtins.str, None] =, *, kw: builtins.bool =) -> returns.result.Result[builtins.int, builtins.Exception]"
+    reveal_type(safe((ValueError,))(test))  # N: Revealed type is "def (first: builtins.int, second: Union[builtins.str, None] =, *, kw: builtins.bool =) -> returns.result.Result[builtins.int, builtins.ValueError]"
 
 
 - case: safe_regression333
@@ -149,7 +149,7 @@
         def raise_for_status(self) -> None:
             ...
 
-    reveal_type(safe((EOFError,))(tap(Response.raise_for_status)))  # N: Revealed type is "def (main.Response) -> returns.result.Result[main.Response, builtins.Exception]"
+    reveal_type(safe((EOFError,))(tap(Response.raise_for_status)))  # N: Revealed type is "def (main.Response) -> returns.result.Result[main.Response, builtins.EOFError]"
 
 
 - case: safe_decorator_with_args_kwargs
@@ -173,7 +173,7 @@
     def test(*args, **kwargs) -> int:
         return 1
 
-    reveal_type(test)  # N: Revealed type is "def (*args: Any, **kwargs: Any) -> returns.result.Result[builtins.int, builtins.Exception]"
+    reveal_type(test)  # N: Revealed type is "def (*args: Any, **kwargs: Any) -> returns.result.Result[builtins.int, builtins.EOFError]"
 
 
 - case: safe_decorator_with_args_kwargs
@@ -225,4 +225,4 @@
     def test(*args: int, **kwargs: str) -> int:
         return 1
 
-    reveal_type(test)  # N: Revealed type is "def (*args: builtins.int, **kwargs: builtins.str) -> returns.io.IO[returns.result.Result[builtins.int, builtins.Exception]]"
+    reveal_type(test)  # N: Revealed type is "def (*args: builtins.int, **kwargs: builtins.str) -> returns.io.IO[returns.result.Result[builtins.int, builtins.ValueError]]"

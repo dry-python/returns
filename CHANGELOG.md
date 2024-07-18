@@ -10,6 +10,8 @@ See [0Ver](https://0ver.org/).
 
 ### Features
 
+- Improve inference of `ResultLike` objects when exception catching
+  decorator is applied with explicit exception types
 - Add picky exceptions to `impure_safe` decorator like `safe` has. Issue #1543
 
 

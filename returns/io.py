@@ -888,6 +888,9 @@ IOResultE = IOResult[_ValueType, Exception]
 
 # impure_safe decorator:
 
+_ExceptionType = TypeVar('_ExceptionType', bound=Exception)
+
+
 @overload
 def impure_safe(
     function: Callable[_FuncParams, _NewValueType],
@@ -897,22 +900,22 @@ def impure_safe(
 
 @overload
 def impure_safe(
-    exceptions: Tuple[Type[Exception], ...],
+    exceptions: Tuple[Type[_ExceptionType], ...],
 ) -> Callable[
     [Callable[_FuncParams, _NewValueType]],
-    Callable[_FuncParams, IOResultE[_NewValueType]],
+    Callable[_FuncParams, IOResult[_NewValueType, _ExceptionType]],
 ]:
     """Decorator to convert exception-throwing just for a set of Exceptions."""
 
 
 def impure_safe(  # type: ignore # noqa: WPS234, C901
     function: Optional[Callable[_FuncParams, _NewValueType]] = None,
-    exceptions: Optional[Tuple[Type[Exception], ...]] = None,
+    exceptions: Optional[Tuple[Type[_ExceptionType], ...]] = None,
 ) -> Union[
     Callable[_FuncParams, IOResultE[_NewValueType]],
     Callable[
         [Callable[_FuncParams, _NewValueType]],
-        Callable[_FuncParams, IOResultE[_NewValueType]],
+        Callable[_FuncParams, IOResult[_NewValueType, _ExceptionType]],
     ],
 ]:
     """
