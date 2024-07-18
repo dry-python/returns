@@ -47,7 +47,7 @@
     def test() -> int:
         return 1
 
-    reveal_type(safe((EOFError,))(test))  # N: Revealed type is "def () -> returns.result.Result[builtins.int, builtins.Exception]"
+    reveal_type(safe((EOFError,))(test))  # N: Revealed type is "def () -> returns.result.Result[builtins.int, builtins.EOFError]"
 
 
 - case: safe_decorator_with_args
@@ -226,3 +226,11 @@
         return 1
 
     reveal_type(test)  # N: Revealed type is "def (*args: builtins.int, **kwargs: builtins.str) -> returns.io.IO[returns.result.Result[builtins.int, builtins.ValueError]]"
+
+
+- case: safe_decorator_wrong_exceptions_types
+  disable_cache: false
+  main: |
+    from returns.result import safe
+
+    safe((int,))  # E: Value of type variable "_ExceptionType" of "safe" cannot be "int"  [type-var]
