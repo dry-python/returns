@@ -9,9 +9,12 @@ from typing import (
     Iterator,
     List,
     Optional,
+    Tuple,
+    Type,
     TypeVar,
     Union,
     final,
+    overload,
 )
 
 from typing_extensions import ParamSpec
@@ -885,9 +888,33 @@ IOResultE = IOResult[_ValueType, Exception]
 
 # impure_safe decorator:
 
+@overload
 def impure_safe(
     function: Callable[_FuncParams, _NewValueType],
 ) -> Callable[_FuncParams, IOResultE[_NewValueType]]:
+    """Decorator to convert exception-throwing for any kind of Exception."""
+
+
+@overload
+def impure_safe(
+    exceptions: Tuple[Type[Exception], ...],
+) -> Callable[
+    [Callable[_FuncParams, _NewValueType]],
+    Callable[_FuncParams, IOResultE[_NewValueType]],
+]:
+    """Decorator to convert exception-throwing just for a set of Exceptions."""
+
+
+def impure_safe(  # type: ignore # noqa: WPS234, C901
+    function: Optional[Callable[_FuncParams, _NewValueType]] = None,
+    exceptions: Optional[Tuple[Type[Exception], ...]] = None,
+) -> Union[
+    Callable[_FuncParams, IOResultE[_NewValueType]],
+    Callable[
+        [Callable[_FuncParams, _NewValueType]],
+        Callable[_FuncParams, IOResultE[_NewValueType]],
+    ],
+]:
     """
     Decorator to mark function that it returns :class:`~IOResult` container.
 
@@ -910,16 +937,40 @@ def impure_safe(
       >>> assert function(1) == IOSuccess(1.0)
       >>> assert function(0).failure()
 
+    You can also use it with explicit exception types as the first argument:
+
+    .. code:: python
+
+      >>> from returns.io import IOSuccess, IOFailure, impure_safe
+
+      >>> @impure_safe(exceptions=(ZeroDivisionError,))
+      ... def might_raise(arg: int) -> float:
+      ...     return 1 / arg
+
+      >>> assert might_raise(1) == IOSuccess(1.0)
+      >>> assert isinstance(might_raise(0), IOFailure)
+
+    In this case, only exceptions that are explicitly
+    listed are going to be caught.
+
     Similar to :func:`returns.future.future_safe`
     and :func:`returns.result.safe` decorators.
     """
-    @wraps(function)
-    def decorator(
-        *args: _FuncParams.args,
-        **kwargs: _FuncParams.kwargs,
-    ) -> IOResultE[_NewValueType]:
-        try:
-            return IOSuccess(function(*args, **kwargs))
-        except Exception as exc:
-            return IOFailure(exc)
-    return decorator
+    def factory(
+        inner_function: Callable[_FuncParams, _NewValueType],
+        inner_exceptions: Tuple[Type[Exception], ...],
+    ) -> Callable[_FuncParams, IOResultE[_NewValueType]]:
+        @wraps(inner_function)
+        def decorator(*args: _FuncParams.args, **kwargs: _FuncParams.kwargs):
+            try:
+                return IOSuccess(inner_function(*args, **kwargs))
+            except inner_exceptions as exc:
+                return IOFailure(exc)
+        return decorator
+
+    if callable(function):
+        return factory(function, exceptions or (Exception,))
+    if isinstance(function, tuple):
+        exceptions = function  # type: ignore
+        function = None
+    return lambda function: factory(function, exceptions)  # type: ignore
