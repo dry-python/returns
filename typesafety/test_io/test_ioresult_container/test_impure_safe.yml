@@ -19,9 +19,10 @@
     def test1(arg: str) -> int:
         return 1
 
-    reveal_type(test)  # N: Revealed type is "def (arg: builtins.str) -> returns.io.IOResult[builtins.int, builtins.Exception]"
+    reveal_type(test1)  # N: Revealed type is "def (arg: builtins.str) -> returns.io.IOResult[builtins.int, builtins.Exception]"
+
     @impure_safe(exceptions=(ValueError,))
     def test2(arg: str) -> int:
         return 1
 
-    reveal_type(test)  # N: Revealed type is "def (arg: builtins.str) -> returns.io.IOResult[builtins.int, builtins.Exception]"
+    reveal_type(test2)  # N: Revealed type is "def (arg: builtins.str) -> returns.io.IOResult[builtins.int, builtins.Exception]"
