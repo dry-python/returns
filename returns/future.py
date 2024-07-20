@@ -1455,10 +1455,7 @@ def FutureFailure(  # noqa: N802
     return FutureResult.from_failure(inner_value)
 
 
-# Aliases:
-
-#: Alias for a popular case when ``Result`` has ``Exception`` as error type.
-FutureResultE = FutureResult[_ValueType, Exception]
+_ExceptionType = TypeVar('_ExceptionType', bound=Exception)
 
 
 # Decorators:
@@ -1469,30 +1466,32 @@ def future_safe(
         _FuncParams,
         Coroutine[_FirstType, _SecondType, _ValueType],
     ],
-) -> Callable[_FuncParams, FutureResultE[_ValueType]]:
+) -> Callable[_FuncParams, FutureResult[_ValueType, Exception]]:
     """Decorator to convert exception-throwing for any kind of Exception."""
+
 
 @overload
 def future_safe(
-    exceptions: Tuple[Type[Exception], ...],
-) -> Callable[[Callable[
-        _FuncParams,
-        Coroutine[_FirstType, _SecondType, _ValueType],
-    ]],Callable[_FuncParams,FutureResultE[_ValueType]]]:
+    exceptions: Tuple[Type[_ExceptionType], ...],
+) -> Callable[
+        [Callable[
+            _FuncParams,
+            Coroutine[_FirstType, _SecondType, _ValueType],]],
+        Callable[_FuncParams, FutureResult[_ValueType, _ExceptionType]]]:
     """Decorator to convert exception-throwing just for a set of Exceptions."""
 
 def future_safe(  # type: ignore # noqa: WPS234, C901
-    function: Callable[
+    function: Optional[Callable[
         _FuncParams,
         Coroutine[_FirstType, _SecondType, _ValueType],
-    ],
-    exceptions: Optional[Tuple[Type[Exception], ...]] = None,
+    ]] = None,
+    exceptions: Optional[Tuple[Type[_ExceptionType], ...]] = None,
 ) -> Union[
-    Callable[_FuncParams, FutureResultE[_ValueType]],
+    Callable[_FuncParams, FutureResult[_ValueType, Exception]],
     Callable[[Callable[
         _FuncParams,
         Coroutine[_FirstType, _SecondType, _ValueType],
-    ]], Callable[_FuncParams, FutureResultE[_ValueType]]],
+    ]], Callable[_FuncParams, FutureResult[_ValueType, _ExceptionType]]],
     ]:
     """
     Decorator to convert exception-throwing coroutine to ``FutureResult``.
@@ -1525,23 +1524,33 @@ def future_safe(  # type: ignore # noqa: WPS234, C901
     decorators, but works with ``async`` functions.
 
     """
+
     async def factory(
-        inner_function: Awaitable[_FuncParams, _ValueType],
-        inner_exceptions: Tuple[Type[Exception], ...],
+        inner_exceptions: Tuple[Type[_ExceptionType], ...],
         *args: _FuncParams.args,
         **kwargs: _FuncParams.kwargs,
     ) -> Result[_ValueType, Exception]:
         try:
-            return Success(await inner_function(*args, **kwargs))
-        except Exception as exc:
+            return Success(await function(*args, **kwargs))
+        except inner_exceptions as exc:
             return Failure(exc)
 
     if callable(function):
         @wraps(function)
-        def decorator(*args, **kwargs):
-            return FutureResult(factory(function,inner_exceptions=(Exception,)))
+        def decorator(
+            *args: _FuncParams.args,
+            **kwargs: _FuncParams.kwargs,
+        ):
+            return FutureResult(factory((Exception,), *args, **kwargs))
         return decorator
     if isinstance(function, tuple):
         exceptions = function  # type: ignore
         function = None
-    return lambda function: factory(function, exceptions)  # type: ignore
+
+    @wraps(function)
+    def decorator(
+        *args: _FuncParams.args,
+        **kwargs: _FuncParams.kwargs,
+    ):
+        return FutureResult(factory(exceptions, *args, **kwargs))
+    return decorator
