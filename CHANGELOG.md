@@ -6,6 +6,15 @@ incremental in minor, bugfixes only are patches.
 See [0Ver](https://0ver.org/).
 
 
+## 0.24.0 WIP
+
+### Features
+
+- Improve inference of `ResultLike` objects when exception catching
+  decorator is applied with explicit exception types
+- Add picky exceptions to `impure_safe` decorator like `safe` has. Issue #1543
+
+
 ## 0.23.0
 
 ### Features
