@@ -1520,37 +1520,64 @@ def future_safe(  # type: ignore # noqa: WPS234, C901
       ...     IOFailure,
       ... )
 
+    You can also use it with explicit exception types as the first argument:
+
+    .. code:: python
+
+      >>> from returns.result import Failure, Success, safe
+
+      >>> @future_safe(exceptions=(ZeroDivisionError,))
+      ... def might_raise(arg: int) -> float:
+      ...     return 1 / arg
+
+      >>> assert anyio.run(might_raise(2).awaitable) == IOSuccess(0.5)
+      >>> assert isinstance(
+      ...     anyio.run(might_raise(0).awaitable),
+      ...     IOFailure,
+      ... )
+
+    In this case, only exceptions that are explicitly
+    listed are going to be caught.
+
     Similar to :func:`returns.io.impure_safe` and :func:`returns.result.safe`
     decorators, but works with ``async`` functions.
 
     """
 
     async def factory(
+        inner_function: Callable[
+            _FuncParams,
+            Coroutine[_FirstType, _SecondType, _ValueType],
+        ],
         inner_exceptions: Tuple[Type[_ExceptionType], ...],
         *args: _FuncParams.args,
         **kwargs: _FuncParams.kwargs,
     ) -> Result[_ValueType, Exception]:
         try:
-            return Success(await function(*args, **kwargs))
+            return Success(await inner_function(*args, **kwargs))
         except inner_exceptions as exc:
             return Failure(exc)
 
+    # when used without arguments
     if callable(function):
         @wraps(function)
         def decorator(
             *args: _FuncParams.args,
             **kwargs: _FuncParams.kwargs,
         ):
-            return FutureResult(factory((Exception,), *args, **kwargs))
+            return FutureResult(factory(function, (Exception,), *args, **kwargs))
         return decorator
+    # when used with positional arguments
     if isinstance(function, tuple):
         exceptions = function  # type: ignore
         function = None
 
-    @wraps(function)
-    def decorator(
-        *args: _FuncParams.args,
-        **kwargs: _FuncParams.kwargs,
-    ):
-        return FutureResult(factory(exceptions, *args, **kwargs))
-    return decorator
+    def factory_func(function):
+        @wraps(function)
+        def decorator2(
+            *args: _FuncParams.args,
+            **kwargs: _FuncParams.kwargs,
+        ):
+            return FutureResult(factory(function, exceptions, *args, **kwargs))
+        return decorator2
+    return lambda function: factory_func(function)   # type: ignore

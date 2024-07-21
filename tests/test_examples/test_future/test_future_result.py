@@ -4,7 +4,7 @@ from typing import Final, Sequence, cast
 import httpx  # you would need to `pip install httpx`
 from typing_extensions import TypedDict
 
-from returns.future import FutureResultE, future_safe
+from returns.future import FutureResult, future_safe
 from returns.io import IOResultE
 from returns.iterables import Fold
 
@@ -27,7 +27,7 @@ async def _fetch_post(post_id: int) -> _Post:
         return cast(_Post, response.json())  # or validate the response
 
 
-def _show_titles(number_of_posts: int) -> Sequence[FutureResultE[str]]:
+def _show_titles(number_of_posts: int) -> Sequence[FutureResult[str, Exception]]:
     def factory(post: _Post) -> str:
         return post['title']
 
