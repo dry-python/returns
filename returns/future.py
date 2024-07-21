@@ -1565,19 +1565,27 @@ def future_safe(  # type: ignore # noqa: WPS234, C901
             *args: _FuncParams.args,
             **kwargs: _FuncParams.kwargs,
         ):
-            return FutureResult(factory(function, (Exception,), *args, **kwargs))
+            return FutureResult(
+                factory(
+                    function, (Exception,), *args, **kwargs,
+                )
+            )
         return decorator
     # when used with positional arguments
     if isinstance(function, tuple):
         exceptions = function  # type: ignore
         function = None
 
-    def factory_func(function):
-        @wraps(function)
+    def factory_func(func: Callable[
+        _FuncParams,
+        Coroutine[_FirstType, _SecondType, _ValueType],
+    ],
+    ):
+        @wraps(func)
         def decorator2(
             *args: _FuncParams.args,
             **kwargs: _FuncParams.kwargs,
         ):
-            return FutureResult(factory(function, exceptions, *args, **kwargs))
+            return FutureResult(factory(func, exceptions, *args, **kwargs))
         return decorator2
-    return lambda function: factory_func(function)   # type: ignore
+    return lambda function: factory_func(function)  # type: ignore

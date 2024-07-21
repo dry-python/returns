@@ -24,7 +24,7 @@ class _Post(TypedDict):
 def _close(
     client: httpx.AsyncClient,
     raw_value: ResultE[Sequence[str]],
-) -> FutureResult[None,Exception]:
+) -> FutureResult[None, Exception]:
     return future_safe(client.aclose)()
 
 

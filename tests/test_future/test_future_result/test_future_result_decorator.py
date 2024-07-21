@@ -1,6 +1,6 @@
 from typing import Union
-import pytest
 
+import pytest
 
 from returns.future import FutureResult, future_safe
 from returns.io import IOFailure, IOSuccess
@@ -41,7 +41,8 @@ async def test_future_safe_decorator_failure():
 
 
 @pytest.mark.anyio
-async def test_future_safe_decorator_with_expected_error():
+async def test_future_safe_decorator_w_expected_error():
+    """Ensure that coroutine marked with ``@future_safe``."""
     future_instance = _coro_two(0)
 
     assert isinstance(future_instance, FutureResult)
@@ -55,7 +56,8 @@ async def test_future_safe_decorator_with_expected_error():
 
 @pytest.mark.anyio
 @pytest.mark.xfail(raises=AssertionError)
-async def test_future_safe_decorator_with_non_expected_error():
+async def test_future_safe_decorator_w_unexpected_error():
+    """Ensure that coroutine marked with ``@future_safe``."""
     future_instance = _coro_three('0')
 
     await future_instance
