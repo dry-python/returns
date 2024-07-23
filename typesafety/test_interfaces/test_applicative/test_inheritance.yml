@@ -104,10 +104,10 @@
         def from_value(cls, inner_value: V) -> None:
             ...
   out: |
-    main:11: error: Argument 1 of "apply" is incompatible with supertype "ApplicativeN"; supertype defines the argument type as "KindN[MyClass[V], Callable[[V], _UpdatedType], NoReturn, NoReturn]"  [override]
+    main:11: error: Argument 1 of "apply" is incompatible with supertype "ApplicativeN"; supertype defines the argument type as "KindN[MyClass[V], Callable[[V], _UpdatedType], Never, Never]"  [override]
     main:11: note: This violates the Liskov substitution principle
     main:11: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
-    main:16: error: Return type "None" of "from_value" incompatible with return type "KindN[MyClass[V], _UpdatedType, NoReturn, NoReturn]" in supertype "ApplicativeN"  [override]
+    main:16: error: Return type "None" of "from_value" incompatible with return type "KindN[MyClass[V], _UpdatedType, Never, Never]" in supertype "ApplicativeN"  [override]
     main:16: error: Argument 1 of "from_value" is incompatible with supertype "ApplicativeN"; supertype defines the argument type as "_UpdatedType"  [override]
     main:16: note: This violates the Liskov substitution principle
     main:16: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides

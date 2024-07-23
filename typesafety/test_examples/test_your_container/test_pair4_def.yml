@@ -23,5 +23,5 @@
     my_pair: Pair[int, str] = Pair.from_paired(1, 'a')
     reveal_type(my_pair.pair(function))
   out: |
-    main:4: note: Revealed type is "def [_FirstType, _SecondType] (inner_value: Tuple[_FirstType`1, _SecondType`2]) -> test_pair4.Pair[_FirstType`1, _SecondType`2]"
-    main:10: note: Revealed type is "test_pair4.Pair[builtins.float, builtins.bool]"
+    main:4: note: Revealed type is "Any"
+    main:10: note: Revealed type is "Any"

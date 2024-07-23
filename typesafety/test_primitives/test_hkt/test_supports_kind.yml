@@ -5,7 +5,7 @@
     from typing import List
 
     container: SupportsKind1[List, int]
-    container.pop  # E: "SupportsKindN[List[Any], int, NoReturn, NoReturn]" has no attribute "pop"  [attr-defined]
+    container.pop  # E: "SupportsKindN[List[Any], int, Never, Never]" has no attribute "pop"  [attr-defined]
 
 
 - case: supports_kind_getattr_missing

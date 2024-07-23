@@ -27,7 +27,7 @@
     x: Result[str, str]
     bind(test)(x)
   out: |
-    main:8: error: Argument 1 has incompatible type "Result[str, str]"; expected "KindN[Result[Any, Any], float, str, NoReturn]"  [arg-type]
+    main:8: error: Argument 1 has incompatible type "Result[str, str]"; expected "KindN[Result[Any, Any], float, str, Never]"  [arg-type]
 
 
 - case: bind_wrong_error_type
@@ -42,7 +42,7 @@
     x: Result[float, str]
     bind(test)(x)
   out: |
-    main:8: error: Argument 1 has incompatible type "Result[float, str]"; expected "KindN[Result[Any, Any], float, Exception, NoReturn]"  [arg-type]
+    main:8: error: Argument 1 has incompatible type "Result[float, str]"; expected "KindN[Result[Any, Any], float, Exception, Never]"  [arg-type]
 
 
 - case: bind_with_flow

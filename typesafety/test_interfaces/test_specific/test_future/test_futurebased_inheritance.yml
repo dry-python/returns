@@ -158,5 +158,5 @@
         async def awaitable(self) -> None:
             ...
   out: |
-    main:12: error: Return type "Generator[None, None, T]" of "__await__" incompatible with return type "Generator[Any, Any, IOLikeN[T, NoReturn, NoReturn]]" in supertype "AwaitableFutureN"  [override]
-    main:15: error: Return type "Coroutine[Any, Any, None]" of "awaitable" incompatible with return type "Coroutine[Any, Any, IOLikeN[T, NoReturn, NoReturn]]" in supertype "AwaitableFutureN"  [override]
+    main:12: error: Return type "Generator[None, None, T]" of "__await__" incompatible with return type "Generator[Any, Any, IOLikeN[T, Never, Never]]" in supertype "AwaitableFutureN"  [override]
+    main:15: error: Return type "Coroutine[Any, Any, None]" of "awaitable" incompatible with return type "Coroutine[Any, Any, IOLikeN[T, Never, Never]]" in supertype "AwaitableFutureN"  [override]

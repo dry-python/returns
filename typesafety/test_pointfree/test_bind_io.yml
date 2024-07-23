@@ -41,7 +41,7 @@
     x: IO[str]
     bind_io(test)(x)
   out: |
-    main:8: error: Argument 1 has incompatible type "IO[str]"; expected "KindN[IO[Any], float, NoReturn, NoReturn]"  [arg-type]
+    main:8: error: Argument 1 has incompatible type "IO[str]"; expected "KindN[IO[Any], float, Never, Never]"  [arg-type]
 
 
 - case: bind_io_wrong_unsupported_type
@@ -58,7 +58,7 @@
     bind_io(test)(x)
   out: |
     main:9: error: Value of type variable "_IOLikeKind" of function cannot be "Maybe[Any]"  [type-var]
-    main:9: error: Argument 1 has incompatible type "Maybe[str]"; expected "KindN[Maybe[Any], float, NoReturn, NoReturn]"  [arg-type]
+    main:9: error: Argument 1 has incompatible type "Maybe[str]"; expected "KindN[Maybe[Any], float, Never, Never]"  [arg-type]
 
 
 - case: bind_io_io
