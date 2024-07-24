@@ -116,8 +116,8 @@
         ) -> 'MyClass[V]':
             ...
   out: |
-    main:9: error: Return type "MyClass[V]" of "bind" incompatible with return type "KindN[MyClass[V], _UpdatedType, NoReturn, NoReturn]" in supertype "BindableN"  [override]
-    main:11: error: Argument 1 of "bind" is incompatible with supertype "BindableN"; supertype defines the argument type as "Callable[[V], KindN[MyClass[V], _UpdatedType, NoReturn, NoReturn]]"  [override]
+    main:9: error: Return type "MyClass[V]" of "bind" incompatible with return type "KindN[MyClass[V], _UpdatedType, Never, Never]" in supertype "BindableN"  [override]
+    main:11: error: Argument 1 of "bind" is incompatible with supertype "BindableN"; supertype defines the argument type as "Callable[[V], KindN[MyClass[V], _UpdatedType, Never, Never]]"  [override]
     main:11: note: This violates the Liskov substitution principle
     main:11: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
 
@@ -140,8 +140,8 @@
         ) -> 'MyClass[V, T]':
             ...
   out: |
-    main:10: error: Return type "MyClass[V, T]" of "bind" incompatible with return type "KindN[MyClass[V, T], _UpdatedType, T, NoReturn]" in supertype "BindableN"  [override]
-    main:12: error: Argument 1 of "bind" is incompatible with supertype "BindableN"; supertype defines the argument type as "Callable[[V], KindN[MyClass[V, T], _UpdatedType, T, NoReturn]]"  [override]
+    main:10: error: Return type "MyClass[V, T]" of "bind" incompatible with return type "KindN[MyClass[V, T], _UpdatedType, T, Never]" in supertype "BindableN"  [override]
+    main:12: error: Argument 1 of "bind" is incompatible with supertype "BindableN"; supertype defines the argument type as "Callable[[V], KindN[MyClass[V, T], _UpdatedType, T, Never]]"  [override]
     main:12: note: This violates the Liskov substitution principle
     main:12: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
 

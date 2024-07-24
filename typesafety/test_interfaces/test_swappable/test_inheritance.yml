@@ -54,4 +54,4 @@
         def swap(self) -> MyClass[_FirstType, _SecondType]:
             ...
   out: |
-    main:13: error: Return type "MyClass[_FirstType, _SecondType]" of "swap" incompatible with return type "KindN[MyClass[_FirstType, _SecondType], _SecondType, _FirstType, NoReturn]" in supertype "SwappableN"  [override]
+    main:13: error: Return type "MyClass[_FirstType, _SecondType]" of "swap" incompatible with return type "KindN[MyClass[_FirstType, _SecondType], _SecondType, _FirstType, Never]" in supertype "SwappableN"  [override]

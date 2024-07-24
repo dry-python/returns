@@ -92,7 +92,7 @@
         ) -> 'MyClass[N, E]':
             ...
   out: |
-    main:10: error: Return type "MyClass[N, E]" of "alt" incompatible with return type "KindN[MyClass[V, E], V, _UpdatedType, NoReturn]" in supertype "AltableN"  [override]
+    main:10: error: Return type "MyClass[N, E]" of "alt" incompatible with return type "KindN[MyClass[V, E], V, _UpdatedType, Never]" in supertype "AltableN"  [override]
     main:12: error: Argument 1 of "alt" is incompatible with supertype "AltableN"; supertype defines the argument type as "Callable[[E], _UpdatedType]"  [override]
     main:12: note: This violates the Liskov substitution principle
     main:12: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides

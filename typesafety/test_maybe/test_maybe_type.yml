@@ -142,9 +142,9 @@
   disable_cache: false
   main: |
     from returns.maybe import Maybe
-    from typing import NoReturn
+    from typing_extensions import Never
 
-    def fallback() -> NoReturn:
+    def fallback() -> Never:
         ...
 
     result = Maybe.from_value(1).or_else_call(fallback)
