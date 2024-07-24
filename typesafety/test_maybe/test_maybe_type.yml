@@ -142,7 +142,7 @@
   disable_cache: false
   main: |
     from returns.maybe import Maybe
-    from typing import Never
+    from typing_extensions import Never
 
     def fallback() -> Never:
         ...
