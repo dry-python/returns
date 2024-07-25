@@ -1,12 +1,6 @@
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    Callable,
-    Generic,
-    NoReturn,
-    Protocol,
-    TypeVar,
-)
+from typing import TYPE_CHECKING, Any, Callable, Generic, Protocol, TypeVar
+
+from typing_extensions import Never
 
 _InstanceType = TypeVar('_InstanceType', covariant=True)
 _TypeArgType1 = TypeVar('_TypeArgType1', covariant=True)
@@ -139,12 +133,12 @@ class SupportsKindN(
 
 #: Type alias used for inheritance with one type argument.
 SupportsKind1 = SupportsKindN[
-    _InstanceType, _TypeArgType1, NoReturn, NoReturn,
+    _InstanceType, _TypeArgType1, Never, Never,
 ]
 
 #: Type alias used for inheritance with two type arguments.
 SupportsKind2 = SupportsKindN[
-    _InstanceType, _TypeArgType1, _TypeArgType2, NoReturn,
+    _InstanceType, _TypeArgType1, _TypeArgType2, Never,
 ]
 
 #: Type alias used for inheritance with three type arguments.

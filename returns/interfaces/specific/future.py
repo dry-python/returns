@@ -16,9 +16,10 @@ from typing import (
     Callable,
     Generator,
     Generic,
-    NoReturn,
     TypeVar,
 )
+
+from typing_extensions import Never
 
 from returns.interfaces.specific import io
 from returns.primitives.hkt import KindN
@@ -88,10 +89,10 @@ class FutureLikeN(io.IOLikeN[_FirstType, _SecondType, _ThirdType]):
 
 
 #: Type alias for kinds with one type argument.
-FutureLike1 = FutureLikeN[_FirstType, NoReturn, NoReturn]
+FutureLike1 = FutureLikeN[_FirstType, Never, Never]
 
 #: Type alias for kinds with two type arguments.
-FutureLike2 = FutureLikeN[_FirstType, _SecondType, NoReturn]
+FutureLike2 = FutureLikeN[_FirstType, _SecondType, Never]
 
 #: Type alias for kinds with three type arguments.
 FutureLike3 = FutureLikeN[_FirstType, _SecondType, _ThirdType]
@@ -120,10 +121,10 @@ class AwaitableFutureN(Generic[_FirstType, _SecondType, _ThirdType]):
 
 
 #: Type alias for kinds with one type argument.
-AsyncFuture1 = AwaitableFutureN[_FirstType, NoReturn, NoReturn]
+AsyncFuture1 = AwaitableFutureN[_FirstType, Never, Never]
 
 #: Type alias for kinds with two type arguments.
-AsyncFuture2 = AwaitableFutureN[_FirstType, _SecondType, NoReturn]
+AsyncFuture2 = AwaitableFutureN[_FirstType, _SecondType, Never]
 
 #: Type alias for kinds with three type arguments.
 AsyncFuture3 = AwaitableFutureN[_FirstType, _SecondType, _ThirdType]
@@ -143,10 +144,10 @@ class FutureBasedN(
 
 
 #: Type alias for kinds with one type argument.
-FutureBased1 = FutureBasedN[_FirstType, NoReturn, NoReturn]
+FutureBased1 = FutureBasedN[_FirstType, Never, Never]
 
 #: Type alias for kinds with two type arguments.
-FutureBased2 = FutureBasedN[_FirstType, _SecondType, NoReturn]
+FutureBased2 = FutureBasedN[_FirstType, _SecondType, Never]
 
 #: Type alias for kinds with three type arguments.
 FutureBased3 = FutureBasedN[_FirstType, _SecondType, _ThirdType]

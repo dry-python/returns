@@ -1,6 +1,6 @@
-from typing import Any, Dict, NoReturn
+from typing import Any, Dict
 
-from typing_extensions import Self
+from typing_extensions import Never, Self
 
 from returns.primitives.exceptions import ImmutableStateError
 
@@ -39,10 +39,10 @@ class Immutable:
         """Returns itself."""
         return self
 
-    def __setattr__(self, attr_name: str, attr_value: Any) -> NoReturn:
+    def __setattr__(self, attr_name: str, attr_value: Any) -> Never:
         """Makes inner state of the containers immutable for modification."""
         raise ImmutableStateError()
 
-    def __delattr__(self, attr_name: str) -> NoReturn:  # noqa: WPS603
+    def __delattr__(self, attr_name: str) -> Never:  # noqa: WPS603
         """Makes inner state of the containers immutable for deletion."""
         raise ImmutableStateError()

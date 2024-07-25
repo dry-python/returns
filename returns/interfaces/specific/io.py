@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import TYPE_CHECKING, Callable, NoReturn, TypeVar
+from typing import TYPE_CHECKING, Callable, TypeVar
+
+from typing_extensions import Never
 
 from returns.interfaces import container, equable
 from returns.primitives.hkt import KindN
@@ -46,10 +48,10 @@ class IOLikeN(container.ContainerN[_FirstType, _SecondType, _ThirdType]):
 
 
 #: Type alias for kinds with one type argument.
-IOLike1 = IOLikeN[_FirstType, NoReturn, NoReturn]
+IOLike1 = IOLikeN[_FirstType, Never, Never]
 
 #: Type alias for kinds with two type arguments.
-IOLike2 = IOLikeN[_FirstType, _SecondType, NoReturn]
+IOLike2 = IOLikeN[_FirstType, _SecondType, Never]
 
 #: Type alias for kinds with three type arguments.
 IOLike3 = IOLikeN[_FirstType, _SecondType, _ThirdType]
@@ -75,10 +77,10 @@ class IOBasedN(
 
 
 #: Type alias for kinds with one type argument.
-IOBased1 = IOBasedN[_FirstType, NoReturn, NoReturn]
+IOBased1 = IOBasedN[_FirstType, Never, Never]
 
 #: Type alias for kinds with two type arguments.
-IOBased2 = IOBasedN[_FirstType, _SecondType, NoReturn]
+IOBased2 = IOBasedN[_FirstType, _SecondType, Never]
 
 #: Type alias for kinds with three type arguments.
 IOBased3 = IOBasedN[_FirstType, _SecondType, _ThirdType]

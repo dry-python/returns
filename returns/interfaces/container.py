@@ -1,4 +1,6 @@
-from typing import Callable, ClassVar, NoReturn, Sequence, TypeVar, final
+from typing import Callable, ClassVar, Sequence, TypeVar, final
+
+from typing_extensions import Never
 
 from returns.interfaces import applicative, bindable
 from returns.primitives.asserts import assert_equal
@@ -121,10 +123,10 @@ class ContainerN(
 
 
 #: Type alias for kinds with one type argument.
-Container1 = ContainerN[_FirstType, NoReturn, NoReturn]
+Container1 = ContainerN[_FirstType, Never, Never]
 
 #: Type alias for kinds with two type arguments.
-Container2 = ContainerN[_FirstType, _SecondType, NoReturn]
+Container2 = ContainerN[_FirstType, _SecondType, Never]
 
 #: Type alias for kinds with three type arguments.
 Container3 = ContainerN[_FirstType, _SecondType, _ThirdType]
