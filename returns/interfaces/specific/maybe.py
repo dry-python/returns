@@ -2,7 +2,6 @@ from abc import abstractmethod
 from typing import (
     Callable,
     ClassVar,
-    NoReturn,
     Optional,
     Sequence,
     Type,
@@ -10,6 +9,8 @@ from typing import (
     Union,
     final,
 )
+
+from typing_extensions import Never
 
 from returns.interfaces import equable, failable, unwrappable
 from returns.primitives.asserts import assert_equal
@@ -150,7 +151,7 @@ class MaybeLikeN(
 
 
 #: Type alias for kinds with two type arguments.
-MaybeLike2 = MaybeLikeN[_FirstType, _SecondType, NoReturn]
+MaybeLike2 = MaybeLikeN[_FirstType, _SecondType, Never]
 
 #: Type alias for kinds with three type arguments.
 MaybeLike3 = MaybeLikeN[_FirstType, _SecondType, _ThirdType]
@@ -178,7 +179,7 @@ class MaybeBasedN(
 
 
 #: Type alias for kinds with two type arguments.
-MaybeBased2 = MaybeBasedN[_FirstType, _SecondType, NoReturn]
+MaybeBased2 = MaybeBasedN[_FirstType, _SecondType, Never]
 
 #: Type alias for kinds with three type arguments.
 MaybeBased3 = MaybeBasedN[_FirstType, _SecondType, _ThirdType]

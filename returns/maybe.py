@@ -7,14 +7,13 @@ from typing import (
     ClassVar,
     Generator,
     Iterator,
-    NoReturn,
     Optional,
     TypeVar,
     Union,
     final,
 )
 
-from typing_extensions import ParamSpec
+from typing_extensions import Never, ParamSpec
 
 from returns.interfaces.specific.maybe import MaybeBased2
 from returns.primitives.container import BaseContainer, container_equality
@@ -234,7 +233,7 @@ class Maybe(  # type: ignore[type-var]
 
         .. code:: pycon
 
-          >>> def fallback() -> NoReturn:
+          >>> def fallback() -> Never:
           ...    raise ValueError('Nothing!')
 
           >>> Nothing.or_else_call(fallback)
@@ -445,7 +444,7 @@ class Some(Maybe[_ValueType]):
 
 
 #: Public unit value of protected :class:`~_Nothing` type.
-Nothing: Maybe[NoReturn] = _Nothing()
+Nothing: Maybe[Never] = _Nothing()
 Maybe.empty = Nothing
 
 

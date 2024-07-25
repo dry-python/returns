@@ -1,5 +1,7 @@
 from abc import abstractmethod
-from typing import Callable, ClassVar, NoReturn, Sequence, Type, TypeVar, final
+from typing import Callable, ClassVar, Sequence, Type, TypeVar, final
+
+from typing_extensions import Never
 
 from returns.interfaces import container as _container
 from returns.interfaces import lashable, swappable
@@ -73,7 +75,7 @@ class FailableN(
 
 
 #: Type alias for kinds with two type arguments.
-Failable2 = FailableN[_FirstType, _SecondType, NoReturn]
+Failable2 = FailableN[_FirstType, _SecondType, Never]
 
 #: Type alias for kinds with three type arguments.
 Failable3 = FailableN[_FirstType, _SecondType, _ThirdType]
@@ -154,7 +156,7 @@ class SingleFailableN(
 
 
 #: Type alias for kinds with two types arguments.
-SingleFailable2 = SingleFailableN[_FirstType, _SecondType, NoReturn]
+SingleFailable2 = SingleFailableN[_FirstType, _SecondType, Never]
 
 #: Type alias for kinds with three type arguments.
 SingleFailable3 = SingleFailableN[_FirstType, _SecondType, _ThirdType]
@@ -258,7 +260,7 @@ class DiverseFailableN(
 
 
 #: Type alias for kinds with two type arguments.
-DiverseFailable2 = DiverseFailableN[_FirstType, _SecondType, NoReturn]
+DiverseFailable2 = DiverseFailableN[_FirstType, _SecondType, Never]
 
 #: Type alias for kinds with three type arguments.
 DiverseFailable3 = DiverseFailableN[_FirstType, _SecondType, _ThirdType]

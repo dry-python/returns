@@ -7,7 +7,9 @@ It is a base interface for both sync and async ``IO`` stacks.
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import TYPE_CHECKING, Callable, NoReturn, TypeVar
+from typing import TYPE_CHECKING, Callable, TypeVar
+
+from typing_extensions import Never
 
 from returns.interfaces.specific import io, result
 from returns.primitives.hkt import KindN
@@ -74,7 +76,7 @@ class IOResultLikeN(
 
 
 #: Type alias for kinds with two type arguments.
-IOResultLike2 = IOResultLikeN[_FirstType, _SecondType, NoReturn]
+IOResultLike2 = IOResultLikeN[_FirstType, _SecondType, Never]
 
 #: Type alias for kinds with three type arguments.
 IOResultLike3 = IOResultLikeN[_FirstType, _SecondType, _ThirdType]
@@ -102,7 +104,7 @@ class IOResultBasedN(
 
 
 #: Type alias for kinds with two type arguments.
-IOResultBased2 = IOResultBasedN[_FirstType, _SecondType, NoReturn]
+IOResultBased2 = IOResultBasedN[_FirstType, _SecondType, Never]
 
 #: Type alias for kinds with three type arguments.
 IOResultBased3 = IOResultBasedN[_FirstType, _SecondType, _ThirdType]

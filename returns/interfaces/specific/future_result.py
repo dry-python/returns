@@ -9,7 +9,9 @@ Use this type to mark that this specific async opetaion can fail.
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import TYPE_CHECKING, Awaitable, Callable, NoReturn, TypeVar
+from typing import TYPE_CHECKING, Awaitable, Callable, TypeVar
+
+from typing_extensions import Never
 
 from returns.interfaces.specific import future, ioresult
 from returns.primitives.hkt import KindN
@@ -80,7 +82,7 @@ class FutureResultLikeN(
 
 
 #: Type alias for kinds with two type arguments.
-FutureResultLike2 = FutureResultLikeN[_FirstType, _SecondType, NoReturn]
+FutureResultLike2 = FutureResultLikeN[_FirstType, _SecondType, Never]
 
 #: Type alias for kinds with three type arguments.
 FutureResultLike3 = FutureResultLikeN[_FirstType, _SecondType, _ThirdType]
@@ -101,7 +103,7 @@ class FutureResultBasedN(
 
 
 #: Type alias for kinds with two type arguments.
-FutureResultBased2 = FutureResultBasedN[_FirstType, _SecondType, NoReturn]
+FutureResultBased2 = FutureResultBasedN[_FirstType, _SecondType, Never]
 
 #: Type alias for kinds with three type arguments.
 FutureResultBased3 = FutureResultBasedN[_FirstType, _SecondType, _ThirdType]

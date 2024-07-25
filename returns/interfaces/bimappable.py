@@ -1,4 +1,6 @@
-from typing import NoReturn, TypeVar
+from typing import TypeVar
+
+from typing_extensions import Never
 
 from returns.interfaces import altable, mappable
 
@@ -25,7 +27,7 @@ class BiMappableN(
 
 
 #: Type alias for kinds with two type arguments.
-BiMappable2 = BiMappableN[_FirstType, _SecondType, NoReturn]
+BiMappable2 = BiMappableN[_FirstType, _SecondType, Never]
 
 #: Type alias for kinds with three type arguments.
 BiMappable3 = BiMappableN[_FirstType, _SecondType, _ThirdType]

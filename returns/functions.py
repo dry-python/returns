@@ -1,7 +1,7 @@
 from functools import wraps
-from typing import Any, Callable, NoReturn, TypeVar
+from typing import Any, Callable, TypeVar
 
-from typing_extensions import ParamSpec
+from typing_extensions import Never, ParamSpec
 
 _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')
@@ -105,7 +105,7 @@ def untap(
     return decorator
 
 
-def raise_exception(exception: Exception) -> NoReturn:
+def raise_exception(exception: Exception) -> Never:
     """
     Helper function to raise exceptions as a function.
 
