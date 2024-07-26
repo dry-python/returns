@@ -26,6 +26,7 @@ See [0Ver](https://0ver.org/).
 
 - Now requires `mypy>=1.10`
 - Adds `[check-laws]` extra for installation
+- Fix typo in documentation
 
 
 ## 0.22.0

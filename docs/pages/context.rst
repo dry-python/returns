@@ -91,7 +91,7 @@ Ok, you can directly use ``django.settings`` (or similar)
 in your ``_award_points_for_letters`` function.
 And ruin your pure logic with framework-specific details. That's ugly!
 
-Explicitly reling on context
+Explicitly relying on context
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We have learned that this tiny change showed us
