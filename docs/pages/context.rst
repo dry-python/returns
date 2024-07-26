@@ -92,7 +92,7 @@ in your ``_award_points_for_letters`` function.
 And ruin your pure logic with framework-specific details. That's ugly!
 
 Explicitly relying on context
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We have learned that this tiny change showed us
 that it is not so easy to rely on implicit app context.
