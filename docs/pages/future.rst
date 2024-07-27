@@ -100,18 +100,6 @@ and without a single ``async/await``.
 That example illustrates the whole point of our actions: writing
 sync code that executes asynchronously without any magic at all.
 
-Aliases
--------
-
-There are several useful aliases for ``FutureResult`` type
-with some common values:
-
-- :attr:`returns.future.FutureResultE` is an alias
-  for ``FutureResult[... Exception]``,
-  just use it when you want to work with ``FutureResult`` containers
-  that use exceptions as error type.
-  It is named ``FutureResultE`` because it is ``FutureResultException``
-  and ``FutureResultError`` at the same time.
 
 
 Decorators

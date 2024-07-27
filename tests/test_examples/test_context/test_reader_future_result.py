@@ -6,7 +6,7 @@ from typing_extensions import TypedDict
 
 from returns.context import RequiresContextFutureResultE
 from returns.functions import tap
-from returns.future import FutureResultE, future_safe
+from returns.future import FutureResult, future_safe
 from returns.iterables import Fold
 from returns.pipeline import managed
 from returns.result import ResultE, safe
@@ -24,7 +24,7 @@ class _Post(TypedDict):
 def _close(
     client: httpx.AsyncClient,
     raw_value: ResultE[Sequence[str]],
-) -> FutureResultE[None]:
+) -> FutureResult[None, Exception]:
     return future_safe(client.aclose)()
 
 
@@ -65,7 +65,7 @@ if __name__ == '__main__':
     # because we want to highlight `managed` in this example:
     managed_httpx = managed(_show_titles(3), _close)
     future_result = managed_httpx(
-        FutureResultE.from_value(httpx.AsyncClient(timeout=5)),
+        FutureResult.from_value(httpx.AsyncClient(timeout=5)),
     )
     print(anyio.run(future_result.awaitable))  # noqa: WPS421
     # <IOResult: <Success: (
