@@ -15,7 +15,7 @@ from typing import (
     overload,
 )
 
-from typing_extensions import ParamSpec
+from typing_extensions import ParamSpec, TypeAlias
 
 from returns._internal.futures import _future, _future_result
 from returns.interfaces.specific.future import FutureBased1
@@ -1454,8 +1454,8 @@ def FutureFailure(  # noqa: N802
     return FutureResult.from_failure(inner_value)
 
 
-# Deprecated
-FutureResultE = FutureResult[_ValueType, Exception]
+#: Deprecated alias for ``FutureResult[_ValueType, Exception]``.
+FutureResultE: TypeAlias = FutureResult[_ValueType, Exception]
 
 
 _ExceptionType = TypeVar('_ExceptionType', bound=Exception)

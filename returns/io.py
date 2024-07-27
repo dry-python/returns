@@ -17,7 +17,7 @@ from typing import (
     overload,
 )
 
-from typing_extensions import ParamSpec
+from typing_extensions import ParamSpec, TypeAlias
 
 from returns.interfaces.specific import io, ioresult
 from returns.primitives.container import BaseContainer, container_equality
@@ -882,8 +882,8 @@ class IOSuccess(IOResult[_ValueType, Any]):
 # Aliases:
 
 
-#: Alias for a popular case when ``IOResult`` has ``Exception`` as error type.
-IOResultE = IOResult[_ValueType, Exception]
+#: Deprecated alias for ``IOResult[_ValueType, Exception]``.
+IOResultE: TypeAlias = IOResult[_ValueType, Exception]
 
 
 # impure_safe decorator:
@@ -894,7 +894,8 @@ _ExceptionType = TypeVar('_ExceptionType', bound=Exception)
 @overload
 def impure_safe(
     function: Callable[_FuncParams, _NewValueType],
-) -> Callable[_FuncParams, IOResultE[_NewValueType]]:
+    /,
+) -> Callable[_FuncParams, IOResult[_NewValueType, Exception]]:
     """Decorator to convert exception-throwing for any kind of Exception."""
 
 
@@ -908,11 +909,13 @@ def impure_safe(
     """Decorator to convert exception-throwing just for a set of Exceptions."""
 
 
-def impure_safe(  # type: ignore # noqa: WPS234, C901
-    function: Optional[Callable[_FuncParams, _NewValueType]] = None,
-    exceptions: Optional[Tuple[Type[_ExceptionType], ...]] = None,
+def impure_safe(  # noqa: WPS234, C901
+    exceptions: Union[
+        Callable[_FuncParams, _NewValueType],
+        Tuple[Type[_ExceptionType], ...],
+    ],
 ) -> Union[
-    Callable[_FuncParams, IOResultE[_NewValueType]],
+    Callable[_FuncParams, IOResult[_NewValueType, Exception]],
     Callable[
         [Callable[_FuncParams, _NewValueType]],
         Callable[_FuncParams, IOResult[_NewValueType, _ExceptionType]],
@@ -961,19 +964,22 @@ def impure_safe(  # type: ignore # noqa: WPS234, C901
     """
     def factory(
         inner_function: Callable[_FuncParams, _NewValueType],
-        inner_exceptions: Tuple[Type[Exception], ...],
-    ) -> Callable[_FuncParams, IOResultE[_NewValueType]]:
+        inner_exceptions: Tuple[Type[_ExceptionType], ...],
+    ) -> Callable[_FuncParams, IOResult[_NewValueType, _ExceptionType]]:
         @wraps(inner_function)
-        def decorator(*args: _FuncParams.args, **kwargs: _FuncParams.kwargs):
+        def decorator(
+            *args: _FuncParams.args,
+            **kwargs: _FuncParams.kwargs,
+        ) -> IOResult[_NewValueType, _ExceptionType]:
             try:
                 return IOSuccess(inner_function(*args, **kwargs))
             except inner_exceptions as exc:
                 return IOFailure(exc)
         return decorator
 
-    if callable(function):
-        return factory(function, exceptions or (Exception,))
-    if isinstance(function, tuple):
-        exceptions = function  # type: ignore
-        function = None
-    return lambda function: factory(function, exceptions)  # type: ignore
+    if isinstance(exceptions, tuple):
+        return lambda function: factory(function, exceptions)
+    return factory(
+        exceptions,
+        (Exception,),  # type: ignore[arg-type]
+    )

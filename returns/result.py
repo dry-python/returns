@@ -17,7 +17,7 @@ from typing import (
     overload,
 )
 
-from typing_extensions import Never, ParamSpec
+from typing_extensions import Never, ParamSpec, TypeAlias
 
 from returns.interfaces.specific import result
 from returns.primitives.container import BaseContainer, container_equality
@@ -468,8 +468,8 @@ class Success(Result[_ValueType, Any]):
 
 # Aliases:
 
-#: Alias for a popular case when ``Result`` has ``Exception`` as error type.
-ResultE = Result[_ValueType, Exception]
+#: Deprecated alias for ``Result[_ValueType, Exception]``.
+ResultE: TypeAlias = Result[_ValueType, Exception]
 
 
 # Decorators:
@@ -480,7 +480,8 @@ _ExceptionType = TypeVar('_ExceptionType', bound=Exception)
 @overload
 def safe(
     function: Callable[_FuncParams, _ValueType],
-) -> Callable[_FuncParams, ResultE[_ValueType]]:
+    /,
+) -> Callable[_FuncParams, Result[_ValueType, Exception]]:
     """Decorator to convert exception-throwing for any kind of Exception."""
 
 
@@ -494,11 +495,13 @@ def safe(
     """Decorator to convert exception-throwing just for a set of Exceptions."""
 
 
-def safe(  # type: ignore # noqa: WPS234, C901
-    function: Optional[Callable[_FuncParams, _ValueType]] = None,
-    exceptions: Optional[Tuple[Type[_ExceptionType], ...]] = None,
+def safe(  # noqa: WPS234, C901
+    exceptions: Union[
+        Callable[_FuncParams, _ValueType],
+        Tuple[Type[_ExceptionType], ...],
+    ],
 ) -> Union[
-    Callable[_FuncParams, ResultE[_ValueType]],
+    Callable[_FuncParams, Result[_ValueType, Exception]],
     Callable[
         [Callable[_FuncParams, _ValueType]],
         Callable[_FuncParams, Result[_ValueType, _ExceptionType]],
@@ -546,22 +549,25 @@ def safe(  # type: ignore # noqa: WPS234, C901
     """
     def factory(
         inner_function: Callable[_FuncParams, _ValueType],
-        inner_exceptions: Tuple[Type[Exception], ...],
-    ) -> Callable[_FuncParams, ResultE[_ValueType]]:
+        inner_exceptions: Tuple[Type[_ExceptionType], ...],
+    ) -> Callable[_FuncParams, Result[_ValueType, _ExceptionType]]:
         @wraps(inner_function)
-        def decorator(*args: _FuncParams.args, **kwargs: _FuncParams.kwargs):
+        def decorator(
+            *args: _FuncParams.args,
+            **kwargs: _FuncParams.kwargs,
+        ) -> Result[_ValueType, _ExceptionType]:
             try:
                 return Success(inner_function(*args, **kwargs))
             except inner_exceptions as exc:
                 return Failure(exc)
         return decorator
 
-    if callable(function):
-        return factory(function, (Exception,))
-    if isinstance(function, tuple):
-        exceptions = function  # type: ignore
-        function = None
-    return lambda function: factory(function, exceptions)  # type: ignore
+    if isinstance(exceptions, tuple):
+        return lambda function: factory(function, exceptions)
+    return factory(
+        exceptions,
+        (Exception,),  # type: ignore[arg-type]
+    )
 
 
 def attempt(

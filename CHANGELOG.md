@@ -8,6 +8,12 @@ See [0Ver](https://0ver.org/).
 
 ## 0.24.0 WIP
 
+### Deprecated
+
+- `returns.result.ResultE` alias
+- `returns.io.IOResultE` alias
+- `returns.future.FutureResultE` alias
+
 ### Features
 
 - Add picky exceptions to `future_safe` decorator like `safe` has.
@@ -15,10 +21,9 @@ See [0Ver](https://0ver.org/).
   decorator is applied with explicit exception types
 - Add picky exceptions to `impure_safe` decorator like `safe` has. Issue #1543
 
+### Misc
 
-## Deprecated
-
-- FutureResultE from future
+- Now requires `mypy>=1.11`
 
 
 ## 0.23.0
