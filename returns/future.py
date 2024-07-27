@@ -7,7 +7,6 @@ from typing import (
     Callable,
     Coroutine,
     Generator,
-    Optional,
     Tuple,
     Type,
     TypeVar,
@@ -1466,10 +1465,11 @@ _ExceptionType = TypeVar('_ExceptionType', bound=Exception)
 
 @overload
 def future_safe(
-    function: Callable[
+    exceptions: Callable[
         _FuncParams,
         Coroutine[_FirstType, _SecondType, _ValueType],
     ],
+    /,
 ) -> Callable[_FuncParams, FutureResult[_ValueType, Exception]]:
     """Decorator to convert exception-throwing for any kind of Exception."""
 
@@ -1478,34 +1478,37 @@ def future_safe(
 def future_safe(
     exceptions: Tuple[Type[_ExceptionType], ...],
 ) -> Callable[
-        [
-            Callable[
+    [
+        Callable[
             _FuncParams,
             Coroutine[_FirstType, _SecondType, _ValueType],
-            ]
         ],
-        Callable[_FuncParams, FutureResult[_ValueType, _ExceptionType]
-                 ]
+    ],
+    Callable[_FuncParams, FutureResult[_ValueType, _ExceptionType]],
 ]:
     """Decorator to convert exception-throwing just for a set of Exceptions."""
 
 
-def future_safe(  # type: ignore # noqa: WPS234, C901, WPS212
-    function: Optional[Callable[
-        _FuncParams,
-        Coroutine[_FirstType, _SecondType, _ValueType],
-    ]] = None,
-    exceptions: Optional[Tuple[Type[_ExceptionType], ...]] = None,
+def future_safe(  # type: ignore[misc]  # noqa: C901, WPS212, WPS234,
+    exceptions: Union[
+        Callable[
+            _FuncParams,
+            Coroutine[_FirstType, _SecondType, _ValueType],
+        ],
+        Tuple[Type[_ExceptionType], ...],
+    ],
 ) -> Union[
     Callable[_FuncParams, FutureResult[_ValueType, Exception]],
     Callable[
         [
             Callable[
-            _FuncParams,
-            Coroutine[_FirstType, _SecondType, _ValueType],
-            ]
-        ], Callable[_FuncParams, FutureResult[_ValueType, _ExceptionType]]],
-    ]:
+                _FuncParams,
+                Coroutine[_FirstType, _SecondType, _ValueType],
+            ],
+        ],
+        Callable[_FuncParams, FutureResult[_ValueType, _ExceptionType]],
+    ],
+]:
     """
     Decorator to convert exception-throwing coroutine to ``FutureResult``.
 
@@ -1541,7 +1544,7 @@ def future_safe(  # type: ignore # noqa: WPS234, C901, WPS212
       >>> from returns.io import IOFailure, IOSuccess
 
       >>> @future_safe(exceptions=(ZeroDivisionError,))
-      ... def might_raise(arg: int) -> float:
+      ... async def might_raise(arg: int) -> float:
       ...     return 1 / arg
 
       >>> assert anyio.run(might_raise(2).awaitable) == IOSuccess(0.5)
@@ -1557,52 +1560,32 @@ def future_safe(  # type: ignore # noqa: WPS234, C901, WPS212
     decorators, but works with ``async`` functions.
 
     """
-
-    async def factory(
-        inner_function: Callable[
+    def _future_safe_factory(  # noqa: WPS430
+        function: Callable[
             _FuncParams,
             Coroutine[_FirstType, _SecondType, _ValueType],
         ],
         inner_exceptions: Tuple[Type[_ExceptionType], ...],
-        *args: _FuncParams.args,
-        **kwargs: _FuncParams.kwargs,
-    ) -> Result[_ValueType, Exception]:
-        try:
-            return Success(await inner_function(*args, **kwargs))
-        except inner_exceptions as exc:
-            return Failure(exc)
+    ) -> Callable[_FuncParams, FutureResult[_ValueType, _ExceptionType]]:
+        async def factory(
+            *args: _FuncParams.args,
+            **kwargs: _FuncParams.kwargs,
+        ) -> Result[_ValueType, _ExceptionType]:
+            try:
+                return Success(await function(*args, **kwargs))
+            except inner_exceptions as exc:
+                return Failure(exc)
 
-    # when used without arguments
-    if callable(function):
         @wraps(function)
-        def decorator(  # noqa: WPS430
+        def decorator(
             *args: _FuncParams.args,
             **kwargs: _FuncParams.kwargs,
-        ):
-            return FutureResult(
-                factory(
-                    function,
-                    (Exception,),
-                    *args,
-                    **kwargs,
-                ),
-            )
+        ) -> FutureResult[_ValueType, _ExceptionType]:
+            return FutureResult(factory(*args, **kwargs))
         return decorator
-    # when used with positional arguments
-    if isinstance(function, tuple):
-        exceptions = function  # type: ignore
-        function = None
-
-    def factory_f(func: Callable[  # noqa: WPS430
-        _FuncParams,
-        Coroutine[_FirstType, _SecondType, _ValueType],
-    ],
-    ):
-        @wraps(func)
-        def decorator2(  # noqa: WPS430
-            *args: _FuncParams.args,
-            **kwargs: _FuncParams.kwargs,
-        ):
-            return FutureResult(factory(func, exceptions, *args, **kwargs))
-        return decorator2
-    return lambda function: factory_f(function)  # type: ignore  # noqa: WPS506
+    if isinstance(exceptions, tuple):
+        return lambda function: _future_safe_factory(function, exceptions)
+    return _future_safe_factory(
+        exceptions,
+        (Exception,),  # type: ignore[arg-type]
+    )

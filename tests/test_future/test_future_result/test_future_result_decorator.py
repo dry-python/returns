@@ -41,19 +41,15 @@ async def test_future_safe_decorator_failure():
 
 
 @pytest.mark.anyio
-async def test_future_safe_decorator_w_expected_error():
+async def test_future_safe_decorator_w_expected_error(subtests):
     """Ensure that coroutine marked with ``@future_safe``."""
-    future_instance = _coro_two(0)
+    expected = '<IOResult: <Failure: division by zero>>'
 
-    assert isinstance(future_instance, FutureResult)
-    assert isinstance(await future_instance, IOFailure)
-    assert future_instance == IOFailure(ZeroDivisionError())
-
-    future_instance = _coro_three(0)
-
-    assert isinstance(future_instance, FutureResult)
-    assert isinstance(await future_instance, IOFailure)
-    assert future_instance == IOFailure(ZeroDivisionError())
+    for future_instance in (_coro_two(0), _coro_three(0)):
+        with subtests.test(future_instance=future_instance):
+            assert isinstance(future_instance, FutureResult)
+            inner_result = await future_instance
+            assert str(inner_result) == expected
 
 
 @pytest.mark.anyio
