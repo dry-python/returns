@@ -1,13 +1,7 @@
 from abc import abstractmethod
-from typing import (
-    Callable,
-    ClassVar,
-    Generic,
-    NoReturn,
-    Sequence,
-    TypeVar,
-    final,
-)
+from typing import Callable, ClassVar, Generic, Sequence, TypeVar, final
+
+from typing_extensions import Never
 
 from returns.functions import compose, identity
 from returns.primitives.asserts import assert_equal
@@ -85,7 +79,7 @@ class AltableN(
 
 
 #: Type alias for kinds with two type arguments.
-Altable2 = AltableN[_FirstType, _SecondType, NoReturn]
+Altable2 = AltableN[_FirstType, _SecondType, Never]
 
 #: Type alias for kinds with three type arguments.
 Altable3 = AltableN[_FirstType, _SecondType, _ThirdType]

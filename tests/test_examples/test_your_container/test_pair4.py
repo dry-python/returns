@@ -1,14 +1,7 @@
 from abc import abstractmethod
-from typing import (
-    Callable,
-    ClassVar,
-    NoReturn,
-    Sequence,
-    Tuple,
-    Type,
-    TypeVar,
-    final,
-)
+from typing import Callable, ClassVar, Sequence, Tuple, Type, TypeVar, final
+
+from typing_extensions import Never
 
 from returns.contrib.hypothesis.laws import check_all_laws
 from returns.interfaces import bindable, equable, lashable, swappable
@@ -96,7 +89,7 @@ class PairLikeN(
         """Allows to create a PairLikeN from just a single object."""
 
 
-PairLike2 = PairLikeN[_FirstType, _SecondType, NoReturn]
+PairLike2 = PairLikeN[_FirstType, _SecondType, Never]
 PairLike3 = PairLikeN[_FirstType, _SecondType, _ThirdType]
 
 

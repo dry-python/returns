@@ -8,7 +8,7 @@
         ...
 
     x: Future[float]
-    bind_async(test)(x)  # E: Argument 1 has incompatible type "Future[float]"; expected "KindN[Future[Any], str, NoReturn, NoReturn]"  [arg-type]
+    bind_async(test)(x)  # E: Argument 1 has incompatible type "Future[float]"; expected "KindN[Future[Any], str, Never, Never]"  [arg-type]
 
 
 - case: bind_async_wrong_second_type
@@ -21,7 +21,7 @@
         ...
 
     x: FutureResult[str, bool]
-    bind_async(test)(x)  # E: Argument 1 has incompatible type "FutureResult[str, bool]"; expected "KindN[FutureResult[Any, Any], str, str, NoReturn]"  [arg-type]
+    bind_async(test)(x)  # E: Argument 1 has incompatible type "FutureResult[str, bool]"; expected "KindN[FutureResult[Any, Any], str, str, Never]"  [arg-type]
 
 
 - case: bind_async_wrong_instance_type
@@ -37,7 +37,7 @@
     bind_async(test)(x)
   out: |
     main:8: error: Value of type variable "_FutureKind" of "bind_async" cannot be "IO[Any]"  [type-var]
-    main:8: error: Argument 1 has incompatible type "IO[float]"; expected "KindN[IO[Any], str, NoReturn, NoReturn]"  [arg-type]
+    main:8: error: Argument 1 has incompatible type "IO[float]"; expected "KindN[IO[Any], str, Never, Never]"  [arg-type]
 
 
 - case: bind_async_wrong_function_type
@@ -53,7 +53,7 @@
     bind_async(test)(x)
   out: |
     main:8: error: Value of type variable "_FutureKind" of "bind_async" cannot be "IO[Any]"  [type-var]
-    main:8: error: Argument 1 has incompatible type "Future[float]"; expected "KindN[IO[Any], float, NoReturn, NoReturn]"  [arg-type]
+    main:8: error: Argument 1 has incompatible type "Future[float]"; expected "KindN[IO[Any], float, Never, Never]"  [arg-type]
     main:8: note: Maybe you forgot to use "await"?
 
 

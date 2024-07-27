@@ -1,5 +1,7 @@
 from abc import abstractmethod
-from typing import Callable, ClassVar, NoReturn, Sequence, Type, TypeVar, final
+from typing import Callable, ClassVar, Sequence, Type, TypeVar, final
+
+from typing_extensions import Never
 
 from returns.functions import compose, identity
 from returns.interfaces import mappable
@@ -162,10 +164,10 @@ class ApplicativeN(
 
 
 #: Type alias for kinds with one type argument.
-Applicative1 = ApplicativeN[_FirstType, NoReturn, NoReturn]
+Applicative1 = ApplicativeN[_FirstType, Never, Never]
 
 #: Type alias for kinds with two type arguments.
-Applicative2 = ApplicativeN[_FirstType, _SecondType, NoReturn]
+Applicative2 = ApplicativeN[_FirstType, _SecondType, Never]
 
 #: Type alias for kinds with three type arguments.
 Applicative3 = ApplicativeN[_FirstType, _SecondType, _ThirdType]

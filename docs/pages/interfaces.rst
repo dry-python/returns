@@ -31,14 +31,14 @@ for example, can have one, two or three possible types. See the example below:
 
 .. code:: python
 
-  >>> from typing import NoReturn
+  >>> from typing_extensions import Never
 
   >>> from returns.interfaces.mappable import (
   ...    MappableN, Mappable1, Mappable2, Mappable3,
   ... )
 
-  >>> one_type: MappableN[int, NoReturn, NoReturn]
-  >>> two_types: MappableN[int, str, NoReturn]
+  >>> one_type: MappableN[int, Never, Never]
+  >>> two_types: MappableN[int, str, Never]
   >>> three_types: MappableN[int, str, bool]
 
   >>> # We have a shortcut for each amount of arguments to reduce the boilerplate

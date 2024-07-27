@@ -57,7 +57,7 @@
 
     flatten(returns_result())
   out: |
-    main:7: error: Argument 1 to "flatten" has incompatible type "Result[int, Result[int, str]]"; expected "KindN[Result[Any, Any], KindN[Result[Any, Any], Never, Result[int, str], NoReturn], Result[int, str], NoReturn]"  [arg-type]
+    main:7: error: Argument 1 to "flatten" has incompatible type "Result[int, Result[int, str]]"; expected "KindN[Result[Any, Any], KindN[Result[Any, Any], Never, Result[int, str], Never], Result[int, str], Never]"  [arg-type]
 
 
 - case: flatten_io

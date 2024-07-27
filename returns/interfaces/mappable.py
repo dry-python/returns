@@ -1,13 +1,7 @@
 from abc import abstractmethod
-from typing import (
-    Callable,
-    ClassVar,
-    Generic,
-    NoReturn,
-    Sequence,
-    TypeVar,
-    final,
-)
+from typing import Callable, ClassVar, Generic, Sequence, TypeVar, final
+
+from typing_extensions import Never
 
 from returns.functions import compose, identity
 from returns.primitives.asserts import assert_equal
@@ -93,10 +87,10 @@ class MappableN(
 
 
 #: Type alias for kinds with one type argument.
-Mappable1 = MappableN[_FirstType, NoReturn, NoReturn]
+Mappable1 = MappableN[_FirstType, Never, Never]
 
 #: Type alias for kinds with two type arguments.
-Mappable2 = MappableN[_FirstType, _SecondType, NoReturn]
+Mappable2 = MappableN[_FirstType, _SecondType, Never]
 
 #: Type alias for kinds with three type arguments.
 Mappable3 = MappableN[_FirstType, _SecondType, _ThirdType]

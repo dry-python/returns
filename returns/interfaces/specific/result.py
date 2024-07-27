@@ -8,7 +8,9 @@ For impure result see
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import TYPE_CHECKING, Callable, NoReturn, TypeVar
+from typing import TYPE_CHECKING, Callable, TypeVar
+
+from typing_extensions import Never
 
 from returns.interfaces import equable, failable, unwrappable
 from returns.primitives.hkt import KindN
@@ -60,7 +62,7 @@ class ResultLikeN(
 
 
 #: Type alias for kinds with two type arguments.
-ResultLike2 = ResultLikeN[_FirstType, _SecondType, NoReturn]
+ResultLike2 = ResultLikeN[_FirstType, _SecondType, Never]
 
 #: Type alias for kinds with three type arguments.
 ResultLike3 = ResultLikeN[_FirstType, _SecondType, _ThirdType]
@@ -101,7 +103,7 @@ class ResultBasedN(
 
 
 #: Type alias for kinds with two type arguments.
-ResultBased2 = ResultBasedN[_FirstType, _SecondType, NoReturn]
+ResultBased2 = ResultBasedN[_FirstType, _SecondType, Never]
 
 #: Type alias for kinds with three type arguments.
 ResultBased3 = ResultBasedN[_FirstType, _SecondType, _ThirdType]

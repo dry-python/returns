@@ -129,7 +129,7 @@
     main:30: note: This violates the Liskov substitution principle
     main:30: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
     main:35: error: Return type "MyClass[_ValueType, _ErrorType, _EnvType]" of "ask" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType, _EnvType], _EnvType, _ErrorType, _EnvType]" in supertype "ReaderLike3"  [override]
-    main:39: error: Return type "MyClass[_ValueType, Exception, _EnvType]" of "from_context" incompatible with return type "KindN[MyClass[_ValueType, _ErrorType, _EnvType], _ValueType, _ErrorType, _EnvType]" in supertype "ReaderLike3"  [override]
+    main:39: error: Return type "MyClass[_ValueType@MyClass, Exception, _EnvType@MyClass]" of "from_context" incompatible with return type "KindN[MyClass[_ValueType@MyClass, _ErrorType, _EnvType@MyClass], _ValueType@from_context, _ErrorType, _EnvType@from_context]" in supertype "ReaderLike3"  [override]
     main:40: error: Argument 1 of "from_context" is incompatible with supertype "ReaderLike3"; supertype defines the argument type as "RequiresContext[_ValueType, _EnvType]"  [override]
     main:40: note: This violates the Liskov substitution principle
     main:40: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides

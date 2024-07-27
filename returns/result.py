@@ -8,7 +8,6 @@ from typing import (
     Generator,
     Iterator,
     List,
-    NoReturn,
     Optional,
     Tuple,
     Type,
@@ -18,7 +17,7 @@ from typing import (
     overload,
 )
 
-from typing_extensions import ParamSpec
+from typing_extensions import Never, ParamSpec
 
 from returns.interfaces.specific import result
 from returns.primitives.container import BaseContainer, container_equality
@@ -394,7 +393,7 @@ class Failure(Result[Any, _ErrorType]):  # noqa: WPS338
         """Failures swap to :class:`Success`."""
         return Success(self._inner_value)
 
-    def unwrap(self) -> NoReturn:
+    def unwrap(self) -> Never:
         """Raises an exception, since it does not have a value inside."""
         if isinstance(self._inner_value, Exception):
             raise UnwrapFailedError(self) from self._inner_value
@@ -462,7 +461,7 @@ class Success(Result[_ValueType, Any]):
         """Returns the unwrapped value from successful container."""
         return self._inner_value
 
-    def failure(self) -> NoReturn:
+    def failure(self) -> Never:
         """Raises an exception for successful container."""
         raise UnwrapFailedError(self)
 

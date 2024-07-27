@@ -1,5 +1,7 @@
 from abc import abstractmethod
-from typing import ClassVar, NoReturn, Sequence, TypeVar, final
+from typing import ClassVar, Sequence, TypeVar, final
+
+from typing_extensions import Never
 
 from returns.interfaces import bimappable
 from returns.primitives.asserts import assert_equal
@@ -61,7 +63,7 @@ class SwappableN(
 
 
 #: Type alias for kinds with two type arguments.
-Swappable2 = SwappableN[_FirstType, _SecondType, NoReturn]
+Swappable2 = SwappableN[_FirstType, _SecondType, Never]
 
 #: Type alias for kinds with three type arguments.
 Swappable3 = SwappableN[_FirstType, _SecondType, _ThirdType]
