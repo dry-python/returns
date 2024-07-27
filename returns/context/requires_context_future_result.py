@@ -45,7 +45,7 @@ _FirstType = TypeVar('_FirstType')
 class RequiresContextFutureResult(  # type: ignore[type-var]
     BaseContainer,
     SupportsKind3[
-        'RequiresContextFutureResult', _ValueType, _ErrorType, _EnvType,
+        'RequiresContextFutureResult[Any, Any, Any]', _ValueType, _ErrorType, _EnvType,
     ],
     reader_future_result.ReaderFutureResultBasedN[
         _ValueType, _ErrorType, _EnvType,

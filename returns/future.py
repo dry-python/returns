@@ -9,13 +9,12 @@ from typing import (
     Generator,
     Tuple,
     Type,
-    TypeVar,
     Union,
     final,
     overload,
 )
 
-from typing_extensions import ParamSpec, TypeAlias
+from typing_extensions import ParamSpec, TypeAlias, TypeVar
 
 from returns._internal.futures import _future, _future_result
 from returns.interfaces.specific.future import FutureBased1
@@ -36,7 +35,7 @@ from returns.result import Failure, Result, Success
 # Definitions:
 _ValueType = TypeVar('_ValueType', covariant=True)
 _NewValueType = TypeVar('_NewValueType')
-_ErrorType = TypeVar('_ErrorType', covariant=True)
+_ErrorType = TypeVar('_ErrorType', covariant=True, default=Exception)
 _NewErrorType = TypeVar('_NewErrorType')
 
 _FuncParams = ParamSpec('_FuncParams')
@@ -545,7 +544,7 @@ def asyncify(
 @final
 class FutureResult(  # type: ignore[type-var]
     BaseContainer,
-    SupportsKind2['FutureResult', _ValueType, _ErrorType],
+    SupportsKind2['FutureResult[Any, Any]', _ValueType, _ErrorType],
     FutureResultBased2[_ValueType, _ErrorType],
 ):
     """

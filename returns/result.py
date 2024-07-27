@@ -11,13 +11,12 @@ from typing import (
     Optional,
     Tuple,
     Type,
-    TypeVar,
     Union,
     final,
     overload,
 )
 
-from typing_extensions import Never, ParamSpec, TypeAlias
+from typing_extensions import Never, ParamSpec, TypeAlias, TypeVar
 
 from returns.interfaces.specific import result
 from returns.primitives.container import BaseContainer, container_equality
@@ -27,7 +26,7 @@ from returns.primitives.hkt import Kind2, SupportsKind2
 # Definitions:
 _ValueType = TypeVar('_ValueType', covariant=True)
 _NewValueType = TypeVar('_NewValueType')
-_ErrorType = TypeVar('_ErrorType', covariant=True)
+_ErrorType = TypeVar('_ErrorType', covariant=True, default=Exception)
 _NewErrorType = TypeVar('_NewErrorType')
 
 _FirstType = TypeVar('_FirstType')
@@ -36,7 +35,7 @@ _FuncParams = ParamSpec('_FuncParams')
 
 class Result(  # type: ignore[type-var]
     BaseContainer,
-    SupportsKind2['Result', _ValueType, _ErrorType],
+    SupportsKind2['Result[Any, Any]', _ValueType, _ErrorType],
     result.ResultBased2[_ValueType, _ErrorType],
     metaclass=ABCMeta,
 ):
