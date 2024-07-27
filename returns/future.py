@@ -1455,6 +1455,10 @@ def FutureFailure(  # noqa: N802
     return FutureResult.from_failure(inner_value)
 
 
+# Deprecated
+FutureResultE = FutureResult[_ValueType, Exception]
+
+
 _ExceptionType = TypeVar('_ExceptionType', bound=Exception)
 
 
@@ -1474,13 +1478,19 @@ def future_safe(
 def future_safe(
     exceptions: Tuple[Type[_ExceptionType], ...],
 ) -> Callable[
-        [Callable[
+        [
+            Callable[
             _FuncParams,
-            Coroutine[_FirstType, _SecondType, _ValueType],]],
-        Callable[_FuncParams, FutureResult[_ValueType, _ExceptionType]]]:
+            Coroutine[_FirstType, _SecondType, _ValueType],
+            ]
+        ],
+        Callable[_FuncParams, FutureResult[_ValueType, _ExceptionType]
+                 ]
+]:
     """Decorator to convert exception-throwing just for a set of Exceptions."""
 
-def future_safe(  # type: ignore # noqa: WPS234, C901
+
+def future_safe(  # type: ignore # noqa: WPS234, C901, WPS212
     function: Optional[Callable[
         _FuncParams,
         Coroutine[_FirstType, _SecondType, _ValueType],
@@ -1488,10 +1498,13 @@ def future_safe(  # type: ignore # noqa: WPS234, C901
     exceptions: Optional[Tuple[Type[_ExceptionType], ...]] = None,
 ) -> Union[
     Callable[_FuncParams, FutureResult[_ValueType, Exception]],
-    Callable[[Callable[
-        _FuncParams,
-        Coroutine[_FirstType, _SecondType, _ValueType],
-    ]], Callable[_FuncParams, FutureResult[_ValueType, _ExceptionType]]],
+    Callable[
+        [
+            Callable[
+            _FuncParams,
+            Coroutine[_FirstType, _SecondType, _ValueType],
+            ]
+        ], Callable[_FuncParams, FutureResult[_ValueType, _ExceptionType]]],
     ]:
     """
     Decorator to convert exception-throwing coroutine to ``FutureResult``.
@@ -1524,7 +1537,8 @@ def future_safe(  # type: ignore # noqa: WPS234, C901
 
     .. code:: python
 
-      >>> from returns.result import Failure, Success, safe
+      >>> from returns.future import future_safe
+      >>> from returns.io import IOFailure, IOSuccess
 
       >>> @future_safe(exceptions=(ZeroDivisionError,))
       ... def might_raise(arg: int) -> float:
@@ -1561,14 +1575,17 @@ def future_safe(  # type: ignore # noqa: WPS234, C901
     # when used without arguments
     if callable(function):
         @wraps(function)
-        def decorator(
+        def decorator(  # noqa: WPS430
             *args: _FuncParams.args,
             **kwargs: _FuncParams.kwargs,
         ):
             return FutureResult(
                 factory(
-                    function, (Exception,), *args, **kwargs,
-                )
+                    function,
+                    (Exception,),
+                    *args,
+                    **kwargs,
+                ),
             )
         return decorator
     # when used with positional arguments
@@ -1576,16 +1593,16 @@ def future_safe(  # type: ignore # noqa: WPS234, C901
         exceptions = function  # type: ignore
         function = None
 
-    def factory_func(func: Callable[
+    def factory_f(func: Callable[  # noqa: WPS430
         _FuncParams,
         Coroutine[_FirstType, _SecondType, _ValueType],
     ],
     ):
         @wraps(func)
-        def decorator2(
+        def decorator2(  # noqa: WPS430
             *args: _FuncParams.args,
             **kwargs: _FuncParams.kwargs,
         ):
             return FutureResult(factory(func, exceptions, *args, **kwargs))
         return decorator2
-    return lambda function: factory_func(function)  # type: ignore
+    return lambda function: factory_f(function)  # type: ignore  # noqa: WPS506

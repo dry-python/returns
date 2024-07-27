@@ -11,10 +11,14 @@ See [0Ver](https://0ver.org/).
 ### Features
 
 - Add picky exceptions to `future_safe` decorator like `safe` has.
-- Remove FutureResultE
 - Improve inference of `ResultLike` objects when exception catching
   decorator is applied with explicit exception types
 - Add picky exceptions to `impure_safe` decorator like `safe` has. Issue #1543
+
+
+## Deprecated
+
+- FutureResultE from future
 
 
 ## 0.23.0

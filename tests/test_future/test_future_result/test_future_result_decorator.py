@@ -47,17 +47,17 @@ async def test_future_safe_decorator_w_expected_error():
 
     assert isinstance(future_instance, FutureResult)
     assert isinstance(await future_instance, IOFailure)
+    assert future_instance == IOFailure(ZeroDivisionError())
 
     future_instance = _coro_three(0)
 
     assert isinstance(future_instance, FutureResult)
     assert isinstance(await future_instance, IOFailure)
+    assert future_instance == IOFailure(ZeroDivisionError())
 
 
 @pytest.mark.anyio
 @pytest.mark.xfail(raises=AssertionError)
 async def test_future_safe_decorator_w_unexpected_error():
     """Ensure that coroutine marked with ``@future_safe``."""
-    future_instance = _coro_three('0')
-
-    await future_instance
+    await _coro_three('0')
