@@ -1489,7 +1489,7 @@ def future_safe(
     """Decorator to convert exception-throwing just for a set of Exceptions."""
 
 
-def future_safe(  # type: ignore[misc]  # noqa: C901, WPS212, WPS234,
+def future_safe(  # noqa: C901, WPS212, WPS234,
     exceptions: Union[
         Callable[
             _FuncParams,
