@@ -229,8 +229,6 @@ def _clean_plugin_context() -> Iterator[None]:
         types._global_type_lookup.pop(key_to_remove)
     _clean_caches()
 
-    print(types._global_type_lookup)
-
     yield
 
     for saved_state in saved_stategies.items():
