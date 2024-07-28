@@ -3,10 +3,7 @@ from pathlib import Path
 from types import MappingProxyType
 from typing import Final, Optional
 
-from _pytest.config import Config
-
-# See https://github.com/HypothesisWorks/hypothesis/pull/2567
-pytest_plugins = ['hypothesis.extra.pytestplugin']
+import pytest
 
 PYTHON_VERSION: Final = (sys.version_info.major, sys.version_info.minor)
 ENABLE_SINCE: Final = MappingProxyType({
@@ -27,7 +24,7 @@ PATHS_TO_IGNORE_NOW: Final = frozenset(
 
 def pytest_ignore_collect(
     collection_path: Path,
-    config: Config,
+    config: pytest.Config,
 ) -> Optional[bool]:
     """
     Return True to prevent considering this path for collection.

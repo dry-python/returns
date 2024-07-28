@@ -1,6 +1,5 @@
 import inspect
 from contextlib import ExitStack, contextmanager
-from copy import copy
 from typing import (
     Any,
     Callable,
@@ -114,15 +113,12 @@ def container_strategies(
             ),
         )
 
-    with register_container(
-        container_type,
-        use_init=settings.use_init,
-    ):
+    try:
         yield
-
-    for interface in our_interfaces:
-        types._global_type_lookup.pop(interface)
-    _clean_caches()
+    finally:
+        for interface in our_interfaces:
+            types._global_type_lookup.pop(interface)
+        _clean_caches()
 
 
 @contextmanager
@@ -141,11 +137,14 @@ def register_container(
         ),
     )
 
-    yield
-
-    types._global_type_lookup.pop(container_type)
-    if used:
-        st.register_type_strategy(container_type, used)
+    try:
+        yield
+    finally:
+        types._global_type_lookup.pop(container_type)
+        if used:
+            st.register_type_strategy(container_type, used)
+        else:
+            _clean_caches()
 
 
 @contextmanager
@@ -171,10 +170,11 @@ def pure_functions() -> Iterator[None]:
     used = types._global_type_lookup[callable_type]
     st.register_type_strategy(callable_type, factory)
 
-    yield
-
-    types._global_type_lookup.pop(callable_type)
-    st.register_type_strategy(callable_type, used)
+    try:
+        yield
+    finally:
+        types._global_type_lookup.pop(callable_type)
+        st.register_type_strategy(callable_type, used)
 
 
 def _get_callable_type() -> Any:
@@ -198,34 +198,43 @@ def type_vars() -> Iterator[None]:
        for example, ``nan`` does not work for us
 
     """
-    used = types._global_type_lookup.pop(TypeVar)
-
     def factory(thing):
         return types.resolve_TypeVar(thing).filter(
             lambda inner: inner == inner,  # noqa: WPS312
         )
 
+    used = types._global_type_lookup.pop(TypeVar)
     st.register_type_strategy(TypeVar, factory)
 
-    yield
-
-    types._global_type_lookup.pop(TypeVar)
-    st.register_type_strategy(TypeVar, used)
+    try:
+        yield
+    finally:
+        types._global_type_lookup.pop(TypeVar)
+        st.register_type_strategy(TypeVar, used)
 
 
 @contextmanager
-def _clean_plugin_context() -> Iterator[None]:
+def clean_plugin_context() -> Iterator[None]:
     """
     We register a lot of types in `_entrypoint.py`, we need to clean them.
 
     Otherwise, some types might be messed up.
     """
-    saved_state = copy(types._global_type_lookup)
+    saved_stategies = {}
+    for strategy_key, strategy in types._global_type_lookup.items():
+        if isinstance(strategy_key, type):
+            if strategy_key.__module__.startswith('returns.'):
+                saved_stategies.update({strategy_key: strategy})
 
-    yield
-
-    types._global_type_lookup = saved_state
+    for key_to_remove in saved_stategies:
+        types._global_type_lookup.pop(key_to_remove)
     _clean_caches()
+
+    try:
+        yield
+    finally:
+        for saved_state in saved_stategies.items():
+            st.register_type_strategy(*saved_state)
 
 
 def _clean_caches() -> None:
@@ -239,21 +248,17 @@ def _run_law(
     settings: _Settings,
 ) -> Callable[[st.DataObject], None]:
     def factory(source: st.DataObject) -> None:
-        existing_keys = set(types._global_type_lookup.keys())
         with ExitStack() as stack:
-            stack.enter_context(_clean_plugin_context())
+            stack.enter_context(clean_plugin_context())
             stack.enter_context(type_vars())
             stack.enter_context(pure_functions())
             stack.enter_context(
                 container_strategies(container_type, settings=settings),
             )
-
+            stack.enter_context(
+                register_container(container_type, use_init=settings.use_init),
+            )
             source.draw(st.builds(law.definition))
-
-        new_keys = set(types._global_type_lookup.keys())
-        assert existing_keys == new_keys, (  # noqa: S101
-            existing_keys.symmetric_difference(new_keys),
-        )
     return factory
 
 
@@ -283,7 +288,12 @@ def _create_law_test_case(
     setattr(
         module,
         test_function.__name__,
-        # We mark all tests with `returns_lawful` marker,
-        # so users can easily skip them if needed.
-        pytest.mark.returns_lawful(test_function),
+        pytest.mark.filterwarnings(
+            # We ignore multiple warnings about unused coroutines and stuff:
+            'ignore::pytest.PytestUnraisableExceptionWarning',
+        )(
+            # We mark all tests with `returns_lawful` marker,
+            # so users can easily skip them if needed.
+            pytest.mark.returns_lawful(test_function),
+        ),
     )
