@@ -481,7 +481,7 @@ _ExceptionType = TypeVar('_ExceptionType', bound=Exception)
 def safe(
     function: Callable[_FuncParams, _ValueType],
     /,
-) -> Callable[_FuncParams, Result[_ValueType, Exception]]:
+) -> Callable[_FuncParams, ResultE[_ValueType]]:
     """Decorator to convert exception-throwing for any kind of Exception."""
 
 
@@ -501,7 +501,7 @@ def safe(  # noqa: WPS234, C901
         Tuple[Type[_ExceptionType], ...],
     ],
 ) -> Union[
-    Callable[_FuncParams, Result[_ValueType, Exception]],
+    Callable[_FuncParams, ResultE[_ValueType]],
     Callable[
         [Callable[_FuncParams, _ValueType]],
         Callable[_FuncParams, Result[_ValueType, _ExceptionType]],

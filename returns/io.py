@@ -895,7 +895,7 @@ _ExceptionType = TypeVar('_ExceptionType', bound=Exception)
 def impure_safe(
     function: Callable[_FuncParams, _NewValueType],
     /,
-) -> Callable[_FuncParams, IOResult[_NewValueType, Exception]]:
+) -> Callable[_FuncParams, IOResultE[_NewValueType]]:
     """Decorator to convert exception-throwing for any kind of Exception."""
 
 
@@ -915,7 +915,7 @@ def impure_safe(  # noqa: WPS234, C901
         Tuple[Type[_ExceptionType], ...],
     ],
 ) -> Union[
-    Callable[_FuncParams, IOResult[_NewValueType, Exception]],
+    Callable[_FuncParams, IOResultE[_NewValueType]],
     Callable[
         [Callable[_FuncParams, _NewValueType]],
         Callable[_FuncParams, IOResult[_NewValueType, _ExceptionType]],

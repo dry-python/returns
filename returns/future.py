@@ -1470,7 +1470,7 @@ def future_safe(
         Coroutine[_FirstType, _SecondType, _ValueType],
     ],
     /,
-) -> Callable[_FuncParams, FutureResult[_ValueType, Exception]]:
+) -> Callable[_FuncParams, FutureResultE[_ValueType]]:
     """Decorator to convert exception-throwing for any kind of Exception."""
 
 
@@ -1498,7 +1498,7 @@ def future_safe(  # noqa: C901, WPS212, WPS234,
         Tuple[Type[_ExceptionType], ...],
     ],
 ) -> Union[
-    Callable[_FuncParams, FutureResult[_ValueType, Exception]],
+    Callable[_FuncParams, FutureResultE[_ValueType]],
     Callable[
         [
             Callable[
