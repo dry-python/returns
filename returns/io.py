@@ -882,7 +882,7 @@ class IOSuccess(IOResult[_ValueType, Any]):
 # Aliases:
 
 
-#: Deprecated alias for ``IOResult[_ValueType, Exception]``.
+#: Alias for ``IOResult[_ValueType, Exception]``.
 IOResultE: TypeAlias = IOResult[_ValueType, Exception]
 
 

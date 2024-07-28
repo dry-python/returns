@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Callable, ClassVar, TypeVar, final
 
+from typing_extensions import TypeAlias
+
 from returns.functions import identity
 from returns.future import FutureResult
 from returns.interfaces.specific import reader
@@ -437,4 +439,4 @@ class RequiresContext(  # type: ignore[type-var]
 # Aliases
 
 #: Sometimes `RequiresContext` is too long to type.
-Reader = RequiresContext
+Reader: TypeAlias = RequiresContext

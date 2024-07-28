@@ -8,12 +8,6 @@ See [0Ver](https://0ver.org/).
 
 ## 0.24.0 WIP
 
-### Deprecated
-
-- `returns.result.ResultE` alias
-- `returns.io.IOResultE` alias
-- `returns.future.FutureResultE` alias
-
 ### Features
 
 - Add picky exceptions to `future_safe` decorator like `safe` has.

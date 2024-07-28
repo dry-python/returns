@@ -10,6 +10,8 @@ from typing import (
     final,
 )
 
+from typing_extensions import TypeAlias
+
 from returns._internal.futures import _reader_future_result
 from returns.context import NoDeps
 from returns.future import Future, FutureResult
@@ -1389,14 +1391,14 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
 # Aliases:
 
 #: Alias for a popular case when ``Result`` has ``Exception`` as error type.
-RequiresContextFutureResultE = RequiresContextFutureResult[
+RequiresContextFutureResultE: TypeAlias = RequiresContextFutureResult[
     _ValueType, Exception, _EnvType,
 ]
 
 #: Sometimes `RequiresContextFutureResult` is too long to type.
-ReaderFutureResult = RequiresContextFutureResult
+ReaderFutureResult: TypeAlias = RequiresContextFutureResult
 
 #: Alias to save you some typing. Uses ``Exception`` as error type.
-ReaderFutureResultE = RequiresContextFutureResult[
+ReaderFutureResultE: TypeAlias = RequiresContextFutureResult[
     _ValueType, Exception, _EnvType,
 ]

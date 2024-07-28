@@ -1454,7 +1454,7 @@ def FutureFailure(  # noqa: N802
     return FutureResult.from_failure(inner_value)
 
 
-#: Deprecated alias for ``FutureResult[_ValueType, Exception]``.
+#: Alias for ``FutureResult[_ValueType, Exception]``.
 FutureResultE: TypeAlias = FutureResult[_ValueType, Exception]
 
 

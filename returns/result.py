@@ -468,7 +468,7 @@ class Success(Result[_ValueType, Any]):
 
 # Aliases:
 
-#: Deprecated alias for ``Result[_ValueType, Exception]``.
+#: Alias for ``Result[_ValueType, Exception]``.
 ResultE: TypeAlias = Result[_ValueType, Exception]
 
 
