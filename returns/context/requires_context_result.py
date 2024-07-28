@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Callable, ClassVar, TypeVar, final
 
+from typing_extensions import TypeAlias
+
 from returns.context import NoDeps
 from returns.interfaces.specific import reader_result
 from returns.primitives.container import BaseContainer
@@ -605,12 +607,14 @@ class RequiresContextResult(  # type: ignore[type-var]
 # Aliases:
 
 #: Alias for a popular case when ``Result`` has ``Exception`` as error type.
-RequiresContextResultE = RequiresContextResult[
+RequiresContextResultE: TypeAlias = RequiresContextResult[
     _ValueType, Exception, _EnvType,
 ]
 
 #: Alias to save you some typing. Uses original name from Haskell.
-ReaderResult = RequiresContextResult
+ReaderResult: TypeAlias = RequiresContextResult
 
 #: Alias to save you some typing. Has ``Exception`` as error type.
-ReaderResultE = RequiresContextResult[_ValueType, Exception, _EnvType]
+ReaderResultE: TypeAlias = RequiresContextResult[
+    _ValueType, Exception, _EnvType,
+]

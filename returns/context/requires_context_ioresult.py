@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Callable, ClassVar, TypeVar, final
 
+from typing_extensions import TypeAlias
+
 from returns.context import NoDeps
 from returns.interfaces.specific import reader_ioresult
 from returns.io import IO, IOFailure, IOResult, IOSuccess
@@ -896,12 +898,14 @@ class RequiresContextIOResult(  # type: ignore[type-var]
 # Aliases:
 
 #: Alias for a popular case when ``Result`` has ``Exception`` as error type.
-RequiresContextIOResultE = RequiresContextIOResult[
+RequiresContextIOResultE: TypeAlias = RequiresContextIOResult[
     _ValueType, Exception, _EnvType,
 ]
 
 #: Alias to save you some typing. Uses original name from Haskell.
-ReaderIOResult = RequiresContextIOResult
+ReaderIOResult: TypeAlias = RequiresContextIOResult
 
 #: Alias to save you some typing. Uses ``Exception`` as error type.
-ReaderIOResultE = RequiresContextIOResult[_ValueType, Exception, _EnvType]
+ReaderIOResultE: TypeAlias = RequiresContextIOResult[
+    _ValueType, Exception, _EnvType,
+]
