@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Any, Callable, Protocol, TypeVar
 
-from typing_extensions import Never, TypeVarTuple, Generic
+from typing_extensions import Generic, Never, TypeVarTuple, Unpack
 
 _InstanceType = TypeVar('_InstanceType', covariant=True)
 _TypeArgType1 = TypeVar('_TypeArgType1', covariant=True)
@@ -25,7 +25,7 @@ _SecondKind = TypeVar('_SecondKind')
 _TypeVars = TypeVarTuple('_TypeVars')
 
 
-class KindN(Generic[_InstanceType, *_TypeVars]):
+class KindN(Generic[_InstanceType, Unpack[_TypeVars]]):
     """
     Emulation support for Higher Kinded Types.
 
@@ -109,7 +109,7 @@ Kind2 = KindN[_InstanceType, _TypeArgType1, _TypeArgType2, Any]
 Kind3 = KindN[_InstanceType, _TypeArgType1, _TypeArgType2, _TypeArgType3]
 
 
-class SupportsKindN(KindN[_InstanceType, *_TypeVars]):
+class SupportsKindN(KindN[_InstanceType, Unpack[_TypeVars]]):
     """
     Base class for your containers.
 
