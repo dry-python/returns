@@ -113,7 +113,7 @@ def container_strategies(
             ),
         )
 
-    with maybe_register_container(
+    with register_container(
         container_type,
         use_init=settings.use_init,
     ):
@@ -125,27 +125,23 @@ def container_strategies(
 
 
 @contextmanager
-def maybe_register_container(
+def register_container(
     container_type: Type['Lawful'],
     *,
     use_init: bool,
 ) -> Iterator[None]:
     """Temporary registers a container if it is not registered yet."""
-    unknown_container = container_type not in types._global_type_lookup
-    if unknown_container:
-        st.register_type_strategy(
+    st.register_type_strategy(
+        container_type,
+        strategy_from_container(
             container_type,
-            strategy_from_container(
-                container_type,
-                use_init=use_init,
-            ),
-        )
+            use_init=use_init,
+        ),
+    )
 
     yield
 
-    if unknown_container:
-        types._global_type_lookup.pop(container_type)  # noqa: WPS441
-        _clean_caches()
+    types._global_type_lookup.pop(container_type)  # noqa: WPS441
 
 
 @contextmanager
