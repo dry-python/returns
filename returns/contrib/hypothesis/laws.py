@@ -1,5 +1,6 @@
 import inspect
 from contextlib import ExitStack, contextmanager
+from copy import copy
 from typing import (
     Any,
     Callable,
@@ -120,7 +121,7 @@ def container_strategies(
         yield
 
     for interface in our_interfaces:
-        types._global_type_lookup.pop(interface)  # noqa: WPS441
+        types._global_type_lookup.pop(interface)
     _clean_caches()
 
 
@@ -142,7 +143,7 @@ def register_container(
 
     yield
 
-    types._global_type_lookup.pop(container_type)  # noqa: WPS441
+    types._global_type_lookup.pop(container_type)
     if used:
         st.register_type_strategy(container_type, used)
 
@@ -219,20 +220,12 @@ def _clean_plugin_context() -> Iterator[None]:
 
     Otherwise, some types might be messed up.
     """
-    saved_stategies = {}
-    for strategy_key, strategy in types._global_type_lookup.items():
-        if isinstance(strategy_key, type):
-            if strategy_key.__module__.startswith('returns.'):
-                saved_stategies.update({strategy_key: strategy})
-
-    for key_to_remove in saved_stategies:
-        types._global_type_lookup.pop(key_to_remove)
-    _clean_caches()
+    saved_state = copy(types._global_type_lookup)
 
     yield
 
-    for saved_state in saved_stategies.items():
-        st.register_type_strategy(*saved_state)
+    types._global_type_lookup = saved_state
+    _clean_caches()
 
 
 def _clean_caches() -> None:
@@ -246,6 +239,7 @@ def _run_law(
     settings: _Settings,
 ) -> Callable[[st.DataObject], None]:
     def factory(source: st.DataObject) -> None:
+        existing_keys = set(types._global_type_lookup.keys())
         with ExitStack() as stack:
             stack.enter_context(_clean_plugin_context())
             stack.enter_context(type_vars())
@@ -255,6 +249,11 @@ def _run_law(
             )
 
             source.draw(st.builds(law.definition))
+
+        new_keys = set(types._global_type_lookup.keys())
+        assert existing_keys == new_keys, (  # noqa: S101
+            existing_keys.symmetric_difference(new_keys),
+        )
     return factory
 
 
