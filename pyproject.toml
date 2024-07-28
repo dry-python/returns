@@ -42,7 +42,7 @@ classifiers = [
 returns = "returns.contrib.pytest.plugin"
 
 [tool.poetry.plugins.hypothesis]
-_ = "returns.contrib.hypothesis._entrypoint"
+_ = "returns.contrib.hypothesis._entrypoint:_setup_hook"
 
 
 [tool.poetry.dependencies]

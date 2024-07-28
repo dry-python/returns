@@ -1,5 +1,5 @@
 import inspect
-from contextlib import contextmanager
+from contextlib import ExitStack, contextmanager
 from typing import (
     Any,
     Callable,
@@ -52,7 +52,7 @@ def check_all_laws(
 
     .. code:: python
 
-      check_all_laws(IO, {'max_examples': 100})
+      check_all_laws(IO, settings_kwargs={'max_examples': 100})
 
     Note:
         Cannot be used inside doctests because of the magic we use inside.
@@ -113,37 +113,38 @@ def container_strategies(
             ),
         )
 
-    with maybe_register_container(
-        container_type,
-        use_init=settings.use_init,
-    ):
+    try:
         yield
-
-    for interface in our_interfaces:
-        types._global_type_lookup.pop(interface)  # noqa: WPS441
+    finally:
+        for interface in our_interfaces:
+            types._global_type_lookup.pop(interface)
+        _clean_caches()
 
 
 @contextmanager
-def maybe_register_container(
+def register_container(
     container_type: Type['Lawful'],
     *,
     use_init: bool,
 ) -> Iterator[None]:
     """Temporary registers a container if it is not registered yet."""
-    unknown_container = container_type not in types._global_type_lookup
-    if unknown_container:
-        st.register_type_strategy(
+    used = types._global_type_lookup.pop(container_type, None)
+    st.register_type_strategy(
+        container_type,
+        strategy_from_container(
             container_type,
-            strategy_from_container(
-                container_type,
-                use_init=use_init,
-            ),
-        )
+            use_init=use_init,
+        ),
+    )
 
-    yield
-
-    if unknown_container:
-        types._global_type_lookup.pop(container_type)  # noqa: WPS441
+    try:
+        yield
+    finally:
+        types._global_type_lookup.pop(container_type)
+        if used:
+            st.register_type_strategy(container_type, used)
+        else:
+            _clean_caches()
 
 
 @contextmanager
@@ -154,10 +155,11 @@ def pure_functions() -> Iterator[None]:
     It is not a default in ``hypothesis``.
     """
     def factory(thing) -> st.SearchStrategy:
-        like = (lambda: None) if len(
-            thing.__args__,
-        ) == 1 else (lambda *args, **kwargs: None)
-
+        like = (
+            (lambda: None)
+            if len(thing.__args__) == 1
+            else (lambda *args, **kwargs: None)
+        )
         return st.functions(
             like=like,
             returns=st.from_type(thing.__args__[-1]),
@@ -168,10 +170,11 @@ def pure_functions() -> Iterator[None]:
     used = types._global_type_lookup[callable_type]
     st.register_type_strategy(callable_type, factory)
 
-    yield
-
-    types._global_type_lookup.pop(callable_type)
-    st.register_type_strategy(callable_type, used)
+    try:
+        yield
+    finally:
+        types._global_type_lookup.pop(callable_type)
+        st.register_type_strategy(callable_type, used)
 
 
 def _get_callable_type() -> Any:
@@ -195,23 +198,47 @@ def type_vars() -> Iterator[None]:
        for example, ``nan`` does not work for us
 
     """
-    used = types._global_type_lookup[TypeVar]
-
     def factory(thing):
-        type_strategies = [
-            types.resolve_TypeVar(thing),
-            # TODO: add mutable strategies
-        ]
-        return st.one_of(type_strategies).filter(
+        return types.resolve_TypeVar(thing).filter(
             lambda inner: inner == inner,  # noqa: WPS312
         )
 
+    used = types._global_type_lookup.pop(TypeVar)
     st.register_type_strategy(TypeVar, factory)
 
-    yield
+    try:
+        yield
+    finally:
+        types._global_type_lookup.pop(TypeVar)
+        st.register_type_strategy(TypeVar, used)
 
-    types._global_type_lookup.pop(TypeVar)
-    st.register_type_strategy(TypeVar, used)
+
+@contextmanager
+def clean_plugin_context() -> Iterator[None]:
+    """
+    We register a lot of types in `_entrypoint.py`, we need to clean them.
+
+    Otherwise, some types might be messed up.
+    """
+    saved_stategies = {}
+    for strategy_key, strategy in types._global_type_lookup.items():
+        if isinstance(strategy_key, type):
+            if strategy_key.__module__.startswith('returns.'):
+                saved_stategies.update({strategy_key: strategy})
+
+    for key_to_remove in saved_stategies:
+        types._global_type_lookup.pop(key_to_remove)
+    _clean_caches()
+
+    try:
+        yield
+    finally:
+        for saved_state in saved_stategies.items():
+            st.register_type_strategy(*saved_state)
+
+
+def _clean_caches() -> None:
+    st.from_type.__clear_cache()  # type: ignore[attr-defined]
 
 
 def _run_law(
@@ -221,10 +248,17 @@ def _run_law(
     settings: _Settings,
 ) -> Callable[[st.DataObject], None]:
     def factory(source: st.DataObject) -> None:
-        with type_vars():
-            with pure_functions():
-                with container_strategies(container_type, settings=settings):
-                    source.draw(st.builds(law.definition))
+        with ExitStack() as stack:
+            stack.enter_context(clean_plugin_context())
+            stack.enter_context(type_vars())
+            stack.enter_context(pure_functions())
+            stack.enter_context(
+                container_strategies(container_type, settings=settings),
+            )
+            stack.enter_context(
+                register_container(container_type, use_init=settings.use_init),
+            )
+            source.draw(st.builds(law.definition))
     return factory
 
 
@@ -254,7 +288,12 @@ def _create_law_test_case(
     setattr(
         module,
         test_function.__name__,
-        # We mark all tests with `returns_lawful` marker,
-        # so users can easily skip them if needed.
-        pytest.mark.returns_lawful(test_function),
+        pytest.mark.filterwarnings(
+            # We ignore multiple warnings about unused coroutines and stuff:
+            'ignore::pytest.PytestUnraisableExceptionWarning',
+        )(
+            # We mark all tests with `returns_lawful` marker,
+            # so users can easily skip them if needed.
+            pytest.mark.returns_lawful(test_function),
+        ),
     )

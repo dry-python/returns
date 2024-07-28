@@ -8,12 +8,14 @@ from returns.context import (
     Reader,
     RequiresContext,
     RequiresContextFutureResult,
+    RequiresContextFutureResultE,
     RequiresContextIOResult,
+    RequiresContextIOResultE,
     RequiresContextResult,
     RequiresContextResultE,
 )
 from returns.future import Future, FutureResult
-from returns.io import IO, IOResult
+from returns.io import IO, IOResult, IOResultE
 from returns.maybe import Maybe
 from returns.pipeline import is_successful
 from returns.primitives.laws import Lawful
@@ -33,8 +35,11 @@ _all_containers: Sequence[Type[Lawful]] = (
 
     # Aliases:
     ResultE,
+    IOResultE,
     Reader,
     RequiresContextResultE,
+    RequiresContextIOResultE,
+    RequiresContextFutureResultE,
 )
 
 

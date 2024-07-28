@@ -26,7 +26,6 @@ _DiverseFailableType = TypeVar('_DiverseFailableType', bound='DiverseFailableN')
 
 # Used in laws:
 _NewFirstType = TypeVar('_NewFirstType')
-_NewSecondType = TypeVar('_NewSecondType')
 
 
 @final
