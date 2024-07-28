@@ -25,7 +25,7 @@
     from returns.result import Result
 
     x: Result[Result[int, str], float]
-    flatten(x)  # E: Cannot infer type argument 3 of "flatten"
+    flatten(x)  # E: Cannot infer type argument 3 of "flatten"  [misc]
 
 
 - case: flatten_custom_type
