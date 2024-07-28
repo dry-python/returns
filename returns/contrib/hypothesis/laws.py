@@ -131,6 +131,7 @@ def register_container(
     use_init: bool,
 ) -> Iterator[None]:
     """Temporary registers a container if it is not registered yet."""
+    used = types._global_type_lookup.pop(container_type)
     st.register_type_strategy(
         container_type,
         strategy_from_container(
@@ -142,6 +143,8 @@ def register_container(
     yield
 
     types._global_type_lookup.pop(container_type)  # noqa: WPS441
+    if used:
+        st.register_type_strategy(container_type, used)
 
 
 @contextmanager
@@ -220,9 +223,8 @@ def _clean_plugin_context() -> Iterator[None]:
     for strategy_key, strategy in types._global_type_lookup.items():
         if isinstance(strategy_key, type):
             if strategy_key.__module__.startswith('returns.'):
-                saved_stategies.update({
-                    strategy_key: strategy,
-                })
+                saved_stategies.update({strategy_key: strategy})
+
     for key_to_remove in saved_stategies:
         types._global_type_lookup.pop(key_to_remove)
     _clean_caches()
