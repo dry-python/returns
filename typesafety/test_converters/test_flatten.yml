@@ -25,8 +25,7 @@
     from returns.result import Result
 
     x: Result[Result[int, str], float]
-    # TODO: I am pretty sure we can later fix this to be an error:
-    reveal_type(flatten(x))  # N: Revealed type is "returns.result.Result[builtins.int, builtins.object]"
+    flatten(x)  # E: Cannot infer type argument 3 of "flatten"
 
 
 - case: flatten_custom_type
