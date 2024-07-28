@@ -39,9 +39,7 @@ def _setup_hook() -> None:
             from returns.contrib.hypothesis.containers import (
                 strategy_from_container,
             )
-            return strategy_from_container(
-                container_type,
-            )(thing)
+            return strategy_from_container(container_type)(thing)
         return decorator
 
     #: Our types that we register in hypothesis
