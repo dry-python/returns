@@ -131,7 +131,7 @@ def register_container(
     use_init: bool,
 ) -> Iterator[None]:
     """Temporary registers a container if it is not registered yet."""
-    used = types._global_type_lookup.pop(container_type)
+    used = types._global_type_lookup.pop(container_type, None)
     st.register_type_strategy(
         container_type,
         strategy_from_container(
@@ -228,6 +228,8 @@ def _clean_plugin_context() -> Iterator[None]:
     for key_to_remove in saved_stategies:
         types._global_type_lookup.pop(key_to_remove)
     _clean_caches()
+
+    print(types._global_type_lookup)
 
     yield
 
