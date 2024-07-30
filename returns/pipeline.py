@@ -1,4 +1,4 @@
-from typing import ClassVar
+from typing import Any
 
 from returns._internal.pipeline.flow import flow as flow
 from returns._internal.pipeline.managed import managed as managed
@@ -8,7 +8,7 @@ from returns.primitives.exceptions import UnwrapFailedError
 
 
 # TODO: add overloads for specific types, so it can narrow them with `TypeIs`
-def is_successful(container: Unwrappable) -> bool:
+def is_successful(container: Unwrappable[Any, Any]) -> bool:
     """
     Determines if a container was successful or not.
 
