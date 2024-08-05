@@ -56,7 +56,7 @@ mypy = {version = ">=1.11,<1.12", optional = true}
 [tool.poetry.group.dev.dependencies]
 anyio = "^4.3"
 trio = ">=0.25,<0.27"
-attrs = "^23.2"
+attrs = ">=23.2,<25.0"
 httpx = "^0.27"
 
 wemake-python-styleguide = "^0.19"
