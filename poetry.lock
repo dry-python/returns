@@ -2452,13 +2452,13 @@ files = [
 
 [[package]]
 name = "trio"
-version = "0.26.0"
+version = "0.26.1"
 description = "A friendly Python library for async concurrency and I/O"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "trio-0.26.0-py3-none-any.whl", hash = "sha256:bb9c1b259591af941fccfbabbdc65bc7ed764bd2db76428454c894cd5e3d2032"},
-    {file = "trio-0.26.0.tar.gz", hash = "sha256:67c5ec3265dd4abc7b1d1ab9ca4fe4c25b896f9c93dac73713778adab487f9c4"},
+    {file = "trio-0.26.1-py3-none-any.whl", hash = "sha256:998bbdc5797621e1976c86820b1bc341cc66b51d2618a31cc8720ddd7df8affe"},
+    {file = "trio-0.26.1.tar.gz", hash = "sha256:6d2fe7ee656146d598ec75128ff4a2386576801b42b691f4a91cc2c18508544a"},
 ]
 
 [package.dependencies]
