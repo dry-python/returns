@@ -606,7 +606,10 @@ def attempt(
     return decorator
 
 
-def partition(resulsts: Iterable[Result[_ValueType, _ErrorType]]) -> tuple[
+_AdditionalType = TypeVar('_AdditionalType')
+
+
+def partition(results: Iterable[result.ResultBasedN[_ValueType, _ErrorType,_AdditionalType]]) -> tuple[
     List[Success], List[Failure],
 ]:
     """
@@ -622,7 +625,7 @@ def partition(resulsts: Iterable[Result[_ValueType, _ErrorType]]) -> tuple[
     """
     successes = []
     failures = []
-    for res in resulsts:
+    for res in results:
         if isinstance(res, Success):
             successes.append(res)
         else:
