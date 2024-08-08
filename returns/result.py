@@ -6,6 +6,7 @@ from typing import (
     Any,
     Callable,
     Generator,
+    Iterable,
     Iterator,
     List,
     Optional,
@@ -603,3 +604,27 @@ def attempt(
             return Failure(arg)
 
     return decorator
+
+
+def partition(resulsts: Iterable[Result[_ValueType, _ErrorType]]) -> tuple[
+    List[Success], List[Failure],
+]:
+    """
+    Partition a list of results into successes and failures. Preserves order.
+
+    .. code:: python
+
+        >>> from returns.result import Failure, Success, partition
+        >>> results = [Success(1), Failure(2), Success(3)]
+        >>> partition(results)
+        ([Success(1), Success(3)], [Failure(2)])
+
+    """
+    successes = []
+    failures = []
+    for res in resulsts:
+        if isinstance(res, Success):
+            successes.append(res)
+        else:
+            failures.append(res)
+    return successes, failures

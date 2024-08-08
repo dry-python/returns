@@ -1,0 +1,13 @@
+- case: partition_no_params
+  disable_cache: false
+  main: |
+    from returns.result import Success, Failure, partition
+
+    def some(arg: int) -> tuple[list[Success],list[Failure]]:
+      suc = Sucess(arg)
+      failure = Failure('test')
+
+      return partition([suc, failure])
+
+    reveal_type(some(1))  # N: Revealed type is "tuple[returns.result.Success[builtin.int],returns.result.Failure[builtin.str]]"
+
