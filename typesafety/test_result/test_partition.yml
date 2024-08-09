@@ -9,5 +9,5 @@
 
       return partition([suc, failure])
 
-    reveal_type(some(1))  # N: Revealed type is "tuple[list[builtin.int],list[builtin.str]]"
+    reveal_type(some(1))  # N: Revealed type is "Tuple[builtins.list[builtin.int],builtins.list[builtin.str]]"
 

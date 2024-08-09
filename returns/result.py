@@ -609,18 +609,22 @@ def attempt(
 _AdditionalType = TypeVar('_AdditionalType')
 
 
-def partition(containers: Iterable[result.ResultBasedN[_ValueType, _ErrorType, _AdditionalType]]) -> tuple[
-    List[_ValueType], List[_ErrorType],
-]:
+def partition(
+    containers: Iterable[
+        result.ResultBasedN[_ValueType, _ErrorType, _AdditionalType]
+    ],
+) -> tuple[List[_ValueType], List[_ErrorType]]:
     """
-    Partition a list of results into successful and failed unwrapped values. Preserves order.
+    Partition a list of results into successful and failed unwrapped values.
+
+    Preserves order.
 
     .. code:: python
 
         >>> from returns.result import Failure, Success, partition
         >>> results = [Success(1), Failure(2), Success(3)]
         >>> partition(results)
-        ([Success(1), Success(3)], [Failure(2)])
+        ([1, 3], [2])
 
     """
     successes = []
@@ -629,5 +633,5 @@ def partition(containers: Iterable[result.ResultBasedN[_ValueType, _ErrorType, _
         if isinstance(res, Success):
             successes.append(res.unwrap())
         else:
-            failures.append(res.unwrap())
+            failures.append(res.failure())
     return successes, failures
