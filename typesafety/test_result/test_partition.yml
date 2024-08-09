@@ -1,13 +1,19 @@
 - case: partition_no_params
   disable_cache: false
   main: |
-    from returns.result import Success, Failure, partition
+    from returns.result import Success, Failure
+    from returns.result.methods import partition
 
-    def some(arg: int) -> tuple[list[int],list[str]]:
-      suc = Success(arg)
-      failure = Failure('test')
+    x: List[Result[int, str]]
+    reveal_type(partition(x))  # N: Revealed type is "Tuple[builtins.list[builtin.int], builtins.list[builtin.str]]"
 
-      return partition([suc, failure])
+- case: partition_io_results
+  disable_cache: false
+  main: |
+    from returns.result import Success, Failure
+    from returns.result.methods import partition
+    from returns.io import IO, IOResult
 
-    reveal_type(some(1))  # N: Revealed type is "Tuple[builtins.list[builtin.int],builtins.list[builtin.str]]"
+    x: List[IOResult[int, str], IOResult[int,str]]
+    reveal_type(partition(x))  # N: Revealed type is "Tuple[builtins.list[IO[builtin.int]],builtins.list[IO[builtin.int]]"
 

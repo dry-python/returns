@@ -145,10 +145,11 @@ partition
 list of ``Result`` instances to a tuple of two lists: successes and failures.
   .. code:: python
 
-      >>> from returns.result import Failure, Success, partition
-      >>> results = [Success(1), Failure(2), Success(3)]
+      >>> from returns.result import Failure, Success
+      >>> from returns.result.methods import partition
+      >>> results = [Success(1), Failure(2), Success(3), Failure(4)]
       >>> partition(results)
-      ([Success(1), Success(3)], [Failure(2)])
+      ([1, 3], [2, 4])
 
 FAQ
 ---
