@@ -1,8 +1,7 @@
 
 import pytest
 
-from returns.future import IOResult
-from returns.io import IO
+from returns.io import IO, IOResult
 from returns.methods import partition
 from returns.result import Failure, Success
 
