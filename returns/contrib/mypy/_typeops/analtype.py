@@ -3,8 +3,9 @@ from typing import Final, List, Optional, overload
 
 from mypy.checkmember import analyze_member_access
 from mypy.nodes import ARG_NAMED, ARG_OPT
-from mypy.types import CallableType, FunctionLike
+from mypy.types import CallableType, FunctionLike, ProperType
 from mypy.types import Type as MypyType
+from mypy.types import get_proper_type
 from typing_extensions import Literal
 
 from returns.contrib.mypy._structures.args import FuncArg
@@ -99,9 +100,9 @@ def safe_translate_to_function(
 
 
 def translate_to_function(
-    function_def: MypyType,
+    function_def: ProperType,
     ctx: CallableContext,
-) -> MypyType:
+) -> ProperType:
     """
     Tries to translate a type into callable by accessing ``__call__`` attr.
 
@@ -109,7 +110,7 @@ def translate_to_function(
     This also preserves all type arguments as-is.
     """
     checker = ctx.api.expr_checker  # type: ignore
-    return analyze_member_access(
+    return get_proper_type(analyze_member_access(
         '__call__',
         function_def,
         ctx.context,
@@ -120,4 +121,4 @@ def translate_to_function(
         original_type=function_def,
         chk=checker.chk,
         in_literal_context=checker.is_literal_context(),
-    )
+    ))

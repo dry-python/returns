@@ -39,7 +39,7 @@ def attribute_access(ctx: AttributeContext) -> MypyType:
 
     """
     assert isinstance(ctx.type, Instance)
-    instance = ctx.type.args[0]
+    instance = get_proper_type(ctx.type.args[0])
 
     if isinstance(instance, TypeVarType):
         bound = get_proper_type(instance.upper_bound)
@@ -78,18 +78,15 @@ def dekind(ctx: FunctionContext) -> MypyType:
     So, ``dekind(KindN[T, int])`` will fail.
     """
     kind = get_proper_type(ctx.arg_types[0][0])
-    correct_args = (
-        isinstance(kind, Instance) and
-        isinstance(kind.args[0], Instance)
-    )
+    assert isinstance(kind, Instance)  # mypy requires these lines
 
-    if not correct_args:
+    kind_inst = get_proper_type(kind.args[0])
+
+    if not isinstance(kind_inst, Instance):
         ctx.api.fail(_KindErrors.dekind_not_instance, ctx.context)
         return AnyType(TypeOfAny.from_error)
 
-    assert isinstance(kind, Instance)  # mypy requires these lines
-    assert isinstance(kind.args[0], Instance)
-    return kind.args[0].copy_modified(args=_crop_kind_args(kind))
+    return kind_inst.copy_modified(args=_crop_kind_args(kind))
 
 
 @asserts_fallback_to_any
@@ -101,9 +98,10 @@ def kinded_signature(ctx: MethodSigContext) -> CallableType:
     See :class:`returns.primitives.hkt.Kinded` for more information.
     """
     assert isinstance(ctx.type, Instance)
-    assert isinstance(ctx.type.args[0], FunctionLike)
 
-    wrapped_method = ctx.type.args[0]
+    wrapped_method = get_proper_type(ctx.type.args[0])
+    assert isinstance(wrapped_method, FunctionLike)
+
     if isinstance(wrapped_method, Overloaded):
         return ctx.default_signature
 
@@ -138,10 +136,11 @@ def kinded_get_descriptor(ctx: MethodContext) -> MypyType:
     We do this due to ``__get__`` descriptor magic.
     """
     assert isinstance(ctx.type, Instance)
-    assert isinstance(ctx.type.args[0], CallableType)
 
-    wrapped_method = ctx.type.args[0]
-    self_type = wrapped_method.arg_types[0]
+    wrapped_method = get_proper_type(ctx.type.args[0])
+    assert isinstance(wrapped_method, CallableType)
+
+    self_type = get_proper_type(wrapped_method.arg_types[0])
     signature = bind_self(
         wrapped_method,
         is_classmethod=isinstance(self_type, TypeType),
