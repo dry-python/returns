@@ -40,9 +40,9 @@ from typing import Callable, List, Tuple
 
 from mypy.nodes import ARG_POS
 from mypy.plugin import FunctionContext, MethodContext, MethodSigContext
-from mypy.types import AnyType, CallableType, FunctionLike, Instance
+from mypy.types import AnyType, CallableType, FunctionLike, Instance, ProperType
 from mypy.types import Type as MypyType
-from mypy.types import TypeOfAny, UnionType, get_proper_type
+from mypy.types import TypeOfAny, UnionType, get_proper_type, get_proper_types
 
 from returns.contrib.mypy._typeops.analtype import translate_to_function
 from returns.contrib.mypy._typeops.inference import PipelineInference
@@ -51,21 +51,22 @@ from returns.contrib.mypy._typeops.transform_callable import detach_callable
 
 def analyze(ctx: FunctionContext) -> MypyType:
     """This hook helps when we create the pipeline from sequence of funcs."""
-    if not isinstance(ctx.default_return_type, Instance):
-        return ctx.default_return_type
+    default_return = get_proper_type(ctx.default_return_type)
+    if not isinstance(default_return, Instance):
+        return default_return
 
     if not ctx.arg_types[0]:  # We do require to pass `*functions` arg.
         ctx.api.fail('Too few arguments for "pipe"', ctx.context)
-        return ctx.default_return_type
+        return default_return
 
     arg_types = [arg_type[0] for arg_type in ctx.arg_types if arg_type]
     first_step, last_step = _get_pipeline_def(arg_types, ctx)
     if not isinstance(first_step, FunctionLike):
-        return ctx.default_return_type
+        return default_return
     if not isinstance(last_step, FunctionLike):
-        return ctx.default_return_type
+        return default_return
 
-    return ctx.default_return_type.copy_modified(
+    return default_return.copy_modified(
         args=[
             # First type argument represents first function arguments type:
             _unify_type(first_step, _get_first_arg_type),
@@ -82,9 +83,9 @@ def infer(ctx: MethodContext) -> MypyType:
     if not isinstance(ctx.type, Instance):
         return ctx.default_return_type
 
-    pipeline_functions = ctx.type.args[2:]
+    pipeline_functions = get_proper_types(ctx.type.args[2:])
     return PipelineInference(
-        ctx.arg_types[0][0],
+        get_proper_type(ctx.arg_types[0][0]),
     ).from_callable_sequence(
         pipeline_functions,
         list((ARG_POS,) * len(pipeline_functions)),
@@ -117,12 +118,12 @@ def _unify_type(
 def _get_pipeline_def(
     arg_types: List[MypyType],
     ctx: FunctionContext,
-) -> Tuple[MypyType, MypyType]:
+) -> Tuple[ProperType, ProperType]:
     first_step = get_proper_type(arg_types[0])
     last_step = get_proper_type(arg_types[-1])
 
     if not isinstance(first_step, FunctionLike):
-        first_step = translate_to_function(first_step, ctx)  # type: ignore
+        first_step = translate_to_function(first_step, ctx)
     if not isinstance(last_step, FunctionLike):
-        last_step = translate_to_function(last_step, ctx)  # type: ignore
+        last_step = translate_to_function(last_step, ctx)
     return first_step, last_step

@@ -2,9 +2,15 @@ from typing import Final, Iterator, List, Optional, Tuple, final
 
 from mypy.nodes import ARG_STAR, ARG_STAR2
 from mypy.plugin import FunctionContext
-from mypy.types import CallableType, FunctionLike, Instance, Overloaded
-from mypy.types import Type as MypyType
-from mypy.types import TypeType
+from mypy.types import (
+    CallableType,
+    FunctionLike,
+    Instance,
+    Overloaded,
+    ProperType,
+    TypeType,
+    get_proper_type,
+)
 
 from returns.contrib.mypy._structures.args import FuncArg
 from returns.contrib.mypy._typeops.analtype import (
@@ -27,7 +33,7 @@ _SUPPORTED_TYPES: Final = (
 )
 
 
-def analyze(ctx: FunctionContext) -> MypyType:
+def analyze(ctx: FunctionContext) -> ProperType:
     """
     This hook is used to make typed curring a thing in `returns` project.
 
@@ -40,26 +46,27 @@ def analyze(ctx: FunctionContext) -> MypyType:
     Internally we just reduce the original function's argument count.
     And drop some of them from function's signature.
     """
-    if not isinstance(ctx.default_return_type, CallableType):
-        return ctx.default_return_type
+    default_return = get_proper_type(ctx.default_return_type)
+    if not isinstance(default_return, CallableType):
+        return default_return
 
-    function_def = ctx.arg_types[0][0]
+    function_def = get_proper_type(ctx.arg_types[0][0])
     func_args = _AppliedArgs(ctx)
 
     if len(list(filter(len, ctx.arg_types))) == 1:
         return function_def  # this means, that `partial(func)` is called
     elif not isinstance(function_def, _SUPPORTED_TYPES):
-        return ctx.default_return_type
+        return default_return
     elif isinstance(function_def, (Instance, TypeType)):
         # We force `Instance` and similar types to coercse to callable:
         function_def = func_args.get_callable_from_context()
 
     is_valid, applied_args = func_args.build_from_context()
     if not isinstance(function_def, (CallableType, Overloaded)) or not is_valid:
-        return ctx.default_return_type
+        return default_return
 
     return _PartialFunctionReducer(
-        ctx.default_return_type,
+        default_return,
         function_def,
         applied_args,
         ctx,
@@ -118,7 +125,7 @@ class _PartialFunctionReducer:
         self._case_functions: List[CallableType] = []
         self._fallbacks: List[CallableType] = []
 
-    def new_partial(self) -> MypyType:
+    def new_partial(self) -> ProperType:
         """
         Creates new partial functions.
 
@@ -182,7 +189,7 @@ class _PartialFunctionReducer:
             return detach_callable(partial)
         return partial.copy_modified(variables=[])
 
-    def _create_new_partial(self) -> MypyType:
+    def _create_new_partial(self) -> ProperType:
         """
         Creates a new partial function-like from set of callables.
 
@@ -220,12 +227,12 @@ class _AppliedArgs:
             self._function_ctx.arg_kinds[1:],
         )
 
-    def get_callable_from_context(self) -> MypyType:
+    def get_callable_from_context(self) -> ProperType:
         """Returns callable type from the context."""
-        return safe_translate_to_function(
+        return get_proper_type(safe_translate_to_function(
             self._function_ctx.arg_types[0][0],
             self._function_ctx,
-        )
+        ))
 
     def build_from_context(self) -> Tuple[bool, List[FuncArg]]:
         """

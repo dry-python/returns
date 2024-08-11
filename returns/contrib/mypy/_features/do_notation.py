@@ -36,22 +36,23 @@ def analyze(ctx: MethodContext) -> MypyType:
        if generator expression has ``if`` conditions inside.
 
     """
+    default_return = get_proper_type(ctx.default_return_type)
     if not ctx.args or not ctx.args[0]:
-        return ctx.default_return_type
+        return default_return
 
     expr = ctx.args[0][0]
     if not isinstance(expr, GeneratorExpr):
         ctx.api.fail(_LITERAL_GENERATOR_EXPR_REQUIRED, expr)
-        return ctx.default_return_type
+        return default_return
     if not isinstance(ctx.type, CallableType):
-        return ctx.default_return_type
-    if not isinstance(ctx.default_return_type, Instance):
-        return ctx.default_return_type
+        return default_return
+    if not isinstance(default_return, Instance):
+        return default_return
 
     return _do_notation(
         expr=expr,
         type_info=ctx.type.type_object(),
-        default_return_type=ctx.default_return_type,
+        default_return_type=default_return,
         ctx=ctx,
     )
 

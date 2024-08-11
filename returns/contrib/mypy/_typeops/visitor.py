@@ -1,4 +1,4 @@
-from typing import Iterable, List, Optional
+from typing import Dict, Iterable, List, Optional
 
 from mypy.typeops import erase_to_bound
 from mypy.types import (
@@ -11,8 +11,11 @@ from mypy.types import (
     NoneType,
     Overloaded,
     PartialType,
+    ProperType,
     TupleType,
-    Type,
+)
+from mypy.types import Type as MypyType
+from mypy.types import (
     TypedDictType,
     TypeOfAny,
     TypeType,
@@ -38,7 +41,7 @@ _LEAF_TYPES = (
 )
 
 
-def translate_kind_instance(typ: Type) -> Type:  # noqa: WPS, C901
+def translate_kind_instance(typ: MypyType) -> ProperType:  # noqa: WPS, C901
     """
     We use this ugly hack to translate ``KindN[x, y]`` into ``x[y]``.
 
@@ -82,7 +85,7 @@ def translate_kind_instance(typ: Type) -> Type:  # noqa: WPS, C901
             typ.column,
         )
     elif isinstance(typ, TypedDictType):
-        dict_items = {
+        dict_items: Dict[str, MypyType] = {
             item_name: translate_kind_instance(item_type)
             for item_name, item_type in typ.items.items()
         }
@@ -120,18 +123,18 @@ def translate_kind_instance(typ: Type) -> Type:  # noqa: WPS, C901
     return typ
 
 
-def _translate_types(types: Iterable[Type]) -> List[Type]:
+def _translate_types(types: Iterable[MypyType]) -> List[MypyType]:
     return [translate_kind_instance(typ) for typ in types]
 
 
-def _process_kinded_type(kind: Instance) -> Type:
+def _process_kinded_type(kind: Instance) -> ProperType:
     """Recursively process all type arguments in a kind."""
     if not kind.args:
         return kind
 
     real_type = get_proper_type(kind.args[0])
     if isinstance(real_type, TypeVarType):
-        return erase_to_bound(real_type)
+        return get_proper_type(erase_to_bound(real_type))
     elif isinstance(real_type, Instance):
         return real_type.copy_modified(
             args=kind.args[1:len(real_type.args) + 1],
