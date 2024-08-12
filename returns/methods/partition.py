@@ -1,17 +1,16 @@
 
 from typing import Iterable, List, TypeVar
 
-from returns.interfaces.specific import  result
+from returns.interfaces.unwrappable import Unwrappable
 from returns.primitives.exceptions import UnwrapFailedError
 
 _ValueType = TypeVar('_ValueType', covariant=True)
 _ErrorType = TypeVar('_ErrorType', covariant=True)
-_AdditionalType = TypeVar('_AdditionalType')
 
 
 def partition(
     containers: Iterable[
-        result.UnwrappableResult[_ValueType, _ErrorType, _AdditionalType, _ValueType, _ErrorType],
+        Unwrappable[_ValueType, _ErrorType],
     ],
 ) -> tuple[List[_ValueType], List[_ErrorType]]:
     """
@@ -28,8 +27,8 @@ def partition(
         ([1, 3], [2, 4])
 
     """
-    successes = []
-    failures = []
+    successes: list[_ValueType] = []
+    failures: list[_ErrorType] = []
     for container in containers:
         try:
             successes.append(container.unwrap())
