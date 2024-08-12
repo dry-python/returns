@@ -15,5 +15,5 @@
     from returns.io import IO, IOResult
 
     x: Tuple[IOResult[int, str], IOResult[int, str]]
-    reveal_type(partition(x))  # N: Revealed type is "Tuple[builtins.list[IO[builtin.int]],builtins.list[IO[builtin.int]]"
+    reveal_type(partition(x))  # N: Revealed type is "Tuple[builtins.list[IO[builtin.int]], builtins.list[IO[builtin.int]]"
 
