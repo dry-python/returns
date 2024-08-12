@@ -1,7 +1,7 @@
 
-from typing import Iterable, List, TypeVar
+from typing import Iterable, List, TypeVar, Union
 
-from returns.interfaces.specific import result
+from returns.interfaces.specific import ioresult, result
 from returns.primitives.exceptions import UnwrapFailedError
 
 _ValueType = TypeVar('_ValueType', covariant=True)
@@ -11,7 +11,10 @@ _AdditionalType = TypeVar('_AdditionalType')
 
 def partition(
     containers: Iterable[
-        result.ResultBasedN[_ValueType, _ErrorType, _AdditionalType]
+        Union[
+        result.ResultBasedN[_ValueType, _ErrorType, _AdditionalType],
+        ioresult.IOResultBasedN[_ValueType, _ErrorType, _AdditionalType],
+        ]
     ],
 ) -> tuple[List[_ValueType], List[_ErrorType]]:
     """
