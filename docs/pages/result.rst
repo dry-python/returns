@@ -146,7 +146,7 @@ list of ``Result`` instances to a tuple of two lists: successes and failures.
   .. code:: python
 
       >>> from returns.result import Failure, Success
-      >>> from returns.result.methods import partition
+      >>> from returns.methods import partition
       >>> results = [Success(1), Failure(2), Success(3), Failure(4)]
       >>> partition(results)
       ([1, 3], [2, 4])

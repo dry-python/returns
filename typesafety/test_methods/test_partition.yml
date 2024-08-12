@@ -2,7 +2,7 @@
   disable_cache: false
   main: |
     from returns.result import Success, Failure
-    from returns.result.methods import partition
+    from returns.methods import partition
 
     x: List[Result[int, str]]
     reveal_type(partition(x))  # N: Revealed type is "Tuple[builtins.list[builtin.int], builtins.list[builtin.str]]"
@@ -12,7 +12,7 @@
   main: |
     from typing import Tuple
     from returns.result import Success, Failure
-    from returns.result.methods import partition
+    from returns.methods import partition
     from returns.io import IO, IOResult
 
     x: Tuple[IOResult[int, str], IOResult[int, str]]
