@@ -10,6 +10,7 @@
 - case: partition_io_results
   disable_cache: false
   main: |
+    from typing import Tuple
     from returns.result import Success, Failure
     from returns.result.methods import partition
     from returns.io import IO, IOResult
