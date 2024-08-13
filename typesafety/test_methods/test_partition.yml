@@ -19,3 +19,14 @@
     x: Tuple[IOResult[int, str], IOResult[int, str]]
     reveal_type(partition(x))  # N: Revealed type is "Tuple[builtins.list[returns.io.IO[builtins.int]], builtins.list[returns.io.IO[builtins.str]]]"
 
+- case: partition_maybe
+  disable_cache: false
+  main: |
+    from typing import List, Tuple, Never
+    from returns.maybe import Maybe, Some, Nothing, Maybe, _Nothing
+    from returns.methods import partition
+
+    x: Tuple[Some[int], Some[int], Maybe[None]]
+
+    reveal_type(partition(x))  # N: Revealed type is "Tuple[builtins.list[builtins.int], builtins.list[None]]"
+

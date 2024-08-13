@@ -2,6 +2,7 @@
 import pytest
 
 from returns.io import IO, IOResult
+from returns.maybe import Nothing, Some
 from returns.methods import partition
 from returns.result import Failure, Success
 
@@ -18,6 +19,10 @@ from returns.result import Failure, Success
             IOResult.from_failure(None),
         ),
         ([IO(1), IO(2)], [IO(None)]),
+    ),
+    (
+        (Some(1), Some(2), Nothing),
+        ([1, 2], []),
     ),
 ])
 def test_partition(containers, expected):
