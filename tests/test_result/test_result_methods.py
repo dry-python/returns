@@ -9,8 +9,8 @@ from returns.result import Failure, Success
 
 @pytest.mark.parametrize(('containers', 'expected'), [
     (
-        (Success(1), Success(2), Failure(None)),
-        ([1, 2], [None]),
+        (Success(1), Success(2), Failure(None), Success(3)),
+        ([1, 2, 3], [None]),
     ),
     (
         (
