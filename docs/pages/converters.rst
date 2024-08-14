@@ -22,8 +22,8 @@ That's how they work:
 .. code:: python
 
   >>> from returns.converters import maybe_to_result, result_to_maybe
-  >>> from returns.maybe import Maybe, Some
-  >>> from returns.result import Result, Success
+  >>> from returns.maybe import Maybe, Some, Nothin
+  >>> from returns.result import Failure, Result, Success
 
   >>> result: Result[int, Exception] = Success(1)
   >>> maybe: Maybe[int] = result_to_maybe(result)
@@ -31,6 +31,9 @@ That's how they work:
 
   >>> new_result: Result[int, None] = maybe_to_result(maybe)
   >>> assert new_result == Success(1)
+
+  >>> failure_with_default: Result[int, str] = maybe_to_result(Nothing, 'abc')
+  >>> assert failure_with_default == Failure('abc')
 
 Take a note, that type changes.
 Also, take a note that ``Success(None)`` will be converted to ``Nothing``.
