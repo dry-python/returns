@@ -22,7 +22,7 @@ from returns.result import Failure, Success
     ),
     (
         (Some(1), Some(2), Nothing),
-        ([1, 2], []),
+        ([1, 2], [None]),
     ),
 ])
 def test_partition(containers, expected):
