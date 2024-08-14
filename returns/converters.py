@@ -1,4 +1,4 @@
-from typing import TypeVar
+from typing import TypeVar, Union, overload
 
 from returns.functions import identity
 from returns.interfaces.bindable import BindableN
@@ -71,11 +71,29 @@ def result_to_maybe(
     return Nothing
 
 
+@overload
 def maybe_to_result(
     maybe_container: Maybe[_FirstType],
 ) -> Result[_FirstType, None]:
+    """No default case."""
+
+
+@overload
+def maybe_to_result(
+    maybe_container: Maybe[_FirstType],
+    default_error: _SecondType,
+) -> Result[_FirstType, _SecondType]:
+    """Default value case."""
+
+
+def maybe_to_result(
+    maybe_container: Maybe[_FirstType],
+    default_error: Union[_SecondType, None] = None,
+) -> Result[_FirstType, Union[_SecondType, None]]:
     """
     Converts ``Maybe`` container to ``Result`` container.
+
+    With optional ``default_error`` to be used for ``Failure``'s error value.
 
     .. code:: python
 
@@ -86,7 +104,9 @@ def maybe_to_result(
       >>> assert maybe_to_result(Some(None)) == Success(None)
       >>> assert maybe_to_result(Nothing) == Failure(None)
 
+      >>> assert maybe_to_result(Nothing, 'error') == Failure('error')
+
     """
     if is_successful(maybe_container):
         return Success(maybe_container.unwrap())
-    return Failure(None)
+    return Failure(default_error)
