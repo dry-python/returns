@@ -22,8 +22,8 @@
 - case: partition_maybe
   disable_cache: false
   main: |
-    from typing import List, Tuple, Never
-    from returns.maybe import Maybe, Some, Nothing, Maybe, _Nothing
+    from typing import List, Tuple
+    from returns.maybe import Maybe
     from returns.methods import partition
 
     x: List[Maybe[int]]

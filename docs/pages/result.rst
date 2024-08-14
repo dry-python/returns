@@ -139,7 +139,7 @@ argument that lead to that exception.
   This decorator works only with functions that has just one argument.
 
 partition
-~~~~~~~
+~~~~~~~~~
 
 :func:`partition <returns.result.partition>` is used to convert
 list of ``Result`` instances to a tuple of two lists: successes and failures.
