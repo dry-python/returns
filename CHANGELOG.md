@@ -14,8 +14,10 @@ See [0Ver](https://0ver.org/).
 - Improve inference of `ResultLike` objects when exception catching
   decorator is applied with explicit exception types
 - Add picky exceptions to `impure_safe` decorator like `safe` has. Issue #1543
+- Add partition function to result module. Issue #1905
 - Adds `default_error` parameter to `returns.converters.maybe_to_result`,
   which provides a default error value for `Failure`
+
 
 ### Misc
 
