@@ -21,7 +21,7 @@ Make your functions return something meaningful, typed, and safe!
 - Provides a bunch of primitives to write declarative business logic
 - Enforces better architecture
 - Fully typed with annotations and checked with `mypy`, [PEP561 compatible](https://www.python.org/dev/peps/pep-0561/)
-- Adds emulated Higher Kinded Types support
+- Adds emulated [Higher Kinded Types](https://returns.readthedocs.io/en/latest/pages/hkt.html) support
 - Provides type-safe interfaces to create your own data-types with enforced laws
 - Has a bunch of helpers for better composition
 - Pythonic and pleasant to write and to read 🐍
