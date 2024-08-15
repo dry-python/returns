@@ -14,7 +14,7 @@ def partition(
     ],
 ) -> tuple[List[_ValueType], List[_ErrorType]]:
     """
-    Partition a list of results into successful and failed unwrapped values.
+    Partition a list of unwrappables into successful and failed values.
 
     Preserves order.
 

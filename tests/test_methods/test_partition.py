@@ -19,12 +19,13 @@ from returns.result import Failure, Success
             IOResult.from_value(3),
             IOResult.from_failure(4),
         ),
-        ([IO(1), IO(2)], [IO(3), IO(4)]),
+        ([IO(1), IO(3)], [IO(2), IO(4)]),
     ),
     (
         (Some(1), Some(2), Nothing),
         ([1, 2], [None]),
     ),
+    ((), ([], [])),
 ])
 def test_partition(containers, expected):
     """Test partition function."""
