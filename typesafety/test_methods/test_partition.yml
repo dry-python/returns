@@ -1,4 +1,4 @@
-- case: partition_no_params
+- case: partition_result
   disable_cache: false
   main: |
     from typing import List

@@ -80,7 +80,9 @@ partition
 ~~~~~~~~~
 
 :func:`partition <returns.result.partition>` is used to convert
-list of Unwrappable instances like Result, IOResult, Maybe
+list of :class:`~returns.interfaces.Unwrappable`
+instances like :class:`~returns.result.Result`,
+:class:`~returns.io.IOResult`, and :class:`~returns.maybe.Maybe`
 to a tuple of two lists: successes and failures.
 
 .. code:: python
