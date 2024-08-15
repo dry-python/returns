@@ -1,13 +1,13 @@
-from typing import List, Mapping, Optional, Tuple, cast, final
+from typing import Iterable, List, Mapping, Optional, cast, final
 
 from mypy.argmap import map_actuals_to_formals
 from mypy.constraints import infer_constraints_for_callable
 from mypy.expandtype import expand_type
 from mypy.nodes import ARG_POS, ArgKind
 from mypy.plugin import FunctionContext
-from mypy.types import CallableType, FunctionLike
+from mypy.types import CallableType, FunctionLike, ProperType
 from mypy.types import Type as MypyType
-from mypy.types import TypeVarId
+from mypy.types import TypeVarId, get_proper_type
 from typing_extensions import TypeAlias
 
 from returns.contrib.mypy._structures.args import FuncArg
@@ -103,19 +103,19 @@ class PipelineInference:
     passes the first argument, and then infers types step by step.
     """
 
-    def __init__(self, instance: MypyType) -> None:
+    def __init__(self, instance: ProperType) -> None:
         """We do need the first argument to start the inference."""
         self._instance = instance
 
     def from_callable_sequence(
         self,
-        pipeline_types: Tuple[MypyType, ...],
-        pipeline_kinds: List[ArgKind],
+        pipeline_types: Iterable[ProperType],
+        pipeline_kinds: Iterable[ArgKind],
         ctx: CallableContext,
-    ) -> MypyType:
+    ) -> ProperType:
         """Pass pipeline functions to infer them one by one."""
         parameter = FuncArg(None, self._instance, ARG_POS)
-        ret_type = ctx.default_return_type
+        ret_type = get_proper_type(ctx.default_return_type)
 
         for pipeline, kind in zip(pipeline_types, pipeline_kinds):
             ret_type = self._proper_type(
@@ -129,7 +129,8 @@ class PipelineInference:
             parameter = FuncArg(None, ret_type, kind)
         return ret_type
 
-    def _proper_type(self, typ: MypyType) -> MypyType:
-        if isinstance(typ, CallableType):
-            return typ.ret_type
-        return typ  # It might be `Instance` or `AnyType` or `Nothing`
+    def _proper_type(self, typ: MypyType) -> ProperType:
+        res_typ = get_proper_type(typ)
+        if isinstance(res_typ, CallableType):
+            return get_proper_type(res_typ.ret_type)
+        return res_typ  # It might be `Instance` or `AnyType` or `Nothing`

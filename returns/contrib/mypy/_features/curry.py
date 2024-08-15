@@ -6,7 +6,7 @@ from mypy.nodes import ARG_STAR, ARG_STAR2
 from mypy.plugin import FunctionContext
 from mypy.types import AnyType, CallableType, FunctionLike, Overloaded
 from mypy.types import Type as MypyType
-from mypy.types import TypeOfAny
+from mypy.types import TypeOfAny, get_proper_type
 
 from returns.contrib.mypy._structures.args import FuncArg
 from returns.contrib.mypy._typeops.transform_callable import (
@@ -20,14 +20,14 @@ _RawArgTree = List[List[List[FuncArg]]]
 
 def analyze(ctx: FunctionContext) -> MypyType:
     """Returns proper type for curried functions."""
-    if not isinstance(ctx.arg_types[0][0], CallableType):
-        return ctx.default_return_type
-    if not isinstance(ctx.default_return_type, CallableType):
-        return ctx.default_return_type
+    default_return = get_proper_type(ctx.default_return_type)
+    arg_type = get_proper_type(ctx.arg_types[0][0])
+    if not isinstance(arg_type, CallableType):
+        return default_return
+    if not isinstance(default_return, CallableType):
+        return default_return
 
-    return _CurryFunctionOverloads(
-        ctx.arg_types[0][0], ctx,
-    ).build_overloads()
+    return _CurryFunctionOverloads(arg_type, ctx).build_overloads()
 
 
 @final
@@ -147,7 +147,7 @@ class _CurryFunctionOverloads:
                 # Will take `2` and apply its type to the previous function `1`.
                 # Will result in `def x -> y -> A`
                 # We also overloadify existing return types.
-                ret_type = argtree.case.ret_type
+                ret_type = get_proper_type(argtree.case.ret_type)
                 temp_any = isinstance(
                     ret_type, AnyType,
                 ) and ret_type.type_of_any == TypeOfAny.implementation_artifact

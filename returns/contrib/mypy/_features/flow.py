@@ -1,5 +1,6 @@
 from mypy.plugin import FunctionContext
 from mypy.types import Type as MypyType
+from mypy.types import get_proper_type
 
 from returns.contrib.mypy._typeops.inference import PipelineInference
 
@@ -46,7 +47,7 @@ def analyze(ctx: FunctionContext) -> MypyType:
     )
 
     return PipelineInference(
-        ctx.arg_types[0][0],
+        get_proper_type(ctx.arg_types[0][0]),
     ).from_callable_sequence(
         real_arg_types,
         ctx.arg_kinds[1],
