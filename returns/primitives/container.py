@@ -66,6 +66,12 @@ class BaseContainer(Immutable, metaclass=ABCMeta):
             # backward compatibility with 0.19.0 and earlier
             object.__setattr__(self, '_inner_value', state)  # noqa: WPS609
 
+    def __replace__(self, **changes: Any) -> 'BaseContainer':
+        """Create a new instance with specified changes."""
+        if set(changes.keys()) - set(self.__slots__):
+            raise ValueError("Invalid attribute(s) specified")
+        new_inner_value = changes.get('_inner_value', self._inner_value)
+        return type(self)(new_inner_value)
 
 def container_equality(
     self: Kind1[_EqualType, Any],
