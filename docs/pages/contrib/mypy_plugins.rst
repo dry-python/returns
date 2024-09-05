@@ -49,7 +49,7 @@ You can have a look at the suggested ``mypy``
 `configuration <https://github.com/dry-python/returns/blob/master/setup.cfg>`_
 in our own repository.
 
-You can also use `nitpick <https://wemake-python-stylegui.de/en/latest/pages/usage/integrations/nitpick.html>`_
+You can also use `nitpick <https://wemake-python-styleguide.readthedocs.io/en/latest/pages/usage/integrations/nitpick.html>`_
 tool to enforce the same ``mypy`` configuration for all your projects.
 
 We recommend to use our own setup. Add this to your ``pyproject.toml``:
