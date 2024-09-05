@@ -16,7 +16,7 @@ List of supported containers:
 - :class:`RequiresContext <returns.context.requires_context.RequiresContext>`
   to pass context to your functions (DI and similar)
 
-There are also some combintations like
+There are also some combinations like
 :class:`IOResult <returns.io.IOResult>`,
 :class:`FutureResult <returns.future.FutureResult>`,
 :class:`RequiresContextResult <.RequiresContextResult>`,
