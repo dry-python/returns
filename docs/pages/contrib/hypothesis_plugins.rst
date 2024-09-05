@@ -72,7 +72,7 @@ check_all_laws
 --------------
 
 We also provide a very powerful mechanism of checking defined container laws.
-It works in a combitation with "Laws as Values" feature we provide in the core.
+It works in a combination with "Laws as Values" feature we provide in the core.
 
 .. code:: python
 
