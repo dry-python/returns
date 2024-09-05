@@ -174,7 +174,7 @@ You might want to sometimes use ``unify`` :ref:`pointfree` functions
 instead of ``.bind`` to compose error types together.
 While ``.bind`` enforces error type to stay the same,
 ``unify`` is designed
-to return a ``Union`` of a revious error type and a new one.
+to return a ``Union`` of a previous error type and a new one.
 
 It gives an extra flexibility, but also provokes more thinking
 and can be problematic in some cases.
