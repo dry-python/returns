@@ -76,7 +76,7 @@ The last criteria we have to decided on naming is
 That's why we have ``ResultLikeN`` and ``ResultBasedN`` interfaces.
 Because ``ResultBasedN`` has two extra methods compared to ``ResultLikeN``.
 We use ``Like`` suffix for interfaces that describes some similar types.
-We use ``Based`` suffix for interfaces that descire almost concrete types.
+We use ``Based`` suffix for interfaces that describe almost concrete types.
 
 Laws
 ~~~~

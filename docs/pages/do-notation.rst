@@ -88,7 +88,7 @@ Async containers
 We also support async containers like ``Future`` and ``FutureResult``.
 It works in a similar way as regular sync containers.
 But, they require ``async for`` expressions instead of regular ``for`` ones.
-And because of that - they cannot be used outsided of ``async def`` context.
+And because of that - they cannot be used outside of ``async def`` context.
 
 Usage example:
 
