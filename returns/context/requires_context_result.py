@@ -30,7 +30,12 @@ _FirstType = TypeVar('_FirstType')
 @final
 class RequiresContextResult(  # type: ignore[type-var]
     BaseContainer,
-    SupportsKind3['RequiresContextResult', _ValueType, _ErrorType, _EnvType],
+    SupportsKind3[
+        'RequiresContextResult[Any, Any, Any]',
+        _ValueType,
+        _ErrorType,
+        _EnvType,
+    ],
     reader_result.ReaderResultBasedN[_ValueType, _ErrorType, _EnvType],
 ):
     """
