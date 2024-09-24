@@ -113,7 +113,7 @@ It might be later used with multiple values:
 
   >>> assert pipeline(2) == '2B'
 
-It is also might be useful to compose containers together:
+It also might be useful to compose containers together:
 
 .. code:: python
 

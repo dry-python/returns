@@ -34,7 +34,7 @@ So, you have to turn you function into async one.
 And all callers of this function in async functions. And all their callers.
 
 This is really hard to model.
-When you code has two types of uncomposable
+When your code has two types of uncomposable
 functions you increase your mental complexity by extreme levels.
 
 Instead, you can use ``Future`` container,
@@ -54,7 +54,7 @@ it allows you to model async interactions in a sync manner:
   ...    return Future(first()).bind_awaitable(second)
 
 Now we can compose async functions and maintaining a sync context!
-It is also possible run a ``Future``
+It is also possible to run a ``Future``
 with regular tools like ``asyncio.run`` or ``anyio.run``:
 
 .. code:: python
