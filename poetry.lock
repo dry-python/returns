@@ -2143,13 +2143,13 @@ files = [
 
 [[package]]
 name = "slotscheck"
-version = "0.19.0"
+version = "0.19.1"
 description = "Ensure your __slots__ are working properly."
 optional = false
 python-versions = ">=3.8.1"
 files = [
-    {file = "slotscheck-0.19.0-py3-none-any.whl", hash = "sha256:53fbc9befacb331a2ab25b385004d99ea72b5cee4f3deb6da676c8f08d0fcdd9"},
-    {file = "slotscheck-0.19.0.tar.gz", hash = "sha256:707b4339d280664139ffd2c78fef99b3028e215f13cc77244147dd6126fe2e0d"},
+    {file = "slotscheck-0.19.1-py3-none-any.whl", hash = "sha256:bff9926f8d6408ea21b6c6bbaa4389cea1682962e73ee4f30084b6d2b89260ee"},
+    {file = "slotscheck-0.19.1.tar.gz", hash = "sha256:6146b7747f8db335a00a66b782f86011b74b995f61746dc5b36a9e77d5326013"},
 ]
 
 [package.dependencies]
