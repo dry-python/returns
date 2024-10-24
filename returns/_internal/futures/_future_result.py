@@ -1,4 +1,6 @@
-from typing import TYPE_CHECKING, Any, Awaitable, Callable, TypeVar
+from typing import TYPE_CHECKING, Any, Awaitable, Callable
+
+from typing_extensions import TypeVar
 
 from returns.io import IO, IOResult
 from returns.primitives.hkt import Kind2, dekind
@@ -10,7 +12,7 @@ if TYPE_CHECKING:
 
 _ValueType = TypeVar('_ValueType', covariant=True)
 _NewValueType = TypeVar('_NewValueType')
-_ErrorType = TypeVar('_ErrorType', covariant=True)
+_ErrorType = TypeVar('_ErrorType', covariant=True, default=Exception)
 _NewErrorType = TypeVar('_NewErrorType')
 
 
