@@ -179,10 +179,10 @@ def pure_functions() -> Iterator[None]:
 
 def _get_callable_type() -> Any:
     # Helper to accommodate changes in `hypothesis@6.79.0`
-    if Callable in types._global_type_lookup:  # type: ignore
-        return Callable
-    elif Callable.__origin__ in types._global_type_lookup:  # type: ignore
+    if Callable.__origin__ in types._global_type_lookup:  # type: ignore
         return Callable.__origin__  # type: ignore
+    elif Callable in types._global_type_lookup:  # type: ignore
+        return Callable
     raise RuntimeError('Failed to find Callable type strategy')
 
 
