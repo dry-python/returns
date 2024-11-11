@@ -920,13 +920,13 @@ zstd = ["zstandard (>=0.18.0)"]
 
 [[package]]
 name = "hypothesis"
-version = "6.118.2"
+version = "6.118.7"
 description = "A library for property-based testing"
 optional = true
 python-versions = ">=3.9"
 files = [
-    {file = "hypothesis-6.118.2-py3-none-any.whl", hash = "sha256:da2b2fb3ce2dbc05a72b5571d0ffe355450cd2c9b69d62d656409b90822dc34e"},
-    {file = "hypothesis-6.118.2.tar.gz", hash = "sha256:14b20a191475179735e6c4b6dd7c7ef3654e7f99575b67a0de8ec11b68c6aad6"},
+    {file = "hypothesis-6.118.7-py3-none-any.whl", hash = "sha256:5fe1d80f46d81c6160ef762e4e11a61bb4eb6838a8fb7bd3c5a2542fb107bc38"},
+    {file = "hypothesis-6.118.7.tar.gz", hash = "sha256:604328f5d766a056182f54b4826f9b2d5f664f42bff68fd81b4d9d6c44b2398b"},
 ]
 
 [package.dependencies]
@@ -935,10 +935,10 @@ exceptiongroup = {version = ">=1.0.0", markers = "python_version < \"3.11\""}
 sortedcontainers = ">=2.1.0,<3.0.0"
 
 [package.extras]
-all = ["black (>=19.10b0)", "click (>=7.0)", "crosshair-tool (>=0.0.74)", "django (>=4.2)", "dpcontracts (>=0.4)", "hypothesis-crosshair (>=0.0.16)", "lark (>=0.10.1)", "libcst (>=0.3.16)", "numpy (>=1.19.3)", "pandas (>=1.1)", "pytest (>=4.6)", "python-dateutil (>=1.4)", "pytz (>=2014.1)", "redis (>=3.0.0)", "rich (>=9.0.0)", "tzdata (>=2024.2)"]
+all = ["black (>=19.10b0)", "click (>=7.0)", "crosshair-tool (>=0.0.77)", "django (>=4.2)", "dpcontracts (>=0.4)", "hypothesis-crosshair (>=0.0.18)", "lark (>=0.10.1)", "libcst (>=0.3.16)", "numpy (>=1.19.3)", "pandas (>=1.1)", "pytest (>=4.6)", "python-dateutil (>=1.4)", "pytz (>=2014.1)", "redis (>=3.0.0)", "rich (>=9.0.0)", "tzdata (>=2024.2)"]
 cli = ["black (>=19.10b0)", "click (>=7.0)", "rich (>=9.0.0)"]
 codemods = ["libcst (>=0.3.16)"]
-crosshair = ["crosshair-tool (>=0.0.74)", "hypothesis-crosshair (>=0.0.16)"]
+crosshair = ["crosshair-tool (>=0.0.77)", "hypothesis-crosshair (>=0.0.18)"]
 dateutil = ["python-dateutil (>=1.4)"]
 django = ["django (>=4.2)"]
 dpcontracts = ["dpcontracts (>=0.4)"]
