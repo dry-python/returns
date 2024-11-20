@@ -91,10 +91,11 @@ def translate_kind_instance(typ: MypyType) -> ProperType:  # noqa: WPS, C901
         }
         return TypedDictType(
             dict_items,
-            typ.required_keys,
-            translate_kind_instance(typ.fallback),  # type: ignore
-            typ.line,
-            typ.column,
+            required_keys=typ.required_keys,
+            readonly_keys=typ.readonly_keys,
+            fallback=translate_kind_instance(typ.fallback),  # type: ignore
+            line=typ.line,
+            column=typ.column,
         )
     elif isinstance(typ, LiteralType):
         fallback = translate_kind_instance(typ.fallback)
