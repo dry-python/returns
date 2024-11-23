@@ -24,22 +24,20 @@ async def gather(
 
       >>> async def coro():
       ...    return 1
-      >>> assert anyio.run(gather([coro()])) == (IOSuccess(1),)
+      >>> assert anyio.run(gather([coro()])) == (IOSuccess(1), )
       >>> container = FutureResult(coro())
-      >>> assert anyio.run(gather([container.awaitable])) == (IOSuccess(1),)
+      >>> assert anyio.run(gather([container.awaitable])) == (IOSuccess(1), )
 
     """
 
     async with anyio.create_task_group() as tg:
         containers_t = tuple(containers)
-        results: list[IOResult | None] = len(containers_t)*[IOResult(None)]
+        results: list[IOResult] = len(containers_t)*[IOResult(None)]
 
         async def run_task(coro: Awaitable, index: int):
             results[index] = await FutureResult(coro)
 
         for i, coro in enumerate(containers_t):
-            if i >= len(results):
-                results = results + 2*len(results)*[None]
             tg.start_soon(run_task, coro, i)
     return tuple(results)
 
