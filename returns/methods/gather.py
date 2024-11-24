@@ -43,4 +43,4 @@ async def gather(
 
         for coro_index, coro in enumerate(containers_t):
             tg.start_soon(_run_task, coro, coro_index)
-    return tuple([ioresults[key] for key in sorted(ioresults.keys())])
+    return tuple(ioresults[key] for key in sorted(ioresults.keys()))
