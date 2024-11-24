@@ -1,3 +1,4 @@
+# flake8: noqa: WPS102
 
 from typing import Awaitable, Iterable
 
