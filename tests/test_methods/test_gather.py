@@ -13,10 +13,10 @@ from returns.methods import gather
             FutureResult.from_value(2),
             FutureResult.from_failure(None),
         ),
-        (IO(1), IOResult.from_value(2), FutureResult.from_failure(None)),
+        (IO(1), IOResult.from_value(2), IOResult.from_failure(None)),
     ),
     ((), ()),
 ])
-def test_gather(containers, expected):
+async def test_gather(containers, expected):
     """Test partition function."""
-    assert gather(containers) == expected
+    assert await gather(containers) == expected

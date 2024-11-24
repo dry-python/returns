@@ -107,6 +107,7 @@ as possible before synchrounous computations.
 
   >>> import anyio
   >>> from returns.io import IO, IOSuccess, IOFailure
+  >>> from returns.result import Failure, Success
   >>> from returns.methods import gather
 
   >>> async def coro():
@@ -114,7 +115,7 @@ as possible before synchrounous computations.
   >>> async def coro_raise():
   ...    raise ValueError(2)
   >>> anyio.run(gather,[coro(), coro_raise()])
-  (IOSuccess(1), IOFailure(ValueError(2)))
+  (<IOResult: <Success: 1>>, <IOResult: <Failure: 2>>)
 
 
 
