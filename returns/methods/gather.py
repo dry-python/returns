@@ -1,11 +1,10 @@
-from typing import Any
 
 from typing import Awaitable, Iterable
 
 import anyio
-from returns.future import Future, FutureResult
-from returns.io import IOResult
 
+from returns.future import FutureResult
+from returns.io import IOResult
 
 
 async def gather(
@@ -24,20 +23,24 @@ async def gather(
 
       >>> async def coro():
       ...    return 1
-      >>> assert anyio.run(gather([coro()])) == (IOSuccess(1), )
+      >>> assert anyio.run(gather, [coro()]) == (IOSuccess(1), )
       >>> container = FutureResult(coro())
-      >>> assert anyio.run(gather([container.awaitable])) == (IOSuccess(1), )
+      >>> assert anyio.run(gather, [container.awaitable]) == (IOSuccess(1), )
 
     """
-
     async with anyio.create_task_group() as tg:
         containers_t = tuple(containers)
-        results: list[IOResult] = len(containers_t)*[IOResult(None)]
+        ioresults: dict[int, IOResult] = {}
 
-        async def run_task(coro: Awaitable, index: int):
-            results[index] = await FutureResult(coro)
+        async def _coro_wrapper(coro: Awaitable):  # noqa: WPS430
+            try:
+                return IOResult.from_value(await coro)
+            except Exception as exc:
+                return IOResult.from_failure(exc)
 
-        for i, coro in enumerate(containers_t):
-            tg.start_soon(run_task, coro, i)
-    return tuple(results)
+        async def _run_task(coro: Awaitable, index: int):  # noqa: WPS430
+            ioresults[index] = await _coro_wrapper(coro)
 
+        for coro_index, coro in enumerate(containers_t):
+            tg.start_soon(_run_task, coro, coro_index)
+    return tuple([ioresults[key] for key in sorted(ioresults.keys())])
