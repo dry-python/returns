@@ -131,7 +131,8 @@
 - case: result_inheritance_wrong
   disable_cache: false
   main: |
-    from typing import Callable, TypeVar
+    from typing import Callable
+    from typing_extensions import TypeVar
     from returns.interfaces.specific.result import ResultBased2
     from returns.primitives.hkt import SupportsKind2
     from returns.result import Result
@@ -140,7 +141,7 @@
     _NewValueType = TypeVar('_NewValueType')
 
     # Result related:
-    _ErrorType = TypeVar('_ErrorType', covariant=True)
+    _ErrorType = TypeVar('_ErrorType', covariant=True, default=Exception)
     _NewErrorType = TypeVar('_NewErrorType')
 
     class MyClass(  # type: ignore[type-var]
@@ -153,5 +154,5 @@
         def failure(self) -> _ValueType:
             ...
   out: |
-    main:17: error: Return type "_ErrorType" of "unwrap" incompatible with return type "_ValueType" in supertype "Unwrappable"  [override]
-    main:20: error: Return type "_ValueType" of "failure" incompatible with return type "_ErrorType" in supertype "Unwrappable"  [override]
+    main:18: error: Return type "_ErrorType" of "unwrap" incompatible with return type "_ValueType" in supertype "Unwrappable"  [override]
+    main:21: error: Return type "_ValueType" of "failure" incompatible with return type "_ErrorType" in supertype "Unwrappable"  [override]

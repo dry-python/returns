@@ -11,13 +11,12 @@ from typing import (
     Optional,
     Tuple,
     Type,
-    TypeVar,
     Union,
     final,
     overload,
 )
 
-from typing_extensions import ParamSpec, TypeAlias
+from typing_extensions import ParamSpec, TypeAlias, TypeVar
 
 from returns.interfaces.specific import io, ioresult
 from returns.primitives.container import BaseContainer, container_equality
@@ -37,7 +36,7 @@ _NewValueType = TypeVar('_NewValueType')
 _FuncParams = ParamSpec('_FuncParams')
 
 # Result related:
-_ErrorType = TypeVar('_ErrorType', covariant=True)
+_ErrorType = TypeVar('_ErrorType', covariant=True, default=Exception)
 _NewErrorType = TypeVar('_NewErrorType')
 
 
@@ -279,7 +278,7 @@ def impure(
 
 class IOResult(  # type: ignore[type-var]
     BaseContainer,
-    SupportsKind2['IOResult', _ValueType, _ErrorType],
+    SupportsKind2['IOResult[Any, Any]', _ValueType, _ErrorType],
     ioresult.IOResultBased2[_ValueType, _ErrorType],
     metaclass=ABCMeta,
 ):
