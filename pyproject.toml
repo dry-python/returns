@@ -57,7 +57,7 @@ mypy = {version = ">=1.12,<1.14", optional = true}
 anyio = "^4.3"
 trio = "^0.27"
 attrs = "^24.2"
-httpx = "^0.27"
+httpx = ">=0.27,<0.29"
 
 wemake-python-styleguide = "^0.19"
 flake8-pytest-style = "^2.0"
