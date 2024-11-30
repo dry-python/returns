@@ -79,7 +79,7 @@ Here's a full example:
 partition
 ~~~~~~~~~
 
-:func:`partition <returns.result.partition>` is used to convert
+:func:`partition <returns.methods.partition>` is used to convert
 list of :class:`~returns.interfaces.Unwrappable`
 instances like :class:`~returns.result.Result`,
 :class:`~returns.io.IOResult`, and :class:`~returns.maybe.Maybe`
@@ -87,11 +87,37 @@ to a tuple of two lists: successes and failures.
 
 .. code:: python
 
-    >>> from returns.result import Failure, Success
-    >>> from returns.methods import partition
-    >>> results = [Success(1), Failure(2), Success(3), Failure(4)]
-    >>> partition(results)
-    ([1, 3], [2, 4])
+  >>> from returns.result import Failure, Success
+  >>> from returns.methods import partition
+  >>> results = [Success(1), Failure(2), Success(3), Failure(4)]
+  >>> partition(results)
+  ([1, 3], [2, 4])
+
+gather
+~~~~~~
+
+:func:`gather <returns.methods.gather>` is used to safely concurrently
+execute multiple awaitable objects(any object with ``__await__`` method,
+included function marked with async keyword) and return a tuple of wrapped results
+:class: `~returns.io.IOResult`.
+Embrace railway-oriented programming princple of executing as many IO operations
+as possible before synchrounous computations.
+
+.. code:: python
+
+  >>> import anyio
+  >>> from returns.io import IO, IOSuccess, IOFailure
+  >>> from returns.result import Failure, Success
+  >>> from returns.methods import gather
+
+  >>> async def coro():
+  ...    return 1
+  >>> async def coro_raise():
+  ...    raise ValueError(2)
+  >>> anyio.run(gather,[coro(), coro_raise()])
+  (<IOResult: <Success: 1>>, <IOResult: <Failure: 2>>)
+
+
 
 API Reference
 -------------
