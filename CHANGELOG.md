@@ -13,18 +13,13 @@ See [0Ver](https://0ver.org/).
 - Drop `python3.9` support
 - Add `python3.13` support
 - Add support for `mypy>=1.12`
-- Add picky exceptions to `future_safe` decorator like `safe` has.
+- Add picky exceptions to `future_safe` decorator like `safe` has
 - Improve inference of `ResultLike` objects when exception catching
   decorator is applied with explicit exception types
 - Add picky exceptions to `impure_safe` decorator like `safe` has. Issue #1543
 - Add partition function to result module. Issue #1905
 - Add `default_error` parameter to `returns.converters.maybe_to_result`,
   which provides a default error value for `Failure`
-
-
-### Misc
-
-- Now requires `mypy>=1.11`
 
 
 ## 0.23.0
