@@ -72,7 +72,6 @@ pytest-mypy-plugins = "^3.1"
 pytest-subtests = "^0.13"
 pytest-shard = "^0.1"
 
-doc8 = "^1.1"
 
 [tool.poetry.group.docs]
 optional = true

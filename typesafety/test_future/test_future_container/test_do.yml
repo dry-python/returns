@@ -1,5 +1,4 @@
 - case: do_sync_error
-  skip: sys.version_info[:2] < (3, 8)
   disable_cache: false
   main: |
     from returns.future import Future
@@ -27,7 +26,6 @@
 
 
 - case: do_with_if
-  skip: sys.version_info[:2] < (3, 8)
   disable_cache: false
   main: |
     from returns.future import Future
