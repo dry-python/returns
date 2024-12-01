@@ -151,9 +151,14 @@ def pure_functions() -> Iterator[None]:
             if len(thing.__args__) == 1
             else (lambda *args, **kwargs: None)
         )
+        return_type = thing.__args__[-1]
         return st.functions(
             like=like,
-            returns=st.from_type(thing.__args__[-1]),
+            returns=st.from_type(
+                return_type
+                if return_type is not None
+                else type(None),
+            ),
             pure=True,
         )
 
