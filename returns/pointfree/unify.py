@@ -1,4 +1,5 @@
-from typing import Callable, TypeVar, Union
+from collections.abc import Callable
+from typing import TypeVar, Union
 
 from returns.interfaces.failable import DiverseFailableN
 from returns.primitives.hkt import Kinded, KindN, kinded
@@ -26,7 +27,7 @@ def unify(  # noqa: WPS234
         KindN[
             _DiverseFailableKind,
             _NewFirstType,
-            Union[_SecondType, _NewSecondType],
+            _SecondType | _NewSecondType,
             _NewThirdType,
         ],
     ]
@@ -63,7 +64,7 @@ def unify(  # noqa: WPS234
     ) -> KindN[
         _DiverseFailableKind,
         _NewFirstType,
-        Union[_SecondType, _NewSecondType],
+        _SecondType | _NewSecondType,
         _NewThirdType,
     ]:
         return container.bind(function)  # type: ignore

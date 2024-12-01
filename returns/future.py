@@ -1,21 +1,15 @@
-from functools import wraps
-from typing import (
-    Any,
+from collections.abc import (
     AsyncGenerator,
     AsyncIterator,
     Awaitable,
     Callable,
     Coroutine,
     Generator,
-    Tuple,
-    Type,
-    TypeVar,
-    Union,
-    final,
-    overload,
 )
+from functools import wraps
+from typing import Any, Tuple, Type, TypeAlias, TypeVar, Union, final, overload
 
-from typing_extensions import ParamSpec, TypeAlias
+from typing_extensions import ParamSpec
 
 from returns._internal.futures import _future, _future_result
 from returns.interfaces.specific.future import FutureBased1
@@ -1476,7 +1470,7 @@ def future_safe(
 
 @overload
 def future_safe(
-    exceptions: Tuple[Type[_ExceptionType], ...],
+    exceptions: tuple[type[_ExceptionType], ...],
 ) -> Callable[
     [
         Callable[
@@ -1490,15 +1484,15 @@ def future_safe(
 
 
 def future_safe(  # noqa: C901, WPS212, WPS234,
-    exceptions: Union[
+    exceptions: (
         Callable[
             _FuncParams,
             Coroutine[_FirstType, _SecondType, _ValueType],
-        ],
-        Tuple[Type[_ExceptionType], ...],
-    ],
-) -> Union[
-    Callable[_FuncParams, FutureResultE[_ValueType]],
+        ] |
+        tuple[type[_ExceptionType], ...]
+    ),
+) -> (
+    Callable[_FuncParams, FutureResultE[_ValueType]] |
     Callable[
         [
             Callable[
@@ -1507,8 +1501,8 @@ def future_safe(  # noqa: C901, WPS212, WPS234,
             ],
         ],
         Callable[_FuncParams, FutureResult[_ValueType, _ExceptionType]],
-    ],
-]:
+    ]
+):
     """
     Decorator to convert exception-throwing coroutine to ``FutureResult``.
 
@@ -1565,7 +1559,7 @@ def future_safe(  # noqa: C901, WPS212, WPS234,
             _FuncParams,
             Coroutine[_FirstType, _SecondType, _ValueType],
         ],
-        inner_exceptions: Tuple[Type[_ExceptionType], ...],
+        inner_exceptions: tuple[type[_ExceptionType], ...],
     ) -> Callable[_FuncParams, FutureResult[_ValueType, _ExceptionType]]:
         async def factory(
             *args: _FuncParams.args,

@@ -1,4 +1,5 @@
-from typing import Callable, TypeVar
+from collections.abc import Callable
+from typing import TypeVar
 
 from returns.interfaces.specific.reader import ReaderLike2, ReaderLike3
 from returns.primitives.hkt import Kind2, Kind3, Kinded, kinded

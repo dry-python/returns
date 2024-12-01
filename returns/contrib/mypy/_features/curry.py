@@ -1,6 +1,7 @@
+from collections.abc import Iterator
 from itertools import groupby, product
 from operator import itemgetter
-from typing import Iterator, List, Optional, Tuple, cast, final
+from typing import List, Optional, Tuple, cast, final
 
 from mypy.nodes import ARG_STAR, ARG_STAR2
 from mypy.plugin import FunctionContext
@@ -15,7 +16,7 @@ from returns.contrib.mypy._typeops.transform_callable import (
 )
 
 #: Raw material to build `_ArgTree`.
-_RawArgTree = List[List[List[FuncArg]]]
+_RawArgTree = list[list[list[FuncArg]]]
 
 
 def analyze(ctx: FunctionContext) -> MypyType:
@@ -34,9 +35,9 @@ def analyze(ctx: FunctionContext) -> MypyType:
 class _ArgTree:
     """Represents a node in tree of arguments."""
 
-    def __init__(self, case: Optional[CallableType]) -> None:
+    def __init__(self, case: CallableType | None) -> None:
         self.case = case
-        self.children: List['_ArgTree'] = []
+        self.children: list['_ArgTree'] = []
 
 
 @final
@@ -62,7 +63,7 @@ class _CurryFunctionOverloads:
         """
         self._original = original
         self._ctx = ctx
-        self._overloads: List[CallableType] = []
+        self._overloads: list[CallableType] = []
         self._args = FuncArg.from_callable(self._original)
 
         # We need to get rid of generics here.
@@ -112,7 +113,7 @@ class _CurryFunctionOverloads:
         """
         def factory(
             args: _RawArgTree,
-        ) -> Iterator[Tuple[List[FuncArg], _RawArgTree]]:
+        ) -> Iterator[tuple[list[FuncArg], _RawArgTree]]:
             if not args or not args[0]:
                 return  # we have reached an end of arguments
             yield from (
@@ -159,7 +160,7 @@ class _CurryFunctionOverloads:
             else:  # Root is reached, we need to save the result:
                 self._overloads.append(child.case)
 
-    def _slices(self, source: List[FuncArg]) -> Iterator[List[List[FuncArg]]]:
+    def _slices(self, source: list[FuncArg]) -> Iterator[list[list[FuncArg]]]:
         """
         Generate all possible slices of a source list.
 

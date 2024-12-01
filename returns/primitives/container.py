@@ -39,7 +39,7 @@ class BaseContainer(Immutable, metaclass=ABCMeta):
 
     def __repr__(self) -> str:
         """Used to display details of object."""
-        return '<{0}: {1}>'.format(
+        return '<{}: {}>'.format(
             self.__class__.__qualname__.strip('_'),
             str(self._inner_value),
         )
@@ -56,7 +56,7 @@ class BaseContainer(Immutable, metaclass=ABCMeta):
         """That's how this object will be pickled."""
         return {'container_value': self._inner_value}  # type: ignore
 
-    def __setstate__(self, state: Union[_PickleState, Any]) -> None:
+    def __setstate__(self, state: _PickleState | Any) -> None:
         """Loading state from pickled data."""
         if isinstance(state, dict) and 'container_value' in state:
             object.__setattr__(  # noqa: WPS609

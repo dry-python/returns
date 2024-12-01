@@ -1,4 +1,5 @@
-from typing import Callable, Optional, Type, TypeVar, Union, overload
+from collections.abc import Callable
+from typing import Optional, Type, TypeVar, Union, overload
 
 from returns.context import NoDeps
 from returns.interfaces.failable import DiverseFailableN, SingleFailableN
@@ -14,7 +15,7 @@ _SingleFailableKind = TypeVar('_SingleFailableKind', bound=SingleFailableN)
 
 @overload
 def cond(
-    container_type: Type[_SingleFailableKind],
+    container_type: type[_SingleFailableKind],
     success_value: _ValueType,
 ) -> Kinded[
     Callable[
@@ -26,7 +27,7 @@ def cond(
 
 @overload
 def cond(
-    container_type: Type[_DiverseFailableKind],
+    container_type: type[_DiverseFailableKind],
     success_value: _ValueType,
     error_value: _ErrorType,
 ) -> Kinded[
@@ -38,11 +39,11 @@ def cond(
 
 
 def cond(
-    container_type: Union[
-        Type[_SingleFailableKind], Type[_DiverseFailableKind],
-    ],
+    container_type: (
+        type[_SingleFailableKind] | type[_DiverseFailableKind]
+    ),
     success_value: _ValueType,
-    error_value: Optional[_ErrorType] = None,
+    error_value: _ErrorType | None = None,
 ):
     """
     Reduce the boilerplate when choosing paths.

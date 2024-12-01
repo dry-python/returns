@@ -10,7 +10,8 @@ https://mypy.readthedocs.io/en/latest/extending_mypy.html
 We use ``pytest-mypy-plugins`` to test that it works correctly, see:
 https://github.com/mkurnikov/pytest-mypy-plugins
 """
-from typing import Callable, ClassVar, Mapping, Optional, Type, final
+from collections.abc import Callable, Mapping
+from typing import ClassVar, Optional, Type, final
 
 from mypy.nodes import SymbolTableNode
 from mypy.plugin import (
@@ -85,7 +86,7 @@ class _ReturnsPlugin(Plugin):
     def get_function_hook(
         self,
         fullname: str,
-    ) -> Optional[_FunctionCallback]:
+    ) -> _FunctionCallback | None:
         """
         Called for function return types from ``mypy``.
 
@@ -100,7 +101,7 @@ class _ReturnsPlugin(Plugin):
     def get_attribute_hook(
         self,
         fullname: str,
-    ) -> Optional[_AttributeCallback]:
+    ) -> _AttributeCallback | None:
         """Called for any exiting or ``__getattr__`` aatribute access."""
         if fullname.startswith(_consts.TYPED_KINDN_ACCESS):
             return kind.attribute_access
@@ -109,18 +110,18 @@ class _ReturnsPlugin(Plugin):
     def get_method_signature_hook(
         self,
         fullname: str,
-    ) -> Optional[_MethodSigCallback]:
+    ) -> _MethodSigCallback | None:
         """Called for method signature from ``mypy``."""
         return self._method_sig_hook_plugins.get(fullname)
 
     def get_method_hook(
         self,
         fullname: str,
-    ) -> Optional[_MethodCallback]:
+    ) -> _MethodCallback | None:
         """Called for method return types from ``mypy``."""
         return self._method_hook_plugins.get(fullname)
 
 
-def plugin(version: str) -> Type[Plugin]:
+def plugin(version: str) -> type[Plugin]:
     """Plugin's public API and entrypoint."""
     return _ReturnsPlugin

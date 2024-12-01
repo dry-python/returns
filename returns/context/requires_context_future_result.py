@@ -1,16 +1,7 @@
 from __future__ import annotations
 
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    Awaitable,
-    Callable,
-    ClassVar,
-    TypeVar,
-    final,
-)
-
-from typing_extensions import TypeAlias
+from collections.abc import Awaitable, Callable
+from typing import TYPE_CHECKING, Any, ClassVar, TypeAlias, TypeVar, final
 
 from returns._internal.futures import _reader_future_result
 from returns.context import NoDeps

@@ -13,7 +13,7 @@ _DiverseFailableKind = TypeVar('_DiverseFailableKind', bound=DiverseFailableN)
 
 @overload
 def internal_cond(
-    container_type: Type[_SingleFailableKind],
+    container_type: type[_SingleFailableKind],
     is_success: bool,
     success_value: _ValueType,
 ) -> KindN[_SingleFailableKind, _ValueType, _ErrorType, NoDeps]:
@@ -22,7 +22,7 @@ def internal_cond(
 
 @overload
 def internal_cond(
-    container_type: Type[_DiverseFailableKind],
+    container_type: type[_DiverseFailableKind],
     is_success: bool,
     success_value: _ValueType,
     error_value: _ErrorType,
@@ -31,12 +31,12 @@ def internal_cond(
 
 
 def internal_cond(
-    container_type: Union[
-        Type[_SingleFailableKind], Type[_DiverseFailableKind],
-    ],
+    container_type: (
+        type[_SingleFailableKind] | type[_DiverseFailableKind]
+    ),
     is_success: bool,
     success_value: _ValueType,
-    error_value: Optional[_ErrorType] = None,
+    error_value: _ErrorType | None = None,
 ):
     """
     Reduce the boilerplate when choosing paths.

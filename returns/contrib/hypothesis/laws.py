@@ -1,16 +1,7 @@
 import inspect
+from collections.abc import Callable, Iterator
 from contextlib import ExitStack, contextmanager
-from typing import (
-    Any,
-    Callable,
-    Dict,
-    Iterator,
-    NamedTuple,
-    Optional,
-    Type,
-    TypeVar,
-    final,
-)
+from typing import Any, Dict, NamedTuple, Optional, Type, TypeVar, final
 
 import pytest
 from hypothesis import given
@@ -26,14 +17,14 @@ from returns.primitives.laws import Law, Lawful
 class _Settings(NamedTuple):
     """Settings that we provide to an end user."""
 
-    settings_kwargs: Dict[str, Any]
+    settings_kwargs: dict[str, Any]
     use_init: bool
 
 
 def check_all_laws(
-    container_type: Type[Lawful],
+    container_type: type[Lawful],
     *,
-    settings_kwargs: Optional[Dict[str, Any]] = None,
+    settings_kwargs: dict[str, Any] | None = None,
     use_init: bool = False,
 ) -> None:
     """
@@ -79,7 +70,7 @@ def check_all_laws(
 
 @contextmanager
 def container_strategies(
-    container_type: Type[Lawful],
+    container_type: type[Lawful],
     *,
     settings: _Settings,
 ) -> Iterator[None]:
@@ -123,7 +114,7 @@ def container_strategies(
 
 @contextmanager
 def register_container(
-    container_type: Type['Lawful'],
+    container_type: type['Lawful'],
     *,
     use_init: bool,
 ) -> Iterator[None]:
@@ -242,7 +233,7 @@ def _clean_caches() -> None:
 
 
 def _run_law(
-    container_type: Type[Lawful],
+    container_type: type[Lawful],
     law: Law,
     *,
     settings: _Settings,
@@ -263,8 +254,8 @@ def _run_law(
 
 
 def _create_law_test_case(
-    container_type: Type[Lawful],
-    interface: Type[Lawful],
+    container_type: type[Lawful],
+    interface: type[Lawful],
     law: Law,
     *,
     settings: _Settings,

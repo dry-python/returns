@@ -27,15 +27,8 @@ See also:
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import (
-    TYPE_CHECKING,
-    Callable,
-    ClassVar,
-    Generic,
-    Sequence,
-    TypeVar,
-    final,
-)
+from collections.abc import Callable, Sequence
+from typing import TYPE_CHECKING, ClassVar, Generic, TypeVar, final
 
 from returns.interfaces.container import Container2, Container3
 from returns.primitives.hkt import Kind2, Kind3

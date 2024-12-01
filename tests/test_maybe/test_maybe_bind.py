@@ -17,7 +17,7 @@ def test_bind_some():
 
 def test_bind_optional():
     """Ensures that bind_optional works correctly."""
-    def factory(inner_value: int) -> Optional[int]:
+    def factory(inner_value: int) -> int | None:
         return inner_value if inner_value else None
 
     assert Some(1).bind_optional(factory) == Some(1)

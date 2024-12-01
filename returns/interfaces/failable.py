@@ -1,5 +1,6 @@
 from abc import abstractmethod
-from typing import Callable, ClassVar, Sequence, Type, TypeVar, final
+from collections.abc import Callable, Sequence
+from typing import ClassVar, Type, TypeVar, final
 
 from typing_extensions import Never
 
@@ -252,7 +253,7 @@ class DiverseFailableN(
     @classmethod
     @abstractmethod
     def from_failure(
-        cls: Type[_DiverseFailableType],
+        cls: type[_DiverseFailableType],
         inner_value: _UpdatedType,
     ) -> KindN[_DiverseFailableType, _FirstType, _UpdatedType, _ThirdType]:
         """Unit method to create new containers from any raw value."""

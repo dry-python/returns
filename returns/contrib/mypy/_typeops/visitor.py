@@ -1,4 +1,5 @@
-from typing import Dict, Iterable, List, Optional
+from collections.abc import Iterable
+from typing import Dict, List, Optional
 
 from mypy.typeops import erase_to_bound
 from mypy.types import (
@@ -56,7 +57,7 @@ def translate_kind_instance(typ: MypyType) -> ProperType:  # noqa: WPS, C901
     if isinstance(typ, _LEAF_TYPES):  # noqa: WPS223
         return typ
     elif isinstance(typ, Instance):
-        last_known_value: Optional[LiteralType] = None
+        last_known_value: LiteralType | None = None
         if typ.last_known_value is not None:
             raw_last_known_value = translate_kind_instance(typ.last_known_value)
             assert isinstance(raw_last_known_value, LiteralType)
@@ -85,7 +86,7 @@ def translate_kind_instance(typ: MypyType) -> ProperType:  # noqa: WPS, C901
             typ.column,
         )
     elif isinstance(typ, TypedDictType):
-        dict_items: Dict[str, MypyType] = {
+        dict_items: dict[str, MypyType] = {
             item_name: translate_kind_instance(item_type)
             for item_name, item_type in typ.items.items()
         }
@@ -109,7 +110,7 @@ def translate_kind_instance(typ: MypyType) -> ProperType:  # noqa: WPS, C901
     elif isinstance(typ, UnionType):
         return UnionType(_translate_types(typ.items), typ.line, typ.column)
     elif isinstance(typ, Overloaded):
-        functions: List[CallableType] = []
+        functions: list[CallableType] = []
         for func in typ.items:
             new = translate_kind_instance(func)
             assert isinstance(new, CallableType)
@@ -124,7 +125,7 @@ def translate_kind_instance(typ: MypyType) -> ProperType:  # noqa: WPS, C901
     return typ
 
 
-def _translate_types(types: Iterable[MypyType]) -> List[MypyType]:
+def _translate_types(types: Iterable[MypyType]) -> list[MypyType]:
     return [translate_kind_instance(typ) for typ in types]
 
 

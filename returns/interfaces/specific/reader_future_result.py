@@ -1,15 +1,8 @@
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import (
-    TYPE_CHECKING,
-    Awaitable,
-    Callable,
-    ClassVar,
-    Sequence,
-    TypeVar,
-    final,
-)
+from collections.abc import Awaitable, Callable, Sequence
+from typing import TYPE_CHECKING, ClassVar, TypeVar, final
 
 from returns.interfaces.specific import future_result, reader, reader_ioresult
 from returns.primitives.asserts import assert_equal

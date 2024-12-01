@@ -1,5 +1,6 @@
 import sys
-from typing import Callable, Iterator, Union
+from collections.abc import Callable, Iterator
+from typing import Union
 
 import pytest
 
@@ -10,7 +11,7 @@ from returns.trampolines import Trampoline, trampoline
 def _accumulate(
     numbers: Iterator[int],
     acc: int = 0,
-) -> Union[int, Trampoline[int]]:
+) -> int | Trampoline[int]:
     number = next(numbers, None)
     if number is None:
         return acc
@@ -21,7 +22,7 @@ def _accumulate(
 def _with_func_kwarg(
     numbers: Iterator[int],
     func: int = 0,  # we need this name to match `Trampoline` constructor
-) -> Union[int, Trampoline[int]]:
+) -> int | Trampoline[int]:
     number = next(numbers, None)
     if number is None:
         return func

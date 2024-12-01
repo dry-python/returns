@@ -1,5 +1,6 @@
 from abc import abstractmethod
-from typing import Callable, Iterable, Tuple, TypeVar, final
+from collections.abc import Callable, Iterable
+from typing import Tuple, TypeVar, final
 
 from returns.interfaces.applicative import ApplicativeN
 from returns.interfaces.failable import FailableN

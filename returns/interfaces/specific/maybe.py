@@ -1,14 +1,6 @@
 from abc import abstractmethod
-from typing import (
-    Callable,
-    ClassVar,
-    Optional,
-    Sequence,
-    Type,
-    TypeVar,
-    Union,
-    final,
-)
+from collections.abc import Callable, Sequence
+from typing import ClassVar, Optional, Type, TypeVar, Union, final
 
 from typing_extensions import Never
 
@@ -78,7 +70,7 @@ class _LawSpec(LawSpecDef):
     @law_definition
     def bind_optional_short_circuit_law(
         container: 'MaybeLikeN[_FirstType, _SecondType, _ThirdType]',
-        function: Callable[[_FirstType], Optional[_NewType1]],
+        function: Callable[[_FirstType], _NewType1 | None],
     ) -> None:
         """Ensures that you cannot bind from failures."""
         assert_equal(
@@ -137,15 +129,15 @@ class MaybeLikeN(
     @abstractmethod
     def bind_optional(
         self: _MaybeLikeType,
-        function: Callable[[_FirstType], Optional[_UpdatedType]],
+        function: Callable[[_FirstType], _UpdatedType | None],
     ) -> KindN[_MaybeLikeType, _UpdatedType, _SecondType, _ThirdType]:
         """Binds a function that returns ``Optional`` values."""
 
     @classmethod
     @abstractmethod
     def from_optional(
-        cls: Type[_MaybeLikeType],  # noqa: N805
-        inner_value: Optional[_ValueType],
+        cls: type[_MaybeLikeType],  # noqa: N805
+        inner_value: _ValueType | None,
     ) -> KindN[_MaybeLikeType, _ValueType, _SecondType, _ThirdType]:
         """Unit method to create containers from ``Optional`` value."""
 
@@ -174,7 +166,7 @@ class MaybeBasedN(
     def or_else_call(
         self,
         function: Callable[[], _ValueType],
-    ) -> Union[_FirstType, _ValueType]:
+    ) -> _FirstType | _ValueType:
         """Calls a function in case there nothing to unwrap."""
 
 

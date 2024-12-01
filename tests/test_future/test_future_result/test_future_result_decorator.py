@@ -17,7 +17,7 @@ async def _coro_two(arg: int) -> float:
 
 
 @future_safe((ZeroDivisionError,))
-async def _coro_three(arg: Union[int, str]) -> float:
+async def _coro_three(arg: int | str) -> float:
     assert isinstance(arg, int)
     return 1 / arg
 

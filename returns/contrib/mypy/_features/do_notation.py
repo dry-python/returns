@@ -86,7 +86,7 @@ def _try_fetch_error_type(
     type_info: TypeInfo,
     seq: Expression,
     ctx: MethodContext,
-) -> Optional[MypyType]:
+) -> MypyType | None:
     inst = Instance(
         type_info,
         [
@@ -110,7 +110,7 @@ def _try_fetch_error_type(
 def _extract_error_type(
     typ: MypyType,
     type_info: TypeInfo,
-) -> Tuple[bool, Optional[MypyType]]:
+) -> tuple[bool, MypyType | None]:
     typ = get_proper_type(typ)
     if isinstance(typ, Instance):
         return True, _decide_error_type(
@@ -129,7 +129,7 @@ def _extract_error_type(
     return False, None
 
 
-def _decide_error_type(typ: Instance) -> Optional[MypyType]:
+def _decide_error_type(typ: Instance) -> MypyType | None:
     if len(typ.args) < 2:
         return None
     if isinstance(get_proper_type(typ.args[1]), AnyType):

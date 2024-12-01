@@ -1,23 +1,22 @@
 from abc import ABCMeta
+from collections.abc import Callable, Generator, Iterator
 from functools import wraps
 from inspect import FrameInfo
 from typing import (
     TYPE_CHECKING,
     Any,
-    Callable,
-    Generator,
-    Iterator,
     List,
     Optional,
     Tuple,
     Type,
+    TypeAlias,
     TypeVar,
     Union,
     final,
     overload,
 )
 
-from typing_extensions import ParamSpec, TypeAlias
+from typing_extensions import ParamSpec
 
 from returns.interfaces.specific import io, ioresult
 from returns.primitives.container import BaseContainer, container_equality
@@ -368,10 +367,10 @@ class IOResult(  # type: ignore[type-var]
           '<IOResult: <Failure: wrong!>>'
 
         """
-        return '<IOResult: {0}>'.format(str(self._inner_value))
+        return f'<IOResult: {str(self._inner_value)}>'
 
     @property
-    def trace(self) -> Optional[List[FrameInfo]]:
+    def trace(self) -> list[FrameInfo] | None:
         """Returns a stack trace when :func:`~IOFailure` was called."""
         return self._inner_value.trace
 
@@ -567,7 +566,7 @@ class IOResult(  # type: ignore[type-var]
     def value_or(
         self,
         default_value: _NewValueType,
-    ) -> IO[Union[_ValueType, _NewValueType]]:
+    ) -> IO[_ValueType | _NewValueType]:
         """
         Get value from successful container or default value from failed one.
 
@@ -901,7 +900,7 @@ def impure_safe(
 
 @overload
 def impure_safe(
-    exceptions: Tuple[Type[_ExceptionType], ...],
+    exceptions: tuple[type[_ExceptionType], ...],
 ) -> Callable[
     [Callable[_FuncParams, _NewValueType]],
     Callable[_FuncParams, IOResult[_NewValueType, _ExceptionType]],
@@ -910,17 +909,17 @@ def impure_safe(
 
 
 def impure_safe(  # noqa: WPS234, C901
-    exceptions: Union[
-        Callable[_FuncParams, _NewValueType],
-        Tuple[Type[_ExceptionType], ...],
-    ],
-) -> Union[
-    Callable[_FuncParams, IOResultE[_NewValueType]],
+    exceptions: (
+        Callable[_FuncParams, _NewValueType] |
+        tuple[type[_ExceptionType], ...]
+    ),
+) -> (
+    Callable[_FuncParams, IOResultE[_NewValueType]] |
     Callable[
         [Callable[_FuncParams, _NewValueType]],
         Callable[_FuncParams, IOResult[_NewValueType, _ExceptionType]],
-    ],
-]:
+    ]
+):
     """
     Decorator to mark function that it returns :class:`~IOResult` container.
 
@@ -964,7 +963,7 @@ def impure_safe(  # noqa: WPS234, C901
     """
     def factory(
         inner_function: Callable[_FuncParams, _NewValueType],
-        inner_exceptions: Tuple[Type[_ExceptionType], ...],
+        inner_exceptions: tuple[type[_ExceptionType], ...],
     ) -> Callable[_FuncParams, IOResult[_NewValueType, _ExceptionType]]:
         @wraps(inner_function)
         def decorator(

@@ -27,7 +27,7 @@ def assert_equal(
         first, deps=deps, backend=backend,
     ) == _convert(
         second, deps=deps, backend=backend,
-    ), '{0} == {1}'.format(first, second)
+    ), f'{first} == {second}'
 
 
 def _convert(container, *, deps, backend: str):

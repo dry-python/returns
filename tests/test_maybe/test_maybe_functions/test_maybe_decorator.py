@@ -4,7 +4,7 @@ from returns.maybe import Nothing, Some, maybe
 
 
 @maybe
-def _function(hashmap: Dict[str, str], key: str) -> Optional[str]:
+def _function(hashmap: dict[str, str], key: str) -> str | None:
     return hashmap.get(key, None)
 
 

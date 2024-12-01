@@ -1,5 +1,6 @@
 from abc import abstractmethod
-from typing import Callable, ClassVar, Sequence, Tuple, Type, TypeVar, final
+from collections.abc import Callable, Sequence
+from typing import ClassVar, Tuple, Type, TypeVar, final
 
 from typing_extensions import Never
 
@@ -34,7 +35,7 @@ class _LawSpec(LawSpecDef):
 
     @law_definition
     def pair_left_identity_law(
-        pair: Tuple[_FirstType, _SecondType],
+        pair: tuple[_FirstType, _SecondType],
         container: 'PairLikeN[_FirstType, _SecondType, _ThirdType]',
         function: Callable[
             [_FirstType, _SecondType],
@@ -74,7 +75,7 @@ class PairLikeN(
     @classmethod
     @abstractmethod
     def from_paired(
-        cls: Type[_PairLikeKind],
+        cls: type[_PairLikeKind],
         first: _NewFirstType,
         second: _NewSecondType,
     ) -> KindN[_PairLikeKind, _NewFirstType, _NewSecondType, _ThirdType]:
@@ -83,7 +84,7 @@ class PairLikeN(
     @classmethod
     @abstractmethod
     def from_unpaired(
-        cls: Type[_PairLikeKind],
+        cls: type[_PairLikeKind],
         inner_value: _NewFirstType,
     ) -> KindN[_PairLikeKind, _NewFirstType, _NewFirstType, _ThirdType]:
         """Allows to create a PairLikeN from just a single object."""
@@ -109,7 +110,7 @@ class Pair(
 
     def __init__(
         self,
-        inner_value: Tuple[_FirstType, _SecondType],
+        inner_value: tuple[_FirstType, _SecondType],
     ) -> None:
         """Saves passed tuple as ``._inner_value`` inside this instance."""
         super().__init__(inner_value)

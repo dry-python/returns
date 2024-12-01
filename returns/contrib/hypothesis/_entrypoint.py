@@ -10,7 +10,8 @@ interfaces won't be registered!
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Callable, Sequence, Type, TypeVar
+from collections.abc import Callable, Sequence
+from typing import TYPE_CHECKING, Any, Type, TypeVar
 
 if TYPE_CHECKING:
     from returns.primitives.laws import Lawful
@@ -33,7 +34,7 @@ def _setup_hook() -> None:
     from returns.result import Result
 
     def factory(
-        container_type: Type[_Inst],
+        container_type: type[_Inst],
     ) -> Callable[[Any], st.SearchStrategy[_Inst]]:
         def decorator(thing: Any) -> st.SearchStrategy[_Inst]:
             from returns.contrib.hypothesis.containers import (
@@ -44,7 +45,7 @@ def _setup_hook() -> None:
 
     #: Our types that we register in hypothesis
     #: to be working with ``st.from_type``
-    registered_types: Sequence[Type[Lawful]] = (
+    registered_types: Sequence[type[Lawful]] = (
         Result,
         Maybe,
         IO,

@@ -1,6 +1,7 @@
-from typing import TYPE_CHECKING, Any, Callable, Protocol, TypeVar
+from collections.abc import Callable
+from typing import TYPE_CHECKING, Any, Generic, Protocol, TypeVar
 
-from typing_extensions import Generic, Never, TypeVarTuple, Unpack
+from typing_extensions import Never, TypeVarTuple, Unpack
 
 _InstanceType = TypeVar('_InstanceType', covariant=True)
 _TypeArgType1 = TypeVar('_TypeArgType1', covariant=True)

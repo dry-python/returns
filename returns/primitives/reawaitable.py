@@ -1,13 +1,5 @@
-from typing import (
-    Awaitable,
-    Callable,
-    Generator,
-    NewType,
-    TypeVar,
-    Union,
-    cast,
-    final,
-)
+from collections.abc import Awaitable, Callable, Generator
+from typing import NewType, TypeVar, Union, cast, final
 
 _ValueType = TypeVar('_ValueType')
 _FunctionCoroType = TypeVar('_FunctionCoroType', bound=Callable[..., Awaitable])
@@ -59,7 +51,7 @@ class ReAwaitable:
     def __init__(self, coro: Awaitable[_ValueType]) -> None:
         """We need just an awaitable to work with."""
         self._coro = coro
-        self._cache: Union[_ValueType, _Sentinel] = _sentinel
+        self._cache: _ValueType | _Sentinel = _sentinel
 
     def __await__(self) -> Generator[None, None, _ValueType]:
         """

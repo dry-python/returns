@@ -25,7 +25,7 @@ PATHS_TO_IGNORE_NOW: Final = frozenset(
 def pytest_ignore_collect(
     collection_path: Path,
     config: pytest.Config,
-) -> Optional[bool]:
+) -> bool | None:
     """
     Return True to prevent considering this path for collection.
 

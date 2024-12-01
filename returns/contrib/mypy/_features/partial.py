@@ -1,4 +1,5 @@
-from typing import Final, Iterator, List, Optional, Tuple, final
+from collections.abc import Iterator
+from typing import Final, List, Optional, Tuple, final
 
 from mypy.nodes import ARG_STAR, ARG_STAR2
 from mypy.plugin import FunctionContext
@@ -104,7 +105,7 @@ class _PartialFunctionReducer:
         self,
         default_return_type: FunctionLike,
         original: FunctionLike,
-        applied_args: List[FuncArg],
+        applied_args: list[FuncArg],
         ctx: FunctionContext,
     ) -> None:
         """
@@ -122,8 +123,8 @@ class _PartialFunctionReducer:
         self._applied_args = applied_args
         self._ctx = ctx
 
-        self._case_functions: List[CallableType] = []
-        self._fallbacks: List[CallableType] = []
+        self._case_functions: list[CallableType] = []
+        self._fallbacks: list[CallableType] = []
 
     def new_partial(self) -> ProperType:
         """
@@ -149,7 +150,7 @@ class _PartialFunctionReducer:
     def _create_intermediate(
         self,
         case_function: CallableType,
-    ) -> Tuple[CallableType, Optional[CallableType]]:
+    ) -> tuple[CallableType, CallableType | None]:
         intermediate = Intermediate(case_function).with_applied_args(
             self._applied_args,
         )
@@ -234,7 +235,7 @@ class _AppliedArgs:
             self._function_ctx,
         ))
 
-    def build_from_context(self) -> Tuple[bool, List[FuncArg]]:
+    def build_from_context(self) -> tuple[bool, list[FuncArg]]:
         """
         Builds handy arguments structures from the context.
 

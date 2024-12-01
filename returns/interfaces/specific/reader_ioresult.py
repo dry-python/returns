@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import TYPE_CHECKING, Callable, ClassVar, Sequence, TypeVar, final
+from collections.abc import Callable, Sequence
+from typing import TYPE_CHECKING, ClassVar, TypeVar, final
 
 from returns.interfaces.specific import ioresult, reader, reader_result
 from returns.primitives.hkt import KindN

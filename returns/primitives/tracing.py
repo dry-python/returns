@@ -1,16 +1,8 @@
 import types
+from collections.abc import Callable, Iterator
 from contextlib import contextmanager
 from inspect import FrameInfo, stack
-from typing import (
-    Callable,
-    ContextManager,
-    Iterator,
-    List,
-    Optional,
-    TypeVar,
-    Union,
-    overload,
-)
+from typing import ContextManager, List, Optional, TypeVar, Union, overload
 
 from returns.result import Failure
 
@@ -28,8 +20,8 @@ def collect_traces(function: _FunctionType) -> _FunctionType:
 
 
 def collect_traces(
-    function: Optional[_FunctionType] = None,
-) -> Union[_FunctionType, ContextManager[None]]:  # noqa: DAR101, DAR201, DAR301
+    function: _FunctionType | None = None,
+) -> _FunctionType | ContextManager[None]:  # noqa: DAR101, DAR201, DAR301
     """
     Context Manager/Decorator to active traces collect to the Failures.
 
@@ -76,7 +68,7 @@ def collect_traces(
     return factory()(function) if function else factory()
 
 
-def _get_trace(_self: Failure) -> Optional[List[FrameInfo]]:
+def _get_trace(_self: Failure) -> list[FrameInfo] | None:
     """
     Function to be used on Monkey Patching.
 

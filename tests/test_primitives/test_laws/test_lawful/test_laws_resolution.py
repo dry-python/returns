@@ -27,9 +27,9 @@ from returns.result import Result
     RequiresContextIOResult,
     RequiresContextResult,
 ])
-def test_laws_resolution(container: Type[Lawful]):
+def test_laws_resolution(container: type[Lawful]):
     """Ensures all tests are unique."""
-    all_laws: List[Law] = []
+    all_laws: list[Law] = []
     for laws in container.laws().values():
         all_laws.extend(laws)
     assert len(all_laws) == len(set(all_laws))

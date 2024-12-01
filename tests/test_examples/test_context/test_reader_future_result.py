@@ -1,4 +1,5 @@
-from typing import Final, Sequence, cast
+from collections.abc import Sequence
+from typing import Final, cast
 
 import anyio  # you would need to `pip install anyio`
 import httpx  # you would need to `pip install httpx`

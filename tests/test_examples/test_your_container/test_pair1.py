@@ -1,4 +1,5 @@
-from typing import Callable, Tuple, TypeVar, final
+from collections.abc import Callable
+from typing import Tuple, TypeVar, final
 
 from returns.interfaces import bindable, equable, lashable, swappable
 from returns.primitives.container import BaseContainer, container_equality
@@ -30,7 +31,7 @@ class Pair(
 
     def __init__(
         self,
-        inner_value: Tuple[_FirstType, _SecondType],
+        inner_value: tuple[_FirstType, _SecondType],
     ) -> None:
         """Saves passed tuple as ``._inner_value`` inside this instance."""
         super().__init__(inner_value)

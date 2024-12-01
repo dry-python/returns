@@ -1,5 +1,6 @@
+from collections.abc import Callable
 from functools import wraps
-from typing import Callable, Generic, TypeVar, Union, final
+from typing import Generic, TypeVar, Union, final
 
 from typing_extensions import ParamSpec
 
@@ -35,7 +36,7 @@ class Trampoline(Generic[_ReturnType]):
 
 
 def trampoline(
-    func: Callable[_FuncParams, Union[_ReturnType, Trampoline[_ReturnType]]],
+    func: Callable[_FuncParams, _ReturnType | Trampoline[_ReturnType]],
 ) -> Callable[_FuncParams, _ReturnType]:
     """
     Convert functions using recursion to regular functions.

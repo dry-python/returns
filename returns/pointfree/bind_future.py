@@ -1,4 +1,5 @@
-from typing import Callable, TypeVar
+from collections.abc import Callable
+from typing import TypeVar
 
 from returns.future import Future
 from returns.interfaces.specific.future import FutureLikeN

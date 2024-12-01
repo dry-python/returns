@@ -1,23 +1,22 @@
 from abc import ABCMeta
+from collections.abc import Callable, Generator, Iterator
 from functools import wraps
 from inspect import FrameInfo
 from typing import (
     TYPE_CHECKING,
     Any,
-    Callable,
-    Generator,
-    Iterator,
     List,
     Optional,
     Tuple,
     Type,
+    TypeAlias,
     TypeVar,
     Union,
     final,
     overload,
 )
 
-from typing_extensions import Never, ParamSpec, TypeAlias
+from typing_extensions import Never, ParamSpec
 
 from returns.interfaces.specific import result
 from returns.primitives.container import BaseContainer, container_equality
@@ -55,14 +54,14 @@ class Result(  # type: ignore[type-var]
     __slots__ = ('_trace',)
     __match_args__ = ('_inner_value',)
 
-    _inner_value: Union[_ValueType, _ErrorType]
-    _trace: Optional[List[FrameInfo]]
+    _inner_value: _ValueType | _ErrorType
+    _trace: list[FrameInfo] | None
 
     #: Typesafe equality comparison with other `Result` objects.
     equals = container_equality
 
     @property
-    def trace(self) -> Optional[List[FrameInfo]]:
+    def trace(self) -> list[FrameInfo] | None:
         """Returns a list with stack trace when :func:`~Failure` was called."""
         return self._trace
 
@@ -239,7 +238,7 @@ class Result(  # type: ignore[type-var]
     def value_or(
         self,
         default_value: _NewValueType,
-    ) -> Union[_ValueType, _NewValueType]:
+    ) -> _ValueType | _NewValueType:
         """
         Get value or default value.
 
@@ -403,7 +402,7 @@ class Failure(Result[Any, _ErrorType]):  # noqa: WPS338
         """Returns failed value."""
         return self._inner_value
 
-    def _get_trace(self) -> Optional[List[FrameInfo]]:
+    def _get_trace(self) -> list[FrameInfo] | None:
         """Method that will be monkey patched when trace is active."""
 
 
@@ -487,7 +486,7 @@ def safe(
 
 @overload
 def safe(
-    exceptions: Tuple[Type[_ExceptionType], ...],
+    exceptions: tuple[type[_ExceptionType], ...],
 ) -> Callable[
     [Callable[_FuncParams, _ValueType]],
     Callable[_FuncParams, Result[_ValueType, _ExceptionType]],
@@ -496,17 +495,17 @@ def safe(
 
 
 def safe(  # noqa: WPS234, C901
-    exceptions: Union[
-        Callable[_FuncParams, _ValueType],
-        Tuple[Type[_ExceptionType], ...],
-    ],
-) -> Union[
-    Callable[_FuncParams, ResultE[_ValueType]],
+    exceptions: (
+        Callable[_FuncParams, _ValueType] |
+        tuple[type[_ExceptionType], ...]
+    ),
+) -> (
+    Callable[_FuncParams, ResultE[_ValueType]] |
     Callable[
         [Callable[_FuncParams, _ValueType]],
         Callable[_FuncParams, Result[_ValueType, _ExceptionType]],
-    ],
-]:
+    ]
+):
     """
     Decorator to convert exception-throwing function to ``Result`` container.
 
@@ -549,7 +548,7 @@ def safe(  # noqa: WPS234, C901
     """
     def factory(
         inner_function: Callable[_FuncParams, _ValueType],
-        inner_exceptions: Tuple[Type[_ExceptionType], ...],
+        inner_exceptions: tuple[type[_ExceptionType], ...],
     ) -> Callable[_FuncParams, Result[_ValueType, _ExceptionType]]:
         @wraps(inner_function)
         def decorator(

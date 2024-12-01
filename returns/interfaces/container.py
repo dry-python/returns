@@ -1,4 +1,5 @@
-from typing import Callable, ClassVar, Sequence, TypeVar, final
+from collections.abc import Callable, Sequence
+from typing import ClassVar, TypeVar, final
 
 from typing_extensions import Never
 

@@ -15,7 +15,7 @@ class _CustomException(Exception):
     ValueError,
     _CustomException,
 ])
-def test_raise_regular_exception(exception_type: Type[Exception]):
+def test_raise_regular_exception(exception_type: type[Exception]):
     """Ensures that regular exception can be thrown."""
     with pytest.raises(exception_type):
         raise_exception(exception_type())
