@@ -1,5 +1,5 @@
 from collections.abc import Sequence
-from typing import Any, Type
+from typing import Any
 
 import pytest
 from hypothesis import given

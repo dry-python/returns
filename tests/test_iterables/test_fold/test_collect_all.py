@@ -1,6 +1,5 @@
 import sys
 from collections.abc import Iterable, Sequence
-from typing import List, Tuple
 
 import pytest
 

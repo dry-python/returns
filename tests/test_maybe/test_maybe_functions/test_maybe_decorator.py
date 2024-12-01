@@ -1,4 +1,3 @@
-from typing import Dict, Optional
 
 from returns.maybe import Nothing, Some, maybe
 

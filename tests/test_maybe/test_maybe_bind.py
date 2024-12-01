@@ -1,4 +1,3 @@
-from typing import Optional
 
 from returns.maybe import Maybe, Nothing, Some
 

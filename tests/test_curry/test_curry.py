@@ -1,5 +1,4 @@
 from inspect import getdoc
-from typing import List, Tuple
 
 import pytest
 
