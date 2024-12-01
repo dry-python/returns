@@ -2,7 +2,7 @@ from collections.abc import Callable
 from functools import partial as _partial
 from functools import wraps
 from inspect import BoundArguments, Signature
-from typing import Any, Tuple, TypeVar, Union
+from typing import Any, TypeVar, Union
 
 _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')

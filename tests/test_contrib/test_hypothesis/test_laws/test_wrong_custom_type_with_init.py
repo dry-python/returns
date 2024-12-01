@@ -29,7 +29,7 @@ class _Wrapper(
         function: Callable[[_ValueType], _NewValueType],
     ) -> '_Wrapper[_NewValueType]':
         return _Wrapper(
-            f'wrong-{function(self._inner_value)}',  # type: ignore
+            'wrong-{0}'.format(function(self._inner_value)),  # type: ignore
         )
 
 

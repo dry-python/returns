@@ -1,7 +1,7 @@
 from abc import ABCMeta
 from collections.abc import Callable, Generator, Iterator
 from functools import wraps
-from typing import TYPE_CHECKING, Any, ClassVar, Optional, TypeVar, Union, final
+from typing import TYPE_CHECKING, Any, ClassVar, Optional, TypeVar, final
 
 from typing_extensions import Never, ParamSpec
 

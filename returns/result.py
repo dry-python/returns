@@ -2,19 +2,7 @@ from abc import ABCMeta
 from collections.abc import Callable, Generator, Iterator
 from functools import wraps
 from inspect import FrameInfo
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    List,
-    Optional,
-    Tuple,
-    Type,
-    TypeAlias,
-    TypeVar,
-    Union,
-    final,
-    overload,
-)
+from typing import TYPE_CHECKING, Any, TypeAlias, TypeVar, final, overload
 
 from typing_extensions import Never, ParamSpec
 

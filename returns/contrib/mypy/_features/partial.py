@@ -1,5 +1,5 @@
 from collections.abc import Iterator
-from typing import Final, List, Optional, Tuple, final
+from typing import Final, final
 
 from mypy.nodes import ARG_STAR, ARG_STAR2
 from mypy.plugin import FunctionContext

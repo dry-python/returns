@@ -1,5 +1,4 @@
 from collections.abc import Iterable
-from typing import Dict, List, Optional
 
 from mypy.typeops import erase_to_bound
 from mypy.types import (

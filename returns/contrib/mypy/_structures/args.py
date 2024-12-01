@@ -1,5 +1,5 @@
 from collections import namedtuple
-from typing import List, Optional, final
+from typing import final
 
 from mypy.nodes import ArgKind, Context, TempNode
 from mypy.types import CallableType

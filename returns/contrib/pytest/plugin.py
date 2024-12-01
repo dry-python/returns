@@ -4,7 +4,7 @@ from collections.abc import Callable, Iterator
 from contextlib import ExitStack, contextmanager
 from functools import partial, wraps
 from types import FrameType, MappingProxyType
-from typing import TYPE_CHECKING, Any, Dict, Final, TypeVar, Union, final
+from typing import TYPE_CHECKING, Any, Final, TypeVar, Union, final
 from unittest import mock
 
 import pytest
@@ -76,7 +76,7 @@ class ReturnsAsserts:
             pass  # noqa: WPS420
         else:
             pytest.fail(
-                'No container {} was created'.format(
+                'No container {0} was created'.format(
                     trace_type.__class__.__name__,
                 ),
             )

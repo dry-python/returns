@@ -1,4 +1,4 @@
-from typing import Final, Optional, Tuple
+from typing import Final
 
 from mypy.maptype import map_instance_to_supertype
 from mypy.nodes import Expression, GeneratorExpr, TypeInfo

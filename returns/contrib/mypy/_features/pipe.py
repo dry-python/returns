@@ -37,7 +37,6 @@ Here's when it works:
 
 """
 from collections.abc import Callable
-from typing import List, Tuple
 
 from mypy.nodes import ARG_POS
 from mypy.plugin import FunctionContext, MethodContext, MethodSigContext

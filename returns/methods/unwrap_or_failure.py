@@ -1,4 +1,4 @@
-from typing import TypeVar, Union
+from typing import TypeVar
 
 from returns.interfaces.unwrappable import Unwrappable
 from returns.pipeline import is_successful

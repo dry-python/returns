@@ -1,5 +1,5 @@
 from collections.abc import Awaitable, Callable, Generator
-from typing import NewType, TypeVar, Union, cast, final
+from typing import NewType, TypeVar, cast, final
 
 _ValueType = TypeVar('_ValueType')
 _FunctionCoroType = TypeVar('_FunctionCoroType', bound=Callable[..., Awaitable])

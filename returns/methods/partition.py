@@ -1,5 +1,5 @@
 from collections.abc import Iterable
-from typing import List, TypeVar
+from typing import TypeVar
 
 from returns.interfaces.unwrappable import Unwrappable
 from returns.primitives.exceptions import UnwrapFailedError

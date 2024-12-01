@@ -1,5 +1,5 @@
 from collections.abc import Callable
-from typing import TypeVar, Union
+from typing import TypeVar
 
 from returns.interfaces.failable import DiverseFailableN
 from returns.primitives.hkt import Kinded, KindN, kinded

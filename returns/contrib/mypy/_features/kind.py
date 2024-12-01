@@ -1,6 +1,5 @@
 from collections.abc import Sequence
 from enum import Enum, unique
-from typing import Optional, Tuple
 
 from mypy.checkmember import analyze_member_access
 from mypy.plugin import (

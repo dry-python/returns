@@ -1,5 +1,5 @@
 from collections.abc import Iterable, Mapping
-from typing import List, Optional, TypeAlias, cast, final
+from typing import TypeAlias, cast, final
 
 from mypy.argmap import map_actuals_to_formals
 from mypy.constraints import infer_constraints_for_callable

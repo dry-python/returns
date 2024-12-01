@@ -34,7 +34,7 @@ if __name__ == '__main__':
 
         # Matches any `Some` instance and binds its value to the `book` variable
         case Some(book):
-            print(f'Book found: {book.name}')
+            print('Book found: {0}'.format(book.name))
 
         # Matches `Nothing` instance
         case Maybe.empty:

@@ -1,5 +1,5 @@
 from collections.abc import Callable, Sequence
-from typing import ClassVar, Dict, Generic, Type, TypeVar, final
+from typing import ClassVar, Generic, TypeVar, final
 
 from returns.primitives.types import Immutable
 
@@ -126,7 +126,7 @@ class Lawful(Generic[_Caps]):
 
         """
         seen = {
-            '{}.{}'.format(
+            '{0}.{1}'.format(
                 parent.__module__,  # noqa: WPS609
                 parent.__qualname__,
             ): parent

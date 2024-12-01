@@ -1,7 +1,7 @@
 from collections.abc import Iterator
 from itertools import groupby, product
 from operator import itemgetter
-from typing import List, Optional, Tuple, cast, final
+from typing import cast, final
 
 from mypy.nodes import ARG_STAR, ARG_STAR2
 from mypy.plugin import FunctionContext

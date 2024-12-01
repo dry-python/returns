@@ -1,5 +1,5 @@
 from abc import ABCMeta
-from typing import Any, TypeVar, Union
+from typing import Any, TypeVar
 
 from typing_extensions import TypedDict
 
@@ -39,7 +39,7 @@ class BaseContainer(Immutable, metaclass=ABCMeta):
 
     def __repr__(self) -> str:
         """Used to display details of object."""
-        return '<{}: {}>'.format(
+        return '<{0}: {1}>'.format(
             self.__class__.__qualname__.strip('_'),
             str(self._inner_value),
         )

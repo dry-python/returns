@@ -13,7 +13,7 @@ match div(1, 0):
 
     # Matches any `Success` instance and binds its value to the `value` variable
     case Success(value):
-        print(f'Result is "{value}"')
+        print('Result is "{0}"'.format(value))
 
     # Matches if the result stored inside `Failure` is `ZeroDivisionError`
     case Failure(ZeroDivisionError()):

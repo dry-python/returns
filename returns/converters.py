@@ -1,4 +1,4 @@
-from typing import TypeVar, Union, overload
+from typing import TypeVar, overload
 
 from returns.functions import identity
 from returns.interfaces.bindable import BindableN

@@ -1,4 +1,4 @@
-from typing import Optional, Type, TypeVar, Union, overload
+from typing import TypeVar, overload
 
 from returns.context import NoDeps
 from returns.interfaces.failable import DiverseFailableN, SingleFailableN

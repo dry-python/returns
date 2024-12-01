@@ -2,7 +2,7 @@ import types
 from collections.abc import Callable, Iterator
 from contextlib import contextmanager
 from inspect import FrameInfo, stack
-from typing import ContextManager, List, Optional, TypeVar, Union, overload
+from typing import ContextManager, TypeVar, overload
 
 from returns.result import Failure
 

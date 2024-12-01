@@ -1,4 +1,4 @@
-from typing import ClassVar, Dict, FrozenSet, List, final
+from typing import ClassVar, final
 
 from mypy.nodes import ARG_OPT, ARG_POS, ARG_STAR, ARG_STAR2, ArgKind
 from mypy.typeops import get_type_vars

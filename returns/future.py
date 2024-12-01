@@ -7,7 +7,7 @@ from collections.abc import (
     Generator,
 )
 from functools import wraps
-from typing import Any, Tuple, Type, TypeAlias, TypeVar, Union, final, overload
+from typing import Any, TypeAlias, TypeVar, final, overload
 
 from typing_extensions import ParamSpec
 

@@ -1,6 +1,6 @@
 from collections.abc import Callable
 from functools import wraps
-from typing import Generic, TypeVar, Union, final
+from typing import Generic, TypeVar, final
 
 from typing_extensions import ParamSpec
 

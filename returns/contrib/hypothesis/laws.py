@@ -1,7 +1,7 @@
 import inspect
 from collections.abc import Callable, Iterator
 from contextlib import ExitStack, contextmanager
-from typing import Any, Dict, NamedTuple, Optional, Type, TypeVar, final
+from typing import Any, NamedTuple, TypeVar, final
 
 import pytest
 from hypothesis import given

@@ -1,5 +1,5 @@
 from collections.abc import Callable
-from typing import Optional, TypeVar
+from typing import TypeVar
 
 from returns.interfaces.specific.maybe import MaybeLikeN
 from returns.primitives.hkt import Kinded, KindN, kinded

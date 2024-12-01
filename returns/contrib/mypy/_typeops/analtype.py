@@ -1,5 +1,5 @@
 from types import MappingProxyType
-from typing import Final, List, Literal, Optional, overload
+from typing import Final, Literal, overload
 
 from mypy.checkmember import analyze_member_access
 from mypy.nodes import ARG_NAMED, ARG_OPT

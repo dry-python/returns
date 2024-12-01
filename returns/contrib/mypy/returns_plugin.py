@@ -11,7 +11,7 @@ We use ``pytest-mypy-plugins`` to test that it works correctly, see:
 https://github.com/mkurnikov/pytest-mypy-plugins
 """
 from collections.abc import Callable, Mapping
-from typing import ClassVar, Optional, Type, final
+from typing import ClassVar, Optional, final
 
 from mypy.nodes import SymbolTableNode
 from mypy.plugin import (
