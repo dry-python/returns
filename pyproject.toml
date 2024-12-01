@@ -46,7 +46,7 @@ _ = "returns.contrib.hypothesis._entrypoint:_setup_hook"
 
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.10"
 
 typing-extensions = ">=4.0,<5.0"
 pytest = { version = "^8.0", optional = true }
@@ -83,7 +83,7 @@ sphinx = "^7.3"
 sphinx-autodoc-typehints = "^2.3"
 sphinxcontrib-mermaid = "^1.0"
 furo = "^2024.5"
-m2r2 = "^0.3"
+myst-parser = "^4.0"
 tomli = "^2.0"
 
 [tool.poetry.extras]
