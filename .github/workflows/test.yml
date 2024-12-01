@@ -20,7 +20,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.9', '3.10', '3.11', '3.12']
+        python-version: ['3.10', '3.11', '3.12', '3.13']
 
     steps:
     - uses: actions/checkout@v4
@@ -56,7 +56,6 @@ jobs:
         # Different python versions are covered differently:
         poetry run pytest returns docs/pages tests
 
-        poetry run doc8 -q docs
         poetry run codespell returns tests docs typesafety README.md CONTRIBUTING.md CHANGELOG.md
 
         poetry run poetry check

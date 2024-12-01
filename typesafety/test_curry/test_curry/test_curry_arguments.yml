@@ -1,6 +1,5 @@
 - case: curry_pos_only_args
   disable_cache: false
-  skip: sys.version_info[:2] < (3, 8)
   main: |
     from returns.curry import curry
 

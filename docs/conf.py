@@ -51,7 +51,7 @@ extensions = [
     'sphinx.ext.napoleon',
 
     # Used to include .md files:
-    'm2r2',
+    'myst_parser',
 
     # Used to insert typehints into the final docs:
     'sphinx_autodoc_typehints',
@@ -70,6 +70,11 @@ autodoc_default_options = {
     'exclude-members': '__dict__,__weakref__',
     'show-inheritance': True,
 }
+
+suppress_warnings = [
+    'myst.header',
+    'myst.xref_missing',
+]
 
 # https://pypi.org/project/sphinx-autodoc-typehints/
 always_document_param_types = True
