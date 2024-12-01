@@ -162,14 +162,14 @@ def pure_functions() -> Iterator[None]:
             pure=True,
         )
 
-    used = types._global_type_lookup[Callable]
-    st.register_type_strategy(Callable, factory)
+    used = types._global_type_lookup[Callable]  # type: ignore[index]
+    st.register_type_strategy(Callable, factory)  # type: ignore[arg-type]
 
     try:
         yield
     finally:
-        types._global_type_lookup.pop(Callable)
-        st.register_type_strategy(Callable, used)
+        types._global_type_lookup.pop(Callable)  # type: ignore[call-overload]
+        st.register_type_strategy(Callable, used)  # type: ignore[arg-type]
 
 
 @contextmanager
