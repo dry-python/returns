@@ -1,16 +1,7 @@
 import inspect
+from collections.abc import Callable, Iterator
 from contextlib import ExitStack, contextmanager
-from typing import (
-    Any,
-    Callable,
-    Dict,
-    Iterator,
-    NamedTuple,
-    Optional,
-    Type,
-    TypeVar,
-    final,
-)
+from typing import Any, NamedTuple, TypeVar, final
 
 import pytest
 from hypothesis import given
@@ -26,14 +17,14 @@ from returns.primitives.laws import Law, Lawful
 class _Settings(NamedTuple):
     """Settings that we provide to an end user."""
 
-    settings_kwargs: Dict[str, Any]
+    settings_kwargs: dict[str, Any]
     use_init: bool
 
 
 def check_all_laws(
-    container_type: Type[Lawful],
+    container_type: type[Lawful],
     *,
-    settings_kwargs: Optional[Dict[str, Any]] = None,
+    settings_kwargs: dict[str, Any] | None = None,
     use_init: bool = False,
 ) -> None:
     """
@@ -79,7 +70,7 @@ def check_all_laws(
 
 @contextmanager
 def container_strategies(
-    container_type: Type[Lawful],
+    container_type: type[Lawful],
     *,
     settings: _Settings,
 ) -> Iterator[None]:
@@ -123,7 +114,7 @@ def container_strategies(
 
 @contextmanager
 def register_container(
-    container_type: Type['Lawful'],
+    container_type: type['Lawful'],
     *,
     use_init: bool,
 ) -> Iterator[None]:
@@ -160,30 +151,25 @@ def pure_functions() -> Iterator[None]:
             if len(thing.__args__) == 1
             else (lambda *args, **kwargs: None)
         )
+        return_type = thing.__args__[-1]
         return st.functions(
             like=like,
-            returns=st.from_type(thing.__args__[-1]),
+            returns=st.from_type(
+                return_type
+                if return_type is not None
+                else type(None),
+            ),
             pure=True,
         )
 
-    callable_type = _get_callable_type()
-    used = types._global_type_lookup[callable_type]
-    st.register_type_strategy(callable_type, factory)
+    used = types._global_type_lookup[Callable]  # type: ignore[index]
+    st.register_type_strategy(Callable, factory)  # type: ignore[arg-type]
 
     try:
         yield
     finally:
-        types._global_type_lookup.pop(callable_type)
-        st.register_type_strategy(callable_type, used)
-
-
-def _get_callable_type() -> Any:
-    # Helper to accommodate changes in `hypothesis@6.79.0`
-    if Callable.__origin__ in types._global_type_lookup:  # type: ignore
-        return Callable.__origin__  # type: ignore
-    elif Callable in types._global_type_lookup:  # type: ignore
-        return Callable
-    raise RuntimeError('Failed to find Callable type strategy')
+        types._global_type_lookup.pop(Callable)  # type: ignore[call-overload]
+        st.register_type_strategy(Callable, used)  # type: ignore[arg-type]
 
 
 @contextmanager
@@ -242,7 +228,7 @@ def _clean_caches() -> None:
 
 
 def _run_law(
-    container_type: Type[Lawful],
+    container_type: type[Lawful],
     law: Law,
     *,
     settings: _Settings,
@@ -263,8 +249,8 @@ def _run_law(
 
 
 def _create_law_test_case(
-    container_type: Type[Lawful],
-    interface: Type[Lawful],
+    container_type: type[Lawful],
+    interface: type[Lawful],
     law: Law,
     *,
     settings: _Settings,

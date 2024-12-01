@@ -9,15 +9,8 @@ Don't use this type for async that can. Instead, use
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    Awaitable,
-    Callable,
-    Generator,
-    Generic,
-    TypeVar,
-)
+from collections.abc import Awaitable, Callable, Generator
+from typing import TYPE_CHECKING, Any, Generic, TypeVar
 
 from typing_extensions import Never
 

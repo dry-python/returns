@@ -1,19 +1,10 @@
 import inspect
 import sys
+from collections.abc import Callable, Iterator
 from contextlib import ExitStack, contextmanager
 from functools import partial, wraps
 from types import FrameType, MappingProxyType
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    Callable,
-    Dict,
-    Final,
-    Iterator,
-    TypeVar,
-    Union,
-    final,
-)
+from typing import TYPE_CHECKING, Any, Final, TypeVar, Union, final
 from unittest import mock
 
 import pytest
@@ -30,7 +21,7 @@ if TYPE_CHECKING:
 # Also, the object itself cannot be (in) the key because
 # (1) we cannot always assume hashability and
 # (2) we need to track the object identity, not its value
-_ErrorsHandled = Dict[int, Any]
+_ErrorsHandled = dict[int, Any]
 
 _FunctionType = TypeVar('_FunctionType', bound=Callable)
 _ReturnsResultType = TypeVar(

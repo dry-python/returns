@@ -1,4 +1,5 @@
-from typing import Awaitable, Callable, TypeVar
+from collections.abc import Awaitable, Callable
+from typing import TypeVar
 
 from returns.interfaces.specific.future import FutureLikeN
 from returns.primitives.hkt import Kinded, KindN, kinded

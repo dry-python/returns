@@ -1,13 +1,5 @@
-from typing import (
-    Callable,
-    ClassVar,
-    Dict,
-    Generic,
-    Sequence,
-    Type,
-    TypeVar,
-    final,
-)
+from collections.abc import Callable, Sequence
+from typing import ClassVar, Generic, TypeVar, final
 
 from returns.primitives.types import Immutable
 
@@ -122,7 +114,7 @@ class Lawful(Generic[_Caps]):
 
     @final  # noqa: WPS210
     @classmethod
-    def laws(cls) -> Dict[Type['Lawful'], Sequence[Law]]:  # noqa: WPS210
+    def laws(cls) -> dict[type['Lawful'], Sequence[Law]]:  # noqa: WPS210
         """
         Collects all laws from all parent classes.
 

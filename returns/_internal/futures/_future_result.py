@@ -1,4 +1,5 @@
-from typing import TYPE_CHECKING, Any, Awaitable, Callable, TypeVar
+from collections.abc import Awaitable, Callable
+from typing import TYPE_CHECKING, Any, TypeVar
 
 from returns.io import IO, IOResult
 from returns.primitives.hkt import Kind2, dekind

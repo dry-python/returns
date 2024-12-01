@@ -1,4 +1,5 @@
-from typing import Iterable, List, Mapping, Optional, cast, final
+from collections.abc import Iterable, Mapping
+from typing import TypeAlias, cast, final
 
 from mypy.argmap import map_actuals_to_formals
 from mypy.constraints import infer_constraints_for_callable
@@ -8,7 +9,6 @@ from mypy.plugin import FunctionContext
 from mypy.types import CallableType, FunctionLike, ProperType
 from mypy.types import Type as MypyType
 from mypy.types import TypeVarId, get_proper_type
-from typing_extensions import TypeAlias
 
 from returns.contrib.mypy._structures.args import FuncArg
 from returns.contrib.mypy._structures.types import CallableContext
@@ -32,7 +32,7 @@ class CallableInference:
         case_function: CallableType,
         ctx: FunctionContext,
         *,
-        fallback: Optional[CallableType] = None,
+        fallback: CallableType | None = None,
     ) -> None:
         """
         Create the callable inference.
@@ -55,7 +55,7 @@ class CallableInference:
 
     def from_usage(
         self,
-        applied_args: List[FuncArg],
+        applied_args: list[FuncArg],
     ) -> CallableType:
         """Infers function constrains from its usage: passed arguments."""
         constraints = self._infer_constraints(applied_args)
@@ -63,7 +63,7 @@ class CallableInference:
 
     def _infer_constraints(
         self,
-        applied_args: List[FuncArg],
+        applied_args: list[FuncArg],
     ) -> _Constraints:
         """Creates mapping of ``typevar`` to real type that we already know."""
         checker = self._ctx.api.expr_checker  # type: ignore

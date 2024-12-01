@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Callable, ClassVar, TypeVar, final
-
-from typing_extensions import TypeAlias
+from collections.abc import Callable
+from typing import TYPE_CHECKING, Any, ClassVar, TypeAlias, TypeVar, final
 
 from returns.context import NoDeps
 from returns.interfaces.specific import reader_result

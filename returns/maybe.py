@@ -1,17 +1,7 @@
 from abc import ABCMeta
+from collections.abc import Callable, Generator, Iterator
 from functools import wraps
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    Callable,
-    ClassVar,
-    Generator,
-    Iterator,
-    Optional,
-    TypeVar,
-    Union,
-    final,
-)
+from typing import TYPE_CHECKING, Any, ClassVar, Optional, TypeVar, final
 
 from typing_extensions import Never, ParamSpec
 
@@ -47,7 +37,7 @@ class Maybe(  # type: ignore[type-var]
 
     __slots__ = ()
 
-    _inner_value: Optional[_ValueType]
+    _inner_value: _ValueType | None
     __match_args__ = ('_inner_value',)
 
     #: Alias for `Nothing`
@@ -115,7 +105,7 @@ class Maybe(  # type: ignore[type-var]
 
     def bind_optional(
         self,
-        function: Callable[[_ValueType], Optional[_NewValueType]],
+        function: Callable[[_ValueType], _NewValueType | None],
     ) -> 'Maybe[_NewValueType]':
         """
         Binds a function returning an optional value over a container.
@@ -194,7 +184,7 @@ class Maybe(  # type: ignore[type-var]
     def value_or(
         self,
         default_value: _NewValueType,
-    ) -> Union[_ValueType, _NewValueType]:
+    ) -> _ValueType | _NewValueType:
         """
         Get value from successful container or default value from failed one.
 
@@ -209,7 +199,7 @@ class Maybe(  # type: ignore[type-var]
     def or_else_call(
         self,
         function: Callable[[], _NewValueType],
-    ) -> Union[_ValueType, _NewValueType]:
+    ) -> _ValueType | _NewValueType:
         """
         Get value from successful container or default value from failed one.
 
@@ -295,7 +285,7 @@ class Maybe(  # type: ignore[type-var]
 
     @classmethod
     def from_optional(
-        cls, inner_value: Optional[_NewValueType],
+        cls, inner_value: _NewValueType | None,
     ) -> 'Maybe[_NewValueType]':
         """
         Creates new instance of ``Maybe`` container based on an optional value.
@@ -449,7 +439,7 @@ Maybe.empty = Nothing
 
 
 def maybe(
-    function: Callable[_FuncParams, Optional[_ValueType]],
+    function: Callable[_FuncParams, _ValueType | None],
 ) -> Callable[_FuncParams, Maybe[_ValueType]]:
     """
     Decorator to convert ``None``-returning function to ``Maybe`` container.

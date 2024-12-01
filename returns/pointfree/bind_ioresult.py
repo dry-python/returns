@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Callable, TypeVar
+from collections.abc import Callable
+from typing import TYPE_CHECKING, TypeVar
 
 from returns.interfaces.specific.ioresult import IOResultLikeN
 from returns.primitives.hkt import Kinded, KindN, kinded

@@ -1,12 +1,11 @@
 from types import MappingProxyType
-from typing import Final, List, Optional, overload
+from typing import Final, Literal, overload
 
 from mypy.checkmember import analyze_member_access
 from mypy.nodes import ARG_NAMED, ARG_OPT
 from mypy.types import CallableType, FunctionLike, ProperType
 from mypy.types import Type as MypyType
 from mypy.types import get_proper_type
-from typing_extensions import Literal
 
 from returns.contrib.mypy._structures.args import FuncArg
 from returns.contrib.mypy._structures.types import CallableContext
@@ -23,7 +22,7 @@ _KIND_MAPPING: Final = MappingProxyType({
 @overload
 def analyze_call(
     function: FunctionLike,
-    args: List[FuncArg],
+    args: list[FuncArg],
     ctx: CallableContext,
     *,
     show_errors: Literal[True],
@@ -34,11 +33,11 @@ def analyze_call(
 @overload
 def analyze_call(
     function: FunctionLike,
-    args: List[FuncArg],
+    args: list[FuncArg],
     ctx: CallableContext,
     *,
     show_errors: bool,
-) -> Optional[CallableType]:
+) -> CallableType | None:
     """Errors are not reported, we can get ``None`` when errors happen."""
 
 

@@ -1,7 +1,8 @@
+from collections.abc import Callable
 from functools import partial as _partial
 from functools import wraps
 from inspect import BoundArguments, Signature
-from typing import Any, Callable, Tuple, TypeVar, Union
+from typing import Any, TypeVar, Union
 
 _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')
@@ -127,7 +128,7 @@ def _eager_curry(
     argspec,
     args: tuple,
     kwargs: dict,
-) -> Union[_ReturnType, Callable[..., _ReturnType]]:
+) -> _ReturnType | Callable[..., _ReturnType]:
     """
     Internal ``curry`` implementation.
 
@@ -147,9 +148,9 @@ def _eager_curry(
 
 _ArgSpec = Union[
     # Case when all arguments are bound and function can be called:
-    Tuple[None, Tuple[tuple, dict]],
+    tuple[None, tuple[tuple, dict]],
     # Case when there are still unbound arguments:
-    Tuple[BoundArguments, None],
+    tuple[BoundArguments, None],
 ]
 
 

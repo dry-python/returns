@@ -1,4 +1,5 @@
-from typing import Any, Sequence, Type
+from collections.abc import Sequence
+from typing import Any
 
 import pytest
 from hypothesis import given
@@ -21,7 +22,7 @@ from returns.pipeline import is_successful
 from returns.primitives.laws import Lawful
 from returns.result import Result, ResultE
 
-_all_containers: Sequence[Type[Lawful]] = (
+_all_containers: Sequence[type[Lawful]] = (
     Maybe,
     Result,
     IO,
@@ -45,7 +46,7 @@ _all_containers: Sequence[Type[Lawful]] = (
 
 @pytest.mark.filterwarnings('ignore:.*')
 @pytest.mark.parametrize('container_type', _all_containers)
-def test_all_containers_resolves(container_type: Type[Lawful]) -> None:
+def test_all_containers_resolves(container_type: type[Lawful]) -> None:
     """Ensures all containers do resolve."""
     assert st.from_type(container_type).example() is not None
 

@@ -1,5 +1,6 @@
 import asyncio  # we use `asyncio` only as an example, you can use any io lib
-from typing import Final, Sequence, cast
+from collections.abc import Sequence
+from typing import Final, cast
 
 import httpx  # you would need to `pip install httpx`
 from typing_extensions import TypedDict

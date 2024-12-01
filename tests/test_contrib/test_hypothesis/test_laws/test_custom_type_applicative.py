@@ -1,4 +1,5 @@
-from typing import Callable, TypeVar
+from collections.abc import Callable
+from typing import TypeVar
 
 from returns.contrib.hypothesis.laws import check_all_laws
 from returns.interfaces import applicative

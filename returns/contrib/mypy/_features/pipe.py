@@ -36,7 +36,7 @@ Here's when it works:
   >>> assert pipeline(0) == 'not bigger'  # `signature and `infer` again
 
 """
-from typing import Callable, List, Tuple
+from collections.abc import Callable
 
 from mypy.nodes import ARG_POS
 from mypy.plugin import FunctionContext, MethodContext, MethodSigContext
@@ -116,9 +116,9 @@ def _unify_type(
 
 
 def _get_pipeline_def(
-    arg_types: List[MypyType],
+    arg_types: list[MypyType],
     ctx: FunctionContext,
-) -> Tuple[ProperType, ProperType]:
+) -> tuple[ProperType, ProperType]:
     first_step = get_proper_type(arg_types[0])
     last_step = get_proper_type(arg_types[-1])
 

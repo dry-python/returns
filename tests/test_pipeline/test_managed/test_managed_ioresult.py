@@ -1,4 +1,3 @@
-from typing import List, Tuple
 
 import pytest
 
@@ -19,7 +18,7 @@ def _use_failure(inner_value: str) -> IOResult[str, str]:
 
 
 class _ReleaseSuccess:
-    def __init__(self, logs: List[Tuple[str, Result[str, str]]]) -> None:
+    def __init__(self, logs: list[tuple[str, Result[str, str]]]) -> None:
         self._logs = logs
 
     def __call__(
@@ -32,7 +31,7 @@ class _ReleaseSuccess:
 
 
 class _ReleaseFailure:
-    def __init__(self, logs: List[Tuple[str, Result[str, str]]]) -> None:
+    def __init__(self, logs: list[tuple[str, Result[str, str]]]) -> None:
         self._logs = logs
 
     def __call__(
@@ -106,7 +105,7 @@ class _ReleaseFailure:
 ])
 def test_all_success(acquire, use, release, final_result, log):
     """Ensures that managed works as intended."""
-    pipeline_logs: List[Tuple[str, Result[str, str]]] = []
+    pipeline_logs: list[tuple[str, Result[str, str]]] = []
     pipeline_result = managed(
         use,
         release(pipeline_logs),
@@ -118,7 +117,7 @@ def test_all_success(acquire, use, release, final_result, log):
 
 def test_full_typing():
     """This test is here to be a case for typing."""
-    logs: List[Tuple[str, Result[str, str]]] = []
+    logs: list[tuple[str, Result[str, str]]] = []
     pipeline_result = managed(
         _use_success,
         _ReleaseSuccess(logs),

@@ -1,5 +1,6 @@
 from abc import abstractmethod
-from typing import Callable, Tuple, Type, TypeVar, final
+from collections.abc import Callable
+from typing import TypeVar, final
 
 from typing_extensions import Never
 
@@ -38,7 +39,7 @@ class PairLikeN(
     @classmethod
     @abstractmethod
     def from_paired(
-        cls: Type[_PairLikeKind],
+        cls: type[_PairLikeKind],
         first: _NewFirstType,
         second: _NewSecondType,
     ) -> KindN[_PairLikeKind, _NewFirstType, _NewSecondType, _ThirdType]:
@@ -47,7 +48,7 @@ class PairLikeN(
     @classmethod
     @abstractmethod
     def from_unpaired(
-        cls: Type[_PairLikeKind],
+        cls: type[_PairLikeKind],
         inner_value: _NewFirstType,
     ) -> KindN[_PairLikeKind, _NewFirstType, _NewFirstType, _ThirdType]:
         """Allows to create a PairLikeN from just a single object."""
@@ -73,7 +74,7 @@ class Pair(
 
     def __init__(
         self,
-        inner_value: Tuple[_FirstType, _SecondType],
+        inner_value: tuple[_FirstType, _SecondType],
     ) -> None:
         """Saves passed tuple as ``._inner_value`` inside this instance."""
         super().__init__(inner_value)

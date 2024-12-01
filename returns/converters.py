@@ -1,4 +1,4 @@
-from typing import TypeVar, Union, overload
+from typing import TypeVar, overload
 
 from returns.functions import identity
 from returns.interfaces.bindable import BindableN
@@ -88,8 +88,8 @@ def maybe_to_result(
 
 def maybe_to_result(
     maybe_container: Maybe[_FirstType],
-    default_error: Union[_SecondType, None] = None,
-) -> Result[_FirstType, Union[_SecondType, None]]:
+    default_error: _SecondType | None = None,
+) -> Result[_FirstType, _SecondType | None]:
     """
     Converts ``Maybe`` container to ``Result`` container.
 

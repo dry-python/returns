@@ -1,4 +1,5 @@
-from typing import Callable, TypeVar
+from collections.abc import Callable
+from typing import TypeVar
 
 from returns.interfaces.altable import AltableN
 from returns.primitives.hkt import Kinded, KindN, kinded

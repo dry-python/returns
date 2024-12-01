@@ -1,5 +1,5 @@
 import sys
-from typing import Iterable, List, Sequence, Tuple
+from collections.abc import Iterable, Sequence
 
 import pytest
 
@@ -99,7 +99,7 @@ def test_collect_all_reader_result(iterable, sequence):
 @pytest.mark.anyio
 async def test_collect_all_reader_future_result(subtests):
     """Iterable for ``ReaderFutureResult`` and ``Fold``."""
-    containers: List[Tuple[  # noqa: WPS234
+    containers: list[tuple[  # noqa: WPS234
         Iterable[ReaderFutureResult[int, str, NoDeps]],
         ReaderFutureResult[Sequence[int], str, NoDeps],
     ]] = [
@@ -141,7 +141,7 @@ async def test_collect_all_reader_future_result(subtests):
 @pytest.mark.anyio
 async def test_collect_all_future_result(subtests):
     """Iterable for ``FutureResult`` and ``Fold``."""
-    containers: List[Tuple[  # noqa: WPS234
+    containers: list[tuple[  # noqa: WPS234
         Iterable[FutureResult[int, str]],
         FutureResult[Sequence[int], str],
     ]] = [

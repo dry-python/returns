@@ -9,7 +9,8 @@ Use this type to mark that this specific async opetaion can fail.
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import TYPE_CHECKING, Awaitable, Callable, TypeVar
+from collections.abc import Awaitable, Callable
+from typing import TYPE_CHECKING, TypeVar
 
 from typing_extensions import Never
 

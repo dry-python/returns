@@ -1,5 +1,6 @@
 from abc import abstractmethod
-from typing import ClassVar, Sequence, TypeVar, final
+from collections.abc import Sequence
+from typing import ClassVar, TypeVar, final
 
 from typing_extensions import Never
 

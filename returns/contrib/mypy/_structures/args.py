@@ -1,5 +1,5 @@
 from collections import namedtuple
-from typing import List, Optional, final
+from typing import final
 
 from mypy.nodes import ArgKind, Context, TempNode
 from mypy.types import CallableType
@@ -13,7 +13,7 @@ _FuncArgStruct = namedtuple('_FuncArgStruct', ('name', 'type', 'kind'))
 class FuncArg(_FuncArgStruct):
     """Representation of function arg with all required fields and methods."""
 
-    name: Optional[str]
+    name: str | None
     type: MypyType  # noqa: WPS125
     kind: ArgKind
 
@@ -22,7 +22,7 @@ class FuncArg(_FuncArgStruct):
         return TempNode(self.type, context=context)
 
     @classmethod
-    def from_callable(cls, function_def: CallableType) -> List['FuncArg']:
+    def from_callable(cls, function_def: CallableType) -> list['FuncArg']:
         """Public constructor to create FuncArg lists from callables."""
         parts = zip(
             function_def.arg_names,

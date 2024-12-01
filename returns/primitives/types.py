@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any
 
 from typing_extensions import Never, Self
 
@@ -35,7 +35,7 @@ class Immutable:
         """Returns itself."""
         return self
 
-    def __deepcopy__(self, memo: Dict[Any, Any]) -> Self:
+    def __deepcopy__(self, memo: dict[Any, Any]) -> Self:
         """Returns itself."""
         return self
 

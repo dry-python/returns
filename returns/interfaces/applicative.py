@@ -1,5 +1,6 @@
 from abc import abstractmethod
-from typing import Callable, ClassVar, Sequence, Type, TypeVar, final
+from collections.abc import Callable, Sequence
+from typing import ClassVar, TypeVar, final
 
 from typing_extensions import Never
 
@@ -157,7 +158,7 @@ class ApplicativeN(
     @classmethod
     @abstractmethod
     def from_value(
-        cls: Type[_ApplicativeType],  # noqa: N805
+        cls: type[_ApplicativeType],  # noqa: N805
         inner_value: _UpdatedType,
     ) -> KindN[_ApplicativeType, _UpdatedType, _SecondType, _ThirdType]:
         """Unit method to create new containers from any raw value."""
