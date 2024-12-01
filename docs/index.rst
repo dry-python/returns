@@ -1,4 +1,8 @@
-.. mdinclude:: ../README.md
+returns
+=======
+
+.. include:: ../README.md
+   :parser: myst_parser.sphinx_
 
 Contents
 --------
