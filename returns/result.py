@@ -119,9 +119,9 @@ class Result(  # type: ignore[type-var]
         self,
         function: Callable[
             [_ValueType],
-            Kind2['Result', _NewValueType, _ErrorType],
+            Kind2['Result', _NewValueType, _ErrorType | _NewErrorType],
         ],
-    ) -> 'Result[_NewValueType, _ErrorType]':
+    ) -> 'Result[_NewValueType, _ErrorType | _NewErrorType]':
         """
         Composes successful container with a function that returns a container.
 
