@@ -757,9 +757,9 @@ class FutureResult(  # type: ignore[type-var]
         self,
         function: Callable[
             [_ValueType],
-            Kind2['FutureResult', _NewValueType, _ErrorType],
+            Kind2['FutureResult', _NewValueType, _ErrorType | _NewErrorType],
         ],
-    ) -> 'FutureResult[_NewValueType, _ErrorType]':
+    ) -> 'FutureResult[_NewValueType, _ErrorType | _NewErrorType]':
         """
         Applies 'function' to the result of a previous calculation.
 
@@ -795,9 +795,9 @@ class FutureResult(  # type: ignore[type-var]
         self,
         function: Callable[
             [_ValueType],
-            Awaitable[Kind2['FutureResult', _NewValueType, _ErrorType]],
+            Awaitable[Kind2['FutureResult', _NewValueType, _ErrorType | _NewErrorType]],
         ],
-    ) -> 'FutureResult[_NewValueType, _ErrorType]':
+    ) -> 'FutureResult[_NewValueType, _ErrorType | _NewErrorType]':
         """
         Composes a container and ``async`` function returning container.
 

@@ -68,3 +68,18 @@
     from returns.io import IOSuccess
 
     reveal_type(IOSuccess(1).unwrap())  # N: Revealed type is "returns.io.IO[builtins.int]"
+
+
+- case: iosuccess_bind_composite_error
+  disable_cache: false
+  main: |
+    from returns.io import IOSuccess, IOResult
+
+    def returns_value_error(param: int) -> IOResult[str, ValueError]:
+        ...
+    def returns_key_error(param: str) -> IOResult[str, KeyError]:
+        ...
+
+    first: IOResult[int, Exception] = IOSuccess(1)
+    result = first.bind(returns_value_error).bind(returns_key_error)
+    reveal_type(result)  # N: Revealed type is "returns.io.IOResult[builtins.str, Union[builtins.Exception, builtins.ValueError, builtins.KeyError]]"

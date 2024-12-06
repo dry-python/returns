@@ -155,3 +155,59 @@
     first: FutureResult[int, str]
 
     reveal_type(first.lash(bind))  # N: Revealed type is "returns.future.FutureResult[builtins.int, builtins.float]"
+
+
+- case: future_success_result_async_composite_error
+  disable_cache: false
+  main: |
+    from returns.future import FutureResult, FutureSuccess
+
+    def returns_value_error(value: int) -> FutureResult[str, ValueError]:
+        ...
+    def returns_key_error(value: str) -> FutureResult[bool, KeyError]:
+        ...
+
+    result = FutureSuccess(0).bind(returns_value_error).bind(returns_key_error)
+    reveal_type(result)  # N: Revealed type is "returns.future.FutureResult[builtins.bool, Union[Any, builtins.ValueError, builtins.KeyError]]"
+
+
+- case: future_failure_result_async_composite_error
+  disable_cache: false
+  main: |
+    from returns.future import FutureResult, FutureFailure
+
+    def returns_value_error(value: int) -> FutureResult[str, ValueError]:
+        ...
+    def returns_key_error(value: str) -> FutureResult[bool, KeyError]:
+        ...
+
+    result = FutureFailure(0).bind(returns_value_error).bind(returns_key_error)
+    reveal_type(result)  # N: Revealed type is "returns.future.FutureResult[builtins.bool, Union[builtins.int, builtins.ValueError, builtins.KeyError]]"
+
+
+- case: future_success_result_bind_async_composite_error
+  disable_cache: false
+  main: |
+    from returns.future import FutureResult, FutureSuccess
+
+    async def returns_value_error(value: int) -> FutureResult[str, ValueError]:
+        ...
+    async def returns_key_error(value: str) -> FutureResult[bool, KeyError]:
+        ...
+
+    result = FutureSuccess(0).bind_async(returns_value_error).bind_async(returns_key_error)
+    reveal_type(result)  # N: Revealed type is "returns.future.FutureResult[builtins.bool, Union[Any, builtins.ValueError, builtins.KeyError]]"
+
+
+- case: future_failure_result_bind_async_composite_error
+  disable_cache: false
+  main: |
+    from returns.future import FutureResult, FutureFailure
+
+    async def returns_value_error(value: int) -> FutureResult[str, ValueError]:
+        ...
+    async def returns_key_error(value: str) -> FutureResult[bool, KeyError]:
+        ...
+
+    result = FutureFailure(0).bind_async(returns_value_error).bind_async(returns_key_error)
+    reveal_type(result)  # N: Revealed type is "returns.future.FutureResult[builtins.bool, Union[builtins.int, builtins.ValueError, builtins.KeyError]]"

@@ -13,23 +13,23 @@ if TYPE_CHECKING:
     from returns.context.requires_context import RequiresContext
 
 # Context:
-_EnvType = TypeVar('_EnvType', contravariant=True)
-_NewEnvType = TypeVar('_NewEnvType')
+_EnvType = TypeVar("_EnvType", contravariant=True)
+_NewEnvType = TypeVar("_NewEnvType")
 
 # Result:
-_ValueType = TypeVar('_ValueType', covariant=True)
-_NewValueType = TypeVar('_NewValueType')
-_ErrorType = TypeVar('_ErrorType', covariant=True)
-_NewErrorType = TypeVar('_NewErrorType')
+_ValueType = TypeVar("_ValueType", covariant=True)
+_NewValueType = TypeVar("_NewValueType")
+_ErrorType = TypeVar("_ErrorType", covariant=True)
+_NewErrorType = TypeVar("_NewErrorType")
 
 # Helpers:
-_FirstType = TypeVar('_FirstType')
+_FirstType = TypeVar("_FirstType")
 
 
 @final
 class RequiresContextResult(  # type: ignore[type-var]
     BaseContainer,
-    SupportsKind3['RequiresContextResult', _ValueType, _ErrorType, _EnvType],
+    SupportsKind3["RequiresContextResult", _ValueType, _ErrorType, _EnvType],
     reader_result.ReaderResultBasedN[_ValueType, _ErrorType, _EnvType],
 ):
     """
@@ -167,7 +167,8 @@ class RequiresContextResult(  # type: ignore[type-var]
         return RequiresContextResult(lambda deps: self(deps).swap())
 
     def map(
-        self, function: Callable[[_ValueType], _NewValueType],
+        self,
+        function: Callable[[_ValueType], _NewValueType],
     ) -> RequiresContextResult[_NewValueType, _ErrorType, _EnvType]:
         """
         Composes successful container with a pure function.
@@ -232,11 +233,11 @@ class RequiresContextResult(  # type: ignore[type-var]
             Kind3[
                 RequiresContextResult,
                 _NewValueType,
-                _ErrorType,
+                _ErrorType | _NewErrorType,
                 _EnvType,
             ],
         ],
-    ) -> RequiresContextResult[_NewValueType, _ErrorType, _EnvType]:
+    ) -> RequiresContextResult[_NewValueType, _ErrorType | _NewErrorType, _EnvType]:
         """
         Composes this container with a function returning the same type.
 
@@ -274,8 +275,10 @@ class RequiresContextResult(  # type: ignore[type-var]
 
     def bind_result(
         self,
-        function: Callable[[_ValueType], Result[_NewValueType, _ErrorType]],
-    ) -> RequiresContextResult[_NewValueType, _ErrorType, _EnvType]:
+        function: Callable[
+            [_ValueType], Result[_NewValueType, _ErrorType | _NewErrorType]
+        ],
+    ) -> RequiresContextResult[_NewValueType, _ErrorType | _NewErrorType, _EnvType]:
         """
         Binds ``Result`` returning function to current container.
 
@@ -338,7 +341,8 @@ class RequiresContextResult(  # type: ignore[type-var]
         )
 
     def alt(
-        self, function: Callable[[_ErrorType], _NewErrorType],
+        self,
+        function: Callable[[_ErrorType], _NewErrorType],
     ) -> RequiresContextResult[_ValueType, _NewErrorType, _EnvType]:
         """
         Composes failed container with a pure function.
@@ -455,7 +459,8 @@ class RequiresContextResult(  # type: ignore[type-var]
 
     @classmethod
     def from_result(
-        cls, inner_value: Result[_NewValueType, _NewErrorType],
+        cls,
+        inner_value: Result[_NewValueType, _NewErrorType],
     ) -> RequiresContextResult[_NewValueType, _NewErrorType, NoDeps]:
         """
         Creates new container with ``Result`` as a unit value.
@@ -481,7 +486,8 @@ class RequiresContextResult(  # type: ignore[type-var]
     def from_typecast(
         cls,
         inner_value: RequiresContext[
-            Result[_NewValueType, _NewErrorType], _EnvType,
+            Result[_NewValueType, _NewErrorType],
+            _EnvType,
         ],
     ) -> RequiresContextResult[_NewValueType, _NewErrorType, _EnvType]:
         """
@@ -510,7 +516,8 @@ class RequiresContextResult(  # type: ignore[type-var]
 
     @classmethod
     def from_context(
-        cls, inner_value: RequiresContext[_NewValueType, _NewEnvType],
+        cls,
+        inner_value: RequiresContext[_NewValueType, _NewEnvType],
     ) -> RequiresContextResult[_NewValueType, Any, _NewEnvType]:
         """
         Creates new container from ``RequiresContext`` as a success unit.
@@ -528,7 +535,8 @@ class RequiresContextResult(  # type: ignore[type-var]
 
     @classmethod
     def from_failed_context(
-        cls, inner_value: RequiresContext[_NewValueType, _NewEnvType],
+        cls,
+        inner_value: RequiresContext[_NewValueType, _NewEnvType],
     ) -> RequiresContextResult[Any, _NewValueType, _NewEnvType]:
         """
         Creates new container from ``RequiresContext`` as a failure unit.
@@ -548,7 +556,9 @@ class RequiresContextResult(  # type: ignore[type-var]
     def from_result_context(
         cls,
         inner_value: RequiresContextResult[
-            _NewValueType, _NewErrorType, _NewEnvType,
+            _NewValueType,
+            _NewErrorType,
+            _NewEnvType,
         ],
     ) -> RequiresContextResult[_NewValueType, _NewErrorType, _NewEnvType]:
         """
@@ -572,7 +582,8 @@ class RequiresContextResult(  # type: ignore[type-var]
 
     @classmethod
     def from_value(
-        cls, inner_value: _FirstType,
+        cls,
+        inner_value: _FirstType,
     ) -> RequiresContextResult[_FirstType, Any, NoDeps]:
         """
         Creates new container with ``Success(inner_value)`` as a unit value.
@@ -588,7 +599,8 @@ class RequiresContextResult(  # type: ignore[type-var]
 
     @classmethod
     def from_failure(
-        cls, inner_value: _FirstType,
+        cls,
+        inner_value: _FirstType,
     ) -> RequiresContextResult[Any, _FirstType, NoDeps]:
         """
         Creates new container with ``Failure(inner_value)`` as a unit value.
@@ -607,7 +619,9 @@ class RequiresContextResult(  # type: ignore[type-var]
 
 #: Alias for a popular case when ``Result`` has ``Exception`` as error type.
 RequiresContextResultE: TypeAlias = RequiresContextResult[
-    _ValueType, Exception, _EnvType,
+    _ValueType,
+    Exception,
+    _EnvType,
 ]
 
 #: Alias to save you some typing. Uses original name from Haskell.
@@ -615,5 +629,7 @@ ReaderResult: TypeAlias = RequiresContextResult
 
 #: Alias to save you some typing. Has ``Exception`` as error type.
 ReaderResultE: TypeAlias = RequiresContextResult[
-    _ValueType, Exception, _EnvType,
+    _ValueType,
+    Exception,
+    _EnvType,
 ]
