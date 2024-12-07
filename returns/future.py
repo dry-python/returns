@@ -795,7 +795,9 @@ class FutureResult(  # type: ignore[type-var]
         self,
         function: Callable[
             [_ValueType],
-            Awaitable[Kind2['FutureResult', _NewValueType, _ErrorType | _NewErrorType]],
+            Awaitable[
+                Kind2['FutureResult', _NewValueType, _ErrorType | _NewErrorType]
+            ],
         ],
     ) -> 'FutureResult[_NewValueType, _ErrorType | _NewErrorType]':
         """

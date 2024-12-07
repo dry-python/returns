@@ -13,23 +13,23 @@ if TYPE_CHECKING:
     from returns.context.requires_context import RequiresContext
 
 # Context:
-_EnvType = TypeVar("_EnvType", contravariant=True)
-_NewEnvType = TypeVar("_NewEnvType")
+_EnvType = TypeVar('_EnvType', contravariant=True)
+_NewEnvType = TypeVar('_NewEnvType')
 
 # Result:
-_ValueType = TypeVar("_ValueType", covariant=True)
-_NewValueType = TypeVar("_NewValueType")
-_ErrorType = TypeVar("_ErrorType", covariant=True)
-_NewErrorType = TypeVar("_NewErrorType")
+_ValueType = TypeVar('_ValueType', covariant=True)
+_NewValueType = TypeVar('_NewValueType')
+_ErrorType = TypeVar('_ErrorType', covariant=True)
+_NewErrorType = TypeVar('_NewErrorType')
 
 # Helpers:
-_FirstType = TypeVar("_FirstType")
+_FirstType = TypeVar('_FirstType')
 
 
 @final
 class RequiresContextResult(  # type: ignore[type-var]
     BaseContainer,
-    SupportsKind3["RequiresContextResult", _ValueType, _ErrorType, _EnvType],
+    SupportsKind3['RequiresContextResult', _ValueType, _ErrorType, _EnvType],
     reader_result.ReaderResultBasedN[_ValueType, _ErrorType, _EnvType],
 ):
     """
@@ -237,7 +237,9 @@ class RequiresContextResult(  # type: ignore[type-var]
                 _EnvType,
             ],
         ],
-    ) -> RequiresContextResult[_NewValueType, _ErrorType | _NewErrorType, _EnvType]:
+    ) -> RequiresContextResult[
+        _NewValueType, _ErrorType | _NewErrorType, _EnvType,
+    ]:
         """
         Composes this container with a function returning the same type.
 
@@ -276,9 +278,11 @@ class RequiresContextResult(  # type: ignore[type-var]
     def bind_result(
         self,
         function: Callable[
-            [_ValueType], Result[_NewValueType, _ErrorType | _NewErrorType]
+            [_ValueType], Result[_NewValueType, _ErrorType | _NewErrorType],
         ],
-    ) -> RequiresContextResult[_NewValueType, _ErrorType | _NewErrorType, _EnvType]:
+    ) -> RequiresContextResult[
+        _NewValueType, _ErrorType | _NewErrorType, _EnvType,
+    ]:
         """
         Binds ``Result`` returning function to current container.
 
