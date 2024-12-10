@@ -65,3 +65,18 @@
     from returns.result import Success
 
     reveal_type(Success(1).unwrap())  # N: Revealed type is "builtins.int"
+
+
+- case: success_bind_composite_error
+  disable_cache: false
+  main: |
+    from returns.result import Success, Result
+
+    def returns_value_error(param: int) -> Result[str, ValueError]:
+        ...
+      
+    def returns_key_error(param: str) -> Result[str, KeyError]:
+        ...
+
+    first: Result[int, Exception] = Success(1)
+    reveal_type(first.bind(returns_value_error).bind(returns_key_error))  # N: Revealed type is "returns.result.Result[builtins.str, Union[builtins.Exception, builtins.ValueError, builtins.KeyError]]"

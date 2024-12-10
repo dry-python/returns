@@ -437,9 +437,9 @@ class IOResult(  # type: ignore[type-var]
         self,
         function: Callable[
             [_ValueType],
-            Kind2['IOResult', _NewValueType, _ErrorType],
+            Kind2['IOResult', _NewValueType, _ErrorType | _NewErrorType],
         ],
-    ) -> 'IOResult[_NewValueType, _ErrorType]':
+    ) -> 'IOResult[_NewValueType, _ErrorType | _NewErrorType]':
         """
         Composes successful container with a function that returns a container.
 
@@ -464,9 +464,9 @@ class IOResult(  # type: ignore[type-var]
         self,
         function: Callable[
             [_ValueType],
-            Result[_NewValueType, _ErrorType],
+            Result[_NewValueType, _ErrorType | _NewErrorType],
         ],
-    ) -> 'IOResult[_NewValueType, _ErrorType]':
+    ) -> 'IOResult[_NewValueType, _ErrorType | _NewErrorType]':
         """
         Composes successful container with a function that returns a container.
 
