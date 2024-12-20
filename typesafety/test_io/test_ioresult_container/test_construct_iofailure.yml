@@ -24,3 +24,17 @@
     from returns.io import IOFailure
 
     reveal_type(IOFailure(1).failure())  # N: Revealed type is "returns.io.IO[builtins.int]"
+
+
+- case: iofailure_bind_composite_error
+  disable_cache: false
+  main: |
+    from returns.io import IOFailure, IOResult
+
+    def returns_value_error(value: int) -> IOResult[str, ValueError]:
+        ...
+    def returns_key_error(value: str) -> IOResult[bool, KeyError]:
+        ...
+
+    result = IOFailure(0).bind(returns_value_error).bind(returns_key_error)
+    reveal_type(result)  # N: Revealed type is "returns.io.IOResult[builtins.bool, Union[builtins.int, builtins.ValueError, builtins.KeyError]]"

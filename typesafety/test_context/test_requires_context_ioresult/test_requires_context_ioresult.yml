@@ -164,3 +164,19 @@
 
     first: RequiresContextIOResult[float, bool, int]
     reveal_type(first.modify_env(int)('1'))  # N: Revealed type is "returns.io.IOResult[builtins.float, builtins.bool]"
+
+
+- case: requires_context_ioresult_bind_composite_error
+  disable_cache: false
+  main: |
+    from returns.context import RequiresContextIOResult
+
+    x: RequiresContextIOResult[int, float, str]
+
+    def first_function(param: int) -> RequiresContextIOResult[bool, ValueError, str]:
+        ...
+
+    def second_function(param: bool) -> RequiresContextIOResult[bool, KeyError, str]:
+        ...
+
+    reveal_type(x.bind(first_function).bind(second_function))  # N: Revealed type is "returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.bool, Union[builtins.float, builtins.ValueError, builtins.KeyError], builtins.str]"

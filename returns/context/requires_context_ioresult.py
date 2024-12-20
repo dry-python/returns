@@ -249,11 +249,13 @@ class RequiresContextIOResult(  # type: ignore[type-var]
             Kind3[
                 RequiresContextIOResult,
                 _NewValueType,
-                _ErrorType,
+                _ErrorType | _NewErrorType,
                 _EnvType,
             ],
         ],
-    ) -> RequiresContextIOResult[_NewValueType, _ErrorType, _EnvType]:
+    ) -> RequiresContextIOResult[
+        _NewValueType, _ErrorType | _NewErrorType, _EnvType,
+    ]:
         """
         Composes this container with a function returning the same type.
 
@@ -293,8 +295,12 @@ class RequiresContextIOResult(  # type: ignore[type-var]
 
     def bind_result(
         self,
-        function: Callable[[_ValueType], Result[_NewValueType, _ErrorType]],
-    ) -> RequiresContextIOResult[_NewValueType, _ErrorType, _EnvType]:
+        function: Callable[
+            [_ValueType], Result[_NewValueType, _ErrorType | _NewErrorType],
+        ],
+    ) -> RequiresContextIOResult[
+        _NewValueType, _ErrorType | _NewErrorType, _EnvType,
+    ]:
         """
         Binds ``Result`` returning function to the current container.
 

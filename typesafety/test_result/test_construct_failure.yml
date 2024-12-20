@@ -24,3 +24,18 @@
     from returns.result import Failure
 
     reveal_type(Failure(1).failure())  # N: Revealed type is "builtins.int"
+
+
+- case: failure_bind_composite_error
+  disable_cache: false
+  main: |
+    from returns.result import Failure, Result
+
+    def returns_value_error(value: int) -> Result[str, ValueError]:
+        ...
+
+    def second_function(value: str) -> Result[bool, KeyError]:
+        ...
+
+    result = Failure(0).bind(returns_value_error).bind(second_function)
+    reveal_type(result)  # N: Revealed type is "returns.result.Result[builtins.bool, Union[builtins.int, builtins.ValueError, builtins.KeyError]]"

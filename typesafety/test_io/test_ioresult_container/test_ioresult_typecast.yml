@@ -91,7 +91,7 @@
 
     first: IOResult[int, Exception]
     second = first.bind(test)
-    reveal_type(second)  # N: Revealed type is "returns.io.IOResult[builtins.int, builtins.Exception]"
+    reveal_type(second)  # N: Revealed type is "returns.io.IOResult[builtins.int, Union[builtins.Exception, builtins.ValueError]]"
 
 
 - case: ioresult_correct_usage
