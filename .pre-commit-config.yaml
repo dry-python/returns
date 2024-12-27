@@ -10,10 +10,6 @@ repos:
       - id: mixed-line-ending
         args: [--fix=lf]
       - id: check-case-conflict
-  - repo: https://github.com/google/yamlfmt
-    rev: v0.14.0
-    hooks:
-      - id: yamlfmt
   - repo: https://github.com/python-jsonschema/check-jsonschema
     rev: 0.30.0
     hooks:
