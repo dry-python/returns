@@ -1,3 +1,8 @@
+[build-system]
+build-backend = "poetry.core.masonry.api"
+
+requires = [ "poetry-core>=1.9" ]
+
 [tool.poetry]
 name = "returns"
 version = "0.24.0"
@@ -5,7 +10,7 @@ description = "Make your functions return something meaningful, typed, and safe!
 license = "BSD-3-Clause"
 
 authors = [
-  "sobolevn <mail@sobolevn.me>"
+  "sobolevn <mail@sobolevn.me>",
 ]
 
 readme = "README.md"
@@ -22,7 +27,7 @@ keywords = [
   "composition",
   "type-safety",
   "mypy",
-  "railway-oriented-programming"
+  "railway-oriented-programming",
 ]
 
 classifiers = [
@@ -32,7 +37,7 @@ classifiers = [
   "Framework :: Hypothesis",
   "Topic :: Software Development :: Libraries :: Python Modules",
   "Topic :: Utilities",
-  "Typing :: Typed"
+  "Typing :: Typed",
 ]
 
 [tool.poetry.urls]
@@ -44,14 +49,13 @@ returns = "returns.contrib.pytest.plugin"
 [tool.poetry.plugins.hypothesis]
 _ = "returns.contrib.hypothesis._entrypoint:_setup_hook"
 
-
 [tool.poetry.dependencies]
 python = "^3.10"
 
 typing-extensions = ">=4.0,<5.0"
 pytest = { version = "^8.0", optional = true }
 hypothesis = { version = "^6.122", optional = true }
-mypy = {version = ">=1.12,<1.15", optional = true}
+mypy = { version = ">=1.12,<1.15", optional = true }
 
 [tool.poetry.group.dev.dependencies]
 anyio = "^4.3"
@@ -71,7 +75,6 @@ pytest-subtests = "^0.14"
 pytest-shard = "^0.1"
 covdefaults = "^2.3"
 
-
 [tool.poetry.group.docs]
 optional = true
 
@@ -85,22 +88,8 @@ myst-parser = "^4.0"
 tomli = "^2.0"
 
 [tool.poetry.extras]
-compatible-mypy = ["mypy"]
-check-laws = ["pytest", "hypothesis"]
-
-
-[build-system]
-requires = ["poetry-core>=1.9.0"]
-build-backend = "poetry.core.masonry.api"
-
-
-[tool.slotscheck]
-strict-imports = true
-require-subclass = true
-require-superclass = true
-exclude-modules = 'returns\.contrib\.'
-exclude-classes = 'returns\.primitives\.exceptions:UnwrapFailedError'
-
+compatible-mypy = [ "mypy" ]
+check-laws = [ "pytest", "hypothesis" ]
 
 [tool.ruff]
 # Ruff config: https://docs.astral.sh/ruff/settings
@@ -141,8 +130,8 @@ lint.select = [
   "PIE",  # flake8-pie
   "PL",   # pylint
   "PT",   # flake8-pytest-style
-  "PYI",  # flake8-pyi
   "PTH",  # flake8-use-pathlib
+  "PYI",  # flake8-pyi
   "Q",    # flake8-quotes
   "RET",  # flake8-return
   "RSE",  # flake8-raise
@@ -176,38 +165,41 @@ lint.ignore = [
   "PLR6301", # do not require classmethod / staticmethod when self not used
   "TRY003",  # long exception messages from `tryceratops`
 ]
+lint.per-file-ignores."*.pyi" = [ "D103" ]
+lint.per-file-ignores."returns/context/__init__.py" = [ "F401", "PLC0414" ]
+lint.per-file-ignores."returns/contrib/mypy/*.py" = [ "S101" ]
+lint.per-file-ignores."returns/contrib/mypy/_typeops/visitor.py" = [ "S101" ]
+lint.per-file-ignores."returns/contrib/pytest/__init__.py" = [ "F401", "PLC0414" ]
+lint.per-file-ignores."returns/interfaces/*.py" = [ "S101" ]
+lint.per-file-ignores."returns/methods/__init__.py" = [ "F401", "PLC0414" ]
+lint.per-file-ignores."returns/pipeline.py" = [ "F401", "PLC0414" ]
+lint.per-file-ignores."returns/pointfree/__init__.py" = [ "F401", "PLC0414" ]
+lint.per-file-ignores."returns/primitives/asserts.py" = [ "S101" ]
+lint.per-file-ignores."tests/*.py" = [
+  "RUF029", # allow async functions to not use `await`
+  "S101",   # asserts
+  "S105",   # hardcoded passwords
+  "S404",   # subprocess calls are for tests
+  "S603",   # do not require `shell=True`
+  "S607",   # partial executable paths
+]
+lint.per-file-ignores."tests/test_examples/*" = [ "D102" ]
+lint.per-file-ignores."tests/test_examples/test_maybe/test_maybe_pattern_matching.py" = [
+  "D101",
+  "D103",
+  "F811",
+]
+lint.per-file-ignores."tests/test_examples/test_result/test_result_pattern_matching.py" = [ "D103" ]
+lint.per-file-ignores."tests/test_pattern_matching.py" = [ "S101" ]
 lint.external = [ "WPS" ]
 lint.flake8-quotes.inline-quotes = "single"
 lint.mccabe.max-complexity = 6
+lint.pep8-naming.staticmethod-decorators = [ "law_definition", "staticmethod" ]
 lint.pydocstyle.convention = "google"
 
-[tool.ruff.lint.per-file-ignores]
-"returns/context/__init__.py" = ["F401", "PLC0414"]
-"returns/primitives/asserts.py" = ["S101"]
-"returns/methods/__init__.py" = ["F401", "PLC0414"]
-"returns/contrib/mypy/_typeops/visitor.py" = ["S101"]
-"returns/pointfree/__init__.py" = ["F401", "PLC0414"]
-"returns/contrib/pytest/__init__.py" = ["F401", "PLC0414"]
-"returns/pipeline.py" = ["F401", "PLC0414"]
-"returns/contrib/mypy/*.py" = ["S101"]
-"returns/interfaces/*.py" = ["S101"]
-"*.pyi" = ["D103"]
-"tests/test_pattern_matching.py" = ["S101"]
-"tests/test_examples/test_maybe/test_maybe_pattern_matching.py" = [
-    "D101",
-    "D103",
-    "F811",
-]
-"tests/test_examples/*" = ["D102"]
-"tests/test_examples/test_result/test_result_pattern_matching.py" = ["D103"]
-"tests/*.py" = [
-  "S101", # asserts
-  "S105", # hardcoded passwords
-  "S404", # subprocess calls are for tests
-  "S603", # do not require `shell=True`
-  "S607", # partial executable paths
-  "RUF029",  # allow async functions to not use `await`
-]
-
-[tool.ruff.lint.pep8-naming]
-staticmethod-decorators = ["staticmethod", "law_definition"]
+[tool.slotscheck]
+strict-imports = true
+require-subclass = true
+require-superclass = true
+exclude-modules = 'returns\.contrib\.'
+exclude-classes = 'returns\.primitives\.exceptions:UnwrapFailedError'
