@@ -10,24 +10,25 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 
-import os
+import pathlib
 import sys
 
 import tomli
 
-sys.path.insert(0, os.path.abspath('..'))
+sys.path.insert(0, str(pathlib.Path('..').resolve()))
 
 
 # -- Project information -----------------------------------------------------
 
+
 def _get_project_meta():
-    with open('../pyproject.toml', mode='rb') as pyproject:
+    with pathlib.Path('../pyproject.toml').open(mode='rb') as pyproject:
         return tomli.load(pyproject)['tool']['poetry']
 
 
 pkg_meta = _get_project_meta()
 project = str(pkg_meta['name'])
-copyright = '2019, dry-python team'  # noqa: WPS125
+copyright = '2019, dry-python team'  # noqa: A001
 author = 'dry-python team'
 
 # The short X.Y version
@@ -49,13 +50,10 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx.ext.autosummary',
     'sphinx.ext.napoleon',
-
     # Used to include .md files:
     'myst_parser',
-
     # Used to insert typehints into the final docs:
     'sphinx_autodoc_typehints',
-
     # Used to build graphs:
     'sphinxcontrib.mermaid',
 ]

@@ -18,7 +18,10 @@ def unify(  # noqa: WPS234
     function: Callable[
         [_FirstType],
         KindN[
-            _DiverseFailableKind, _NewFirstType, _NewSecondType, _NewThirdType,
+            _DiverseFailableKind,
+            _NewFirstType,
+            _NewSecondType,
+            _NewThirdType,
         ],
     ],
 ) -> Kinded[
@@ -56,10 +59,14 @@ def unify(  # noqa: WPS234
       >>> assert unify(bindable)(Failure(42)) == Failure(42)
 
     """
+
     @kinded
     def factory(
         container: KindN[
-            _DiverseFailableKind, _FirstType, _SecondType, _ThirdType,
+            _DiverseFailableKind,
+            _FirstType,
+            _SecondType,
+            _ThirdType,
         ],
     ) -> KindN[
         _DiverseFailableKind,
@@ -68,4 +75,5 @@ def unify(  # noqa: WPS234
         _NewThirdType,
     ]:
         return container.bind(function)  # type: ignore
+
     return factory

@@ -1,4 +1,4 @@
-from abc import ABCMeta
+from abc import ABC
 from typing import Any, TypeVar
 
 from typing_extensions import TypedDict
@@ -23,7 +23,7 @@ class _PickleState(TypedDict):
     container_value: Any
 
 
-class BaseContainer(Immutable, metaclass=ABCMeta):
+class BaseContainer(Immutable, ABC):
     """Utility class to provide all needed magic methods to the context."""
 
     __slots__ = ('_inner_value',)
@@ -35,16 +35,16 @@ class BaseContainer(Immutable, metaclass=ABCMeta):
 
         'value' is any arbitrary value of any type including functions.
         """
-        object.__setattr__(self, '_inner_value', inner_value)  # noqa: WPS609
+        object.__setattr__(self, '_inner_value', inner_value)
 
     def __repr__(self) -> str:
         """Used to display details of object."""
-        return '<{0}: {1}>'.format(
+        return '<{}: {}>'.format(
             self.__class__.__qualname__.strip('_'),
             str(self._inner_value),
         )
 
-    def __eq__(self, other: Any) -> bool:
+    def __eq__(self, other: object) -> bool:
         """Used to compare two 'Container' objects."""
         return container_equality(self, other)  # type: ignore
 
@@ -59,12 +59,14 @@ class BaseContainer(Immutable, metaclass=ABCMeta):
     def __setstate__(self, state: _PickleState | Any) -> None:
         """Loading state from pickled data."""
         if isinstance(state, dict) and 'container_value' in state:
-            object.__setattr__(  # noqa: WPS609
-                self, '_inner_value', state['container_value'],
+            object.__setattr__(
+                self,
+                '_inner_value',
+                state['container_value'],
             )
         else:
             # backward compatibility with 0.19.0 and earlier
-            object.__setattr__(self, '_inner_value', state)  # noqa: WPS609
+            object.__setattr__(self, '_inner_value', state)
 
 
 def container_equality(
@@ -79,5 +81,5 @@ def container_equality(
     if type(self) != type(other):  # noqa: WPS516, E721
         return False
     return bool(
-        self._inner_value == other._inner_value,  # type: ignore # noqa: WPS437
+        self._inner_value == other._inner_value,  # type: ignore # noqa: SLF001
     )

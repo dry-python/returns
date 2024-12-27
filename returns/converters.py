@@ -74,16 +74,14 @@ def result_to_maybe(
 @overload
 def maybe_to_result(
     maybe_container: Maybe[_FirstType],
-) -> Result[_FirstType, None]:
-    """No default case."""
+) -> Result[_FirstType, None]: ...
 
 
 @overload
 def maybe_to_result(
     maybe_container: Maybe[_FirstType],
     default_error: _SecondType,
-) -> Result[_FirstType, _SecondType]:
-    """Default value case."""
+) -> Result[_FirstType, _SecondType]: ...
 
 
 def maybe_to_result(

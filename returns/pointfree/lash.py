@@ -17,10 +17,12 @@ def lash(
         [_SecondType],
         KindN[_LashableKind, _FirstType, _UpdatedType, _ThirdType],
     ],
-) -> Kinded[Callable[
-    [KindN[_LashableKind, _FirstType, _SecondType, _ThirdType]],
-    KindN[_LashableKind, _FirstType, _UpdatedType, _ThirdType],
-]]:
+) -> Kinded[
+    Callable[
+        [KindN[_LashableKind, _FirstType, _SecondType, _ThirdType]],
+        KindN[_LashableKind, _FirstType, _UpdatedType, _ThirdType],
+    ]
+]:
     """
     Turns function's input parameter from a regular value to a container.
 
@@ -49,9 +51,11 @@ def lash(
     See :class:`returns.interfaces.lashable.Lashable` for more info.
 
     """
+
     @kinded
     def factory(
         container: KindN[_LashableKind, _FirstType, _SecondType, _ThirdType],
     ) -> KindN[_LashableKind, _FirstType, _UpdatedType, _ThirdType]:
         return container.lash(function)
+
     return factory

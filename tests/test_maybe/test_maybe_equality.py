@@ -2,7 +2,7 @@ from copy import copy, deepcopy
 
 import pytest
 
-from returns.maybe import Nothing, Some, _Nothing
+from returns.maybe import Nothing, Some, _Nothing  # noqa: PLC2701
 from returns.primitives.exceptions import ImmutableStateError
 
 
@@ -23,7 +23,7 @@ def test_not_equals():
 
 def test_equality():
     """Ensures that containers can be compared."""
-    assert Nothing is Nothing  # noqa: WPS312
+    assert Nothing is Nothing  # noqa: PLR0124, WPS312
     assert Nothing == _Nothing() == _Nothing(None)
     assert Some(5) == Some(5)
     assert hash(Some(1))
@@ -50,31 +50,31 @@ def test_is_compare():
 def test_immutability_failure():
     """Ensures that Failure container is immutable."""
     with pytest.raises(ImmutableStateError):
-        Nothing._inner_state = 1  # noqa: WPS437
+        Nothing._inner_state = 1  # noqa: SLF001
 
     with pytest.raises(ImmutableStateError):
         Nothing.missing = 2
 
     with pytest.raises(ImmutableStateError):
-        del Nothing._inner_state  # type: ignore # noqa: WPS420, WPS437
+        del Nothing._inner_state  # type: ignore # noqa: SLF001, WPS420
 
     with pytest.raises(AttributeError):
-        Nothing.missing  # type: ignore # noqa: WPS428
+        Nothing.missing  # type: ignore # noqa: B018
 
 
 def test_immutability_success():
     """Ensures that Success container is immutable."""
     with pytest.raises(ImmutableStateError):
-        Some(0)._inner_state = 1  # noqa: WPS437
+        Some(0)._inner_state = 1  # noqa: SLF001
 
     with pytest.raises(ImmutableStateError):
         Some(1).missing = 2
 
     with pytest.raises(ImmutableStateError):
-        del Some(0)._inner_state  # type: ignore # noqa: WPS420, WPS437
+        del Some(0)._inner_state  # type: ignore # noqa: SLF001, WPS420
 
     with pytest.raises(AttributeError):
-        Some(1).missing  # type: ignore # noqa: WPS428
+        Some(1).missing  # type: ignore # noqa: B018
 
 
 def test_success_immutable_copy():

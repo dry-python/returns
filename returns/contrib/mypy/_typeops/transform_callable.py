@@ -2,9 +2,15 @@ from typing import ClassVar, final
 
 from mypy.nodes import ARG_OPT, ARG_POS, ARG_STAR, ARG_STAR2, ArgKind
 from mypy.typeops import get_type_vars
-from mypy.types import AnyType, CallableType, FunctionLike, Overloaded
+from mypy.types import (
+    AnyType,
+    CallableType,
+    FunctionLike,
+    Overloaded,
+    TypeOfAny,
+    TypeVarType,
+)
 from mypy.types import Type as MypyType
-from mypy.types import TypeOfAny, TypeVarType
 
 from returns.contrib.mypy._structures.args import FuncArg
 
@@ -50,11 +56,13 @@ class Intermediate:
 
     def with_signature(self, new_args: list[FuncArg]) -> CallableType:
         """Smartly creates a new callable from a given arguments."""
-        return detach_callable(self._case_function.copy_modified(
-            arg_names=[arg.name for arg in new_args],
-            arg_types=[arg.type for arg in new_args],
-            arg_kinds=[arg.kind for arg in new_args],
-        ))
+        return detach_callable(
+            self._case_function.copy_modified(
+                arg_names=[arg.name for arg in new_args],
+                arg_types=[arg.type for arg in new_args],
+                arg_kinds=[arg.kind for arg in new_args],
+            )
+        )
 
     def with_ret_type(self, ret_type: MypyType) -> CallableType:
         """Smartly creates a new callable from a given return type."""
@@ -64,10 +72,13 @@ class Intermediate:
         self,
         applied_args: list[FuncArg],
     ) -> list[FuncArg]:
-        callee_args = list(filter(
-            lambda name: name.name is None,  # TODO: maybe use `kind` instead?
-            applied_args,
-        ))
+        callee_args = list(
+            filter(
+                lambda name: name.name
+                is None,  # TODO: maybe use `kind` instead?
+                applied_args,
+            )
+        )
 
         new_function_args = []
         for ind, arg in enumerate(FuncArg.from_callable(self._case_function)):
@@ -79,10 +90,12 @@ class Intermediate:
         self,
         applied_args: list[FuncArg],
     ) -> list[FuncArg]:
-        callee_args = list(filter(
-            lambda name: name.name is not None,
-            applied_args,
-        ))
+        callee_args = list(
+            filter(
+                lambda name: name.name is not None,
+                applied_args,
+            )
+        )
 
         new_function_args = []
         for arg in FuncArg.from_callable(self._case_function):
@@ -117,22 +130,24 @@ class Functions:
     def diff(self) -> CallableType:
         """Finds a diff between two functions' arguments."""
         intermediate_names = [
-            arg.name
-            for arg in FuncArg.from_callable(self._intermediate)
+            arg.name for arg in FuncArg.from_callable(self._intermediate)
         ]
         new_function_args = []
 
         for index, arg in enumerate(FuncArg.from_callable(self._original)):
             should_be_copied = (
-                arg.kind in {ARG_STAR, ARG_STAR2} or
-                arg.name not in intermediate_names or
+                arg.kind in {ARG_STAR, ARG_STAR2}
+                or arg.name not in intermediate_names
+                or
                 # We need to treat unnamed args differently, because python3.8
                 # has pos_only_args, all their names are `None`.
                 # This is also true for `lambda` functions where `.name`
                 # might be missing for some reason.
                 (
-                    not arg.name and not (
-                        index < len(intermediate_names) and
+                    not arg.name
+                    and not (
+                        index < len(intermediate_names)
+                        and
                         # If this is also unnamed arg, then ignoring it.
                         not intermediate_names[index]
                     )
@@ -147,7 +162,7 @@ class Functions:
 
 # TODO: Remove this function once `mypy` order the TypeVars
 # by their appearance sequence
-def detach_callable(typ: CallableType) -> CallableType:  # noqa: C901, WPS210
+def detach_callable(typ: CallableType) -> CallableType:  # noqa: WPS210
     """
     THIS IS A COPY OF `mypy.checker.detach_callable` FUNCTION.
 
@@ -155,7 +170,7 @@ def detach_callable(typ: CallableType) -> CallableType:  # noqa: C901, WPS210
     TYPE VARIABLES!
     AS YOU CAN SEE, WE ORDER THE TYPE VARS BY THEIR APPEARANCE SEQUENCE.
     """
-    type_list = typ.arg_types + [typ.ret_type]
+    type_list = [*typ.arg_types, typ.ret_type]
 
     appear_map: dict[str, list[int]] = {}
     for idx, inner_type in enumerate(type_list):
@@ -165,9 +180,7 @@ def detach_callable(typ: CallableType) -> CallableType:  # noqa: C901, WPS210
                 appear_map[var.fullname] = []
             appear_map[var.fullname].append(idx)
 
-    used_type_var_names = set()
-    for var_name, _ in appear_map.items():
-        used_type_var_names.add(var_name)
+    used_type_var_names = appear_map.keys()
 
     all_type_vars = get_type_vars(typ)
     new_variables = []

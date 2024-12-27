@@ -17,10 +17,12 @@ def bind(
         [_FirstType],
         KindN[_BindableKind, _UpdatedType, _SecondType, _ThirdType],
     ],
-) -> Kinded[Callable[
-    [KindN[_BindableKind, _FirstType, _SecondType, _ThirdType]],
-    KindN[_BindableKind, _UpdatedType, _SecondType, _ThirdType],
-]]:
+) -> Kinded[
+    Callable[
+        [KindN[_BindableKind, _FirstType, _SecondType, _ThirdType]],
+        KindN[_BindableKind, _UpdatedType, _SecondType, _ThirdType],
+    ]
+]:
     """
     Turns function's input parameter from a regular value to a container.
 
@@ -49,9 +51,11 @@ def bind(
     See :class:`returns.primitives.interfaces.bindable.BindableN` for more info.
 
     """
+
     @kinded
     def factory(
         container: KindN[_BindableKind, _FirstType, _SecondType, _ThirdType],
     ) -> KindN[_BindableKind, _UpdatedType, _SecondType, _ThirdType]:
         return container.bind(function)
+
     return factory

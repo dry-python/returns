@@ -4,7 +4,7 @@
   main: |
     from returns.primitives.tracing import collect_traces
 
-    reveal_type(collect_traces)  # N: Revealed type is "Overload(def () -> typing.ContextManager[None], def [_FunctionType <: def (*Any, **Any) -> Any] (function: _FunctionType`-1) -> _FunctionType`-1)"
+    reveal_type(collect_traces)  # N: Revealed type is "Overload(def () -> contextlib.AbstractContextManager[None, Union[builtins.bool, None]], def [_FunctionType <: def (*Any, **Any) -> Any] (function: _FunctionType`-1) -> _FunctionType`-1)"
 
 - case: collect_traces_context_manager_return_type_two
   skip: sys.version_info[:2] >= (3, 13)
@@ -12,7 +12,7 @@
   main: |
     from returns.primitives.tracing import collect_traces
 
-    with reveal_type(collect_traces()):  # N: Revealed type is "typing.ContextManager[None]"
+    with reveal_type(collect_traces()):  # N: Revealed type is "contextlib.AbstractContextManager[None, Union[builtins.bool, None]]"
         pass
 
 - case: collect_traces_decorated_function_return_type

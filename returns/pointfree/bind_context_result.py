@@ -25,10 +25,12 @@ def bind_context_result(
         [_FirstType],
         ReaderResult[_UpdatedType, _SecondType, _ThirdType],
     ],
-) -> Kinded[Callable[
-    [KindN[_ReaderResultLikeKind, _FirstType, _SecondType, _ThirdType]],
-    KindN[_ReaderResultLikeKind, _UpdatedType, _SecondType, _ThirdType],
-]]:
+) -> Kinded[
+    Callable[
+        [KindN[_ReaderResultLikeKind, _FirstType, _SecondType, _ThirdType]],
+        KindN[_ReaderResultLikeKind, _UpdatedType, _SecondType, _ThirdType],
+    ]
+]:
     """
     Composes successful container with a function that returns a container.
 
@@ -55,6 +57,7 @@ def bind_context_result(
       ... )(...) == IOFailure('a')
 
     """
+
     @kinded
     def factory(
         container: KindN[
@@ -65,4 +68,5 @@ def bind_context_result(
         ],
     ) -> KindN[_ReaderResultLikeKind, _UpdatedType, _SecondType, _ThirdType]:
         return container.bind_context_result(function)
+
     return factory

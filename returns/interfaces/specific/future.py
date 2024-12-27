@@ -27,7 +27,6 @@ _UpdatedType = TypeVar('_UpdatedType')
 
 _FutureLikeType = TypeVar('_FutureLikeType', bound='FutureLikeN')
 _AsyncFutureType = TypeVar('_AsyncFutureType', bound='AwaitableFutureN')
-_FutureBasedType = TypeVar('_FutureBasedType', bound='FutureBasedN')
 
 
 class FutureLikeN(io.IOLikeN[_FirstType, _SecondType, _ThirdType]):
@@ -75,7 +74,7 @@ class FutureLikeN(io.IOLikeN[_FirstType, _SecondType, _ThirdType]):
     @classmethod
     @abstractmethod
     def from_future(
-        cls: type[_FutureLikeType],  # noqa: N805
+        cls: type[_FutureLikeType],
         inner_value: Future[_UpdatedType],
     ) -> KindN[_FutureLikeType, _UpdatedType, _SecondType, _ThirdType]:
         """Unit method to create new containers from successful ``Future``."""
@@ -101,8 +100,12 @@ class AwaitableFutureN(Generic[_FirstType, _SecondType, _ThirdType]):
     __slots__ = ()
 
     @abstractmethod
-    def __await__(self: _AsyncFutureType) -> Generator[
-        Any, Any, io.IOLikeN[_FirstType, _SecondType, _ThirdType],
+    def __await__(
+        self: _AsyncFutureType,
+    ) -> Generator[
+        Any,
+        Any,
+        io.IOLikeN[_FirstType, _SecondType, _ThirdType],
     ]:
         """Magic method to allow ``await`` expression."""
 

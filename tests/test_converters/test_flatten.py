@@ -13,50 +13,49 @@ from returns.maybe import Nothing, Some
 from returns.result import Failure, Success
 
 
-@pytest.mark.parametrize(('container', 'merged'), [
-    # Flattens:
-    (IO(IO(1)), IO(1)),
-
-    (Success(Success({})), Success({})),
-    (IOSuccess(IOSuccess(1)), IOSuccess(1)),
-
-    (Some(Some(None)), Some(None)),
-    (Some(Some([])), Some([])),
-
-    # Nope:
-    (Nothing, Nothing),
-    (Failure(Failure('a')), Failure(Failure('a'))),
-    (Failure(Success('a')), Failure(Success('a'))),
-    (IOFailure(IOFailure('a')), IOFailure(IOFailure('a'))),
-    (IOFailure(IOSuccess('a')), IOFailure(IOSuccess('a'))),
-])
+@pytest.mark.parametrize(
+    ('container', 'merged'),
+    [
+        # Flattens:
+        (IO(IO(1)), IO(1)),
+        (Success(Success({})), Success({})),
+        (IOSuccess(IOSuccess(1)), IOSuccess(1)),
+        (Some(Some(None)), Some(None)),
+        (Some(Some([])), Some([])),
+        # Nope:
+        (Nothing, Nothing),
+        (Failure(Failure('a')), Failure(Failure('a'))),
+        (Failure(Success('a')), Failure(Success('a'))),
+        (IOFailure(IOFailure('a')), IOFailure(IOFailure('a'))),
+        (IOFailure(IOSuccess('a')), IOFailure(IOSuccess('a'))),
+    ],
+)
 def test_flatten(container, merged):
     """Ensures that `flatten` is always returning the correct type."""
     assert flatten(container) == merged
 
 
-@pytest.mark.parametrize(('container', 'merged'), [
-    (
-        RequiresContextResult.from_value(
+@pytest.mark.parametrize(
+    ('container', 'merged'),
+    [
+        (
+            RequiresContextResult.from_value(
+                RequiresContextResult.from_value(1),
+            ),
             RequiresContextResult.from_value(1),
         ),
-
-        RequiresContextResult.from_value(1),
-    ),
-
-    (
-        RequiresContextIOResult.from_value(
+        (
+            RequiresContextIOResult.from_value(
+                RequiresContextIOResult.from_value(1),
+            ),
             RequiresContextIOResult.from_value(1),
         ),
-
-        RequiresContextIOResult.from_value(1),
-    ),
-
-    (
-        RequiresContext.from_value(RequiresContext.from_value(1)),
-        RequiresContext.from_value(1),
-    ),
-])
+        (
+            RequiresContext.from_value(RequiresContext.from_value(1)),
+            RequiresContext.from_value(1),
+        ),
+    ],
+)
 def test_flatten_context(container, merged):
     """Ensures that `flatten` is always returning the correct type."""
     assert flatten(container)(...) == merged(...)
@@ -111,7 +110,7 @@ async def test_non_flatten_future(subtests):
     for cont in futures:
         with subtests.test(container=cont):
             assert isinstance(
-                (await flatten(cont)).failure()._inner_value,  # noqa: WPS437
+                (await flatten(cont)).failure()._inner_value,  # noqa: SLF001
                 cont.__class__,
             )
 
@@ -133,6 +132,6 @@ async def test_non_flatten_context_future_result(subtests):
         with subtests.test(container=cont):
             inner = await flatten(cont)(...)
             assert isinstance(
-                inner.failure()._inner_value,  # noqa: WPS437
+                inner.failure()._inner_value,  # noqa: SLF001
                 cont.__class__,
             )

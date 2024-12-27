@@ -5,9 +5,15 @@ from mypy.nodes import Expression, GeneratorExpr, TypeInfo
 from mypy.plugin import MethodContext
 from mypy.subtypes import is_subtype
 from mypy.typeops import make_simplified_union
-from mypy.types import AnyType, CallableType, Instance
+from mypy.types import (
+    AnyType,
+    CallableType,
+    Instance,
+    TypeOfAny,
+    UnionType,
+    get_proper_type,
+)
 from mypy.types import Type as MypyType
-from mypy.types import TypeOfAny, UnionType, get_proper_type
 
 _INVALID_DO_NOTATION_SOURCE: Final = (
     'Invalid type supplied in do-notation: expected "{0}", got "{1}"'

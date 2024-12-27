@@ -52,9 +52,7 @@ class SwappableN(
 
     __slots__ = ()
 
-    _laws: ClassVar[Sequence[Law]] = (
-        Law1(_LawSpec.double_swap_law),
-    )
+    _laws: ClassVar[Sequence[Law]] = (Law1(_LawSpec.double_swap_law),)
 
     @abstractmethod
     def swap(

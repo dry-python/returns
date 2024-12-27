@@ -24,24 +24,28 @@ def assert_equal(
     By the way, ``anyio`` should be installed separately.
     """
     assert _convert(
-        first, deps=deps, backend=backend,
+        first,
+        deps=deps,
+        backend=backend,
     ) == _convert(
-        second, deps=deps, backend=backend,
-    ), '{0} == {1}'.format(first, second)
+        second,
+        deps=deps,
+        backend=backend,
+    ), f'{first} == {second}'
 
 
 def _convert(container, *, deps, backend: str):
-    from returns.interfaces.specific import future, reader
+    from returns.interfaces.specific import future, reader  # noqa: PLC0415
 
     if isinstance(container, future.AwaitableFutureN):
-        import anyio
+        import anyio  # noqa: PLC0415
 
         return _convert(
             anyio.run(container.awaitable, backend=backend),
             deps=deps,
             backend=backend,
         )
-    elif isinstance(container, reader.Contextable):
+    if isinstance(container, reader.Contextable):
         return _convert(
             container(deps),
             deps=deps,

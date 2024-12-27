@@ -7,7 +7,7 @@ import pytest
 from hypothesis import given
 from hypothesis import settings as hypothesis_settings
 from hypothesis import strategies as st
-from hypothesis.strategies._internal import types
+from hypothesis.strategies._internal import types  # noqa: PLC2701
 
 from returns.contrib.hypothesis.containers import strategy_from_container
 from returns.primitives.laws import Law, Lawful
@@ -54,7 +54,7 @@ def check_all_laws(
 
     """
     settings = _Settings(
-        settings_kwargs if settings_kwargs is not None else {},
+        settings_kwargs or {},
         use_init,
     )
 
@@ -87,12 +87,8 @@ def container_strategies(
         base_type
         for base_type in container_type.__mro__
         if (
-            getattr(base_type, '__module__', '').startswith('returns.') and
-            # We don't register `Lawful` type, it is not a container:
-            base_type != Lawful and
-            # We will register the container itself later with
-            # `maybe_register_container` function:
-            base_type != container_type
+            getattr(base_type, '__module__', '').startswith('returns.')
+            and base_type not in {Lawful, container_type}
         )
     }
     for interface in our_interfaces:
@@ -108,7 +104,7 @@ def container_strategies(
         yield
     finally:
         for interface in our_interfaces:
-            types._global_type_lookup.pop(interface)
+            types._global_type_lookup.pop(interface)  # noqa: SLF001
         _clean_caches()
 
 
@@ -119,7 +115,7 @@ def register_container(
     use_init: bool,
 ) -> Iterator[None]:
     """Temporary registers a container if it is not registered yet."""
-    used = types._global_type_lookup.pop(container_type, None)
+    used = types._global_type_lookup.pop(container_type, None)  # noqa: SLF001
     st.register_type_strategy(
         container_type,
         strategy_from_container(
@@ -131,7 +127,7 @@ def register_container(
     try:
         yield
     finally:
-        types._global_type_lookup.pop(container_type)
+        types._global_type_lookup.pop(container_type)  # noqa: SLF001
         if used:
             st.register_type_strategy(container_type, used)
         else:
@@ -145,6 +141,7 @@ def pure_functions() -> Iterator[None]:
 
     It is not a default in ``hypothesis``.
     """
+
     def factory(thing) -> st.SearchStrategy:
         like = (
             (lambda: None)
@@ -155,20 +152,18 @@ def pure_functions() -> Iterator[None]:
         return st.functions(
             like=like,
             returns=st.from_type(
-                return_type
-                if return_type is not None
-                else type(None),
+                type(None) if return_type is None else return_type,
             ),
             pure=True,
         )
 
-    used = types._global_type_lookup[Callable]  # type: ignore[index]
+    used = types._global_type_lookup[Callable]  # type: ignore[index]  # noqa: SLF001
     st.register_type_strategy(Callable, factory)  # type: ignore[arg-type]
 
     try:
         yield
     finally:
-        types._global_type_lookup.pop(Callable)  # type: ignore[call-overload]
+        types._global_type_lookup.pop(Callable)  # type: ignore[call-overload]  # noqa: SLF001
         st.register_type_strategy(Callable, used)  # type: ignore[arg-type]
 
 
@@ -184,18 +179,19 @@ def type_vars() -> Iterator[None]:
        for example, ``nan`` does not work for us
 
     """
+
     def factory(thing):
         return types.resolve_TypeVar(thing).filter(
-            lambda inner: inner == inner,  # noqa: WPS312
+            lambda inner: inner == inner,  # noqa: PLR0124, WPS312
         )
 
-    used = types._global_type_lookup.pop(TypeVar)
+    used = types._global_type_lookup.pop(TypeVar)  # noqa: SLF001
     st.register_type_strategy(TypeVar, factory)
 
     try:
         yield
     finally:
-        types._global_type_lookup.pop(TypeVar)
+        types._global_type_lookup.pop(TypeVar)  # noqa: SLF001
         st.register_type_strategy(TypeVar, used)
 
 
@@ -207,13 +203,15 @@ def clean_plugin_context() -> Iterator[None]:
     Otherwise, some types might be messed up.
     """
     saved_stategies = {}
-    for strategy_key, strategy in types._global_type_lookup.items():
-        if isinstance(strategy_key, type):
-            if strategy_key.__module__.startswith('returns.'):
-                saved_stategies.update({strategy_key: strategy})
+    for strategy_key, strategy in types._global_type_lookup.items():  # noqa: SLF001
+        if isinstance(  # type: ignore[redundant-expr]
+            strategy_key,
+            type,
+        ) and strategy_key.__module__.startswith('returns.'):
+            saved_stategies.update({strategy_key: strategy})
 
     for key_to_remove in saved_stategies:
-        types._global_type_lookup.pop(key_to_remove)
+        types._global_type_lookup.pop(key_to_remove)  # noqa: SLF001
     _clean_caches()
 
     try:
@@ -224,7 +222,7 @@ def clean_plugin_context() -> Iterator[None]:
 
 
 def _clean_caches() -> None:
-    st.from_type.__clear_cache()  # type: ignore[attr-defined]
+    st.from_type.__clear_cache()  # type: ignore[attr-defined]  # noqa: SLF001
 
 
 def _run_law(
@@ -245,6 +243,7 @@ def _run_law(
                 register_container(container_type, use_init=settings.use_init),
             )
             source.draw(st.builds(law.definition))
+
     return factory
 
 

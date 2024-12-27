@@ -14,10 +14,12 @@ _AltableKind = TypeVar('_AltableKind', bound=AltableN)
 
 def alt(
     function: Callable[[_SecondType], _UpdatedType],
-) -> Kinded[Callable[
-    [KindN[_AltableKind, _FirstType, _SecondType, _ThirdType]],
-    KindN[_AltableKind, _FirstType, _UpdatedType, _ThirdType],
-]]:
+) -> Kinded[
+    Callable[
+        [KindN[_AltableKind, _FirstType, _SecondType, _ThirdType]],
+        KindN[_AltableKind, _FirstType, _UpdatedType, _ThirdType],
+    ]
+]:
     """
     Lifts function to be wrapped in a container for better composition.
 
@@ -44,9 +46,11 @@ def alt(
     See :class:`returns.primitives.interfaces.altable.AltableN` for more info.
 
     """
+
     @kinded
     def factory(
         container: KindN[_AltableKind, _FirstType, _SecondType, _ThirdType],
     ) -> KindN[_AltableKind, _FirstType, _UpdatedType, _ThirdType]:
         return container.alt(function)
+
     return factory

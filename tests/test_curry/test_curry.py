@@ -141,7 +141,7 @@ def test_arg_star_kwargs():
 
     @curry
     def factory(first: int, **kwargs: int) -> list[tuple[str, int]]:
-        return [('first', first)] + sorted(kwargs.items())
+        return [('first', first), *sorted(kwargs.items())]
 
     assert factory(1) == [('first', 1)]
     assert factory(1, arg=2) == [('first', 1), ('arg', 2)]
@@ -168,12 +168,14 @@ def test_kwonly():
 
     @curry
     def factory(*args: int, by: int) -> tuple[int, ...]:
-        return args + (by, )
+        return (*args, by)
 
     assert factory(
-        1, 2, 3,
+        1,
+        2,
+        3,
     )(by=10) == (1, 2, 3, 10)
-    assert factory(by=10) == (10, )
+    assert factory(by=10) == (10,)
 
 
 def test_raises():

@@ -46,7 +46,7 @@ class ReAwaitable:
 
     """
 
-    __slots__ = ('_coro', '_cache')
+    __slots__ = ('_cache', '_coro')
 
     def __init__(self, coro: Awaitable[_ValueType]) -> None:
         """We need just an awaitable to work with."""
@@ -77,7 +77,7 @@ class ReAwaitable:
           Hello
 
         """
-        return self._awaitable().__await__()  # noqa: WPS609
+        return self._awaitable().__await__()
 
     def __repr__(self) -> str:
         """

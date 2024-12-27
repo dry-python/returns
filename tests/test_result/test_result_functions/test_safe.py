@@ -1,4 +1,3 @@
-
 import pytest
 
 from returns.result import Success, safe

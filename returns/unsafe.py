@@ -28,4 +28,4 @@ def unsafe_perform_io(wrapped_in_io: IO[_ValueType]) -> _ValueType:
         - https://github.com/seddonym/import-linter
 
     """
-    return wrapped_in_io._inner_value  # noqa: WPS437
+    return wrapped_in_io._inner_value  # noqa: SLF001

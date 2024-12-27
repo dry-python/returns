@@ -5,6 +5,7 @@ from returns.result import Failure, Result, Success
 
 def test_bind():
     """Ensures that bind works."""
+
     def factory(inner_value: int) -> RCR[float, str, int]:
         if inner_value > 0:
             return RCR(lambda deps: Success(inner_value / deps))
@@ -15,13 +16,18 @@ def test_bind():
     assert bound.bind(factory)(2) == factory(input_value)(2)
     assert bound.bind(factory)(2) == Success(2.5)
 
-    assert RCR.from_value(0).bind(
-        factory,
-    )(2) == factory(0)(2) == Failure('0')
+    assert (
+        RCR.from_value(0).bind(
+            factory,
+        )(2)
+        == factory(0)(2)
+        == Failure('0')
+    )
 
 
 def test_bind_regular_result():
     """Ensures that regular ``Result`` can be bound."""
+
     def factory(inner_value: int) -> Result[int, str]:
         if inner_value > 0:
             return Success(inner_value + 1)
@@ -39,6 +45,7 @@ def test_bind_regular_result():
 
 def test_bind_regular_context():
     """Ensures that regular ``RequiresContext`` can be bound."""
+
     def factory(inner_value: int) -> RequiresContext[float, int]:
         return RequiresContext(lambda deps: inner_value / deps)
 
@@ -54,6 +61,7 @@ def test_bind_regular_context():
 
 def test_lash_success():
     """Ensures that lash works for Success container."""
+
     def factory(inner_value) -> RCR[int, str, int]:
         return RCR.from_value(inner_value * 2)
 
@@ -67,6 +75,7 @@ def test_lash_success():
 
 def test_lash_failure():
     """Ensures that lash works for Failure container."""
+
     def factory(inner_value) -> RCR[int, str, int]:
         return RCR.from_failure(inner_value * 2)
 

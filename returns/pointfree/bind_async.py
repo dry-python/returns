@@ -17,10 +17,12 @@ def bind_async(
         [_FirstType],
         Awaitable[KindN[_FutureKind, _UpdatedType, _SecondType, _ThirdType]],
     ],
-) -> Kinded[Callable[
-    [KindN[_FutureKind, _FirstType, _SecondType, _ThirdType]],
-    KindN[_FutureKind, _UpdatedType, _SecondType, _ThirdType],
-]]:
+) -> Kinded[
+    Callable[
+        [KindN[_FutureKind, _FirstType, _SecondType, _ThirdType]],
+        KindN[_FutureKind, _UpdatedType, _SecondType, _ThirdType],
+    ]
+]:
     """
     Compose a container and ``async`` function returning a container.
 
@@ -51,9 +53,11 @@ def bind_async(
     for more info.
 
     """
+
     @kinded
     def factory(
         container: KindN[_FutureKind, _FirstType, _SecondType, _ThirdType],
     ) -> KindN[_FutureKind, _UpdatedType, _SecondType, _ThirdType]:
         return container.bind_async(function)
+
     return factory

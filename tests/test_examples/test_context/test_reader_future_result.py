@@ -37,19 +37,23 @@ def _fetch_post(
         httpx.AsyncClient,
     ] = RequiresContextFutureResultE.ask()
 
-    return context.bind_future_result(
-        lambda client: future_safe(client.get)(_URL.format(post_id)),
-    ).bind_result(
-        safe(tap(httpx.Response.raise_for_status)),
-    ).map(
-        lambda response: cast(_Post, response.json()),  # or validate it
+    return (
+        context.bind_future_result(
+            lambda client: future_safe(client.get)(_URL.format(post_id)),
+        )
+        .bind_result(
+            safe(tap(httpx.Response.raise_for_status)),
+        )
+        .map(
+            lambda response: cast(_Post, response.json()),  # or validate it
+        )
     )
 
 
 def _show_titles(
     number_of_posts: int,
 ) -> RequiresContextFutureResultE[Sequence[str], httpx.AsyncClient]:
-    def factory(post: _Post) -> str:
+    def factory(post: _Post) -> str:  # noqa: FURB118
         return post['title']
 
     titles = [

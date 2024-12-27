@@ -158,7 +158,7 @@ class ApplicativeN(
     @classmethod
     @abstractmethod
     def from_value(
-        cls: type[_ApplicativeType],  # noqa: N805
+        cls: type[_ApplicativeType],
         inner_value: _UpdatedType,
     ) -> KindN[_ApplicativeType, _UpdatedType, _SecondType, _ThirdType]:
         """Unit method to create new containers from any raw value."""

@@ -1,8 +1,8 @@
 import types
 from collections.abc import Callable, Iterator
-from contextlib import contextmanager
+from contextlib import AbstractContextManager, contextmanager
 from inspect import FrameInfo, stack
-from typing import ContextManager, TypeVar, overload
+from typing import TypeVar, overload
 
 from returns.result import Failure
 
@@ -10,18 +10,16 @@ _FunctionType = TypeVar('_FunctionType', bound=Callable)
 
 
 @overload
-def collect_traces() -> ContextManager[None]:
-    """Context Manager to active traces collect to the Failures."""
+def collect_traces() -> AbstractContextManager[None]: ...
 
 
 @overload
-def collect_traces(function: _FunctionType) -> _FunctionType:
-    """Decorator to active traces collect to the Failures."""
+def collect_traces(function: _FunctionType) -> _FunctionType: ...
 
 
 def collect_traces(
     function: _FunctionType | None = None,
-) -> _FunctionType | ContextManager[None]:  # noqa: DAR101, DAR201, DAR301
+) -> _FunctionType | AbstractContextManager[None]:
     """
     Context Manager/Decorator to active traces collect to the Failures.
 
@@ -39,7 +37,10 @@ def collect_traces(
 
         >>> assert non_traced_failure.trace is None
         >>> assert isinstance(traced_failure.trace, list)
-        >>> assert all(isinstance(trace_line, FrameInfo) for trace_line in traced_failure.trace)
+        >>> assert all(
+        ...     isinstance(trace_line, FrameInfo)
+        ...     for trace_line in traced_failure.trace
+        ... )
 
         >>> for trace_line in traced_failure.trace:
         ...     print(  # doctest: +SKIP
@@ -56,6 +57,7 @@ def collect_traces(
         # doctest: # noqa: DAR301, E501
 
     """
+
     @contextmanager
     def factory() -> Iterator[None]:
         unpatched_get_trace = getattr(Failure, '_get_trace')  # noqa: B009
@@ -65,6 +67,7 @@ def collect_traces(
             yield
         finally:
             setattr(Failure, '_get_trace', unpatched_get_trace)  # noqa: B010
+
     return factory()(function) if function else factory()
 
 

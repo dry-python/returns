@@ -26,10 +26,13 @@ def test_io_str():
     assert str(IO([])) == '<IO: []>'
 
 
-@pytest.mark.parametrize('container', [
-    IOSuccess(1),
-    IOFailure(1),
-])
+@pytest.mark.parametrize(
+    'container',
+    [
+        IOSuccess(1),
+        IOFailure(1),
+    ],
+)
 def test_io_typecast_reverse(container):
     """Ensures that IO can be casted to IOResult and back."""
     assert IO.from_ioresult(container) == IO.from_ioresult(

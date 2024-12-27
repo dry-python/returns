@@ -25,10 +25,12 @@ def bind_context_ioresult(
         [_FirstType],
         ReaderIOResult[_UpdatedType, _SecondType, _ThirdType],
     ],
-) -> Kinded[Callable[
-    [KindN[_ReaderIOResultLikeKind, _FirstType, _SecondType, _ThirdType]],
-    KindN[_ReaderIOResultLikeKind, _UpdatedType, _SecondType, _ThirdType],
-]]:
+) -> Kinded[
+    Callable[
+        [KindN[_ReaderIOResultLikeKind, _FirstType, _SecondType, _ThirdType]],
+        KindN[_ReaderIOResultLikeKind, _UpdatedType, _SecondType, _ThirdType],
+    ]
+]:
     """
     Lifts function from ``RequiresContextIOResult`` for better composition.
 
@@ -61,6 +63,7 @@ def bind_context_ioresult(
       ... )('abc').awaitable) == IOFailure(0)
 
     """
+
     @kinded
     def factory(
         container: KindN[
@@ -71,4 +74,5 @@ def bind_context_ioresult(
         ],
     ) -> KindN[_ReaderIOResultLikeKind, _UpdatedType, _SecondType, _ThirdType]:
         return container.bind_context_ioresult(function)
+
     return factory

@@ -20,27 +20,29 @@ _Inst = TypeVar('_Inst', bound='Lawful')
 
 
 def _setup_hook() -> None:
-    from hypothesis import strategies as st
+    from hypothesis import strategies as st  # noqa: PLC0415
 
-    from returns.context import (
+    from returns.context import (  # noqa: PLC0415
         RequiresContext,
         RequiresContextFutureResult,
         RequiresContextIOResult,
         RequiresContextResult,
     )
-    from returns.future import Future, FutureResult
-    from returns.io import IO, IOResult
-    from returns.maybe import Maybe
-    from returns.result import Result
+    from returns.future import Future, FutureResult  # noqa: PLC0415
+    from returns.io import IO, IOResult  # noqa: PLC0415
+    from returns.maybe import Maybe  # noqa: PLC0415
+    from returns.result import Result  # noqa: PLC0415
 
     def factory(
         container_type: type[_Inst],
     ) -> Callable[[Any], st.SearchStrategy[_Inst]]:
         def decorator(thing: Any) -> st.SearchStrategy[_Inst]:
-            from returns.contrib.hypothesis.containers import (
+            from returns.contrib.hypothesis.containers import (  # noqa: PLC0415
                 strategy_from_container,
             )
+
             return strategy_from_container(container_type)(thing)
+
         return decorator
 
     #: Our types that we register in hypothesis

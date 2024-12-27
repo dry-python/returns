@@ -36,13 +36,23 @@ Here's when it works:
   >>> assert pipeline(0) == 'not bigger'  # `signature and `infer` again
 
 """
+
 from collections.abc import Callable
 
 from mypy.nodes import ARG_POS
 from mypy.plugin import FunctionContext, MethodContext, MethodSigContext
-from mypy.types import AnyType, CallableType, FunctionLike, Instance, ProperType
+from mypy.types import (
+    AnyType,
+    CallableType,
+    FunctionLike,
+    Instance,
+    ProperType,
+    TypeOfAny,
+    UnionType,
+    get_proper_type,
+    get_proper_types,
+)
 from mypy.types import Type as MypyType
-from mypy.types import TypeOfAny, UnionType, get_proper_type, get_proper_types
 
 from returns.contrib.mypy._typeops.analtype import translate_to_function
 from returns.contrib.mypy._typeops.inference import PipelineInference
@@ -109,10 +119,7 @@ def _unify_type(
     function: FunctionLike,
     fetch_type: Callable[[CallableType], MypyType],
 ) -> MypyType:
-    return UnionType.make_union([
-        fetch_type(case)
-        for case in function.items
-    ])
+    return UnionType.make_union([fetch_type(case) for case in function.items])
 
 
 def _get_pipeline_def(
