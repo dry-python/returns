@@ -62,13 +62,14 @@ httpx = "^0.28"
 wemake-python-styleguide = "^1.0"
 codespell = "^2.2"
 slotscheck = "^0.19"
+ruff = "^0.8"
 
 pytest-cov = "^6.0"
 pytest-randomly = "^3.12"
 pytest-mypy-plugins = "^3.1"
 pytest-subtests = "^0.14"
 pytest-shard = "^0.1"
-ruff = "^0.8"
+covdefaults = "^2.3"
 
 
 [tool.poetry.group.docs]

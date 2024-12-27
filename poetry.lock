@@ -321,6 +321,20 @@ files = [
 ]
 
 [[package]]
+name = "covdefaults"
+version = "2.3.0"
+description = "A coverage plugin to provide sensible default settings"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "covdefaults-2.3.0-py2.py3-none-any.whl", hash = "sha256:2832961f6ffcfe4b57c338bc3418a3526f495c26fb9c54565409c5532f7c41be"},
+    {file = "covdefaults-2.3.0.tar.gz", hash = "sha256:4e99f679f12d792bc62e5510fa3eb59546ed47bd569e36e4fddc4081c9c3ebf7"},
+]
+
+[package.dependencies]
+coverage = ">=6.0.2"
+
+[[package]]
 name = "coverage"
 version = "7.6.10"
 description = "Code coverage measurement for Python"
@@ -1765,4 +1779,4 @@ compatible-mypy = ["mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "c4273c1fdc7d3a2dccc5e9210c9a6fb8879457c9e86a4ee50c10f74dc646cb34"
+content-hash = "22381bbeead975745a658ce171ac3daae3209e9a3607a481637bcdaf5562f8ab"
