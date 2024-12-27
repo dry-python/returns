@@ -1,5 +1,4 @@
-import asyncio
-
+import anyio
 import pytest
 
 from returns.future import FutureResult, future_safe
@@ -9,21 +8,21 @@ from returns.io import IOFailure, IOSuccess
 @future_safe
 async def _coro(arg: int) -> float:
     assert isinstance(arg, int)
-    await asyncio.sleep(0)
+    await anyio.sleep(0)
     return 1 / arg
 
 
 @future_safe(exceptions=(ZeroDivisionError,))
 async def _coro_two(arg: int) -> float:
     assert isinstance(arg, int)
-    await asyncio.sleep(0)
+    await anyio.sleep(0)
     return 1 / arg
 
 
 @future_safe((ZeroDivisionError,))
 async def _coro_three(arg: int | str) -> float:
     assert isinstance(arg, int)
-    await asyncio.sleep(0)
+    await anyio.sleep(0)
     return 1 / arg
 
 
