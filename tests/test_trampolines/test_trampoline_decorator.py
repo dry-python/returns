@@ -28,18 +28,24 @@ def _with_func_kwarg(
     return Trampoline(_with_func_kwarg, numbers, func=func + number)
 
 
-@pytest.mark.parametrize('trampoline_func', [
-    _accumulate,
-    _with_func_kwarg,
-])
-@pytest.mark.parametrize('given_range', [
-    range(0),
-    range(1),
-    range(2),
-    range(5),
-    range(sys.getrecursionlimit()),
-    range(sys.getrecursionlimit() + 1),
-])
+@pytest.mark.parametrize(
+    'trampoline_func',
+    [
+        _accumulate,
+        _with_func_kwarg,
+    ],
+)
+@pytest.mark.parametrize(
+    'given_range',
+    [
+        range(0),
+        range(1),
+        range(2),
+        range(5),
+        range(sys.getrecursionlimit()),
+        range(sys.getrecursionlimit() + 1),
+    ],
+)
 def test_recursion_limit(
     trampoline_func: Callable[[Iterator[int]], int],
     given_range: range,

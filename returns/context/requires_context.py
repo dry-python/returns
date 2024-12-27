@@ -23,9 +23,9 @@ if TYPE_CHECKING:
     from returns.context.requires_context_result import RequiresContextResult
 
 # Context:
-_EnvType = TypeVar('_EnvType', contravariant=True)
+_EnvType_contra = TypeVar('_EnvType_contra', contravariant=True)
 _NewEnvType = TypeVar('_NewEnvType')
-_ReturnType = TypeVar('_ReturnType', covariant=True)
+_ReturnType_co = TypeVar('_ReturnType_co', covariant=True)
 _NewReturnType = TypeVar('_NewReturnType')
 
 _ValueType = TypeVar('_ValueType')
@@ -43,8 +43,8 @@ NoDeps = Any
 @final
 class RequiresContext(  # type: ignore[type-var]
     BaseContainer,
-    SupportsKind2['RequiresContext', _ReturnType, _EnvType],
-    reader.ReaderBased2[_ReturnType, _EnvType],
+    SupportsKind2['RequiresContext', _ReturnType_co, _EnvType_contra],
+    reader.ReaderBased2[_ReturnType_co, _EnvType_contra],
 ):
     """
     The ``RequiresContext`` container.
@@ -79,14 +79,14 @@ class RequiresContext(  # type: ignore[type-var]
     __slots__ = ()
 
     #: This field has an extra 'RequiresContext' just because `mypy` needs it.
-    _inner_value: Callable[[_EnvType], _ReturnType]
+    _inner_value: Callable[[_EnvType_contra], _ReturnType_co]
 
     #: A convenient placeholder to call methods created by `.from_value()`:
     no_args: ClassVar[NoDeps] = object()
 
     def __init__(
         self,
-        inner_value: Callable[[_EnvType], _ReturnType],
+        inner_value: Callable[[_EnvType_contra], _ReturnType_co],
     ) -> None:
         """
         Public constructor for this type. Also required for typing.
@@ -102,7 +102,7 @@ class RequiresContext(  # type: ignore[type-var]
         """
         super().__init__(inner_value)
 
-    def __call__(self, deps: _EnvType) -> _ReturnType:
+    def __call__(self, deps: _EnvType_contra) -> _ReturnType_co:
         """
         Evaluates the wrapped function.
 
@@ -127,8 +127,9 @@ class RequiresContext(  # type: ignore[type-var]
         return self._inner_value(deps)
 
     def map(
-        self, function: Callable[[_ReturnType], _NewReturnType],
-    ) -> RequiresContext[_NewReturnType, _EnvType]:
+        self,
+        function: Callable[[_ReturnType_co], _NewReturnType],
+    ) -> RequiresContext[_NewReturnType, _EnvType_contra]:
         """
         Allows to compose functions inside the wrapped container.
 
@@ -153,10 +154,10 @@ class RequiresContext(  # type: ignore[type-var]
         self,
         container: Kind2[
             RequiresContext,
-            Callable[[_ReturnType], _NewReturnType],
-            _EnvType,
+            Callable[[_ReturnType_co], _NewReturnType],
+            _EnvType_contra,
         ],
-    ) -> RequiresContext[_NewReturnType, _EnvType]:
+    ) -> RequiresContext[_NewReturnType, _EnvType_contra]:
         """
         Calls a wrapped function in a container on this container.
 
@@ -175,10 +176,10 @@ class RequiresContext(  # type: ignore[type-var]
     def bind(
         self,
         function: Callable[
-            [_ReturnType],
-            Kind2[RequiresContext, _NewReturnType, _EnvType],
+            [_ReturnType_co],
+            Kind2[RequiresContext, _NewReturnType, _EnvType_contra],
         ],
-    ) -> RequiresContext[_NewReturnType, _EnvType]:
+    ) -> RequiresContext[_NewReturnType, _EnvType_contra]:
         """
         Composes a container with a function returning another container.
 
@@ -212,8 +213,8 @@ class RequiresContext(  # type: ignore[type-var]
 
     def modify_env(
         self,
-        function: Callable[[_NewEnvType], _EnvType],
-    ) -> RequiresContext[_ReturnType, _NewEnvType]:
+        function: Callable[[_NewEnvType], _EnvType_contra],
+    ) -> RequiresContext[_ReturnType_co, _NewEnvType]:
         """
         Allows to modify the environment type.
 
@@ -230,7 +231,7 @@ class RequiresContext(  # type: ignore[type-var]
         return RequiresContext(lambda deps: self(function(deps)))
 
     @classmethod
-    def ask(cls) -> RequiresContext[_EnvType, _EnvType]:
+    def ask(cls) -> RequiresContext[_EnvType_contra, _EnvType_contra]:
         """
         Get current context to use the dependencies.
 
@@ -308,12 +309,13 @@ class RequiresContext(  # type: ignore[type-var]
         See also:
             - https://dev.to/gcanti/getting-started-with-fp-ts-reader-1ie5
 
-        """  # noqa: F811
+        """
         return RequiresContext(identity)
 
     @classmethod
     def from_value(
-        cls, inner_value: _FirstType,
+        cls,
+        inner_value: _FirstType,
     ) -> RequiresContext[_FirstType, NoDeps]:
         """
         Used to return some specific value from the container.
@@ -335,7 +337,8 @@ class RequiresContext(  # type: ignore[type-var]
 
     @classmethod
     def from_context(
-        cls, inner_value: RequiresContext[_NewReturnType, _NewEnvType],
+        cls,
+        inner_value: RequiresContext[_NewReturnType, _NewEnvType],
     ) -> RequiresContext[_NewReturnType, _NewEnvType]:
         """
         Used to create new containers from existing ones.
@@ -354,8 +357,10 @@ class RequiresContext(  # type: ignore[type-var]
     @classmethod
     def from_requires_context_result(
         cls,
-        inner_value: RequiresContextResult[_ValueType, _ErrorType, _EnvType],
-    ) -> RequiresContext[Result[_ValueType, _ErrorType], _EnvType]:
+        inner_value: RequiresContextResult[
+            _ValueType, _ErrorType, _EnvType_contra
+        ],
+    ) -> RequiresContext[Result[_ValueType, _ErrorType], _EnvType_contra]:
         """
         Typecasts ``RequiresContextResult`` to ``RequiresContext`` instance.
 
@@ -379,9 +384,10 @@ class RequiresContext(  # type: ignore[type-var]
     @classmethod
     def from_requires_context_ioresult(
         cls,
-        inner_value:
-            RequiresContextIOResult[_ValueType, _ErrorType, _EnvType],
-    ) -> RequiresContext[IOResult[_ValueType, _ErrorType], _EnvType]:
+        inner_value: RequiresContextIOResult[
+            _ValueType, _ErrorType, _EnvType_contra
+        ],
+    ) -> RequiresContext[IOResult[_ValueType, _ErrorType], _EnvType_contra]:
         """
         Typecasts ``RequiresContextIOResult`` to ``RequiresContext`` instance.
 
@@ -406,9 +412,11 @@ class RequiresContext(  # type: ignore[type-var]
     def from_requires_context_future_result(
         cls,
         inner_value: RequiresContextFutureResult[
-            _ValueType, _ErrorType, _EnvType,
+            _ValueType,
+            _ErrorType,
+            _EnvType_contra,
         ],
-    ) -> RequiresContext[FutureResult[_ValueType, _ErrorType], _EnvType]:
+    ) -> RequiresContext[FutureResult[_ValueType, _ErrorType], _EnvType_contra]:
         """
         Typecasts ``RequiresContextIOResult`` to ``RequiresContext`` instance.
 

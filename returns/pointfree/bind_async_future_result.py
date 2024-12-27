@@ -18,10 +18,12 @@ def bind_async_future_result(
         [_FirstType],
         Awaitable[FutureResult[_UpdatedType, _SecondType]],
     ],
-) -> Kinded[Callable[
-    [KindN[_FutureResultKind, _FirstType, _SecondType, _ThirdType]],
-    KindN[_FutureResultKind, _UpdatedType, _SecondType, _ThirdType],
-]]:
+) -> Kinded[
+    Callable[
+        [KindN[_FutureResultKind, _FirstType, _SecondType, _ThirdType]],
+        KindN[_FutureResultKind, _UpdatedType, _SecondType, _ThirdType],
+    ]
+]:
     """
     Compose a container and async function returning ``FutureResult``.
 
@@ -62,11 +64,16 @@ def bind_async_future_result(
     See :class:`~FutureResultLikeN` for more info.
 
     """
+
     @kinded
     def factory(
         container: KindN[
-            _FutureResultKind, _FirstType, _SecondType, _ThirdType,
+            _FutureResultKind,
+            _FirstType,
+            _SecondType,
+            _ThirdType,
         ],
     ) -> KindN[_FutureResultKind, _UpdatedType, _SecondType, _ThirdType]:
         return container.bind_async_future_result(function)
+
     return factory

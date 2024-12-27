@@ -1,6 +1,6 @@
 from abc import abstractmethod
 from collections.abc import Callable, Iterable
-from typing import Tuple, TypeVar, final
+from typing import TypeVar, final
 
 from returns.interfaces.applicative import ApplicativeN
 from returns.interfaces.failable import FailableN
@@ -100,13 +100,13 @@ class AbstractFold:
         ],
         acc: KindN[
             _ApplicativeKind,
-            'Tuple[_FirstType, ...]',
+            'tuple[_FirstType, ...]',
             _SecondType,
             _ThirdType,
         ],
     ) -> KindN[
         _ApplicativeKind,
-        'Tuple[_FirstType, ...]',
+        'tuple[_FirstType, ...]',
         _SecondType,
         _ThirdType,
     ]:
@@ -165,13 +165,13 @@ class AbstractFold:
         ],
         acc: KindN[
             _FailableKind,
-            'Tuple[_FirstType, ...]',
+            'tuple[_FirstType, ...]',
             _SecondType,
             _ThirdType,
         ],
     ) -> KindN[
         _FailableKind,
-        'Tuple[_FirstType, ...]',
+        'tuple[_FirstType, ...]',
         _SecondType,
         _ThirdType,
     ]:
@@ -265,13 +265,13 @@ class AbstractFold:
         ],
         acc: KindN[
             _ApplicativeKind,
-            'Tuple[_FirstType, ...]',
+            'tuple[_FirstType, ...]',
             _SecondType,
             _ThirdType,
         ],
     ) -> KindN[
         _ApplicativeKind,
-        'Tuple[_FirstType, ...]',
+        'tuple[_FirstType, ...]',
         _SecondType,
         _ThirdType,
     ]:
@@ -290,13 +290,13 @@ class AbstractFold:
         ],
         acc: KindN[
             _FailableKind,
-            'Tuple[_FirstType, ...]',
+            'tuple[_FirstType, ...]',
             _SecondType,
             _ThirdType,
         ],
     ) -> KindN[
         _FailableKind,
-        'Tuple[_FirstType, ...]',
+        'tuple[_FirstType, ...]',
         _SecondType,
         _ThirdType,
     ]:
@@ -359,11 +359,12 @@ class Fold(AbstractFold):
 # Helper functions
 # ================
 
+
 def _concat_sequence(
     first: _FirstType,
 ) -> Callable[
-    ['Tuple[_FirstType, ...]'],
-    'Tuple[_FirstType, ...]',
+    ['tuple[_FirstType, ...]'],
+    'tuple[_FirstType, ...]',
 ]:
     """
     Concats a given item to an existing sequence.
@@ -372,15 +373,21 @@ def _concat_sequence(
     ``@curry`` decorator is way slower. And we don't need its features here.
     But, your functions can use ``@curry`` if you need it.
     """
-    return lambda second: second + (first,)
+    return lambda second: (*second, first)
 
 
 def _concat_applicative(
     current: KindN[
-        _ApplicativeKind, _FirstType, _SecondType, _ThirdType,
+        _ApplicativeKind,
+        _FirstType,
+        _SecondType,
+        _ThirdType,
     ],
     acc: KindN[
-        _ApplicativeKind, _UpdatedType, _SecondType, _ThirdType,
+        _ApplicativeKind,
+        _UpdatedType,
+        _SecondType,
+        _ThirdType,
     ],
     function: KindN[
         _ApplicativeKind,
@@ -395,10 +402,16 @@ def _concat_applicative(
 
 def _concat_failable_safely(
     current: KindN[
-        _FailableKind, _FirstType, _SecondType, _ThirdType,
+        _FailableKind,
+        _FirstType,
+        _SecondType,
+        _ThirdType,
     ],
     acc: KindN[
-        _FailableKind, _UpdatedType, _SecondType, _ThirdType,
+        _FailableKind,
+        _UpdatedType,
+        _SecondType,
+        _ThirdType,
     ],
     function: KindN[
         _FailableKind,

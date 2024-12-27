@@ -33,7 +33,6 @@ _all_containers: Sequence[type[Lawful]] = (
     RequiresContextResult,
     RequiresContextIOResult,
     RequiresContextFutureResult,
-
     # Aliases:
     ResultE,
     IOResultE,

@@ -1,3 +1,5 @@
+import asyncio
+
 import pytest
 
 from returns.future import Future, future
@@ -6,6 +8,8 @@ from returns.io import IO
 
 @future
 async def _coro(arg: int) -> float:
+    assert isinstance(arg, int)
+    await asyncio.sleep(0)
     return arg / 2
 
 

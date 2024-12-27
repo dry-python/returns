@@ -1,4 +1,3 @@
-
 import pytest
 
 from returns.context import (
@@ -14,18 +13,21 @@ from returns.primitives.laws import Law, Lawful
 from returns.result import Result
 
 
-@pytest.mark.parametrize('container', [
-    Result,
-    Maybe,
-    Future,
-    FutureResult,
-    IO,
-    IOResult,
-    RequiresContext,
-    RequiresContextFutureResult,
-    RequiresContextIOResult,
-    RequiresContextResult,
-])
+@pytest.mark.parametrize(
+    'container',
+    [
+        Result,
+        Maybe,
+        Future,
+        FutureResult,
+        IO,
+        IOResult,
+        RequiresContext,
+        RequiresContextFutureResult,
+        RequiresContextIOResult,
+        RequiresContextResult,
+    ],
+)
 def test_laws_resolution(container: type[Lawful]):
     """Ensures all tests are unique."""
     all_laws: list[Law] = []

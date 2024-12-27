@@ -70,9 +70,11 @@ def tap(
         - https://github.com/dry-python/returns/issues/145
 
     """
+
     def decorator(argument_to_return: _FirstType) -> _FirstType:
         function(argument_to_return)
         return argument_to_return
+
     return decorator
 
 
@@ -101,8 +103,10 @@ def untap(
         - https://github.com/dry-python/returns/issues/145
 
     """
+
     def decorator(argument_to_return: _FirstType) -> None:
         function(argument_to_return)
+
     return decorator
 
 
@@ -147,10 +151,12 @@ def not_(function: Callable[_FuncParams, bool]) -> Callable[_FuncParams, bool]:
       >>> assert not_(is_successful)(Failure(1)) is True
 
     """
+
     @wraps(function)
     def decorator(
         *args: _FuncParams.args,
         **kwargs: _FuncParams.kwargs,
     ) -> bool:
         return not function(*args, **kwargs)
+
     return decorator

@@ -49,7 +49,6 @@ _ThirdType = TypeVar('_ThirdType')
 _UpdatedType = TypeVar('_UpdatedType')
 
 _ValueType = TypeVar('_ValueType')
-_ErrorType = TypeVar('_ErrorType')
 _EnvType = TypeVar('_EnvType')
 
 _ReaderLike2Type = TypeVar('_ReaderLike2Type', bound='ReaderLike2')
@@ -121,7 +120,7 @@ class ReaderLike2(Container2[_FirstType, _SecondType]):
     @classmethod
     @abstractmethod
     def from_context(
-        cls: type[_ReaderLike2Type],  # noqa: N805
+        cls: type[_ReaderLike2Type],
         inner_value: RequiresContext[_ValueType, _EnvType],
     ) -> Kind2[_ReaderLike2Type, _ValueType, _EnvType]:
         """Unit method to create new containers from successful ``Reader``."""
@@ -186,7 +185,7 @@ class ReaderLike3(Container3[_FirstType, _SecondType, _ThirdType]):
     @classmethod
     @abstractmethod
     def from_context(
-        cls: type[_ReaderLike3Type],  # noqa: N805
+        cls: type[_ReaderLike3Type],
         inner_value: RequiresContext[_ValueType, _EnvType],
     ) -> Kind3[_ReaderLike3Type, _ValueType, _SecondType, _EnvType]:
         """Unit method to create new containers from successful ``Reader``."""
@@ -233,9 +232,9 @@ class _LawSpec(LawSpecDef):
         env: _SecondType,
     ) -> None:
         """Asking for an env, always returns the env."""
-        assert container.ask().__call__(    # noqa: WPS609
+        assert container.ask().__call__(  # noqa: PLC2801
             env,
-        ) == container.from_value(env).__call__(env)  # noqa: WPS609
+        ) == container.from_value(env).__call__(env)  # noqa: PLC2801
 
 
 class ReaderBased2(

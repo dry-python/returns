@@ -1,19 +1,21 @@
-
 import pytest
 
 from returns.functions import raise_exception
 from returns.result import Failure, Success
 
 
-class _CustomException(Exception):
+class _CustomError(Exception):
     """Just for the test."""
 
 
-@pytest.mark.parametrize('exception_type', [
-    TypeError,
-    ValueError,
-    _CustomException,
-])
+@pytest.mark.parametrize(
+    'exception_type',
+    [
+        TypeError,
+        ValueError,
+        _CustomError,
+    ],
+)
 def test_raise_regular_exception(exception_type: type[Exception]):
     """Ensures that regular exception can be thrown."""
     with pytest.raises(exception_type):

@@ -5,9 +5,15 @@ from typing import cast, final
 
 from mypy.nodes import ARG_STAR, ARG_STAR2
 from mypy.plugin import FunctionContext
-from mypy.types import AnyType, CallableType, FunctionLike, Overloaded
+from mypy.types import (
+    AnyType,
+    CallableType,
+    FunctionLike,
+    Overloaded,
+    TypeOfAny,
+    get_proper_type,
+)
 from mypy.types import Type as MypyType
-from mypy.types import TypeOfAny, get_proper_type
 
 from returns.contrib.mypy._structures.args import FuncArg
 from returns.contrib.mypy._typeops.transform_callable import (
@@ -37,7 +43,7 @@ class _ArgTree:
 
     def __init__(self, case: CallableType | None) -> None:
         self.case = case
-        self.children: list['_ArgTree'] = []
+        self.children: list[_ArgTree] = []
 
 
 @final
@@ -70,7 +76,8 @@ class _CurryFunctionOverloads:
         # Because, otherwise `detach_callable` with add
         # unused variables to intermediate callables.
         self._default = cast(
-            CallableType, self._ctx.default_return_type,
+            CallableType,
+            self._ctx.default_return_type,
         ).copy_modified(
             ret_type=AnyType(TypeOfAny.implementation_artifact),
         )
@@ -111,6 +118,7 @@ class _CurryFunctionOverloads:
         Arguments that have more than one child are treated as overloads.
 
         """
+
         def factory(
             args: _RawArgTree,
         ) -> Iterator[tuple[list[FuncArg], _RawArgTree]]:
@@ -133,14 +141,17 @@ class _CurryFunctionOverloads:
         """Generates functions from argument tree."""
         for child in argtree.children:
             self._build_overloads_from_argtree(child)
-            assert child.case  # mypy is not happy  # noqa: S101
+            assert child.case  # mypy is not happy
 
             if not child.children:
                 child.case = Intermediate(child.case).with_ret_type(
                     self._original.ret_type,
                 )
 
-            if argtree.case is not None:
+            if argtree.case is None:
+                # Root is reached, we need to save the result:
+                self._overloads.append(child.case)
+            else:
                 # We need to go backwards and to replace the return types
                 # of the previous functions. Like so:
                 # 1.  `def x -> A`
@@ -149,16 +160,21 @@ class _CurryFunctionOverloads:
                 # Will result in `def x -> y -> A`
                 # We also overloadify existing return types.
                 ret_type = get_proper_type(argtree.case.ret_type)
-                temp_any = isinstance(
-                    ret_type, AnyType,
-                ) and ret_type.type_of_any == TypeOfAny.implementation_artifact
+                temp_any = (
+                    isinstance(
+                        ret_type,
+                        AnyType,
+                    )
+                    and ret_type.type_of_any
+                    == TypeOfAny.implementation_artifact
+                )
                 argtree.case = Intermediate(argtree.case).with_ret_type(
-                    child.case if temp_any else Overloaded(
+                    child.case
+                    if temp_any
+                    else Overloaded(
                         [child.case, *cast(FunctionLike, ret_type).items],
                     ),
                 )
-            else:  # Root is reached, we need to save the result:
-                self._overloads.append(child.case)
 
     def _slices(self, source: list[FuncArg]) -> Iterator[list[list[FuncArg]]]:
         """

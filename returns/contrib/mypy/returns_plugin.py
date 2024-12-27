@@ -10,8 +10,9 @@ https://mypy.readthedocs.io/en/latest/extending_mypy.html
 We use ``pytest-mypy-plugins`` to test that it works correctly, see:
 https://github.com/mkurnikov/pytest-mypy-plugins
 """
+
 from collections.abc import Callable, Mapping
-from typing import ClassVar, Optional, final
+from typing import ClassVar, final
 
 from mypy.nodes import SymbolTableNode
 from mypy.plugin import (
@@ -42,7 +43,7 @@ _FunctionCallback = Callable[[FunctionContext], MypyType]
 
 #: Type for a function hook that need a definition node.
 _FunctionDefCallback = Callable[
-    [Optional[SymbolTableNode]],
+    [SymbolTableNode | None],
     Callable[[FunctionContext], MypyType],
 ]
 
@@ -58,6 +59,7 @@ _MethodSigCallback = Callable[[MethodSigContext], CallableType]
 
 # Interface
 # =========
+
 
 @final
 class _ReturnsPlugin(Plugin):

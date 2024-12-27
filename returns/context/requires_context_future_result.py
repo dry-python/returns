@@ -21,13 +21,13 @@ if TYPE_CHECKING:
     from returns.context.requires_context_result import RequiresContextResult
 
 # Context:
-_EnvType = TypeVar('_EnvType', contravariant=True)
+_EnvType_contra = TypeVar('_EnvType_contra', contravariant=True)
 _NewEnvType = TypeVar('_NewEnvType')
 
 # Result:
-_ValueType = TypeVar('_ValueType', covariant=True)
+_ValueType_co = TypeVar('_ValueType_co', covariant=True)
 _NewValueType = TypeVar('_NewValueType')
-_ErrorType = TypeVar('_ErrorType', covariant=True)
+_ErrorType_co = TypeVar('_ErrorType_co', covariant=True)
 _NewErrorType = TypeVar('_NewErrorType')
 
 # Helpers:
@@ -38,12 +38,19 @@ _FirstType = TypeVar('_FirstType')
 class RequiresContextFutureResult(  # type: ignore[type-var]
     BaseContainer,
     SupportsKind3[
-        'RequiresContextFutureResult', _ValueType, _ErrorType, _EnvType,
+        'RequiresContextFutureResult',
+        _ValueType_co,
+        _ErrorType_co,
+        _EnvType_contra,
     ],
     reader_future_result.ReaderFutureResultBasedN[
-        _ValueType, _ErrorType, _EnvType,
+        _ValueType_co,
+        _ErrorType_co,
+        _EnvType_contra,
     ],
-    future_result.FutureResultLike3[_ValueType, _ErrorType, _EnvType],
+    future_result.FutureResultLike3[
+        _ValueType_co, _ErrorType_co, _EnvType_contra
+    ],
 ):
     """
     The ``RequiresContextFutureResult`` combinator.
@@ -99,14 +106,18 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
     #: Inner value of `RequiresContext`
     #: is just a function that returns `FutureResult`.
     #: This field has an extra 'RequiresContext' just because `mypy` needs it.
-    _inner_value: Callable[[_EnvType], FutureResult[_ValueType, _ErrorType]]
+    _inner_value: Callable[
+        [_EnvType_contra], FutureResult[_ValueType_co, _ErrorType_co]
+    ]
 
     #: A convenient placeholder to call methods created by `.from_value()`.
     no_args: ClassVar[NoDeps] = object()
 
     def __init__(
         self,
-        inner_value: Callable[[_EnvType], FutureResult[_ValueType, _ErrorType]],
+        inner_value: Callable[
+            [_EnvType_contra], FutureResult[_ValueType_co, _ErrorType_co]
+        ],
     ) -> None:
         """
         Public constructor for this type. Also required for typing.
@@ -128,7 +139,9 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
         """
         super().__init__(inner_value)
 
-    def __call__(self, deps: _EnvType) -> FutureResult[_ValueType, _ErrorType]:
+    def __call__(
+        self, deps: _EnvType_contra
+    ) -> FutureResult[_ValueType_co, _ErrorType_co]:
         """
         Evaluates the wrapped function.
 
@@ -160,7 +173,9 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
 
     def swap(
         self,
-    ) -> RequiresContextFutureResult[_ErrorType, _ValueType, _EnvType]:
+    ) -> RequiresContextFutureResult[
+        _ErrorType_co, _ValueType_co, _EnvType_contra
+    ]:
         """
         Swaps value and error types.
 
@@ -186,8 +201,10 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
 
     def map(
         self,
-        function: Callable[[_ValueType], _NewValueType],
-    ) -> RequiresContextFutureResult[_NewValueType, _ErrorType, _EnvType]:
+        function: Callable[[_ValueType_co], _NewValueType],
+    ) -> RequiresContextFutureResult[
+        _NewValueType, _ErrorType_co, _EnvType_contra
+    ]:
         """
         Composes successful container with a pure function.
 
@@ -214,11 +231,13 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
         self,
         container: Kind3[
             RequiresContextFutureResult,
-            Callable[[_ValueType], _NewValueType],
-            _ErrorType,
-            _EnvType,
+            Callable[[_ValueType_co], _NewValueType],
+            _ErrorType_co,
+            _EnvType_contra,
         ],
-    ) -> RequiresContextFutureResult[_NewValueType, _ErrorType, _EnvType]:
+    ) -> RequiresContextFutureResult[
+        _NewValueType, _ErrorType_co, _EnvType_contra
+    ]:
         """
         Calls a wrapped function in a container on this container.
 
@@ -253,15 +272,17 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
     def bind(
         self,
         function: Callable[
-            [_ValueType],
+            [_ValueType_co],
             Kind3[
                 RequiresContextFutureResult,
                 _NewValueType,
-                _ErrorType,
-                _EnvType,
+                _ErrorType_co,
+                _EnvType_contra,
             ],
         ],
-    ) -> RequiresContextFutureResult[_NewValueType, _ErrorType, _EnvType]:
+    ) -> RequiresContextFutureResult[
+        _NewValueType, _ErrorType_co, _EnvType_contra
+    ]:
         """
         Composes this container with a function returning the same type.
 
@@ -305,17 +326,19 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
     def bind_async(
         self,
         function: Callable[
-            [_ValueType],
+            [_ValueType_co],
             Awaitable[
                 Kind3[
                     RequiresContextFutureResult,
                     _NewValueType,
-                    _ErrorType,
-                    _EnvType,
+                    _ErrorType_co,
+                    _EnvType_contra,
                 ],
             ],
         ],
-    ) -> RequiresContextFutureResult[_NewValueType, _ErrorType, _EnvType]:
+    ) -> RequiresContextFutureResult[
+        _NewValueType, _ErrorType_co, _EnvType_contra
+    ]:
         """
         Composes this container with a async function returning the same type.
 
@@ -345,9 +368,13 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
 
         """
         return RequiresContextFutureResult(
-            lambda deps: FutureResult(_reader_future_result.async_bind_async(
-                function, self, deps,
-            )),
+            lambda deps: FutureResult(
+                _reader_future_result.async_bind_async(
+                    function,
+                    self,
+                    deps,
+                )
+            ),
         )
 
     #: Alias for `bind_async_context_future_result` method,
@@ -356,8 +383,10 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
 
     def bind_awaitable(
         self,
-        function: Callable[[_ValueType], Awaitable[_NewValueType]],
-    ) -> RequiresContextFutureResult[_NewValueType, _ErrorType, _EnvType]:
+        function: Callable[[_ValueType_co], Awaitable[_NewValueType]],
+    ) -> RequiresContextFutureResult[
+        _NewValueType, _ErrorType_co, _EnvType_contra
+    ]:
         """
         Allows to compose a container and a regular ``async`` function.
 
@@ -395,8 +424,12 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
 
     def bind_result(
         self,
-        function: Callable[[_ValueType], Result[_NewValueType, _ErrorType]],
-    ) -> RequiresContextFutureResult[_NewValueType, _ErrorType, _EnvType]:
+        function: Callable[
+            [_ValueType_co], Result[_NewValueType, _ErrorType_co]
+        ],
+    ) -> RequiresContextFutureResult[
+        _NewValueType, _ErrorType_co, _EnvType_contra
+    ]:
         """
         Binds ``Result`` returning function to the current container.
 
@@ -432,10 +465,12 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
     def bind_context(
         self,
         function: Callable[
-            [_ValueType],
-            RequiresContext[_NewValueType, _EnvType],
+            [_ValueType_co],
+            RequiresContext[_NewValueType, _EnvType_contra],
         ],
-    ) -> RequiresContextFutureResult[_NewValueType, _ErrorType, _EnvType]:
+    ) -> RequiresContextFutureResult[
+        _NewValueType, _ErrorType_co, _EnvType_contra
+    ]:
         """
         Binds ``RequiresContext`` returning function to current container.
 
@@ -472,10 +507,14 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
     def bind_context_result(
         self,
         function: Callable[
-            [_ValueType],
-            RequiresContextResult[_NewValueType, _ErrorType, _EnvType],
+            [_ValueType_co],
+            RequiresContextResult[
+                _NewValueType, _ErrorType_co, _EnvType_contra
+            ],
         ],
-    ) -> RequiresContextFutureResult[_NewValueType, _ErrorType, _EnvType]:
+    ) -> RequiresContextFutureResult[
+        _NewValueType, _ErrorType_co, _EnvType_contra
+    ]:
         """
         Binds ``RequiresContextResult`` returning function to the current one.
 
@@ -515,10 +554,14 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
     def bind_context_ioresult(
         self,
         function: Callable[
-            [_ValueType],
-            RequiresContextIOResult[_NewValueType, _ErrorType, _EnvType],
+            [_ValueType_co],
+            RequiresContextIOResult[
+                _NewValueType, _ErrorType_co, _EnvType_contra
+            ],
         ],
-    ) -> RequiresContextFutureResult[_NewValueType, _ErrorType, _EnvType]:
+    ) -> RequiresContextFutureResult[
+        _NewValueType, _ErrorType_co, _EnvType_contra
+    ]:
         """
         Binds ``RequiresContextIOResult`` returning function to the current one.
 
@@ -556,8 +599,10 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
 
     def bind_io(
         self,
-        function: Callable[[_ValueType], IO[_NewValueType]],
-    ) -> RequiresContextFutureResult[_NewValueType, _ErrorType, _EnvType]:
+        function: Callable[[_ValueType_co], IO[_NewValueType]],
+    ) -> RequiresContextFutureResult[
+        _NewValueType, _ErrorType_co, _EnvType_contra
+    ]:
         """
         Binds ``IO`` returning function to the current container.
 
@@ -587,8 +632,12 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
 
     def bind_ioresult(
         self,
-        function: Callable[[_ValueType], IOResult[_NewValueType, _ErrorType]],
-    ) -> RequiresContextFutureResult[_NewValueType, _ErrorType, _EnvType]:
+        function: Callable[
+            [_ValueType_co], IOResult[_NewValueType, _ErrorType_co]
+        ],
+    ) -> RequiresContextFutureResult[
+        _NewValueType, _ErrorType_co, _EnvType_contra
+    ]:
         """
         Binds ``IOResult`` returning function to the current container.
 
@@ -622,8 +671,10 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
 
     def bind_future(
         self,
-        function: Callable[[_ValueType], Future[_NewValueType]],
-    ) -> RequiresContextFutureResult[_NewValueType, _ErrorType, _EnvType]:
+        function: Callable[[_ValueType_co], Future[_NewValueType]],
+    ) -> RequiresContextFutureResult[
+        _NewValueType, _ErrorType_co, _EnvType_contra
+    ]:
         """
         Binds ``Future`` returning function to the current container.
 
@@ -658,10 +709,12 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
     def bind_future_result(
         self,
         function: Callable[
-            [_ValueType],
-            FutureResult[_NewValueType, _ErrorType],
+            [_ValueType_co],
+            FutureResult[_NewValueType, _ErrorType_co],
         ],
-    ) -> RequiresContextFutureResult[_NewValueType, _ErrorType, _EnvType]:
+    ) -> RequiresContextFutureResult[
+        _NewValueType, _ErrorType_co, _EnvType_contra
+    ]:
         """
         Binds ``FutureResult`` returning function to the current container.
 
@@ -695,8 +748,10 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
 
     def bind_async_future(
         self,
-        function: Callable[[_ValueType], Awaitable[Future[_NewValueType]]],
-    ) -> RequiresContextFutureResult[_NewValueType, _ErrorType, _EnvType]:
+        function: Callable[[_ValueType_co], Awaitable[Future[_NewValueType]]],
+    ) -> RequiresContextFutureResult[
+        _NewValueType, _ErrorType_co, _EnvType_contra
+    ]:
         """
         Binds ``Future`` returning async function to the current container.
 
@@ -731,10 +786,12 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
     def bind_async_future_result(
         self,
         function: Callable[
-            [_ValueType],
-            Awaitable[FutureResult[_NewValueType, _ErrorType]],
+            [_ValueType_co],
+            Awaitable[FutureResult[_NewValueType, _ErrorType_co]],
         ],
-    ) -> RequiresContextFutureResult[_NewValueType, _ErrorType, _EnvType]:
+    ) -> RequiresContextFutureResult[
+        _NewValueType, _ErrorType_co, _EnvType_contra
+    ]:
         """
         Bind ``FutureResult`` returning async function to the current container.
 
@@ -769,8 +826,11 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
         )
 
     def alt(
-        self, function: Callable[[_ErrorType], _NewErrorType],
-    ) -> RequiresContextFutureResult[_ValueType, _NewErrorType, _EnvType]:
+        self,
+        function: Callable[[_ErrorType_co], _NewErrorType],
+    ) -> RequiresContextFutureResult[
+        _ValueType_co, _NewErrorType, _EnvType_contra
+    ]:
         """
         Composes failed container with a pure function.
 
@@ -802,15 +862,17 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
     def lash(
         self,
         function: Callable[
-            [_ErrorType],
+            [_ErrorType_co],
             Kind3[
                 RequiresContextFutureResult,
-                _ValueType,
+                _ValueType_co,
                 _NewErrorType,
-                _EnvType,
+                _EnvType_contra,
             ],
         ],
-    ) -> RequiresContextFutureResult[_ValueType, _NewErrorType, _EnvType]:
+    ) -> RequiresContextFutureResult[
+        _ValueType_co, _NewErrorType, _EnvType_contra
+    ]:
         """
         Composes this container with a function returning the same type.
 
@@ -852,15 +914,17 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
     def compose_result(
         self,
         function: Callable[
-            [Result[_ValueType, _ErrorType]],
+            [Result[_ValueType_co, _ErrorType_co]],
             Kind3[
                 RequiresContextFutureResult,
                 _NewValueType,
-                _ErrorType,
-                _EnvType,
+                _ErrorType_co,
+                _EnvType_contra,
             ],
         ],
-    ) -> RequiresContextFutureResult[_NewValueType, _ErrorType, _EnvType]:
+    ) -> RequiresContextFutureResult[
+        _NewValueType, _ErrorType_co, _EnvType_contra
+    ]:
         """
         Composes inner ``Result`` with ``ReaderFutureResult`` returning func.
 
@@ -894,15 +958,17 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
         return RequiresContextFutureResult(
             lambda deps: FutureResult(
                 _reader_future_result.async_compose_result(
-                    function, self, deps,
+                    function,
+                    self,
+                    deps,
                 ),
             ),
         )
 
     def modify_env(
         self,
-        function: Callable[[_NewEnvType], _EnvType],
-    ) -> RequiresContextFutureResult[_ValueType, _ErrorType, _NewEnvType]:
+        function: Callable[[_NewEnvType], _EnvType_contra],
+    ) -> RequiresContextFutureResult[_ValueType_co, _ErrorType_co, _NewEnvType]:
         """
         Allows to modify the environment type.
 
@@ -927,7 +993,9 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
     @classmethod
     def ask(
         cls,
-    ) -> RequiresContextFutureResult[_EnvType, _ErrorType, _EnvType]:
+    ) -> RequiresContextFutureResult[
+        _EnvType_contra, _ErrorType_co, _EnvType_contra
+    ]:
         """
         Is used to get the current dependencies inside the call stack.
 
@@ -957,7 +1025,8 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
 
     @classmethod
     def from_result(
-        cls, inner_value: Result[_NewValueType, _NewErrorType],
+        cls,
+        inner_value: Result[_NewValueType, _NewErrorType],
     ) -> RequiresContextFutureResult[_NewValueType, _NewErrorType, NoDeps]:
         """
         Creates new container with ``Result`` as a unit value.
@@ -1034,7 +1103,8 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
 
     @classmethod
     def from_ioresult(
-        cls, inner_value: IOResult[_NewValueType, _NewErrorType],
+        cls,
+        inner_value: IOResult[_NewValueType, _NewErrorType],
     ) -> RequiresContextFutureResult[_NewValueType, _NewErrorType, NoDeps]:
         """
         Creates new container with ``IOResult`` as a unit value.
@@ -1115,8 +1185,9 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
     @classmethod
     def from_future_result_context(
         cls,
-        inner_value:
-            ReaderFutureResult[_NewValueType, _NewErrorType, _NewEnvType],
+        inner_value: ReaderFutureResult[
+            _NewValueType, _NewErrorType, _NewEnvType
+        ],
     ) -> ReaderFutureResult[_NewValueType, _NewErrorType, _NewEnvType]:
         """
         Creates new container with ``ReaderFutureResult`` as a unit value.
@@ -1180,9 +1251,12 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
     def from_typecast(
         cls,
         inner_value: RequiresContext[
-            FutureResult[_NewValueType, _NewErrorType], _EnvType,
+            FutureResult[_NewValueType, _NewErrorType],
+            _EnvType_contra,
         ],
-    ) -> RequiresContextFutureResult[_NewValueType, _NewErrorType, _EnvType]:
+    ) -> RequiresContextFutureResult[
+        _NewValueType, _NewErrorType, _EnvType_contra
+    ]:
         """
         You might end up with ``RequiresContext[FutureResult]`` as a value.
 
@@ -1217,7 +1291,8 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
 
     @classmethod
     def from_context(
-        cls, inner_value: RequiresContext[_NewValueType, _NewEnvType],
+        cls,
+        inner_value: RequiresContext[_NewValueType, _NewEnvType],
     ) -> RequiresContextFutureResult[_NewValueType, Any, _NewEnvType]:
         """
         Creates new container from ``RequiresContext`` as a success unit.
@@ -1242,7 +1317,8 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
 
     @classmethod
     def from_failed_context(
-        cls, inner_value: RequiresContext[_NewValueType, _NewEnvType],
+        cls,
+        inner_value: RequiresContext[_NewValueType, _NewEnvType],
     ) -> RequiresContextFutureResult[Any, _NewValueType, _NewEnvType]:
         """
         Creates new container from ``RequiresContext`` as a failure unit.
@@ -1269,7 +1345,9 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
     def from_result_context(
         cls,
         inner_value: RequiresContextResult[
-            _NewValueType, _NewErrorType, _NewEnvType,
+            _NewValueType,
+            _NewErrorType,
+            _NewEnvType,
         ],
     ) -> ReaderFutureResult[_NewValueType, _NewErrorType, _NewEnvType]:
         """
@@ -1303,8 +1381,7 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
     @classmethod
     def from_ioresult_context(
         cls,
-        inner_value:
-            ReaderIOResult[_NewValueType, _NewErrorType, _NewEnvType],
+        inner_value: ReaderIOResult[_NewValueType, _NewErrorType, _NewEnvType],
     ) -> ReaderFutureResult[_NewValueType, _NewErrorType, _NewEnvType]:
         """
         Creates new container from ``RequiresContextIOResult`` as a unit value.
@@ -1336,7 +1413,8 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
 
     @classmethod
     def from_value(
-        cls, inner_value: _FirstType,
+        cls,
+        inner_value: _FirstType,
     ) -> RequiresContextFutureResult[_FirstType, Any, NoDeps]:
         """
         Creates new container with successful ``FutureResult`` as a unit value.
@@ -1358,7 +1436,8 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
 
     @classmethod
     def from_failure(
-        cls, inner_value: _FirstType,
+        cls,
+        inner_value: _FirstType,
     ) -> RequiresContextFutureResult[Any, _FirstType, NoDeps]:
         """
         Creates new container with failed ``FutureResult`` as a unit value.
@@ -1383,7 +1462,9 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
 
 #: Alias for a popular case when ``Result`` has ``Exception`` as error type.
 RequiresContextFutureResultE: TypeAlias = RequiresContextFutureResult[
-    _ValueType, Exception, _EnvType,
+    _ValueType_co,
+    Exception,
+    _EnvType_contra,
 ]
 
 #: Sometimes `RequiresContextFutureResult` is too long to type.
@@ -1391,5 +1472,7 @@ ReaderFutureResult: TypeAlias = RequiresContextFutureResult
 
 #: Alias to save you some typing. Uses ``Exception`` as error type.
 ReaderFutureResultE: TypeAlias = RequiresContextFutureResult[
-    _ValueType, Exception, _EnvType,
+    _ValueType_co,
+    Exception,
+    _EnvType_contra,
 ]

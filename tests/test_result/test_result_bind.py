@@ -3,6 +3,7 @@ from returns.result import Failure, Result, Success
 
 def test_bind():
     """Ensures that bind works."""
+
     def factory(inner_value: int) -> Result[int, str]:
         if inner_value > 0:
             return Success(inner_value * 2)
@@ -24,6 +25,7 @@ def test_bind():
 
 def test_left_identity_success():
     """Ensures that left identity works for Success container."""
+
     def factory(inner_value: int) -> Result[int, str]:
         return Success(inner_value * 2)
 
@@ -35,6 +37,7 @@ def test_left_identity_success():
 
 def test_left_identity_failure():
     """Ensures that left identity works for Failure container."""
+
     def factory(inner_value: int) -> Result[int, int]:
         return Failure(6)
 
@@ -48,6 +51,7 @@ def test_left_identity_failure():
 
 def test_lash_success():
     """Ensures that lash works for Success container."""
+
     def factory(inner_value) -> Result[int, str]:
         return Success(inner_value * 2)
 
@@ -60,6 +64,7 @@ def test_lash_success():
 
 def test_lash_failure():
     """Ensures that lash works for Failure container."""
+
     def factory(inner_value: int) -> Result[str, int]:
         return Failure(inner_value + 1)
 

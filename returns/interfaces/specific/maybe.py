@@ -136,7 +136,7 @@ class MaybeLikeN(
     @classmethod
     @abstractmethod
     def from_optional(
-        cls: type[_MaybeLikeType],  # noqa: N805
+        cls: type[_MaybeLikeType],
         inner_value: _ValueType | None,
     ) -> KindN[_MaybeLikeType, _ValueType, _SecondType, _ThirdType]:
         """Unit method to create containers from ``Optional`` value."""

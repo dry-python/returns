@@ -42,7 +42,7 @@ def analyze(ctx: FunctionContext) -> MypyType:
     # because for some reason, `mypy` does not do it correctly.
     # It inferes `covariant` types incorrectly.
     real_arg_types = tuple(
-        ctx.api.expr_checker.accept(arg)   # type: ignore
+        ctx.api.expr_checker.accept(arg)  # type: ignore
         for arg in ctx.args[1]
     )
 

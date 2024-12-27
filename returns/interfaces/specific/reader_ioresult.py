@@ -58,7 +58,7 @@ class ReaderIOResultLikeN(
     @classmethod
     @abstractmethod
     def from_ioresult_context(
-        cls: type[_ReaderIOResultLikeType],  # noqa: N805
+        cls: type[_ReaderIOResultLikeType],
         inner_value: ReaderIOResult[_ValueType, _ErrorType, _EnvType],
     ) -> KindN[_ReaderIOResultLikeType, _ValueType, _ErrorType, _EnvType]:
         """Unit method to create new containers from ``ReaderIOResult``."""
@@ -84,9 +84,9 @@ class _LawSpec(LawSpecDef):
         env: _ThirdType,
     ) -> None:
         """Asking for an env, always returns the env."""
-        assert container.ask().__call__(    # noqa: WPS609
+        assert container.ask().__call__(  # noqa: PLC2801
             env,
-        ) == container.from_value(env).__call__(env)  # noqa: WPS609
+        ) == container.from_value(env).__call__(env)  # noqa: PLC2801
 
 
 class ReaderIOResultBasedN(
@@ -112,9 +112,7 @@ class ReaderIOResultBasedN(
 
     __slots__ = ()
 
-    _laws: ClassVar[Sequence[Law]] = (
-        Law2(_LawSpec.asking_law),
-    )
+    _laws: ClassVar[Sequence[Law]] = (Law2(_LawSpec.asking_law),)
 
 
 #: Type alias for kinds with three type arguments.

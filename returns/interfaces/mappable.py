@@ -59,8 +59,8 @@ class _LawSpec(LawSpecDef):
 
 
 class MappableN(
-    Generic[_FirstType, _SecondType, _ThirdType],
     Lawful['MappableN[_FirstType, _SecondType, _ThirdType]'],
+    Generic[_FirstType, _SecondType, _ThirdType],
 ):
     """
     Allows to chain wrapped values in containers with regular functions.

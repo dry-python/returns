@@ -17,10 +17,12 @@ _BiMappableKind = TypeVar('_BiMappableKind', bound=BiMappableN)
 def bimap(
     on_first: Callable[[_FirstType], _UpdatedType1],
     on_second: Callable[[_SecondType], _UpdatedType2],
-) -> Kinded[Callable[
-    [KindN[_BiMappableKind, _FirstType, _SecondType, _ThirdType]],
-    KindN[_BiMappableKind, _UpdatedType1, _UpdatedType2, _ThirdType],
-]]:
+) -> Kinded[
+    Callable[
+        [KindN[_BiMappableKind, _FirstType, _SecondType, _ThirdType]],
+        KindN[_BiMappableKind, _UpdatedType1, _UpdatedType2, _ThirdType],
+    ]
+]:
     """
     Maps container on both: first and second arguments.
 
@@ -48,9 +50,11 @@ def bimap(
     for more info.
 
     """
+
     @kinded
     def factory(
         container: KindN[_BiMappableKind, _FirstType, _SecondType, _ThirdType],
     ) -> KindN[_BiMappableKind, _UpdatedType1, _UpdatedType2, _ThirdType]:
         return container.map(on_first).alt(on_second)
+
     return factory

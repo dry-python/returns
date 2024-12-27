@@ -62,7 +62,7 @@ class IOResultLikeN(
     @classmethod
     @abstractmethod
     def from_ioresult(
-        cls: type[_IOResultLikeType],  # noqa: N805
+        cls: type[_IOResultLikeType],
         inner_value: IOResult[_ValueType, _ErrorType],
     ) -> KindN[_IOResultLikeType, _ValueType, _ErrorType, _ThirdType]:
         """Unit method to create new containers from ``IOResult`` type."""
@@ -70,7 +70,7 @@ class IOResultLikeN(
     @classmethod
     @abstractmethod
     def from_failed_io(
-        cls: type[_IOResultLikeType],  # noqa: N805
+        cls: type[_IOResultLikeType],
         inner_value: IO[_ErrorType],
     ) -> KindN[_IOResultLikeType, _FirstType, _ErrorType, _ThirdType]:
         """Unit method to create new containers from failed ``IO``."""

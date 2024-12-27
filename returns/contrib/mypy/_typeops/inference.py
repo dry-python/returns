@@ -6,9 +6,14 @@ from mypy.constraints import infer_constraints_for_callable
 from mypy.expandtype import expand_type
 from mypy.nodes import ARG_POS, ArgKind
 from mypy.plugin import FunctionContext
-from mypy.types import CallableType, FunctionLike, ProperType
+from mypy.types import (
+    CallableType,
+    FunctionLike,
+    ProperType,
+    TypeVarId,
+    get_proper_type,
+)
 from mypy.types import Type as MypyType
-from mypy.types import TypeVarId, get_proper_type
 
 from returns.contrib.mypy._structures.args import FuncArg
 from returns.contrib.mypy._structures.types import CallableContext
@@ -50,7 +55,7 @@ class CallableInference:
 
         """
         self._case_function = case_function
-        self._fallback = fallback if fallback else self._case_function
+        self._fallback = fallback or self._case_function
         self._ctx = ctx
 
     def from_usage(
@@ -68,10 +73,7 @@ class CallableInference:
         """Creates mapping of ``typevar`` to real type that we already know."""
         checker = self._ctx.api.expr_checker  # type: ignore
         kinds = [arg.kind for arg in applied_args]
-        exprs = [
-            arg.expression(self._ctx.context)
-            for arg in applied_args
-        ]
+        exprs = [arg.expression(self._ctx.context) for arg in applied_args]
 
         formal_to_actual = map_actuals_to_formals(
             kinds,
@@ -89,8 +91,7 @@ class CallableInference:
             context=checker.argument_infer_context(),
         )
         return {
-            constraint.type_var: constraint.target
-            for constraint in constraints
+            constraint.type_var: constraint.target for constraint in constraints
         }
 
 
@@ -117,7 +118,7 @@ class PipelineInference:
         parameter = FuncArg(None, self._instance, ARG_POS)
         ret_type = get_proper_type(ctx.default_return_type)
 
-        for pipeline, kind in zip(pipeline_types, pipeline_kinds):
+        for pipeline, kind in zip(pipeline_types, pipeline_kinds, strict=False):
             ret_type = self._proper_type(
                 analyze_call(
                     cast(FunctionLike, pipeline),

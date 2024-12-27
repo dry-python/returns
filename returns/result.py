@@ -1,4 +1,4 @@
-from abc import ABCMeta
+from abc import ABC
 from collections.abc import Callable, Generator, Iterator
 from functools import wraps
 from inspect import FrameInfo
@@ -12,9 +12,9 @@ from returns.primitives.exceptions import UnwrapFailedError
 from returns.primitives.hkt import Kind2, SupportsKind2
 
 # Definitions:
-_ValueType = TypeVar('_ValueType', covariant=True)
+_ValueType_co = TypeVar('_ValueType_co', covariant=True)
 _NewValueType = TypeVar('_NewValueType')
-_ErrorType = TypeVar('_ErrorType', covariant=True)
+_ErrorType_co = TypeVar('_ErrorType_co', covariant=True)
 _NewErrorType = TypeVar('_NewErrorType')
 
 _FirstType = TypeVar('_FirstType')
@@ -23,9 +23,9 @@ _FuncParams = ParamSpec('_FuncParams')
 
 class Result(  # type: ignore[type-var]
     BaseContainer,
-    SupportsKind2['Result', _ValueType, _ErrorType],
-    result.ResultBased2[_ValueType, _ErrorType],
-    metaclass=ABCMeta,
+    SupportsKind2['Result', _ValueType_co, _ErrorType_co],
+    result.ResultBased2[_ValueType_co, _ErrorType_co],
+    ABC,
 ):
     """
     Base class for :class:`~Failure` and :class:`~Success`.
@@ -42,7 +42,7 @@ class Result(  # type: ignore[type-var]
     __slots__ = ('_trace',)
     __match_args__ = ('_inner_value',)
 
-    _inner_value: _ValueType | _ErrorType
+    _inner_value: _ValueType_co | _ErrorType_co
     _trace: list[FrameInfo] | None
 
     #: Typesafe equality comparison with other `Result` objects.
@@ -53,7 +53,7 @@ class Result(  # type: ignore[type-var]
         """Returns a list with stack trace when :func:`~Failure` was called."""
         return self._trace
 
-    def swap(self) -> 'Result[_ErrorType, _ValueType]':
+    def swap(self) -> 'Result[_ErrorType_co, _ValueType_co]':
         """
         Swaps value and error types.
 
@@ -72,8 +72,8 @@ class Result(  # type: ignore[type-var]
 
     def map(
         self,
-        function: Callable[[_ValueType], _NewValueType],
-    ) -> 'Result[_NewValueType, _ErrorType]':
+        function: Callable[[_ValueType_co], _NewValueType],
+    ) -> 'Result[_NewValueType, _ErrorType_co]':
         """
         Composes successful container with a pure function.
 
@@ -93,10 +93,10 @@ class Result(  # type: ignore[type-var]
         self,
         container: Kind2[
             'Result',
-            Callable[[_ValueType], _NewValueType],
-            _ErrorType,
+            Callable[[_ValueType_co], _NewValueType],
+            _ErrorType_co,
         ],
-    ) -> 'Result[_NewValueType, _ErrorType]':
+    ) -> 'Result[_NewValueType, _ErrorType_co]':
         """
         Calls a wrapped function in a container on this container.
 
@@ -118,10 +118,10 @@ class Result(  # type: ignore[type-var]
     def bind(
         self,
         function: Callable[
-            [_ValueType],
-            Kind2['Result', _NewValueType, _ErrorType],
+            [_ValueType_co],
+            Kind2['Result', _NewValueType, _ErrorType_co],
         ],
-    ) -> 'Result[_NewValueType, _ErrorType]':
+    ) -> 'Result[_NewValueType, _ErrorType_co]':
         """
         Composes successful container with a function that returns a container.
 
@@ -145,8 +145,8 @@ class Result(  # type: ignore[type-var]
 
     def alt(
         self,
-        function: Callable[[_ErrorType], _NewErrorType],
-    ) -> 'Result[_ValueType, _NewErrorType]':
+        function: Callable[[_ErrorType_co], _NewErrorType],
+    ) -> 'Result[_ValueType_co, _NewErrorType]':
         """
         Composes failed container with a pure function to modify failure.
 
@@ -165,9 +165,10 @@ class Result(  # type: ignore[type-var]
     def lash(
         self,
         function: Callable[
-            [_ErrorType], Kind2['Result', _ValueType, _NewErrorType],
+            [_ErrorType_co],
+            Kind2['Result', _ValueType_co, _NewErrorType],
         ],
-    ) -> 'Result[_ValueType, _NewErrorType]':
+    ) -> 'Result[_ValueType_co, _NewErrorType]':
         """
         Composes failed container with a function that returns a container.
 
@@ -186,7 +187,7 @@ class Result(  # type: ignore[type-var]
 
         """
 
-    def __iter__(self) -> Iterator[_ValueType]:
+    def __iter__(self) -> Iterator[_ValueType_co]:
         """API for :ref:`do-notation`."""
         yield self.unwrap()
 
@@ -226,7 +227,7 @@ class Result(  # type: ignore[type-var]
     def value_or(
         self,
         default_value: _NewValueType,
-    ) -> _ValueType | _NewValueType:
+    ) -> _ValueType_co | _NewValueType:
         """
         Get value or default value.
 
@@ -238,7 +239,7 @@ class Result(  # type: ignore[type-var]
 
         """
 
-    def unwrap(self) -> _ValueType:
+    def unwrap(self) -> _ValueType_co:
         """
         Get value or raise exception.
 
@@ -253,9 +254,9 @@ class Result(  # type: ignore[type-var]
             ...
           returns.primitives.exceptions.UnwrapFailedError
 
-        """  # noqa: RST307
+        """
 
-    def failure(self) -> _ErrorType:
+    def failure(self) -> _ErrorType_co:
         """
         Get failed value or raise exception.
 
@@ -270,11 +271,12 @@ class Result(  # type: ignore[type-var]
             ...
           returns.primitives.exceptions.UnwrapFailedError
 
-        """  # noqa: RST307
+        """
 
     @classmethod
     def from_value(
-        cls, inner_value: _NewValueType,
+        cls,
+        inner_value: _NewValueType,
     ) -> 'Result[_NewValueType, Any]':
         """
         One more value to create success unit values.
@@ -294,7 +296,8 @@ class Result(  # type: ignore[type-var]
 
     @classmethod
     def from_failure(
-        cls, inner_value: _NewErrorType,
+        cls,
+        inner_value: _NewErrorType,
     ) -> 'Result[Any, _NewErrorType]':
         """
         One more value to create failure unit values.
@@ -314,7 +317,8 @@ class Result(  # type: ignore[type-var]
 
     @classmethod
     def from_result(
-        cls, inner_value: 'Result[_NewValueType, _NewErrorType]',
+        cls,
+        inner_value: 'Result[_NewValueType, _NewErrorType]',
     ) -> 'Result[_NewValueType, _NewErrorType]':
         """
         Creates a new ``Result`` instance from existing ``Result`` instance.
@@ -332,7 +336,7 @@ class Result(  # type: ignore[type-var]
 
 
 @final  # noqa: WPS338
-class Failure(Result[Any, _ErrorType]):  # noqa: WPS338
+class Failure(Result[Any, _ErrorType_co]):  # noqa: WPS338
     """
     Represents a calculation which has failed.
 
@@ -341,14 +345,15 @@ class Failure(Result[Any, _ErrorType]):  # noqa: WPS338
 
     __slots__ = ()
 
-    _inner_value: _ErrorType
+    _inner_value: _ErrorType_co
 
-    def __init__(self, inner_value: _ErrorType) -> None:
+    def __init__(self, inner_value: _ErrorType_co) -> None:
         """Failure constructor."""
         super().__init__(inner_value)
-        object.__setattr__(self, '_trace', self._get_trace())  # noqa: WPS609
+        object.__setattr__(self, '_trace', self._get_trace())
 
-    if not TYPE_CHECKING:  # noqa: C901, WPS604  # pragma: no branch
+    if not TYPE_CHECKING:  # noqa: WPS604  # pragma: no branch
+
         def alt(self, function):
             """Composes failed container with a pure function to modify failure."""  # noqa: E501
             return Failure(function(self._inner_value))
@@ -386,7 +391,7 @@ class Failure(Result[Any, _ErrorType]):  # noqa: WPS338
             raise UnwrapFailedError(self) from self._inner_value
         raise UnwrapFailedError(self)
 
-    def failure(self) -> _ErrorType:
+    def failure(self) -> _ErrorType_co:
         """Returns failed value."""
         return self._inner_value
 
@@ -395,7 +400,7 @@ class Failure(Result[Any, _ErrorType]):  # noqa: WPS338
 
 
 @final
-class Success(Result[_ValueType, Any]):
+class Success(Result[_ValueType_co, Any]):
     """
     Represents a calculation which has succeeded and contains the result.
 
@@ -404,13 +409,14 @@ class Success(Result[_ValueType, Any]):
 
     __slots__ = ()
 
-    _inner_value: _ValueType
+    _inner_value: _ValueType_co
 
-    def __init__(self, inner_value: _ValueType) -> None:
+    def __init__(self, inner_value: _ValueType_co) -> None:
         """Success constructor."""
         super().__init__(inner_value)
 
-    if not TYPE_CHECKING:  # noqa: C901, WPS604  # pragma: no branch
+    if not TYPE_CHECKING:  # noqa: WPS604  # pragma: no branch
+
         def alt(self, function):
             """Does nothing for ``Success``."""
             return self
@@ -444,7 +450,7 @@ class Success(Result[_ValueType, Any]):
         """Successes swap to :class:`Failure`."""
         return Failure(self._inner_value)
 
-    def unwrap(self) -> _ValueType:
+    def unwrap(self) -> _ValueType_co:
         """Returns the unwrapped value from successful container."""
         return self._inner_value
 
@@ -455,8 +461,8 @@ class Success(Result[_ValueType, Any]):
 
 # Aliases:
 
-#: Alias for ``Result[_ValueType, Exception]``.
-ResultE: TypeAlias = Result[_ValueType, Exception]
+#: Alias for ``Result[_ValueType_co, Exception]``.
+ResultE: TypeAlias = Result[_ValueType_co, Exception]
 
 
 # Decorators:
@@ -466,32 +472,29 @@ _ExceptionType = TypeVar('_ExceptionType', bound=Exception)
 
 @overload
 def safe(
-    function: Callable[_FuncParams, _ValueType],
+    function: Callable[_FuncParams, _ValueType_co],
     /,
-) -> Callable[_FuncParams, ResultE[_ValueType]]:
-    """Decorator to convert exception-throwing for any kind of Exception."""
+) -> Callable[_FuncParams, ResultE[_ValueType_co]]: ...
 
 
 @overload
 def safe(
     exceptions: tuple[type[_ExceptionType], ...],
 ) -> Callable[
-    [Callable[_FuncParams, _ValueType]],
-    Callable[_FuncParams, Result[_ValueType, _ExceptionType]],
-]:
-    """Decorator to convert exception-throwing just for a set of Exceptions."""
+    [Callable[_FuncParams, _ValueType_co]],
+    Callable[_FuncParams, Result[_ValueType_co, _ExceptionType]],
+]: ...
 
 
-def safe(  # noqa: WPS234, C901
+def safe(  # noqa: WPS234
     exceptions: (
-        Callable[_FuncParams, _ValueType] |
-        tuple[type[_ExceptionType], ...]
+        Callable[_FuncParams, _ValueType_co] | tuple[type[_ExceptionType], ...]
     ),
 ) -> (
-    Callable[_FuncParams, ResultE[_ValueType]] |
-    Callable[
-        [Callable[_FuncParams, _ValueType]],
-        Callable[_FuncParams, Result[_ValueType, _ExceptionType]],
+    Callable[_FuncParams, ResultE[_ValueType_co]]
+    | Callable[
+        [Callable[_FuncParams, _ValueType_co]],
+        Callable[_FuncParams, Result[_ValueType_co, _ExceptionType]],
     ]
 ):
     """
@@ -534,19 +537,21 @@ def safe(  # noqa: WPS234, C901
     Similar to :func:`returns.io.impure_safe`
     and :func:`returns.future.future_safe` decorators.
     """
+
     def factory(
-        inner_function: Callable[_FuncParams, _ValueType],
+        inner_function: Callable[_FuncParams, _ValueType_co],
         inner_exceptions: tuple[type[_ExceptionType], ...],
-    ) -> Callable[_FuncParams, Result[_ValueType, _ExceptionType]]:
+    ) -> Callable[_FuncParams, Result[_ValueType_co, _ExceptionType]]:
         @wraps(inner_function)
         def decorator(
             *args: _FuncParams.args,
             **kwargs: _FuncParams.kwargs,
-        ) -> Result[_ValueType, _ExceptionType]:
+        ) -> Result[_ValueType_co, _ExceptionType]:
             try:
                 return Success(inner_function(*args, **kwargs))
             except inner_exceptions as exc:
                 return Failure(exc)
+
         return decorator
 
     if isinstance(exceptions, tuple):
@@ -582,6 +587,7 @@ def attempt(
         >>> assert parse_json('incorrect input') == Failure('incorrect input')
 
     """
+
     @wraps(func)
     def decorator(arg: _FirstType) -> Result[_NewValueType, _FirstType]:
         try:

@@ -1,4 +1,3 @@
-
 import pytest
 
 from returns.context import NoDeps, ReaderIOResult
@@ -43,67 +42,69 @@ class _ReleaseFailure:
         return ReaderIOResult.from_failure('release failure')
 
 
-@pytest.mark.parametrize(('acquire', 'use', 'release', 'final_result', 'log'), [
-    # Acquire success:
-    (
-        _acquire_success,
-        _use_success,
-        _ReleaseSuccess,
-        IOSuccess('use success'),
-        [('acquire success', Success('use success'))],
-    ),
-    (
-        _acquire_success,
-        _use_success,
-        _ReleaseFailure,
-        IOFailure('release failure'),
-        [],
-    ),
-    (
-        _acquire_success,
-        _use_failure,
-        _ReleaseSuccess,
-        IOFailure('use failure'),
-        [('acquire success', Failure('use failure'))],
-    ),
-    (
-        _acquire_success,
-        _use_failure,
-        _ReleaseFailure,
-        IOFailure('release failure'),
-        [],
-    ),
-
-    # Acquire failure:
-    (
-        _acquire_failure,
-        _use_success,
-        _ReleaseSuccess,
-        IOFailure('acquire failure'),
-        [],
-    ),
-    (
-        _acquire_failure,
-        _use_failure,
-        _ReleaseSuccess,
-        IOFailure('acquire failure'),
-        [],
-    ),
-    (
-        _acquire_failure,
-        _use_success,
-        _ReleaseFailure,
-        IOFailure('acquire failure'),
-        [],
-    ),
-    (
-        _acquire_failure,
-        _use_failure,
-        _ReleaseFailure,
-        IOFailure('acquire failure'),
-        [],
-    ),
-])
+@pytest.mark.parametrize(
+    ('acquire', 'use', 'release', 'final_result', 'log'),
+    [
+        # Acquire success:
+        (
+            _acquire_success,
+            _use_success,
+            _ReleaseSuccess,
+            IOSuccess('use success'),
+            [('acquire success', Success('use success'))],
+        ),
+        (
+            _acquire_success,
+            _use_success,
+            _ReleaseFailure,
+            IOFailure('release failure'),
+            [],
+        ),
+        (
+            _acquire_success,
+            _use_failure,
+            _ReleaseSuccess,
+            IOFailure('use failure'),
+            [('acquire success', Failure('use failure'))],
+        ),
+        (
+            _acquire_success,
+            _use_failure,
+            _ReleaseFailure,
+            IOFailure('release failure'),
+            [],
+        ),
+        # Acquire failure:
+        (
+            _acquire_failure,
+            _use_success,
+            _ReleaseSuccess,
+            IOFailure('acquire failure'),
+            [],
+        ),
+        (
+            _acquire_failure,
+            _use_failure,
+            _ReleaseSuccess,
+            IOFailure('acquire failure'),
+            [],
+        ),
+        (
+            _acquire_failure,
+            _use_success,
+            _ReleaseFailure,
+            IOFailure('acquire failure'),
+            [],
+        ),
+        (
+            _acquire_failure,
+            _use_failure,
+            _ReleaseFailure,
+            IOFailure('acquire failure'),
+            [],
+        ),
+    ],
+)
 def test_all_success(acquire, use, release, final_result, log):
     """Ensures that managed works as intended."""
     pipeline_logs: list[tuple[str, Result[str, str]]] = []

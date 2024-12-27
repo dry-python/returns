@@ -55,22 +55,20 @@ mypy = {version = ">=1.12,<1.15", optional = true}
 
 [tool.poetry.group.dev.dependencies]
 anyio = "^4.3"
-trio = ">=0.27,<0.29"
+trio = "^0.28"
 attrs = "^24.2"
-httpx = ">=0.27,<0.29"
+httpx = "^0.28"
 
-wemake-python-styleguide = "^0.19"
-flake8-pytest-style = "^2.0"
-flake8-pyi = "^24.1"
-nitpick = "^0.35"
+wemake-python-styleguide = "^1.0"
 codespell = "^2.2"
 slotscheck = "^0.19"
 
 pytest-cov = "^6.0"
 pytest-randomly = "^3.12"
 pytest-mypy-plugins = "^3.1"
-pytest-subtests = ">=0.13,<0.15"
+pytest-subtests = "^0.14"
 pytest-shard = "^0.1"
+ruff = "^0.8"
 
 
 [tool.poetry.group.docs]
@@ -78,7 +76,7 @@ optional = true
 
 [tool.poetry.group.docs.dependencies]
 
-sphinx = ">=7.3,<9.0"
+sphinx = "^8.1"
 sphinx-autodoc-typehints = "^2.3"
 sphinxcontrib-mermaid = "^1.0"
 furo = "^2024.5"
@@ -95,13 +93,120 @@ requires = ["poetry-core>=1.9.0"]
 build-backend = "poetry.core.masonry.api"
 
 
-[tool.nitpick]
-style = "https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/0.19.2/styles/nitpick-style-wemake.toml"
-
-
 [tool.slotscheck]
 strict-imports = true
 require-subclass = true
 require-superclass = true
 exclude-modules = 'returns\.contrib\.'
 exclude-classes = 'returns\.primitives\.exceptions:UnwrapFailedError'
+
+
+[tool.ruff]
+# Ruff config: https://docs.astral.sh/ruff/settings
+target-version = "py310"
+line-length = 80
+extend-exclude = [
+  # Intentionally bad code:
+  "tests/**/__snapshots__/**",
+  "tests/fixtures/**",
+]
+
+preview = true
+fix = true
+format.quote-style = "single"
+format.docstring-code-format = false
+lint.select = [
+  "A",    # flake8-builtins
+  "B",    # flake8-bugbear
+  "C4",   # flake8-comprehensions
+  "C90",  # maccabe
+  "COM",  # flake8-commas
+  "D",    # pydocstyle
+  "DTZ",  # flake8-datetimez
+  "E",    # pycodestyle
+  "ERA",  # flake8-eradicate
+  "EXE",  # flake8-executable
+  "F",    # pyflakes
+  "FBT",  # flake8-boolean-trap
+  "FLY",  # pyflint
+  "FURB", # refurb
+  "G",    # flake8-logging-format
+  "I",    # isort
+  "ICN",  # flake8-import-conventions
+  "ISC",  # flake8-implicit-str-concat
+  "LOG",  # flake8-logging
+  "N",    # pep8-naming
+  "PERF", # perflint
+  "PIE",  # flake8-pie
+  "PL",   # pylint
+  "PT",   # flake8-pytest-style
+  "PYI",  # flake8-pyi
+  "PTH",  # flake8-use-pathlib
+  "Q",    # flake8-quotes
+  "RET",  # flake8-return
+  "RSE",  # flake8-raise
+  "RUF",  # ruff
+  "S",    # flake8-bandit
+  "SIM",  # flake8-simpify
+  "SLF",  # flake8-self
+  "SLOT", # flake8-slots
+  "T100", # flake8-debugger
+  "TRY",  # tryceratops
+  "UP",   # pyupgrade
+  "W",    # pycodestyle
+  "YTT",  # flake8-2020
+]
+lint.ignore = [
+  "A005",   # allow to shadow stdlib and builtin module names
+  "COM812", # trailing comma, conflicts with `ruff format`
+  # Different doc rules that we don't really care about:
+  "D100",
+  "D104",
+  "D106",
+  "D203",
+  "D212",
+  "D401",
+  "D404",
+  "D405",
+  "ISC001",  # implicit string concat conflicts with `ruff format`
+  "ISC003",  # prefer explicit string concat over implicit concat
+  "PLR09",   # we have our own complexity rules
+  "PLR2004", # do not report magic numbers
+  "PLR6301", # do not require classmethod / staticmethod when self not used
+  "TRY003",  # long exception messages from `tryceratops`
+]
+lint.external = [ "WPS" ]
+lint.flake8-quotes.inline-quotes = "single"
+lint.mccabe.max-complexity = 6
+lint.pydocstyle.convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"returns/context/__init__.py" = ["F401", "PLC0414"]
+"returns/primitives/asserts.py" = ["S101"]
+"returns/methods/__init__.py" = ["F401", "PLC0414"]
+"returns/contrib/mypy/_typeops/visitor.py" = ["S101"]
+"returns/pointfree/__init__.py" = ["F401", "PLC0414"]
+"returns/contrib/pytest/__init__.py" = ["F401", "PLC0414"]
+"returns/pipeline.py" = ["F401", "PLC0414"]
+"returns/contrib/mypy/*.py" = ["S101"]
+"returns/interfaces/*.py" = ["S101"]
+"*.pyi" = ["D103"]
+"tests/test_pattern_matching.py" = ["S101"]
+"tests/test_examples/test_maybe/test_maybe_pattern_matching.py" = [
+    "D101",
+    "D103",
+    "F811",
+]
+"tests/test_examples/*" = ["D102"]
+"tests/test_examples/test_result/test_result_pattern_matching.py" = ["D103"]
+"tests/*.py" = [
+  "S101", # asserts
+  "S105", # hardcoded passwords
+  "S404", # subprocess calls are for tests
+  "S603", # do not require `shell=True`
+  "S607", # partial executable paths
+  "RUF029",  # allow async functions to not use `await`
+]
+
+[tool.ruff.lint.pep8-naming]
+staticmethod-decorators = ["staticmethod", "law_definition"]

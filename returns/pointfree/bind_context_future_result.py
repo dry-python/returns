@@ -25,10 +25,18 @@ def bind_context_future_result(
         [_FirstType],
         'ReaderFutureResult[_UpdatedType, _SecondType, _ThirdType]',
     ],
-) -> Kinded[Callable[
-    [KindN[_ReaderFutureResultLikeKind, _FirstType, _SecondType, _ThirdType]],
-    KindN[_ReaderFutureResultLikeKind, _UpdatedType, _SecondType, _ThirdType],
-]]:
+) -> Kinded[
+    Callable[
+        [
+            KindN[
+                _ReaderFutureResultLikeKind, _FirstType, _SecondType, _ThirdType
+            ]
+        ],
+        KindN[
+            _ReaderFutureResultLikeKind, _UpdatedType, _SecondType, _ThirdType
+        ],
+    ]
+]:
     """
     Lifts function from ``RequiresContextFutureResult`` for better composition.
 
@@ -59,6 +67,7 @@ def bind_context_future_result(
       ... )('abc').awaitable) == IOFailure(0)
 
     """
+
     @kinded
     def factory(
         container: KindN[
@@ -74,4 +83,5 @@ def bind_context_future_result(
         _ThirdType,
     ]:
         return container.bind_context_future_result(function)
+
     return factory

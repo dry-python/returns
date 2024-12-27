@@ -21,14 +21,14 @@ class Law(Immutable):
     Use ``Law1``, ``Law2`` or ``Law3`` instead.
     """
 
-    __slots__ = ('definition', )
+    __slots__ = ('definition',)
 
     #: Function used to define this law.
     definition: Callable
 
     def __init__(self, function) -> None:
         """Saves function to the inner state."""
-        object.__setattr__(self, 'definition', function)  # noqa: WPS609
+        object.__setattr__(self, 'definition', function)
 
     @final
     @property
@@ -126,16 +126,13 @@ class Lawful(Generic[_Caps]):
 
         """
         seen = {
-            '{0}.{1}'.format(
-                parent.__module__,  # noqa: WPS609
-                parent.__qualname__,
-            ): parent
+            f'{parent.__module__}.{parent.__qualname__}': parent
             for parent in cls.__mro__
         }
 
         laws = {}
         for klass in seen.values():
-            current_laws = klass.__dict__.get('_laws', ())  # noqa: WPS609
+            current_laws = klass.__dict__.get('_laws', ())
             if not current_laws:
                 continue
             laws[klass] = current_laws

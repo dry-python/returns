@@ -23,10 +23,12 @@ def bind_context2(
         [_FirstType],
         RequiresContext[_UpdatedType, _SecondType],
     ],
-) -> Kinded[Callable[
-    [Kind2[_Reader2Kind, _FirstType, _SecondType]],
-    Kind2[_Reader2Kind, _UpdatedType, _SecondType],
-]]:
+) -> Kinded[
+    Callable[
+        [Kind2[_Reader2Kind, _FirstType, _SecondType]],
+        Kind2[_Reader2Kind, _UpdatedType, _SecondType],
+    ]
+]:
     """
     Composes successful container with a function that returns a container.
 
@@ -52,11 +54,13 @@ def bind_context2(
     for more info.
 
     """
+
     @kinded
     def factory(
         container: Kind2[_Reader2Kind, _FirstType, _SecondType],
     ) -> Kind2[_Reader2Kind, _UpdatedType, _SecondType]:
         return container.bind_context(function)
+
     return factory
 
 
@@ -65,10 +69,12 @@ def bind_context3(
         [_FirstType],
         RequiresContext[_UpdatedType, _ThirdType],
     ],
-) -> Kinded[Callable[
-    [Kind3[_Reader3Kind, _FirstType, _SecondType, _ThirdType]],
-    Kind3[_Reader3Kind, _UpdatedType, _SecondType, _ThirdType],
-]]:
+) -> Kinded[
+    Callable[
+        [Kind3[_Reader3Kind, _FirstType, _SecondType, _ThirdType]],
+        Kind3[_Reader3Kind, _UpdatedType, _SecondType, _ThirdType],
+    ]
+]:
     """
     Composes successful container with a function that returns a container.
 
@@ -98,11 +104,13 @@ def bind_context3(
     for more info.
 
     """
+
     @kinded
     def factory(
         container: Kind3[_Reader3Kind, _FirstType, _SecondType, _ThirdType],
     ) -> Kind3[_Reader3Kind, _UpdatedType, _SecondType, _ThirdType]:
         return container.bind_context(function)
+
     return factory
 
 

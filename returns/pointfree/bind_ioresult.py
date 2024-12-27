@@ -19,10 +19,12 @@ _IOResultLikeKind = TypeVar('_IOResultLikeKind', bound=IOResultLikeN)
 
 def bind_ioresult(
     function: Callable[[_FirstType], IOResult[_UpdatedType, _SecondType]],
-) -> Kinded[Callable[
-    [KindN[_IOResultLikeKind, _FirstType, _SecondType, _ThirdType]],
-    KindN[_IOResultLikeKind, _UpdatedType, _SecondType, _ThirdType],
-]]:
+) -> Kinded[
+    Callable[
+        [KindN[_IOResultLikeKind, _FirstType, _SecondType, _ThirdType]],
+        KindN[_IOResultLikeKind, _UpdatedType, _SecondType, _ThirdType],
+    ]
+]:
     """
     Composes successful container with a function that returns a container.
 
@@ -48,6 +50,7 @@ def bind_ioresult(
       ... )(...) == IOSuccess(2)
 
     """
+
     @kinded
     def factory(
         container: KindN[
@@ -58,4 +61,5 @@ def bind_ioresult(
         ],
     ) -> KindN[_IOResultLikeKind, _UpdatedType, _SecondType, _ThirdType]:
         return container.bind_ioresult(function)
+
     return factory

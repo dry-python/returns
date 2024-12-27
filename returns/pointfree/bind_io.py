@@ -9,20 +9,22 @@ from returns.primitives.hkt import Kinded, KindN, kinded
 if TYPE_CHECKING:
     from returns.io import IO  # noqa: WPS433
 
-_FirstType = TypeVar('_FirstType', contravariant=True)
+_FirstType_contra = TypeVar('_FirstType_contra', contravariant=True)
 _SecondType = TypeVar('_SecondType')
-_ThirdType = TypeVar('_ThirdType', contravariant=True)
-_UpdatedType = TypeVar('_UpdatedType', covariant=True)
+_ThirdType_contra = TypeVar('_ThirdType_contra', contravariant=True)
+_UpdatedType_co = TypeVar('_UpdatedType_co', covariant=True)
 
 _IOLikeKind = TypeVar('_IOLikeKind', bound=IOLikeN)
 
 
 def bind_io(
-    function: Callable[[_FirstType], IO[_UpdatedType]],
-) -> Kinded[Callable[
-    [KindN[_IOLikeKind, _FirstType, _SecondType, _ThirdType]],
-    KindN[_IOLikeKind, _UpdatedType, _SecondType, _ThirdType],
-]]:
+    function: Callable[[_FirstType_contra], IO[_UpdatedType_co]],
+) -> Kinded[
+    Callable[
+        [KindN[_IOLikeKind, _FirstType_contra, _SecondType, _ThirdType_contra]],
+        KindN[_IOLikeKind, _UpdatedType_co, _SecondType, _ThirdType_contra],
+    ]
+]:
     """
     Composes successful container with a function that returns a container.
 
@@ -47,9 +49,13 @@ def bind_io(
       >>> assert bound(IOFailure(1)) == IOFailure(1)
 
     """
+
     @kinded
     def factory(
-        container: KindN[_IOLikeKind, _FirstType, _SecondType, _ThirdType],
-    ) -> KindN[_IOLikeKind, _UpdatedType, _SecondType, _ThirdType]:
+        container: KindN[
+            _IOLikeKind, _FirstType_contra, _SecondType, _ThirdType_contra
+        ],
+    ) -> KindN[_IOLikeKind, _UpdatedType_co, _SecondType, _ThirdType_contra]:
         return container.bind_io(function)
+
     return factory

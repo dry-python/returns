@@ -16,7 +16,7 @@ class Trampoline(Generic[_ReturnType]):
     Primitive to convert recursion into an actual object.
     """
 
-    __slots__ = ('func', 'args', 'kwargs')
+    __slots__ = ('args', 'func', 'kwargs')
 
     def __init__(  # noqa: WPS451
         self,
@@ -91,5 +91,5 @@ def trampoline(
             trampoline_result = trampoline_result()
         return trampoline_result
 
-    decorator._orig_func = func  # type: ignore[attr-defined]  # noqa: WPS437
+    decorator._orig_func = func  # type: ignore[attr-defined]  # noqa: SLF001
     return decorator
