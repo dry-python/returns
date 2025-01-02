@@ -25,9 +25,9 @@ repos:
       - id: zizmor
   - repo: https://github.com/shellcheck-py/shellcheck-py
     rev: v0.10.0.1
+    always_run: true
     hooks:
       - id: shellcheck
-        always_run: true
   - repo: https://github.com/tox-dev/pyproject-fmt
     rev: v2.5.0
     hooks:
