@@ -27,6 +27,7 @@ repos:
     rev: v0.10.0.1
     hooks:
       - id: shellcheck
+        always_run: true
   - repo: https://github.com/tox-dev/pyproject-fmt
     rev: v2.5.0
     hooks:
