@@ -50,7 +50,6 @@ repos:
       - id: check-hooks-apply
       - id: check-useless-excludes
 
-exclude: ^(tests/fixtures/|tests/test_formatter/__snapshots__/)
 ci:
   autofix_commit_msg: "[pre-commit.ci] auto fixes from pre-commit.com hooks"
   autofix_prs: true
