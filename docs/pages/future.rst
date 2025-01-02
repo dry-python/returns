@@ -12,7 +12,7 @@ What problems do we solve with these containers? Basically these ones:
 
 1. You cannot call async function from a sync one
 2. Any unexpectedly thrown exception can ruin your whole event loop
-3. Ugly composition with lots of `await` statements
+3. Ugly composition with lots of ``await`` statements
 
 
 Future container

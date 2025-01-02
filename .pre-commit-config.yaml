@@ -1,8 +1,4 @@
 repos:
-  - repo: meta
-    hooks:
-      - id: check-hooks-apply
-      - id: check-useless-excludes
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v5.0.0
     hooks:
@@ -47,6 +43,12 @@ repos:
       - id: sphinx-lint
         args: [--enable=default-role]
         files: ^docs/
+
+  # Should be the last:
+  - repo: meta
+    hooks:
+      - id: check-hooks-apply
+      - id: check-useless-excludes
 
 exclude: ^(tests/fixtures/|tests/test_formatter/__snapshots__/)
 ci:
