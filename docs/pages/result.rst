@@ -99,7 +99,7 @@ use :func:`future_safe <returns.future.future_safe>` instead.
   >>> str(divide(0))
   '<Failure: division by zero>'
 
-If you want to `safe` handle only a set of exceptions:
+If you want ``@safe`` to handle only a set of exceptions:
 
 .. code:: python
 

@@ -19,6 +19,10 @@ repos:
     rev: v1.7.5
     hooks:
       - id: actionlint
+  - repo: https://github.com/woodruffw/zizmor-pre-commit
+    rev: v0.8.0
+    hooks:
+      - id: zizmor
   - repo: https://github.com/shellcheck-py/shellcheck-py
     rev: v0.10.0.1
     hooks:
@@ -33,7 +37,18 @@ repos:
       - id: ruff
         args: ["--exit-non-zero-on-fix", "--fix"]
       - id: ruff-format
-exclude: ^(tests/fixtures/|tests/test_formatter/__snapshots__/)
+  - repo: https://github.com/sphinx-contrib/sphinx-lint
+    rev: v1.0.0
+    hooks:
+      - id: sphinx-lint
+        args: [--enable=default-role]
+        files: ^docs/
+
+  # Should be the last:
+  - repo: meta
+    hooks:
+      - id: check-useless-excludes
+
 ci:
   autofix_commit_msg: "[pre-commit.ci] auto fixes from pre-commit.com hooks"
   autofix_prs: true
