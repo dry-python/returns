@@ -23,6 +23,10 @@ repos:
     rev: v0.8.0
     hooks:
       - id: zizmor
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.10.0.1
+    hooks:
+      - id: shellcheck
   - repo: https://github.com/tox-dev/pyproject-fmt
     rev: v2.5.0
     hooks:
@@ -43,7 +47,6 @@ repos:
   # Should be the last:
   - repo: meta
     hooks:
-      - id: check-hooks-apply
       - id: check-useless-excludes
 
 ci:
