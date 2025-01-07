@@ -14,6 +14,7 @@ repos:
     rev: 0.30.0
     hooks:
       - id: check-dependabot
+      - id: check-readthedocs
       - id: check-github-workflows
   - repo: https://github.com/rhysd/actionlint
     rev: v1.7.6
