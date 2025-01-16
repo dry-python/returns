@@ -204,7 +204,7 @@ from words_app.logic import calculate_points
 
 def view(request: HttpRequest) -> HttpResponse:
     user_word: str = request.POST['word']  # just an example
-    points = calculate_points(user_words)(settings)  # passing the dependencies
+    points = calculate_points(user_word)(settings)  # passing the dependencies
     ...  # later you show the result to user somehow
 
 # Somewhere in your `words_app/logic.py`:
