@@ -1516,13 +1516,13 @@ test = ["cython (>=3.0)", "defusedxml (>=0.7.1)", "pytest (>=8.0)", "setuptools 
 
 [[package]]
 name = "sphinx-autodoc-typehints"
-version = "3.0.0"
+version = "3.0.1"
 description = "Type hints (PEP 484) support for the Sphinx autodoc extension"
 optional = false
 python-versions = ">=3.10"
 files = [
-    {file = "sphinx_autodoc_typehints-3.0.0-py3-none-any.whl", hash = "sha256:b82bf83e23ae3d5dc25881004a6d6614be6291ff8ff165b2d1e18799f0f6bd74"},
-    {file = "sphinx_autodoc_typehints-3.0.0.tar.gz", hash = "sha256:d5cdab471efb10fcff4ffe81a2ef713398bc891af9d942a4b763f5ed1d9bf550"},
+    {file = "sphinx_autodoc_typehints-3.0.1-py3-none-any.whl", hash = "sha256:4b64b676a14b5b79cefb6628a6dc8070e320d4963e8ff640a2f3e9390ae9045a"},
+    {file = "sphinx_autodoc_typehints-3.0.1.tar.gz", hash = "sha256:b9b40dd15dee54f6f810c924f863f9cf1c54f9f3265c495140ea01be7f44fa55"},
 ]
 
 [package.dependencies]
