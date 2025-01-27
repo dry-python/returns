@@ -59,7 +59,7 @@ or:
 plugins = ["returns.contrib.mypy.returns_plugin"]
 ```
 
-We also recommend to use the same `mypy` settings [we use](https://github.com/wemake-services/wemake-python-styleguide/blob/master/styles/mypy.toml).
+We also recommend to use the same `mypy` settings we use, which you'll find in the `[tool.mypy]` sections in our [pyproject.toml](https://github.com/wemake-services/wemake-python-styleguide/blob/master/pyproject.toml) file.
 
 Make sure you know how to get started, [check out our docs](https://returns.readthedocs.io/en/latest/)!
 [Try our demo](https://repl.it/@sobolevn/returns#ex.py).
