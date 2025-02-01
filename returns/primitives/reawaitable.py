@@ -1,6 +1,6 @@
 from collections.abc import Awaitable, Callable, Generator
 from functools import wraps
-from typing import NewType, TypeVar, ParamSpec, cast, final
+from typing import NewType, ParamSpec, TypeVar, cast, final
 
 _ValueType = TypeVar('_ValueType')
 _Params = ParamSpec('_Params')
@@ -127,7 +127,11 @@ def reawaitable(
       >>> assert anyio.run(main) == 3
 
     """
+
     @wraps(coro)
-    def decorator(*args: _Params.args, **kwargs: _Params.kwargs) -> Awaitable[_ValueType]:
+    def decorator(
+        *args: _Params.args, **kwargs: _Params.kwargs
+    ) -> Awaitable[_ValueType]:
         return ReAwaitable(coro(*args, **kwargs))
+
     return decorator
