@@ -3,6 +3,7 @@ from functools import wraps
 from typing import NewType, ParamSpec, TypeVar, cast, final
 
 _ValueType = TypeVar('_ValueType')
+_AwaitableT = TypeVar('_AwaitableT', bound=Awaitable)
 _Ps = ParamSpec('_Ps')
 
 _Sentinel = NewType('_Sentinel', object)
@@ -106,8 +107,8 @@ class ReAwaitable:
 
 
 def reawaitable(
-    coro: Callable[_Ps, Awaitable[_ValueType]],
-) -> Callable[_Ps, Awaitable[_ValueType]]:
+    coro: Callable[_Ps, _AwaitableT],
+) -> Callable[_Ps, _AwaitableT]:
     """
     Allows to decorate coroutine functions to be awaitable multiple times.
 
@@ -130,8 +131,9 @@ def reawaitable(
 
     @wraps(coro)
     def decorator(
-        *args: _Ps.args, **kwargs: _Ps.kwargs
-    ) -> Awaitable[_ValueType]:
-        return ReAwaitable(coro(*args, **kwargs))
+        *args: _Ps.args,
+        **kwargs: _Ps.kwargs,
+    ) -> _AwaitableT:
+        return ReAwaitable(coro(*args, **kwargs))  # type: ignore[return-type]
 
     return decorator
