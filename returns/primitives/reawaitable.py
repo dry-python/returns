@@ -1,8 +1,9 @@
 from collections.abc import Awaitable, Callable, Generator
-from typing import NewType, TypeVar, cast, final
+from functools import wraps
+from typing import NewType, TypeVar, ParamSpec, cast, final
 
 _ValueType = TypeVar('_ValueType')
-_FunctionCoroType = TypeVar('_FunctionCoroType', bound=Callable[..., Awaitable])
+_Params = ParamSpec('_Params')
 
 _Sentinel = NewType('_Sentinel', object)
 _sentinel: _Sentinel = cast(_Sentinel, object())
@@ -104,7 +105,9 @@ class ReAwaitable:
         return self._cache  # type: ignore
 
 
-def reawaitable(coro: _FunctionCoroType) -> _FunctionCoroType:
+def reawaitable(
+    coro: Callable[_Params, Awaitable[_ValueType]],
+) -> Callable[_Params, Awaitable[_ValueType]]:
     """
     Allows to decorate coroutine functions to be awaitable multiple times.
 
@@ -124,6 +127,7 @@ def reawaitable(coro: _FunctionCoroType) -> _FunctionCoroType:
       >>> assert anyio.run(main) == 3
 
     """
-    return lambda *args, **kwargs: ReAwaitable(  # type: ignore
-        coro(*args, **kwargs),
-    )
+    @wraps(coro)
+    def decorator(*args: _Params.args, **kwargs: _Params.kwargs) -> Awaitable[_ValueType]:
+        return ReAwaitable(coro(*args, **kwargs))
+    return decorator
