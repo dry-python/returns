@@ -134,6 +134,6 @@ def reawaitable(
         *args: _Ps.args,
         **kwargs: _Ps.kwargs,
     ) -> _AwaitableT:
-        return ReAwaitable(coro(*args, **kwargs))  # type: ignore[return-type]
+        return ReAwaitable(coro(*args, **kwargs))  # type: ignore[return-value]
 
     return decorator
