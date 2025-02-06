@@ -62,7 +62,7 @@
 
 
 - case: reader_result_like_inheritance_wrong
-  disable_cache: false
+  disable_cache: true
   main: |
     from typing import TypeVar, Callable
     from returns.interfaces.specific.reader_result import ReaderResultLike3
