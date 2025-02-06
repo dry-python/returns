@@ -107,6 +107,7 @@
     main:20: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
     main:25: error: Signature of "from_failed_context" incompatible with supertype "ReaderResultLikeN"  [override]
     main:25: note:      Superclass:
+    main:25: note:          @classmethod
     main:25: note:          def [_ErrorType, _EnvType] from_failed_context(cls, inner_value: RequiresContext[_ErrorType, _EnvType]) -> KindN[MyClass[T, V, U], T, _ErrorType, _EnvType]
     main:25: note:      Subclass:
     main:25: note:          @classmethod
