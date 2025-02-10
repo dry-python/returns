@@ -12,7 +12,7 @@ from abc import abstractmethod
 from collections.abc import Awaitable, Callable
 from typing import TYPE_CHECKING, TypeVar
 
-from typing_extensions import Never
+from typing_extensions import Never, Self
 
 from returns.interfaces.specific import future, ioresult
 from returns.primitives.hkt import KindN
@@ -77,9 +77,9 @@ class FutureResultLikeN(
 
     @classmethod
     def from_future_result(
-        cls: type[_FutureResultLikeType],
+        cls,
         inner_value: FutureResult[_ValueType, _ErrorType],
-    ) -> KindN[_FutureResultLikeType, _ValueType, _ErrorType, _ThirdType]:
+    ) -> KindN[Self, _ValueType, _ErrorType, _ThirdType]:
         """Creates container from ``FutureResult`` instance."""
 
 
