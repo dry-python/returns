@@ -37,7 +37,7 @@
 
 
 - case: curry_two_generic_args2
-  disable_cache: false
+  disable_cache: true
   main: |
     from returns.curry import curry
     from typing import List, TypeVar
