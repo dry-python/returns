@@ -49,11 +49,12 @@
         ...
 
     x: List[int]
+    y: List[str]
 
-    reveal_type(zero)  # N: Revealed type is "Overload(def (arg: builtins.int) -> def [T] (other: builtins.list[T`-1]) -> T`-1, def [T] (arg: builtins.int, other: builtins.list[T`-1]) -> T`-1)"
-    reveal_type(zero(1))  # N: Revealed type is "def [T] (other: builtins.list[T`2]) -> T`2"
     reveal_type(zero(1)(x))  # N: Revealed type is "builtins.int"
     reveal_type(zero(1, x))  # N: Revealed type is "builtins.int"
+    reveal_type(zero(1)(y))  # N: Revealed type is "builtins.str"
+    reveal_type(zero(1, y))  # N: Revealed type is "builtins.str"
 
 
 # TODO: enable and fix our plugin
