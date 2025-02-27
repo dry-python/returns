@@ -1,8 +1,8 @@
 import pickle  # noqa: S403
 
-from returns.maybe import Nothing, Some
+from returns.maybe import Nothing
 from returns.primitives.exceptions import UnwrapFailedError
-from returns.result import Failure, Success
+from returns.result import Failure
 
 
 def test_pickle_unwrap_failed_error_from_maybe():
