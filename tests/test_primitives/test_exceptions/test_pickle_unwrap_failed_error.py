@@ -12,10 +12,10 @@ def test_pickle_unwrap_failed_error_from_maybe():
     except UnwrapFailedError as error:
         # Serialize the error
         serialized = pickle.dumps(error)
-        
+
         # Deserialize
         deserialized_error = pickle.loads(serialized)  # noqa: S301
-        
+
         # Check that halted_container is preserved
         assert deserialized_error.halted_container == Nothing
         assert deserialized_error.halted_container != Some(None)
@@ -28,10 +28,10 @@ def test_pickle_unwrap_failed_error_from_result():
     except UnwrapFailedError as error:
         # Serialize the error
         serialized = pickle.dumps(error)
-        
+
         # Deserialize
         deserialized_error = pickle.loads(serialized)  # noqa: S301
-        
+
         # Check that halted_container is preserved
         assert deserialized_error.halted_container == Failure('error')
         assert deserialized_error.halted_container != Success('error')
