@@ -23,7 +23,7 @@ class UnwrapFailedError(Exception):
 
     def __reduce__(self):  # noqa: WPS603
         """Custom reduce method for pickle protocol.
-        
+
         This helps properly reconstruct the exception during unpickling.
         """
         return (
