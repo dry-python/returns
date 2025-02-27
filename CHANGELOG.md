@@ -22,6 +22,13 @@ See [0Ver](https://0ver.org/).
   which provides a default error value for `Failure`
 
 
+## 0.24.1
+
+### Bugfixes
+
+- Add pickling support for `UnwrapFailedError` exception
+
+
 ## 0.23.0
 
 ### Features
