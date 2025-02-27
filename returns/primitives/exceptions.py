@@ -21,7 +21,7 @@ class UnwrapFailedError(Exception):
         super().__init__()
         self.halted_container = container
 
-    def __reduce__(self):
+    def __reduce__(self):  # noqa: WPS603
         """Custom reduce method for pickle protocol.
         
         This helps properly reconstruct the exception during unpickling.
