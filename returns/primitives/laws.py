@@ -1,5 +1,5 @@
 from collections.abc import Callable, Sequence
-from typing import ClassVar, Generic, TypeVar, final
+from typing import ClassVar, Final, Generic, TypeVar, final
 
 from returns.primitives.types import Immutable
 
@@ -12,7 +12,7 @@ _TypeArgType3 = TypeVar('_TypeArgType3')
 #: Special alias to define laws as functions even inside a class
 law_definition = staticmethod
 
-LAWS_ATTRIBUTE: str = '_laws'
+LAWS_ATTRIBUTE: Final = '_laws'
 
 
 class Law(Immutable):
