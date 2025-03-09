@@ -1,7 +1,7 @@
 import inspect
 from collections.abc import Callable, Iterator
 from contextlib import ExitStack, contextmanager
-from typing import Any, NamedTuple, TypeVar, final
+from typing import Any, NamedTuple, TypeGuard, TypeVar, final
 
 import pytest
 from hypothesis import given
@@ -219,11 +219,15 @@ def lawful_interfaces(container_type: type[Lawful]) -> set[type[object]]:
     return {
         base_type
         for base_type in container_type.__mro__
-        if (
-            getattr(base_type, '__module__', '').startswith('returns.')
-            and base_type not in {Lawful, container_type}
-        )
+        if _is_lawful_interface(base_type)
+        and base_type not in {Lawful, container_type}
     }
+
+
+def _is_lawful_interface(
+    interface_type: type[object],
+) -> TypeGuard[type[Lawful]]:
+    return issubclass(interface_type, Lawful)
 
 
 def _clean_caches() -> None:
