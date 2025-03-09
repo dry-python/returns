@@ -81,9 +81,9 @@ It works in a combination with "Laws as Values" feature we provide in the core.
 
   check_all_laws(YourCustomContainer)
 
-This one line of code will generate ~100 tests for all defined law
+This one line of code will generate ~100 tests for all defined laws
 in both ``YourCustomContainer`` and all its super types,
-including our internal ones.
+including our internal ones and user-defined ones.
 
 We also provide a way to configure
 the checking process with ``settings_kwargs``:

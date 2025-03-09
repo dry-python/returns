@@ -1,7 +1,7 @@
 import inspect
 from collections.abc import Callable, Iterator
 from contextlib import ExitStack, contextmanager
-from typing import Any, NamedTuple, TypeVar, final
+from typing import Any, NamedTuple, TypeGuard, TypeVar, final
 
 import pytest
 from hypothesis import given
@@ -10,7 +10,7 @@ from hypothesis import strategies as st
 from hypothesis.strategies._internal import types  # noqa: PLC2701
 
 from returns.contrib.hypothesis.containers import strategy_from_container
-from returns.primitives.laws import Law, Lawful
+from returns.primitives.laws import LAWS_ATTRIBUTE, Law, Lawful
 
 
 @final
@@ -83,14 +83,7 @@ def container_strategies(
 
     Can be used independently from other functions.
     """
-    our_interfaces = {
-        base_type
-        for base_type in container_type.__mro__
-        if (
-            getattr(base_type, '__module__', '').startswith('returns.')
-            and base_type not in {Lawful, container_type}
-        )
-    }
+    our_interfaces = lawful_interfaces(container_type)
     for interface in our_interfaces:
         st.register_type_strategy(
             interface,
@@ -219,6 +212,28 @@ def clean_plugin_context() -> Iterator[None]:
     finally:
         for saved_state in saved_stategies.items():
             st.register_type_strategy(*saved_state)
+
+
+def lawful_interfaces(container_type: type[Lawful]) -> set[type[Lawful]]:
+    """Return ancestors of `container_type` that are lawful interfaces."""
+    return {
+        base_type
+        for base_type in container_type.__mro__
+        if _is_lawful_interface(base_type)
+        and base_type not in {Lawful, container_type}
+    }
+
+
+def _is_lawful_interface(
+    interface_type: type[object],
+) -> TypeGuard[type[Lawful]]:
+    return issubclass(interface_type, Lawful) and _has_non_inherited_attribute(
+        interface_type, LAWS_ATTRIBUTE
+    )
+
+
+def _has_non_inherited_attribute(type_: type[object], attribute: str) -> bool:
+    return attribute in type_.__dict__
 
 
 def _clean_caches() -> None:

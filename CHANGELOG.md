@@ -24,6 +24,10 @@ See [0Ver](https://0ver.org/).
 
 ## 0.24.1
 
+### Features
+
+- Make `hypothesis` plugin test laws from user-defined interfaces too
+
 ### Bugfixes
 
 - Add pickling support for `UnwrapFailedError` exception
