@@ -2,8 +2,6 @@ from abc import abstractmethod
 from collections.abc import Callable, Sequence
 from typing import ClassVar, Generic, TypeAlias, TypeVar, final
 
-import pytest
-from hypothesis.errors import ResolutionFailed
 from typing_extensions import Never
 
 from returns.contrib.hypothesis.laws import check_all_laws
@@ -84,10 +82,14 @@ class _MappableN(
 _Mappable1: TypeAlias = _MappableN[_FirstType, Never, Never]
 
 
+class _ParentWrapper(_Mappable1[_ValueType]):
+    """Class that is an ancestor of `_Wrapper` but has no laws."""
+
+
 class _Wrapper(
     BaseContainer,
     SupportsKind1['_Wrapper', _ValueType],
-    _Mappable1[_ValueType],
+    _ParentWrapper[_ValueType],
 ):
     """Simple instance of `_MappableN`."""
 
@@ -103,6 +105,6 @@ class _Wrapper(
         return _Wrapper(function(self._inner_value))
 
 
-pytestmark = pytest.mark.xfail(raises=ResolutionFailed)
-
-check_all_laws(_Wrapper)
+# We need to use `use_init=True` because `MappableN` does not automatically
+# get a strategy from `strategy_from_container`.
+check_all_laws(_Wrapper, use_init=True)

@@ -14,15 +14,11 @@ def test_lawful_interfaces__container_defined_in_returns() -> None:
     assert sorted(str(interface) for interface in result) == [
         "<class 'returns.interfaces.altable.AltableN'>",
         "<class 'returns.interfaces.applicative.ApplicativeN'>",
-        "<class 'returns.interfaces.bimappable.BiMappableN'>",
         "<class 'returns.interfaces.container.ContainerN'>",
         "<class 'returns.interfaces.equable.Equable'>",
         "<class 'returns.interfaces.failable.DiverseFailableN'>",
         "<class 'returns.interfaces.failable.FailableN'>",
         "<class 'returns.interfaces.mappable.MappableN'>",
-        "<class 'returns.interfaces.specific.result.ResultBasedN'>",
-        "<class 'returns.interfaces.specific.result.ResultLikeN'>",
-        "<class 'returns.interfaces.specific.result.UnwrappableResult'>",
         "<class 'returns.interfaces.swappable.SwappableN'>",
     ]
 

@@ -12,6 +12,8 @@ _TypeArgType3 = TypeVar('_TypeArgType3')
 #: Special alias to define laws as functions even inside a class
 law_definition = staticmethod
 
+LAWS_ATTRIBUTE: str = '_laws'
+
 
 class Law(Immutable):
     """
@@ -132,7 +134,7 @@ class Lawful(Generic[_Caps]):
 
         laws = {}
         for klass in seen.values():
-            current_laws = klass.__dict__.get('_laws', ())
+            current_laws = klass.__dict__.get(LAWS_ATTRIBUTE, ())
             if not current_laws:
                 continue
             laws[klass] = current_laws

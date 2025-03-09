@@ -10,7 +10,7 @@ from hypothesis import strategies as st
 from hypothesis.strategies._internal import types  # noqa: PLC2701
 
 from returns.contrib.hypothesis.containers import strategy_from_container
-from returns.primitives.laws import Law, Lawful
+from returns.primitives.laws import LAWS_ATTRIBUTE, Law, Lawful
 
 
 @final
@@ -214,7 +214,7 @@ def clean_plugin_context() -> Iterator[None]:
             st.register_type_strategy(*saved_state)
 
 
-def lawful_interfaces(container_type: type[Lawful]) -> set[type[object]]:
+def lawful_interfaces(container_type: type[Lawful]) -> set[type[Lawful]]:
     """Return ancestors of `container_type` that are lawful interfaces."""
     return {
         base_type
@@ -227,7 +227,13 @@ def lawful_interfaces(container_type: type[Lawful]) -> set[type[object]]:
 def _is_lawful_interface(
     interface_type: type[object],
 ) -> TypeGuard[type[Lawful]]:
-    return issubclass(interface_type, Lawful)
+    return issubclass(interface_type, Lawful) and _has_non_inherited_attribute(
+        interface_type, LAWS_ATTRIBUTE
+    )
+
+
+def _has_non_inherited_attribute(type_: type[object], attribute: str) -> bool:
+    return attribute in type_.__dict__
 
 
 def _clean_caches() -> None:
