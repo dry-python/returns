@@ -83,14 +83,7 @@ def container_strategies(
 
     Can be used independently from other functions.
     """
-    our_interfaces = {
-        base_type
-        for base_type in container_type.__mro__
-        if (
-            getattr(base_type, '__module__', '').startswith('returns.')
-            and base_type not in {Lawful, container_type}
-        )
-    }
+    our_interfaces = lawful_interfaces(container_type)
     for interface in our_interfaces:
         st.register_type_strategy(
             interface,
@@ -219,6 +212,18 @@ def clean_plugin_context() -> Iterator[None]:
     finally:
         for saved_state in saved_stategies.items():
             st.register_type_strategy(*saved_state)
+
+
+def lawful_interfaces(container_type: type[Lawful]) -> set[type[object]]:
+    """Return ancestors of `container_type` that are lawful interfaces."""
+    return {
+        base_type
+        for base_type in container_type.__mro__
+        if (
+            getattr(base_type, '__module__', '').startswith('returns.')
+            and base_type not in {Lawful, container_type}
+        )
+    }
 
 
 def _clean_caches() -> None:
