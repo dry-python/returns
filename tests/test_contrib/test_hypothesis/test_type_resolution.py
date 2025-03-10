@@ -19,7 +19,7 @@ from returns.contrib.hypothesis.laws import Settings, register_container
 from returns.contrib.hypothesis.type_resolver import (
     apply_strategy,
     look_up_strategy,
-    strategy_for_type,
+    strategies_for_types,
 )
 from returns.future import Future, FutureResult
 from returns.io import IO, IOResult, IOResultE
@@ -138,9 +138,9 @@ def test_register_container_with_strategy() -> None:
     container_type = Result
 
     with (
-        strategy_for_type(
-            container_type, st.builds(container_type, st.integers())
-        ),
+        strategies_for_types({
+            container_type: st.builds(container_type, st.integers())
+        }),
         register_container(
             container_type,
             settings=Settings(settings_kwargs={}, use_init=False),

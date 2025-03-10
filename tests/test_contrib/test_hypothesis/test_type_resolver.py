@@ -4,40 +4,53 @@ from hypothesis import strategies as st
 
 from returns.contrib.hypothesis.type_resolver import (
     look_up_strategy,
-    strategy_for_type,
+    strategies_for_types,
 )
 
 _ValueType = TypeVar('_ValueType')
 
 
-class _Wrapper(Generic[_ValueType]):
+class _Wrapper1(Generic[_ValueType]):
     _inner_value: _ValueType
 
 
-def test_type_without_strategy() -> None:
+class _Wrapper2(Generic[_ValueType]):
+    _inner_value: _ValueType
+
+
+def test_types_without_strategies() -> None:  # noqa: WPS210
     """Check that it temporarily resolves a type that has no strategy."""
-    strategy_before = look_up_strategy(_Wrapper)
+    strategy_before1 = look_up_strategy(_Wrapper1)
+    strategy_before2 = look_up_strategy(_Wrapper2)
 
-    with strategy_for_type(_Wrapper, st.builds(_Wrapper, st.integers())):
-        strategy_inside = look_up_strategy(_Wrapper)
+    with strategies_for_types({
+        _Wrapper1: st.builds(_Wrapper1, st.integers()),
+        _Wrapper2: st.builds(_Wrapper2, st.text()),
+    }):
+        strategy_inside1 = look_up_strategy(_Wrapper1)
+        strategy_inside2 = look_up_strategy(_Wrapper2)
 
-    strategy_after = look_up_strategy(_Wrapper)
+    strategy_after1 = look_up_strategy(_Wrapper1)
+    strategy_after2 = look_up_strategy(_Wrapper2)
 
-    assert strategy_before is None
-    assert str(strategy_inside) == 'builds(_Wrapper, integers())'
-    assert strategy_after is None
+    assert strategy_before1 is None
+    assert strategy_before2 is None
+    assert str(strategy_inside1) == 'builds(_Wrapper1, integers())'
+    assert str(strategy_inside2) == 'builds(_Wrapper2, text())'
+    assert strategy_after1 is None
+    assert strategy_after2 is None
 
 
 def test_type_with_strategy() -> None:
     """Check that it restores the original strategy."""
-    with strategy_for_type(_Wrapper, st.builds(_Wrapper, st.integers())):
-        strategy_before = look_up_strategy(_Wrapper)
+    with strategies_for_types({_Wrapper1: st.builds(_Wrapper1, st.integers())}):
+        strategy_before = look_up_strategy(_Wrapper1)
 
-        with strategy_for_type(_Wrapper, st.builds(_Wrapper, st.text())):
-            strategy_inside = look_up_strategy(_Wrapper)
+        with strategies_for_types({_Wrapper1: st.builds(_Wrapper1, st.text())}):
+            strategy_inside = look_up_strategy(_Wrapper1)
 
-        strategy_after = look_up_strategy(_Wrapper)
+        strategy_after = look_up_strategy(_Wrapper1)
 
-    assert str(strategy_before) == 'builds(_Wrapper, integers())'
-    assert str(strategy_inside) == 'builds(_Wrapper, text())'
-    assert str(strategy_after) == 'builds(_Wrapper, integers())'
+    assert str(strategy_before) == 'builds(_Wrapper1, integers())'
+    assert str(strategy_inside) == 'builds(_Wrapper1, text())'
+    assert str(strategy_after) == 'builds(_Wrapper1, integers())'

@@ -12,7 +12,7 @@ from hypothesis.strategies._internal import types  # noqa: PLC2701
 from returns.contrib.hypothesis.containers import strategy_from_container
 from returns.contrib.hypothesis.type_resolver import (
     StrategyFactory,
-    strategy_for_type,
+    strategies_for_types,
 )
 from returns.primitives.laws import LAWS_ATTRIBUTE, Law, Lawful
 
@@ -118,7 +118,7 @@ def register_container(
         if settings.strategy is None
         else settings.strategy
     )
-    with strategy_for_type(container_type, strategy):
+    with strategies_for_types({container_type: strategy}):
         yield
 
 

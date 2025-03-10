@@ -1,6 +1,6 @@
 """Make `hypothesis` resolve types to the right strategies."""
 
-from collections.abc import Callable, Iterator
+from collections.abc import Callable, Iterator, Mapping
 from contextlib import contextmanager
 from typing import TypeAlias
 
@@ -13,15 +13,15 @@ StrategyFactory: TypeAlias = (
 
 
 @contextmanager
-def strategy_for_type(
-    type_: type[object], strategy: StrategyFactory
+def strategies_for_types(
+    mapping: Mapping[type[object], StrategyFactory],
 ) -> Iterator[None]:
     """
-    Temporarily register a strategy in `hypothesis`.
+    Temporarily register strategies with `hypothesis`.
 
-    Within this context, `hypothesis` will generate data for `type_`
-    using `strategy`. Otherwise, it will continue to use the globally
-    registered strategy for `type_`.
+    Within this context, `hypothesis` will generate data for `MyType`
+    using `mapping[MyType]`, if possible. Otherwise, it will continue to
+    use the globally registered strategy for `MyType`.
 
     NOTE: This manually adds and removes strategies from an internal data
     structure of `hypothesis`: `types._global_type_lookup`. This is a global
@@ -29,17 +29,19 @@ def strategy_for_type(
     we can easily have unintentional side-effects. We have to be very careful
     when modifying it.
     """
-    previous_strategy = types._global_type_lookup.pop(type_, None)  # noqa: SLF001
-    st.register_type_strategy(type_, strategy)
+    previous_strategies: dict[type[object], StrategyFactory | None] = {}
+    for type_, strategy in mapping.items():
+        previous_strategies[type_] = look_up_strategy(type_)
+        st.register_type_strategy(type_, strategy)
 
     try:
         yield
     finally:
-        types._global_type_lookup.pop(type_)  # noqa: SLF001
-        if previous_strategy is None:
-            _clean_caches()
-        else:
-            st.register_type_strategy(type_, previous_strategy)
+        for type_, previous_strategy in previous_strategies.items():
+            if previous_strategy is None:
+                _remove_strategy(type_)
+            else:
+                st.register_type_strategy(type_, previous_strategy)
 
 
 def look_up_strategy(
@@ -47,6 +49,14 @@ def look_up_strategy(
 ) -> StrategyFactory | None:
     """Return the strategy used by `hypothesis`."""
     return types._global_type_lookup.get(type_)  # noqa: SLF001
+
+
+def _remove_strategy(
+    type_: type[object],
+) -> None:
+    """Remove the strategy registered for `type_`."""
+    types._global_type_lookup.pop(type_)  # noqa: SLF001
+    _clean_caches()
 
 
 def apply_strategy(
