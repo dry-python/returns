@@ -37,4 +37,4 @@
   main: |
     from returns.contrib.hypothesis.laws import check_all_laws
 
-    reveal_type(check_all_laws)  # N: Revealed type is "def (container_type: Type[returns.primitives.laws.Lawful[Any]], *, settings_kwargs: Union[builtins.dict[builtins.str, Any], None] =, use_init: builtins.bool =)"
+    reveal_type(check_all_laws)  # N: Revealed type is "Overload(def [Example_co] (container_type: Type[returns.primitives.laws.Lawful[Example_co`-1]], *, settings_kwargs: Union[builtins.dict[builtins.str, Any], None] =, container_strategy: Union[Union[hypothesis.strategies._internal.strategies.SearchStrategy[Example_co`-1], def (Type[Example_co`-1]) -> hypothesis.strategies._internal.strategies.SearchStrategy[Example_co`-1]], None] =), def [Example_co] (container_type: Type[returns.primitives.laws.Lawful[Example_co`-1]], *, settings_kwargs: Union[builtins.dict[builtins.str, Any], None] =, use_init: builtins.bool =))"
