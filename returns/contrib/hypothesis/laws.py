@@ -23,7 +23,7 @@ class Settings(NamedTuple):
 
     settings_kwargs: dict[str, Any]
     use_init: bool
-    strategy: StrategyFactory | None = None
+    container_strategy: StrategyFactory | None
 
 
 def check_all_laws(
@@ -31,6 +31,7 @@ def check_all_laws(
     *,
     settings_kwargs: dict[str, Any] | None = None,
     use_init: bool = False,
+    container_strategy: StrategyFactory | None = None,
 ) -> None:
     """
     Function to check all defined mathematical laws in a specified container.
@@ -61,6 +62,7 @@ def check_all_laws(
     settings = Settings(
         settings_kwargs or {},
         use_init,
+        container_strategy,
     )
 
     for interface, laws in container_type.laws().items():
@@ -227,8 +229,8 @@ def _strategy_for_container(
 ) -> StrategyFactory:
     return (
         strategy_from_container(container_type, use_init=settings.use_init)
-        if settings.strategy is None
-        else settings.strategy
+        if settings.container_strategy is None
+        else settings.container_strategy
     )
 
 

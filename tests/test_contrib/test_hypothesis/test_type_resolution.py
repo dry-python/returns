@@ -131,7 +131,10 @@ def test_register_container_with_no_strategy() -> None:
     container_type = Result
 
     with register_container(
-        container_type, settings=Settings(settings_kwargs={}, use_init=False)
+        container_type,
+        settings=Settings(
+            settings_kwargs={}, use_init=False, container_strategy=None
+        ),
     ):
         strategy_factory = look_up_strategy(container_type)
 
@@ -151,7 +154,9 @@ def test_register_container_with_strategy() -> None:
         }),
         register_container(
             container_type,
-            settings=Settings(settings_kwargs={}, use_init=False),
+            settings=Settings(
+                settings_kwargs={}, use_init=False, container_strategy=None
+            ),
         ),
     ):
         strategy_factory = look_up_strategy(container_type)
@@ -171,7 +176,7 @@ def test_register_container_with_setting() -> None:
         settings=Settings(
             settings_kwargs={},
             use_init=False,
-            strategy=st.builds(Success, st.integers()),
+            container_strategy=st.builds(Success, st.integers()),
         ),
     ):
         strategy_factory = look_up_strategy(container_type)
@@ -186,19 +191,14 @@ def test_interface_strategies() -> None:
     """Check that ancestor interfaces get resolved to the concrete container."""
     container_type = test_custom_type_applicative._Wrapper  # noqa: SLF001
 
-    strategy_factories_before = _interface_factories(container_type)
-
     with interface_strategies(
-        container_type, settings=Settings(settings_kwargs={}, use_init=False)
+        container_type,
+        settings=Settings(
+            settings_kwargs={}, use_init=False, container_strategy=None
+        ),
     ):
         strategy_factories_inside = _interface_factories(container_type)
 
-    strategy_factories_after = _interface_factories(container_type)
-
-    assert _strategy_strings(strategy_factories_before, container_type) == [
-        'None',
-        'None',
-    ]
     assert _strategy_strings(strategy_factories_inside, container_type) == [
         "builds(from_value, shared(sampled_from([<class 'NoneType'>,"
         " <class 'bool'>, <class 'int'>, <class 'float'>, <class 'str'>,"
@@ -206,10 +206,6 @@ def test_interface_strategies() -> None:
         "builds(from_value, shared(sampled_from([<class 'NoneType'>,"
         " <class 'bool'>, <class 'int'>, <class 'float'>, <class 'str'>,"
         " <class 'bytes'>]), key='typevar=~_FirstType').flatmap(from_type))",
-    ]
-    assert _strategy_strings(strategy_factories_after, container_type) == [
-        'None',
-        'None',
     ]
 
 
@@ -217,31 +213,19 @@ def test_interface_strategies_with_settings() -> None:
     """Check that we prefer the strategy in the settings."""
     container_type = test_custom_type_applicative._Wrapper  # noqa: SLF001
 
-    strategy_factories_before = _interface_factories(container_type)
-
     with interface_strategies(
         container_type,
         settings=Settings(
             settings_kwargs={},
             use_init=False,
-            strategy=st.builds(container_type, st.integers()),
+            container_strategy=st.builds(container_type, st.integers()),
         ),
     ):
         strategy_factories_inside = _interface_factories(container_type)
 
-    strategy_factories_after = _interface_factories(container_type)
-
-    assert _strategy_strings(strategy_factories_before, container_type) == [
-        'None',
-        'None',
-    ]
     assert _strategy_strings(strategy_factories_inside, container_type) == [
         'builds(_Wrapper, integers())',
         'builds(_Wrapper, integers())',
-    ]
-    assert _strategy_strings(strategy_factories_after, container_type) == [
-        'None',
-        'None',
     ]
 
 

@@ -20,7 +20,7 @@ def strategies_for_types(
     Temporarily register strategies with `hypothesis`.
 
     Within this context, `hypothesis` will generate data for `MyType`
-    using `mapping[MyType]`, if possible. Otherwise, it will continue to
+    using `mapping[MyType]`, if available. Otherwise, it will continue to
     use the globally registered strategy for `MyType`.
 
     NOTE: This manually adds and removes strategies from an internal data
