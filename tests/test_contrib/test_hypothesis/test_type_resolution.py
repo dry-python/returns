@@ -16,7 +16,7 @@ from returns.context import (
     RequiresContextResultE,
 )
 from returns.contrib.hypothesis.laws import (
-    Settings,
+    _Settings,  # noqa: PLC2701
     interface_strategies,
     lawful_interfaces,
     register_container,
@@ -132,7 +132,7 @@ def test_register_container_with_no_strategy() -> None:
 
     with register_container(
         container_type,
-        settings=Settings(
+        settings=_Settings(
             settings_kwargs={}, use_init=False, container_strategy=None
         ),
     ):
@@ -154,7 +154,7 @@ def test_register_container_with_strategy() -> None:
         }),
         register_container(
             container_type,
-            settings=Settings(
+            settings=_Settings(
                 settings_kwargs={}, use_init=False, container_strategy=None
             ),
         ),
@@ -173,7 +173,7 @@ def test_register_container_with_setting() -> None:
 
     with register_container(
         container_type,
-        settings=Settings(
+        settings=_Settings(
             settings_kwargs={},
             use_init=False,
             container_strategy=st.builds(Success, st.integers()),
@@ -193,7 +193,7 @@ def test_interface_strategies() -> None:
 
     with interface_strategies(
         container_type,
-        settings=Settings(
+        settings=_Settings(
             settings_kwargs={}, use_init=False, container_strategy=None
         ),
     ):
@@ -215,7 +215,7 @@ def test_interface_strategies_with_settings() -> None:
 
     with interface_strategies(
         container_type,
-        settings=Settings(
+        settings=_Settings(
             settings_kwargs={},
             use_init=False,
             container_strategy=st.builds(container_type, st.integers()),

@@ -1,7 +1,8 @@
+import dataclasses
 import inspect
 from collections.abc import Callable, Iterator, Mapping
 from contextlib import ExitStack, contextmanager
-from typing import Any, NamedTuple, TypeGuard, TypeVar, final, overload
+from typing import Any, TypeGuard, TypeVar, final, overload
 
 import pytest
 from hypothesis import given
@@ -20,12 +21,21 @@ Example_co = TypeVar('Example_co', covariant=True)
 
 
 @final
-class Settings(NamedTuple):
+@dataclasses.dataclass(frozen=True)
+class _Settings:
     """Settings that we provide to an end user."""
 
     settings_kwargs: dict[str, Any]
     use_init: bool
     container_strategy: StrategyFactory | None
+
+    def __post_init__(self) -> None:
+        """Check that the settings are mutually compatible."""
+        if self.use_init and self.container_strategy is not None:
+            raise AssertionError(
+                'Expected only one of `use_init` and'
+                ' `container_strategy` to be truthy'
+            )
 
 
 @overload
@@ -79,7 +89,7 @@ def check_all_laws(
         - https://mmhaskell.com/blog/2017/3/13/obey-the-type-laws
 
     """
-    settings = Settings(
+    settings = _Settings(
         settings_kwargs or {},
         use_init,
         container_strategy,
@@ -99,7 +109,7 @@ def check_all_laws(
 def interface_strategies(
     container_type: type[Lawful],
     *,
-    settings: Settings,
+    settings: _Settings,
 ) -> Iterator[None]:
     """
     Make all interfaces of a container resolve to the container's strategy.
@@ -122,7 +132,7 @@ def interface_strategies(
 def register_container(
     container_type: type['Lawful'],
     *,
-    settings: Settings,
+    settings: _Settings,
 ) -> Iterator[None]:
     """Temporary registers a container if it is not registered yet."""
     with strategies_for_types({
@@ -245,7 +255,8 @@ def _clean_caches() -> None:
 
 
 def _strategy_for_container(
-    container_type: type[Lawful], settings: Settings
+    container_type: type[Lawful],
+    settings: _Settings,
 ) -> StrategyFactory:
     return (
         strategy_from_container(container_type, use_init=settings.use_init)
@@ -258,7 +269,7 @@ def _run_law(
     container_type: type[Lawful],
     law: Law,
     *,
-    settings: Settings,
+    settings: _Settings,
 ) -> Callable[[st.DataObject], None]:
     def factory(source: st.DataObject) -> None:
         with ExitStack() as stack:
@@ -281,7 +292,7 @@ def _create_law_test_case(
     interface: type[Lawful],
     law: Law,
     *,
-    settings: Settings,
+    settings: _Settings,
 ) -> None:
     test_function = given(st.data())(
         hypothesis_settings(**settings.settings_kwargs)(
