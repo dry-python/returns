@@ -7,12 +7,14 @@ from typing import TypeAlias
 from hypothesis import strategies as st
 from hypothesis.strategies._internal import types  # noqa: PLC2701
 
-Strategy: TypeAlias = st.SearchStrategy | Callable[[type], st.SearchStrategy]
+StrategyFactory: TypeAlias = (
+    st.SearchStrategy | Callable[[type], st.SearchStrategy]
+)
 
 
 @contextmanager
 def strategy_for_type(
-    type_: type[object], strategy: Strategy
+    type_: type[object], strategy: StrategyFactory
 ) -> Iterator[None]:
     """
     Temporarily register a strategy in `hypothesis`.
@@ -34,17 +36,26 @@ def strategy_for_type(
         yield
     finally:
         types._global_type_lookup.pop(type_)  # noqa: SLF001
-        if previous_strategy:
-            st.register_type_strategy(type_, previous_strategy)
-        else:
+        if previous_strategy is None:
             _clean_caches()
+        else:
+            st.register_type_strategy(type_, previous_strategy)
 
 
 def look_up_strategy(
     type_: type[object],
-) -> st.SearchStrategy | Callable[[type], st.SearchStrategy] | None:
+) -> StrategyFactory | None:
     """Return the strategy used by `hypothesis`."""
     return types._global_type_lookup.get(type_)  # noqa: SLF001
+
+
+def apply_strategy(
+    strategy: StrategyFactory, type_: type[object]
+) -> StrategyFactory:
+    """Apply `strategy` to `type_`."""
+    if isinstance(strategy, st.SearchStrategy):
+        return strategy
+    return strategy(type_)
 
 
 def _clean_caches() -> None:

@@ -1,5 +1,5 @@
 from collections.abc import Sequence
-from typing import Any
+from typing import Any, Final
 
 import pytest
 from hypothesis import given
@@ -14,6 +14,12 @@ from returns.context import (
     RequiresContextIOResultE,
     RequiresContextResult,
     RequiresContextResultE,
+)
+from returns.contrib.hypothesis.laws import register_container
+from returns.contrib.hypothesis.type_resolver import (
+    apply_strategy,
+    look_up_strategy,
+    strategy_for_type,
 )
 from returns.future import Future, FutureResult
 from returns.io import IO, IOResult, IOResultE
@@ -100,3 +106,43 @@ def test_custom_readerresult_types_resolve(
         assert isinstance(real_result.unwrap(), int)
     else:
         assert isinstance(real_result.failure(), str)
+
+
+DEFAULT_RESULT_STRATEGY: Final = (
+    "one_of(builds(from_value, shared(sampled_from([<class 'NoneType'>, "
+    "<class 'bool'>, <class 'int'>, <class 'float'>, <class 'str'>, "
+    "<class 'bytes'>]), key='typevar=~_FirstType').flatmap(from_type)), "
+    "builds(from_failure, shared(sampled_from([<class 'NoneType'>, "
+    "<class 'bool'>, <class 'int'>, <class 'float'>, <class 'str'>, "
+    "<class 'bytes'>]), "
+    "key='typevar=~_SecondType').flatmap(from_type)))"
+)
+
+
+def test_register_container_with_no_strategy() -> None:
+    """Check that a container without a strategy gets a strategy."""
+    container_type = Result
+
+    with register_container(container_type, use_init=False):
+        strategy_factory = look_up_strategy(container_type)
+
+    assert strategy_factory is not None
+    strategy = apply_strategy(strategy_factory, container_type)
+    assert str(strategy) == DEFAULT_RESULT_STRATEGY
+
+
+def test_register_container_with_strategy() -> None:
+    """Check that when a container has an existing strategy, we drop it."""
+    container_type = Result
+
+    with (
+        strategy_for_type(
+            container_type, st.builds(container_type, st.integers())
+        ),
+        register_container(container_type, use_init=False),
+    ):
+        strategy_factory = look_up_strategy(container_type)
+
+    assert strategy_factory is not None
+    strategy = apply_strategy(strategy_factory, container_type)
+    assert str(strategy) == DEFAULT_RESULT_STRATEGY

@@ -10,6 +10,7 @@ from hypothesis import strategies as st
 from hypothesis.strategies._internal import types  # noqa: PLC2701
 
 from returns.contrib.hypothesis.containers import strategy_from_container
+from returns.contrib.hypothesis.type_resolver import strategy_for_type
 from returns.primitives.laws import LAWS_ATTRIBUTE, Law, Lawful
 
 
@@ -108,23 +109,9 @@ def register_container(
     use_init: bool,
 ) -> Iterator[None]:
     """Temporary registers a container if it is not registered yet."""
-    used = types._global_type_lookup.pop(container_type, None)  # noqa: SLF001
-    st.register_type_strategy(
-        container_type,
-        strategy_from_container(
-            container_type,
-            use_init=use_init,
-        ),
-    )
-
-    try:
+    strategy = strategy_from_container(container_type, use_init=use_init)
+    with strategy_for_type(container_type, strategy):
         yield
-    finally:
-        types._global_type_lookup.pop(container_type)  # noqa: SLF001
-        if used:
-            st.register_type_strategy(container_type, used)
-        else:
-            _clean_caches()
 
 
 @contextmanager
