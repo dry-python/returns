@@ -10,7 +10,10 @@ from hypothesis import strategies as st
 from hypothesis.strategies._internal import types  # noqa: PLC2701
 
 from returns.contrib.hypothesis.containers import strategy_from_container
-from returns.contrib.hypothesis.type_resolver import strategy_for_type
+from returns.contrib.hypothesis.type_resolver import (
+    StrategyFactory,
+    strategy_for_type,
+)
 from returns.primitives.laws import LAWS_ATTRIBUTE, Law, Lawful
 
 
@@ -20,6 +23,7 @@ class Settings(NamedTuple):
 
     settings_kwargs: dict[str, Any]
     use_init: bool
+    strategy: StrategyFactory | None = None
 
 
 def check_all_laws(
@@ -109,8 +113,10 @@ def register_container(
     settings: Settings,
 ) -> Iterator[None]:
     """Temporary registers a container if it is not registered yet."""
-    strategy = strategy_from_container(
-        container_type, use_init=settings.use_init
+    strategy = (
+        strategy_from_container(container_type, use_init=settings.use_init)
+        if settings.strategy is None
+        else settings.strategy
     )
     with strategy_for_type(container_type, strategy):
         yield

@@ -26,7 +26,7 @@ from returns.io import IO, IOResult, IOResultE
 from returns.maybe import Maybe
 from returns.pipeline import is_successful
 from returns.primitives.laws import Lawful
-from returns.result import Result, ResultE
+from returns.result import Result, ResultE, Success
 
 _all_containers: Sequence[type[Lawful]] = (
     Maybe,
@@ -151,3 +151,22 @@ def test_register_container_with_strategy() -> None:
     assert strategy_factory is not None
     strategy = apply_strategy(strategy_factory, container_type)
     assert str(strategy) == DEFAULT_RESULT_STRATEGY
+
+
+def test_register_container_with_setting() -> None:
+    """Check that we prefer a strategy given in settings."""
+    container_type = Result
+
+    with register_container(
+        container_type,
+        settings=Settings(
+            settings_kwargs={},
+            use_init=False,
+            strategy=st.builds(Success, st.integers()),
+        ),
+    ):
+        strategy_factory = look_up_strategy(container_type)
+
+    assert strategy_factory is not None
+    strategy = apply_strategy(strategy_factory, container_type)
+    assert str(strategy) == 'builds(Success, integers())'
