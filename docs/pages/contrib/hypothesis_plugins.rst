@@ -140,6 +140,27 @@ like ``Future``, ``ReaderFutureResult``, etc
 that have complex ``__init__`` signatures.
 And we don't want to mess with them.
 
+You can also register a custom strategy to be used when running your
+container's laws:
+
+.. code:: python
+
+
+  from hypothesis import strategies as st
+
+  check_all_laws(Number, container_strategy=st.builds(Number, st.integers()))
+
+The ``container_strategy`` will be used only when running the tests generated
+by the ``check_all_laws`` call above. It will have no effect on any other
+property tests that involve ``Number``. You cannot use this argument together
+with ``use_init``.
+
+Warning::
+  Avoid directly registering your container's strategy with ``hypothesis``
+  using ``st.register_type_strategy``. Because of the way we emulate
+  higher-kinded types, ``hypothesis`` may mistakenly use the strategy
+  for other incompatible containers and cause spurious test failures.
+
 Warning::
   Checking laws is not compatible with ``pytest-xdist``,
   because we use a lot of global mutable state there.

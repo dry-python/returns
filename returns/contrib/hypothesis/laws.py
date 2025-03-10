@@ -1,7 +1,7 @@
 import inspect
 from collections.abc import Callable, Iterator, Mapping
 from contextlib import ExitStack, contextmanager
-from typing import Any, NamedTuple, TypeGuard, TypeVar, final
+from typing import Any, NamedTuple, TypeGuard, TypeVar, final, overload
 
 import pytest
 from hypothesis import given
@@ -26,6 +26,24 @@ class Settings(NamedTuple):
     settings_kwargs: dict[str, Any]
     use_init: bool
     container_strategy: StrategyFactory | None
+
+
+@overload
+def check_all_laws(
+    container_type: type[Lawful[Example_co]],
+    *,
+    settings_kwargs: dict[str, Any] | None = None,
+    container_strategy: StrategyFactory[Example_co] | None = None,
+) -> None: ...
+
+
+@overload
+def check_all_laws(
+    container_type: type[Lawful[Example_co]],
+    *,
+    settings_kwargs: dict[str, Any] | None = None,
+    use_init: bool = False,
+) -> None: ...
 
 
 def check_all_laws(
