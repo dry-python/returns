@@ -15,8 +15,14 @@ from returns.context import (
     RequiresContextResult,
     RequiresContextResultE,
 )
-from returns.contrib.hypothesis.laws import Settings, register_container
+from returns.contrib.hypothesis.laws import (
+    Settings,
+    container_strategies,
+    lawful_interfaces,
+    register_container,
+)
 from returns.contrib.hypothesis.type_resolver import (
+    StrategyFactory,
     apply_strategy,
     look_up_strategy,
     strategies_for_types,
@@ -27,6 +33,7 @@ from returns.maybe import Maybe
 from returns.pipeline import is_successful
 from returns.primitives.laws import Lawful
 from returns.result import Result, ResultE, Success
+from test_hypothesis.test_laws import test_custom_type_applicative
 
 _all_containers: Sequence[type[Lawful]] = (
     Maybe,
@@ -128,9 +135,10 @@ def test_register_container_with_no_strategy() -> None:
     ):
         strategy_factory = look_up_strategy(container_type)
 
-    assert strategy_factory is not None
-    strategy = apply_strategy(strategy_factory, container_type)
-    assert str(strategy) == DEFAULT_RESULT_STRATEGY
+    assert (
+        _strategy_string(strategy_factory, container_type)
+        == DEFAULT_RESULT_STRATEGY
+    )
 
 
 def test_register_container_with_strategy() -> None:
@@ -148,9 +156,10 @@ def test_register_container_with_strategy() -> None:
     ):
         strategy_factory = look_up_strategy(container_type)
 
-    assert strategy_factory is not None
-    strategy = apply_strategy(strategy_factory, container_type)
-    assert str(strategy) == DEFAULT_RESULT_STRATEGY
+    assert (
+        _strategy_string(strategy_factory, container_type)
+        == DEFAULT_RESULT_STRATEGY
+    )
 
 
 def test_register_container_with_setting() -> None:
@@ -167,6 +176,64 @@ def test_register_container_with_setting() -> None:
     ):
         strategy_factory = look_up_strategy(container_type)
 
-    assert strategy_factory is not None
-    strategy = apply_strategy(strategy_factory, container_type)
-    assert str(strategy) == 'builds(Success, integers())'
+    assert (
+        _strategy_string(strategy_factory, container_type)
+        == 'builds(Success, integers())'
+    )
+
+
+def test_interface_strategies() -> None:
+    """Check that ancestor interfaces get resolved to the concrete container."""
+    container_type = test_custom_type_applicative._Wrapper  # noqa: SLF001
+
+    strategy_factories_before = _interface_factories(container_type)
+
+    with container_strategies(
+        container_type, settings=Settings(settings_kwargs={}, use_init=False)
+    ):
+        strategy_factories_inside = _interface_factories(container_type)
+
+    strategy_factories_after = _interface_factories(container_type)
+
+    assert _strategy_strings(strategy_factories_before, container_type) == [
+        'None',
+        'None',
+    ]
+    assert _strategy_strings(strategy_factories_inside, container_type) == [
+        "builds(from_value, shared(sampled_from([<class 'NoneType'>,"
+        " <class 'bool'>, <class 'int'>, <class 'float'>, <class 'str'>,"
+        " <class 'bytes'>]), key='typevar=~_FirstType').flatmap(from_type))",
+        "builds(from_value, shared(sampled_from([<class 'NoneType'>,"
+        " <class 'bool'>, <class 'int'>, <class 'float'>, <class 'str'>,"
+        " <class 'bytes'>]), key='typevar=~_FirstType').flatmap(from_type))",
+    ]
+    assert _strategy_strings(strategy_factories_after, container_type) == [
+        'None',
+        'None',
+    ]
+
+
+def _interface_factories(type_: type[Lawful]) -> list[StrategyFactory | None]:
+    return [
+        look_up_strategy(interface) for interface in lawful_interfaces(type_)
+    ]
+
+
+def _strategy_strings(
+    strategy_factories: Sequence[StrategyFactory | None], type_: type[object]
+) -> list[str]:
+    return [
+        _strategy_string(strategy_factory, type_)
+        for strategy_factory in strategy_factories
+    ]
+
+
+def _strategy_string(
+    strategy_factory: StrategyFactory | None, type_: type[object]
+) -> str:
+    """Return an easily testable string representation."""
+    return (
+        str(None)
+        if strategy_factory is None
+        else str(apply_strategy(strategy_factory, type_))
+    )
