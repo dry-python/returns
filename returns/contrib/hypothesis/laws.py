@@ -1,5 +1,5 @@
 import inspect
-from collections.abc import Callable, Iterator
+from collections.abc import Callable, Iterator, Mapping
 from contextlib import ExitStack, contextmanager
 from typing import Any, NamedTuple, TypeGuard, TypeVar, final
 
@@ -88,22 +88,15 @@ def interface_strategies(
 
     Can be used independently from other functions.
     """
-    our_interfaces = lawful_interfaces(container_type)
-    for interface in our_interfaces:
-        st.register_type_strategy(
-            interface,
-            strategy_from_container(
-                container_type,
-                use_init=settings.use_init,
-            ),
+    mapping: Mapping[type[object], StrategyFactory] = {
+        interface: strategy_from_container(
+            container_type,
+            use_init=settings.use_init,
         )
-
-    try:
+        for interface in lawful_interfaces(container_type)
+    }
+    with strategies_for_types(mapping):
         yield
-    finally:
-        for interface in our_interfaces:
-            types._global_type_lookup.pop(interface)  # noqa: SLF001
-        _clean_caches()
 
 
 @contextmanager
