@@ -1,7 +1,8 @@
+import dataclasses
 import inspect
-from collections.abc import Callable, Iterator
+from collections.abc import Callable, Iterator, Mapping
 from contextlib import ExitStack, contextmanager
-from typing import Any, NamedTuple, TypeGuard, TypeVar, final
+from typing import Any, TypeGuard, TypeVar, final, overload
 
 import pytest
 from hypothesis import given
@@ -10,22 +11,57 @@ from hypothesis import strategies as st
 from hypothesis.strategies._internal import types  # noqa: PLC2701
 
 from returns.contrib.hypothesis.containers import strategy_from_container
+from returns.contrib.hypothesis.type_resolver import (
+    StrategyFactory,
+    strategies_for_types,
+)
 from returns.primitives.laws import LAWS_ATTRIBUTE, Law, Lawful
+
+Example_co = TypeVar('Example_co', covariant=True)
 
 
 @final
-class _Settings(NamedTuple):
+@dataclasses.dataclass(frozen=True)
+class _Settings:
     """Settings that we provide to an end user."""
 
     settings_kwargs: dict[str, Any]
     use_init: bool
+    container_strategy: StrategyFactory | None
+
+    def __post_init__(self) -> None:
+        """Check that the settings are mutually compatible."""
+        if self.use_init and self.container_strategy is not None:
+            raise AssertionError(
+                'Expected only one of `use_init` and'
+                ' `container_strategy` to be truthy'
+            )
 
 
+@overload
 def check_all_laws(
-    container_type: type[Lawful],
+    container_type: type[Lawful[Example_co]],
+    *,
+    settings_kwargs: dict[str, Any] | None = None,
+    container_strategy: StrategyFactory[Example_co] | None = None,
+) -> None: ...
+
+
+@overload
+def check_all_laws(
+    container_type: type[Lawful[Example_co]],
     *,
     settings_kwargs: dict[str, Any] | None = None,
     use_init: bool = False,
+) -> None: ...
+
+
+def check_all_laws(
+    container_type: type[Lawful[Example_co]],
+    *,
+    settings_kwargs: dict[str, Any] | None = None,
+    use_init: bool = False,
+    container_strategy: StrategyFactory[Example_co] | None = None,
 ) -> None:
     """
     Function to check all defined mathematical laws in a specified container.
@@ -56,6 +92,7 @@ def check_all_laws(
     settings = _Settings(
         settings_kwargs or {},
         use_init,
+        container_strategy,
     )
 
     for interface, laws in container_type.laws().items():
@@ -69,13 +106,13 @@ def check_all_laws(
 
 
 @contextmanager
-def container_strategies(
+def interface_strategies(
     container_type: type[Lawful],
     *,
     settings: _Settings,
 ) -> Iterator[None]:
     """
-    Registers all types inside a container to resolve to a correct strategy.
+    Make all interfaces of a container resolve to the container's strategy.
 
     For example, let's say we have ``Result`` type.
     It is a subtype of ``ContainerN``, ``MappableN``, ``BindableN``, etc.
@@ -83,48 +120,25 @@ def container_strategies(
 
     Can be used independently from other functions.
     """
-    our_interfaces = lawful_interfaces(container_type)
-    for interface in our_interfaces:
-        st.register_type_strategy(
-            interface,
-            strategy_from_container(
-                container_type,
-                use_init=settings.use_init,
-            ),
-        )
-
-    try:
+    mapping: Mapping[type[object], StrategyFactory] = {
+        interface: _strategy_for_container(container_type, settings)
+        for interface in lawful_interfaces(container_type)
+    }
+    with strategies_for_types(mapping):
         yield
-    finally:
-        for interface in our_interfaces:
-            types._global_type_lookup.pop(interface)  # noqa: SLF001
-        _clean_caches()
 
 
 @contextmanager
 def register_container(
     container_type: type['Lawful'],
     *,
-    use_init: bool,
+    settings: _Settings,
 ) -> Iterator[None]:
     """Temporary registers a container if it is not registered yet."""
-    used = types._global_type_lookup.pop(container_type, None)  # noqa: SLF001
-    st.register_type_strategy(
-        container_type,
-        strategy_from_container(
-            container_type,
-            use_init=use_init,
-        ),
-    )
-
-    try:
+    with strategies_for_types({
+        container_type: _strategy_for_container(container_type, settings)
+    }):
         yield
-    finally:
-        types._global_type_lookup.pop(container_type)  # noqa: SLF001
-        if used:
-            st.register_type_strategy(container_type, used)
-        else:
-            _clean_caches()
 
 
 @contextmanager
@@ -240,6 +254,17 @@ def _clean_caches() -> None:
     st.from_type.__clear_cache()  # type: ignore[attr-defined]  # noqa: SLF001
 
 
+def _strategy_for_container(
+    container_type: type[Lawful],
+    settings: _Settings,
+) -> StrategyFactory:
+    return (
+        strategy_from_container(container_type, use_init=settings.use_init)
+        if settings.container_strategy is None
+        else settings.container_strategy
+    )
+
+
 def _run_law(
     container_type: type[Lawful],
     law: Law,
@@ -252,10 +277,10 @@ def _run_law(
             stack.enter_context(type_vars())
             stack.enter_context(pure_functions())
             stack.enter_context(
-                container_strategies(container_type, settings=settings),
+                interface_strategies(container_type, settings=settings),
             )
             stack.enter_context(
-                register_container(container_type, use_init=settings.use_init),
+                register_container(container_type, settings=settings),
             )
             source.draw(st.builds(law.definition))
 

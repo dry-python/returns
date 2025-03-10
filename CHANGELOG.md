@@ -27,6 +27,7 @@ See [0Ver](https://0ver.org/).
 ### Features
 
 - Make `hypothesis` plugin test laws from user-defined interfaces too
+- Make `hypothesis` plugin accept user-defined strategies
 
 ### Bugfixes
 
