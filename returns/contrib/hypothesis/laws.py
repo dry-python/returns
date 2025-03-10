@@ -16,6 +16,8 @@ from returns.contrib.hypothesis.type_resolver import (
 )
 from returns.primitives.laws import LAWS_ATTRIBUTE, Law, Lawful
 
+Example_co = TypeVar('Example_co', covariant=True)
+
 
 @final
 class Settings(NamedTuple):
@@ -27,11 +29,11 @@ class Settings(NamedTuple):
 
 
 def check_all_laws(
-    container_type: type[Lawful],
+    container_type: type[Lawful[Example_co]],
     *,
     settings_kwargs: dict[str, Any] | None = None,
     use_init: bool = False,
-    container_strategy: StrategyFactory | None = None,
+    container_strategy: StrategyFactory[Example_co] | None = None,
 ) -> None:
     """
     Function to check all defined mathematical laws in a specified container.

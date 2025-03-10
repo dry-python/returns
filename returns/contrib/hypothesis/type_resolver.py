@@ -2,13 +2,16 @@
 
 from collections.abc import Callable, Iterator, Mapping
 from contextlib import contextmanager
-from typing import TypeAlias
+from typing import TypeAlias, TypeVar
 
 from hypothesis import strategies as st
 from hypothesis.strategies._internal import types  # noqa: PLC2701
 
+Example_co = TypeVar('Example_co', covariant=True)
+
 StrategyFactory: TypeAlias = (
-    st.SearchStrategy | Callable[[type], st.SearchStrategy]
+    st.SearchStrategy[Example_co]
+    | Callable[[type[Example_co]], st.SearchStrategy[Example_co]]
 )
 
 
@@ -45,8 +48,8 @@ def strategies_for_types(
 
 
 def look_up_strategy(
-    type_: type[object],
-) -> StrategyFactory | None:
+    type_: type[Example_co],
+) -> StrategyFactory[Example_co] | None:
     """Return the strategy used by `hypothesis`."""
     return types._global_type_lookup.get(type_)  # noqa: SLF001
 
@@ -60,8 +63,8 @@ def _remove_strategy(
 
 
 def apply_strategy(
-    strategy: StrategyFactory, type_: type[object]
-) -> StrategyFactory:
+    strategy: StrategyFactory[Example_co], type_: type[Example_co]
+) -> StrategyFactory[Example_co]:
     """Apply `strategy` to `type_`."""
     if isinstance(strategy, st.SearchStrategy):
         return strategy
