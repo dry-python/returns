@@ -25,8 +25,7 @@
 
     x: Type[Lawful] = {{ container }}
 
-
-- case: test_all_laws_sig
+- case: test_all_laws_accepts_only_one_approach
   disable_cache: false
   # TODO: remove this config after
   #     mypy/typeshed/stdlib/unittest/mock.pyi:120:
@@ -35,6 +34,13 @@
   mypy_config:
     disallow_subclassing_any = False
   main: |
+    from hypothesis import strategies as st
     from returns.contrib.hypothesis.laws import check_all_laws
+    from returns.result import Result, Success
 
-    reveal_type(check_all_laws)  # N: Revealed type is "Overload(def [Example_co] (container_type: Type[returns.primitives.laws.Lawful[Example_co`-1]], *, settings_kwargs: Union[builtins.dict[builtins.str, Any], None] =, container_strategy: Union[Union[hypothesis.strategies._internal.strategies.SearchStrategy[Example_co`-1], def (Type[Example_co`-1]) -> hypothesis.strategies._internal.strategies.SearchStrategy[Example_co`-1]], None] =), def [Example_co] (container_type: Type[returns.primitives.laws.Lawful[Example_co`-1]], *, settings_kwargs: Union[builtins.dict[builtins.str, Any], None] =, use_init: builtins.bool =))"
+    check_all_laws(Result)
+    check_all_laws(Result, use_init=True)
+    check_all_laws(Result, container_strategy=st.builds(Success, st.integers()))
+    check_all_laws(  # E: No overload variant of "check_all_laws" matches argument types "Type[Result[_ValueType_co, _ErrorType_co]]", "bool", "SearchStrategy[Success[Any]]"  [call-overload] # N: Possible overload variants:  # N:     def [Example_co] check_all_laws(container_type: Type[Lawful[Example_co]], *, settings_kwargs: Optional[Dict[str, Any]] = ..., container_strategy: Optional[Union[SearchStrategy[Example_co], Callable[[Type[Example_co]], SearchStrategy[Example_co]]]] = ...) -> None  # N:     def [Example_co] check_all_laws(container_type: Type[Lawful[Example_co]], *, settings_kwargs: Optional[Dict[str, Any]] = ..., use_init: bool = ...) -> None
+        Result, use_init=True, container_strategy=st.builds(Success, st.integers())
+    )
