@@ -74,13 +74,13 @@ def check_all_laws(
 
 
 @contextmanager
-def container_strategies(
+def interface_strategies(
     container_type: type[Lawful],
     *,
     settings: Settings,
 ) -> Iterator[None]:
     """
-    Registers all types inside a container to resolve to a correct strategy.
+    Make all interfaces of a container resolve to the container's strategy.
 
     For example, let's say we have ``Result`` type.
     It is a subtype of ``ContainerN``, ``MappableN``, ``BindableN``, etc.
@@ -247,7 +247,7 @@ def _run_law(
             stack.enter_context(type_vars())
             stack.enter_context(pure_functions())
             stack.enter_context(
-                container_strategies(container_type, settings=settings),
+                interface_strategies(container_type, settings=settings),
             )
             stack.enter_context(
                 register_container(container_type, settings=settings),

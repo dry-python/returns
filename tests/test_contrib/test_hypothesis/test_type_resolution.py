@@ -17,7 +17,7 @@ from returns.context import (
 )
 from returns.contrib.hypothesis.laws import (
     Settings,
-    container_strategies,
+    interface_strategies,
     lawful_interfaces,
     register_container,
 )
@@ -188,7 +188,7 @@ def test_interface_strategies() -> None:
 
     strategy_factories_before = _interface_factories(container_type)
 
-    with container_strategies(
+    with interface_strategies(
         container_type, settings=Settings(settings_kwargs={}, use_init=False)
     ):
         strategy_factories_inside = _interface_factories(container_type)
