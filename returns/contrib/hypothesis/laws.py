@@ -15,7 +15,7 @@ from returns.primitives.laws import LAWS_ATTRIBUTE, Law, Lawful
 
 
 @final
-class _Settings(NamedTuple):
+class Settings(NamedTuple):
     """Settings that we provide to an end user."""
 
     settings_kwargs: dict[str, Any]
@@ -54,7 +54,7 @@ def check_all_laws(
         - https://mmhaskell.com/blog/2017/3/13/obey-the-type-laws
 
     """
-    settings = _Settings(
+    settings = Settings(
         settings_kwargs or {},
         use_init,
     )
@@ -73,7 +73,7 @@ def check_all_laws(
 def container_strategies(
     container_type: type[Lawful],
     *,
-    settings: _Settings,
+    settings: Settings,
 ) -> Iterator[None]:
     """
     Registers all types inside a container to resolve to a correct strategy.
@@ -106,10 +106,12 @@ def container_strategies(
 def register_container(
     container_type: type['Lawful'],
     *,
-    use_init: bool,
+    settings: Settings,
 ) -> Iterator[None]:
     """Temporary registers a container if it is not registered yet."""
-    strategy = strategy_from_container(container_type, use_init=use_init)
+    strategy = strategy_from_container(
+        container_type, use_init=settings.use_init
+    )
     with strategy_for_type(container_type, strategy):
         yield
 
@@ -231,7 +233,7 @@ def _run_law(
     container_type: type[Lawful],
     law: Law,
     *,
-    settings: _Settings,
+    settings: Settings,
 ) -> Callable[[st.DataObject], None]:
     def factory(source: st.DataObject) -> None:
         with ExitStack() as stack:
@@ -242,7 +244,7 @@ def _run_law(
                 container_strategies(container_type, settings=settings),
             )
             stack.enter_context(
-                register_container(container_type, use_init=settings.use_init),
+                register_container(container_type, settings=settings),
             )
             source.draw(st.builds(law.definition))
 
@@ -254,7 +256,7 @@ def _create_law_test_case(
     interface: type[Lawful],
     law: Law,
     *,
-    settings: _Settings,
+    settings: Settings,
 ) -> None:
     test_function = given(st.data())(
         hypothesis_settings(**settings.settings_kwargs)(

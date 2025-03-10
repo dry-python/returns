@@ -15,7 +15,7 @@ from returns.context import (
     RequiresContextResult,
     RequiresContextResultE,
 )
-from returns.contrib.hypothesis.laws import register_container
+from returns.contrib.hypothesis.laws import Settings, register_container
 from returns.contrib.hypothesis.type_resolver import (
     apply_strategy,
     look_up_strategy,
@@ -123,7 +123,9 @@ def test_register_container_with_no_strategy() -> None:
     """Check that a container without a strategy gets a strategy."""
     container_type = Result
 
-    with register_container(container_type, use_init=False):
+    with register_container(
+        container_type, settings=Settings(settings_kwargs={}, use_init=False)
+    ):
         strategy_factory = look_up_strategy(container_type)
 
     assert strategy_factory is not None
@@ -139,7 +141,10 @@ def test_register_container_with_strategy() -> None:
         strategy_for_type(
             container_type, st.builds(container_type, st.integers())
         ),
-        register_container(container_type, use_init=False),
+        register_container(
+            container_type,
+            settings=Settings(settings_kwargs={}, use_init=False),
+        ),
     ):
         strategy_factory = look_up_strategy(container_type)
 
