@@ -213,6 +213,38 @@ def test_interface_strategies() -> None:
     ]
 
 
+def test_interface_strategies_with_settings() -> None:
+    """Check that we prefer the strategy in the settings."""
+    container_type = test_custom_type_applicative._Wrapper  # noqa: SLF001
+
+    strategy_factories_before = _interface_factories(container_type)
+
+    with interface_strategies(
+        container_type,
+        settings=Settings(
+            settings_kwargs={},
+            use_init=False,
+            strategy=st.builds(container_type, st.integers()),
+        ),
+    ):
+        strategy_factories_inside = _interface_factories(container_type)
+
+    strategy_factories_after = _interface_factories(container_type)
+
+    assert _strategy_strings(strategy_factories_before, container_type) == [
+        'None',
+        'None',
+    ]
+    assert _strategy_strings(strategy_factories_inside, container_type) == [
+        'builds(_Wrapper, integers())',
+        'builds(_Wrapper, integers())',
+    ]
+    assert _strategy_strings(strategy_factories_after, container_type) == [
+        'None',
+        'None',
+    ]
+
+
 def _interface_factories(type_: type[Lawful]) -> list[StrategyFactory | None]:
     return [
         look_up_strategy(interface) for interface in lawful_interfaces(type_)

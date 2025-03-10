@@ -89,10 +89,7 @@ def interface_strategies(
     Can be used independently from other functions.
     """
     mapping: Mapping[type[object], StrategyFactory] = {
-        interface: strategy_from_container(
-            container_type,
-            use_init=settings.use_init,
-        )
+        interface: _strategy_for_container(container_type, settings)
         for interface in lawful_interfaces(container_type)
     }
     with strategies_for_types(mapping):
@@ -106,12 +103,9 @@ def register_container(
     settings: Settings,
 ) -> Iterator[None]:
     """Temporary registers a container if it is not registered yet."""
-    strategy = (
-        strategy_from_container(container_type, use_init=settings.use_init)
-        if settings.strategy is None
-        else settings.strategy
-    )
-    with strategies_for_types({container_type: strategy}):
+    with strategies_for_types({
+        container_type: _strategy_for_container(container_type, settings)
+    }):
         yield
 
 
@@ -226,6 +220,16 @@ def _has_non_inherited_attribute(type_: type[object], attribute: str) -> bool:
 
 def _clean_caches() -> None:
     st.from_type.__clear_cache()  # type: ignore[attr-defined]  # noqa: SLF001
+
+
+def _strategy_for_container(
+    container_type: type[Lawful], settings: Settings
+) -> StrategyFactory:
+    return (
+        strategy_from_container(container_type, use_init=settings.use_init)
+        if settings.strategy is None
+        else settings.strategy
+    )
 
 
 def _run_law(
