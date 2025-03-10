@@ -30,7 +30,14 @@ To install them you would need to run the `install` command:
 poetry install
 ```
 
-To activate your `virtualenv` run `poetry shell`.
+To install extra dependencies for working on the `hypothesis` or `mypy` plugin:
+
+```bash
+poetry install --extras check-laws
+poetry install --extras compatible-mypy
+```
+
+To activate your `virtualenv` run `eval $(poetry env activate)`.
 
 
 ## Tests
