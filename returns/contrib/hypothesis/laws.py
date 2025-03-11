@@ -194,20 +194,16 @@ def _enter_hypothesis_context(
     container_type: type[Lawful],
     settings: _Settings,
 ) -> None:
-    stack.enter_context(strategies_for_types({TypeVar: type_vars_factory}))  # type: ignore[dict-item]
-    stack.enter_context(
-        strategies_for_types({Callable: pure_functions_factory})  # type: ignore[dict-item]
-    )
     stack.enter_context(
         strategies_for_types({
-            interface: _strategy_for_container(container_type, settings)
-            for interface in container_type.laws()
-        }),
-    )
-    stack.enter_context(
-        strategies_for_types({
-            container_type: _strategy_for_container(container_type, settings)
-        }),
+            TypeVar: type_vars_factory,  # type: ignore[dict-item]
+            Callable: pure_functions_factory,  # type: ignore[dict-item]
+            **{
+                interface: _strategy_for_container(container_type, settings)
+                for interface in container_type.laws()
+            },
+            container_type: _strategy_for_container(container_type, settings),
+        })
     )
 
 

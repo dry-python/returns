@@ -19,7 +19,7 @@ from returns.context import (
 from returns.contrib.hypothesis.laws import (
     _enter_hypothesis_context,  # noqa: PLC2701
     _Settings,  # noqa: PLC2701
-    )
+)
 from returns.contrib.hypothesis.type_resolver import (
     StrategyFactory,
     apply_strategy,
