@@ -158,17 +158,6 @@ def pure_functions_factory(thing) -> st.SearchStrategy:
     )
 
 
-@contextmanager
-def pure_functions() -> Iterator[None]:
-    """
-    Context manager to resolve all ``Callable`` as pure functions.
-
-    It is not a default in ``hypothesis``.
-    """
-    with strategies_for_types({Callable: pure_functions_factory}):  # type: ignore[dict-item]
-        yield
-
-
 def type_vars_factory(thing: type[object]) -> StrategyFactory:
     """Strategy factory for ``TypeVar``s.
 
@@ -178,22 +167,6 @@ def type_vars_factory(thing: type[object]) -> StrategyFactory:
     return types.resolve_TypeVar(thing).filter(  # type: ignore[no-any-return]
         lambda inner: inner == inner,  # noqa: PLR0124, WPS312
     )
-
-
-@contextmanager
-def type_vars() -> Iterator[None]:
-    """
-    Our custom ``TypeVar`` handling.
-
-    There are several noticeable differences:
-
-    1. We add mutable types to the tests: like ``list`` and ``dict``
-    2. We ensure that values inside strategies are self-equal,
-       for example, ``nan`` does not work for us
-
-    """
-    with strategies_for_types({TypeVar: type_vars_factory}):  # type: ignore[dict-item]
-        yield
 
 
 @contextmanager
@@ -257,8 +230,10 @@ def _enter_hypothesis_context(
     container_type: type[Lawful],
     settings: _Settings,
 ) -> None:
-    stack.enter_context(type_vars())
-    stack.enter_context(pure_functions())
+    stack.enter_context(strategies_for_types({TypeVar: type_vars_factory}))  # type: ignore[dict-item]
+    stack.enter_context(
+        strategies_for_types({Callable: pure_functions_factory})  # type: ignore[dict-item]
+    )
     stack.enter_context(
         interface_strategies(container_type, settings=settings),
     )
