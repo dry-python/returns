@@ -141,6 +141,23 @@ def register_container(
         yield
 
 
+def pure_functions_factory(thing) -> st.SearchStrategy:
+    """Factory to create pure functions."""
+    like = (
+        (lambda: None)
+        if len(thing.__args__) == 1
+        else (lambda *args, **kwargs: None)
+    )
+    return_type = thing.__args__[-1]
+    return st.functions(
+        like=like,
+        returns=st.from_type(
+            type(None) if return_type is None else return_type,
+        ),
+        pure=True,
+    )
+
+
 @contextmanager
 def pure_functions() -> Iterator[None]:
     """
@@ -148,24 +165,19 @@ def pure_functions() -> Iterator[None]:
 
     It is not a default in ``hypothesis``.
     """
-
-    def factory(thing) -> st.SearchStrategy:
-        like = (
-            (lambda: None)
-            if len(thing.__args__) == 1
-            else (lambda *args, **kwargs: None)
-        )
-        return_type = thing.__args__[-1]
-        return st.functions(
-            like=like,
-            returns=st.from_type(
-                type(None) if return_type is None else return_type,
-            ),
-            pure=True,
-        )
-
-    with strategies_for_types({Callable: factory}):  # type: ignore[dict-item]
+    with strategies_for_types({Callable: pure_functions_factory}):  # type: ignore[dict-item]
         yield
+
+
+def type_vars_factory(thing: type[object]) -> StrategyFactory:
+    """Strategy factory for ``TypeVar``s.
+
+    We ensure that values inside strategies are self-equal. For example,
+       ``nan`` does not work for us.
+    """
+    return types.resolve_TypeVar(thing).filter(  # type: ignore[no-any-return]
+        lambda inner: inner == inner,  # noqa: PLR0124, WPS312
+    )
 
 
 @contextmanager
@@ -180,13 +192,7 @@ def type_vars() -> Iterator[None]:
        for example, ``nan`` does not work for us
 
     """
-
-    def factory(thing):
-        return types.resolve_TypeVar(thing).filter(
-            lambda inner: inner == inner,  # noqa: PLR0124, WPS312
-        )
-
-    with strategies_for_types({TypeVar: factory}):
+    with strategies_for_types({TypeVar: type_vars_factory}):  # type: ignore[dict-item]
         yield
 
 
