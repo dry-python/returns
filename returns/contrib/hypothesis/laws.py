@@ -1,6 +1,6 @@
 import dataclasses
 import inspect
-from collections.abc import Callable, Iterator, Mapping
+from collections.abc import Callable, Iterator
 from contextlib import ExitStack, contextmanager
 from typing import Any, TypeVar, final, overload
 
@@ -9,6 +9,7 @@ from hypothesis import given
 from hypothesis import settings as hypothesis_settings
 from hypothesis import strategies as st
 from hypothesis.strategies._internal import types  # noqa: PLC2701
+from typing_extensions import Self
 
 from returns.contrib.hypothesis.containers import strategy_from_container
 from returns.contrib.hypothesis.type_resolver import (
@@ -28,6 +29,19 @@ class _Settings:
     settings_kwargs: dict[str, Any]
     use_init: bool
     container_strategy: StrategyFactory | None
+    other_strategies: dict[type[object], StrategyFactory] = dataclasses.field(
+        default_factory=dict
+    )
+
+    def __or__(self, other: Self) -> Self:
+        return _Settings(
+            settings_kwargs=self.settings_kwargs | other.settings_kwargs,
+            use_init=self.use_init | other.use_init,
+            container_strategy=self.container_strategy
+            if other.container_strategy is None
+            else other.container_strategy,
+            other_strategies=self.other_strategies | other.other_strategies,
+        )
 
     def __post_init__(self) -> None:
         """Check that the settings are mutually compatible."""
@@ -36,6 +50,23 @@ class _Settings:
                 'Expected only one of `use_init` and'
                 ' `container_strategy` to be truthy'
             )
+
+
+def _default_settings(container_type: type[Lawful]) -> _Settings:
+    """Return default settings for creating law tests.
+
+    We use special strategies for `TypeVar` and `Callable` by default, but
+    they can be overriden by the user if needed.
+    """
+    return _Settings(
+        settings_kwargs={},
+        use_init=False,
+        container_strategy=None,
+        other_strategies={
+            TypeVar: type_vars_factory,  # type: ignore[dict-item]
+            Callable: pure_functions_factory,  # type: ignore[dict-item]
+        },
+    )
 
 
 @overload
@@ -222,15 +253,26 @@ def _run_law(
 def _types_to_strategies(
     container_type: type[Lawful],
     settings: _Settings,
-) -> Mapping[type[object], StrategyFactory]:
+) -> dict[type[object], StrategyFactory]:
+    """Return a mapping from type to `hypothesis` strategy.
+
+    We override the default settings with the user-provided `settings`.
+    """
+    merged_settings = _default_settings(container_type) | settings
+    return merged_settings.other_strategies | _container_mapping(
+        container_type, merged_settings
+    )
+
+
+def _container_mapping(
+    container_type: type[Lawful],
+    settings: _Settings,
+) -> dict[type[object], StrategyFactory]:
+    """Map `container_type` and its interfaces to the container strategy."""
+    container_strategy = _strategy_for_container(container_type, settings)
     return {
-        TypeVar: type_vars_factory,  # type: ignore[dict-item]
-        Callable: pure_functions_factory,  # type: ignore[dict-item]
-        **{
-            interface: _strategy_for_container(container_type, settings)
-            for interface in container_type.laws()
-        },
-        container_type: _strategy_for_container(container_type, settings),
+        **dict.fromkeys(container_type.laws(), container_strategy),
+        container_type: container_strategy,
     }
 
 
