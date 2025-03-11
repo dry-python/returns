@@ -1,5 +1,6 @@
-from collections.abc import Sequence
-from typing import Any, Final
+from collections.abc import Callable, Sequence
+from contextlib import ExitStack
+from typing import Any, Final, TypeVar
 
 import pytest
 from hypothesis import given
@@ -16,6 +17,7 @@ from returns.context import (
     RequiresContextResultE,
 )
 from returns.contrib.hypothesis.laws import (
+    _enter_hypothesis_context,  # noqa: PLC2701
     _Settings,  # noqa: PLC2701
     interface_strategies,
     register_container,
@@ -186,6 +188,83 @@ def test_register_container_with_setting() -> None:
     )
 
 
+_ValueType = TypeVar('_ValueType')
+
+
+def test_enter_hypothesis_context() -> None:  # noqa: WPS210
+    """Check that strategies are registered correctly."""
+    container_type = test_custom_type_applicative._Wrapper  # noqa: SLF001
+    # NOTE: There is a type error because `Callable` is a
+    # special form, not a type.
+    callable_type: type[object] = Callable  # type: ignore[assignment]
+
+    container_strategy_outside = look_up_strategy(container_type)
+    interface_strategies_outside = _interface_factories(container_type)
+    pure_functions_strategy_outside = look_up_strategy(callable_type)
+    type_var_strategy_outside = look_up_strategy(TypeVar)
+
+    with ExitStack() as stack:
+        _enter_hypothesis_context(
+            stack,
+            container_type,
+            settings=_Settings(
+                settings_kwargs={}, use_init=False, container_strategy=None
+            ),
+        )
+        container_strategy = look_up_strategy(container_type)
+        interface_strategies = _interface_factories(container_type)
+        pure_functions_strategy = look_up_strategy(callable_type)
+        type_var_strategy = look_up_strategy(TypeVar)
+
+    assert (
+        _strategy_string(container_strategy_outside, container_type) == 'None'
+    )
+    assert _strategy_strings(interface_strategies_outside, container_type) == [
+        'None',
+        'None',
+    ]
+    assert (
+        _strategy_string(
+            pure_functions_strategy_outside, Callable[[int, str], bool]
+        )
+        == 'functions(like=lambda *a, **k: None, returns=booleans())'
+    )
+    assert (
+        _strategy_string(type_var_strategy_outside, _ValueType)
+        == "shared(sampled_from([<class 'NoneType'>, <class 'bool'>,"
+        " <class 'int'>, <class 'float'>, <class 'str'>, <class 'bytes'>]),"
+        " key='typevar=~_ValueType').flatmap(from_type)"
+    )
+    wrapper_strategy = (
+        "builds(from_value, shared(sampled_from([<class 'NoneType'>,"
+        " <class 'bool'>, <class 'int'>, <class 'float'>, <class 'str'>,"
+        " <class 'bytes'>]), key='typevar=~_FirstType').flatmap(from_type))"
+    )
+    assert (
+        _strategy_string(container_strategy, container_type) == wrapper_strategy
+    )
+    assert _strategy_strings(interface_strategies, container_type) == [
+        wrapper_strategy,
+        wrapper_strategy,
+    ]
+    assert (
+        _strategy_string(pure_functions_strategy, Callable[[int, str], bool])
+        == 'functions(like=lambda *args, **kwargs: <unknown>,'
+        ' returns=booleans(), pure=True)'
+    )
+    assert (
+        _strategy_string(pure_functions_strategy, Callable[[], None])
+        == 'functions(like=lambda: None, returns=none(), pure=True)'
+    )
+    assert (
+        _strategy_string(type_var_strategy, _ValueType)
+        == "shared(sampled_from([<class 'NoneType'>, <class 'bool'>,"
+        " <class 'int'>, <class 'float'>, <class 'str'>, <class 'bytes'>]),"
+        " key='typevar=~_ValueType').flatmap(from_type).filter(lambda"
+        ' inner: inner == inner)'
+    )
+
+
 def test_interface_strategies() -> None:
     """Check that ancestor interfaces get resolved to the concrete container."""
     container_type = test_custom_type_applicative._Wrapper  # noqa: SLF001
@@ -242,7 +321,7 @@ def _strategy_strings(
 
 
 def _strategy_string(
-    strategy_factory: StrategyFactory | None, type_: type[object]
+    strategy_factory: StrategyFactory | None, type_: Any
 ) -> str:
     """Return an easily testable string representation."""
     return (

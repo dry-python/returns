@@ -252,17 +252,25 @@ def _run_law(
     def factory(source: st.DataObject) -> None:
         with ExitStack() as stack:
             stack.enter_context(clean_plugin_context())
-            stack.enter_context(type_vars())
-            stack.enter_context(pure_functions())
-            stack.enter_context(
-                interface_strategies(container_type, settings=settings),
-            )
-            stack.enter_context(
-                register_container(container_type, settings=settings),
-            )
+            _enter_hypothesis_context(stack, container_type, settings)
             source.draw(st.builds(law.definition))
 
     return factory
+
+
+def _enter_hypothesis_context(
+    stack: ExitStack,
+    container_type: type[Lawful],
+    settings: _Settings,
+) -> None:
+    stack.enter_context(type_vars())
+    stack.enter_context(pure_functions())
+    stack.enter_context(
+        interface_strategies(container_type, settings=settings),
+    )
+    stack.enter_context(
+        register_container(container_type, settings=settings),
+    )
 
 
 def _create_law_test_case(
