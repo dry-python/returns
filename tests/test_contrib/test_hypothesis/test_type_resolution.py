@@ -191,8 +191,12 @@ def test_register_container_with_setting() -> None:
 _ValueType = TypeVar('_ValueType')
 
 
-def test_enter_hypothesis_context() -> None:  # noqa: WPS210
-    """Check that strategies are registered correctly."""
+def test_hypothesis_state_outside_context() -> None:  # noqa: WPS210
+    """Check values of strategies before we register them.
+
+    This is mostly useful as a baseline to compare the the values when we do
+    register them.
+    """
     container_type = test_custom_type_applicative._Wrapper  # noqa: SLF001
     # NOTE: There is a type error because `Callable` is a
     # special form, not a type.
@@ -202,19 +206,6 @@ def test_enter_hypothesis_context() -> None:  # noqa: WPS210
     interface_strategies_outside = _interface_factories(container_type)
     pure_functions_strategy_outside = look_up_strategy(callable_type)
     type_var_strategy_outside = look_up_strategy(TypeVar)
-
-    with ExitStack() as stack:
-        _enter_hypothesis_context(
-            stack,
-            container_type,
-            settings=_Settings(
-                settings_kwargs={}, use_init=False, container_strategy=None
-            ),
-        )
-        container_strategy = look_up_strategy(container_type)
-        interface_strategies = _interface_factories(container_type)
-        pure_functions_strategy = look_up_strategy(callable_type)
-        type_var_strategy = look_up_strategy(TypeVar)
 
     assert (
         _strategy_string(container_strategy_outside, container_type) == 'None'
@@ -235,11 +226,81 @@ def test_enter_hypothesis_context() -> None:  # noqa: WPS210
         " <class 'int'>, <class 'float'>, <class 'str'>, <class 'bytes'>]),"
         " key='typevar=~_ValueType').flatmap(from_type)"
     )
+
+
+def test_hypothesis_state_inside_context() -> None:  # noqa: WPS210
+    """Check that strategies are registered correctly."""
+    container_type = test_custom_type_applicative._Wrapper  # noqa: SLF001
+    # NOTE: There is a type error because `Callable` is a
+    # special form, not a type.
+    callable_type: type[object] = Callable  # type: ignore[assignment]
+
+    with ExitStack() as stack:
+        _enter_hypothesis_context(
+            stack,
+            container_type,
+            settings=_Settings(
+                settings_kwargs={}, use_init=False, container_strategy=None
+            ),
+        )
+        container_strategy = look_up_strategy(container_type)
+        interface_strategies = _interface_factories(container_type)
+        pure_functions_strategy = look_up_strategy(callable_type)
+        type_var_strategy = look_up_strategy(TypeVar)
+
     wrapper_strategy = (
         "builds(from_value, shared(sampled_from([<class 'NoneType'>,"
         " <class 'bool'>, <class 'int'>, <class 'float'>, <class 'str'>,"
         " <class 'bytes'>]), key='typevar=~_FirstType').flatmap(from_type))"
     )
+    assert (
+        _strategy_string(container_strategy, container_type) == wrapper_strategy
+    )
+    assert _strategy_strings(interface_strategies, container_type) == [
+        wrapper_strategy,
+        wrapper_strategy,
+    ]
+    assert (
+        _strategy_string(pure_functions_strategy, Callable[[int, str], bool])
+        == 'functions(like=lambda *args, **kwargs: <unknown>,'
+        ' returns=booleans(), pure=True)'
+    )
+    assert (
+        _strategy_string(pure_functions_strategy, Callable[[], None])
+        == 'functions(like=lambda: None, returns=none(), pure=True)'
+    )
+    assert (
+        _strategy_string(type_var_strategy, _ValueType)
+        == "shared(sampled_from([<class 'NoneType'>, <class 'bool'>,"
+        " <class 'int'>, <class 'float'>, <class 'str'>, <class 'bytes'>]),"
+        " key='typevar=~_ValueType').flatmap(from_type).filter(lambda"
+        ' inner: inner == inner)'
+    )
+
+
+def test_hypothesis_state_with_setting() -> None:  # noqa: WPS210
+    """Check that we prefer the strategies in settings."""
+    container_type = test_custom_type_applicative._Wrapper  # noqa: SLF001
+    # NOTE: There is a type error because `Callable` is a
+    # special form, not a type.
+    callable_type: type[object] = Callable  # type: ignore[assignment]
+
+    with ExitStack() as stack:
+        _enter_hypothesis_context(
+            stack,
+            container_type,
+            settings=_Settings(
+                settings_kwargs={},
+                use_init=False,
+                container_strategy=st.builds(container_type, st.integers()),
+            ),
+        )
+        container_strategy = look_up_strategy(container_type)
+        interface_strategies = _interface_factories(container_type)
+        pure_functions_strategy = look_up_strategy(callable_type)
+        type_var_strategy = look_up_strategy(TypeVar)
+
+    wrapper_strategy = 'builds(_Wrapper, integers())'
     assert (
         _strategy_string(container_strategy, container_type) == wrapper_strategy
     )
