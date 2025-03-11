@@ -29,9 +29,7 @@ class _Settings:
     settings_kwargs: dict[str, Any]
     use_init: bool
     container_strategy: StrategyFactory | None
-    other_strategies: dict[type[object], StrategyFactory] = dataclasses.field(
-        default_factory=dict
-    )
+    other_strategies: dict[type[object], StrategyFactory]
 
     def __or__(self, other: Self) -> Self:
         return _Settings(
@@ -73,8 +71,9 @@ def _default_settings(container_type: type[Lawful]) -> _Settings:
 def check_all_laws(
     container_type: type[Lawful[Example_co]],
     *,
+    container_strategy: StrategyFactory[Example_co],
     settings_kwargs: dict[str, Any] | None = None,
-    container_strategy: StrategyFactory[Example_co] | None = None,
+    other_strategies: dict[type[object], StrategyFactory] | None = None,
 ) -> None: ...
 
 
@@ -93,6 +92,7 @@ def check_all_laws(
     settings_kwargs: dict[str, Any] | None = None,
     use_init: bool = False,
     container_strategy: StrategyFactory[Example_co] | None = None,
+    other_strategies: dict[type[object], StrategyFactory] | None = None,
 ) -> None:
     """
     Function to check all defined mathematical laws in a specified container.
@@ -124,6 +124,7 @@ def check_all_laws(
         settings_kwargs or {},
         use_init,
         container_strategy,
+        other_strategies=other_strategies or {},
     )
 
     for interface, laws in container_type.laws().items():

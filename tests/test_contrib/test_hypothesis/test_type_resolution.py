@@ -187,6 +187,7 @@ def test_types_to_strategies_default() -> None:  # noqa: WPS210
             settings_kwargs={},
             use_init=False,
             container_strategy=None,
+            other_strategies={},
         ),
     )
 
