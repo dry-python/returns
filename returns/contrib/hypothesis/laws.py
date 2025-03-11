@@ -2,7 +2,7 @@ import dataclasses
 import inspect
 from collections.abc import Callable, Iterator, Mapping
 from contextlib import ExitStack, contextmanager
-from typing import Any, TypeGuard, TypeVar, final, overload
+from typing import Any, TypeVar, final, overload
 
 import pytest
 from hypothesis import given
@@ -15,7 +15,7 @@ from returns.contrib.hypothesis.type_resolver import (
     StrategyFactory,
     strategies_for_types,
 )
-from returns.primitives.laws import LAWS_ATTRIBUTE, Law, Lawful
+from returns.primitives.laws import Law, Lawful
 
 Example_co = TypeVar('Example_co', covariant=True)
 
@@ -122,7 +122,7 @@ def interface_strategies(
     """
     mapping: Mapping[type[object], StrategyFactory] = {
         interface: _strategy_for_container(container_type, settings)
-        for interface in lawful_interfaces(container_type)
+        for interface in container_type.laws()
     }
     with strategies_for_types(mapping):
         yield
@@ -226,28 +226,6 @@ def clean_plugin_context() -> Iterator[None]:
     finally:
         for saved_state in saved_stategies.items():
             st.register_type_strategy(*saved_state)
-
-
-def lawful_interfaces(container_type: type[Lawful]) -> set[type[Lawful]]:
-    """Return ancestors of `container_type` that are lawful interfaces."""
-    return {
-        base_type
-        for base_type in container_type.__mro__
-        if _is_lawful_interface(base_type)
-        and base_type not in {Lawful, container_type}
-    }
-
-
-def _is_lawful_interface(
-    interface_type: type[object],
-) -> TypeGuard[type[Lawful]]:
-    return issubclass(interface_type, Lawful) and _has_non_inherited_attribute(
-        interface_type, LAWS_ATTRIBUTE
-    )
-
-
-def _has_non_inherited_attribute(type_: type[object], attribute: str) -> bool:
-    return attribute in type_.__dict__
 
 
 def _clean_caches() -> None:

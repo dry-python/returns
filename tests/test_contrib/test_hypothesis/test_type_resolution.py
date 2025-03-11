@@ -18,7 +18,6 @@ from returns.context import (
 from returns.contrib.hypothesis.laws import (
     _Settings,  # noqa: PLC2701
     interface_strategies,
-    lawful_interfaces,
     register_container,
 )
 from returns.contrib.hypothesis.type_resolver import (
@@ -230,9 +229,7 @@ def test_interface_strategies_with_settings() -> None:
 
 
 def _interface_factories(type_: type[Lawful]) -> list[StrategyFactory | None]:
-    return [
-        look_up_strategy(interface) for interface in lawful_interfaces(type_)
-    ]
+    return [look_up_strategy(interface) for interface in type_.laws()]
 
 
 def _strategy_strings(
