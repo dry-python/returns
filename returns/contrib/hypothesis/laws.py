@@ -164,14 +164,8 @@ def pure_functions() -> Iterator[None]:
             pure=True,
         )
 
-    used = types._global_type_lookup[Callable]  # type: ignore[index]  # noqa: SLF001
-    st.register_type_strategy(Callable, factory)  # type: ignore[arg-type]
-
-    try:
+    with strategies_for_types({Callable: factory}):  # type: ignore[dict-item]
         yield
-    finally:
-        types._global_type_lookup.pop(Callable)  # type: ignore[call-overload]  # noqa: SLF001
-        st.register_type_strategy(Callable, used)  # type: ignore[arg-type]
 
 
 @contextmanager
@@ -192,14 +186,8 @@ def type_vars() -> Iterator[None]:
             lambda inner: inner == inner,  # noqa: PLR0124, WPS312
         )
 
-    used = types._global_type_lookup.pop(TypeVar)  # noqa: SLF001
-    st.register_type_strategy(TypeVar, factory)
-
-    try:
+    with strategies_for_types({TypeVar: factory}):
         yield
-    finally:
-        types._global_type_lookup.pop(TypeVar)  # noqa: SLF001
-        st.register_type_strategy(TypeVar, used)
 
 
 @contextmanager
