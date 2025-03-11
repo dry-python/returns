@@ -1,6 +1,6 @@
 from collections.abc import Callable, Sequence
 from contextlib import ExitStack
-from typing import Any, Final, TypeVar
+from typing import Any, TypeVar
 
 import pytest
 from hypothesis import given
@@ -19,21 +19,18 @@ from returns.context import (
 from returns.contrib.hypothesis.laws import (
     _enter_hypothesis_context,  # noqa: PLC2701
     _Settings,  # noqa: PLC2701
-    interface_strategies,
-    register_container,
-)
+    )
 from returns.contrib.hypothesis.type_resolver import (
     StrategyFactory,
     apply_strategy,
     look_up_strategy,
-    strategies_for_types,
 )
 from returns.future import Future, FutureResult
 from returns.io import IO, IOResult, IOResultE
 from returns.maybe import Maybe
 from returns.pipeline import is_successful
 from returns.primitives.laws import Lawful
-from returns.result import Result, ResultE, Success
+from returns.result import Result, ResultE
 from test_hypothesis.test_laws import test_custom_type_applicative
 
 _all_containers: Sequence[type[Lawful]] = (
@@ -114,78 +111,6 @@ def test_custom_readerresult_types_resolve(
         assert isinstance(real_result.unwrap(), int)
     else:
         assert isinstance(real_result.failure(), str)
-
-
-DEFAULT_RESULT_STRATEGY: Final = (
-    "one_of(builds(from_value, shared(sampled_from([<class 'NoneType'>, "
-    "<class 'bool'>, <class 'int'>, <class 'float'>, <class 'str'>, "
-    "<class 'bytes'>]), key='typevar=~_FirstType').flatmap(from_type)), "
-    "builds(from_failure, shared(sampled_from([<class 'NoneType'>, "
-    "<class 'bool'>, <class 'int'>, <class 'float'>, <class 'str'>, "
-    "<class 'bytes'>]), "
-    "key='typevar=~_SecondType').flatmap(from_type)))"
-)
-
-
-def test_register_container_with_no_strategy() -> None:
-    """Check that a container without a strategy gets a strategy."""
-    container_type = Result
-
-    with register_container(
-        container_type,
-        settings=_Settings(
-            settings_kwargs={}, use_init=False, container_strategy=None
-        ),
-    ):
-        strategy_factory = look_up_strategy(container_type)
-
-    assert (
-        _strategy_string(strategy_factory, container_type)
-        == DEFAULT_RESULT_STRATEGY
-    )
-
-
-def test_register_container_with_strategy() -> None:
-    """Check that when a container has an existing strategy, we drop it."""
-    container_type = Result
-
-    with (
-        strategies_for_types({
-            container_type: st.builds(container_type, st.integers())
-        }),
-        register_container(
-            container_type,
-            settings=_Settings(
-                settings_kwargs={}, use_init=False, container_strategy=None
-            ),
-        ),
-    ):
-        strategy_factory = look_up_strategy(container_type)
-
-    assert (
-        _strategy_string(strategy_factory, container_type)
-        == DEFAULT_RESULT_STRATEGY
-    )
-
-
-def test_register_container_with_setting() -> None:
-    """Check that we prefer a strategy given in settings."""
-    container_type = Result
-
-    with register_container(
-        container_type,
-        settings=_Settings(
-            settings_kwargs={},
-            use_init=False,
-            container_strategy=st.builds(Success, st.integers()),
-        ),
-    ):
-        strategy_factory = look_up_strategy(container_type)
-
-    assert (
-        _strategy_string(strategy_factory, container_type)
-        == 'builds(Success, integers())'
-    )
 
 
 _ValueType = TypeVar('_ValueType')
@@ -324,48 +249,6 @@ def test_hypothesis_state_with_setting() -> None:  # noqa: WPS210
         " key='typevar=~_ValueType').flatmap(from_type).filter(lambda"
         ' inner: inner == inner)'
     )
-
-
-def test_interface_strategies() -> None:
-    """Check that ancestor interfaces get resolved to the concrete container."""
-    container_type = test_custom_type_applicative._Wrapper  # noqa: SLF001
-
-    with interface_strategies(
-        container_type,
-        settings=_Settings(
-            settings_kwargs={}, use_init=False, container_strategy=None
-        ),
-    ):
-        strategy_factories_inside = _interface_factories(container_type)
-
-    assert _strategy_strings(strategy_factories_inside, container_type) == [
-        "builds(from_value, shared(sampled_from([<class 'NoneType'>,"
-        " <class 'bool'>, <class 'int'>, <class 'float'>, <class 'str'>,"
-        " <class 'bytes'>]), key='typevar=~_FirstType').flatmap(from_type))",
-        "builds(from_value, shared(sampled_from([<class 'NoneType'>,"
-        " <class 'bool'>, <class 'int'>, <class 'float'>, <class 'str'>,"
-        " <class 'bytes'>]), key='typevar=~_FirstType').flatmap(from_type))",
-    ]
-
-
-def test_interface_strategies_with_settings() -> None:
-    """Check that we prefer the strategy in the settings."""
-    container_type = test_custom_type_applicative._Wrapper  # noqa: SLF001
-
-    with interface_strategies(
-        container_type,
-        settings=_Settings(
-            settings_kwargs={},
-            use_init=False,
-            container_strategy=st.builds(container_type, st.integers()),
-        ),
-    ):
-        strategy_factories_inside = _interface_factories(container_type)
-
-    assert _strategy_strings(strategy_factories_inside, container_type) == [
-        'builds(_Wrapper, integers())',
-        'builds(_Wrapper, integers())',
-    ]
 
 
 def _interface_factories(type_: type[Lawful]) -> list[StrategyFactory | None]:

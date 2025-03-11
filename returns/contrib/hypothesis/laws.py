@@ -1,6 +1,6 @@
 import dataclasses
 import inspect
-from collections.abc import Callable, Iterator, Mapping
+from collections.abc import Callable, Iterator
 from contextlib import ExitStack, contextmanager
 from typing import Any, TypeVar, final, overload
 
@@ -105,42 +105,6 @@ def check_all_laws(
             )
 
 
-@contextmanager
-def interface_strategies(
-    container_type: type[Lawful],
-    *,
-    settings: _Settings,
-) -> Iterator[None]:
-    """
-    Make all interfaces of a container resolve to the container's strategy.
-
-    For example, let's say we have ``Result`` type.
-    It is a subtype of ``ContainerN``, ``MappableN``, ``BindableN``, etc.
-    When we check this type, we need ``MappableN`` to resolve to ``Result``.
-
-    Can be used independently from other functions.
-    """
-    mapping: Mapping[type[object], StrategyFactory] = {
-        interface: _strategy_for_container(container_type, settings)
-        for interface in container_type.laws()
-    }
-    with strategies_for_types(mapping):
-        yield
-
-
-@contextmanager
-def register_container(
-    container_type: type['Lawful'],
-    *,
-    settings: _Settings,
-) -> Iterator[None]:
-    """Temporary registers a container if it is not registered yet."""
-    with strategies_for_types({
-        container_type: _strategy_for_container(container_type, settings)
-    }):
-        yield
-
-
 def pure_functions_factory(thing) -> st.SearchStrategy:
     """Factory to create pure functions."""
     like = (
@@ -235,10 +199,15 @@ def _enter_hypothesis_context(
         strategies_for_types({Callable: pure_functions_factory})  # type: ignore[dict-item]
     )
     stack.enter_context(
-        interface_strategies(container_type, settings=settings),
+        strategies_for_types({
+            interface: _strategy_for_container(container_type, settings)
+            for interface in container_type.laws()
+        }),
     )
     stack.enter_context(
-        register_container(container_type, settings=settings),
+        strategies_for_types({
+            container_type: _strategy_for_container(container_type, settings)
+        }),
     )
 
 
