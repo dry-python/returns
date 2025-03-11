@@ -163,14 +163,40 @@ def _clean_caches() -> None:
     st.from_type.__clear_cache()  # type: ignore[attr-defined]  # noqa: SLF001
 
 
-def _strategy_for_container(
+def _create_law_test_case(
     container_type: type[Lawful],
+    interface: type[Lawful],
+    law: Law,
+    *,
     settings: _Settings,
-) -> StrategyFactory:
-    return (
-        strategy_from_container(container_type, use_init=settings.use_init)
-        if settings.container_strategy is None
-        else settings.container_strategy
+) -> None:
+    test_function = given(st.data())(
+        hypothesis_settings(**settings.settings_kwargs)(
+            _run_law(container_type, law, settings=settings),
+        ),
+    )
+
+    called_from = inspect.stack()[2]
+    module = inspect.getmodule(called_from[0])
+
+    template = 'test_{container}_{interface}_{name}'
+    test_function.__name__ = template.format(  # noqa: WPS125
+        container=container_type.__qualname__.lower(),
+        interface=interface.__qualname__.lower(),
+        name=law.name,
+    )
+
+    setattr(
+        module,
+        test_function.__name__,
+        pytest.mark.filterwarnings(
+            # We ignore multiple warnings about unused coroutines and stuff:
+            'ignore::pytest.PytestUnraisableExceptionWarning',
+        )(
+            # We mark all tests with `returns_lawful` marker,
+            # so users can easily skip them if needed.
+            pytest.mark.returns_lawful(test_function),
+        ),
     )
 
 
@@ -207,38 +233,12 @@ def _enter_hypothesis_context(
     )
 
 
-def _create_law_test_case(
+def _strategy_for_container(
     container_type: type[Lawful],
-    interface: type[Lawful],
-    law: Law,
-    *,
     settings: _Settings,
-) -> None:
-    test_function = given(st.data())(
-        hypothesis_settings(**settings.settings_kwargs)(
-            _run_law(container_type, law, settings=settings),
-        ),
-    )
-
-    called_from = inspect.stack()[2]
-    module = inspect.getmodule(called_from[0])
-
-    template = 'test_{container}_{interface}_{name}'
-    test_function.__name__ = template.format(  # noqa: WPS125
-        container=container_type.__qualname__.lower(),
-        interface=interface.__qualname__.lower(),
-        name=law.name,
-    )
-
-    setattr(
-        module,
-        test_function.__name__,
-        pytest.mark.filterwarnings(
-            # We ignore multiple warnings about unused coroutines and stuff:
-            'ignore::pytest.PytestUnraisableExceptionWarning',
-        )(
-            # We mark all tests with `returns_lawful` marker,
-            # so users can easily skip them if needed.
-            pytest.mark.returns_lawful(test_function),
-        ),
+) -> StrategyFactory:
+    return (
+        strategy_from_container(container_type, use_init=settings.use_init)
+        if settings.container_strategy is None
+        else settings.container_strategy
     )
