@@ -1,5 +1,4 @@
 from collections.abc import Callable, Sequence
-from contextlib import ExitStack
 from typing import Any, TypeVar
 
 import pytest
@@ -17,8 +16,8 @@ from returns.context import (
     RequiresContextResultE,
 )
 from returns.contrib.hypothesis.laws import (
-    _enter_hypothesis_context,  # noqa: PLC2701
     _Settings,  # noqa: PLC2701
+    _types_to_strategies,  # noqa: PLC2701
 )
 from returns.contrib.hypothesis.type_resolver import (
     StrategyFactory,
@@ -116,62 +115,21 @@ def test_custom_readerresult_types_resolve(
 _ValueType = TypeVar('_ValueType')
 
 
-def test_hypothesis_state_outside_context() -> None:  # noqa: WPS210
-    """Check values of strategies before we register them.
-
-    This is mostly useful as a baseline to compare the the values when we do
-    register them.
-    """
+def test_types_to_strategies_default() -> None:  # noqa: WPS210
+    """Check the default strategies for types."""
     container_type = test_custom_type_applicative._Wrapper  # noqa: SLF001
     # NOTE: There is a type error because `Callable` is a
     # special form, not a type.
     callable_type: type[object] = Callable  # type: ignore[assignment]
 
-    container_strategy_outside = look_up_strategy(container_type)
-    interface_strategies_outside = _interface_factories(container_type)
-    pure_functions_strategy_outside = look_up_strategy(callable_type)
-    type_var_strategy_outside = look_up_strategy(TypeVar)
-
-    assert (
-        _strategy_string(container_strategy_outside, container_type) == 'None'
+    result = _types_to_strategies(
+        container_type,
+        _Settings(
+            settings_kwargs={},
+            use_init=False,
+            container_strategy=None,
+        ),
     )
-    assert _strategy_strings(interface_strategies_outside, container_type) == [
-        'None',
-        'None',
-    ]
-    assert (
-        _strategy_string(
-            pure_functions_strategy_outside, Callable[[int, str], bool]
-        )
-        == 'functions(like=lambda *a, **k: None, returns=booleans())'
-    )
-    assert (
-        _strategy_string(type_var_strategy_outside, _ValueType)
-        == "shared(sampled_from([<class 'NoneType'>, <class 'bool'>,"
-        " <class 'int'>, <class 'float'>, <class 'str'>, <class 'bytes'>]),"
-        " key='typevar=~_ValueType').flatmap(from_type)"
-    )
-
-
-def test_hypothesis_state_inside_context() -> None:  # noqa: WPS210
-    """Check that strategies are registered correctly."""
-    container_type = test_custom_type_applicative._Wrapper  # noqa: SLF001
-    # NOTE: There is a type error because `Callable` is a
-    # special form, not a type.
-    callable_type: type[object] = Callable  # type: ignore[assignment]
-
-    with ExitStack() as stack:
-        _enter_hypothesis_context(
-            stack,
-            container_type,
-            settings=_Settings(
-                settings_kwargs={}, use_init=False, container_strategy=None
-            ),
-        )
-        container_strategy = look_up_strategy(container_type)
-        interface_strategies = _interface_factories(container_type)
-        pure_functions_strategy = look_up_strategy(callable_type)
-        type_var_strategy = look_up_strategy(TypeVar)
 
     wrapper_strategy = (
         "builds(from_value, shared(sampled_from([<class 'NoneType'>,"
@@ -179,23 +137,27 @@ def test_hypothesis_state_inside_context() -> None:  # noqa: WPS210
         " <class 'bytes'>]), key='typevar=~_FirstType').flatmap(from_type))"
     )
     assert (
-        _strategy_string(container_strategy, container_type) == wrapper_strategy
+        _strategy_string(result[container_type], container_type)
+        == wrapper_strategy
     )
-    assert _strategy_strings(interface_strategies, container_type) == [
+    assert _strategy_strings(
+        [result[interface] for interface in container_type.laws()],
+        container_type,
+    ) == [
         wrapper_strategy,
         wrapper_strategy,
     ]
     assert (
-        _strategy_string(pure_functions_strategy, Callable[[int, str], bool])
+        _strategy_string(result[callable_type], Callable[[int, str], bool])
         == 'functions(like=lambda *args, **kwargs: <unknown>,'
         ' returns=booleans(), pure=True)'
     )
     assert (
-        _strategy_string(pure_functions_strategy, Callable[[], None])
+        _strategy_string(result[callable_type], Callable[[], None])
         == 'functions(like=lambda: None, returns=none(), pure=True)'
     )
     assert (
-        _strategy_string(type_var_strategy, _ValueType)
+        _strategy_string(result[TypeVar], _ValueType)
         == "shared(sampled_from([<class 'NoneType'>, <class 'bool'>,"
         " <class 'int'>, <class 'float'>, <class 'str'>, <class 'bytes'>]),"
         " key='typevar=~_ValueType').flatmap(from_type).filter(lambda"
@@ -203,47 +165,45 @@ def test_hypothesis_state_inside_context() -> None:  # noqa: WPS210
     )
 
 
-def test_hypothesis_state_with_setting() -> None:  # noqa: WPS210
+def test_types_to_strategies_overrides() -> None:  # noqa: WPS210
     """Check that we prefer the strategies in settings."""
     container_type = test_custom_type_applicative._Wrapper  # noqa: SLF001
     # NOTE: There is a type error because `Callable` is a
     # special form, not a type.
     callable_type: type[object] = Callable  # type: ignore[assignment]
 
-    with ExitStack() as stack:
-        _enter_hypothesis_context(
-            stack,
-            container_type,
-            settings=_Settings(
-                settings_kwargs={},
-                use_init=False,
-                container_strategy=st.builds(container_type, st.integers()),
-            ),
-        )
-        container_strategy = look_up_strategy(container_type)
-        interface_strategies = _interface_factories(container_type)
-        pure_functions_strategy = look_up_strategy(callable_type)
-        type_var_strategy = look_up_strategy(TypeVar)
+    result = _types_to_strategies(
+        container_type,
+        _Settings(
+            settings_kwargs={},
+            use_init=False,
+            container_strategy=st.builds(container_type, st.integers()),
+        ),
+    )
 
     wrapper_strategy = 'builds(_Wrapper, integers())'
     assert (
-        _strategy_string(container_strategy, container_type) == wrapper_strategy
+        _strategy_string(result[container_type], container_type)
+        == wrapper_strategy
     )
-    assert _strategy_strings(interface_strategies, container_type) == [
+    assert _strategy_strings(
+        [result[interface] for interface in container_type.laws()],
+        container_type,
+    ) == [
         wrapper_strategy,
         wrapper_strategy,
     ]
     assert (
-        _strategy_string(pure_functions_strategy, Callable[[int, str], bool])
+        _strategy_string(result[callable_type], Callable[[int, str], bool])
         == 'functions(like=lambda *args, **kwargs: <unknown>,'
         ' returns=booleans(), pure=True)'
     )
     assert (
-        _strategy_string(pure_functions_strategy, Callable[[], None])
+        _strategy_string(result[callable_type], Callable[[], None])
         == 'functions(like=lambda: None, returns=none(), pure=True)'
     )
     assert (
-        _strategy_string(type_var_strategy, _ValueType)
+        _strategy_string(result[TypeVar], _ValueType)
         == "shared(sampled_from([<class 'NoneType'>, <class 'bool'>,"
         " <class 'int'>, <class 'float'>, <class 'str'>, <class 'bytes'>]),"
         " key='typevar=~_ValueType').flatmap(from_type).filter(lambda"
