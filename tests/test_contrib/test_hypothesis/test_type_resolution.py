@@ -16,7 +16,7 @@ from returns.context import (
     RequiresContextResultE,
 )
 from returns.contrib.hypothesis.laws import (
-    _Settings,  # noqa: PLC2701
+    Settings,
     _types_to_strategies,  # noqa: PLC2701
     default_settings,
 )
@@ -116,13 +116,13 @@ def test_custom_readerresult_types_resolve(
 
 def test_merge_settings() -> None:
     """Check that each part of the settings can be overridden by users."""
-    settings1 = _Settings(
+    settings1 = Settings(
         settings_kwargs={'a': 1, 'b': 2},
         use_init=False,
         container_strategy=st.integers(),
         other_strategies={int: st.integers(max_value=10), str: st.text('abc')},
     )
-    settings2 = _Settings(
+    settings2 = Settings(
         settings_kwargs={'a': 1, 'c': 3},
         use_init=False,
         container_strategy=st.integers(max_value=20),
@@ -131,7 +131,7 @@ def test_merge_settings() -> None:
 
     result = settings1 | settings2
 
-    assert result == _Settings(
+    assert result == Settings(
         settings_kwargs={'a': 1, 'b': 2, 'c': 3},
         use_init=False,
         container_strategy=st.integers(max_value=20),
@@ -149,13 +149,13 @@ def test_merge_use_init() -> None:
     Note: They can't set a `True` to `False`, since we use `|` to merge.
     However, the default value is `False`, so this should not be a problem.
     """
-    settings1 = _Settings(
+    settings1 = Settings(
         settings_kwargs={},
         use_init=False,
         container_strategy=None,
         other_strategies={},
     )
-    settings2 = _Settings(
+    settings2 = Settings(
         settings_kwargs={},
         use_init=True,
         container_strategy=None,
@@ -164,7 +164,7 @@ def test_merge_use_init() -> None:
 
     result = settings1 | settings2
 
-    assert result == _Settings(
+    assert result == Settings(
         settings_kwargs={},
         use_init=True,
         container_strategy=None,
@@ -230,7 +230,7 @@ def test_types_to_strategies_overrides() -> None:  # noqa: WPS210
 
     result = _types_to_strategies(
         container_type,
-        _Settings(
+        Settings(
             settings_kwargs={},
             use_init=False,
             container_strategy=st.builds(container_type, st.integers()),

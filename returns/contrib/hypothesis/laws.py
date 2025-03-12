@@ -23,12 +23,26 @@ Example_co = TypeVar('Example_co', covariant=True)
 
 @final
 @dataclasses.dataclass(frozen=True)
-class _Settings:
-    """Settings that we provide to an end user."""
+class Settings:
+    """Settings for the law tests.
 
+    Any settings passed by the user will override the value from
+    :func:`default_settings`.
+    """
+
+    #: Settings directly passed on to `hypothesis`. We support all kwargs from
+    #: ``@settings``, see `@settings docs
+    #: <https://hypothesis.readthedocs.io/en/latest/settings.html>`_.
     settings_kwargs: dict[str, Any]
+    #: Whether to create examples using ``__init__`` instead of the default .
     use_init: bool
+    #: Strategy for generating the container. By default, we generate examples
+    #: of a container using:
+    #: :func:`returns.contrib.hypothesis.containers.strategy_from_container`.
     container_strategy: StrategyFactory | None
+    #: Strategies for generating values of other types. This can be useful for
+    #: overriding ``TypeVar``, ``Callable``, etc. in case you use certain
+    #: types that ``hypothesis`` is unable to find.
     other_strategies: dict[type[object], StrategyFactory]
 
     def __post_init__(self) -> None:
@@ -41,7 +55,7 @@ class _Settings:
 
     def __or__(self, other: Self) -> Self:
         """Merge the two settings, preferring values from `other`."""
-        return _Settings(
+        return Settings(
             settings_kwargs=self.settings_kwargs | other.settings_kwargs,
             use_init=self.use_init | other.use_init,
             container_strategy=self.container_strategy
@@ -51,7 +65,7 @@ class _Settings:
         )
 
 
-def default_settings(container_type: type[Lawful]) -> _Settings:
+def default_settings(container_type: type[Lawful]) -> Settings:
     """Return default settings for creating law tests.
 
     We use some special strategies by default, but
@@ -68,7 +82,7 @@ def default_settings(container_type: type[Lawful]) -> _Settings:
     `collections.abc.Callable`. So, this is the type we should register with
     `hypothesis`.
     """
-    return _Settings(
+    return Settings(
         settings_kwargs={},
         use_init=False,
         container_strategy=None,
@@ -132,7 +146,7 @@ def check_all_laws(
         - https://mmhaskell.com/blog/2017/3/13/obey-the-type-laws
 
     """
-    settings = default_settings(container_type) | _Settings(
+    settings = default_settings(container_type) | Settings(
         settings_kwargs or {},
         use_init,
         container_strategy,
@@ -212,7 +226,7 @@ def _create_law_test_case(
     interface: type[Lawful],
     law: Law,
     *,
-    settings: _Settings,
+    settings: Settings,
 ) -> None:
     test_function = given(st.data())(
         hypothesis_settings(**settings.settings_kwargs)(
@@ -248,7 +262,7 @@ def _run_law(
     container_type: type[Lawful],
     law: Law,
     *,
-    settings: _Settings,
+    settings: Settings,
 ) -> Callable[[st.DataObject], None]:
     def factory(source: st.DataObject) -> None:
         with ExitStack() as stack:
@@ -265,7 +279,7 @@ def _run_law(
 
 def _types_to_strategies(
     container_type: type[Lawful],
-    settings: _Settings,
+    settings: Settings,
 ) -> dict[type[object], StrategyFactory]:
     """Return a mapping from type to `hypothesis` strategy."""
     return settings.other_strategies | _container_mapping(
@@ -275,7 +289,7 @@ def _types_to_strategies(
 
 def _container_mapping(
     container_type: type[Lawful],
-    settings: _Settings,
+    settings: Settings,
 ) -> dict[type[object], StrategyFactory]:
     """Map `container_type` and its interfaces to the container strategy."""
     container_strategy = _strategy_for_container(container_type, settings)
@@ -287,7 +301,7 @@ def _container_mapping(
 
 def _strategy_for_container(
     container_type: type[Lawful],
-    settings: _Settings,
+    settings: Settings,
 ) -> StrategyFactory:
     return (
         strategy_from_container(container_type, use_init=settings.use_init)
