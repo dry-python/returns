@@ -18,6 +18,7 @@ from returns.context import (
 from returns.contrib.hypothesis.laws import (
     _Settings,  # noqa: PLC2701
     _types_to_strategies,  # noqa: PLC2701
+    default_settings,
 )
 from returns.contrib.hypothesis.type_resolver import (
     StrategyFactory,
@@ -183,12 +184,7 @@ def test_types_to_strategies_default() -> None:  # noqa: WPS210
 
     result = _types_to_strategies(
         container_type,
-        _Settings(
-            settings_kwargs={},
-            use_init=False,
-            container_strategy=None,
-            other_strategies={},
-        ),
+        default_settings(container_type),
     )
 
     wrapper_strategy = (

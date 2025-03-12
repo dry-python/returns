@@ -31,7 +31,16 @@ class _Settings:
     container_strategy: StrategyFactory | None
     other_strategies: dict[type[object], StrategyFactory]
 
+    def __post_init__(self) -> None:
+        """Check that the settings are mutually compatible."""
+        if self.use_init and self.container_strategy is not None:
+            raise AssertionError(
+                'Expected only one of `use_init` and'
+                ' `container_strategy` to be truthy'
+            )
+
     def __or__(self, other: Self) -> Self:
+        """Merge the two settings, preferring values from `other`."""
         return _Settings(
             settings_kwargs=self.settings_kwargs | other.settings_kwargs,
             use_init=self.use_init | other.use_init,
@@ -41,20 +50,23 @@ class _Settings:
             other_strategies=self.other_strategies | other.other_strategies,
         )
 
-    def __post_init__(self) -> None:
-        """Check that the settings are mutually compatible."""
-        if self.use_init and self.container_strategy is not None:
-            raise AssertionError(
-                'Expected only one of `use_init` and'
-                ' `container_strategy` to be truthy'
-            )
 
-
-def _default_settings(container_type: type[Lawful]) -> _Settings:
+def default_settings(container_type: type[Lawful]) -> _Settings:
     """Return default settings for creating law tests.
 
-    We use special strategies for `TypeVar` and `Callable` by default, but
-    they can be overriden by the user if needed.
+    We use some special strategies by default, but
+    they can be overriden by the user if needed:
+
+    + `TypeVar`: We need to make sure that the values generated behave
+    sensibly when tested for equality.
+
+    + `collections.abc.Callable`: We need to generate pure functions, which
+    are not the default.
+
+    Note that this is `collections.abc.Callable`, NOT `typing.Callable`. This
+    is because, at runtime, `typing.get_origin(Callable[[int], str])` is
+    `collections.abc.Callable`. So, this is the type we should register with
+    `hypothesis`.
     """
     return _Settings(
         settings_kwargs={},
@@ -120,7 +132,7 @@ def check_all_laws(
         - https://mmhaskell.com/blog/2017/3/13/obey-the-type-laws
 
     """
-    settings = _Settings(
+    settings = default_settings(container_type) | _Settings(
         settings_kwargs or {},
         use_init,
         container_strategy,
@@ -255,13 +267,9 @@ def _types_to_strategies(
     container_type: type[Lawful],
     settings: _Settings,
 ) -> dict[type[object], StrategyFactory]:
-    """Return a mapping from type to `hypothesis` strategy.
-
-    We override the default settings with the user-provided `settings`.
-    """
-    merged_settings = _default_settings(container_type) | settings
-    return merged_settings.other_strategies | _container_mapping(
-        container_type, merged_settings
+    """Return a mapping from type to `hypothesis` strategy."""
+    return settings.other_strategies | _container_mapping(
+        container_type, settings
     )
 
 
