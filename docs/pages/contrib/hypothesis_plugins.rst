@@ -140,7 +140,6 @@ You can also register strategies for other types:
 
 .. code:: python
 
-
   from hypothesis import strategies as st
 
   check_all_laws(
