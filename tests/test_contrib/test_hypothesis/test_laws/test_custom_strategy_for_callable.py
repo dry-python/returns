@@ -6,7 +6,8 @@ We use the strategy to generates `Maybe`s and `Result`s for
 
 Without the custom strategy, we would simply get instances of `_Wrapper`, even
 though it is not an `Applicative`, because `_Wrapper` is a subtype of `KindN`
-and `hypothesis` doesn't know about that `KindN` is just emulating HKTs.
+and `hypothesis` doesn't know about the fact that `KindN` is just emulating
+HKTs.
 """
 
 from abc import abstractmethod

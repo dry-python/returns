@@ -28,6 +28,8 @@ See [0Ver](https://0ver.org/).
 
 - Make `hypothesis` plugin test laws from user-defined interfaces too
 - Make `hypothesis` plugin accept user-defined strategies
+- Allow users to override the `hypothesis` plugin's strategies for types, such
+  as `TypeVar` and `Callable`.
 
 ### Bugfixes
 
