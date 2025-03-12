@@ -69,7 +69,7 @@ def default_settings(container_type: type[Lawful]) -> Settings:
     """Return default settings for creating law tests.
 
     We use some special strategies by default, but
-    they can be overriden by the user if needed:
+    they can be overridden by the user if needed:
 
     + `TypeVar`: We need to make sure that the values generated behave
     sensibly when tested for equality.
