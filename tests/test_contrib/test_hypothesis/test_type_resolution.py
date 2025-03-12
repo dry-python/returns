@@ -120,13 +120,13 @@ def test_merge_settings() -> None:
         settings_kwargs={'a': 1, 'b': 2},
         use_init=False,
         container_strategy=st.integers(),
-        other_strategies={int: st.integers(max_value=10), str: st.text('abc')},
+        type_strategies={int: st.integers(max_value=10), str: st.text('abc')},
     )
     settings2 = Settings(
         settings_kwargs={'a': 1, 'c': 3},
         use_init=False,
         container_strategy=st.integers(max_value=20),
-        other_strategies={int: st.integers(max_value=30), bool: st.booleans()},
+        type_strategies={int: st.integers(max_value=30), bool: st.booleans()},
     )
 
     result = settings1 | settings2
@@ -135,7 +135,7 @@ def test_merge_settings() -> None:
         settings_kwargs={'a': 1, 'b': 2, 'c': 3},
         use_init=False,
         container_strategy=st.integers(max_value=20),
-        other_strategies={
+        type_strategies={
             int: st.integers(max_value=30),
             bool: st.booleans(),
             str: st.text('abc'),
@@ -153,13 +153,13 @@ def test_merge_use_init() -> None:
         settings_kwargs={},
         use_init=False,
         container_strategy=None,
-        other_strategies={},
+        type_strategies={},
     )
     settings2 = Settings(
         settings_kwargs={},
         use_init=True,
         container_strategy=None,
-        other_strategies={},
+        type_strategies={},
     )
 
     result = settings1 | settings2
@@ -168,7 +168,7 @@ def test_merge_use_init() -> None:
         settings_kwargs={},
         use_init=True,
         container_strategy=None,
-        other_strategies={},
+        type_strategies={},
     )
 
 
@@ -234,7 +234,7 @@ def test_types_to_strategies_overrides() -> None:  # noqa: WPS210
             settings_kwargs={},
             use_init=False,
             container_strategy=st.builds(container_type, st.integers()),
-            other_strategies={
+            type_strategies={
                 TypeVar: st.text(),
                 callable_type: st.functions(returns=st.booleans()),
                 # This strategy does not get used, because we use

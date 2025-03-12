@@ -48,7 +48,7 @@
   out: |
     main:8: error: No overload variant of "check_all_laws" matches argument types "Type[Result[_ValueType_co, _ErrorType_co]]", "bool", "SearchStrategy[Success[Any]]"  [call-overload]
     main:8: note: Possible overload variants:
-    main:8: note:     def [Example_co] check_all_laws(container_type: Type[Lawful[Example_co]], *, container_strategy: Union[SearchStrategy[Example_co], Callable[[Type[Example_co]], SearchStrategy[Example_co]]], settings_kwargs: Optional[Dict[str, Any]] = ..., other_strategies: Optional[Dict[Type[object], Union[SearchStrategy[Any], Callable[[Type[Any]], SearchStrategy[Any]]]]] = ...) -> None
+    main:8: note:     def [Example_co] check_all_laws(container_type: Type[Lawful[Example_co]], *, container_strategy: Union[SearchStrategy[Example_co], Callable[[Type[Example_co]], SearchStrategy[Example_co]]], settings_kwargs: Optional[Dict[str, Any]] = ..., type_strategies: Optional[Dict[Type[object], Union[SearchStrategy[Any], Callable[[Type[Any]], SearchStrategy[Any]]]]] = ...) -> None
     main:8: note:     def [Example_co] check_all_laws(container_type: Type[Lawful[Example_co]], *, settings_kwargs: Optional[Dict[str, Any]] = ..., use_init: bool = ...) -> None
 
 - case: test_all_laws_requires_container_strategy
@@ -64,11 +64,11 @@
     from returns.contrib.hypothesis.laws import check_all_laws
     from returns.result import Result, Success
 
-    check_all_laws(Result, container_strategy=st.builds(Success, st.integers()), other_strategies={int: st.integers()})
-    check_all_laws(Result, other_strategies={int: st.integers()})
+    check_all_laws(Result, container_strategy=st.builds(Success, st.integers()), type_strategies={int: st.integers()})
+    check_all_laws(Result, type_strategies={int: st.integers()})
 
   out: |
     main:6: error: No overload variant of "check_all_laws" matches argument types "Type[Result[_ValueType_co, _ErrorType_co]]", "Dict[Type[int], SearchStrategy[int]]"  [call-overload]
     main:6: note: Possible overload variants:
-    main:6: note:     def [Example_co] check_all_laws(container_type: Type[Lawful[Example_co]], *, container_strategy: Union[SearchStrategy[Example_co], Callable[[Type[Example_co]], SearchStrategy[Example_co]]], settings_kwargs: Optional[Dict[str, Any]] = ..., other_strategies: Optional[Dict[Type[object], Union[SearchStrategy[Any], Callable[[Type[Any]], SearchStrategy[Any]]]]] = ...) -> None
+    main:6: note:     def [Example_co] check_all_laws(container_type: Type[Lawful[Example_co]], *, container_strategy: Union[SearchStrategy[Example_co], Callable[[Type[Example_co]], SearchStrategy[Example_co]]], settings_kwargs: Optional[Dict[str, Any]] = ..., type_strategies: Optional[Dict[Type[object], Union[SearchStrategy[Any], Callable[[Type[Any]], SearchStrategy[Any]]]]] = ...) -> None
     main:6: note:     def [Example_co] check_all_laws(container_type: Type[Lawful[Example_co]], *, settings_kwargs: Optional[Dict[str, Any]] = ..., use_init: bool = ...) -> None

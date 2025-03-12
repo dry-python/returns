@@ -150,12 +150,12 @@ def _callable_factory(thing: type[object]) -> StrategyFactory[Callable]:
             raise NotImplementedError
 
 
-other_strategies: dict[type[object], StrategyFactory] = {
+type_strategies: dict[type[object], StrategyFactory] = {
     Callable: _callable_factory  # type: ignore[dict-item]
 }
 
 check_all_laws(
     _Wrapper,
     container_strategy=st.builds(_Wrapper, st.integers()),
-    other_strategies=other_strategies,
+    type_strategies=type_strategies,
 )

@@ -26,6 +26,10 @@ Example_co = TypeVar('Example_co', covariant=True)
 class Settings:
     """Settings for the law tests.
 
+    This sets the context for each generated law test, by temporarily
+    registering strategies for various types and passing any ``hypothesis``
+    settings.
+
     Any settings passed by the user will override the value from
     :func:`default_settings`.
     """
@@ -40,10 +44,11 @@ class Settings:
     #: of a container using:
     #: :func:`returns.contrib.hypothesis.containers.strategy_from_container`.
     container_strategy: StrategyFactory | None
-    #: Strategies for generating values of other types. This can be useful for
-    #: overriding ``TypeVar``, ``Callable``, etc. in case you use certain
-    #: types that ``hypothesis`` is unable to find.
-    other_strategies: dict[type[object], StrategyFactory]
+    #: Strategies for generating values of types other than the container and
+    #: its lawful interfaces. This can be useful for overriding ``TypeVar``,
+    #: ``Callable``, etc. in case you use certain types that ``hypothesis`` is
+    #: unable to find.
+    type_strategies: dict[type[object], StrategyFactory]
 
     def __post_init__(self) -> None:
         """Check that the settings are mutually compatible."""
@@ -61,7 +66,7 @@ class Settings:
             container_strategy=self.container_strategy
             if other.container_strategy is None
             else other.container_strategy,
-            other_strategies=self.other_strategies | other.other_strategies,
+            type_strategies=self.type_strategies | other.type_strategies,
         )
 
 
@@ -86,7 +91,7 @@ def default_settings(container_type: type[Lawful]) -> Settings:
         settings_kwargs={},
         use_init=False,
         container_strategy=None,
-        other_strategies={
+        type_strategies={
             TypeVar: type_vars_factory,  # type: ignore[dict-item]
             Callable: pure_functions_factory,  # type: ignore[dict-item]
         },
@@ -99,7 +104,7 @@ def check_all_laws(
     *,
     container_strategy: StrategyFactory[Example_co],
     settings_kwargs: dict[str, Any] | None = None,
-    other_strategies: dict[type[object], StrategyFactory] | None = None,
+    type_strategies: dict[type[object], StrategyFactory] | None = None,
 ) -> None: ...
 
 
@@ -118,7 +123,7 @@ def check_all_laws(
     settings_kwargs: dict[str, Any] | None = None,
     use_init: bool = False,
     container_strategy: StrategyFactory[Example_co] | None = None,
-    other_strategies: dict[type[object], StrategyFactory] | None = None,
+    type_strategies: dict[type[object], StrategyFactory] | None = None,
 ) -> None:
     """
     Function to check all defined mathematical laws in a specified container.
@@ -150,7 +155,7 @@ def check_all_laws(
         settings_kwargs or {},
         use_init,
         container_strategy,
-        other_strategies=other_strategies or {},
+        type_strategies=type_strategies or {},
     )
 
     for interface, laws in container_type.laws().items():
@@ -282,7 +287,7 @@ def _types_to_strategies(
     settings: Settings,
 ) -> dict[type[object], StrategyFactory]:
     """Return a mapping from type to `hypothesis` strategy."""
-    return settings.other_strategies | _container_mapping(
+    return settings.type_strategies | _container_mapping(
         container_type, settings
     )
 
