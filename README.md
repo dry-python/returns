@@ -2,7 +2,7 @@
 
 -----
 
-[![Build Status](https://github.com/dry-python/returns/workflows/test/badge.svg?branch=master&event=push)](https://github.com/dry-python/returns/actions?query=workflow%3Atest)
+[![test](https://github.com/dry-python/returns/actions/workflows/test.yml/badge.svg?branch=master&event=push)](https://github.com/dry-python/returns/actions/workflows/test.yml)
 [![codecov](https://codecov.io/gh/dry-python/returns/branch/master/graph/badge.svg)](https://codecov.io/gh/dry-python/returns)
 [![Documentation Status](https://readthedocs.org/projects/returns/badge/?version=latest)](https://returns.readthedocs.io/en/latest/?badge=latest)
 [![Python Version](https://img.shields.io/pypi/pyversions/returns.svg)](https://pypi.org/project/returns/)
