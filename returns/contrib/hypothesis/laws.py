@@ -24,7 +24,8 @@ Example_co = TypeVar('Example_co', covariant=True)
 @final
 @dataclasses.dataclass(frozen=True)
 class Settings:
-    """Settings for the law tests.
+    """
+    Settings for the law tests.
 
     This sets the context for each generated law test, by temporarily
     registering strategies for various types and passing any ``hypothesis``
@@ -76,11 +77,11 @@ def default_settings(container_type: type[Lawful]) -> Settings:
     We use some special strategies by default, but
     they can be overridden by the user if needed:
 
-    + `TypeVar`: We need to make sure that the values generated behave
-    sensibly when tested for equality.
+    - ``TypeVar``: We need to make sure that the values generated behave
+      sensibly when tested for equality.
 
-    + `collections.abc.Callable`: We need to generate pure functions, which
-    are not the default.
+    - ``collections.abc.Callable``: We need to generate pure functions,
+      which are not the default.
 
     Note that this is `collections.abc.Callable`, NOT `typing.Callable`. This
     is because, at runtime, `typing.get_origin(Callable[[int], str])` is
@@ -186,10 +187,11 @@ def pure_functions_factory(thing) -> st.SearchStrategy:
 
 
 def type_vars_factory(thing: type[object]) -> StrategyFactory:
-    """Strategy factory for ``TypeVar``s.
+    """
+    Strategy factory for ``TypeVar`` objects.
 
-    We ensure that values inside strategies are self-equal. For example,
-       ``nan`` does not work for us.
+    We ensure that values inside strategies are self-equal.
+    For example, ``float('nan')`` does not work for us.
     """
     return types.resolve_TypeVar(thing).filter(  # type: ignore[no-any-return]
         lambda inner: inner == inner,  # noqa: PLR0124, WPS312

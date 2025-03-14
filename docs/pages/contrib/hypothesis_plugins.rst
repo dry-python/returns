@@ -108,7 +108,8 @@ like ``Future``, ``ReaderFutureResult``, etc
 that have complex ``__init__`` signatures.
 And we don't want to mess with them.
 
-Warning::
+.. warning::
+
   Checking laws is not compatible with ``pytest-xdist``,
   because we use a lot of global mutable state there.
   Please, use ``returns_lawful`` marker
