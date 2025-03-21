@@ -1,6 +1,6 @@
 [build-system]
 build-backend = "poetry.core.masonry.api"
-requires = [ "poetry-core>=2.0" ]
+requires = [ "poetry-core>=2" ]
 
 [tool.poetry]
 name = "returns"
