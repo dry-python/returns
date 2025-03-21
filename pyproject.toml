@@ -1,11 +1,10 @@
 [build-system]
 build-backend = "poetry.core.masonry.api"
-
-requires = [ "poetry-core>=1.9" ]
+requires = [ "poetry-core>=2.0" ]
 
 [tool.poetry]
 name = "returns"
-version = "0.24.0"
+version = "0.25.0"
 description = "Make your functions return something meaningful, typed, and safe!"
 license = "BSD-3-Clause"
 
@@ -66,7 +65,7 @@ httpx = "^0.28"
 wemake-python-styleguide = "^1.0"
 codespell = "^2.2"
 slotscheck = "^0.19"
-ruff = ">=0.8,<0.12"
+ruff = "^0.11"
 
 pytest-cov = "^6.0"
 pytest-randomly = "^3.12"

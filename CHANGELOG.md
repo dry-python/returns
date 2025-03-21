@@ -6,6 +6,19 @@ incremental in minor, bugfixes only are patches.
 See [0Ver](https://0ver.org/).
 
 
+## 0.25.0
+
+### Features
+
+- A lot of new features added to our `hypothesis` plugins.
+  It now allows to create custom strategies, better instantiate containers,
+  docouple it from built-in ones, check laws from user-defined interfaces
+
+### Bugfixes
+
+- Fixes that `UnwrapFailedError` was not picklable
+
+
 ## 0.24.0
 
 ### Features
