@@ -564,15 +564,15 @@ zstd = ["zstandard (>=0.18.0)"]
 
 [[package]]
 name = "hypothesis"
-version = "6.130.0"
+version = "6.130.3"
 description = "A library for property-based testing"
 optional = true
 python-versions = ">=3.9"
 groups = ["main"]
 markers = "extra == \"check-laws\""
 files = [
-    {file = "hypothesis-6.130.0-py3-none-any.whl", hash = "sha256:b75e6fc4738d2e2a1b75d151432cb06e1303de3142905cd7060ba293c18376ce"},
-    {file = "hypothesis-6.130.0.tar.gz", hash = "sha256:274050b4518611500a55f7a5d0247a5359dce0107cb20f10323d6b587cc522d2"},
+    {file = "hypothesis-6.130.3-py3-none-any.whl", hash = "sha256:3dd7f2724ebbd81f4b8fbcd5714ef5f7476cdfd48320e449f0b8289f1b696028"},
+    {file = "hypothesis-6.130.3.tar.gz", hash = "sha256:b8223c195f31e4bfcd9ad02211d50a5b8ff4fc0413780976e8e9947581ec8fbb"},
 ]
 
 [package.dependencies]
@@ -581,10 +581,10 @@ exceptiongroup = {version = ">=1.0.0", markers = "python_version < \"3.11\""}
 sortedcontainers = ">=2.1.0,<3.0.0"
 
 [package.extras]
-all = ["black (>=19.10b0)", "click (>=7.0)", "crosshair-tool (>=0.0.83)", "django (>=4.2)", "dpcontracts (>=0.4)", "hypothesis-crosshair (>=0.0.20)", "lark (>=0.10.1)", "libcst (>=0.3.16)", "numpy (>=1.19.3)", "pandas (>=1.1)", "pytest (>=4.6)", "python-dateutil (>=1.4)", "pytz (>=2014.1)", "redis (>=3.0.0)", "rich (>=9.0.0)", "tzdata (>=2025.1) ; sys_platform == \"win32\" or sys_platform == \"emscripten\"", "watchdog (>=4.0.0)"]
+all = ["black (>=19.10b0)", "click (>=7.0)", "crosshair-tool (>=0.0.84)", "django (>=4.2)", "dpcontracts (>=0.4)", "hypothesis-crosshair (>=0.0.20)", "lark (>=0.10.1)", "libcst (>=0.3.16)", "numpy (>=1.19.3)", "pandas (>=1.1)", "pytest (>=4.6)", "python-dateutil (>=1.4)", "pytz (>=2014.1)", "redis (>=3.0.0)", "rich (>=9.0.0)", "tzdata (>=2025.1) ; sys_platform == \"win32\" or sys_platform == \"emscripten\"", "watchdog (>=4.0.0)"]
 cli = ["black (>=19.10b0)", "click (>=7.0)", "rich (>=9.0.0)"]
 codemods = ["libcst (>=0.3.16)"]
-crosshair = ["crosshair-tool (>=0.0.83)", "hypothesis-crosshair (>=0.0.20)"]
+crosshair = ["crosshair-tool (>=0.0.84)", "hypothesis-crosshair (>=0.0.20)"]
 dateutil = ["python-dateutil (>=1.4)"]
 django = ["django (>=4.2)"]
 dpcontracts = ["dpcontracts (>=0.4)"]
