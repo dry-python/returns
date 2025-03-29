@@ -14,7 +14,6 @@ https://github.com/mkurnikov/pytest-mypy-plugins
 from collections.abc import Callable, Mapping
 from typing import ClassVar, TypeAlias, final
 
-from mypy.nodes import SymbolTableNode
 from mypy.plugin import (
     AttributeContext,
     FunctionContext,
