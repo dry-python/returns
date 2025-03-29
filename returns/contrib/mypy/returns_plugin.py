@@ -41,12 +41,6 @@ from returns.contrib.mypy._features import (
 #: Type for a function hook.
 _FunctionCallback: TypeAlias = Callable[[FunctionContext], MypyType]
 
-#: Type for a function hook that need a definition node.
-_FunctionDefCallback: TypeAlias = Callable[
-    [SymbolTableNode | None],
-    Callable[[FunctionContext], MypyType],
-]
-
 #: Type for attribute hook.
 _AttributeCallback: TypeAlias = Callable[[AttributeContext], MypyType]
 
