@@ -176,6 +176,31 @@ There are many other constructors!
 Check out concrete types and their interfaces.
 
 
+Replacing values in a container
+-------------------------------
+
+Starting from Python 3.13, the standard library provides
+a ``copy.replace()`` function that works with objects that implement
+the ``__replace__`` protocol. All containers in ``returns`` implement this protocol.
+
+This allows creating new container instances with modified internal values:
+
+.. doctest::
+   :skipif: import sys; sys.version_info < (3, 13)
+
+   >>> # The following example requires Python 3.13+
+   >>> from copy import replace
+   >>> from returns.result import Success
+   >>>
+   >>> value = Success(1)
+   >>> new_value = replace(value, _inner_value=2)
+   >>> assert new_value == Success(2)
+   >>> assert value != new_value
+
+This is particularly useful when you need to modify the inner value of a container
+without using the regular container methods like ``map`` or ``bind``.
+
+
 Working with multiple containers
 --------------------------------
 
@@ -299,121 +324,4 @@ We can also change the initial element to some other value:
   ...     sum_two_numbers,
   ... ) == IO(25)
 
-``Fold.loop`` is eager. It will be executed for all items in your iterable.
-
-Collecting an iterable of containers into a single container
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-You might end up with an iterable of containers:
-
-.. code:: python
-
-  >>> from typing import List
-  >>> from returns.maybe import Maybe, Some, Nothing, maybe
-
-  >>> source = {'a': 1, 'b': 2}
-  >>> fetched_values: List[Maybe[int]] = [
-  ...     maybe(source.get)(key)
-  ...     for key in ('a', 'b')
-  ... ]
-
-To work with iterable of containers,
-it is recommended to cast it into a container with the iterable inside
-using the :meth:`Fold.collect <returns.iterables.AbstractFold.collect>` method:
-
-.. code:: python
-
-  >>> from returns.iterables import Fold
-
-  >>> assert Fold.collect(fetched_values, Some(())) == Some((1, 2))
-
-Any falsy values will result in a falsy result (pun intended):
-
-.. code:: python
-
-  >>> fetched_values: List[Maybe[int]] = [
-  ...     maybe(source.get)(key)
-  ...     for key in ('a', 'c')  # 'c' is missing!
-  ... ]
-  >>> assert Fold.collect(fetched_values, Some(())) == Nothing
-
-You can also use a different strategy to fetch values you need,
-to do just that we have
-:meth:`Fold.collect_all <returns.iterables.AbstractFold.collect_all>` method:
-
-.. code:: python
-
-  >>> fetched_values: Maybe[int] = [
-  ...     maybe(source.get)(key)
-  ...     for key in ('a', 'c')  # 'c' is missing!
-  ... ]
-  >>> assert Fold.collect_all(fetched_values, Some(())) == Some((1,))
-
-We support any ``Iterable[T]`` input type
-and return a ``Container[Sequence[T]]``.
-
-You can subclass ``Fold`` type to change how any of these methods work.
-
-.. _immutability:
-
-Immutability
-------------
-
-We like to think of ``returns``
-as :ref:`immutable <primitive-types>` structures.
-You cannot mutate the inner state of the created container,
-because we redefine ``__setattr__`` and ``__delattr__`` magic methods.
-
-You cannot also set new attributes to container instances,
-since we are using ``__slots__`` for better performance and strictness.
-
-Well, nothing is **really** immutable in python, but you were warned.
-
-We also provide :class:`returns.primitives.types.Immutable` mixin
-that users can use to quickly make their classes immutable.
-
-
-.. _type-safety:
-
-Type safety
------------
-
-We try to make our containers optionally type safe.
-
-What does it mean?
-
-1. It is still good old ``python``, do whatever you want without ``mypy``
-2. If you are using ``mypy`` you will be notified about type violations
-
-We also ship `PEP561 <https://www.python.org/dev/peps/pep-0561/>`_
-compatible ``.pyi`` files together with the source code.
-In this case these types will be available to users
-when they install our application.
-
-We also ship custom ``mypy`` plugins to overcome some existing problems,
-please make sure to use them,
-since they increase your developer experience and type-safety level:
-
-Check out our docs on using our :ref:`mypy plugins <mypy-plugins>`.
-
-
-Further reading
----------------
-
-- :ref:`Railway oriented programming <railway>`
-
-
-.. _base-interfaces:
-
-API Reference
--------------
-
-``BaseContainer`` is a base class for all other containers.
-It defines some basic things like representation, hashing, pickling, etc.
-
-.. autoclasstree:: returns.primitives.container
-   :strict:
-
-.. automodule:: returns.primitives.container
-   :members:
-   :special-members:
+``Fold.loop``
