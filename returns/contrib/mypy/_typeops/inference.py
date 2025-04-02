@@ -82,13 +82,15 @@ class CallableInference:
             self._fallback.arg_names,
             lambda index: checker.accept(exprs[index]),
         )
+
+        arg_context = checker.argument_infer_context()
         constraints = infer_constraints_for_callable(
             self._fallback,
             arg_types=[arg.type for arg in applied_args],
             arg_kinds=kinds,
             arg_names=[arg.name for arg in applied_args],
             formal_to_actual=formal_to_actual,
-            context=checker.argument_infer_context(),
+            context=arg_context,
         )
         return {
             constraint.type_var: constraint.target for constraint in constraints
