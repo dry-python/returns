@@ -73,25 +73,26 @@ class CallableInference:
         """Creates mapping of ``typevar`` to real type that we already know."""
         checker = self._ctx.api.expr_checker  # type: ignore
         kinds = [arg.kind for arg in applied_args]
-        exprs = [arg.expression(self._ctx.context) for arg in applied_args]
-
         formal_to_actual = map_actuals_to_formals(
             kinds,
             [arg.name for arg in applied_args],
             self._fallback.arg_kinds,
             self._fallback.arg_names,
-            lambda index: checker.accept(exprs[index]),
+            lambda index: checker.accept(
+                applied_args[index].expression(self._ctx.context),
+            ),
         )
-        constraints = infer_constraints_for_callable(
-            self._fallback,
-            arg_types=[arg.type for arg in applied_args],
-            arg_kinds=kinds,
-            arg_names=[arg.name for arg in applied_args],
-            formal_to_actual=formal_to_actual,
-            context=checker.argument_infer_context(),
-        )
+
         return {
-            constraint.type_var: constraint.target for constraint in constraints
+            constraint.type_var: constraint.target
+            for constraint in infer_constraints_for_callable(
+                self._fallback,
+                arg_types=[arg.type for arg in applied_args],
+                arg_kinds=kinds,
+                arg_names=[arg.name for arg in applied_args],
+                formal_to_actual=formal_to_actual,
+                context=checker.argument_infer_context(),
+            )
         }
 
 
