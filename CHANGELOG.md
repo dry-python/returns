@@ -6,6 +6,12 @@ incremental in minor, bugfixes only are patches.
 See [0Ver](https://0ver.org/).
 
 
+## UNRELEASED
+
+### Features
+
+- Add `__replace__` magic method to `BaseContainer` to support `copy.replace()` function from Python 3.13
+
 ## 0.25.0
 
 ### Features
