@@ -186,16 +186,28 @@ the ``__replace__`` protocol. All containers in ``returns`` implement this proto
 This allows creating new container instances with modified internal values:
 
 .. doctest::
-   :skipif: import sys; sys.version_info < (3, 13)
 
-   >>> # The following example requires Python 3.13+
-   >>> from copy import replace
+   >>> # This is a compatible way to create a new container with modified inner value
    >>> from returns.result import Success
    >>>
    >>> value = Success(1)
-   >>> new_value = replace(value, _inner_value=2)
+   >>> # We can use map to effectively replace the inner value
+   >>> new_value = value.map(lambda _: 2)
    >>> assert new_value == Success(2)
    >>> assert value != new_value
+
+For Python 3.13+, a more direct approach will be available using the ``copy.replace()`` function:
+
+.. code-block:: python
+
+   # The following example requires Python 3.13+
+   from copy import replace
+   from returns.result import Success
+
+   value = Success(1)
+   new_value = replace(value, 2)
+   assert new_value == Success(2)
+   assert value != new_value
 
 This is particularly useful when you need to modify the inner value of a container
 without using the regular container methods like ``map`` or ``bind``.

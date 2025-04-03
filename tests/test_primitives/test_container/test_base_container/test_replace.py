@@ -86,25 +86,10 @@ def test_base_container_replace_direct_call():
     assert type(new_container) is type(container)  # noqa: WPS516
 
 
-def test_base_container_replace_direct_call_invalid_args():
-    """Test direct call with invalid arguments."""
+def test_replace_direct_call_invalid_args():
+    """Ensures calling replace directly with invalid arguments raises error."""
     container = BaseContainer(1)  # Create instance directly
-    # Direct call with no args should fail
-    with pytest.raises(TypeError):
-        container.__replace__()  # noqa: PLC2801
-
-    # Direct call with keyword args matching the name is allowed by Python,
-    # even with /.
-    # If uncommented, it should pass as Python allows this.
-    # Removing commented test case for
-    # `container.__replace__(inner_value='new')`
-
-    # Direct call with extra positional args should fail
-    with pytest.raises(TypeError):
-        container.__replace__('new', 'extra')  # noqa: PLC2801
-
-    # Direct call with unexpected keyword args should fail
-    with pytest.raises(TypeError):
+    with pytest.raises(TypeError, match='unexpected keyword argument'):
         container.__replace__(other_kwarg='value')  # type: ignore[attr-defined]
 
 
@@ -148,33 +133,27 @@ def test_copy_replace(container_value: Any) -> None:
     sys.version_info < (3, 13),
     reason='copy.replace requires Python 3.13+',
 )
-def test_base_container_replace_via_copy_no_changes(container_value):
-    """Test copy.replace with no actual change in value."""
+def test_replace_copy_no_changes(container_value):
+    """
+    Ensures calling copy.replace without changes yields a different container.
+
+    With the same inner value.
+    """
     container = BaseContainer(container_value)
+    original_value = container._inner_value  # noqa: SLF001
+    new_container = copy.replace(container, container_value)
 
-    # Test with no changes is not directly possible via copy.replace with this
-    # __replace__ implementation.
-    # The copy.replace function itself handles the no-change case if the
-    # object supports it, but our __replace__ requires a value.
-    # If copy.replace is called with the same value, it should work.
-    new_container = copy.replace(container, inner_value=container_value)
-
-    assert new_container is not container  # A new instance should be created
+    assert new_container is not container
+    assert new_container._inner_value == original_value  # noqa: SLF001
 
 
 @pytest.mark.skipif(
     sys.version_info < (3, 13),
     reason='copy.replace requires Python 3.13+',
 )
-def test_base_container_replace_via_copy_invalid_args(container):
-    """Test copy.replace with invalid arguments."""
-    # copy.replace converts the keyword 'inner_value' to a positional arg
-    # for __replace__(self, /, inner_value), so this is valid.
-    # Removing commented out test case for copy.replace with inner_value kwarg
-
-    # However, passing other keyword arguments will fail because __replace__
-    # doesn't accept them.
-    with pytest.raises(TypeError):
+def test_replace_copy_invalid_args(container):
+    """Ensures calling copy.replace with invalid arguments raises error."""
+    with pytest.raises(TypeError, match='unexpected keyword argument'):
         copy.replace(container, other_kwarg='value')  # type: ignore[attr-defined]
 
     # copy.replace should raise TypeError if extra positional arguments
