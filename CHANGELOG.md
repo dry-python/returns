@@ -6,6 +6,13 @@ incremental in minor, bugfixes only are patches.
 See [0Ver](https://0ver.org/).
 
 
+## Unreleased
+
+### Bugfixes
+
+- Fixes the `curry.partial` compatibility with mypy 1.6.1+
+
+
 ## 0.25.0
 
 ### Features
