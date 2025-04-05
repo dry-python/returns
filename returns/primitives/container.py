@@ -68,6 +68,17 @@ class BaseContainer(Immutable, ABC):
             # backward compatibility with 0.19.0 and earlier
             object.__setattr__(self, '_inner_value', state)
 
+    def __replace__(self, /, inner_value: Any) -> 'BaseContainer':
+        """
+        Creates a new container with replaced inner_value.
+
+        Implements the protocol for the `copy.replace()` function
+        introduced in Python 3.13.
+
+        The only supported argument is 'inner_value'.
+        """
+        return self.__class__(inner_value)
+
 
 def container_equality(
     self: Kind1[_EqualType, Any],
