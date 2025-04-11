@@ -4,10 +4,10 @@ import pytest
 from returns.primitives.reawaitable import ReAwaitable, reawaitable
 
 
-# Fix for issue with multiple awaits on the same ReAwaitable instance
-# causing race conditions: https://github.com/dry-python/returns/issues/2048
+# Fix for issue with multiple awaits on the same ReAwaitable instance:
+# https://github.com/dry-python/returns/issues/2108
 async def sample_coro() -> str:
-    """Sample coroutine for testing."""
+    """Sample coroutine that simulates an async operation."""
     await anyio.sleep(1)  # Increased from 0.1 to reduce chance of random failures
     return 'done'
 
@@ -19,7 +19,7 @@ async def await_helper(awaitable_obj) -> str:
 
 @pytest.mark.anyio
 async def test_concurrent_awaitable() -> None:
-    """Test that ReAwaitable works with concurrent awaits."""
+    """Test that ReAwaitable safely handles concurrent awaits using a lock."""
     test_target = ReAwaitable(sample_coro())
 
     async with anyio.create_task_group() as tg:
