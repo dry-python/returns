@@ -7,6 +7,7 @@ try:
     import anyio  # noqa: WPS433
 except ImportError:
     import asyncio  # noqa: WPS433
+
     Lock = asyncio.Lock
 else:
     Lock = anyio.Lock

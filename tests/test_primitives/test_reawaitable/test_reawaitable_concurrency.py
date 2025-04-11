@@ -8,7 +8,9 @@ from returns.primitives.reawaitable import ReAwaitable, reawaitable
 # https://github.com/dry-python/returns/issues/2108
 async def sample_coro() -> str:
     """Sample coroutine that simulates an async operation."""
-    await anyio.sleep(1)  # Increased from 0.1 to reduce chance of random failures
+    await anyio.sleep(
+        1
+    )  # Increased from 0.1 to reduce chance of random failures
     return 'done'
 
 
@@ -32,8 +34,10 @@ async def test_reawaitable_decorator() -> None:
     """Test the reawaitable decorator with concurrent awaits."""
 
     async def test_coro() -> str:  # noqa: WPS430
-        await anyio.sleep(1)  # Increased from 0.1 to reduce chance of random failures
-        return "decorated"
+        await anyio.sleep(
+            1
+        )  # Increased from 0.1 to reduce chance of random failures
+        return 'decorated'
 
     decorated = reawaitable(test_coro)
     instance = decorated()
@@ -42,7 +46,7 @@ async def test_reawaitable_decorator() -> None:
     result1 = await instance
     result2 = await instance
 
-    assert result1 == "decorated"
+    assert result1 == 'decorated'
     assert result1 == result2
 
     # Test concurrent awaits
