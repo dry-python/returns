@@ -4,11 +4,12 @@ from typing import NewType, ParamSpec, TypeVar, cast, final
 
 # Try to use anyio.Lock, fall back to asyncio.Lock
 try:
-    import anyio
-    Lock = anyio.Lock
+    import anyio  # noqa: WPS433
 except ImportError:
-    import asyncio
+    import asyncio  # noqa: WPS433
     Lock = asyncio.Lock
+else:
+    Lock = anyio.Lock
 
 _ValueType = TypeVar('_ValueType')
 _AwaitableT = TypeVar('_AwaitableT', bound=Awaitable)
