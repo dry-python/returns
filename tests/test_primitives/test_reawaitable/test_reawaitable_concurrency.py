@@ -24,15 +24,15 @@ async def test_concurrent_awaitable():
         tg.start_soon(await_helper, test_target)
 
 
-async def _test_coro():  # noqa: WPS430
-    await anyio.sleep(0.1)
-    return "decorated"
-
-
 @pytest.mark.anyio  # noqa: WPS210
 async def test_reawaitable_decorator():
     """Test the reawaitable decorator with concurrent awaits."""
-    decorated = reawaitable(_test_coro)
+
+    async def test_coro():  # noqa: WPS430
+        await anyio.sleep(0.1)
+        return "decorated"
+
+    decorated = reawaitable(test_coro)
     instance = decorated()
 
     # Test multiple awaits
