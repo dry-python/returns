@@ -6,6 +6,11 @@ incremental in minor, bugfixes only are patches.
 See [0Ver](https://0ver.org/).
 
 
+### Features
+
+ - Add the ability to add debugging notes to the `safe` decorator.
+
+
 ## 0.25.0
 
 ### Features
