@@ -6,7 +6,8 @@ from returns.primitives.reawaitable import ReAwaitable
 
 async def sample_coro():
     await anyio.sleep(0.1)
-    return "done"
+    return 'done'
+
 
 @pytest.mark.anyio
 async def test_concurrent_awaitable():
@@ -14,7 +15,7 @@ async def test_concurrent_awaitable():
 
     async def await_reawaitable():
         return await reawaitable
+
     async with anyio.create_task_group() as tg:
         task1 = tg.start_soon(await_reawaitable)
         task2 = tg.start_soon(await_reawaitable)
-
