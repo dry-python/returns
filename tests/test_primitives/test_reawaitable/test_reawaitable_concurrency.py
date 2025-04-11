@@ -4,18 +4,21 @@ import pytest
 from returns.primitives.reawaitable import ReAwaitable, reawaitable
 
 
-async def sample_coro():
-    await anyio.sleep(0.1)
+# Fix for issue with multiple awaits on the same ReAwaitable instance
+# causing race conditions: https://github.com/dry-python/returns/issues/2048
+async def sample_coro() -> str:
+    """Sample coroutine for testing."""
+    await anyio.sleep(1)  # Increased from 0.1 to reduce chance of random failures
     return 'done'
 
 
-async def await_helper(awaitable_obj):
+async def await_helper(awaitable_obj) -> str:
     """Helper to await objects in tasks."""
     return await awaitable_obj
 
 
 @pytest.mark.anyio
-async def test_concurrent_awaitable():
+async def test_concurrent_awaitable() -> None:
     """Test that ReAwaitable works with concurrent awaits."""
     test_target = ReAwaitable(sample_coro())
 
@@ -25,11 +28,11 @@ async def test_concurrent_awaitable():
 
 
 @pytest.mark.anyio  # noqa: WPS210
-async def test_reawaitable_decorator():
+async def test_reawaitable_decorator() -> None:
     """Test the reawaitable decorator with concurrent awaits."""
 
-    async def test_coro():  # noqa: WPS430
-        await anyio.sleep(0.1)
+    async def test_coro() -> str:  # noqa: WPS430
+        await anyio.sleep(1)  # Increased from 0.1 to reduce chance of random failures
         return "decorated"
 
     decorated = reawaitable(test_coro)
@@ -49,10 +52,10 @@ async def test_reawaitable_decorator():
 
 
 @pytest.mark.anyio
-async def test_reawaitable_repr():
+async def test_reawaitable_repr() -> None:
     """Test the __repr__ method of ReAwaitable."""
 
-    async def test_func():  # noqa: WPS430
+    async def test_func() -> int:  # noqa: WPS430
         return 1
 
     coro = test_func()
