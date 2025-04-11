@@ -1,4 +1,3 @@
-import sys
 from abc import ABC
 from collections.abc import Callable, Generator, Iterator
 from functools import wraps
@@ -13,18 +12,18 @@ from returns.primitives.exceptions import UnwrapFailedError
 from returns.primitives.hkt import Kind2, SupportsKind2
 
 # Definitions:
-_ValueType_co = TypeVar("_ValueType_co", covariant=True)
-_NewValueType = TypeVar("_NewValueType")
-_ErrorType_co = TypeVar("_ErrorType_co", covariant=True)
-_NewErrorType = TypeVar("_NewErrorType")
+_ValueType_co = TypeVar('_ValueType_co', covariant=True)
+_NewValueType = TypeVar('_NewValueType')
+_ErrorType_co = TypeVar('_ErrorType_co', covariant=True)
+_NewErrorType = TypeVar('_NewErrorType')
 
-_FirstType = TypeVar("_FirstType")
-_FuncParams = ParamSpec("_FuncParams")
+_FirstType = TypeVar('_FirstType')
+_FuncParams = ParamSpec('_FuncParams')
 
 
 class Result(  # type: ignore[type-var]
     BaseContainer,
-    SupportsKind2["Result", _ValueType_co, _ErrorType_co],
+    SupportsKind2['Result', _ValueType_co, _ErrorType_co],
     result.ResultBased2[_ValueType_co, _ErrorType_co],
     ABC,
 ):
@@ -40,8 +39,8 @@ class Result(  # type: ignore[type-var]
 
     """
 
-    __slots__ = ("_trace",)
-    __match_args__ = ("_inner_value",)
+    __slots__ = ('_trace',)
+    __match_args__ = ('_inner_value',)
 
     _inner_value: _ValueType_co | _ErrorType_co
     _trace: list[FrameInfo] | None
@@ -54,7 +53,7 @@ class Result(  # type: ignore[type-var]
         """Returns a list with stack trace when :func:`~Failure` was called."""
         return self._trace
 
-    def swap(self) -> "Result[_ErrorType_co, _ValueType_co]":
+    def swap(self) -> 'Result[_ErrorType_co, _ValueType_co]':
         """
         Swaps value and error types.
 
@@ -74,7 +73,7 @@ class Result(  # type: ignore[type-var]
     def map(
         self,
         function: Callable[[_ValueType_co], _NewValueType],
-    ) -> "Result[_NewValueType, _ErrorType_co]":
+    ) -> 'Result[_NewValueType, _ErrorType_co]':
         """
         Composes successful container with a pure function.
 
@@ -93,11 +92,11 @@ class Result(  # type: ignore[type-var]
     def apply(
         self,
         container: Kind2[
-            "Result",
+            'Result',
             Callable[[_ValueType_co], _NewValueType],
             _ErrorType_co,
         ],
-    ) -> "Result[_NewValueType, _ErrorType_co]":
+    ) -> 'Result[_NewValueType, _ErrorType_co]':
         """
         Calls a wrapped function in a container on this container.
 
@@ -120,9 +119,9 @@ class Result(  # type: ignore[type-var]
         self,
         function: Callable[
             [_ValueType_co],
-            Kind2["Result", _NewValueType, _ErrorType_co],
+            Kind2['Result', _NewValueType, _ErrorType_co],
         ],
-    ) -> "Result[_NewValueType, _ErrorType_co]":
+    ) -> 'Result[_NewValueType, _ErrorType_co]':
         """
         Composes successful container with a function that returns a container.
 
@@ -147,7 +146,7 @@ class Result(  # type: ignore[type-var]
     def alt(
         self,
         function: Callable[[_ErrorType_co], _NewErrorType],
-    ) -> "Result[_ValueType_co, _NewErrorType]":
+    ) -> 'Result[_ValueType_co, _NewErrorType]':
         """
         Composes failed container with a pure function to modify failure.
 
@@ -167,9 +166,9 @@ class Result(  # type: ignore[type-var]
         self,
         function: Callable[
             [_ErrorType_co],
-            Kind2["Result", _ValueType_co, _NewErrorType],
+            Kind2['Result', _ValueType_co, _NewErrorType],
         ],
-    ) -> "Result[_ValueType_co, _NewErrorType]":
+    ) -> 'Result[_ValueType_co, _NewErrorType]':
         """
         Composes failed container with a function that returns a container.
 
@@ -196,7 +195,7 @@ class Result(  # type: ignore[type-var]
     def do(
         cls,
         expr: Generator[_NewValueType, None, None],
-    ) -> "Result[_NewValueType, _NewErrorType]":
+    ) -> 'Result[_NewValueType, _NewErrorType]':
         """
         Allows working with unwrapped values of containers in a safe way.
 
@@ -278,7 +277,7 @@ class Result(  # type: ignore[type-var]
     def from_value(
         cls,
         inner_value: _NewValueType,
-    ) -> "Result[_NewValueType, Any]":
+    ) -> 'Result[_NewValueType, Any]':
         """
         One more value to create success unit values.
 
@@ -299,7 +298,7 @@ class Result(  # type: ignore[type-var]
     def from_failure(
         cls,
         inner_value: _NewErrorType,
-    ) -> "Result[Any, _NewErrorType]":
+    ) -> 'Result[Any, _NewErrorType]':
         """
         One more value to create failure unit values.
 
@@ -319,8 +318,8 @@ class Result(  # type: ignore[type-var]
     @classmethod
     def from_result(
         cls,
-        inner_value: "Result[_NewValueType, _NewErrorType]",
-    ) -> "Result[_NewValueType, _NewErrorType]":
+        inner_value: 'Result[_NewValueType, _NewErrorType]',
+    ) -> 'Result[_NewValueType, _NewErrorType]':
         """
         Creates a new ``Result`` instance from existing ``Result`` instance.
 
@@ -351,7 +350,7 @@ class Failure(Result[Any, _ErrorType_co]):  # noqa: WPS338
     def __init__(self, inner_value: _ErrorType_co) -> None:
         """Failure constructor."""
         super().__init__(inner_value)
-        object.__setattr__(self, "_trace", self._get_trace())
+        object.__setattr__(self, '_trace', self._get_trace())
 
     if not TYPE_CHECKING:  # noqa: WPS604  # pragma: no branch
 
@@ -468,7 +467,7 @@ ResultE: TypeAlias = Result[_ValueType_co, Exception]
 
 # Decorators:
 
-_ExceptionType = TypeVar("_ExceptionType", bound=Exception)
+_ExceptionType = TypeVar('_ExceptionType', bound=Exception)
 
 
 @overload
@@ -592,9 +591,9 @@ def safe(  # noqa: WPS234
                         )
                         line_number = exc_traceback.tb_next.tb_lineno
                         exc.add_note(
-                            f"Exception occurred in {inner_function.__name__} "
-                            f"of {filename} "
-                            f"at line number {line_number}."
+                            f'Exception occurred in {inner_function.__name__} '
+                            f'of {filename} '
+                            f'at line number {line_number}.'
                         )
 
                 return Failure(exc)
