@@ -2,6 +2,8 @@ from collections.abc import Awaitable, Callable, Generator
 from functools import wraps
 from typing import NewType, ParamSpec, TypeVar, cast, final
 
+import anyio
+
 _ValueType = TypeVar('_ValueType')
 _AwaitableT = TypeVar('_AwaitableT', bound=Awaitable)
 _Ps = ParamSpec('_Ps')
@@ -48,10 +50,11 @@ class ReAwaitable:
 
     """
 
-    __slots__ = ('_cache', '_coro')
+    __slots__ = ('_cache', '_coro', '_lock')
 
     def __init__(self, coro: Awaitable[_ValueType]) -> None:
         """We need just an awaitable to work with."""
+        self._lock = anyio.Lock()
         self._coro = coro
         self._cache: _ValueType | _Sentinel = _sentinel
 
@@ -101,9 +104,10 @@ class ReAwaitable:
 
     async def _awaitable(self) -> _ValueType:
         """Caches the once awaited value forever."""
-        if self._cache is _sentinel:
-            self._cache = await self._coro
-        return self._cache  # type: ignore
+        async with self._lock:
+            if self._cache is _sentinel:
+                self._cache = await self._coro
+            return self._cache  # type: ignore
 
 
 def reawaitable(
