@@ -32,9 +32,7 @@ async def test_reawaitable_decorator() -> None:
     """Test the reawaitable decorator with concurrent awaits."""
 
     async def test_coro() -> str:  # noqa: WPS430
-        await anyio.sleep(
-            1
-        )  # Increased from 0.1 to reduce chance of random failures
+        await anyio.sleep(1)
         return 'decorated'
 
     decorated = reawaitable(test_coro)
