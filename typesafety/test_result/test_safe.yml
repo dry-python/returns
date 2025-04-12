@@ -8,7 +8,7 @@
         return 1
 
     reveal_type(test)  # N: Revealed type is "def () -> returns.result.Result[builtins.int, builtins.Exception]"
-  
+
 
 - case: safe_decorator_passing_exceptions_no_params
   disable_cache: false
