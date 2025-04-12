@@ -5,7 +5,7 @@ from typing import NewType, ParamSpec, TypeVar, cast, final
 # Try to use anyio.Lock, fall back to asyncio.Lock
 try:
     import anyio  # noqa: WPS433
-except ImportError:
+except ImportError:  # pragma: no cover
     import asyncio  # noqa: WPS433
 
     Lock = asyncio.Lock
