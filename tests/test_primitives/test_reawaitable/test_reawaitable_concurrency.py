@@ -66,4 +66,4 @@ async def test_reawaitable_repr() -> None:
     # Test the representation
     assert repr(target) == repr(coro)
     # Ensure the coroutine is properly awaited
-    await target
+    assert await target == 1
