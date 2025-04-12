@@ -1,21 +1,23 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, TypeVar, Callable
+from collections.abc import Callable
+from typing import TYPE_CHECKING, TypeVar
+
 from typing_extensions import ParamSpec
 
 if TYPE_CHECKING:
     from returns.interfaces.unwrappable import Unwrappable  # noqa: WPS433
 
 
-_ValueType_co = TypeVar("_ValueType_co", covariant=True)
-_FuncParams = ParamSpec("_FuncParams")
-_ExceptionType = TypeVar("_ExceptionType", bound=Exception)
+_ValueType_co = TypeVar('_ValueType_co', covariant=True)
+_FuncParams = ParamSpec('_FuncParams')
+_ExceptionType = TypeVar('_ExceptionType', bound=Exception)
 
 
 class UnwrapFailedError(Exception):
     """Raised when a container can not be unwrapped into a meaningful value."""
 
-    __slots__ = ("halted_container",)
+    __slots__ = ('halted_container',)
 
     def __init__(self, container: Unwrappable) -> None:
         """
@@ -63,7 +65,6 @@ def add_note_to_exception(
     function name to the exception. If a custom message is provided, it will be
     added as an additional note to the exception.
     """
-
     if not message:
         return exception
 
@@ -83,9 +84,9 @@ def add_note_to_exception(
     filename = exc_traceback.tb_next.tb_frame.f_code.co_filename
     line_number = exc_traceback.tb_next.tb_lineno
     exception.add_note(
-        f"Exception occurred in {function.__name__} "
-        f"of {filename} "
-        f"at line number {line_number}."
+        f'Exception occurred in {function.__name__} '
+        f'of {filename} '
+        f'at line number {line_number}.'
     )
 
     return exception
