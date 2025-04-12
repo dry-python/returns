@@ -1,4 +1,3 @@
-import sys
 from abc import ABC
 from collections.abc import Callable, Generator, Iterator
 from functools import wraps
@@ -471,6 +470,37 @@ ResultE: TypeAlias = Result[_ValueType_co, Exception]
 _ExceptionType = TypeVar("_ExceptionType", bound=Exception)
 
 
+def add_note_to_exception(
+    exception: _ExceptionType,
+    message: bool | str,
+    function: Callable[_FuncParams, _ValueType_co],
+) -> _ExceptionType:
+    """
+    A utility function to add a generic note with file name, line number, and
+    function name to the exception. If a custom message is provided, it will be
+    added as an additional note to the exception.
+    """
+
+    if message:
+        # If the user provides a custom message, add it as a note
+        # to the exception.  Otherwise just add a generic note.
+        if isinstance(message, str):
+            exception.add_note(message)
+
+        # Add the generic note.
+        exc_traceback = exception.__traceback__
+        if exc_traceback is not None:
+            filename = exc_traceback.tb_next.tb_frame.f_code.co_filename
+            line_number = exc_traceback.tb_next.tb_lineno
+            exception.add_note(
+                f"Exception occurred in {function.__name__} "
+                f"of {filename} "
+                f"at line number {line_number}."
+            )
+
+    return exception
+
+
 @overload
 def safe(
     function: Callable[_FuncParams, _ValueType_co],
@@ -550,6 +580,10 @@ def safe(  # noqa: WPS234
     Note that if you use this option, you must provide a tuple of exception
     types as the first argument.
 
+    Note that passing a blank string to ``add_note_on_failure`` will be treated
+    the same as passing False, and will not add a note.
+
+
     .. code:: python
 
       >>> from returns.result import safe
@@ -578,25 +612,11 @@ def safe(  # noqa: WPS234
             try:
                 return Success(inner_function(*args, **kwargs))
             except inner_exceptions as exc:
-                if add_note_on_failure:
-                    # If the user provides a custom message, add it as a note
-                    # to the exception.  Otherwise just add a generic note.
-                    if isinstance(add_note_on_failure, str):
-                        exc.add_note(add_note_on_failure)
-
-                    # Add the generic note.
-                    exc_traceback = exc.__traceback__
-                    if exc_traceback is not None:
-                        filename = (
-                            exc_traceback.tb_next.tb_frame.f_code.co_filename
-                        )
-                        line_number = exc_traceback.tb_next.tb_lineno
-                        exc.add_note(
-                            f"Exception occurred in {inner_function.__name__} "
-                            f"of {filename} "
-                            f"at line number {line_number}."
-                        )
-
+                exc = add_note_to_exception(
+                    exc,
+                    add_note_on_failure,
+                    inner_function,
+                )
                 return Failure(exc)
 
         return decorator

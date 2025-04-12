@@ -26,3 +26,15 @@
         return 1
 
     reveal_type(test2)  # N: Revealed type is "def (arg: builtins.str) -> returns.io.IOResult[builtins.int, builtins.ValueError]"
+
+
+- case: impure_decorator_passing_exceptions_no_params_add_note
+  disable_cache: false
+  main: |
+    from returns.io import impure_safe
+
+    @impure_safe((ValueError,), add_note_on_failure=True)
+    def test1(arg: str) -> int:
+        return 1
+
+    reveal_type(test1)  # N: Revealed type is "def (arg: builtins.str) -> returns.io.IOResult[builtins.int, builtins.ValueError]"

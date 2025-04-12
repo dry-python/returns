@@ -8,7 +8,7 @@
         return 1
 
     reveal_type(test)  # N: Revealed type is "def () -> returns.result.Result[builtins.int, builtins.Exception]"
-
+  
 
 - case: safe_decorator_passing_exceptions_no_params
   disable_cache: false
@@ -26,6 +26,18 @@
         return 1
 
     reveal_type(test2)  # N: Revealed type is "def () -> returns.result.Result[builtins.int, builtins.ValueError]"
+
+
+- case: safe_decorator_no_params_add_note
+  disable_cache: false
+  main: |
+    from returns.result import safe
+
+    @safe((ValueError,), add_note_on_failure=True)
+    def test() -> int:
+        return 1
+
+    reveal_type(test)  # N: Revealed type is "def () -> returns.result.Result[builtins.int, builtins.Exception]"
 
 
 - case: safe_composition_no_params

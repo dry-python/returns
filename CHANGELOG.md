@@ -8,7 +8,8 @@ See [0Ver](https://0ver.org/).
 
 ### Features
 
- - Add the ability to add debugging notes to the `safe` decorator.
+ - Add the ability to add debugging notes to the `safe`, `impure_safe`, and
+   `future_safe` decorators.
 
 
 ## 0.25.0
