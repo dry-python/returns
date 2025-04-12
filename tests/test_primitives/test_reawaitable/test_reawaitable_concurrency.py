@@ -8,7 +8,7 @@ from returns.primitives.reawaitable import ReAwaitable, reawaitable
 # https://github.com/dry-python/returns/issues/2108
 async def sample_coro() -> str:
     """Sample coroutine that simulates an async operation."""
-    await anyio.sleep(1)  
+    await anyio.sleep(1)
     return 'done'
 
 
