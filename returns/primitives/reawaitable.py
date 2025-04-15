@@ -5,6 +5,8 @@ from typing import NewType, ParamSpec, Protocol, TypeVar, cast, final
 
 class AsyncLock(Protocol):
     """A protocol for an asynchronous lock."""
+    
+    def __init__(self) -> None: ...
 
     async def __aenter__(self) -> None: ...
 
