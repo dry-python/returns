@@ -1,16 +1,18 @@
 from collections.abc import Awaitable, Callable, Generator
 from functools import wraps
 from typing import NewType, ParamSpec, TypeVar, cast, final
+from contextlib import AbstractAsyncContextManager
 
 # Try to use anyio.Lock, fall back to asyncio.Lock
+# Note: anyio is required for proper trio support
 try:
     import anyio  # noqa: WPS433
 except ImportError:  # pragma: no cover
     import asyncio  # noqa: WPS433
 
-    Lock = asyncio.Lock
+    Lock:AbstractAsyncContextManager = asyncio.Lock
 else:
-    Lock = anyio.Lock
+    Lock:AbstractAsyncContextManager = anyio.Lock
 
 _ValueType = TypeVar('_ValueType')
 _AwaitableT = TypeVar('_AwaitableT', bound=Awaitable)
@@ -55,6 +57,10 @@ class ReAwaitable:
 
     We try to make this type transparent.
     It should not actually be visible to any of its users.
+    
+    Note:
+        For proper trio support, the anyio library is required.
+        If anyio is not available, we fall back to asyncio.Lock.
 
     """
 
@@ -138,7 +144,10 @@ def reawaitable(
       ...    return await instance + await instance + await instance
 
       >>> assert anyio.run(main) == 3
-
+    
+    Note:
+        For proper trio support, the anyio library is required.
+        If anyio is not available, we fall back to asyncio.Lock.
     """
 
     @wraps(coro)
