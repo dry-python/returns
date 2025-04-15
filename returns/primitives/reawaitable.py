@@ -18,9 +18,9 @@ try:
 except ImportError:  # pragma: no cover
     import asyncio  # noqa: WPS433
 
-    Lock: AsyncLock = asyncio.Lock
+    Lock: type[AsyncLock] = asyncio.Lock
 else:
-    Lock: AsyncLock = anyio.Lock
+    Lock = anyio.Lock
 
 _ValueType = TypeVar('_ValueType')
 _AwaitableT = TypeVar('_AwaitableT', bound=Awaitable)
