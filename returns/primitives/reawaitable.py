@@ -1,7 +1,17 @@
 from collections.abc import Awaitable, Callable, Generator
-from contextlib import AbstractAsyncContextManager
 from functools import wraps
-from typing import NewType, ParamSpec, TypeVar, cast, final
+from typing import NewType, ParamSpec, Protocol, TypeVar, cast, final
+
+
+class AsyncLock(Protocol):
+    """A protocol for an asynchronous lock."""
+
+    async def __aenter__(self) -> None:
+        ...
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb) -> None:
+        ...
+
 
 # Try to use anyio.Lock, fall back to asyncio.Lock
 # Note: anyio is required for proper trio support
@@ -10,9 +20,9 @@ try:
 except ImportError:  # pragma: no cover
     import asyncio  # noqa: WPS433
 
-    Lock: AbstractAsyncContextManager = asyncio.Lock
+    Lock: AsyncLock = asyncio.Lock
 else:
-    Lock: AbstractAsyncContextManager = anyio.Lock
+    Lock: AsyncLock = anyio.Lock
 
 _ValueType = TypeVar('_ValueType')
 _AwaitableT = TypeVar('_AwaitableT', bound=Awaitable)
