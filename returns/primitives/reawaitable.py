@@ -6,11 +6,9 @@ from typing import NewType, ParamSpec, Protocol, TypeVar, cast, final
 class AsyncLock(Protocol):
     """A protocol for an asynchronous lock."""
 
-    async def __aenter__(self) -> None:
-        ...
+    async def __aenter__(self) -> None: ...
 
-    async def __aexit__(self, exc_type, exc_val, exc_tb) -> None:
-        ...
+    async def __aexit__(self, exc_type, exc_val, exc_tb) -> None: ...
 
 
 # Try to use anyio.Lock, fall back to asyncio.Lock
