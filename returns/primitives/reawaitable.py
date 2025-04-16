@@ -22,7 +22,7 @@ except ImportError:  # pragma: no cover
 
     Lock: type[AsyncLock] = asyncio.Lock
 else:
-    Lock = anyio.Lock
+    Lock = cast(type[AsyncLock], anyio.Lock)
 
 _ValueType = TypeVar('_ValueType')
 _AwaitableT = TypeVar('_AwaitableT', bound=Awaitable)
