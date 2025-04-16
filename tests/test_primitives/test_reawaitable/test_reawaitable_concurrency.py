@@ -14,7 +14,7 @@ async def sample_coro() -> str:
 
 async def await_helper(awaitable_obj) -> str:
     """Helper to await objects in tasks."""
-    return await awaitable_obj
+    return await awaitable_obj  # type: ignore[no-any-return]
 
 
 @pytest.mark.anyio
