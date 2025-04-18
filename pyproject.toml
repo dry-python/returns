@@ -94,11 +94,6 @@ check-laws = [ "pytest", "hypothesis" ]
 # Ruff config: https://docs.astral.sh/ruff/settings
 target-version = "py310"
 line-length = 80
-extend-exclude = [
-  # Intentionally bad code:
-  "tests/**/__snapshots__/**",
-  "tests/fixtures/**",
-]
 
 preview = true
 fix = true
