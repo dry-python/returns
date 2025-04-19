@@ -1,6 +1,28 @@
 from collections.abc import Awaitable, Callable, Generator
 from functools import wraps
-from typing import NewType, ParamSpec, TypeVar, cast, final
+from typing import NewType, ParamSpec, Protocol, TypeVar, cast, final
+
+
+class AsyncLock(Protocol):
+    """A protocol for an asynchronous lock."""
+
+    def __init__(self) -> None: ...
+
+    async def __aenter__(self) -> None: ...
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb) -> None: ...
+
+
+# Try to use anyio.Lock, fall back to asyncio.Lock
+# Note: anyio is required for proper trio support
+try:
+    import anyio  # noqa: WPS433
+except ImportError:  # pragma: no cover
+    import asyncio  # noqa: WPS433
+
+    Lock: type[AsyncLock] = asyncio.Lock
+else:
+    Lock = cast(type[AsyncLock], anyio.Lock)
 
 _ValueType = TypeVar('_ValueType')
 _AwaitableT = TypeVar('_AwaitableT', bound=Awaitable)
@@ -46,12 +68,17 @@ class ReAwaitable:
     We try to make this type transparent.
     It should not actually be visible to any of its users.
 
+    Note:
+        For proper trio support, the anyio library is required.
+        If anyio is not available, we fall back to asyncio.Lock.
+
     """
 
-    __slots__ = ('_cache', '_coro')
+    __slots__ = ('_cache', '_coro', '_lock')
 
     def __init__(self, coro: Awaitable[_ValueType]) -> None:
         """We need just an awaitable to work with."""
+        self._lock = Lock()
         self._coro = coro
         self._cache: _ValueType | _Sentinel = _sentinel
 
@@ -101,9 +128,10 @@ class ReAwaitable:
 
     async def _awaitable(self) -> _ValueType:
         """Caches the once awaited value forever."""
-        if self._cache is _sentinel:
-            self._cache = await self._coro
-        return self._cache  # type: ignore
+        async with self._lock:
+            if self._cache is _sentinel:
+                self._cache = await self._coro
+            return self._cache  # type: ignore
 
 
 def reawaitable(
@@ -127,6 +155,9 @@ def reawaitable(
 
       >>> assert anyio.run(main) == 3
 
+    Note:
+        For proper trio support, the anyio library is required.
+        If anyio is not available, we fall back to asyncio.Lock.
     """
 
     @wraps(coro)
