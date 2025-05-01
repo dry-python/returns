@@ -18,20 +18,38 @@ class AsyncLock(Protocol):
 AsyncContext = Literal["asyncio", "trio", "unknown"]
 
 
-# Check for anyio and trio availability
-try:
-    import anyio  # pragma: no qa
+def _is_anyio_available() -> bool:
+    """Check if anyio is available.
 
-    has_anyio = True
+    Returns:
+        bool: True if anyio is available
+    """
     try:
-        import trio  # pragma: no qa
-
-        has_trio = True
+        import anyio  # pragma: no cover
     except ImportError:  # pragma: no cover
-        has_trio = False
-except ImportError:  # pragma: no cover
-    has_anyio = False
-    has_trio = False
+        return False
+    return True
+
+
+def _is_trio_available() -> bool:
+    """Check if trio is available.
+
+    Returns:
+        bool: True if trio is available
+    """
+    if not _is_anyio_available():
+        return False
+
+    try:
+        import trio  # pragma: no cover
+    except ImportError:  # pragma: no cover
+        return False
+    return True
+
+
+# Set availability flags at module level
+has_anyio = _is_anyio_available()
+has_trio = _is_trio_available()
 
 
 def _is_in_trio_context() -> bool:
