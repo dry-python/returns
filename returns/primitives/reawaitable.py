@@ -1,7 +1,8 @@
 from collections.abc import Awaitable, Callable, Generator
 from functools import wraps
-from typing import NewType, ParamSpec, Protocol, TypeVar, cast, final
-
+from typing import Literal, NewType, ParamSpec, Protocol, TypeVar, cast, final
+# Always import asyncio
+import asyncio
 
 class AsyncLock(Protocol):
     """A protocol for an asynchronous lock."""
@@ -13,26 +14,17 @@ class AsyncLock(Protocol):
     async def __aexit__(self, exc_type, exc_val, exc_tb) -> None: ...
 
 
-# Import both libraries if available
-import asyncio  # noqa: WPS433
-from enum import Enum, auto
-
-
-class AsyncContext(Enum):
-    """Enum representing different async context types."""
-
-    ASYNCIO = auto()
-    TRIO = auto()
-    UNKNOWN = auto()
+# Define context types as literals
+AsyncContext = Literal["asyncio", "trio", "unknown"]
 
 
 # Check for anyio and trio availability
 try:
-    import anyio  # noqa: WPS433
+    import anyio  # pragma: no qa
 
     has_anyio = True
     try:
-        import trio  # noqa: WPS433
+        import trio  # pragma: no qa
 
         has_trio = True
     except ImportError:  # pragma: no cover
@@ -42,6 +34,26 @@ except ImportError:  # pragma: no cover
     has_trio = False
 
 
+def _is_in_trio_context() -> bool:
+    """Check if we're in a trio context.
+
+    Returns:
+        bool: True if we're in a trio context
+    """
+    if not has_trio:
+        return False
+        
+    # Import trio here since we already checked it's available
+    import trio
+    
+    try:
+        # Will raise RuntimeError if not in trio context
+        trio.lowlevel.current_task()
+    except (RuntimeError, AttributeError):
+        return False
+    return True
+
+
 def detect_async_context() -> AsyncContext:
     """Detect which async context we're currently running in.
 
@@ -49,20 +61,13 @@ def detect_async_context() -> AsyncContext:
         AsyncContext: The current async context type
     """
     if not has_anyio:  # pragma: no cover
-        return AsyncContext.ASYNCIO
+        return "asyncio"
 
-    if has_trio:
-        try:
-            # Check if we're in a trio context
-            # Will raise RuntimeError if not in trio context
-            trio.lowlevel.current_task()
-            return AsyncContext.TRIO
-        except (RuntimeError, AttributeError):
-            # Not in a trio context or trio API changed
-            pass
+    if _is_in_trio_context():
+        return "trio"
 
     # Default to asyncio
-    return AsyncContext.ASYNCIO
+    return "asyncio"
 
 
 _ValueType = TypeVar('_ValueType')
@@ -121,7 +126,7 @@ class ReAwaitable:
         """We need just an awaitable to work with."""
         self._coro = coro
         self._cache: _ValueType | _Sentinel = _sentinel
-        self._lock = None  # Will be created lazily based on the backend
+        self._lock: AsyncLock | None = None  # Will be created lazily based on the backend
 
     def __await__(self) -> Generator[None, None, _ValueType]:
         """
@@ -171,10 +176,11 @@ class ReAwaitable:
         """Create the appropriate lock based on the current async context."""
         context = detect_async_context()
 
-        if context == AsyncContext.TRIO and has_anyio:
+        if context == "trio" and has_anyio:
+            import anyio
             return anyio.Lock()
 
-        # For ASYNCIO or UNKNOWN contexts
+        # For asyncio or unknown contexts
         return asyncio.Lock()
 
     async def _awaitable(self) -> _ValueType:
