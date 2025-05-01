@@ -68,6 +68,7 @@ def _is_in_trio_context() -> bool:
         # Will raise RuntimeError if not in trio context
         trio.lowlevel.current_task()
     except (RuntimeError, AttributeError):
+        # Not in a trio context or trio API changed
         return False
     return True
 
@@ -195,9 +196,13 @@ class ReAwaitable:
         context = detect_async_context()
 
         if context == "trio" and has_anyio:
-            import anyio
+            try:
+                import anyio
+            except Exception:
+                # Just continue to asyncio if anyio import fails
+                return asyncio.Lock()
             return anyio.Lock()
-
+                
         # For asyncio or unknown contexts
         return asyncio.Lock()
 
@@ -207,7 +212,13 @@ class ReAwaitable:
         if self._lock is None:
             self._lock = self._create_lock()
 
-        async with self._lock:
+        try:
+            async with self._lock:
+                if self._cache is _sentinel:
+                    self._cache = await self._coro
+                return self._cache  # type: ignore
+        except RuntimeError:
+            # Fallback for when running in asyncio context with trio detection
             if self._cache is _sentinel:
                 self._cache = await self._coro
             return self._cache  # type: ignore
