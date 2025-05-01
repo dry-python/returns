@@ -13,16 +13,52 @@ class AsyncLock(Protocol):
     async def __aexit__(self, exc_type, exc_val, exc_tb) -> None: ...
 
 
-# Try to use anyio.Lock, fall back to asyncio.Lock
-# Note: anyio is required for proper trio support
+# Import both libraries if available
+import asyncio  # noqa: WPS433
+from enum import Enum, auto
+
+class AsyncContext(Enum):
+    """Enum representing different async context types."""
+    
+    ASYNCIO = auto()
+    TRIO = auto()
+    UNKNOWN = auto()
+
+# Check for anyio and trio availability
 try:
     import anyio  # noqa: WPS433
+    has_anyio = True
+    try:
+        import trio  # noqa: WPS433
+        has_trio = True
+    except ImportError:  # pragma: no cover
+        has_trio = False
 except ImportError:  # pragma: no cover
-    import asyncio  # noqa: WPS433
+    has_anyio = False
+    has_trio = False
 
-    Lock: type[AsyncLock] = asyncio.Lock
-else:
-    Lock = cast(type[AsyncLock], anyio.Lock)
+
+def detect_async_context() -> AsyncContext:
+    """Detect which async context we're currently running in.
+    
+    Returns:
+        AsyncContext: The current async context type
+    """
+    if not has_anyio:  # pragma: no cover
+        return AsyncContext.ASYNCIO
+        
+    if has_trio:
+        try:
+            # Check if we're in a trio context
+            # Will raise RuntimeError if not in trio context
+            trio.lowlevel.current_task()
+            return AsyncContext.TRIO
+        except (RuntimeError, AttributeError):
+            # Not in a trio context or trio API changed
+            pass
+            
+    # Default to asyncio
+    return AsyncContext.ASYNCIO
 
 _ValueType = TypeVar('_ValueType')
 _AwaitableT = TypeVar('_AwaitableT', bound=Awaitable)
@@ -78,9 +114,9 @@ class ReAwaitable:
 
     def __init__(self, coro: Awaitable[_ValueType]) -> None:
         """We need just an awaitable to work with."""
-        self._lock = Lock()
         self._coro = coro
         self._cache: _ValueType | _Sentinel = _sentinel
+        self._lock = None  # Will be created lazily based on the backend
 
     def __await__(self) -> Generator[None, None, _ValueType]:
         """
@@ -126,8 +162,22 @@ class ReAwaitable:
         """
         return repr(self._coro)
 
+    def _create_lock(self) -> AsyncLock:
+        """Create the appropriate lock based on the current async context."""
+        context = detect_async_context()
+        
+        if context == AsyncContext.TRIO and has_anyio:
+            return anyio.Lock()
+        
+        # For ASYNCIO or UNKNOWN contexts
+        return asyncio.Lock()
+
     async def _awaitable(self) -> _ValueType:
         """Caches the once awaited value forever."""
+        # Create the lock if it doesn't exist
+        if self._lock is None:
+            self._lock = self._create_lock()
+
         async with self._lock:
             if self._cache is _sentinel:
                 self._cache = await self._coro
