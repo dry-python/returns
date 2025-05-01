@@ -17,19 +17,23 @@ class AsyncLock(Protocol):
 import asyncio  # noqa: WPS433
 from enum import Enum, auto
 
+
 class AsyncContext(Enum):
     """Enum representing different async context types."""
-    
+
     ASYNCIO = auto()
     TRIO = auto()
     UNKNOWN = auto()
 
+
 # Check for anyio and trio availability
 try:
     import anyio  # noqa: WPS433
+
     has_anyio = True
     try:
         import trio  # noqa: WPS433
+
         has_trio = True
     except ImportError:  # pragma: no cover
         has_trio = False
@@ -40,13 +44,13 @@ except ImportError:  # pragma: no cover
 
 def detect_async_context() -> AsyncContext:
     """Detect which async context we're currently running in.
-    
+
     Returns:
         AsyncContext: The current async context type
     """
     if not has_anyio:  # pragma: no cover
         return AsyncContext.ASYNCIO
-        
+
     if has_trio:
         try:
             # Check if we're in a trio context
@@ -56,9 +60,10 @@ def detect_async_context() -> AsyncContext:
         except (RuntimeError, AttributeError):
             # Not in a trio context or trio API changed
             pass
-            
+
     # Default to asyncio
     return AsyncContext.ASYNCIO
+
 
 _ValueType = TypeVar('_ValueType')
 _AwaitableT = TypeVar('_AwaitableT', bound=Awaitable)
@@ -165,10 +170,10 @@ class ReAwaitable:
     def _create_lock(self) -> AsyncLock:
         """Create the appropriate lock based on the current async context."""
         context = detect_async_context()
-        
+
         if context == AsyncContext.TRIO and has_anyio:
             return anyio.Lock()
-        
+
         # For ASYNCIO or UNKNOWN contexts
         return asyncio.Lock()
 
