@@ -2,7 +2,7 @@
 
 -----
 
-[![Build Status](https://github.com/dry-python/returns/workflows/test/badge.svg?branch=master&event=push)](https://github.com/dry-python/returns/actions?query=workflow%3Atest)
+[![test](https://github.com/dry-python/returns/actions/workflows/test.yml/badge.svg?branch=master&event=push)](https://github.com/dry-python/returns/actions/workflows/test.yml)
 [![codecov](https://codecov.io/gh/dry-python/returns/branch/master/graph/badge.svg)](https://codecov.io/gh/dry-python/returns)
 [![Documentation Status](https://readthedocs.org/projects/returns/badge/?version=latest)](https://returns.readthedocs.io/en/latest/?badge=latest)
 [![Python Version](https://img.shields.io/pypi/pyversions/returns.svg)](https://pypi.org/project/returns/)
@@ -59,7 +59,7 @@ or:
 plugins = ["returns.contrib.mypy.returns_plugin"]
 ```
 
-We also recommend to use the same `mypy` settings [we use](https://github.com/wemake-services/wemake-python-styleguide/blob/master/styles/mypy.toml).
+We also recommend to use the same `mypy` settings we use, which you'll find in the `[tool.mypy]` sections in our [pyproject.toml](https://github.com/wemake-services/wemake-python-styleguide/blob/master/pyproject.toml) file.
 
 Make sure you know how to get started, [check out our docs](https://returns.readthedocs.io/en/latest/)!
 [Try our demo](https://repl.it/@sobolevn/returns#ex.py).
@@ -204,7 +204,7 @@ from words_app.logic import calculate_points
 
 def view(request: HttpRequest) -> HttpResponse:
     user_word: str = request.POST['word']  # just an example
-    points = calculate_points(user_words)(settings)  # passing the dependencies
+    points = calculate_points(user_word)(settings)  # passing the dependencies
     ...  # later you show the result to user somehow
 
 # Somewhere in your `words_app/logic.py`:

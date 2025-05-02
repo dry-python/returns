@@ -1,5 +1,6 @@
 from abc import abstractmethod
-from typing import Callable, ClassVar, Generic, Sequence, TypeVar, final
+from collections.abc import Callable, Sequence
+from typing import ClassVar, Generic, TypeVar, final
 
 from typing_extensions import Never
 
@@ -58,8 +59,8 @@ class _LawSpec(LawSpecDef):
 
 
 class MappableN(
-    Generic[_FirstType, _SecondType, _ThirdType],
     Lawful['MappableN[_FirstType, _SecondType, _ThirdType]'],
+    Generic[_FirstType, _SecondType, _ThirdType],
 ):
     """
     Allows to chain wrapped values in containers with regular functions.

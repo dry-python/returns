@@ -1,4 +1,5 @@
-from typing import Callable, TypeVar
+from collections.abc import Callable
+from typing import TypeVar
 
 from returns.future import Future
 from returns.interfaces.specific.future import FutureLikeN
@@ -14,10 +15,12 @@ _FutureKind = TypeVar('_FutureKind', bound=FutureLikeN)
 
 def bind_future(
     function: Callable[[_FirstType], Future[_UpdatedType]],
-) -> Kinded[Callable[
-    [KindN[_FutureKind, _FirstType, _SecondType, _ThirdType]],
-    KindN[_FutureKind, _UpdatedType, _SecondType, _ThirdType],
-]]:
+) -> Kinded[
+    Callable[
+        [KindN[_FutureKind, _FirstType, _SecondType, _ThirdType]],
+        KindN[_FutureKind, _UpdatedType, _SecondType, _ThirdType],
+    ]
+]:
     """
     Compose a container and sync function returning ``Future``.
 
@@ -51,9 +54,11 @@ def bind_future(
     for more info.
 
     """
+
     @kinded
     def factory(
         container: KindN[_FutureKind, _FirstType, _SecondType, _ThirdType],
     ) -> KindN[_FutureKind, _UpdatedType, _SecondType, _ThirdType]:
         return container.bind_future(function)
+
     return factory

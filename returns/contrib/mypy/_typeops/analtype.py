@@ -1,12 +1,10 @@
 from types import MappingProxyType
-from typing import Final, List, Optional, overload
+from typing import Final, Literal, overload
 
 from mypy.checkmember import analyze_member_access
 from mypy.nodes import ARG_NAMED, ARG_OPT
-from mypy.types import CallableType, FunctionLike, ProperType
+from mypy.types import CallableType, FunctionLike, ProperType, get_proper_type
 from mypy.types import Type as MypyType
-from mypy.types import get_proper_type
-from typing_extensions import Literal
 
 from returns.contrib.mypy._structures.args import FuncArg
 from returns.contrib.mypy._structures.types import CallableContext
@@ -23,23 +21,21 @@ _KIND_MAPPING: Final = MappingProxyType({
 @overload
 def analyze_call(
     function: FunctionLike,
-    args: List[FuncArg],
+    args: list[FuncArg],
     ctx: CallableContext,
     *,
     show_errors: Literal[True],
-) -> CallableType:
-    """Case when errors are reported and we cannot get ``None``."""
+) -> CallableType: ...
 
 
 @overload
 def analyze_call(
     function: FunctionLike,
-    args: List[FuncArg],
+    args: list[FuncArg],
     ctx: CallableContext,
     *,
     show_errors: bool,
-) -> Optional[CallableType]:
-    """Errors are not reported, we can get ``None`` when errors happen."""
+) -> CallableType | None: ...
 
 
 def analyze_call(function, args, ctx, *, show_errors):
@@ -54,7 +50,7 @@ def analyze_call(function, args, ctx, *, show_errors):
     """
     checker = ctx.api.expr_checker
     with checker.msg.filter_errors(save_filtered_errors=True) as local_errors:
-        return_type, checked_function = checker.check_call(
+        _return_type, checked_function = checker.check_call(
             function,
             [arg.expression(ctx.context) for arg in args],
             [_KIND_MAPPING.get(arg.kind, arg.kind) for arg in args],
@@ -94,7 +90,11 @@ def safe_translate_to_function(
     checker = ctx.api.expr_checker  # type: ignore
     with checker.msg.filter_errors():
         _return_type, function_def = checker.check_call(
-            function_def, [], [], ctx.context, [],
+            function_def,
+            [],
+            [],
+            ctx.context,
+            [],
         )
     return function_def
 
@@ -110,15 +110,17 @@ def translate_to_function(
     This also preserves all type arguments as-is.
     """
     checker = ctx.api.expr_checker  # type: ignore
-    return get_proper_type(analyze_member_access(
-        '__call__',
-        function_def,
-        ctx.context,
-        is_lvalue=False,
-        is_super=False,
-        is_operator=True,
-        msg=checker.msg,
-        original_type=function_def,
-        chk=checker.chk,
-        in_literal_context=checker.is_literal_context(),
-    ))
+    return get_proper_type(
+        analyze_member_access(
+            '__call__',
+            function_def,
+            ctx.context,
+            is_lvalue=False,
+            is_super=False,
+            is_operator=True,
+            msg=checker.msg,
+            original_type=function_def,
+            chk=checker.chk,
+            in_literal_context=checker.is_literal_context(),
+        )
+    )

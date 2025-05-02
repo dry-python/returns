@@ -1,4 +1,6 @@
-from typing import Final, Iterator, List, Optional, Tuple, final
+from collections.abc import Iterator
+from itertools import starmap
+from typing import Final, final
 
 from mypy.nodes import ARG_STAR, ARG_STAR2
 from mypy.plugin import FunctionContext
@@ -55,14 +57,14 @@ def analyze(ctx: FunctionContext) -> ProperType:
 
     if len(list(filter(len, ctx.arg_types))) == 1:
         return function_def  # this means, that `partial(func)` is called
-    elif not isinstance(function_def, _SUPPORTED_TYPES):
+    if not isinstance(function_def, _SUPPORTED_TYPES):
         return default_return
-    elif isinstance(function_def, (Instance, TypeType)):
+    if isinstance(function_def, Instance | TypeType):
         # We force `Instance` and similar types to coercse to callable:
         function_def = func_args.get_callable_from_context()
 
     is_valid, applied_args = func_args.build_from_context()
-    if not isinstance(function_def, (CallableType, Overloaded)) or not is_valid:
+    if not isinstance(function_def, CallableType | Overloaded) or not is_valid:
         return default_return
 
     return _PartialFunctionReducer(
@@ -104,7 +106,7 @@ class _PartialFunctionReducer:
         self,
         default_return_type: FunctionLike,
         original: FunctionLike,
-        applied_args: List[FuncArg],
+        applied_args: list[FuncArg],
         ctx: FunctionContext,
     ) -> None:
         """
@@ -122,8 +124,8 @@ class _PartialFunctionReducer:
         self._applied_args = applied_args
         self._ctx = ctx
 
-        self._case_functions: List[CallableType] = []
-        self._fallbacks: List[CallableType] = []
+        self._case_functions: list[CallableType] = []
+        self._fallbacks: list[CallableType] = []
 
     def new_partial(self) -> ProperType:
         """
@@ -149,7 +151,7 @@ class _PartialFunctionReducer:
     def _create_intermediate(
         self,
         case_function: CallableType,
-    ) -> Tuple[CallableType, Optional[CallableType]]:
+    ) -> tuple[CallableType, CallableType | None]:
         intermediate = Intermediate(case_function).with_applied_args(
             self._applied_args,
         )
@@ -225,16 +227,19 @@ class _AppliedArgs:
             self._function_ctx.arg_names[1:],
             self._function_ctx.arg_types[1:],
             self._function_ctx.arg_kinds[1:],
+            strict=False,
         )
 
     def get_callable_from_context(self) -> ProperType:
         """Returns callable type from the context."""
-        return get_proper_type(safe_translate_to_function(
-            self._function_ctx.arg_types[0][0],
-            self._function_ctx,
-        ))
+        return get_proper_type(
+            safe_translate_to_function(
+                self._function_ctx.arg_types[0][0],
+                self._function_ctx,
+            )
+        )
 
-    def build_from_context(self) -> Tuple[bool, List[FuncArg]]:
+    def build_from_context(self) -> tuple[bool, list[FuncArg]]:
         """
         Builds handy arguments structures from the context.
 
@@ -251,7 +256,9 @@ class _AppliedArgs:
         """
         applied_args = []
         for names, types, kinds in self._parts:
-            for arg in self._generate_applied_args(zip(names, types, kinds)):
+            for arg in self._generate_applied_args(
+                zip(names, types, kinds, strict=False)
+            ):
                 if arg.kind in {ARG_STAR, ARG_STAR2}:
                     # We cannot really work with `*args`, `**kwargs`.
                     return False, []
@@ -260,7 +267,4 @@ class _AppliedArgs:
         return True, applied_args
 
     def _generate_applied_args(self, arg_parts) -> Iterator[FuncArg]:
-        yield from (
-            FuncArg(name, typ, kind)
-            for name, typ, kind in arg_parts
-        )
+        yield from starmap(FuncArg, arg_parts)

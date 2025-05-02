@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Callable, TypeVar
+from collections.abc import Callable
+from typing import TYPE_CHECKING, TypeVar
 
 from returns.interfaces.specific.reader_ioresult import ReaderIOResultLikeN
 from returns.primitives.hkt import Kinded, KindN, kinded
@@ -24,10 +25,12 @@ def bind_context_ioresult(
         [_FirstType],
         ReaderIOResult[_UpdatedType, _SecondType, _ThirdType],
     ],
-) -> Kinded[Callable[
-    [KindN[_ReaderIOResultLikeKind, _FirstType, _SecondType, _ThirdType]],
-    KindN[_ReaderIOResultLikeKind, _UpdatedType, _SecondType, _ThirdType],
-]]:
+) -> Kinded[
+    Callable[
+        [KindN[_ReaderIOResultLikeKind, _FirstType, _SecondType, _ThirdType]],
+        KindN[_ReaderIOResultLikeKind, _UpdatedType, _SecondType, _ThirdType],
+    ]
+]:
     """
     Lifts function from ``RequiresContextIOResult`` for better composition.
 
@@ -60,6 +63,7 @@ def bind_context_ioresult(
       ... )('abc').awaitable) == IOFailure(0)
 
     """
+
     @kinded
     def factory(
         container: KindN[
@@ -70,4 +74,5 @@ def bind_context_ioresult(
         ],
     ) -> KindN[_ReaderIOResultLikeKind, _UpdatedType, _SecondType, _ThirdType]:
         return container.bind_context_ioresult(function)
+
     return factory

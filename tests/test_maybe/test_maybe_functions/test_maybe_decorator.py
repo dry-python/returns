@@ -1,11 +1,9 @@
-from typing import Dict, Optional
-
 from returns.maybe import Nothing, Some, maybe
 
 
 @maybe
-def _function(hashmap: Dict[str, str], key: str) -> Optional[str]:
-    return hashmap.get(key, None)
+def _function(hashmap: dict[str, str], key: str) -> str | None:
+    return hashmap.get(key)
 
 
 def test_maybe_some():

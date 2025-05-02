@@ -1,4 +1,4 @@
-from returns.maybe import _Nothing
+from returns.maybe import _Nothing  # noqa: PLC2701
 
 
 def test_nothing_singleton():

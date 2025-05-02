@@ -1,0 +1,58 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-toml
+      - id: check-merge-conflict
+      - id: mixed-line-ending
+        args: [--fix=lf]
+      - id: check-case-conflict
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.33.0
+    hooks:
+      - id: check-dependabot
+      - id: check-readthedocs
+      - id: check-github-workflows
+  - repo: https://github.com/rhysd/actionlint
+    rev: v1.7.7
+    hooks:
+      - id: actionlint
+  - repo: https://github.com/woodruffw/zizmor-pre-commit
+    rev: v1.6.0
+    hooks:
+      - id: zizmor
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.10.0.1
+    hooks:
+      - id: shellcheck
+  - repo: https://github.com/tox-dev/pyproject-fmt
+    rev: v2.5.1
+    hooks:
+      - id: pyproject-fmt
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.11.7
+    hooks:
+      - id: ruff
+        args: ["--exit-non-zero-on-fix"]
+      - id: ruff-format
+  - repo: https://github.com/sphinx-contrib/sphinx-lint
+    rev: v1.0.0
+    hooks:
+      - id: sphinx-lint
+        args: [--enable=default-role]
+        files: ^docs/
+
+  # Should be the last:
+  - repo: meta
+    hooks:
+      - id: check-useless-excludes
+
+ci:
+  autofix_commit_msg: "[pre-commit.ci] auto fixes from pre-commit.com hooks"
+  autofix_prs: true
+  autoupdate_commit_msg: "[pre-commit.ci] pre-commit autoupdate"
+  autoupdate_schedule: weekly
+  submodules: false

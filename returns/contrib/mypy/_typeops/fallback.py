@@ -1,5 +1,6 @@
+from collections.abc import Callable
 from functools import wraps
-from typing import Callable, TypeVar
+from typing import TypeVar
 
 from mypy.types import AnyType, TypeOfAny
 
@@ -17,6 +18,7 @@ def asserts_fallback_to_any(function: _CallableType) -> _CallableType:
     just return ``Any`` and hope that someday someone reports it.
 
     """
+
     @wraps(function)
     def decorator(*args, **kwargs):
         try:
@@ -24,4 +26,5 @@ def asserts_fallback_to_any(function: _CallableType) -> _CallableType:
         except AssertionError:
             # TODO: log it somehow
             return AnyType(TypeOfAny.implementation_artifact)
+
     return decorator  # type: ignore

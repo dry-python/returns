@@ -4,7 +4,7 @@ version: 2
 # Set the version of Python and other tools you might need
 build:
   os: ubuntu-lts-latest
-  tools: {python: "3.11"}
+  tools: {python: "3.12"}
   jobs:
     pre_create_environment:
       - asdf plugin add poetry
@@ -12,7 +12,11 @@ build:
       - asdf global poetry latest
       - poetry config virtualenvs.create false
       - poetry self add poetry-plugin-export
-      - poetry export --only main --only docs --extras check_laws --format=requirements.txt --output=requirements.txt
+      - poetry export
+        --only main --only docs
+        --extras check_laws --extras compatible_mypy
+        --format=requirements.txt
+        --output=requirements.txt
 
 python:
   install:

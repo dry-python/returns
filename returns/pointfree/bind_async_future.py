@@ -1,4 +1,5 @@
-from typing import Awaitable, Callable, TypeVar
+from collections.abc import Awaitable, Callable
+from typing import TypeVar
 
 from returns.future import Future
 from returns.interfaces.specific.future import FutureLikeN
@@ -17,10 +18,12 @@ def bind_async_future(
         [_FirstType],
         Awaitable[Future[_UpdatedType]],
     ],
-) -> Kinded[Callable[
-    [KindN[_FutureKind, _FirstType, _SecondType, _ThirdType]],
-    KindN[_FutureKind, _UpdatedType, _SecondType, _ThirdType],
-]]:
+) -> Kinded[
+    Callable[
+        [KindN[_FutureKind, _FirstType, _SecondType, _ThirdType]],
+        KindN[_FutureKind, _UpdatedType, _SecondType, _ThirdType],
+    ]
+]:
     """
     Compose a container and async function returning ``Future``.
 
@@ -52,9 +55,11 @@ def bind_async_future(
     for more info.
 
     """
+
     @kinded
     def factory(
         container: KindN[_FutureKind, _FirstType, _SecondType, _ThirdType],
     ) -> KindN[_FutureKind, _UpdatedType, _SecondType, _ThirdType]:
         return container.bind_async_future(function)
+
     return factory

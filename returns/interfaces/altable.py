@@ -1,5 +1,6 @@
 from abc import abstractmethod
-from typing import Callable, ClassVar, Generic, Sequence, TypeVar, final
+from collections.abc import Callable, Sequence
+from typing import ClassVar, Generic, TypeVar, final
 
 from typing_extensions import Never
 
@@ -58,8 +59,8 @@ class _LawSpec(LawSpecDef):
 
 
 class AltableN(
-    Generic[_FirstType, _SecondType, _ThirdType],
     Lawful['AltableN[_FirstType, _SecondType, _ThirdType]'],
+    Generic[_FirstType, _SecondType, _ThirdType],
 ):
     """Modifies the second type argument with a pure function."""
 

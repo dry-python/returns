@@ -1,4 +1,4 @@
-from typing import TypeVar, Union
+from typing import TypeVar
 
 from returns.interfaces.unwrappable import Unwrappable
 from returns.pipeline import is_successful
@@ -9,7 +9,7 @@ _SecondType = TypeVar('_SecondType')
 
 def unwrap_or_failure(
     container: Unwrappable[_FirstType, _SecondType],
-) -> Union[_FirstType, _SecondType]:
+) -> _FirstType | _SecondType:
     """
     Unwraps either successful or failed value.
 

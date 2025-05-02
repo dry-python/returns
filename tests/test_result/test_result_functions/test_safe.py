@@ -1,5 +1,3 @@
-from typing import Union
-
 import pytest
 
 from returns.result import Success, safe
@@ -11,13 +9,13 @@ def _function(number: int) -> float:
 
 
 @safe(exceptions=(ZeroDivisionError,))
-def _function_two(number: Union[int, str]) -> float:
+def _function_two(number: int | str) -> float:
     assert isinstance(number, int)
     return number / number
 
 
 @safe((ZeroDivisionError,))  # no name
-def _function_three(number: Union[int, str]) -> float:
+def _function_three(number: int | str) -> float:
     assert isinstance(number, int)
     return number / number
 

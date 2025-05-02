@@ -1,5 +1,6 @@
+from collections.abc import Callable
 from functools import wraps
-from typing import Callable, Generic, TypeVar, Union, final
+from typing import Generic, TypeVar, final
 
 from typing_extensions import ParamSpec
 
@@ -15,7 +16,7 @@ class Trampoline(Generic[_ReturnType]):
     Primitive to convert recursion into an actual object.
     """
 
-    __slots__ = ('func', 'args', 'kwargs')
+    __slots__ = ('args', 'func', 'kwargs')
 
     def __init__(  # noqa: WPS451
         self,
@@ -35,7 +36,7 @@ class Trampoline(Generic[_ReturnType]):
 
 
 def trampoline(
-    func: Callable[_FuncParams, Union[_ReturnType, Trampoline[_ReturnType]]],
+    func: Callable[_FuncParams, _ReturnType | Trampoline[_ReturnType]],
 ) -> Callable[_FuncParams, _ReturnType]:
     """
     Convert functions using recursion to regular functions.
@@ -90,5 +91,5 @@ def trampoline(
             trampoline_result = trampoline_result()
         return trampoline_result
 
-    decorator._orig_func = func  # type: ignore[attr-defined]  # noqa: WPS437
+    decorator._orig_func = func  # type: ignore[attr-defined]  # noqa: SLF001
     return decorator

@@ -1,4 +1,4 @@
-from typing import Sequence
+from collections.abc import Sequence
 
 import pytest
 
@@ -19,19 +19,15 @@ from returns.result import Result
 _containers: Sequence[BaseContainer] = (
     Result.from_failure(1),
     Result.from_value(1),
-
     IO(1),
     IOResult.from_failure(1),
     IOResult.from_value(1),
-
     Maybe.from_value(1),
     Maybe.from_value(None),
     Maybe.from_optional(None),
-
     Future.from_value(1),
     FutureResult.from_value(1),
     FutureResult.from_failure(1),
-
     Reader.from_value(1),
     ReaderResult.from_value(1),
     ReaderResult.from_failure(1),

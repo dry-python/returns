@@ -1,4 +1,5 @@
-from typing import Callable, TypeVar
+from collections.abc import Callable
+from typing import TypeVar
 
 from returns.interfaces.mappable import MappableN
 from returns.primitives.hkt import Kinded, KindN, kinded
@@ -13,10 +14,12 @@ _MappableKind = TypeVar('_MappableKind', bound=MappableN)
 
 def map_(
     function: Callable[[_FirstType], _UpdatedType],
-) -> Kinded[Callable[
-    [KindN[_MappableKind, _FirstType, _SecondType, _ThirdType]],
-    KindN[_MappableKind, _UpdatedType, _SecondType, _ThirdType],
-]]:
+) -> Kinded[
+    Callable[
+        [KindN[_MappableKind, _FirstType, _SecondType, _ThirdType]],
+        KindN[_MappableKind, _UpdatedType, _SecondType, _ThirdType],
+    ]
+]:
     """
     Lifts function to be wrapped in a container for better composition.
 
@@ -44,9 +47,11 @@ def map_(
         - https://wiki.haskell.org/Lifting
 
     """
+
     @kinded
     def factory(
         container: KindN[_MappableKind, _FirstType, _SecondType, _ThirdType],
     ) -> KindN[_MappableKind, _UpdatedType, _SecondType, _ThirdType]:
         return container.map(function)
+
     return factory

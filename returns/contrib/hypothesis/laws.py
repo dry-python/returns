@@ -1,40 +1,130 @@
+import dataclasses
 import inspect
+from collections.abc import Callable, Iterator
 from contextlib import ExitStack, contextmanager
-from typing import (
-    Any,
-    Callable,
-    Dict,
-    Iterator,
-    NamedTuple,
-    Optional,
-    Type,
-    TypeVar,
-    final,
-)
+from typing import Any, TypeVar, final, overload
 
 import pytest
 from hypothesis import given
 from hypothesis import settings as hypothesis_settings
 from hypothesis import strategies as st
-from hypothesis.strategies._internal import types
+from hypothesis.strategies._internal import types  # noqa: PLC2701
+from typing_extensions import Self
 
 from returns.contrib.hypothesis.containers import strategy_from_container
+from returns.contrib.hypothesis.type_resolver import (
+    StrategyFactory,
+    strategies_for_types,
+)
 from returns.primitives.laws import Law, Lawful
+
+Example_co = TypeVar('Example_co', covariant=True)
 
 
 @final
-class _Settings(NamedTuple):
-    """Settings that we provide to an end user."""
+@dataclasses.dataclass(frozen=True)
+class Settings:
+    """
+    Settings for the law tests.
 
-    settings_kwargs: Dict[str, Any]
+    This sets the context for each generated law test, by temporarily
+    registering strategies for various types and passing any ``hypothesis``
+    settings.
+
+    Any settings passed by the user will override the value from
+    :func:`default_settings`.
+    """
+
+    #: Settings directly passed on to `hypothesis`. We support all kwargs from
+    #: ``@settings``, see `@settings docs
+    #: <https://hypothesis.readthedocs.io/en/latest/settings.html>`_.
+    settings_kwargs: dict[str, Any]
+    #: Whether to create examples using ``__init__`` instead of the default .
     use_init: bool
+    #: Strategy for generating the container. By default, we generate examples
+    #: of a container using:
+    #: :func:`returns.contrib.hypothesis.containers.strategy_from_container`.
+    container_strategy: StrategyFactory | None
+    #: Strategies for generating values of types other than the container and
+    #: its lawful interfaces. This can be useful for overriding ``TypeVar``,
+    #: ``Callable``, etc. in case you use certain types that ``hypothesis`` is
+    #: unable to find.
+    type_strategies: dict[type[object], StrategyFactory]
+
+    def __post_init__(self) -> None:
+        """Check that the settings are mutually compatible."""
+        if self.use_init and self.container_strategy is not None:
+            raise AssertionError(
+                'Expected only one of `use_init` and'
+                ' `container_strategy` to be truthy'
+            )
+
+    def __or__(self, other: Self) -> Self:
+        """Merge the two settings, preferring values from `other`."""
+        return Settings(
+            settings_kwargs=self.settings_kwargs | other.settings_kwargs,
+            use_init=self.use_init | other.use_init,
+            container_strategy=self.container_strategy
+            if other.container_strategy is None
+            else other.container_strategy,
+            type_strategies=self.type_strategies | other.type_strategies,
+        )
+
+
+def default_settings(container_type: type[Lawful]) -> Settings:
+    """Return default settings for creating law tests.
+
+    We use some special strategies by default, but
+    they can be overridden by the user if needed:
+
+    - ``TypeVar``: We need to make sure that the values generated behave
+      sensibly when tested for equality.
+
+    - ``collections.abc.Callable``: We need to generate pure functions,
+      which are not the default.
+
+    Note that this is `collections.abc.Callable`, NOT `typing.Callable`. This
+    is because, at runtime, `typing.get_origin(Callable[[int], str])` is
+    `collections.abc.Callable`. So, this is the type we should register with
+    `hypothesis`.
+    """
+    return Settings(
+        settings_kwargs={},
+        use_init=False,
+        container_strategy=None,
+        type_strategies={
+            TypeVar: type_vars_factory,  # type: ignore[dict-item]
+            Callable: pure_functions_factory,  # type: ignore[dict-item]
+        },
+    )
+
+
+@overload
+def check_all_laws(
+    container_type: type[Lawful[Example_co]],
+    *,
+    container_strategy: StrategyFactory[Example_co],
+    settings_kwargs: dict[str, Any] | None = None,
+    type_strategies: dict[type[object], StrategyFactory] | None = None,
+) -> None: ...
+
+
+@overload
+def check_all_laws(
+    container_type: type[Lawful[Example_co]],
+    *,
+    settings_kwargs: dict[str, Any] | None = None,
+    use_init: bool = False,
+) -> None: ...
 
 
 def check_all_laws(
-    container_type: Type[Lawful],
+    container_type: type[Lawful[Example_co]],
     *,
-    settings_kwargs: Optional[Dict[str, Any]] = None,
+    settings_kwargs: dict[str, Any] | None = None,
     use_init: bool = False,
+    container_strategy: StrategyFactory[Example_co] | None = None,
+    type_strategies: dict[type[object], StrategyFactory] | None = None,
 ) -> None:
     """
     Function to check all defined mathematical laws in a specified container.
@@ -62,9 +152,11 @@ def check_all_laws(
         - https://mmhaskell.com/blog/2017/3/13/obey-the-type-laws
 
     """
-    settings = _Settings(
-        settings_kwargs if settings_kwargs is not None else {},
+    settings = default_settings(container_type) | Settings(
+        settings_kwargs or {},
         use_init,
+        container_strategy,
+        type_strategies=type_strategies or {},
     )
 
     for interface, laws in container_type.laws().items():
@@ -77,140 +169,33 @@ def check_all_laws(
             )
 
 
-@contextmanager
-def container_strategies(
-    container_type: Type[Lawful],
-    *,
-    settings: _Settings,
-) -> Iterator[None]:
-    """
-    Registers all types inside a container to resolve to a correct strategy.
-
-    For example, let's say we have ``Result`` type.
-    It is a subtype of ``ContainerN``, ``MappableN``, ``BindableN``, etc.
-    When we check this type, we need ``MappableN`` to resolve to ``Result``.
-
-    Can be used independently from other functions.
-    """
-    our_interfaces = {
-        base_type
-        for base_type in container_type.__mro__
-        if (
-            getattr(base_type, '__module__', '').startswith('returns.') and
-            # We don't register `Lawful` type, it is not a container:
-            base_type != Lawful and
-            # We will register the container itself later with
-            # `maybe_register_container` function:
-            base_type != container_type
-        )
-    }
-    for interface in our_interfaces:
-        st.register_type_strategy(
-            interface,
-            strategy_from_container(
-                container_type,
-                use_init=settings.use_init,
-            ),
-        )
-
-    try:
-        yield
-    finally:
-        for interface in our_interfaces:
-            types._global_type_lookup.pop(interface)
-        _clean_caches()
-
-
-@contextmanager
-def register_container(
-    container_type: Type['Lawful'],
-    *,
-    use_init: bool,
-) -> Iterator[None]:
-    """Temporary registers a container if it is not registered yet."""
-    used = types._global_type_lookup.pop(container_type, None)
-    st.register_type_strategy(
-        container_type,
-        strategy_from_container(
-            container_type,
-            use_init=use_init,
+def pure_functions_factory(thing) -> st.SearchStrategy:
+    """Factory to create pure functions."""
+    like = (
+        (lambda: None)
+        if len(thing.__args__) == 1
+        else (lambda *args, **kwargs: None)
+    )
+    return_type = thing.__args__[-1]
+    return st.functions(
+        like=like,
+        returns=st.from_type(
+            type(None) if return_type is None else return_type,
         ),
+        pure=True,
     )
 
-    try:
-        yield
-    finally:
-        types._global_type_lookup.pop(container_type)
-        if used:
-            st.register_type_strategy(container_type, used)
-        else:
-            _clean_caches()
 
-
-@contextmanager
-def pure_functions() -> Iterator[None]:
+def type_vars_factory(thing: type[object]) -> StrategyFactory:
     """
-    Context manager to resolve all ``Callable`` as pure functions.
+    Strategy factory for ``TypeVar`` objects.
 
-    It is not a default in ``hypothesis``.
+    We ensure that values inside strategies are self-equal.
+    For example, ``float('nan')`` does not work for us.
     """
-    def factory(thing) -> st.SearchStrategy:
-        like = (
-            (lambda: None)
-            if len(thing.__args__) == 1
-            else (lambda *args, **kwargs: None)
-        )
-        return st.functions(
-            like=like,
-            returns=st.from_type(thing.__args__[-1]),
-            pure=True,
-        )
-
-    callable_type = _get_callable_type()
-    used = types._global_type_lookup[callable_type]
-    st.register_type_strategy(callable_type, factory)
-
-    try:
-        yield
-    finally:
-        types._global_type_lookup.pop(callable_type)
-        st.register_type_strategy(callable_type, used)
-
-
-def _get_callable_type() -> Any:
-    # Helper to accommodate changes in `hypothesis@6.79.0`
-    if Callable.__origin__ in types._global_type_lookup:  # type: ignore
-        return Callable.__origin__  # type: ignore
-    elif Callable in types._global_type_lookup:  # type: ignore
-        return Callable
-    raise RuntimeError('Failed to find Callable type strategy')
-
-
-@contextmanager
-def type_vars() -> Iterator[None]:
-    """
-    Our custom ``TypeVar`` handling.
-
-    There are several noticeable differences:
-
-    1. We add mutable types to the tests: like ``list`` and ``dict``
-    2. We ensure that values inside strategies are self-equal,
-       for example, ``nan`` does not work for us
-
-    """
-    def factory(thing):
-        return types.resolve_TypeVar(thing).filter(
-            lambda inner: inner == inner,  # noqa: WPS312
-        )
-
-    used = types._global_type_lookup.pop(TypeVar)
-    st.register_type_strategy(TypeVar, factory)
-
-    try:
-        yield
-    finally:
-        types._global_type_lookup.pop(TypeVar)
-        st.register_type_strategy(TypeVar, used)
+    return types.resolve_TypeVar(thing).filter(  # type: ignore[no-any-return]
+        lambda inner: inner == inner,  # noqa: PLR0124, WPS312
+    )
 
 
 @contextmanager
@@ -221,13 +206,15 @@ def clean_plugin_context() -> Iterator[None]:
     Otherwise, some types might be messed up.
     """
     saved_stategies = {}
-    for strategy_key, strategy in types._global_type_lookup.items():
-        if isinstance(strategy_key, type):
-            if strategy_key.__module__.startswith('returns.'):
-                saved_stategies.update({strategy_key: strategy})
+    for strategy_key, strategy in types._global_type_lookup.items():  # noqa: SLF001
+        if isinstance(  # type: ignore[redundant-expr]
+            strategy_key,
+            type,
+        ) and strategy_key.__module__.startswith('returns.'):
+            saved_stategies.update({strategy_key: strategy})
 
     for key_to_remove in saved_stategies:
-        types._global_type_lookup.pop(key_to_remove)
+        types._global_type_lookup.pop(key_to_remove)  # noqa: SLF001
     _clean_caches()
 
     try:
@@ -238,36 +225,15 @@ def clean_plugin_context() -> Iterator[None]:
 
 
 def _clean_caches() -> None:
-    st.from_type.__clear_cache()  # type: ignore[attr-defined]
-
-
-def _run_law(
-    container_type: Type[Lawful],
-    law: Law,
-    *,
-    settings: _Settings,
-) -> Callable[[st.DataObject], None]:
-    def factory(source: st.DataObject) -> None:
-        with ExitStack() as stack:
-            stack.enter_context(clean_plugin_context())
-            stack.enter_context(type_vars())
-            stack.enter_context(pure_functions())
-            stack.enter_context(
-                container_strategies(container_type, settings=settings),
-            )
-            stack.enter_context(
-                register_container(container_type, use_init=settings.use_init),
-            )
-            source.draw(st.builds(law.definition))
-    return factory
+    st.from_type.__clear_cache()  # type: ignore[attr-defined]  # noqa: SLF001
 
 
 def _create_law_test_case(
-    container_type: Type[Lawful],
-    interface: Type[Lawful],
+    container_type: type[Lawful],
+    interface: type[Lawful],
     law: Law,
     *,
-    settings: _Settings,
+    settings: Settings,
 ) -> None:
     test_function = given(st.data())(
         hypothesis_settings(**settings.settings_kwargs)(
@@ -296,4 +262,56 @@ def _create_law_test_case(
             # so users can easily skip them if needed.
             pytest.mark.returns_lawful(test_function),
         ),
+    )
+
+
+def _run_law(
+    container_type: type[Lawful],
+    law: Law,
+    *,
+    settings: Settings,
+) -> Callable[[st.DataObject], None]:
+    def factory(source: st.DataObject) -> None:
+        with ExitStack() as stack:
+            stack.enter_context(clean_plugin_context())
+            stack.enter_context(
+                strategies_for_types(
+                    _types_to_strategies(container_type, settings)
+                )
+            )
+            source.draw(st.builds(law.definition))
+
+    return factory
+
+
+def _types_to_strategies(
+    container_type: type[Lawful],
+    settings: Settings,
+) -> dict[type[object], StrategyFactory]:
+    """Return a mapping from type to `hypothesis` strategy."""
+    return settings.type_strategies | _container_mapping(
+        container_type, settings
+    )
+
+
+def _container_mapping(
+    container_type: type[Lawful],
+    settings: Settings,
+) -> dict[type[object], StrategyFactory]:
+    """Map `container_type` and its interfaces to the container strategy."""
+    container_strategy = _strategy_for_container(container_type, settings)
+    return {
+        **dict.fromkeys(container_type.laws(), container_strategy),
+        container_type: container_strategy,
+    }
+
+
+def _strategy_for_container(
+    container_type: type[Lawful],
+    settings: Settings,
+) -> StrategyFactory:
+    return (
+        strategy_from_container(container_type, use_init=settings.use_init)
+        if settings.container_strategy is None
+        else settings.container_strategy
     )

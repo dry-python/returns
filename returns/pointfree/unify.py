@@ -1,4 +1,5 @@
-from typing import Callable, TypeVar, Union
+from collections.abc import Callable
+from typing import TypeVar
 
 from returns.interfaces.failable import DiverseFailableN
 from returns.primitives.hkt import Kinded, KindN, kinded
@@ -17,7 +18,10 @@ def unify(  # noqa: WPS234
     function: Callable[
         [_FirstType],
         KindN[
-            _DiverseFailableKind, _NewFirstType, _NewSecondType, _NewThirdType,
+            _DiverseFailableKind,
+            _NewFirstType,
+            _NewSecondType,
+            _NewThirdType,
         ],
     ],
 ) -> Kinded[
@@ -26,7 +30,7 @@ def unify(  # noqa: WPS234
         KindN[
             _DiverseFailableKind,
             _NewFirstType,
-            Union[_SecondType, _NewSecondType],
+            _SecondType | _NewSecondType,
             _NewThirdType,
         ],
     ]
@@ -55,16 +59,21 @@ def unify(  # noqa: WPS234
       >>> assert unify(bindable)(Failure(42)) == Failure(42)
 
     """
+
     @kinded
     def factory(
         container: KindN[
-            _DiverseFailableKind, _FirstType, _SecondType, _ThirdType,
+            _DiverseFailableKind,
+            _FirstType,
+            _SecondType,
+            _ThirdType,
         ],
     ) -> KindN[
         _DiverseFailableKind,
         _NewFirstType,
-        Union[_SecondType, _NewSecondType],
+        _SecondType | _NewSecondType,
         _NewThirdType,
     ]:
         return container.bind(function)  # type: ignore
+
     return factory

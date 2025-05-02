@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import TYPE_CHECKING, Callable, TypeVar
+from collections.abc import Callable
+from typing import TYPE_CHECKING, TypeVar
 
 from typing_extensions import Never
 
@@ -41,7 +42,7 @@ class IOLikeN(container.ContainerN[_FirstType, _SecondType, _ThirdType]):
     @classmethod
     @abstractmethod
     def from_io(
-        cls: type[_IOLikeType],  # noqa: N805
+        cls: type[_IOLikeType],
         inner_value: IO[_UpdatedType],
     ) -> KindN[_IOLikeType, _UpdatedType, _SecondType, _ThirdType]:
         """Unit method to create new containers from successful ``IO``."""

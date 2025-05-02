@@ -1,4 +1,5 @@
-from typing import Callable, TypeVar
+from collections.abc import Callable
+from typing import TypeVar
 
 from returns.interfaces.specific.ioresult import IOResultLikeN
 from returns.primitives.hkt import Kinded, KindN, kinded
@@ -21,10 +22,12 @@ def managed(
         [_FirstType, Result[_UpdatedType, _SecondType]],
         KindN[_IOResultLikeType, None, _SecondType, _ThirdType],
     ],
-) -> Kinded[Callable[
-    [KindN[_IOResultLikeType, _FirstType, _SecondType, _ThirdType]],
-    KindN[_IOResultLikeType, _UpdatedType, _SecondType, _ThirdType],
-]]:
+) -> Kinded[
+    Callable[
+        [KindN[_IOResultLikeType, _FirstType, _SecondType, _ThirdType]],
+        KindN[_IOResultLikeType, _UpdatedType, _SecondType, _ThirdType],
+    ]
+]:
     """
     Allows to run managed computation.
 
@@ -89,11 +92,13 @@ def managed(
     But, we do not recommend to use this function with ``lambda`` functions.
 
     """
+
     @kinded
     def factory(
         acquire: KindN[_IOResultLikeType, _FirstType, _SecondType, _ThirdType],
     ) -> KindN[_IOResultLikeType, _UpdatedType, _SecondType, _ThirdType]:
         return acquire.bind(_use(acquire, use, release))
+
     return factory
 
 

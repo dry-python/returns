@@ -29,4 +29,3 @@
     x: List[Maybe[int]]
 
     reveal_type(partition(x))  # N: Revealed type is "Tuple[builtins.list[builtins.int], builtins.list[None]]"
-

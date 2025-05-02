@@ -1,13 +1,5 @@
-from typing import (
-    Callable,
-    ClassVar,
-    Dict,
-    Generic,
-    Sequence,
-    Type,
-    TypeVar,
-    final,
-)
+from collections.abc import Callable, Sequence
+from typing import ClassVar, Final, Generic, TypeVar, final
 
 from returns.primitives.types import Immutable
 
@@ -20,6 +12,8 @@ _TypeArgType3 = TypeVar('_TypeArgType3')
 #: Special alias to define laws as functions even inside a class
 law_definition = staticmethod
 
+LAWS_ATTRIBUTE: Final = '_laws'
+
 
 class Law(Immutable):
     """
@@ -29,14 +23,14 @@ class Law(Immutable):
     Use ``Law1``, ``Law2`` or ``Law3`` instead.
     """
 
-    __slots__ = ('definition', )
+    __slots__ = ('definition',)
 
     #: Function used to define this law.
     definition: Callable
 
     def __init__(self, function) -> None:
         """Saves function to the inner state."""
-        object.__setattr__(self, 'definition', function)  # noqa: WPS609
+        object.__setattr__(self, 'definition', function)
 
     @final
     @property
@@ -122,7 +116,7 @@ class Lawful(Generic[_Caps]):
 
     @final  # noqa: WPS210
     @classmethod
-    def laws(cls) -> Dict[Type['Lawful'], Sequence[Law]]:  # noqa: WPS210
+    def laws(cls) -> dict[type['Lawful'], Sequence[Law]]:  # noqa: WPS210
         """
         Collects all laws from all parent classes.
 
@@ -134,16 +128,13 @@ class Lawful(Generic[_Caps]):
 
         """
         seen = {
-            '{0}.{1}'.format(
-                parent.__module__,  # noqa: WPS609
-                parent.__qualname__,
-            ): parent
+            f'{parent.__module__}.{parent.__qualname__}': parent
             for parent in cls.__mro__
         }
 
         laws = {}
         for klass in seen.values():
-            current_laws = klass.__dict__.get('_laws', ())  # noqa: WPS609
+            current_laws = klass.__dict__.get(LAWS_ATTRIBUTE, ())
             if not current_laws:
                 continue
             laws[klass] = current_laws

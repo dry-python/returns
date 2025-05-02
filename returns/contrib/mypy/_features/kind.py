@@ -1,5 +1,5 @@
+from collections.abc import Sequence
 from enum import Enum, unique
-from typing import Optional, Sequence, Tuple
 
 from mypy.checkmember import analyze_member_access
 from mypy.plugin import (
@@ -9,9 +9,18 @@ from mypy.plugin import (
     MethodSigContext,
 )
 from mypy.typeops import bind_self
-from mypy.types import AnyType, CallableType, FunctionLike, Instance, Overloaded
+from mypy.types import (
+    AnyType,
+    CallableType,
+    FunctionLike,
+    Instance,
+    Overloaded,
+    TypeOfAny,
+    TypeType,
+    TypeVarType,
+    get_proper_type,
+)
 from mypy.types import Type as MypyType
-from mypy.types import TypeOfAny, TypeType, TypeVarType, get_proper_type
 
 from returns.contrib.mypy._typeops.fallback import asserts_fallback_to_any
 from returns.contrib.mypy._typeops.visitor import translate_kind_instance
@@ -159,9 +168,9 @@ class _KindErrors(str, Enum):  # noqa: WPS600
 
 def _crop_kind_args(
     kind: Instance,
-    limit: Optional[Sequence[MypyType]] = None,
-) -> Tuple[MypyType, ...]:
+    limit: Sequence[MypyType] | None = None,
+) -> tuple[MypyType, ...]:
     """Returns the correct amount of type arguments for a kind."""
     if limit is None:
         limit = kind.args[0].args  # type: ignore
-    return kind.args[1:len(limit) + 1]
+    return kind.args[1 : len(limit) + 1]

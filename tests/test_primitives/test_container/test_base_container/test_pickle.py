@@ -11,11 +11,14 @@ class _CustomClass:
     def __init__(self, inner_value: Any) -> None:
         self.inner_value = inner_value
 
-    def __eq__(self, other: Any) -> bool:
-        return (  # noqa: E721
-            type(other) == type(self) and  # noqa: WPS516
-            self.inner_value == other.inner_value
+    def __eq__(self, other: object) -> bool:
+        return (
+            type(other) is type(self)  # noqa: WPS516
+            and self.inner_value == other.inner_value  # type: ignore[attr-defined]
         )
+
+    def __hash__(self) -> int:
+        return hash(self.inner_value)
 
 
 @given(

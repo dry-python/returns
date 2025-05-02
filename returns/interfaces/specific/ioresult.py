@@ -7,7 +7,8 @@ It is a base interface for both sync and async ``IO`` stacks.
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import TYPE_CHECKING, Callable, TypeVar
+from collections.abc import Callable
+from typing import TYPE_CHECKING, TypeVar
 
 from typing_extensions import Never
 
@@ -61,7 +62,7 @@ class IOResultLikeN(
     @classmethod
     @abstractmethod
     def from_ioresult(
-        cls: type[_IOResultLikeType],  # noqa: N805
+        cls: type[_IOResultLikeType],
         inner_value: IOResult[_ValueType, _ErrorType],
     ) -> KindN[_IOResultLikeType, _ValueType, _ErrorType, _ThirdType]:
         """Unit method to create new containers from ``IOResult`` type."""
@@ -69,7 +70,7 @@ class IOResultLikeN(
     @classmethod
     @abstractmethod
     def from_failed_io(
-        cls: type[_IOResultLikeType],  # noqa: N805
+        cls: type[_IOResultLikeType],
         inner_value: IO[_ErrorType],
     ) -> KindN[_IOResultLikeType, _FirstType, _ErrorType, _ThirdType]:
         """Unit method to create new containers from failed ``IO``."""

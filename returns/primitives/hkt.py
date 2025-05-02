@@ -1,14 +1,15 @@
-from typing import TYPE_CHECKING, Any, Callable, Protocol, TypeVar
+from collections.abc import Callable
+from typing import TYPE_CHECKING, Any, Generic, Protocol, TypeVar
 
-from typing_extensions import Generic, Never, TypeVarTuple, Unpack
+from typing_extensions import Never, TypeVarTuple, Unpack
 
-_InstanceType = TypeVar('_InstanceType', covariant=True)
-_TypeArgType1 = TypeVar('_TypeArgType1', covariant=True)
-_TypeArgType2 = TypeVar('_TypeArgType2', covariant=True)
-_TypeArgType3 = TypeVar('_TypeArgType3', covariant=True)
+_InstanceType_co = TypeVar('_InstanceType_co', covariant=True)
+_TypeArgType1_co = TypeVar('_TypeArgType1_co', covariant=True)
+_TypeArgType2_co = TypeVar('_TypeArgType2_co', covariant=True)
+_TypeArgType3_co = TypeVar('_TypeArgType3_co', covariant=True)
 
-_FunctionDefType = TypeVar(
-    '_FunctionDefType',
+_FunctionDefType_co = TypeVar(
+    '_FunctionDefType_co',
     bound=Callable,
     covariant=True,  # This is a must! Otherwise it would not work.
 )
@@ -18,14 +19,10 @@ _FunctionType = TypeVar(
 )
 
 _UpdatedType = TypeVar('_UpdatedType')
-
-_FirstKind = TypeVar('_FirstKind')
-_SecondKind = TypeVar('_SecondKind')
-
 _TypeVars = TypeVarTuple('_TypeVars')
 
 
-class KindN(Generic[_InstanceType, Unpack[_TypeVars]]):
+class KindN(Generic[_InstanceType_co, Unpack[_TypeVars]]):
     """
     Emulation support for Higher Kinded Types.
 
@@ -76,7 +73,7 @@ class KindN(Generic[_InstanceType, Unpack[_TypeVars]]):
     a possible metaclass conflict with other metaclasses.
     Current API allows you to mix ``KindN`` anywhere.
 
-    We allow ``_InstanceType`` of ``KindN``
+    We allow ``_InstanceType_co`` of ``KindN``
     to be ``Instance`` type or ``TypeVarType`` with ``bound=...``.
 
     See also:
@@ -90,6 +87,7 @@ class KindN(Generic[_InstanceType, Unpack[_TypeVars]]):
     __slots__ = ()
 
     if TYPE_CHECKING:  # noqa: WPS604 # pragma: no cover
+
         def __getattr__(self, attrname: str):
             """
             This function is required for ``get_attribute_hook`` in mypy plugin.
@@ -100,16 +98,18 @@ class KindN(Generic[_InstanceType, Unpack[_TypeVars]]):
 
 
 #: Type alias for kinds with one type argument.
-Kind1 = KindN[_InstanceType, _TypeArgType1, Any, Any]
+Kind1 = KindN[_InstanceType_co, _TypeArgType1_co, Any, Any]
 
 #: Type alias for kinds with two type arguments.
-Kind2 = KindN[_InstanceType, _TypeArgType1, _TypeArgType2, Any]
+Kind2 = KindN[_InstanceType_co, _TypeArgType1_co, _TypeArgType2_co, Any]
 
 #: Type alias for kinds with three type arguments.
-Kind3 = KindN[_InstanceType, _TypeArgType1, _TypeArgType2, _TypeArgType3]
+Kind3 = KindN[
+    _InstanceType_co, _TypeArgType1_co, _TypeArgType2_co, _TypeArgType3_co
+]
 
 
-class SupportsKindN(KindN[_InstanceType, Unpack[_TypeVars]]):
+class SupportsKindN(KindN[_InstanceType_co, Unpack[_TypeVars]]):
     """
     Base class for your containers.
 
@@ -131,23 +131,34 @@ class SupportsKindN(KindN[_InstanceType, Unpack[_TypeVars]]):
 
 #: Type alias used for inheritance with one type argument.
 SupportsKind1 = SupportsKindN[
-    _InstanceType, _TypeArgType1, Never, Never,
+    _InstanceType_co,
+    _TypeArgType1_co,
+    Never,
+    Never,
 ]
 
 #: Type alias used for inheritance with two type arguments.
 SupportsKind2 = SupportsKindN[
-    _InstanceType, _TypeArgType1, _TypeArgType2, Never,
+    _InstanceType_co,
+    _TypeArgType1_co,
+    _TypeArgType2_co,
+    Never,
 ]
 
 #: Type alias used for inheritance with three type arguments.
 SupportsKind3 = SupportsKindN[
-    _InstanceType, _TypeArgType1, _TypeArgType2, _TypeArgType3,
+    _InstanceType_co,
+    _TypeArgType1_co,
+    _TypeArgType2_co,
+    _TypeArgType3_co,
 ]
 
 
 def dekind(
-    kind: KindN[_InstanceType, _TypeArgType1, _TypeArgType2, _TypeArgType3],
-) -> _InstanceType:
+    kind: KindN[
+        _InstanceType_co, _TypeArgType1_co, _TypeArgType2_co, _TypeArgType3_co
+    ],
+) -> _InstanceType_co:
     """
     Turns ``Kind1[IO, int]`` type into real ``IO[int]`` type.
 
@@ -178,6 +189,7 @@ def dekind(
 # Utils to define kinded functions
 # ================================
 
+
 # TODO: in the future we would be able to write a custom plugin
 # with `transform_kind(T) -> T'` support.
 # It would visit all the possible `KindN[]` types in any type and run `dekind`
@@ -186,7 +198,7 @@ def dekind(
 # out: => Callable[[IO[int]], IO[str]]
 # This will allow to have better support for callable protocols and similar.
 # Blocked by: https://github.com/python/mypy/issues/9001
-class Kinded(Protocol[_FunctionDefType]):  # type: ignore
+class Kinded(Protocol[_FunctionDefType_co]):  # type: ignore
     """
     Protocol that tracks kinded functions calls.
 
@@ -197,7 +209,7 @@ class Kinded(Protocol[_FunctionDefType]):  # type: ignore
     __slots__ = ()
 
     #: Used to translate `KindN` into real types.
-    __call__: _FunctionDefType
+    __call__: _FunctionDefType_co
 
     def __get__(
         self,

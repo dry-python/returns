@@ -255,8 +255,8 @@ See ``Limitations`` in the API Reference.
 FAQ
 ---
 
-Why don't you support `*` and `**` arguments?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Why don't you support ``*`` and ``**`` arguments?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When you use ``partial(some, *my_args)`` or ``partial(some, **my_args)``
 or both of them at the same time,

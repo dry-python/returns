@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Callable, TypeVar
+from collections.abc import Callable
+from typing import TYPE_CHECKING, TypeVar
 
 from returns.interfaces.specific.reader_result import ReaderResultLikeN
 from returns.primitives.hkt import Kinded, KindN, kinded
@@ -24,10 +25,12 @@ def bind_context_result(
         [_FirstType],
         ReaderResult[_UpdatedType, _SecondType, _ThirdType],
     ],
-) -> Kinded[Callable[
-    [KindN[_ReaderResultLikeKind, _FirstType, _SecondType, _ThirdType]],
-    KindN[_ReaderResultLikeKind, _UpdatedType, _SecondType, _ThirdType],
-]]:
+) -> Kinded[
+    Callable[
+        [KindN[_ReaderResultLikeKind, _FirstType, _SecondType, _ThirdType]],
+        KindN[_ReaderResultLikeKind, _UpdatedType, _SecondType, _ThirdType],
+    ]
+]:
     """
     Composes successful container with a function that returns a container.
 
@@ -54,6 +57,7 @@ def bind_context_result(
       ... )(...) == IOFailure('a')
 
     """
+
     @kinded
     def factory(
         container: KindN[
@@ -64,4 +68,5 @@ def bind_context_result(
         ],
     ) -> KindN[_ReaderResultLikeKind, _UpdatedType, _SecondType, _ThirdType]:
         return container.bind_context_result(function)
+
     return factory

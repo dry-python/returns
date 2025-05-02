@@ -1,5 +1,6 @@
 from abc import abstractmethod
-from typing import ClassVar, Sequence, TypeVar, final
+from collections.abc import Sequence
+from typing import ClassVar, TypeVar, final
 
 from typing_extensions import Never
 
@@ -51,9 +52,7 @@ class SwappableN(
 
     __slots__ = ()
 
-    _laws: ClassVar[Sequence[Law]] = (
-        Law1(_LawSpec.double_swap_law),
-    )
+    _laws: ClassVar[Sequence[Law]] = (Law1(_LawSpec.double_swap_law),)
 
     @abstractmethod
     def swap(

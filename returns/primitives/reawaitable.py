@@ -1,16 +1,10 @@
-from typing import (
-    Awaitable,
-    Callable,
-    Generator,
-    NewType,
-    TypeVar,
-    Union,
-    cast,
-    final,
-)
+from collections.abc import Awaitable, Callable, Generator
+from functools import wraps
+from typing import NewType, ParamSpec, TypeVar, cast, final
 
 _ValueType = TypeVar('_ValueType')
-_FunctionCoroType = TypeVar('_FunctionCoroType', bound=Callable[..., Awaitable])
+_AwaitableT = TypeVar('_AwaitableT', bound=Awaitable)
+_Ps = ParamSpec('_Ps')
 
 _Sentinel = NewType('_Sentinel', object)
 _sentinel: _Sentinel = cast(_Sentinel, object())
@@ -54,12 +48,12 @@ class ReAwaitable:
 
     """
 
-    __slots__ = ('_coro', '_cache')
+    __slots__ = ('_cache', '_coro')
 
     def __init__(self, coro: Awaitable[_ValueType]) -> None:
         """We need just an awaitable to work with."""
         self._coro = coro
-        self._cache: Union[_ValueType, _Sentinel] = _sentinel
+        self._cache: _ValueType | _Sentinel = _sentinel
 
     def __await__(self) -> Generator[None, None, _ValueType]:
         """
@@ -85,7 +79,7 @@ class ReAwaitable:
           Hello
 
         """
-        return self._awaitable().__await__()  # noqa: WPS609
+        return self._awaitable().__await__()
 
     def __repr__(self) -> str:
         """
@@ -112,7 +106,9 @@ class ReAwaitable:
         return self._cache  # type: ignore
 
 
-def reawaitable(coro: _FunctionCoroType) -> _FunctionCoroType:
+def reawaitable(
+    coro: Callable[_Ps, _AwaitableT],
+) -> Callable[_Ps, _AwaitableT]:
     """
     Allows to decorate coroutine functions to be awaitable multiple times.
 
@@ -132,6 +128,12 @@ def reawaitable(coro: _FunctionCoroType) -> _FunctionCoroType:
       >>> assert anyio.run(main) == 3
 
     """
-    return lambda *args, **kwargs: ReAwaitable(  # type: ignore
-        coro(*args, **kwargs),
-    )
+
+    @wraps(coro)
+    def decorator(
+        *args: _Ps.args,
+        **kwargs: _Ps.kwargs,
+    ) -> _AwaitableT:
+        return ReAwaitable(coro(*args, **kwargs))  # type: ignore[return-value]
+
+    return decorator

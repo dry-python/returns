@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Callable, TypeVar
+from collections.abc import Callable
+from typing import TYPE_CHECKING, TypeVar
 
 from returns.interfaces.specific.result import ResultLikeN
 from returns.primitives.hkt import Kinded, KindN, kinded
@@ -18,10 +19,12 @@ _ResultLikeKind = TypeVar('_ResultLikeKind', bound=ResultLikeN)
 
 def bind_result(
     function: Callable[[_FirstType], Result[_UpdatedType, _SecondType]],
-) -> Kinded[Callable[
-    [KindN[_ResultLikeKind, _FirstType, _SecondType, _ThirdType]],
-    KindN[_ResultLikeKind, _UpdatedType, _SecondType, _ThirdType],
-]]:
+) -> Kinded[
+    Callable[
+        [KindN[_ResultLikeKind, _FirstType, _SecondType, _ThirdType]],
+        KindN[_ResultLikeKind, _UpdatedType, _SecondType, _ThirdType],
+    ]
+]:
     """
     Composes successful container with a function that returns a container.
 
@@ -46,9 +49,11 @@ def bind_result(
       >>> assert bound(RequiresContextResult.from_value(1))(...) == Success(2)
 
     """
+
     @kinded
     def factory(
         container: KindN[_ResultLikeKind, _FirstType, _SecondType, _ThirdType],
     ) -> KindN[_ResultLikeKind, _UpdatedType, _SecondType, _ThirdType]:
         return container.bind_result(function)
+
     return factory

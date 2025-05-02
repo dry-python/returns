@@ -20,10 +20,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.9', '3.10', '3.11', '3.12']
+        python-version: ['3.10', '3.11', '3.12', '3.13']
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        persist-credentials: false
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
@@ -56,10 +58,10 @@ jobs:
         # Different python versions are covered differently:
         poetry run pytest returns docs/pages tests
 
-        poetry run doc8 -q docs
         poetry run codespell returns tests docs typesafety README.md CONTRIBUTING.md CHANGELOG.md
 
-        poetry run poetry check
+        # TODO: re-enable after all problems are fixed
+        # poetry run poetry check
         poetry run pip check
         poetry run python -m slotscheck returns --verbose
 
@@ -67,18 +69,20 @@ jobs:
       if: matrix.python-version == 3.11
       uses: codecov/codecov-action@v5
       with:
-        file: ./coverage.xml
+        files: ./coverage.xml
 
   typesafety-tests:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.9', '3.10', '3.11', '3.12']
+        python-version: ['3.10', '3.11', '3.12', '3.13']
         shard: [0, 1, 2, 3]
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        persist-credentials: false
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5

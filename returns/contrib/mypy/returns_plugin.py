@@ -10,9 +10,10 @@ https://mypy.readthedocs.io/en/latest/extending_mypy.html
 We use ``pytest-mypy-plugins`` to test that it works correctly, see:
 https://github.com/mkurnikov/pytest-mypy-plugins
 """
-from typing import Callable, ClassVar, Mapping, Optional, Type, final
 
-from mypy.nodes import SymbolTableNode
+from collections.abc import Callable, Mapping
+from typing import ClassVar, TypeAlias, final
+
 from mypy.plugin import (
     AttributeContext,
     FunctionContext,
@@ -37,26 +38,21 @@ from returns.contrib.mypy._features import (
 # ============
 
 #: Type for a function hook.
-_FunctionCallback = Callable[[FunctionContext], MypyType]
-
-#: Type for a function hook that need a definition node.
-_FunctionDefCallback = Callable[
-    [Optional[SymbolTableNode]],
-    Callable[[FunctionContext], MypyType],
-]
+_FunctionCallback: TypeAlias = Callable[[FunctionContext], MypyType]
 
 #: Type for attribute hook.
-_AttributeCallback = Callable[[AttributeContext], MypyType]
+_AttributeCallback: TypeAlias = Callable[[AttributeContext], MypyType]
 
 #: Type for a method hook.
-_MethodCallback = Callable[[MethodContext], MypyType]
+_MethodCallback: TypeAlias = Callable[[MethodContext], MypyType]
 
 #: Type for a method signature hook.
-_MethodSigCallback = Callable[[MethodSigContext], CallableType]
+_MethodSigCallback: TypeAlias = Callable[[MethodSigContext], CallableType]
 
 
 # Interface
 # =========
+
 
 @final
 class _ReturnsPlugin(Plugin):
@@ -85,7 +81,7 @@ class _ReturnsPlugin(Plugin):
     def get_function_hook(
         self,
         fullname: str,
-    ) -> Optional[_FunctionCallback]:
+    ) -> _FunctionCallback | None:
         """
         Called for function return types from ``mypy``.
 
@@ -100,7 +96,7 @@ class _ReturnsPlugin(Plugin):
     def get_attribute_hook(
         self,
         fullname: str,
-    ) -> Optional[_AttributeCallback]:
+    ) -> _AttributeCallback | None:
         """Called for any exiting or ``__getattr__`` aatribute access."""
         if fullname.startswith(_consts.TYPED_KINDN_ACCESS):
             return kind.attribute_access
@@ -109,18 +105,18 @@ class _ReturnsPlugin(Plugin):
     def get_method_signature_hook(
         self,
         fullname: str,
-    ) -> Optional[_MethodSigCallback]:
+    ) -> _MethodSigCallback | None:
         """Called for method signature from ``mypy``."""
         return self._method_sig_hook_plugins.get(fullname)
 
     def get_method_hook(
         self,
         fullname: str,
-    ) -> Optional[_MethodCallback]:
+    ) -> _MethodCallback | None:
         """Called for method return types from ``mypy``."""
         return self._method_hook_plugins.get(fullname)
 
 
-def plugin(version: str) -> Type[Plugin]:
+def plugin(version: str) -> type[Plugin]:
     """Plugin's public API and entrypoint."""
     return _ReturnsPlugin

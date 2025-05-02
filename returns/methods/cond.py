@@ -1,4 +1,4 @@
-from typing import Optional, Type, TypeVar, Union, overload
+from typing import TypeVar, overload
 
 from returns.context import NoDeps
 from returns.interfaces.failable import DiverseFailableN, SingleFailableN
@@ -13,30 +13,26 @@ _DiverseFailableKind = TypeVar('_DiverseFailableKind', bound=DiverseFailableN)
 
 @overload
 def internal_cond(
-    container_type: Type[_SingleFailableKind],
-    is_success: bool,
+    container_type: type[_SingleFailableKind],
+    is_success: bool,  # noqa: FBT001
     success_value: _ValueType,
-) -> KindN[_SingleFailableKind, _ValueType, _ErrorType, NoDeps]:
-    """Reduce the boilerplate when choosing paths with ``SingleFailableN``."""
+) -> KindN[_SingleFailableKind, _ValueType, _ErrorType, NoDeps]: ...
 
 
 @overload
 def internal_cond(
-    container_type: Type[_DiverseFailableKind],
-    is_success: bool,
+    container_type: type[_DiverseFailableKind],
+    is_success: bool,  # noqa: FBT001
     success_value: _ValueType,
     error_value: _ErrorType,
-) -> KindN[_DiverseFailableKind, _ValueType, _ErrorType, NoDeps]:
-    """Reduce the boilerplate when choosing paths with ``DiverseFailableN``."""
+) -> KindN[_DiverseFailableKind, _ValueType, _ErrorType, NoDeps]: ...
 
 
 def internal_cond(
-    container_type: Union[
-        Type[_SingleFailableKind], Type[_DiverseFailableKind],
-    ],
-    is_success: bool,
+    container_type: (type[_SingleFailableKind] | type[_DiverseFailableKind]),
+    is_success: bool,  # noqa: FBT001
     success_value: _ValueType,
-    error_value: Optional[_ErrorType] = None,
+    error_value: _ErrorType | None = None,
 ):
     """
     Reduce the boilerplate when choosing paths.

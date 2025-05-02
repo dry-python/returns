@@ -1,4 +1,5 @@
-from typing import Callable, TypeVar
+from collections.abc import Callable
+from typing import TypeVar
 
 from returns.interfaces.specific.ioresult import IOResultLikeN
 from returns.primitives.hkt import Kind3, Kinded, kinded
@@ -17,10 +18,12 @@ def compose_result(
         [Result[_FirstType, _SecondType]],
         Kind3[_IOResultLikeKind, _NewFirstType, _SecondType, _ThirdType],
     ],
-) -> Kinded[Callable[
-    [Kind3[_IOResultLikeKind, _FirstType, _SecondType, _ThirdType]],
-    Kind3[_IOResultLikeKind, _NewFirstType, _SecondType, _ThirdType],
-]]:
+) -> Kinded[
+    Callable[
+        [Kind3[_IOResultLikeKind, _FirstType, _SecondType, _ThirdType]],
+        Kind3[_IOResultLikeKind, _NewFirstType, _SecondType, _ThirdType],
+    ]
+]:
     """
     Composes inner ``Result`` with ``IOResultLike`` returning function.
 
@@ -45,11 +48,16 @@ def compose_result(
       ... ) == IOFailure('failure')
 
     """
+
     @kinded
     def factory(
         container: Kind3[
-            _IOResultLikeKind, _FirstType, _SecondType, _ThirdType,
+            _IOResultLikeKind,
+            _FirstType,
+            _SecondType,
+            _ThirdType,
         ],
     ) -> Kind3[_IOResultLikeKind, _NewFirstType, _SecondType, _ThirdType]:
         return container.compose_result(function)
+
     return factory

@@ -6,23 +6,48 @@ incremental in minor, bugfixes only are patches.
 See [0Ver](https://0ver.org/).
 
 
-## 0.24.0 WIP
+## 0.25.0
 
 ### Features
 
-- Add picky exceptions to `future_safe` decorator like `safe` has.
+- A lot of new features added to our `hypothesis` plugins.
+  It now allows to create custom strategies, better instantiate containers,
+  docouple it from built-in ones, check laws from user-defined interfaces
+
+### Bugfixes
+
+- Fixes that `UnwrapFailedError` was not picklable
+
+
+## 0.24.0
+
+### Features
+
+- Drop `python3.9` support
+- Add `python3.13` support
+- Add support for `mypy>=1.12`
+- Add picky exceptions to `future_safe` decorator like `safe` has
 - Improve inference of `ResultLike` objects when exception catching
   decorator is applied with explicit exception types
 - Add picky exceptions to `impure_safe` decorator like `safe` has. Issue #1543
-- Add `partition` function to methods module. Issue #1905
-- Adds `default_error` parameter to `returns.converters.maybe_to_result`,
+- Add partition function to result module. Issue #1905
+- Add `default_error` parameter to `returns.converters.maybe_to_result`,
   which provides a default error value for `Failure`
 - Add `returns.methods.gather` utility method
 
 
-### Misc
+## 0.24.1
 
-- Now requires `mypy>=1.11`
+### Features
+
+- Make `hypothesis` plugin test laws from user-defined interfaces too
+- Make `hypothesis` plugin accept user-defined strategies
+- Allow users to override the `hypothesis` plugin's strategies for types, such
+  as `TypeVar` and `Callable`.
+
+### Bugfixes
+
+- Add pickling support for `UnwrapFailedError` exception
 
 
 ## 0.23.0

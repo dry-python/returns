@@ -8,7 +8,8 @@ For impure result see
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import TYPE_CHECKING, Callable, TypeVar
+from collections.abc import Callable
+from typing import TYPE_CHECKING, TypeVar
 
 from typing_extensions import Never
 
@@ -55,7 +56,7 @@ class ResultLikeN(
     @classmethod
     @abstractmethod
     def from_result(
-        cls: type[_ResultLikeType],  # noqa: N805
+        cls: type[_ResultLikeType],
         inner_value: Result[_ValueType, _ErrorType],
     ) -> KindN[_ResultLikeType, _ValueType, _ErrorType, _ThirdType]:
         """Unit method to create new containers from any raw value."""

@@ -1,4 +1,5 @@
-from typing import Callable, TypeVar
+from collections.abc import Callable
+from typing import TypeVar
 
 from returns.interfaces.applicative import ApplicativeN
 from returns.primitives.hkt import Kinded, KindN, kinded
@@ -18,10 +19,12 @@ def apply(
         _SecondType,
         _ThirdType,
     ],
-) -> Kinded[Callable[
-    [KindN[_ApplicativeKind, _FirstType, _SecondType, _ThirdType]],
-    KindN[_ApplicativeKind, _UpdatedType, _SecondType, _ThirdType],
-]]:
+) -> Kinded[
+    Callable[
+        [KindN[_ApplicativeKind, _FirstType, _SecondType, _ThirdType]],
+        KindN[_ApplicativeKind, _UpdatedType, _SecondType, _ThirdType],
+    ]
+]:
     """
     Turns container containing a function into a callable.
 
@@ -50,9 +53,11 @@ def apply(
     See :class:`returns.interfaces.applicative.ApplicativeN` for more info.
 
     """
+
     @kinded
     def factory(
         other: KindN[_ApplicativeKind, _FirstType, _SecondType, _ThirdType],
     ) -> KindN[_ApplicativeKind, _UpdatedType, _SecondType, _ThirdType]:
         return other.apply(container)
+
     return factory

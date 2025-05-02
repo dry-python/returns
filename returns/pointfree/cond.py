@@ -1,4 +1,5 @@
-from typing import Callable, Optional, Type, TypeVar, Union, overload
+from collections.abc import Callable
+from typing import TypeVar, overload
 
 from returns.context import NoDeps
 from returns.interfaces.failable import DiverseFailableN, SingleFailableN
@@ -14,35 +15,33 @@ _SingleFailableKind = TypeVar('_SingleFailableKind', bound=SingleFailableN)
 
 @overload
 def cond(
-    container_type: Type[_SingleFailableKind],
+    container_type: type[_SingleFailableKind],
     success_value: _ValueType,
 ) -> Kinded[
     Callable[
-        [bool], KindN[_SingleFailableKind, _ValueType, _ErrorType, NoDeps],
+        [bool],
+        KindN[_SingleFailableKind, _ValueType, _ErrorType, NoDeps],
     ]
-]:
-    """Reduce the boilerplate when choosing paths with ``SingleFailableN``."""
+]: ...
 
 
 @overload
 def cond(
-    container_type: Type[_DiverseFailableKind],
+    container_type: type[_DiverseFailableKind],
     success_value: _ValueType,
     error_value: _ErrorType,
 ) -> Kinded[
     Callable[
-        [bool], KindN[_DiverseFailableKind, _ValueType, _ErrorType, NoDeps],
+        [bool],
+        KindN[_DiverseFailableKind, _ValueType, _ErrorType, NoDeps],
     ]
-]:
-    """Reduce the boilerplate when choosing paths with ``DiverseFailableN``."""
+]: ...
 
 
 def cond(
-    container_type: Union[
-        Type[_SingleFailableKind], Type[_DiverseFailableKind],
-    ],
+    container_type: (type[_SingleFailableKind] | type[_DiverseFailableKind]),
     success_value: _ValueType,
-    error_value: Optional[_ErrorType] = None,
+    error_value: _ErrorType | None = None,
 ):
     """
     Reduce the boilerplate when choosing paths.
@@ -70,8 +69,13 @@ def cond(
       >>> assert cond(Maybe, 10.0)(False) == Nothing
 
     """
-    def factory(is_success: bool):
+
+    def factory(is_success: bool):  # noqa: FBT001
         return internal_cond(
-            container_type, is_success, success_value, error_value,
+            container_type,
+            is_success,
+            success_value,
+            error_value,
         )
+
     return factory

@@ -1,13 +1,19 @@
-from typing import Final, Optional, Tuple
+from typing import Final
 
 from mypy.maptype import map_instance_to_supertype
 from mypy.nodes import Expression, GeneratorExpr, TypeInfo
 from mypy.plugin import MethodContext
 from mypy.subtypes import is_subtype
 from mypy.typeops import make_simplified_union
-from mypy.types import AnyType, CallableType, Instance
+from mypy.types import (
+    AnyType,
+    CallableType,
+    Instance,
+    TypeOfAny,
+    UnionType,
+    get_proper_type,
+)
 from mypy.types import Type as MypyType
-from mypy.types import TypeOfAny, UnionType, get_proper_type
 
 _INVALID_DO_NOTATION_SOURCE: Final = (
     'Invalid type supplied in do-notation: expected "{0}", got "{1}"'
@@ -86,7 +92,7 @@ def _try_fetch_error_type(
     type_info: TypeInfo,
     seq: Expression,
     ctx: MethodContext,
-) -> Optional[MypyType]:
+) -> MypyType | None:
     inst = Instance(
         type_info,
         [
@@ -110,7 +116,7 @@ def _try_fetch_error_type(
 def _extract_error_type(
     typ: MypyType,
     type_info: TypeInfo,
-) -> Tuple[bool, Optional[MypyType]]:
+) -> tuple[bool, MypyType | None]:
     typ = get_proper_type(typ)
     if isinstance(typ, Instance):
         return True, _decide_error_type(
@@ -129,7 +135,7 @@ def _extract_error_type(
     return False, None
 
 
-def _decide_error_type(typ: Instance) -> Optional[MypyType]:
+def _decide_error_type(typ: Instance) -> MypyType | None:
     if len(typ.args) < 2:
         return None
     if isinstance(get_proper_type(typ.args[1]), AnyType):

@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any
 
 from typing_extensions import Never, Self
 
@@ -27,7 +27,7 @@ class Immutable:
 
     See :class:`returns.primitives.container.BaseContainer` for examples.
 
-    """  # noqa: RST307
+    """
 
     __slots__ = ()
 
@@ -35,14 +35,14 @@ class Immutable:
         """Returns itself."""
         return self
 
-    def __deepcopy__(self, memo: Dict[Any, Any]) -> Self:
+    def __deepcopy__(self, memo: dict[Any, Any]) -> Self:
         """Returns itself."""
         return self
 
     def __setattr__(self, attr_name: str, attr_value: Any) -> Never:
         """Makes inner state of the containers immutable for modification."""
-        raise ImmutableStateError()
+        raise ImmutableStateError
 
     def __delattr__(self, attr_name: str) -> Never:  # noqa: WPS603
         """Makes inner state of the containers immutable for deletion."""
-        raise ImmutableStateError()
+        raise ImmutableStateError

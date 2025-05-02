@@ -1,5 +1,6 @@
 import asyncio  # we use `asyncio` only as an example, you can use any io lib
-from typing import Final, Sequence, cast
+from collections.abc import Sequence
+from typing import Final, cast
 
 import httpx  # you would need to `pip install httpx`
 from typing_extensions import TypedDict
@@ -27,10 +28,10 @@ async def _fetch_post(post_id: int) -> _Post:
         return cast(_Post, response.json())  # or validate the response
 
 
-def _show_titles(number_of_posts: int) -> Sequence[
-    FutureResult[str, Exception]
-]:
-    def factory(post: _Post) -> str:
+def _show_titles(
+    number_of_posts: int,
+) -> Sequence[FutureResult[str, Exception]]:
+    def factory(post: _Post) -> str:  # noqa: FURB118
         return post['title']
 
     return [

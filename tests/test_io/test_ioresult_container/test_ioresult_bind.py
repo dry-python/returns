@@ -4,6 +4,7 @@ from returns.result import Failure, Result, Success
 
 def test_bind():
     """Ensures that bind works."""
+
     def factory(inner_value: int) -> IOResult[int, str]:
         if inner_value > 0:
             return IOSuccess(inner_value * 2)
@@ -24,6 +25,7 @@ def test_bind():
 
 def test_left_identity_success():
     """Ensures that left identity works for IOSuccess container."""
+
     def factory(inner_value: int) -> IOResult[int, str]:
         return IOSuccess(inner_value * 2)
 
@@ -35,6 +37,7 @@ def test_left_identity_success():
 
 def test_left_identity_failure():
     """Ensures that left identity works for IOFailure container."""
+
     def factory(inner_value: int) -> IOResult[int, int]:
         return IOFailure(6)
 
@@ -46,6 +49,7 @@ def test_left_identity_failure():
 
 def test_bind_regular_result():
     """Ensures that regular ``Result`` can be bound to ``IOResult``."""
+
     def factory(inner_value: int) -> Result[int, str]:
         if inner_value > 0:
             return Success(inner_value + 1)
@@ -62,16 +66,16 @@ def test_bind_regular_result():
 
 def test_lash_success():
     """Ensures that lash works for IOSuccess container."""
+
     def factory(inner_value) -> IOResult[int, str]:
         return IOSuccess(inner_value * 2)
 
-    bound = IOSuccess(5).lash(factory)
-
-    assert bound == IOSuccess(5)
+    assert IOSuccess(5).lash(factory) == IOSuccess(5)
 
 
 def test_lash_failure():
     """Ensures that lash works for IOFailure container."""
+
     def factory(inner_value: int) -> IOResult[str, int]:
         return IOFailure(inner_value + 1)
 

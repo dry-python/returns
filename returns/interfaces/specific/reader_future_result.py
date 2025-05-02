@@ -1,15 +1,8 @@
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import (
-    TYPE_CHECKING,
-    Awaitable,
-    Callable,
-    ClassVar,
-    Sequence,
-    TypeVar,
-    final,
-)
+from collections.abc import Awaitable, Callable, Sequence
+from typing import TYPE_CHECKING, ClassVar, TypeVar, final
 
 from returns.interfaces.specific import future_result, reader, reader_ioresult
 from returns.primitives.asserts import assert_equal
@@ -88,7 +81,7 @@ class ReaderFutureResultLikeN(
     @classmethod
     @abstractmethod
     def from_future_result_context(
-        cls: type[_ReaderFutureResultLikeType],  # noqa: N805
+        cls: type[_ReaderFutureResultLikeType],
         inner_value: ReaderFutureResult[_ValueType, _ErrorType, _EnvType],
     ) -> KindN[_ReaderFutureResultLikeType, _ValueType, _ErrorType, _EnvType]:
         """Unit method to create new containers from ``ReaderFutureResult``."""
@@ -96,7 +89,9 @@ class ReaderFutureResultLikeN(
 
 #: Type alias for kinds with three type arguments.
 ReaderFutureResultLike3 = ReaderFutureResultLikeN[
-    _FirstType, _SecondType, _ThirdType,
+    _FirstType,
+    _SecondType,
+    _ThirdType,
 ]
 
 
@@ -112,14 +107,15 @@ class _LawSpec(LawSpecDef):
 
     @law_definition
     def asking_law(
-        container:
-            ReaderFutureResultBasedN[_FirstType, _SecondType, _ThirdType],
+        container: ReaderFutureResultBasedN[
+            _FirstType, _SecondType, _ThirdType
+        ],
         env: _ThirdType,
     ) -> None:
         """Asking for an env, always returns the env."""
         assert_equal(
-            container.ask().__call__(env),  # noqa: WPS609
-            container.from_value(env).__call__(env),  # noqa: WPS609
+            container.ask().__call__(env),  # noqa: PLC2801
+            container.from_value(env).__call__(env),  # noqa: PLC2801
         )
 
 
@@ -146,12 +142,12 @@ class ReaderFutureResultBasedN(
 
     __slots__ = ()
 
-    _laws: ClassVar[Sequence[Law]] = (
-        Law2(_LawSpec.asking_law),
-    )
+    _laws: ClassVar[Sequence[Law]] = (Law2(_LawSpec.asking_law),)
 
 
 #: Type alias for kinds with three type arguments.
 ReaderFutureResultBased3 = ReaderFutureResultBasedN[
-    _FirstType, _SecondType, _ThirdType,
+    _FirstType,
+    _SecondType,
+    _ThirdType,
 ]

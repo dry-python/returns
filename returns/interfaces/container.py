@@ -1,4 +1,5 @@
-from typing import Callable, ClassVar, Sequence, TypeVar, final
+from collections.abc import Callable, Sequence
+from typing import ClassVar, TypeVar, final
 
 from typing_extensions import Never
 
@@ -69,7 +70,7 @@ class _LawSpec(LawSpecDef):
         assert_equal(
             container,
             container.bind(
-                lambda inner: container.from_value(inner),
+                container.from_value,
             ),
         )
 
@@ -90,7 +91,7 @@ class _LawSpec(LawSpecDef):
 
         The final monad law says that when
         we have a chain of container functions applications with ``bind``,
-        it shouldn’t matter how they’re nested.
+        it shouldn't matter how they're nested.
         """
         assert_equal(
             container.bind(first).bind(second),

@@ -34,7 +34,7 @@ Let's say we have a function called ``add`` which is defined like this:
 And we have two containers: ``IO(2)`` and ``IO(3)``.
 How can we easily get ``IO(5)`` in this case?
 
-Luckily, ``IO`` defines :meth:`returns.io.IO.do` which can help us:
+Luckily, ``IO`` defines :meth:`~returns.io.IO.do` which can help us:
 
 .. code:: python
 
@@ -117,7 +117,7 @@ Why don't we allow mixing different container types?
 One might ask, why don't we allow mixing multiple container types
 in a single do-notation expression?
 
-For example, this code will not what you expect:
+For example, this code will not do what you expect:
 
 .. code:: python
 

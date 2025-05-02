@@ -1,5 +1,4 @@
 from inspect import getdoc
-from typing import List, Tuple
 
 import pytest
 
@@ -20,7 +19,7 @@ def test_immutable():
     """Check that arguments from previous calls are immutable."""
 
     @curry
-    def factory(arg: int, other: int) -> Tuple[int, int]:
+    def factory(arg: int, other: int) -> tuple[int, int]:
         return (arg, other)
 
     cached = factory(arg=1)
@@ -59,7 +58,7 @@ def test_two_args():
     """Ensures that it is possible to curry a function with two args."""
 
     @curry
-    def factory(arg: int, other: int) -> Tuple[int, int]:
+    def factory(arg: int, other: int) -> tuple[int, int]:
         return (arg, other)
 
     assert factory(1)(2) == (1, 2)
@@ -121,7 +120,7 @@ def test_star_kwargs():
     """Ensures that it is possible to curry a function with ``**kwargs``."""
 
     @curry
-    def factory(**kwargs: int) -> List[Tuple[str, int]]:
+    def factory(**kwargs: int) -> list[tuple[str, int]]:
         return sorted(kwargs.items())
 
     assert not factory()
@@ -141,8 +140,8 @@ def test_arg_star_kwargs():
     """The decorator should work with ``kwargs``."""
 
     @curry
-    def factory(first: int, **kwargs: int) -> List[Tuple[str, int]]:
-        return [('first', first)] + sorted(kwargs.items())
+    def factory(first: int, **kwargs: int) -> list[tuple[str, int]]:
+        return [('first', first), *sorted(kwargs.items())]
 
     assert factory(1) == [('first', 1)]
     assert factory(1, arg=2) == [('first', 1), ('arg', 2)]
@@ -168,13 +167,15 @@ def test_kwonly():
     """The decorator should work with kw-only args."""
 
     @curry
-    def factory(*args: int, by: int) -> Tuple[int, ...]:
-        return args + (by, )
+    def factory(*args: int, by: int) -> tuple[int, ...]:
+        return (*args, by)
 
     assert factory(
-        1, 2, 3,
+        1,
+        2,
+        3,
     )(by=10) == (1, 2, 3, 10)
-    assert factory(by=10) == (10, )
+    assert factory(by=10) == (10,)
 
 
 def test_raises():
