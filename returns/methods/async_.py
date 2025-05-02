@@ -1,6 +1,6 @@
 # flake8: noqa: WPS102
 
-from typing import Awaitable, Iterable
+from collections.abc import Awaitable, Iterable
 
 import anyio
 
@@ -8,9 +8,7 @@ from returns.io import IOResult
 
 
 async def gather(
-    containers: Iterable[
-        Awaitable,
-    ],
+    containers: Iterable[Awaitable,],
 ) -> tuple[IOResult, ...]:
     """
     Execute multiple coroutines concurrently and return their wrapped results.
