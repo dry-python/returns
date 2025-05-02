@@ -6,6 +6,13 @@ incremental in minor, bugfixes only are patches.
 See [0Ver](https://0ver.org/).
 
 
+## 0.26.0
+
+### Features
+
+- Add `returns.methods.gather` utility method
+
+
 ## 0.25.0
 
 ### Features
@@ -33,7 +40,6 @@ See [0Ver](https://0ver.org/).
 - Add partition function to result module. Issue #1905
 - Add `default_error` parameter to `returns.converters.maybe_to_result`,
   which provides a default error value for `Failure`
-- Add `returns.methods.gather` utility method
 
 
 ## 0.24.1
