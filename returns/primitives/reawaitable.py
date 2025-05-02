@@ -16,8 +16,8 @@ class AsyncLock(Protocol):
 AsyncContext = Literal["asyncio", "trio", "unknown"]
 
 
-# pragma: no cover
-def _is_anyio_available() -> bool:
+# Functions for detecting async context
+def _is_anyio_available() -> bool:  # pragma: no cover
     """Check if anyio is available.
 
     Returns:
@@ -30,8 +30,7 @@ def _is_anyio_available() -> bool:
     return True
 
 
-# pragma: no cover
-def _is_trio_available() -> bool:
+def _is_trio_available() -> bool:  # pragma: no cover
     """Check if trio is available.
 
     Returns:
@@ -40,7 +39,6 @@ def _is_trio_available() -> bool:
     if not _is_anyio_available():
         return False
 
-    # pragma: no cover
     try:
         import trio
     except ImportError:
