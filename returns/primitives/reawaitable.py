@@ -4,13 +4,11 @@ from typing import Literal, NewType, ParamSpec, Protocol, TypeVar, cast, final
 # Always import asyncio
 import asyncio
 
+# pragma: no cover
 class AsyncLock(Protocol):
     """A protocol for an asynchronous lock."""
-
     def __init__(self) -> None: ...
-
     async def __aenter__(self) -> None: ...
-
     async def __aexit__(self, exc_type, exc_val, exc_tb) -> None: ...
 
 
@@ -42,6 +40,7 @@ def _is_trio_available() -> bool:
     if not _is_anyio_available():
         return False
 
+    # pragma: no cover
     try:
         import trio
     except ImportError:

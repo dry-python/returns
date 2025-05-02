@@ -13,3 +13,7 @@ exclude_lines =
     if context == "trio" and has_anyio
     except RuntimeError:
     except Exception:
+    # Skip protocol definitions
+    def __init__
+    def __aenter__
+    def __aexit__
