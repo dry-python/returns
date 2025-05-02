@@ -18,31 +18,31 @@ class AsyncLock(Protocol):
 AsyncContext = Literal["asyncio", "trio", "unknown"]
 
 
-def _is_anyio_available() -> bool:
+def _is_anyio_available() -> bool:  # pragma: no cover
     """Check if anyio is available.
 
     Returns:
         bool: True if anyio is available
     """
     try:
-        import anyio  # pragma: no cover
-    except ImportError:  # pragma: no cover
+        import anyio
+    except ImportError:
         return False
     return True
 
 
-def _is_trio_available() -> bool:
+def _is_trio_available() -> bool:  # pragma: no cover
     """Check if trio is available.
 
     Returns:
         bool: True if trio is available
     """
     if not _is_anyio_available():
-        return False  # pragma: no cover
+        return False
 
     try:
-        import trio  # pragma: no cover
-    except ImportError:  # pragma: no cover
+        import trio
+    except ImportError:
         return False
     return True
 
@@ -58,8 +58,8 @@ def _is_in_trio_context() -> bool:
     Returns:
         bool: True if we're in a trio context
     """
-    if not has_trio:
-        return False  # pragma: no cover
+    if not has_trio:  # pragma: no cover
+        return False
         
     # Import trio here since we already checked it's available
     import trio
@@ -79,14 +79,11 @@ def detect_async_context() -> AsyncContext:
     Returns:
         AsyncContext: The current async context type
     """
-    if not has_anyio:  # pragma: no cover
+    # This branch is only taken when anyio is not installed
+    if not has_anyio or not _is_in_trio_context():  # pragma: no cover
         return "asyncio"
 
-    if _is_in_trio_context():
-        return "trio"
-
-    # Default to asyncio
-    return "asyncio"
+    return "trio"
 
 
 _ValueType = TypeVar('_ValueType')
@@ -195,13 +192,13 @@ class ReAwaitable:
         """Create the appropriate lock based on the current async context."""
         context = detect_async_context()
 
-        if context == "trio" and has_anyio:
+        if context == "trio" and has_anyio:  # pragma: no cover
             try:
                 import anyio
-            except Exception:  # pragma: no cover
+            except Exception:
                 # Just continue to asyncio if anyio import fails
-                return asyncio.Lock()  # pragma: no cover
-            return anyio.Lock()  # pragma: no cover
+                return asyncio.Lock()
+            return anyio.Lock()
                 
         # For asyncio or unknown contexts
         return asyncio.Lock()
@@ -217,12 +214,11 @@ class ReAwaitable:
                 if self._cache is _sentinel:
                     self._cache = await self._coro
                 return self._cache  # type: ignore
-        except RuntimeError:
+        except RuntimeError:  # pragma: no cover
             # Fallback for when running in asyncio context with trio detection
             if self._cache is _sentinel:
                 self._cache = await self._coro
             return self._cache  # type: ignore
-# pragma: no cover
 
 
 def reawaitable(
