@@ -18,7 +18,8 @@ class AsyncLock(Protocol):
 AsyncContext = Literal["asyncio", "trio", "unknown"]
 
 
-def _is_anyio_available() -> bool:  # pragma: no cover
+# pragma: no cover
+def _is_anyio_available() -> bool:
     """Check if anyio is available.
 
     Returns:
@@ -31,7 +32,8 @@ def _is_anyio_available() -> bool:  # pragma: no cover
     return True
 
 
-def _is_trio_available() -> bool:  # pragma: no cover
+# pragma: no cover
+def _is_trio_available() -> bool:
     """Check if trio is available.
 
     Returns:
@@ -81,7 +83,7 @@ def detect_async_context() -> AsyncContext:
         AsyncContext: The current async context type
     """
     # This branch is only taken when anyio is not installed
-    if not has_anyio or not _is_in_trio_context():  # pragma: no cover
+    if not has_anyio or not _is_in_trio_context():
         return "asyncio"
 
     return "trio"
@@ -193,7 +195,7 @@ class ReAwaitable:
         """Create the appropriate lock based on the current async context."""
         context = detect_async_context()
 
-        if context == "trio" and has_anyio:  # pragma: no cover
+        if context == "trio" and has_anyio:
             try:
                 import anyio
             except Exception:

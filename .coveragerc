@@ -1,0 +1,15 @@
+[run]
+omit = 
+    returns/contrib/mypy/*
+    returns/contrib/pytest/*.py
+    returns/contrib/hypothesis/*
+
+[report]
+exclude_lines =
+    pragma: no cover
+    # Skip any-related code for trio/asyncio:
+    if not has_anyio
+    if not has_trio
+    if context == "trio" and has_anyio
+    except RuntimeError:
+    except Exception:
