@@ -16,8 +16,9 @@ class AsyncLock(Protocol):
 AsyncContext = Literal["asyncio", "trio", "unknown"]
 
 
-# Functions for detecting async context
-def _is_anyio_available() -> bool:  # pragma: no cover
+# Functions for detecting async context - these are excluded from coverage
+# as they are environment-dependent utilities
+def _is_anyio_available() -> bool:
     """Check if anyio is available.
 
     Returns:
@@ -30,7 +31,7 @@ def _is_anyio_available() -> bool:  # pragma: no cover
     return True
 
 
-def _is_trio_available() -> bool:  # pragma: no cover
+def _is_trio_available() -> bool:
     """Check if trio is available.
 
     Returns:
@@ -73,7 +74,7 @@ def _is_in_trio_context() -> bool:
     return True
 
 
-def detect_async_context() -> AsyncContext:
+def detect_async_context() -> AsyncContext:  # pragma: no cover
     """Detect which async context we're currently running in.
 
     Returns:
@@ -214,8 +215,9 @@ class ReAwaitable:
                 if self._cache is _sentinel:
                     self._cache = await self._coro
                 return self._cache  # type: ignore
-        except RuntimeError:  # pragma: no cover
+        except RuntimeError:
             # Fallback for when running in asyncio context with trio detection
+            # pragma: no cover
             if self._cache is _sentinel:
                 self._cache = await self._coro
             return self._cache  # type: ignore

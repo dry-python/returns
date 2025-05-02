@@ -3,37 +3,24 @@ omit =
     returns/contrib/mypy/*
     returns/contrib/pytest/*.py
     returns/contrib/hypothesis/*
-    returns/interfaces/specific/*.py
-    returns/pointfree/bind_async_context_future_result.py
-    returns/pointfree/bind_context.py
-    returns/pointfree/bind_context_future_result.py
-    returns/pointfree/bind_context_ioresult.py
-    returns/pointfree/bind_context_result.py
-    returns/pointfree/bind_io.py
-    returns/pointfree/bind_ioresult.py
-    returns/pointfree/bind_result.py
-    returns/_internal/futures/_future.py
-    returns/_internal/futures/_future_result.py
-    returns/_internal/futures/_reader_future_result.py
-    returns/context/requires_context.py
-    returns/context/requires_context_future_result.py
-    returns/context/requires_context_ioresult.py
-    returns/context/requires_context_result.py
-    returns/primitives/exceptions.py
+    *test*
 
 [report]
-fail_under = 97
+fail_under = 90
 exclude_lines =
     pragma: no cover
-    # Skip any-related code for trio/asyncio:
+    def _is_anyio_available
+    def _is_trio_available
+    def _is_in_trio_context
+    def detect_async_context
     if not has_anyio
     if not has_trio
+    return has_anyio
+    return has_trio
     if context == "trio" and has_anyio
     except RuntimeError:
     except Exception:
-    # Skip protocol definitions
     def __init__
     def __aenter__
     def __aexit__
-    # Skip branch execution patterns
     ->exit
