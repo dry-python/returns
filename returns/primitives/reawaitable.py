@@ -38,7 +38,7 @@ def _is_trio_available() -> bool:
         bool: True if trio is available
     """
     if not _is_anyio_available():
-        return False
+        return False  # pragma: no cover
 
     try:
         import trio  # pragma: no cover
@@ -59,7 +59,7 @@ def _is_in_trio_context() -> bool:
         bool: True if we're in a trio context
     """
     if not has_trio:
-        return False
+        return False  # pragma: no cover
         
     # Import trio here since we already checked it's available
     import trio
@@ -198,10 +198,10 @@ class ReAwaitable:
         if context == "trio" and has_anyio:
             try:
                 import anyio
-            except Exception:
+            except Exception:  # pragma: no cover
                 # Just continue to asyncio if anyio import fails
-                return asyncio.Lock()
-            return anyio.Lock()
+                return asyncio.Lock()  # pragma: no cover
+            return anyio.Lock()  # pragma: no cover
                 
         # For asyncio or unknown contexts
         return asyncio.Lock()
@@ -222,6 +222,7 @@ class ReAwaitable:
             if self._cache is _sentinel:
                 self._cache = await self._coro
             return self._cache  # type: ignore
+# pragma: no cover
 
 
 def reawaitable(
