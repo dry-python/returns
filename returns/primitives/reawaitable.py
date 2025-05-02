@@ -58,7 +58,8 @@ def _is_in_trio_context() -> bool:
     Returns:
         bool: True if we're in a trio context
     """
-    if not has_trio:  # pragma: no cover
+    # Early return if trio is not available
+    if not has_trio:
         return False
         
     # Import trio here since we already checked it's available
