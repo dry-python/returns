@@ -1,5 +1,5 @@
 [run]
-omit = 
+omit =
     returns/contrib/mypy/*
     returns/contrib/pytest/*.py
     returns/contrib/hypothesis/*

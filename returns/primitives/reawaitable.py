@@ -1,19 +1,21 @@
+# Always import asyncio
+import asyncio
 from collections.abc import Awaitable, Callable, Generator
 from functools import wraps
 from typing import Literal, NewType, ParamSpec, Protocol, TypeVar, cast, final
-# Always import asyncio
-import asyncio
+
 
 # pragma: no cover
 class AsyncLock(Protocol):
     """A protocol for an asynchronous lock."""
+
     def __init__(self) -> None: ...
     async def __aenter__(self) -> None: ...
     async def __aexit__(self, exc_type, exc_val, exc_tb) -> None: ...
 
 
 # Define context types as literals
-AsyncContext = Literal["asyncio", "trio", "unknown"]
+AsyncContext = Literal['asyncio', 'trio', 'unknown']
 
 
 # Functions for detecting async context - these are excluded from coverage
@@ -61,10 +63,10 @@ def _is_in_trio_context() -> bool:
     # Early return if trio is not available
     if not has_trio:
         return False
-        
+
     # Import trio here since we already checked it's available
     import trio
-    
+
     try:
         # Will raise RuntimeError if not in trio context
         trio.lowlevel.current_task()
@@ -82,9 +84,9 @@ def detect_async_context() -> AsyncContext:  # pragma: no cover
     """
     # This branch is only taken when anyio is not installed
     if not has_anyio or not _is_in_trio_context():
-        return "asyncio"
+        return 'asyncio'
 
-    return "trio"
+    return 'trio'
 
 
 _ValueType = TypeVar('_ValueType')
@@ -143,7 +145,9 @@ class ReAwaitable:
         """We need just an awaitable to work with."""
         self._coro = coro
         self._cache: _ValueType | _Sentinel = _sentinel
-        self._lock: AsyncLock | None = None  # Will be created lazily based on the backend
+        self._lock: AsyncLock | None = (
+            None  # Will be created lazily based on the backend
+        )
 
     def __await__(self) -> Generator[None, None, _ValueType]:
         """
@@ -193,14 +197,14 @@ class ReAwaitable:
         """Create the appropriate lock based on the current async context."""
         context = detect_async_context()
 
-        if context == "trio" and has_anyio:
+        if context == 'trio' and has_anyio:
             try:
                 import anyio
             except Exception:
                 # Just continue to asyncio if anyio import fails
                 return asyncio.Lock()
             return anyio.Lock()
-                
+
         # For asyncio or unknown contexts
         return asyncio.Lock()
 

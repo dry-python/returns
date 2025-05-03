@@ -1,10 +1,9 @@
 import pytest
-import anyio
 
 from returns.primitives.reawaitable import (
     ReAwaitable,
-    detect_async_context,
     _is_in_trio_context,
+    detect_async_context,
 )
 
 
