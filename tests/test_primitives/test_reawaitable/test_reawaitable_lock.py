@@ -14,24 +14,27 @@ async def _test_coro() -> str:
 
 
 @pytest.mark.anyio
-async def test_reawaitable_create_lock():
-    """Test that ReAwaitable correctly creates the lock when needed."""
-    # Create ReAwaitable instance
+async def test_reawaitable_lock_none_initially():
+    """Test that ReAwaitable has no lock initially."""
     reawait = ReAwaitable(_test_coro())
-    
-    # The lock should be None initially
     assert reawait._lock is None
-    
-    # Await the coroutine once
-    result1 = await reawait
-    
-    # The lock should be created
+
+
+@pytest.mark.anyio
+async def test_reawaitable_creates_lock():
+    """Test that ReAwaitable creates lock after first await."""
+    reawait = ReAwaitable(_test_coro())
+    await reawait
     assert reawait._lock is not None
-    assert result1 == 'test'
-    
-    # Await again, should use the same lock
-    result2 = await reawait
-    assert result2 == 'test'
+
+
+@pytest.mark.anyio
+async def test_reawait_twice():
+    """Test awaiting the same ReAwaitable twice."""
+    reawait = ReAwaitable(_test_coro())
+    first: str = await reawait
+    second: str = await reawait
+    assert first == second == 'test'
 
 
 @pytest.mark.anyio
@@ -47,6 +50,6 @@ async def test_is_in_trio_context():
     """Test trio context detection."""
     # Since we might be running in either context,
     # we just check the function runs without errors
-    result = _is_in_trio_context()
+    result: bool = _is_in_trio_context()
     # Result will depend on which backend anyio is using
     assert isinstance(result, bool)

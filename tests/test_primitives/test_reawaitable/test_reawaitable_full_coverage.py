@@ -22,7 +22,7 @@ async def test_reawaitable_lock_creation():
     assert instance._lock is None
     
     # Await to trigger lock creation
-    result = await instance
+    result: str = await instance
     assert result == 'value'
     
     # Verify lock is created
