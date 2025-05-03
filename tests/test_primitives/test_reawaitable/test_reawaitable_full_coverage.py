@@ -7,14 +7,16 @@ from returns.primitives.reawaitable import (
 )
 
 
+async def _test_coro() -> str:
+    """Test coroutine for ReAwaitable tests."""
+    return 'value'
+
+
 @pytest.mark.anyio
 async def test_reawaitable_lock_creation():
     """Test the _create_lock method for different contexts."""
-    async def sample_coro() -> str:
-        return 'value'
-    
     # Create a ReAwaitable instance
-    instance = ReAwaitable(sample_coro())
+    instance = ReAwaitable(_test_coro())
     
     # Test the lock is initially None
     assert instance._lock is None
@@ -31,16 +33,17 @@ async def test_reawaitable_lock_creation():
 # We're relying on pragmas now for this purpose
 
 
+@reawaitable
+async def _test_multiply(num: int) -> int:
+    """Test coroutine for decorator tests."""
+    return num * 2
+
+
 @pytest.mark.anyio
 async def test_reawaitable_decorator():
     """Test the reawaitable decorator."""
-    # Define a test coroutine
-    @reawaitable
-    async def test_func(value: int) -> int:
-        return value * 2
-    
     # Call the decorated function
-    result = test_func(5)
+    result = _test_multiply(5)
     
     # Verify it can be awaited multiple times
     assert await result == 10

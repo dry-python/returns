@@ -8,14 +8,16 @@ from returns.primitives.reawaitable import (
 )
 
 
+async def _test_coro() -> str:
+    """Test coroutine for ReAwaitable tests."""
+    return 'test'
+
+
 @pytest.mark.anyio
 async def test_reawaitable_create_lock():
     """Test that ReAwaitable correctly creates the lock when needed."""
-    async def sample_coroutine() -> str:
-        return 'test'
-    
     # Create ReAwaitable instance
-    reawait = ReAwaitable(sample_coroutine())
+    reawait = ReAwaitable(_test_coro())
     
     # The lock should be None initially
     assert reawait._lock is None
