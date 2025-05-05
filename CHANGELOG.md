@@ -6,6 +6,13 @@ incremental in minor, bugfixes only are patches.
 See [0Ver](https://0ver.org/).
 
 
+## 0.26.0
+
+### Features
+
+- Add `returns.methods.gather` utility method
+
+
 ## 0.25.0
 
 ### Features
