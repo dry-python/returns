@@ -185,6 +185,7 @@ lint.per-file-ignores."tests/test_examples/test_maybe/test_maybe_pattern_matchin
 ]
 lint.per-file-ignores."tests/test_examples/test_result/test_result_pattern_matching.py" = [ "D103" ]
 lint.per-file-ignores."tests/test_pattern_matching.py" = [ "S101" ]
+lint.per-file-ignores."typesafety/test_curry/test_partial/test_partial.py" = [ "S101" ]
 lint.external = [ "WPS" ]
 lint.flake8-quotes.inline-quotes = "single"
 lint.mccabe.max-complexity = 6
