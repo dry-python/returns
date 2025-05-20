@@ -42,6 +42,21 @@
     reveal_type(test)  # N: Revealed type is "def (first: builtins.int, second: Union[builtins.str, None] =, *, kw: builtins.bool =) -> returns.future.FutureResult[builtins.int, builtins.ValueError]"
 
 
+- case: future_safe_decorator_with_pos_params_add_note
+  disable_cache: false
+  main: |
+    from typing import Optional
+    from returns.future import future_safe
+
+    @future_safe((ValueError,), add_note_on_failure=True)
+    async def test(
+         first: int, second: Optional[str] = None, *, kw: bool = True,
+    ) -> int:
+        return 1
+
+    reveal_type(test)  # N: Revealed type is "def (first: builtins.int, second: Union[builtins.str, None] =, *, kw: builtins.bool =) -> returns.future.FutureResult[builtins.int, builtins.ValueError]"
+
+
 - case: future_safe_decorator_with_named_params
   disable_cache: false
   main: |
