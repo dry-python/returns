@@ -1,4 +1,5 @@
 from collections.abc import Sequence
+from importlib.metadata import version
 from types import MappingProxyType
 from typing import Any, Final, Literal, overload
 
@@ -6,7 +7,6 @@ from mypy.checkmember import analyze_member_access
 from mypy.nodes import ARG_NAMED, ARG_OPT
 from mypy.types import CallableType, FunctionLike, ProperType, get_proper_type
 from mypy.types import Type as MypyType
-from mypy.version import __version__ as mypy_version
 
 from returns.contrib.mypy._structures.args import FuncArg
 from returns.contrib.mypy._structures.types import CallableContext
@@ -119,6 +119,7 @@ def translate_to_function(
     """
     checker = ctx.api.expr_checker  # type: ignore
 
+    mypy_version = version('mypy')
     mypy_version_tuple = tuple(
         map(int, mypy_version.partition('+')[0].split('.'))
     )
