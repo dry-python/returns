@@ -1,5 +1,6 @@
 from collections.abc import Sequence
 from enum import Enum, unique
+from importlib.metadata import version
 from typing import Any
 
 from mypy.checkmember import analyze_member_access
@@ -22,7 +23,6 @@ from mypy.types import (
     get_proper_type,
 )
 from mypy.types import Type as MypyType
-from mypy.version import __version__ as mypy_version
 
 from returns.contrib.mypy._typeops.fallback import asserts_fallback_to_any
 from returns.contrib.mypy._typeops.visitor import translate_kind_instance
@@ -64,6 +64,7 @@ def attribute_access(ctx: AttributeContext) -> MypyType:
         return ctx.default_attr_type
 
     exprchecker = ctx.api.expr_checker  # type: ignore
+    mypy_version = version('mypy')
     mypy_version_tuple = tuple(
         map(int, mypy_version.partition('+')[0].split('.'))
     )
