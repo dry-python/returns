@@ -120,8 +120,8 @@ class _Wrapper(
 def _callable_strategy(
     arg1: type[object], arg2: type[object]
 ) -> StrategyFactory[Callable]:
-    type_arg1 = int if arg1 == Any else arg1  # type: ignore[comparison-overlap]
-    type_arg2 = int if arg2 == Any else arg2  # type: ignore[comparison-overlap]
+    type_arg1 = int if arg1 == Any else arg1
+    type_arg2 = int if arg2 == Any else arg2
     return_results = st.functions(
         pure=True,
         returns=strategy_from_container(Result)(Result[type_arg1, type_arg2]),  # type: ignore[valid-type]

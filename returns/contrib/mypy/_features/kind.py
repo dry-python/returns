@@ -1,5 +1,6 @@
 from collections.abc import Sequence
 from enum import Enum, unique
+from typing import Any
 
 from mypy.checkmember import analyze_member_access
 from mypy.plugin import (
@@ -21,6 +22,7 @@ from mypy.types import (
     get_proper_type,
 )
 from mypy.types import Type as MypyType
+from mypy.version import __version__ as mypy_version
 
 from returns.contrib.mypy._typeops.fallback import asserts_fallback_to_any
 from returns.contrib.mypy._typeops.visitor import translate_kind_instance
@@ -62,6 +64,13 @@ def attribute_access(ctx: AttributeContext) -> MypyType:
         return ctx.default_attr_type
 
     exprchecker = ctx.api.expr_checker  # type: ignore
+    mypy_version_tuple = tuple(
+        map(int, mypy_version.partition('+')[0].split('.'))
+    )
+
+    extra_kwargs: dict[str, Any] = {}
+    if mypy_version_tuple < (1, 16):
+        extra_kwargs['msg'] = ctx.api.msg
     return analyze_member_access(
         ctx.context.name,  # type: ignore
         accessed,
@@ -69,10 +78,10 @@ def attribute_access(ctx: AttributeContext) -> MypyType:
         is_lvalue=False,
         is_super=False,
         is_operator=False,
-        msg=ctx.api.msg,
         original_type=instance,
         chk=ctx.api,  # type: ignore
         in_literal_context=exprchecker.is_literal_context(),
+        **extra_kwargs,
     )
 
 
