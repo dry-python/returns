@@ -56,7 +56,7 @@ def test_immutability_failure():
         Nothing.missing = 2
 
     with pytest.raises(ImmutableStateError):
-        del Nothing._inner_state  # type: ignore # noqa: SLF001, WPS420
+        del Nothing._inner_state  # type: ignore # noqa: WPS420, SLF001
 
     with pytest.raises(AttributeError):
         Nothing.missing  # type: ignore # noqa: B018
@@ -71,7 +71,7 @@ def test_immutability_success():
         Some(1).missing = 2
 
     with pytest.raises(ImmutableStateError):
-        del Some(0)._inner_state  # type: ignore # noqa: SLF001, WPS420
+        del Some(0)._inner_state  # type: ignore # noqa: WPS420, SLF001
 
     with pytest.raises(AttributeError):
         Some(1).missing  # type: ignore # noqa: B018
