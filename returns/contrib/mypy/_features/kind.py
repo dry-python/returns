@@ -69,7 +69,7 @@ def attribute_access(ctx: AttributeContext) -> MypyType:
         is_lvalue=False,
         is_super=False,
         is_operator=False,
-        msg=ctx.api.msg,
+        msg=exprchecker.msg,
         original_type=instance,
         chk=ctx.api,  # type: ignore
         in_literal_context=exprchecker.is_literal_context(),
