@@ -6,6 +6,13 @@ incremental in minor, bugfixes only are patches.
 See [0Ver](https://0ver.org/).
 
 
+## 0.25.1
+
+### Bugfixes
+
+- Adds lock to `ReAwaitable` to safely handle multiple concurrent awaits on the same instance
+
+
 ## 0.25.0
 
 ### Features
