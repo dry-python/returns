@@ -1,6 +1,6 @@
 [build-system]
 build-backend = "poetry.core.masonry.api"
-requires = ["poetry-core>=2"]
+requires = [ "poetry-core>=2" ]
 
 [tool.poetry]
 name = "returns"
@@ -8,7 +8,7 @@ version = "0.25.0"
 description = "Make your functions return something meaningful, typed, and safe!"
 license = "BSD-3-Clause"
 
-authors = ["sobolevn <mail@sobolevn.me>"]
+authors = [ "sobolevn <mail@sobolevn.me>" ]
 
 readme = "README.md"
 
@@ -85,8 +85,8 @@ myst-parser = "^4.0"
 tomli = "^2.0"
 
 [tool.poetry.extras]
-compatible-mypy = ["mypy"]
-check-laws = ["pytest", "hypothesis"]
+compatible-mypy = [ "mypy" ]
+check-laws = [ "pytest", "hypothesis" ]
 
 [tool.ruff]
 # Ruff config: https://docs.astral.sh/ruff/settings
@@ -157,16 +157,16 @@ lint.ignore = [
   "PLR6301", # do not require classmethod / staticmethod when self not used
   "TRY003",  # long exception messages from `tryceratops`
 ]
-lint.per-file-ignores."*.pyi" = ["D103"]
-lint.per-file-ignores."returns/context/__init__.py" = ["F401", "PLC0414"]
-lint.per-file-ignores."returns/contrib/mypy/*.py" = ["S101"]
-lint.per-file-ignores."returns/contrib/mypy/_typeops/visitor.py" = ["S101"]
-lint.per-file-ignores."returns/contrib/pytest/__init__.py" = ["F401", "PLC0414"]
-lint.per-file-ignores."returns/interfaces/*.py" = ["S101"]
-lint.per-file-ignores."returns/methods/__init__.py" = ["F401", "PLC0414"]
-lint.per-file-ignores."returns/pipeline.py" = ["F401", "PLC0414"]
-lint.per-file-ignores."returns/pointfree/__init__.py" = ["F401", "PLC0414"]
-lint.per-file-ignores."returns/primitives/asserts.py" = ["S101"]
+lint.per-file-ignores."*.pyi" = [ "D103" ]
+lint.per-file-ignores."returns/context/__init__.py" = [ "F401", "PLC0414" ]
+lint.per-file-ignores."returns/contrib/mypy/*.py" = [ "S101" ]
+lint.per-file-ignores."returns/contrib/mypy/_typeops/visitor.py" = [ "S101" ]
+lint.per-file-ignores."returns/contrib/pytest/__init__.py" = [ "F401", "PLC0414" ]
+lint.per-file-ignores."returns/interfaces/*.py" = [ "S101" ]
+lint.per-file-ignores."returns/methods/__init__.py" = [ "F401", "PLC0414" ]
+lint.per-file-ignores."returns/pipeline.py" = [ "F401", "PLC0414" ]
+lint.per-file-ignores."returns/pointfree/__init__.py" = [ "F401", "PLC0414" ]
+lint.per-file-ignores."returns/primitives/asserts.py" = [ "S101" ]
 lint.per-file-ignores."tests/*.py" = [
   "RUF029", # allow async functions to not use `await`
   "S101",   # asserts
@@ -175,7 +175,7 @@ lint.per-file-ignores."tests/*.py" = [
   "S603",   # do not require `shell=True`
   "S607",   # partial executable paths
 ]
-lint.per-file-ignores."tests/test_examples/*" = ["D102"]
+lint.per-file-ignores."tests/test_examples/*" = [ "D102" ]
 lint.per-file-ignores."tests/test_examples/test_maybe/test_maybe_pattern_matching.py" = [
   "D101",
   "D103",
@@ -184,11 +184,11 @@ lint.per-file-ignores."tests/test_examples/test_maybe/test_maybe_pattern_matchin
 lint.per-file-ignores."tests/test_examples/test_result/test_result_pattern_matching.py" = [
   "D103",
 ]
-lint.per-file-ignores."tests/test_pattern_matching.py" = ["S101"]
-lint.external = ["WPS"]
+lint.per-file-ignores."tests/test_pattern_matching.py" = [ "S101" ]
+lint.external = [ "WPS" ]
 lint.flake8-quotes.inline-quotes = "single"
 lint.mccabe.max-complexity = 6
-lint.pep8-naming.staticmethod-decorators = ["law_definition", "staticmethod"]
+lint.pep8-naming.staticmethod-decorators = [ "law_definition", "staticmethod" ]
 lint.pydocstyle.convention = "google"
 
 [tool.slotscheck]
