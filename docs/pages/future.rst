@@ -69,6 +69,17 @@ its result to ``IO``-based containers.
 This helps a lot when separating pure and impure
 (async functions are impure) code inside your app.
 
+.. note::
+  ``Future`` containers can be awaited multiple times and support concurrent
+  awaits from multiple async tasks. This is achieved through an internal
+  caching mechanism that ensures the underlying coroutine is only executed
+  once, while all subsequent or concurrent awaits receive the cached result.
+  This makes ``Future`` containers safe to use in complex async workflows
+  where the same future might be awaited from different parts of your code.
+
+  The implementation supports multiple async frameworks including asyncio,
+  trio, and anyio, with automatic framework detection and fallback support.
+
 
 FutureResult
 ------------
