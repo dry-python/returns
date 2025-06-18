@@ -65,7 +65,7 @@ httpx = "^0.28"
 wemake-python-styleguide = "^1.0"
 codespell = "^2.2"
 slotscheck = "^0.19"
-ruff = "^0.11"
+ruff = ">=0.11,<0.13"
 
 pytest-cov = "^6.0"
 pytest-randomly = "^3.12"
