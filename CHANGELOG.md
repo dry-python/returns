@@ -6,6 +6,13 @@ incremental in minor, bugfixes only are patches.
 See [0Ver](https://0ver.org/).
 
 
+## Unreleased
+
+### Bugfixes
+
+- Fixes that `ReAwaitable` does not support concurrent await calls. Issue #2108
+
+
 ## 0.25.0
 
 ### Features

@@ -73,6 +73,7 @@ pytest-mypy-plugins = "^3.1"
 pytest-subtests = "^0.14"
 pytest-shard = "^0.1"
 covdefaults = "^2.3"
+pytest-asyncio = "^1.0.0"
 
 [tool.poetry.group.docs]
 optional = true
