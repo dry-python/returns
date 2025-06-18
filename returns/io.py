@@ -8,7 +8,10 @@ from typing_extensions import ParamSpec
 
 from returns.interfaces.specific import io, ioresult
 from returns.primitives.container import BaseContainer, container_equality
-from returns.primitives.exceptions import UnwrapFailedError
+from returns.primitives.exceptions import (
+    UnwrapFailedError,
+    add_note_to_exception,
+)
 from returns.primitives.hkt import (
     Kind1,
     Kind2,
@@ -905,16 +908,19 @@ def impure_safe(
 @overload
 def impure_safe(
     exceptions: tuple[type[_ExceptionType], ...],
+    add_note_on_failure: bool | str = False,
 ) -> Callable[
     [Callable[_FuncParams, _NewValueType]],
     Callable[_FuncParams, IOResult[_NewValueType, _ExceptionType]],
 ]: ...
 
 
+# add_note_on_failure is optional for backwards compatibility.
 def impure_safe(  # noqa: WPS234
     exceptions: (
         Callable[_FuncParams, _NewValueType] | tuple[type[_ExceptionType], ...]
     ),
+    add_note_on_failure: bool | str = False,
 ) -> (
     Callable[_FuncParams, IOResultE[_NewValueType]]
     | Callable[
@@ -960,6 +966,33 @@ def impure_safe(  # noqa: WPS234
     In this case, only exceptions that are explicitly
     listed are going to be caught.
 
+    In order to add a note to the exception, you can use the
+    ``add_note_on_failure`` argument. It can be a string or a boolean value.
+    Either way, a generic note will be added to the exception that calls out
+    the file, line number, and function name where the error occured. If a
+    string is provided, it will be added as an additional note to the
+    exception.
+
+    This feature can help with logging and debugging.
+
+    Note that if you use this option, you must provide a tuple of exception
+    types as the first argument.
+
+    Note that passing a blank string to ``add_note_on_failure`` will be treated
+    the same as passing False, and will not add a note.
+
+    .. code:: python
+
+      >>> from returns.io import impure_safe
+
+      >>> @impure_safe((Exception,), add_note_on_failure=True)
+      ... def error_throwing_function() -> None:
+      ...     raise ValueError("This is an error!")
+
+      >>> @impure_safe((Exception,), add_note_on_failure="A custom message")
+      ... def error_throwing_function() -> None:
+      ...     raise ValueError("This is an error!")
+
     Similar to :func:`returns.future.future_safe`
     and :func:`returns.result.safe` decorators.
     """
@@ -976,6 +1009,11 @@ def impure_safe(  # noqa: WPS234
             try:
                 return IOSuccess(inner_function(*args, **kwargs))
             except inner_exceptions as exc:
+                exc = add_note_to_exception(
+                    exc,
+                    add_note_on_failure,
+                    inner_function,
+                )
                 return IOFailure(exc)
 
         return decorator

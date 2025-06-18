@@ -16,7 +16,10 @@ from returns.interfaces.specific.future import FutureBased1
 from returns.interfaces.specific.future_result import FutureResultBased2
 from returns.io import IO, IOResult
 from returns.primitives.container import BaseContainer
-from returns.primitives.exceptions import UnwrapFailedError
+from returns.primitives.exceptions import (
+    UnwrapFailedError,
+    add_note_to_exception,
+)
 from returns.primitives.hkt import (
     Kind1,
     Kind2,
@@ -1342,7 +1345,7 @@ class FutureResult(  # type: ignore[type-var]
           >>> anyio.run(main)
 
         """
-        return FutureResult.from_value(inner_value._inner_value)  # noqa: SLF001
+        return FutureResult.from_value(inner_value._inner_value)
 
     @classmethod
     def from_failed_io(
@@ -1366,7 +1369,7 @@ class FutureResult(  # type: ignore[type-var]
           >>> anyio.run(main)
 
         """
-        return FutureResult.from_failure(inner_value._inner_value)  # noqa: SLF001
+        return FutureResult.from_failure(inner_value._inner_value)
 
     @classmethod
     def from_ioresult(
@@ -1393,7 +1396,7 @@ class FutureResult(  # type: ignore[type-var]
           >>> anyio.run(main)
 
         """
-        return FutureResult(async_identity(inner_value._inner_value))  # noqa: SLF001
+        return FutureResult(async_identity(inner_value._inner_value))
 
     @classmethod
     def from_result(
@@ -1537,6 +1540,7 @@ def future_safe(
 @overload
 def future_safe(
     exceptions: tuple[type[_ExceptionType], ...],
+    add_note_on_failure: bool | str = False,
 ) -> Callable[
     [
         Callable[
@@ -1548,6 +1552,7 @@ def future_safe(
 ]: ...
 
 
+# add_note_on_failure is optional for backwards compatibility.
 def future_safe(  # noqa: WPS212, WPS234,
     exceptions: (
         Callable[
@@ -1556,6 +1561,7 @@ def future_safe(  # noqa: WPS212, WPS234,
         ]
         | tuple[type[_ExceptionType], ...]
     ),
+    add_note_on_failure: bool | str = False,
 ) -> (
     Callable[_FuncParams, FutureResultE[_ValueType_co]]
     | Callable[
@@ -1615,6 +1621,33 @@ def future_safe(  # noqa: WPS212, WPS234,
     In this case, only exceptions that are explicitly
     listed are going to be caught.
 
+    In order to add a note to the exception, you can use the
+    ``add_note_on_failure`` argument. It can be a string or a boolean value.
+    Either way, a generic note will be added to the exception that calls out
+    the file, line number, and function name where the error occured. If a
+    string is provided, it will be added as an additional note to the
+    exception.
+
+    This feature can help with logging and debugging.
+
+    Note that if you use this option, you must provide a tuple of exception
+    types as the first argument.
+
+    Note that passing a blank string to ``add_note_on_failure`` will be treated
+    the same as passing False, and will not add a note.
+
+    .. code:: python
+
+      >>> from returns.future import future_safe
+
+      >>> @future_safe((Exception,), add_note_on_failure=True)
+      ... def error_throwing_function() -> None:
+      ...     raise ValueError("This is an error!")
+
+      >>> @future_safe((Exception,), add_note_on_failure="A custom message")
+      ... def error_throwing_function() -> None:
+      ...     raise ValueError("This is an error!")
+
     Similar to :func:`returns.io.impure_safe` and :func:`returns.result.safe`
     decorators, but works with ``async`` functions.
 
@@ -1634,6 +1667,7 @@ def future_safe(  # noqa: WPS212, WPS234,
             try:
                 return Success(await function(*args, **kwargs))
             except inner_exceptions as exc:
+                exc = add_note_to_exception(exc, add_note_on_failure, function)
                 return Failure(exc)
 
         @wraps(function)
