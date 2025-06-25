@@ -443,7 +443,8 @@ class Some(Maybe[_ValueType_co]):
         raise UnwrapFailedError(self)
 
     def __bool__(self):
-        """Returns ``True```. Any instance of ``Something`` is treated as ``True``, even ``Something(None)``"""
+        """Returns ``True```. Any instance of ``Something`` is treated 
+        as ``True``, even ``Something(None)``."""
         return True
 
 
