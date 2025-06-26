@@ -444,8 +444,8 @@ class Some(Maybe[_ValueType_co]):
 
     def __bool__(self):
         """
-        Returns ``True```. 
-        
+        Returns ``True```.
+
         Any instance of ``Something`` is treated
         as ``True``, even ``Something(None)``.
         """
