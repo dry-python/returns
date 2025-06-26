@@ -12,8 +12,9 @@ def test_nothing_is_false() -> None:
     assert not bool(Nothing)
 
 
-def test_some_none_is_true():
-    """Ensures that ``Something(None)`` is ``True`` when treated as a boolean.
+def test_some_none_is_true() -> None:
+    """
+    Ensures that ``Something(None)`` is ``True`` when treated as a boolean.
 
     See <https://github.com/dry-python/returns/issues/2177> for the discussion
     of this design choice.
