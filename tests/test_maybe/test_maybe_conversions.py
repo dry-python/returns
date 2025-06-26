@@ -1,7 +1,7 @@
 from returns.maybe import Nothing, Some
 
 
-def test_some_is_true():
+def test_some_is_true() -> None:
     """Ensures that ``Something(...)`` is ``True`` when treated as a boolean."""
     assert bool(Some(123))
     assert bool(Some('abc'))
