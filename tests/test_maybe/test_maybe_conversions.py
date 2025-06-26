@@ -7,7 +7,7 @@ def test_some_is_true() -> None:
     assert bool(Some('abc'))
 
 
-def test_nothing_is_false():
+def test_nothing_is_false() -> None:
     """Ensures that ``Nothing`` is ``False`` when treated as a boolean."""
     assert not bool(Nothing)
 
