@@ -303,6 +303,9 @@ class Maybe(  # type: ignore[type-var]
             return _Nothing(inner_value)
         return Some(inner_value)
 
+    def __bool__(self) -> bool:
+        """Convert (or treat) an instance of ``Maybe`` as a boolean."""
+
 
 @final
 class _Nothing(Maybe[Any]):
@@ -378,6 +381,10 @@ class _Nothing(Maybe[Any]):
         """Returns failed value."""
         return self._inner_value
 
+    def __bool__(self):
+        """Returns ``False``."""
+        return False
+
 
 @final
 class Some(Maybe[_ValueType_co]):
@@ -434,6 +441,15 @@ class Some(Maybe[_ValueType_co]):
     def failure(self):
         """Raises exception for successful container."""
         raise UnwrapFailedError(self)
+
+    def __bool__(self):
+        """
+        Returns ``True```.
+
+        Any instance of ``Something`` is treated
+        as ``True``, even ``Something(None)``.
+        """
+        return True
 
 
 #: Public unit value of protected :class:`~_Nothing` type.
