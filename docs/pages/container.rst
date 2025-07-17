@@ -372,6 +372,126 @@ Well, nothing is **really** immutable in python, but you were warned.
 We also provide :class:`returns.primitives.types.Immutable` mixin
 that users can use to quickly make their classes immutable.
 
+Creating Modified Copies of Containers
+--------------------------------------
+
+While containers are immutable, sometimes you need to create a modified copy
+of a container with different inner values. Since Python 3.13, ``returns``
+containers support the ``copy.replace()`` function via the ``__replace__``
+magic method.
+
+.. code:: python
+
+  >>> from returns.result import Success, Failure
+  >>> import copy, sys
+  >>>
+  >>> # Only run this example on Python 3.13+
+  >>> if sys.version_info >= (3, 13):
+  ...     # Replace the inner value of a Success container
+  ...     original = Success(1)
+  ...     modified = copy.replace(original, _inner_value=2)
+  ...     assert modified == Success(2)
+  ...     assert original is not modified  # Creates a new instance
+  ...
+  ...     # Works with Failure too
+  ...     error = Failure("original error")
+  ...     new_error = copy.replace(error, _inner_value="new error message")
+  ...     assert new_error == Failure("new error message")
+  ...
+  ...     # No changes returns the original object (due to immutability)
+  ...     assert copy.replace(original) is original
+  ... else:
+  ...     # For Python versions before 3.13, the tests would be skipped
+  ...     pass
+
+.. note::
+    The parameter name ``_inner_value`` is used because it directly maps to the
+    internal attribute of the same name in ``BaseContainer``. In the ``__replace__``
+    implementation, this parameter name is specifically recognized to create a new
+    container instance with a modified inner value.
+
+.. warning::
+    While ``copy.replace()`` works at runtime, it has limitations with static
+    type checking. If you replace an inner value with a value of a different
+    type, type checkers won't automatically infer the new type:
+
+    .. code:: python
+
+      # Example that would work in Python 3.13+:
+      # >>> num_container = Success(123)
+      # >>> str_container = copy.replace(num_container, _inner_value="string")
+      # >>> # Type checkers may still think this is Success[int] not Success[str]
+      >>> # The above is skipped in doctest as copy.replace requires Python 3.13+
+
+Using ``copy.replace()`` with Custom Containers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you create your own container by extending ``BaseContainer``, it will automatically
+inherit the ``__replace__`` implementation for free. This means your custom containers
+will work with ``copy.replace()`` just like the built-in ones.
+
+.. code:: python
+
+  >>> from returns.primitives.container import BaseContainer
+  >>> from typing import TypeVar, Generic
+  >>> import copy, sys  # Requires Python 3.13+ for copy.replace
+
+  >>> T = TypeVar('T')
+  >>> class MyBox(BaseContainer, Generic[T]):
+  ...     """A custom container that wraps a value."""
+  ...     def __init__(self, inner_value: T) -> None:
+  ...         super().__init__(inner_value)
+  ...
+  ...     def __eq__(self, other: object) -> bool:
+  ...         if not isinstance(other, MyBox):
+  ...             return False
+  ...         return self._inner_value == other._inner_value
+  ...
+  ...     def __repr__(self) -> str:
+  ...         return f"MyBox({self._inner_value!r})"
+
+  >>> # Create a basic container
+  >>> box = MyBox("hello")
+  >>>
+  >>> # Test works with copy.replace only on Python 3.13+
+  >>> if sys.version_info >= (3, 13):
+  ...     new_box = copy.replace(box, _inner_value="world")
+  ...     assert new_box == MyBox("world")
+  ...     assert box is not new_box
+  ... else:
+  ...     # For Python versions before 3.13
+  ...     pass
+
+By inheriting from ``BaseContainer``, your custom container will automatically support:
+
+1. The basic container operations like ``__eq__``, ``__hash__``, ``__repr__``
+2. Pickling via ``__getstate__`` and ``__setstate__``
+3. The ``copy.replace()`` functionality via ``__replace__``
+4. Immutability via the ``Immutable`` mixin
+
+Before Python 3.13, you can use container-specific methods to create modified copies:
+
+.. code:: python
+
+  >>> from returns.result import Success, Failure, Result
+  >>> from typing import Any
+
+  >>> # For Success containers, we can use .map to transform the inner value
+  >>> original = Success(1)
+  >>> modified = original.map(lambda _: 2)
+  >>> assert modified == Success(2)
+
+  >>> # For Failure containers, we can use .alt to transform the inner value
+  >>> error = Failure("error")
+  >>> new_error = error.alt(lambda _: "new error")
+  >>> assert new_error == Failure("new error")
+
+  >>> # For general containers without knowing success/failure state:
+  >>> def replace_inner_value(container: Result[Any, Any], new_value: Any) -> Result[Any, Any]:
+  ...     """Create a new container with the same state but different inner value."""
+  ...     if container.is_success():
+  ...         return Success(new_value)
+  ...     return Failure(new_value)
 
 .. _type-safety:
 
