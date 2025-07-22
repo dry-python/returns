@@ -14,7 +14,7 @@
     from returns.maybe import Maybe
 
     value: Optional[int]
-    reveal_type(Maybe.from_value(value))  # N: Revealed type is "returns.maybe.Maybe[Union[builtins.int, None]]"
+    reveal_type(Maybe.from_value(value))  # N: Revealed type is "returns.maybe.Maybe[builtins.int | None]"
 
 
 - case: maybe_from_optional1
@@ -52,7 +52,7 @@
     from returns.maybe import Maybe
 
     result = Maybe.from_value({'a': 'b'}).map(lambda d: d.get('a', None))
-    reveal_type(result)  # N: Revealed type is "returns.maybe.Maybe[Union[builtins.str, None]]"
+    reveal_type(result)  # N: Revealed type is "returns.maybe.Maybe[builtins.str | None]"
 
 
 - case: maybe_map_optional2
@@ -93,7 +93,7 @@
     def test(arg: int) -> Maybe[Optional[str]]:
         ...
 
-    reveal_type(Maybe.from_value(1).bind(test))  # N: Revealed type is "returns.maybe.Maybe[Union[builtins.str, None]]"
+    reveal_type(Maybe.from_value(1).bind(test))  # N: Revealed type is "returns.maybe.Maybe[builtins.str | None]"
 
 
 - case: maybe_bind_optional
@@ -114,7 +114,7 @@
     from returns.maybe import Maybe
 
     result = Maybe.from_value(1).value_or(None)
-    reveal_type(result)  # N: Revealed type is "Union[builtins.int, None]"
+    reveal_type(result)  # N: Revealed type is "builtins.int | None"
 
 
 - case: maybe_or_else1
@@ -135,7 +135,7 @@
         ...
 
     result = Maybe.from_value(1).or_else_call(fallback)
-    reveal_type(result)  # N: Revealed type is "Union[builtins.int, builtins.str]"
+    reveal_type(result)  # N: Revealed type is "builtins.int | builtins.str"
 
 
 - case: maybe_or_else3

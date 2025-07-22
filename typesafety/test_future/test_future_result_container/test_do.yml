@@ -18,7 +18,7 @@
   main: |
     from returns.future import FutureResult, FutureFailure
 
-    reveal_type(FutureResult.do(  # N: Revealed type is "returns.future.FutureResult[Any, Union[builtins.int, builtins.str]]"
+    reveal_type(FutureResult.do(  # N: Revealed type is "returns.future.FutureResult[Any, builtins.int | builtins.str]"
         first / second
         async for first in FutureFailure(1)
         async for second in FutureFailure('a')
@@ -45,7 +45,7 @@
     a: FutureResult[int, str]
     b: FutureResult[float, bytes]
 
-    reveal_type(FutureResult.do(  # N: Revealed type is "returns.future.FutureResult[builtins.float, Union[builtins.str, builtins.bytes]]"
+    reveal_type(FutureResult.do(  # N: Revealed type is "returns.future.FutureResult[builtins.float, builtins.str | builtins.bytes]"
         x + y
         async for x in a
         async for y in b

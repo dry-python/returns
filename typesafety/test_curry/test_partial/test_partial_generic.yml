@@ -18,7 +18,7 @@
     reveal_type(partial(multiple, x)(y))
   out: |
     main:15: note: Revealed type is "builtins.int"
-    main:15: error: Argument 1 to "multiple" has incompatible type "List[str]"; expected "List[int]"  [arg-type]
+    main:15: error: Argument 1 to "multiple" has incompatible type "list[str]"; expected "list[int]"  [arg-type]
 
 
 - case: partial_correct_generic
@@ -79,7 +79,6 @@
     main:22: note: Revealed type is "builtins.int"
 
 
-# Python3.8+ sorts generic arguments differently:
 - case: partial_double_generic_complex38
   disable_cache: false
   main: |
@@ -107,12 +106,12 @@
     reveal_type(partial(multiple, 1, b=y))
     reveal_type(partial(multiple, 1, c=y))
   out: |
-    main:18: note: Revealed type is "def [B, A] (a: builtins.int, *, b: builtins.list[B`-1], c: builtins.list[A`-2]) -> Union[A`-2, B`-1]"
-    main:19: note: Revealed type is "def [B, A] (*, b: builtins.list[B`-1], c: builtins.list[A`-2]) -> Union[A`-2, B`-1]"
-    main:20: note: Revealed type is "def [A] (*, c: builtins.list[A`-2]) -> Union[A`-2, builtins.int]"
-    main:21: note: Revealed type is "def [B] (*, b: builtins.list[B`-1]) -> Union[builtins.int, B`-1]"
-    main:22: note: Revealed type is "def [A] (*, c: builtins.list[A`-2]) -> Union[A`-2, builtins.str]"
-    main:23: note: Revealed type is "def [B] (*, b: builtins.list[B`-1]) -> Union[builtins.str, B`-1]"
+    main:18: note: Revealed type is "def [B, A] (a: builtins.int, *, b: builtins.list[B`-1], c: builtins.list[A`-2]) -> A`-2 | B`-1"
+    main:19: note: Revealed type is "def [B, A] (*, b: builtins.list[B`-1], c: builtins.list[A`-2]) -> A`-2 | B`-1"
+    main:20: note: Revealed type is "def [A] (*, c: builtins.list[A`-2]) -> A`-2 | builtins.int"
+    main:21: note: Revealed type is "def [B] (*, b: builtins.list[B`-1]) -> builtins.int | B`-1"
+    main:22: note: Revealed type is "def [A] (*, c: builtins.list[A`-2]) -> A`-2 | builtins.str"
+    main:23: note: Revealed type is "def [B] (*, b: builtins.list[B`-1]) -> builtins.str | B`-1"
 
 
 - case: partial_double_generic
@@ -139,6 +138,6 @@
     reveal_type(partial(multiple, 1, b=x)(c=y))
     reveal_type(partial(multiple, 1, c=x)(b=y))
   out: |
-    main:17: note: Revealed type is "def () -> Union[builtins.str, builtins.int]"
-    main:19: note: Revealed type is "Union[builtins.str, builtins.int]"
-    main:20: note: Revealed type is "Union[builtins.int, builtins.str]"
+    main:17: note: Revealed type is "def () -> builtins.str | builtins.int"
+    main:19: note: Revealed type is "builtins.str | builtins.int"
+    main:20: note: Revealed type is "builtins.int | builtins.str"

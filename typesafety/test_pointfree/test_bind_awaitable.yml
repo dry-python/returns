@@ -118,4 +118,4 @@
         ...
 
     x: MyClass[float]
-    reveal_type(bind_awaitable(test)(x))  # N: Revealed type is "main.MyClass[builtins.int]"
+    reveal_type(bind_awaitable(test)(x))  # N: Revealed type is "tmpi1axi_i6.MyClass[builtins.int]"

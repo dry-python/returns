@@ -57,10 +57,9 @@
     reveal_type(zero(1, y))  # N: Revealed type is "builtins.str"
 
 
-# TODO: enable and fix our plugin
 - case: curry_two_generic_args3
   disable_cache: false
-  skip: True
+  skip: true
   main: |
     from returns.curry import curry
     from typing import List, TypeVar
@@ -74,6 +73,6 @@
     x: List[int]
 
     reveal_type(zero)  # N: Revealed type is "Overload(def [T] (arg: T`-1) -> def [T] (other: builtins.list[T`-1]) -> T`-1, def [T] (arg: T`-1, other: builtins.list[T`-1]) -> T`-1)"
-    reveal_type(zero(1))  # N: Revealed type is "def [T] (other: builtins.list[builtins.int]) -> builtins.int"
+    reveal_type(zero(1))  # N: Revealed type is "def [T] (other: builtins.list[T`2]) -> T`2"
     reveal_type(zero(1)(x))  # N: Revealed type is "builtins.int"
     reveal_type(zero(1, x))  # N: Revealed type is "builtins.int"

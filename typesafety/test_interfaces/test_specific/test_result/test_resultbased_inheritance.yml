@@ -51,7 +51,7 @@
         ...
 
     x: Result[int, str]
-    reveal_type(MyClass.from_result(x).bind_result(test))  # N: Revealed type is "main.MyClass[builtins.float, builtins.str]"
+    reveal_type(MyClass.from_result(x).bind_result(test))  # N: Revealed type is "tmp_30tjo3j.MyClass[builtins.float, builtins.str]"
 
 
 - case: result_inheritance_correct3
@@ -108,7 +108,7 @@
         ...
 
     x: Result[int, str]
-    reveal_type(MyClass.from_result(x).bind_result(test))  # N: Revealed type is "main.MyClass[builtins.float, builtins.str, Any]"
+    reveal_type(MyClass.from_result(x).bind_result(test))  # N: Revealed type is "tmpdnie0d_0.MyClass[builtins.float, builtins.str, Any]"
 
 
 - case: result_inheritance_missing
@@ -153,5 +153,5 @@
         def failure(self) -> _ValueType:
             ...
   out: |
-    main:17: error: Return type "_ErrorType" of "unwrap" incompatible with return type "_ValueType" in supertype "Unwrappable"  [override]
-    main:20: error: Return type "_ValueType" of "failure" incompatible with return type "_ErrorType" in supertype "Unwrappable"  [override]
+    main:17: error: Return type "_ErrorType" of "unwrap" incompatible with return type "_ValueType" in supertype "returns.interfaces.unwrappable.Unwrappable"  [override]
+    main:20: error: Return type "_ValueType" of "failure" incompatible with return type "_ErrorType" in supertype "returns.interfaces.unwrappable.Unwrappable"  [override]

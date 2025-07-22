@@ -55,7 +55,7 @@
         ...
 
     x: Future[int]
-    reveal_type(MyClass.from_future(x).bind_future(test1).bind_async_future(test2).bind_async(test3))  # N: Revealed type is "main.MyClass[builtins.str]"
+    reveal_type(MyClass.from_future(x).bind_future(test1).bind_async_future(test2).bind_async(test3))  # N: Revealed type is "tmp1_9rpu4l.MyClass[builtins.str]"
 
 
 - case: future_inheritance_correct2
@@ -183,19 +183,19 @@
         ) -> MyClass[T]:
             ...
   out: |
-    main:13: error: Return type "MyClass[T]" of "bind_future" incompatible with return type "KindN[MyClass[T], _UpdatedType, Never, Never]" in supertype "FutureLikeN"  [override]
-    main:19: error: Return type "MyClass[T]" of "bind_async" incompatible with return type "KindN[MyClass[T], _UpdatedType, Never, Never]" in supertype "FutureLikeN"  [override]
-    main:21: error: Argument 1 of "bind_async" is incompatible with supertype "FutureLikeN"; supertype defines the argument type as "Callable[[T], Awaitable[KindN[MyClass[T], _UpdatedType, Never, Never]]]"  [override]
+    main:13: error: Return type "MyClass[T]" of "bind_future" incompatible with return type "KindN[MyClass[T], _UpdatedType, Never, Never]" in supertype "returns.interfaces.specific.future.FutureLikeN"  [override]
+    main:19: error: Return type "MyClass[T]" of "bind_async" incompatible with return type "KindN[MyClass[T], _UpdatedType, Never, Never]" in supertype "returns.interfaces.specific.future.FutureLikeN"  [override]
+    main:21: error: Argument 1 of "bind_async" is incompatible with supertype "returns.interfaces.specific.future.FutureLikeN"; supertype defines the argument type as "Callable[[T], Awaitable[KindN[MyClass[T], _UpdatedType, Never, Never]]]"  [override]
     main:21: note: This violates the Liskov substitution principle
     main:21: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
-    main:27: error: Argument 1 of "bind_awaitable" is incompatible with supertype "FutureLikeN"; supertype defines the argument type as "Callable[[T], Awaitable[_UpdatedType]]"  [override]
+    main:27: error: Argument 1 of "bind_awaitable" is incompatible with supertype "returns.interfaces.specific.future.FutureLikeN"; supertype defines the argument type as "Callable[[T], Awaitable[_UpdatedType]]"  [override]
     main:27: note: This violates the Liskov substitution principle
     main:27: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
-    main:31: error: Return type "MyClass[T]" of "bind_async_future" incompatible with return type "KindN[MyClass[T], _UpdatedType, Never, Never]" in supertype "FutureLikeN"  [override]
-    main:33: error: Argument 1 of "bind_async_future" is incompatible with supertype "FutureLikeN"; supertype defines the argument type as "Callable[[T], Awaitable[Future[_UpdatedType]]]"  [override]
+    main:31: error: Return type "MyClass[T]" of "bind_async_future" incompatible with return type "KindN[MyClass[T], _UpdatedType, Never, Never]" in supertype "returns.interfaces.specific.future.FutureLikeN"  [override]
+    main:33: error: Argument 1 of "bind_async_future" is incompatible with supertype "returns.interfaces.specific.future.FutureLikeN"; supertype defines the argument type as "Callable[[T], Awaitable[Future[_UpdatedType]]]"  [override]
     main:33: note: This violates the Liskov substitution principle
     main:33: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
-    main:37: error: Return type "MyClass[T]" of "from_future" incompatible with return type "KindN[MyClass[T], _UpdatedType, Never, Never]" in supertype "FutureLikeN"  [override]
-    main:39: error: Argument 1 of "from_future" is incompatible with supertype "FutureLikeN"; supertype defines the argument type as "Future[_UpdatedType]"  [override]
+    main:37: error: Return type "MyClass[T]" of "from_future" incompatible with return type "KindN[MyClass[T], _UpdatedType, Never, Never]" in supertype "returns.interfaces.specific.future.FutureLikeN"  [override]
+    main:39: error: Argument 1 of "from_future" is incompatible with supertype "returns.interfaces.specific.future.FutureLikeN"; supertype defines the argument type as "Future[_UpdatedType]"  [override]
     main:39: note: This violates the Liskov substitution principle
     main:39: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides

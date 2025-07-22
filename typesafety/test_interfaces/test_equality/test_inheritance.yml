@@ -82,7 +82,7 @@
         def equals(self, other: bool) -> T:
             ...
   out: |
-    main:12: error: Return type "T" of "equals" incompatible with return type "bool" in supertype "Equable"  [override]
-    main:12: error: Argument 1 of "equals" is incompatible with supertype "Equable"; supertype defines the argument type as "MyOwn[T]"  [override]
+    main:12: error: Return type "T" of "equals" incompatible with return type "bool" in supertype "returns.interfaces.equable.Equable"  [override]
+    main:12: error: Argument 1 of "equals" is incompatible with supertype "returns.interfaces.equable.Equable"; supertype defines the argument type as "MyOwn[T]"  [override]
     main:12: note: This violates the Liskov substitution principle
     main:12: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides

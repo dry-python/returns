@@ -3,7 +3,7 @@
   main: |
     from returns.result import Result, Failure
 
-    reveal_type(Result.do(  # N: Revealed type is "returns.result.Result[Any, Union[builtins.int, builtins.str]]"
+    reveal_type(Result.do(  # N: Revealed type is "returns.result.Result[Any, builtins.int | builtins.str]"
         first / second
         for first in Failure(1)
         for second in Failure('a')
@@ -30,7 +30,7 @@
     a: Result[int, str]
     b: Result[float, bytes]
 
-    reveal_type(Result.do(  # N: Revealed type is "returns.result.Result[builtins.float, Union[builtins.str, builtins.bytes]]"
+    reveal_type(Result.do(  # N: Revealed type is "returns.result.Result[builtins.float, builtins.str | builtins.bytes]"
         x + y
         for x in a
         for y in b

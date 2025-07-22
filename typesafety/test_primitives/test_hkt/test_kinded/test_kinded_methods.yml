@@ -17,7 +17,7 @@
             ...
 
     x: Mappable[int]
-    reveal_type(x.map(str))  # N: Revealed type is "main.Mappable[builtins.str]"
+    reveal_type(x.map(str))  # N: Revealed type is "tmphs_3ogpw.Mappable[builtins.str]"
 
 
 - case: kinded_with_unannotated_self_method
@@ -169,4 +169,4 @@
         ) -> Kind1[_MappableType, _UpdatedType]:
             ...
   out: |
-    main:11: error: The erased type of self "Type[builtins.int]" is not a supertype of its class "Type[main.Mappable]"  [misc]
+    main:11: error: The erased type of self "type[builtins.int]" is not a supertype of its class "type[tmp_2a94mx2.Mappable]"  [misc]

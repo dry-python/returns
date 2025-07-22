@@ -133,4 +133,4 @@
         ...
 
     x: MyClass[int, str]
-    reveal_type(lash(test)(x))  # N: Revealed type is "main.MyClass[builtins.int, builtins.int]"
+    reveal_type(lash(test)(x))  # N: Revealed type is "tmp36ari_vo.MyClass[builtins.int, builtins.int]"

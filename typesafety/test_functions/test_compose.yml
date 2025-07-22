@@ -29,8 +29,7 @@
 
 
 - case: compose_optional_functions
-  mypy_config:
-    no_implicit_optional = True
+  mypy_config: no_implicit_optional = True
   main: |
     from returns.functions import compose
 

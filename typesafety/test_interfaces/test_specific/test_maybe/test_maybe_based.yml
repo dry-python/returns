@@ -49,7 +49,7 @@
         ) -> Union[None, V]:
             ...
   out: |
-    main:9: error: Return type "Optional[V]" of "or_else_call" incompatible with return type "Union[V, _ValueType]" in supertype "MaybeBasedN"  [override]
-    main:11: error: Argument 1 of "or_else_call" is incompatible with supertype "MaybeBasedN"; supertype defines the argument type as "Callable[[], _ValueType]"  [override]
+    main:9: error: Return type "V | None" of "or_else_call" incompatible with return type "V | _ValueType" in supertype "returns.interfaces.specific.maybe.MaybeBasedN"  [override]
+    main:11: error: Argument 1 of "or_else_call" is incompatible with supertype "returns.interfaces.specific.maybe.MaybeBasedN"; supertype defines the argument type as "Callable[[], _ValueType]"  [override]
     main:11: note: This violates the Liskov substitution principle
     main:11: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides

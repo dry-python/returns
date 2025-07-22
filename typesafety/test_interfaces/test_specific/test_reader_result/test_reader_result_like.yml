@@ -101,18 +101,17 @@
         ) -> MyClass[T, V, U]:
             ...
   out: |
-    main:18: error: Return type "MyClass[T, V, U]" of "bind_context_result" incompatible with return type "KindN[MyClass[T, V, U], _UpdatedType, V, U]" in supertype "ReaderResultLikeN"  [override]
-    main:20: error: Argument 1 of "bind_context_result" is incompatible with supertype "ReaderResultLikeN"; supertype defines the argument type as "Callable[[T], RequiresContextResult[_UpdatedType, V, U]]"  [override]
+    main:18: error: Return type "MyClass[T, V, U]" of "bind_context_result" incompatible with return type "KindN[MyClass[T, V, U], _UpdatedType, V, U]" in supertype "returns.interfaces.specific.reader_result.ReaderResultLikeN"  [override]
+    main:20: error: Argument 1 of "bind_context_result" is incompatible with supertype "returns.interfaces.specific.reader_result.ReaderResultLikeN"; supertype defines the argument type as "Callable[[T], RequiresContextResult[_UpdatedType, V, U]]"  [override]
     main:20: note: This violates the Liskov substitution principle
     main:20: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
-    main:25: error: Signature of "from_failed_context" incompatible with supertype "ReaderResultLikeN"  [override]
+    main:25: error: Signature of "from_failed_context" incompatible with supertype "returns.interfaces.specific.reader_result.ReaderResultLikeN"  [override]
     main:25: note:      Superclass:
-    main:25: note:          @classmethod
     main:25: note:          def [_ErrorType, _EnvType] from_failed_context(cls, inner_value: RequiresContext[_ErrorType, _EnvType]) -> KindN[MyClass[T, V, U], T, _ErrorType, _EnvType]
     main:25: note:      Subclass:
     main:25: note:          @classmethod
     main:25: note:          def [R1] from_failed_context(cls, inner_value: RequiresContext[R1, R1]) -> MyClass[R1, R1, R1]
-    main:32: error: Return type "MyClass[T, V, U]" of "from_result_context" incompatible with return type "KindN[MyClass[T, V, U], _ValueType, _ErrorType, _EnvType]" in supertype "ReaderResultLikeN"  [override]
-    main:34: error: Argument 1 of "from_result_context" is incompatible with supertype "ReaderResultLikeN"; supertype defines the argument type as "RequiresContextResult[_ValueType, _ErrorType, _EnvType]"  [override]
+    main:32: error: Return type "MyClass[T, V, U]" of "from_result_context" incompatible with return type "KindN[MyClass[T, V, U], _ValueType, _ErrorType, _EnvType]" in supertype "returns.interfaces.specific.reader_result.ReaderResultLikeN"  [override]
+    main:34: error: Argument 1 of "from_result_context" is incompatible with supertype "returns.interfaces.specific.reader_result.ReaderResultLikeN"; supertype defines the argument type as "RequiresContextResult[_ValueType, _ErrorType, _EnvType]"  [override]
     main:34: note: This violates the Liskov substitution principle
     main:34: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
