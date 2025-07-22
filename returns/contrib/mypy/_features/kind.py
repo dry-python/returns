@@ -63,10 +63,8 @@ def attribute_access(ctx: AttributeContext) -> MypyType:
     else:
         return ctx.default_attr_type
 
-    exprchecker = ctx.api.expr_checker  # type: ignore
-    mypy_version = version('mypy')
     mypy_version_tuple = tuple(
-        map(int, mypy_version.partition('+')[0].split('.'))
+        map(int, version('mypy').partition('+')[0].split('.'))
     )
 
     extra_kwargs: dict[str, Any] = {}
@@ -81,7 +79,7 @@ def attribute_access(ctx: AttributeContext) -> MypyType:
         is_operator=False,
         original_type=instance,
         chk=ctx.api,  # type: ignore
-        in_literal_context=exprchecker.is_literal_context(),
+        in_literal_context=ctx.api.expr_checker.is_literal_context(),  # type: ignore
         **extra_kwargs,
     )
 
