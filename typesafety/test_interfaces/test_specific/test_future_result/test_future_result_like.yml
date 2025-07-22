@@ -41,7 +41,7 @@
         ...
 
     x: MyClass[int, str]
-    reveal_type(x.bind_future_result(test))  # N: Revealed type is "tmp417ocr_v.MyClass[builtins.float, builtins.str]"
+    reveal_type(x.bind_future_result(test))  # N: Revealed type is "main.MyClass[builtins.float, builtins.str]"
 
 
 - case: future_result_inheritance_missing

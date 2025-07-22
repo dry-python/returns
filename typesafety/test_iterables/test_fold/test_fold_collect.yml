@@ -5,15 +5,15 @@
     from returns.result import Result
     from returns.iterables import Fold
 
-    x1: List[Result[int, str]]
+    x1: list[Result[int, str]]
     x2: Iterable[Result[int, str]]
     x3: Sequence[Result[int, str]]
     x4: Iterator[Result[int, str]]
-    x5: Tuple[Result[int, str], ...]
-    x6: Tuple[Result[int, str]]
+    x5: tuple[Result[int, str], ...]
+    x6: tuple[Result[int, str]]
     x7: Generator[Result[int, str], None, None]
 
-    acc: Result[Tuple[()], str]
+    acc: Result[tuple[()], str]
 
     reveal_type(Fold.collect(x1, acc))  # N: Revealed type is "returns.result.Result[builtins.tuple[builtins.int, ...], builtins.str]"
     reveal_type(Fold.collect(x2, acc))  # N: Revealed type is "returns.result.Result[builtins.tuple[builtins.int, ...], builtins.str]"
@@ -55,7 +55,7 @@
     from returns.result import Result
     from typing import Iterable, Tuple
 
-    acc: Result[Tuple[()], str]
+    acc: Result[tuple[()], str]
     x: Iterable[Result[float, str]]
     reveal_type(Fold.collect(x, acc))  # N: Revealed type is "returns.result.Result[builtins.tuple[builtins.float, ...], builtins.str]"
 
@@ -67,7 +67,7 @@
     from returns.io import IOResult
     from typing import Iterable, Tuple
 
-    acc: IOResult[Tuple[()], str]
+    acc: IOResult[tuple[()], str]
     x: Iterable[IOResult[float, str]]
     reveal_type(Fold.collect(x, acc))  # N: Revealed type is "returns.io.IOResult[builtins.tuple[builtins.float, ...], builtins.str]"
 
@@ -79,7 +79,7 @@
     from returns.context import RequiresContext
     from typing import Iterable, Tuple
 
-    acc: RequiresContext[Tuple[()], str]
+    acc: RequiresContext[tuple[()], str]
     x: Iterable[RequiresContext[float, str]]
     reveal_type(Fold.collect(x, acc))  # N: Revealed type is "returns.context.requires_context.RequiresContext[builtins.tuple[builtins.float, ...], builtins.str]"
 
@@ -91,7 +91,7 @@
     from returns.context import RequiresContextResult
     from typing import Iterable, Tuple
 
-    acc: RequiresContextResult[Tuple[()], str, bool]
+    acc: RequiresContextResult[tuple[()], str, bool]
     x: Iterable[RequiresContextResult[float, str, bool]]
     reveal_type(Fold.collect(x, acc))  # N: Revealed type is "returns.context.requires_context_result.RequiresContextResult[builtins.tuple[builtins.float, ...], builtins.str, builtins.bool]"
 
@@ -103,7 +103,7 @@
     from returns.context import RequiresContextIOResult
     from typing import Iterable, Tuple
 
-    acc: RequiresContextIOResult[Tuple[()], str, bool]
+    acc: RequiresContextIOResult[tuple[()], str, bool]
     x: Iterable[RequiresContextIOResult[float, str, bool]]
     reveal_type(Fold.collect(x, acc))  # N: Revealed type is "returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.tuple[builtins.float, ...], builtins.str, builtins.bool]"
 
@@ -115,7 +115,7 @@
     from returns.context import RequiresContextFutureResult
     from typing import Iterable, Tuple
 
-    acc: RequiresContextFutureResult[Tuple[()], str, bool]
+    acc: RequiresContextFutureResult[tuple[()], str, bool]
     x: Iterable[RequiresContextFutureResult[float, str, bool]]
     reveal_type(Fold.collect(x, acc))  # N: Revealed type is "returns.context.requires_context_future_result.RequiresContextFutureResult[builtins.tuple[builtins.float, ...], builtins.str, builtins.bool]"
 
@@ -127,7 +127,7 @@
     from returns.future import Future
     from typing import Iterable, Tuple
 
-    acc: Future[Tuple[()]]
+    acc: Future[tuple[()]]
     x: Iterable[Future[float]]
     reveal_type(Fold.collect(x, acc))  # N: Revealed type is "returns.future.Future[builtins.tuple[builtins.float, ...]]"
 
@@ -139,7 +139,7 @@
     from returns.future import FutureResult
     from typing import Iterable, Tuple
 
-    acc: FutureResult[Tuple[()], str]
+    acc: FutureResult[tuple[()], str]
     x: Iterable[FutureResult[float, str]]
     reveal_type(Fold.collect(x, acc))  # N: Revealed type is "returns.future.FutureResult[builtins.tuple[builtins.float, ...], builtins.str]"
 
@@ -157,6 +157,6 @@
     class MyClass(SupportsKind1['MyClass', V], Applicative1[V]):
         ...
 
-    acc: MyClass[Tuple[()]]
+    acc: MyClass[tuple[()]]
     x: Iterable[MyClass[float]]
     reveal_type(Fold.collect(x, acc))  # N: Revealed type is "main.MyClass[builtins.tuple[builtins.float, ...]]"

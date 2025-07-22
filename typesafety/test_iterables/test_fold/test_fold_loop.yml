@@ -7,12 +7,12 @@
     from returns.result import Result
     from returns.iterables import Fold
 
-    x1: List[Result[int, str]]
+    x1: list[Result[int, str]]
     x2: Iterable[Result[int, str]]
     x3: Sequence[Result[int, str]]
     x4: Iterator[Result[int, str]]
-    x5: Tuple[Result[int, str], ...]
-    x6: Tuple[Result[int, str]]
+    x5: tuple[Result[int, str], ...]
+    x6: tuple[Result[int, str]]
     x7: Generator[Result[int, str], None, None]
 
     acc: Result[float, str]

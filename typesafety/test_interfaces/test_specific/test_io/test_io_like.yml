@@ -83,6 +83,7 @@
     main:15: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
     main:19: error: Signature of "from_io" incompatible with supertype "returns.interfaces.specific.io.IOLikeN"  [override]
     main:19: note:      Superclass:
+    main:19: note:          @classmethod
     main:19: note:          def [_UpdatedType] from_io(cls, inner_value: IO[_UpdatedType]) -> KindN[MyClass[_ValueType], _UpdatedType, Never, Never]
     main:19: note:      Subclass:
     main:19: note:          def [_NewValueType] from_io(self, inner_value: IO[_NewValueType]) -> MyClass[_NewValueType]

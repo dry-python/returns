@@ -57,7 +57,7 @@
     from typing import Tuple
 
     @kinded
-    def test() -> Tuple[
+    def test() -> tuple[
         KindN[ReaderIOResult, int, str, bool],
         KindN[ReaderIOResult, float, bytes, object],
     ]:
@@ -74,10 +74,10 @@
     from typing import Union
 
     @kinded
-    def test() -> Union[
-        KindN[ReaderIOResult, int, str, bool],
-        KindN[ReaderIOResult, float, bytes, object],
-    ]:
+    def test() -> (
+        KindN[ReaderIOResult, int, str, bool] |
+        KindN[ReaderIOResult, float, bytes, object]
+    ):
         ...
 
     reveal_type(test())  # N: Revealed type is "returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.int, builtins.str, builtins.bool] | returns.context.requires_context_ioresult.RequiresContextIOResult[builtins.float, builtins.bytes, builtins.object]"

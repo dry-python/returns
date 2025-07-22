@@ -93,22 +93,22 @@
     T = TypeVar('T')
 
     @overload
-    def two_args(a: int, b: List[T]) -> T:
+    def two_args(a: int, b: list[T]) -> T:
         ...
 
     @overload
-    def two_args(a: int, b: Set[T]) -> T:
+    def two_args(a: int, b: set[T]) -> T:
         ...
 
     @overload
-    def two_args(a: List[T], b: Set[T]) -> T:
+    def two_args(a: list[T], b: set[T]) -> T:
         ...
 
     def two_args(a, b):
         ...
 
-    x: List[float]
-    y: Set[float]
+    x: list[float]
+    y: set[float]
 
     reveal_type(partial(two_args))
     reveal_type(partial(two_args, 1))
@@ -135,22 +135,22 @@
     B = TypeVar('B')
 
     @overload
-    def two_args(a: int, b: List[A]) -> A:
+    def two_args(a: int, b: list[A]) -> A:
         ...
 
     @overload
-    def two_args(a: int, b: List[B]) -> B:
+    def two_args(a: int, b: list[B]) -> B:
         ...
 
     @overload
-    def two_args(a: List[A], b: List[B]) -> Union[A, B]:
+    def two_args(a: list[A], b: list[B]) -> A | B:
         ...
 
     def two_args(a, b):
         ...
 
-    a: List[float]
-    b: List[str]
+    a: list[float]
+    b: list[str]
 
     reveal_type(partial(two_args))
     reveal_type(partial(two_args, 1))

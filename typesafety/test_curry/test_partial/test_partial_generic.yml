@@ -7,13 +7,13 @@
     T = TypeVar('T')
 
     def multiple(
-        a: List[T],
-        b: List[T],
+        a: list[T],
+        b: list[T],
     ) -> T:
         ...
 
-    x: List[int]
-    y: List[str]
+    x: list[int]
+    y: list[str]
 
     reveal_type(partial(multiple, x)(y))
   out: |
@@ -30,13 +30,13 @@
     T = TypeVar('T')
 
     def multiple(
-        a: List[T],
-        b: List[T],
+        a: list[T],
+        b: list[T],
     ) -> T:
         ...
 
-    x: List[int]
-    y: List[int]
+    x: list[int]
+    y: list[int]
 
     reveal_type(partial(multiple, x)(y))
   out: |
@@ -53,12 +53,12 @@
 
     def multiple(
         a: int,
-        b: List[T],
+        b: list[T],
         c: bool = False,
     ) -> T:
         ...
 
-    x: List[int]
+    x: list[int]
 
     reveal_type(partial(multiple))
     reveal_type(partial(multiple, 1))
@@ -91,13 +91,13 @@
     def multiple(
         a: int,
         *,
-        b: List[B],
-        c: List[A],
-    ) -> Union[A, B]:
+        b: list[B],
+        c: list[A],
+    ) -> A | B:
         ...
 
-    x: List[int]
-    y: List[str]
+    x: list[int]
+    y: list[str]
 
     reveal_type(partial(multiple))
     reveal_type(partial(multiple, 1))
@@ -126,13 +126,13 @@
     def multiple(
         a: int,
         *,
-        b: List[B],
-        c: List[A],
-    ) -> Union[A, B]:
+        b: list[B],
+        c: list[A],
+    ) -> A | B:
         ...
 
-    x: List[int]
-    y: List[str]
+    x: list[int]
+    y: list[str]
     reveal_type(partial(multiple, 1, c=y, b=x))
 
     reveal_type(partial(multiple, 1, b=x)(c=y))

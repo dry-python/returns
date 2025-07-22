@@ -55,7 +55,7 @@
         ...
 
     x: Future[int]
-    reveal_type(MyClass.from_future(x).bind_future(test1).bind_async_future(test2).bind_async(test3))  # N: Revealed type is "tmp1_9rpu4l.MyClass[builtins.str]"
+    reveal_type(MyClass.from_future(x).bind_future(test1).bind_async_future(test2).bind_async(test3))  # N: Revealed type is "main.MyClass[builtins.str]"
 
 
 - case: future_inheritance_correct2

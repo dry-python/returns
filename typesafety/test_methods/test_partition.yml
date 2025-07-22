@@ -5,7 +5,7 @@
     from returns.result import Success, Failure, Result
     from returns.methods import partition
 
-    x: List[Result[int, str]]
+    x: list[Result[int, str]]
     reveal_type(partition(x))  # N: Revealed type is "tuple[builtins.list[builtins.int], builtins.list[builtins.str]]"
 
 
@@ -17,7 +17,7 @@
     from returns.methods import partition
     from returns.io import IO, IOResult, IOSuccess
 
-    x: Tuple[IOResult[int, str], IOResult[int, str]]
+    x: tuple[IOResult[int, str], IOResult[int, str]]
     reveal_type(partition(x))  # N: Revealed type is "tuple[builtins.list[returns.io.IO[builtins.int]], builtins.list[returns.io.IO[builtins.str]]]"
 
 
@@ -28,6 +28,6 @@
     from returns.maybe import Maybe
     from returns.methods import partition
 
-    x: List[Maybe[int]]
+    x: list[Maybe[int]]
 
     reveal_type(partition(x))  # N: Revealed type is "tuple[builtins.list[builtins.int], builtins.list[None]]"

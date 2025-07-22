@@ -135,7 +135,7 @@
         def __call__(self, arg: int, other: str) -> None:
             ...
 
-    x: Union[Inst, Other]
+    x: Inst | Other
     reveal_type(partial(x))
     # This does not work as well:
     reveal_type(partial(x, 1))

@@ -48,7 +48,7 @@
         ...
 
     x: IOResult[int, str]
-    reveal_type(MyClass.from_ioresult(x).bind_ioresult(test))  # N: Revealed type is "tmpi_w81f7k.MyClass[builtins.float, builtins.str]"
+    reveal_type(MyClass.from_ioresult(x).bind_ioresult(test))  # N: Revealed type is "main.MyClass[builtins.float, builtins.str]"
 
 
 - case: ioresult_inheritance_correct3
@@ -102,7 +102,7 @@
         ...
 
     x: IOResult[int, str]
-    reveal_type(MyClass.from_ioresult(x).bind_ioresult(test))  # N: Revealed type is "tmp_ao0nwoz.MyClass[builtins.float, builtins.str, Any]"
+    reveal_type(MyClass.from_ioresult(x).bind_ioresult(test))  # N: Revealed type is "main.MyClass[builtins.float, builtins.str, Any]"
 
 
 - case: ioresult_inheritance_missing
@@ -179,7 +179,6 @@
     main:33: note:      Superclass:
     main:33: note:          def [_ErrorType] from_failed_io(cls, inner_value: IO[_ErrorType]) -> KindN[MyClass[_ValueType, _ErrorType@MyClass], _ValueType, _ErrorType, Never]
     main:33: note:      Subclass:
-    main:33: note:          @classmethod
     main:33: note:          def [_NewErrorType] from_failed_io(cls, inner_value: IO[_NewErrorType]) -> MyClass[_NewErrorType, Any]
 
 

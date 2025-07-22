@@ -167,7 +167,6 @@
     main:33: note:      Superclass:
     main:33: note:          def [_ErrorType] from_failed_io(cls, inner_value: IO[_ErrorType]) -> KindN[MyClass[_ValueType, _ErrorType@MyClass], _ValueType, _ErrorType, Never]
     main:33: note:      Subclass:
-    main:33: note:          @classmethod
     main:33: note:          def [_NewErrorType] from_failed_io(cls, inner_value: IO[_NewErrorType]) -> MyClass[_NewErrorType, Any]
 
 

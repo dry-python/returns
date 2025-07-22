@@ -15,7 +15,7 @@
     from typing import List
 
     container: Kind1[List, int]
-    container.missing  # E: "List[Any]" has no attribute "missing"  [attr-defined]
+    container.missing  # E: "list[Any]" has no attribute "missing"  [attr-defined]
 
 
 - case: kind_any_getattr

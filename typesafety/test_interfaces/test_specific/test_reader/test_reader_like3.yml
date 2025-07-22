@@ -18,7 +18,7 @@
     ):
         no_args: ClassVar[NoDeps] = object()
 
-        def __call__(self, deps: _EnvType) -> Union[_ValueType, _ErrorType]:
+        def __call__(self, deps: _EnvType) -> _ValueType | _ErrorType:
             ...
 
         def bind_context(
@@ -50,7 +50,7 @@
         ...
 
     x: Reader[int, str]
-    reveal_type(MyClass.from_context(x).bind_context(test))  # N: Revealed type is "tmpai_9hs1y.MyClass[builtins.float, Any, builtins.str]"
+    reveal_type(MyClass.from_context(x).bind_context(test))  # N: Revealed type is "main.MyClass[builtins.float, Any, builtins.str]"
 
 
 - case: reader_inheritance_missing
