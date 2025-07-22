@@ -125,7 +125,7 @@ def translate_to_function(
     )
 
     extra_kwargs: dict[str, Any] = {}
-    if mypy_version_tuple > (1, 16):
+    if mypy_version_tuple < (1, 16):
         extra_kwargs['msg'] = checker.msg
 
     return get_proper_type(
