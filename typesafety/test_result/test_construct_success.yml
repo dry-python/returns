@@ -56,7 +56,7 @@
   main: |
     from returns.result import Success
 
-    reveal_type(Success(1).value_or(None))  # N: Revealed type is "Union[builtins.int, None]"
+    reveal_type(Success(1).value_or(None))  # N: Revealed type is "builtins.int | None"
 
 
 - case: success_unwrap

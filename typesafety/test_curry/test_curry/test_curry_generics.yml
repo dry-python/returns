@@ -7,10 +7,10 @@
     T = TypeVar('T')
 
     @curry
-    def zero(arg: List[T]) -> T:
+    def zero(arg: list[T]) -> T:
         ...
 
-    x: List[int]
+    x: list[int]
 
     reveal_type(zero)  # N: Revealed type is "def [T] (arg: builtins.list[T`-1]) -> T`-1"
     reveal_type(zero(x))  # N: Revealed type is "builtins.int"
@@ -25,10 +25,10 @@
     T = TypeVar('T')
 
     @curry
-    def zero(arg: List[T], other: int) -> T:
+    def zero(arg: list[T], other: int) -> T:
         ...
 
-    x: List[int]
+    x: list[int]
 
     reveal_type(zero)  # N: Revealed type is "Overload(def [T] (arg: builtins.list[T`-1]) -> def (other: builtins.int) -> T`-1, def [T] (arg: builtins.list[T`-1], other: builtins.int) -> T`-1)"
     reveal_type(zero(x))  # N: Revealed type is "def (other: builtins.int) -> builtins.int"
@@ -45,11 +45,11 @@
     T = TypeVar('T')
 
     @curry
-    def zero(arg: int, other: List[T]) -> T:
+    def zero(arg: int, other: list[T]) -> T:
         ...
 
-    x: List[int]
-    y: List[str]
+    x: list[int]
+    y: list[str]
 
     reveal_type(zero(1)(x))  # N: Revealed type is "builtins.int"
     reveal_type(zero(1, x))  # N: Revealed type is "builtins.int"
@@ -57,10 +57,9 @@
     reveal_type(zero(1, y))  # N: Revealed type is "builtins.str"
 
 
-# TODO: enable and fix our plugin
 - case: curry_two_generic_args3
   disable_cache: false
-  skip: True
+  skip: true
   main: |
     from returns.curry import curry
     from typing import List, TypeVar
@@ -68,12 +67,12 @@
     T = TypeVar('T')
 
     @curry
-    def zero(arg: T, other: List[T]) -> T:
+    def zero(arg: T, other: list[T]) -> T:
         ...
 
-    x: List[int]
+    x: list[int]
 
     reveal_type(zero)  # N: Revealed type is "Overload(def [T] (arg: T`-1) -> def [T] (other: builtins.list[T`-1]) -> T`-1, def [T] (arg: T`-1, other: builtins.list[T`-1]) -> T`-1)"
-    reveal_type(zero(1))  # N: Revealed type is "def [T] (other: builtins.list[builtins.int]) -> builtins.int"
+    reveal_type(zero(1))  # N: Revealed type is "def [T] (other: builtins.list[T`2]) -> T`2"
     reveal_type(zero(1)(x))  # N: Revealed type is "builtins.int"
     reveal_type(zero(1, x))  # N: Revealed type is "builtins.int"

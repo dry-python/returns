@@ -3,7 +3,7 @@
   main: |
     from returns.io import IOResult, IOFailure
 
-    reveal_type(IOResult.do(  # N: Revealed type is "returns.io.IOResult[Any, Union[builtins.int, builtins.str]]"
+    reveal_type(IOResult.do(  # N: Revealed type is "returns.io.IOResult[Any, builtins.int | builtins.str]"
         first / second
         for first in IOFailure(1)
         for second in IOFailure('a')
@@ -30,7 +30,7 @@
     a: IOResult[int, str]
     b: IOResult[float, bytes]
 
-    reveal_type(IOResult.do(  # N: Revealed type is "returns.io.IOResult[builtins.float, Union[builtins.str, builtins.bytes]]"
+    reveal_type(IOResult.do(  # N: Revealed type is "returns.io.IOResult[builtins.float, builtins.str | builtins.bytes]"
         x + y
         for x in a
         for y in b

@@ -73,6 +73,7 @@
     x: IO[float]
     reveal_type(bind_io(test)(x))  # N: Revealed type is "returns.io.IO[builtins.int]"
 
+
 - case: bind_io_ioresult
   disable_cache: false
   main: |

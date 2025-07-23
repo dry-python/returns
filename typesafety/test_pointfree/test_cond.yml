@@ -73,4 +73,4 @@
     reveal_type(cond(MyOwn, 'test', 1.0)(True))
   out: |
     main:16: note: Revealed type is "main.MyOwn[builtins.str, builtins.float]"
-    main:16: error: Only concrete class can be given where "Type[MyOwn[Any, Any]]" is expected  [type-abstract]
+    main:16: error: Only concrete class can be given where "type[MyOwn[Any, Any]]" is expected  [type-abstract]

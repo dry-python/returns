@@ -8,9 +8,7 @@ version = "0.25.0"
 description = "Make your functions return something meaningful, typed, and safe!"
 license = "BSD-3-Clause"
 
-authors = [
-  "sobolevn <mail@sobolevn.me>",
-]
+authors = [ "sobolevn <mail@sobolevn.me>" ]
 
 readme = "README.md"
 
@@ -53,8 +51,8 @@ python = "^3.10"
 
 typing-extensions = ">=4.0,<5.0"
 pytest = { version = "^8.0", optional = true }
-hypothesis = { version = "^6.122", optional = true }
-mypy = { version = ">=1.12,<1.16", optional = true }
+hypothesis = { version = "^6.136", optional = true }
+mypy = { version = ">=1.12,<1.18", optional = true }
 
 [tool.poetry.group.dev.dependencies]
 anyio = "^4.3"
@@ -62,7 +60,7 @@ trio = ">=0.28,<0.31"
 attrs = ">=24.2,<26.0"
 httpx = "^0.28"
 
-wemake-python-styleguide = "^1.0"
+wemake-python-styleguide = "1.0"
 codespell = "^2.2"
 slotscheck = "^0.19"
 ruff = ">=0.11,<0.13"
@@ -183,7 +181,9 @@ lint.per-file-ignores."tests/test_examples/test_maybe/test_maybe_pattern_matchin
   "D103",
   "F811",
 ]
-lint.per-file-ignores."tests/test_examples/test_result/test_result_pattern_matching.py" = [ "D103" ]
+lint.per-file-ignores."tests/test_examples/test_result/test_result_pattern_matching.py" = [
+  "D103",
+]
 lint.per-file-ignores."tests/test_pattern_matching.py" = [ "S101" ]
 lint.external = [ "WPS" ]
 lint.flake8-quotes.inline-quotes = "single"

@@ -97,8 +97,14 @@ class _ReturnsPlugin(Plugin):
         self,
         fullname: str,
     ) -> _AttributeCallback | None:
-        """Called for any exiting or ``__getattr__`` aatribute access."""
+        """Called for any exiting or ``__getattr__`` attribute access."""
         if fullname.startswith(_consts.TYPED_KINDN_ACCESS):
+            name_parts = fullname.split('.')
+            attribute_name = name_parts[-1]
+            if attribute_name.startswith('__') and attribute_name.endswith(
+                '__'
+            ):
+                return None
             return kind.attribute_access
         return None
 

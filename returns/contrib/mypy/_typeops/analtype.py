@@ -1,5 +1,7 @@
+from collections.abc import Sequence
+from importlib.metadata import version
 from types import MappingProxyType
-from typing import Final, Literal, overload
+from typing import Any, Final, Literal, overload
 
 from mypy.checkmember import analyze_member_access
 from mypy.nodes import ARG_NAMED, ARG_OPT
@@ -21,7 +23,7 @@ _KIND_MAPPING: Final = MappingProxyType({
 @overload
 def analyze_call(
     function: FunctionLike,
-    args: list[FuncArg],
+    args: Sequence[FuncArg],
     ctx: CallableContext,
     *,
     show_errors: Literal[True],
@@ -31,14 +33,20 @@ def analyze_call(
 @overload
 def analyze_call(
     function: FunctionLike,
-    args: list[FuncArg],
+    args: Sequence[FuncArg],
     ctx: CallableContext,
     *,
     show_errors: bool,
 ) -> CallableType | None: ...
 
 
-def analyze_call(function, args, ctx, *, show_errors):
+def analyze_call(
+    function: FunctionLike,
+    args: Sequence[FuncArg],
+    ctx: CallableContext,
+    *,
+    show_errors: bool,
+) -> CallableType | None:
     """
     Analyzes function call based on passed arguments.
 
@@ -48,7 +56,7 @@ def analyze_call(function, args, ctx, *, show_errors):
     We also allow to return ``None`` instead of showing errors.
     This might be helpful for cases when we run intermediate analysis.
     """
-    checker = ctx.api.expr_checker
+    checker = ctx.api.expr_checker  # type: ignore[attr-defined]
     with checker.msg.filter_errors(save_filtered_errors=True) as local_errors:
         _return_type, checked_function = checker.check_call(
             function,
@@ -63,7 +71,7 @@ def analyze_call(function, args, ctx, *, show_errors):
 
     checker.msg.add_errors(local_errors.filtered_errors())  # noqa: WPS441
 
-    return checked_function
+    return checked_function  # type: ignore[no-any-return]
 
 
 def safe_translate_to_function(
@@ -110,6 +118,16 @@ def translate_to_function(
     This also preserves all type arguments as-is.
     """
     checker = ctx.api.expr_checker  # type: ignore
+
+    mypy_version = version('mypy')
+    mypy_version_tuple = tuple(
+        map(int, mypy_version.partition('+')[0].split('.'))
+    )
+
+    extra_kwargs: dict[str, Any] = {}
+    if mypy_version_tuple < (1, 16):
+        extra_kwargs['msg'] = checker.msg
+
     return get_proper_type(
         analyze_member_access(
             '__call__',
@@ -118,9 +136,8 @@ def translate_to_function(
             is_lvalue=False,
             is_super=False,
             is_operator=True,
-            msg=checker.msg,
             original_type=function_def,
             chk=checker.chk,
-            in_literal_context=checker.is_literal_context(),
+            **extra_kwargs,
         )
     )

@@ -1,16 +1,16 @@
 - case: check_all_laws
   disable_cache: false
   parametrized:
-    - container: Result
-    - container: Maybe
-    - container: IO
-    - container: IOResult
-    - container: Reader
-    - container: ReaderResult
-    - container: ReaderIOResult
-    - container: ReaderFutureResult
-    - container: Future
-    - container: FutureResult
+  - container: Result
+  - container: Maybe
+  - container: IO
+  - container: IOResult
+  - container: Reader
+  - container: ReaderResult
+  - container: ReaderIOResult
+  - container: ReaderFutureResult
+  - container: Future
+  - container: FutureResult
   main: |
     from returns.context import (
         Reader, ReaderResult, ReaderIOResult, ReaderFutureResult,
@@ -25,14 +25,10 @@
 
     x: Type[Lawful] = {{ container }}
 
+
 - case: test_all_laws_accepts_only_one_approach
   disable_cache: false
-  # TODO: remove this config after
-  #     mypy/typeshed/stdlib/unittest/mock.pyi:120:
-  #     error: Class cannot subclass "Any" (has type "Any")
-  # is fixed.
-  mypy_config:
-    disallow_subclassing_any = False
+  mypy_config: disallow_subclassing_any = False
   main: |
     from hypothesis import strategies as st
     from returns.contrib.hypothesis.laws import check_all_laws
@@ -44,21 +40,16 @@
     check_all_laws(
         Result, use_init=True, container_strategy=st.builds(Success, st.integers())
     )
-
   out: |
-    main:8: error: No overload variant of "check_all_laws" matches argument types "Type[Result[_ValueType_co, _ErrorType_co]]", "bool", "SearchStrategy[Success[Any]]"  [call-overload]
+    main:8: error: No overload variant of "check_all_laws" matches argument types "type[Result[_ValueType_co, _ErrorType_co]]", "bool", "SearchStrategy[Success[Any]]"  [call-overload]
     main:8: note: Possible overload variants:
-    main:8: note:     def [Example_co] check_all_laws(container_type: Type[Lawful[Example_co]], *, container_strategy: Union[SearchStrategy[Example_co], Callable[[Type[Example_co]], SearchStrategy[Example_co]]], settings_kwargs: Optional[Dict[str, Any]] = ..., type_strategies: Optional[Dict[Type[object], Union[SearchStrategy[Any], Callable[[Type[Any]], SearchStrategy[Any]]]]] = ...) -> None
-    main:8: note:     def [Example_co] check_all_laws(container_type: Type[Lawful[Example_co]], *, settings_kwargs: Optional[Dict[str, Any]] = ..., use_init: bool = ...) -> None
+    main:8: note:     def [Example_co] check_all_laws(container_type: type[Lawful[Example_co]], *, container_strategy: SearchStrategy[Example_co] | Callable[[type[Example_co]], SearchStrategy[Example_co]], settings_kwargs: dict[str, Any] | None = ..., type_strategies: dict[type[object], SearchStrategy[Any] | Callable[[type[Any]], SearchStrategy[Any]]] | None = ...) -> None
+    main:8: note:     def [Example_co] check_all_laws(container_type: type[Lawful[Example_co]], *, settings_kwargs: dict[str, Any] | None = ..., use_init: bool = ...) -> None
+
 
 - case: test_all_laws_requires_container_strategy
   disable_cache: false
-  # TODO: remove this config after
-  #     mypy/typeshed/stdlib/unittest/mock.pyi:120:
-  #     error: Class cannot subclass "Any" (has type "Any")
-  # is fixed.
-  mypy_config:
-    disallow_subclassing_any = False
+  mypy_config: disallow_subclassing_any = False
   main: |
     from hypothesis import strategies as st
     from returns.contrib.hypothesis.laws import check_all_laws
@@ -66,9 +57,8 @@
 
     check_all_laws(Result, container_strategy=st.builds(Success, st.integers()), type_strategies={int: st.integers()})
     check_all_laws(Result, type_strategies={int: st.integers()})
-
   out: |
-    main:6: error: No overload variant of "check_all_laws" matches argument types "Type[Result[_ValueType_co, _ErrorType_co]]", "Dict[Type[int], SearchStrategy[int]]"  [call-overload]
+    main:6: error: No overload variant of "check_all_laws" matches argument types "type[Result[_ValueType_co, _ErrorType_co]]", "dict[type[int], SearchStrategy[int]]"  [call-overload]
     main:6: note: Possible overload variants:
-    main:6: note:     def [Example_co] check_all_laws(container_type: Type[Lawful[Example_co]], *, container_strategy: Union[SearchStrategy[Example_co], Callable[[Type[Example_co]], SearchStrategy[Example_co]]], settings_kwargs: Optional[Dict[str, Any]] = ..., type_strategies: Optional[Dict[Type[object], Union[SearchStrategy[Any], Callable[[Type[Any]], SearchStrategy[Any]]]]] = ...) -> None
-    main:6: note:     def [Example_co] check_all_laws(container_type: Type[Lawful[Example_co]], *, settings_kwargs: Optional[Dict[str, Any]] = ..., use_init: bool = ...) -> None
+    main:6: note:     def [Example_co] check_all_laws(container_type: type[Lawful[Example_co]], *, container_strategy: SearchStrategy[Example_co] | Callable[[type[Example_co]], SearchStrategy[Example_co]], settings_kwargs: dict[str, Any] | None = ..., type_strategies: dict[type[object], SearchStrategy[Any] | Callable[[type[Any]], SearchStrategy[Any]]] | None = ...) -> None
+    main:6: note:     def [Example_co] check_all_laws(container_type: type[Lawful[Example_co]], *, settings_kwargs: dict[str, Any] | None = ..., use_init: bool = ...) -> None

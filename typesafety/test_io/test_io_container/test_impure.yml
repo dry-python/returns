@@ -31,7 +31,7 @@
     def test(first: int, second: Optional[str] = None, *, kw: bool = True) -> int:
         return 1
 
-    reveal_type(test)  # N: Revealed type is "def (first: builtins.int, second: Union[builtins.str, None] =, *, kw: builtins.bool =) -> returns.io.IO[builtins.int]"
+    reveal_type(test)  # N: Revealed type is "def (first: builtins.int, second: builtins.str | None =, *, kw: builtins.bool =) -> returns.io.IO[builtins.int]"
 
 
 - case: impure_composition_with_args
@@ -43,7 +43,7 @@
     def test(first: int, second: Optional[str] = None, *, kw: bool = True) -> int:
         return 1
 
-    reveal_type(impure(test))  # N: Revealed type is "def (first: builtins.int, second: Union[builtins.str, None] =, *, kw: builtins.bool =) -> returns.io.IO[builtins.int]"
+    reveal_type(impure(test))  # N: Revealed type is "def (first: builtins.int, second: builtins.str | None =, *, kw: builtins.bool =) -> returns.io.IO[builtins.int]"
 
 
 - case: impure_decorator_with_args_kwargs

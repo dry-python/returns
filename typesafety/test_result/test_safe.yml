@@ -60,7 +60,7 @@
     def test(first: int, second: Optional[str] = None, *, kw: bool = True) -> int:
         return 1
 
-    reveal_type(test)  # N: Revealed type is "def (first: builtins.int, second: Union[builtins.str, None] =, *, kw: builtins.bool =) -> returns.result.Result[builtins.int, builtins.Exception]"
+    reveal_type(test)  # N: Revealed type is "def (first: builtins.int, second: builtins.str | None =, *, kw: builtins.bool =) -> returns.result.Result[builtins.int, builtins.Exception]"
 
 
 - case: safe_decorator_passing_exceptions_with_args
@@ -73,7 +73,7 @@
     def test(first: int, second: Optional[str] = None, *, kw: bool = True) -> int:
         return 1
 
-    reveal_type(test)  # N: Revealed type is "def (first: builtins.int, second: Union[builtins.str, None] =, *, kw: builtins.bool =) -> returns.result.Result[builtins.int, builtins.Exception]"
+    reveal_type(test)  # N: Revealed type is "def (first: builtins.int, second: builtins.str | None =, *, kw: builtins.bool =) -> returns.result.Result[builtins.int, builtins.Exception]"
 
 
 - case: safe_composition_with_args
@@ -85,7 +85,7 @@
     def test(first: int, second: Optional[str] = None, *, kw: bool = True) -> int:
         return 1
 
-    reveal_type(safe(test))  # N: Revealed type is "def (first: builtins.int, second: Union[builtins.str, None] =, *, kw: builtins.bool =) -> returns.result.Result[builtins.int, builtins.Exception]"
+    reveal_type(safe(test))  # N: Revealed type is "def (first: builtins.int, second: builtins.str | None =, *, kw: builtins.bool =) -> returns.result.Result[builtins.int, builtins.Exception]"
 
 
 - case: safe_composition_passing_exceptions_with_args
@@ -97,7 +97,7 @@
     def test(first: int, second: Optional[str] = None, *, kw: bool = True) -> int:
         return 1
 
-    reveal_type(safe((ValueError,))(test))  # N: Revealed type is "def (first: builtins.int, second: Union[builtins.str, None] =, *, kw: builtins.bool =) -> returns.result.Result[builtins.int, builtins.ValueError]"
+    reveal_type(safe((ValueError,))(test))  # N: Revealed type is "def (first: builtins.int, second: builtins.str | None =, *, kw: builtins.bool =) -> returns.result.Result[builtins.int, builtins.ValueError]"
 
 
 - case: safe_regression333

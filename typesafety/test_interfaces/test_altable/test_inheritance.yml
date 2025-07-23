@@ -92,8 +92,8 @@
         ) -> 'MyClass[N, E]':
             ...
   out: |
-    main:10: error: Return type "MyClass[N, E]" of "alt" incompatible with return type "KindN[MyClass[V, E], V, _UpdatedType, Never]" in supertype "AltableN"  [override]
-    main:12: error: Argument 1 of "alt" is incompatible with supertype "AltableN"; supertype defines the argument type as "Callable[[E], _UpdatedType]"  [override]
+    main:10: error: Return type "MyClass[N, E]" of "alt" incompatible with return type "KindN[MyClass[V, E], V, _UpdatedType, Never]" in supertype "returns.interfaces.altable.AltableN"  [override]
+    main:12: error: Argument 1 of "alt" is incompatible with supertype "returns.interfaces.altable.AltableN"; supertype defines the argument type as "Callable[[E], _UpdatedType]"  [override]
     main:12: note: This violates the Liskov substitution principle
     main:12: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
 
@@ -117,7 +117,7 @@
         ) -> 'MyClass[N, E, T]':
             ...
   out: |
-    main:11: error: Return type "MyClass[N, E, T]" of "alt" incompatible with return type "KindN[MyClass[V, E, T], V, _UpdatedType, T]" in supertype "AltableN"  [override]
-    main:13: error: Argument 1 of "alt" is incompatible with supertype "AltableN"; supertype defines the argument type as "Callable[[E], _UpdatedType]"  [override]
+    main:11: error: Return type "MyClass[N, E, T]" of "alt" incompatible with return type "KindN[MyClass[V, E, T], V, _UpdatedType, T]" in supertype "returns.interfaces.altable.AltableN"  [override]
+    main:13: error: Argument 1 of "alt" is incompatible with supertype "returns.interfaces.altable.AltableN"; supertype defines the argument type as "Callable[[E], _UpdatedType]"  [override]
     main:13: note: This violates the Liskov substitution principle
     main:13: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides

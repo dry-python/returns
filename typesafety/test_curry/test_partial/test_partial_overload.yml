@@ -93,22 +93,22 @@
     T = TypeVar('T')
 
     @overload
-    def two_args(a: int, b: List[T]) -> T:
+    def two_args(a: int, b: list[T]) -> T:
         ...
 
     @overload
-    def two_args(a: int, b: Set[T]) -> T:
+    def two_args(a: int, b: set[T]) -> T:
         ...
 
     @overload
-    def two_args(a: List[T], b: Set[T]) -> T:
+    def two_args(a: list[T], b: set[T]) -> T:
         ...
 
     def two_args(a, b):
         ...
 
-    x: List[float]
-    y: Set[float]
+    x: list[float]
+    y: set[float]
 
     reveal_type(partial(two_args))
     reveal_type(partial(two_args, 1))
@@ -135,22 +135,22 @@
     B = TypeVar('B')
 
     @overload
-    def two_args(a: int, b: List[A]) -> A:
+    def two_args(a: int, b: list[A]) -> A:
         ...
 
     @overload
-    def two_args(a: int, b: List[B]) -> B:
+    def two_args(a: int, b: list[B]) -> B:
         ...
 
     @overload
-    def two_args(a: List[A], b: List[B]) -> Union[A, B]:
+    def two_args(a: list[A], b: list[B]) -> A | B:
         ...
 
     def two_args(a, b):
         ...
 
-    a: List[float]
-    b: List[str]
+    a: list[float]
+    b: list[str]
 
     reveal_type(partial(two_args))
     reveal_type(partial(two_args, 1))
@@ -161,11 +161,11 @@
     reveal_type(partial(two_args, a, b))
     reveal_type(partial(two_args, b, a))
   out: |
-    main:25: note: Revealed type is "Overload(def [A] (a: builtins.int, b: builtins.list[A`-1]) -> A`-1, def [B] (a: builtins.int, b: builtins.list[B`-1]) -> B`-1, def [A, B] (a: builtins.list[A`-1], b: builtins.list[B`-2]) -> Union[A`-1, B`-2])"
+    main:25: note: Revealed type is "Overload(def [A] (a: builtins.int, b: builtins.list[A`-1]) -> A`-1, def [B] (a: builtins.int, b: builtins.list[B`-1]) -> B`-1, def [A, B] (a: builtins.list[A`-1], b: builtins.list[B`-2]) -> A`-1 | B`-2)"
     main:26: note: Revealed type is "Overload(def [A] (b: builtins.list[A`-1]) -> A`-1, def [B] (b: builtins.list[B`-1]) -> B`-1)"
     main:27: note: Revealed type is "Overload(def () -> builtins.float, def () -> builtins.float)"
     main:28: note: Revealed type is "Overload(def () -> builtins.str, def () -> builtins.str)"
-    main:29: note: Revealed type is "def [B] (b: builtins.list[B`-2]) -> Union[builtins.float, B`-2]"
-    main:30: note: Revealed type is "def [B] (b: builtins.list[B`-2]) -> Union[builtins.str, B`-2]"
-    main:31: note: Revealed type is "def () -> Union[builtins.float, builtins.str]"
-    main:32: note: Revealed type is "def () -> Union[builtins.str, builtins.float]"
+    main:29: note: Revealed type is "def [B] (b: builtins.list[B`-2]) -> builtins.float | B`-2"
+    main:30: note: Revealed type is "def [B] (b: builtins.list[B`-2]) -> builtins.str | B`-2"
+    main:31: note: Revealed type is "def () -> builtins.float | builtins.str"
+    main:32: note: Revealed type is "def () -> builtins.str | builtins.float"

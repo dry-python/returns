@@ -92,8 +92,8 @@
         ) -> MyClass[_FirstType, _FirstType]:
             ...
   out: |
-    main:13: error: Return type "MyClass[_FirstType, _FirstType]" of "from_failure" incompatible with return type "KindN[MyClass[_FirstType, _SecondType], _FirstType, _UpdatedType, Never]" in supertype "DiverseFailableN"  [override]
-    main:15: error: Argument 1 of "from_failure" is incompatible with supertype "DiverseFailableN"; supertype defines the argument type as "_UpdatedType"  [override]
+    main:13: error: Return type "MyClass[_FirstType, _FirstType]" of "from_failure" incompatible with return type "KindN[MyClass[_FirstType, _SecondType], _FirstType, _UpdatedType, Never]" in supertype "returns.interfaces.failable.DiverseFailableN"  [override]
+    main:15: error: Argument 1 of "from_failure" is incompatible with supertype "returns.interfaces.failable.DiverseFailableN"; supertype defines the argument type as "_UpdatedType"  [override]
     main:15: note: This violates the Liskov substitution principle
     main:15: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
 
@@ -120,7 +120,7 @@
         ) -> MyClass[_FirstType, _FirstType, _FirstType]:
             ...
   out: |
-    main:14: error: Return type "MyClass[_FirstType, _FirstType, _FirstType]" of "from_failure" incompatible with return type "KindN[MyClass[_FirstType, _SecondType, _ThirdType], _FirstType, _UpdatedType, _ThirdType]" in supertype "DiverseFailableN"  [override]
-    main:16: error: Argument 1 of "from_failure" is incompatible with supertype "DiverseFailableN"; supertype defines the argument type as "_UpdatedType"  [override]
+    main:14: error: Return type "MyClass[_FirstType, _FirstType, _FirstType]" of "from_failure" incompatible with return type "KindN[MyClass[_FirstType, _SecondType, _ThirdType], _FirstType, _UpdatedType, _ThirdType]" in supertype "returns.interfaces.failable.DiverseFailableN"  [override]
+    main:16: error: Argument 1 of "from_failure" is incompatible with supertype "returns.interfaces.failable.DiverseFailableN"; supertype defines the argument type as "_UpdatedType"  [override]
     main:16: note: This violates the Liskov substitution principle
     main:16: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides

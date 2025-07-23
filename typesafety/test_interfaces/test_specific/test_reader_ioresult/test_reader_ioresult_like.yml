@@ -84,11 +84,11 @@
         ) -> MyClass[T, V, U]:
             ...
   out: |
-    main:15: error: Return type "MyClass[N, U, V]" of "bind_context_ioresult" incompatible with return type "KindN[MyClass[T, V, U], _UpdatedType, V, U]" in supertype "ReaderIOResultLikeN"  [override]
-    main:17: error: Argument 1 of "bind_context_ioresult" is incompatible with supertype "ReaderIOResultLikeN"; supertype defines the argument type as "Callable[[T], RequiresContextIOResult[_UpdatedType, V, U]]"  [override]
+    main:15: error: Return type "MyClass[N, U, V]" of "bind_context_ioresult" incompatible with return type "KindN[MyClass[T, V, U], _UpdatedType, V, U]" in supertype "returns.interfaces.specific.reader_ioresult.ReaderIOResultLikeN"  [override]
+    main:17: error: Argument 1 of "bind_context_ioresult" is incompatible with supertype "returns.interfaces.specific.reader_ioresult.ReaderIOResultLikeN"; supertype defines the argument type as "Callable[[T], RequiresContextIOResult[_UpdatedType, V, U]]"  [override]
     main:17: note: This violates the Liskov substitution principle
     main:17: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
-    main:22: error: Return type "MyClass[T, V, U]" of "from_ioresult_context" incompatible with return type "KindN[MyClass[T, V, U], _ValueType, _ErrorType, _EnvType]" in supertype "ReaderIOResultLikeN"  [override]
-    main:24: error: Argument 1 of "from_ioresult_context" is incompatible with supertype "ReaderIOResultLikeN"; supertype defines the argument type as "RequiresContextIOResult[_ValueType, _ErrorType, _EnvType]"  [override]
+    main:22: error: Return type "MyClass[T, V, U]" of "from_ioresult_context" incompatible with return type "KindN[MyClass[T, V, U], _ValueType, _ErrorType, _EnvType]" in supertype "returns.interfaces.specific.reader_ioresult.ReaderIOResultLikeN"  [override]
+    main:24: error: Argument 1 of "from_ioresult_context" is incompatible with supertype "returns.interfaces.specific.reader_ioresult.ReaderIOResultLikeN"; supertype defines the argument type as "RequiresContextIOResult[_ValueType, _ErrorType, _EnvType]"  [override]
     main:24: note: This violates the Liskov substitution principle
     main:24: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides

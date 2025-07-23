@@ -188,9 +188,9 @@ def test_types_to_strategies_default() -> None:  # noqa: WPS210
     )
 
     wrapper_strategy = (
-        "builds(from_value, shared(sampled_from([<class 'NoneType'>,"
-        " <class 'bool'>, <class 'int'>, <class 'float'>, <class 'str'>,"
-        " <class 'bytes'>]), key='typevar=~_FirstType').flatmap(from_type))"
+        'builds(from_value, shared(sampled_from([NoneType,'
+        ' bool, int, float, str,'
+        " bytes]), key='typevar=~_FirstType').flatmap(from_type))"
     )
     assert (
         _strategy_string(result[container_type], container_type)
@@ -214,8 +214,8 @@ def test_types_to_strategies_default() -> None:  # noqa: WPS210
     )
     assert (
         _strategy_string(result[TypeVar], _ValueType)
-        == "shared(sampled_from([<class 'NoneType'>, <class 'bool'>,"
-        " <class 'int'>, <class 'float'>, <class 'str'>, <class 'bytes'>]),"
+        == 'shared(sampled_from([NoneType, bool,'
+        ' int, float, str, bytes]),'
         " key='typevar=~_ValueType').flatmap(from_type).filter(lambda"
         ' inner: inner == inner)'
     )

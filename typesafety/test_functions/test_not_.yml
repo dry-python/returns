@@ -14,7 +14,7 @@
     from returns.functions import not_
     from typing import List
 
-    def number_is_in_list(number: int, list_: List[int]) -> bool:
+    def number_is_in_list(number: int, list_: list[int]) -> bool:
         return number in list_
 
     reveal_type(not_(number_is_in_list))  # N: Revealed type is "def (number: builtins.int, list_: builtins.list[builtins.int]) -> builtins.bool"

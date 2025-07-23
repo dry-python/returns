@@ -135,12 +135,12 @@
         def __call__(self, arg: int, other: str) -> None:
             ...
 
-    x: Union[Inst, Other]
+    x: Inst | Other
     reveal_type(partial(x))
     # This does not work as well:
     reveal_type(partial(x, 1))
   out: |
-    main:13: note: Revealed type is "Union[main.Inst, main.Other]"
+    main:13: note: Revealed type is "main.Inst | main.Other"
     main:15: note: Revealed type is "def (*Any, **Any)"
 
 

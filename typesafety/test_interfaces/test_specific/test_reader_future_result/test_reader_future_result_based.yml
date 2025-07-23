@@ -64,7 +64,7 @@
         def __call__(self, deps: T) -> FutureResult[V, U]:
             ...
   out: |
-    main:16: error: Return type "FutureResult[V, U]" of "__call__" incompatible with return type "FutureResult[T, V]" in supertype "Contextable"  [override]
-    main:16: error: Argument 1 of "__call__" is incompatible with supertype "Contextable"; supertype defines the argument type as "U"  [override]
+    main:16: error: Return type "FutureResult[V, U]" of "__call__" incompatible with return type "FutureResult[T, V]" in supertype "returns.interfaces.specific.reader.Contextable"  [override]
+    main:16: error: Argument 1 of "__call__" is incompatible with supertype "returns.interfaces.specific.reader.Contextable"; supertype defines the argument type as "U"  [override]
     main:16: note: This violates the Liskov substitution principle
     main:16: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides

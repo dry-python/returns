@@ -170,8 +170,6 @@
     reveal_type(flow(r, bind_result(test), identity, bind_result(second)))  # N: Revealed type is "returns.io.IOResult[builtins.bool, builtins.str]"
 
 
-# Regression to
-# https://github.com/dry-python/returns/issues/461
 - case: bind_result_and_flow3
   disable_cache: false
   main: |

@@ -77,11 +77,11 @@
         ) -> MyClass[_NewValueType]:
             ...
   out: |
-    main:13: error: Return type "MyClass[_ValueType]" of "bind_io" incompatible with return type "KindN[MyClass[_ValueType], _UpdatedType, Never, Never]" in supertype "IOLikeN"  [override]
-    main:15: error: Argument 1 of "bind_io" is incompatible with supertype "IOLikeN"; supertype defines the argument type as "Callable[[_ValueType], IO[_UpdatedType]]"  [override]
+    main:13: error: Return type "MyClass[_ValueType]" of "bind_io" incompatible with return type "KindN[MyClass[_ValueType], _UpdatedType, Never, Never]" in supertype "returns.interfaces.specific.io.IOLikeN"  [override]
+    main:15: error: Argument 1 of "bind_io" is incompatible with supertype "returns.interfaces.specific.io.IOLikeN"; supertype defines the argument type as "Callable[[_ValueType], IO[_UpdatedType]]"  [override]
     main:15: note: This violates the Liskov substitution principle
     main:15: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
-    main:19: error: Signature of "from_io" incompatible with supertype "IOLikeN"  [override]
+    main:19: error: Signature of "from_io" incompatible with supertype "returns.interfaces.specific.io.IOLikeN"  [override]
     main:19: note:      Superclass:
     main:19: note:          @classmethod
     main:19: note:          def [_UpdatedType] from_io(cls, inner_value: IO[_UpdatedType]) -> KindN[MyClass[_ValueType], _UpdatedType, Never, Never]

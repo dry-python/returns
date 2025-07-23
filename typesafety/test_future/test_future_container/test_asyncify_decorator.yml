@@ -10,4 +10,4 @@
     ) -> int:
         return 1
 
-    reveal_type(test)  # N: Revealed type is "def (first: builtins.int, second: Union[builtins.str, None] =, *, kw: builtins.bool =) -> typing.Coroutine[Any, Any, builtins.int]"
+    reveal_type(test)  # N: Revealed type is "def (first: builtins.int, second: builtins.str | None =, *, kw: builtins.bool =) -> typing.Coroutine[Any, Any, builtins.int]"

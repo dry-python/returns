@@ -92,8 +92,8 @@
         ) -> MyClass[N, E]:
             ...
   out: |
-    main:10: error: Return type "MyClass[N, E]" of "lash" incompatible with return type "KindN[MyClass[V, E], V, _UpdatedType, Never]" in supertype "LashableN"  [override]
-    main:12: error: Argument 1 of "lash" is incompatible with supertype "LashableN"; supertype defines the argument type as "Callable[[E], KindN[MyClass[V, E], V, _UpdatedType, Never]]"  [override]
+    main:10: error: Return type "MyClass[N, E]" of "lash" incompatible with return type "KindN[MyClass[V, E], V, _UpdatedType, Never]" in supertype "returns.interfaces.lashable.LashableN"  [override]
+    main:12: error: Argument 1 of "lash" is incompatible with supertype "returns.interfaces.lashable.LashableN"; supertype defines the argument type as "Callable[[E], KindN[MyClass[V, E], V, _UpdatedType, Never]]"  [override]
     main:12: note: This violates the Liskov substitution principle
     main:12: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
 
@@ -117,7 +117,7 @@
         ) -> MyClass[N, E, T]:
             ...
   out: |
-    main:11: error: Return type "MyClass[N, E, T]" of "lash" incompatible with return type "KindN[MyClass[V, E, T], V, _UpdatedType, T]" in supertype "LashableN"  [override]
-    main:13: error: Argument 1 of "lash" is incompatible with supertype "LashableN"; supertype defines the argument type as "Callable[[E], KindN[MyClass[V, E, T], V, _UpdatedType, T]]"  [override]
+    main:11: error: Return type "MyClass[N, E, T]" of "lash" incompatible with return type "KindN[MyClass[V, E, T], V, _UpdatedType, T]" in supertype "returns.interfaces.lashable.LashableN"  [override]
+    main:13: error: Argument 1 of "lash" is incompatible with supertype "returns.interfaces.lashable.LashableN"; supertype defines the argument type as "Callable[[E], KindN[MyClass[V, E, T], V, _UpdatedType, T]]"  [override]
     main:13: note: This violates the Liskov substitution principle
     main:13: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides

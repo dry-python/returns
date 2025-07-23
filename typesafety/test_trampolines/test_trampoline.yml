@@ -6,9 +6,9 @@
 
     @trampoline
     def _accumulate(
-        numbers: List[int],
+        numbers: list[int],
         acc: int = 0,
-    ) -> Union[int, Trampoline[int]]:
+    ) -> int | Trampoline[int]:
         return Trampoline(_accumulate)
   out: |
     main:9: error: Missing positional argument "numbers" in call to "Trampoline"  [call-arg]
@@ -22,9 +22,9 @@
 
     @trampoline
     def _accumulate(
-        numbers: List[int],
+        numbers: list[int],
         acc: int = 0,
-    ) -> Union[int, Trampoline[int]]:
+    ) -> int | Trampoline[int]:
         return Trampoline(_accumulate, ['a'], 'b')
   out: |
     main:9: error: List item 0 has incompatible type "str"; expected "int"  [list-item]
@@ -39,9 +39,9 @@
 
     @trampoline
     def _accumulate(
-        numbers: List[int],
+        numbers: list[int],
         acc: int = 0,
-    ) -> Union[int, Trampoline[int]]:
+    ) -> int | Trampoline[int]:
         return Trampoline(_accumulate, [1], 2)
 
     reveal_type(_accumulate([1, 2]))  # N: Revealed type is "builtins.int"
