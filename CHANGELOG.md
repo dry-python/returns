@@ -6,10 +6,11 @@ incremental in minor, bugfixes only are patches.
 See [0Ver](https://0ver.org/).
 
 
-## 0.26.0 WIP
+## 0.26.0
 
 ### Features
 
+- Added `mypy>=1.16,<1.18` support
 - Added `__bool__` to `Maybe`, only `Nothing` ever returns `False`
 
 
