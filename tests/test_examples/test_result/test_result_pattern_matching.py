@@ -2,7 +2,7 @@ from returns.result import Failure, Success, safe
 
 
 @safe
-def div(first_number: int, second_number: int) -> int:  # noqa: FURB118
+def div(first_number: int, second_number: int) -> int:
     return first_number // second_number
 
 
