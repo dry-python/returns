@@ -65,7 +65,7 @@ codespell = "^2.2"
 slotscheck = "^0.19"
 ruff = "^0.12"
 
-pytest-cov = "^6.0"
+pytest-cov = ">=6,<8"
 pytest-randomly = "^3.12"
 pytest-mypy-plugins = "^3.1"
 pytest-subtests = "^0.14"
