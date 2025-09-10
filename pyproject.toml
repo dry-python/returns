@@ -66,7 +66,7 @@ slotscheck = "^0.19"
 ruff = "^0.12"
 
 pytest-cov = ">=6,<8"
-pytest-randomly = "^3.12"
+pytest-randomly = ">=3.12,<5.0"
 pytest-mypy-plugins = "^3.1"
 pytest-subtests = "^0.14"
 pytest-shard = "^0.1"
