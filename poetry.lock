@@ -1162,14 +1162,14 @@ tomlkit = ">=0.11"
 
 [[package]]
 name = "pytest-randomly"
-version = "4.0.0"
+version = "4.0.1"
 description = "Pytest plugin to randomly order tests and control random.seed."
 optional = false
 python-versions = ">=3.9"
 groups = ["dev"]
 files = [
-    {file = "pytest_randomly-4.0.0-py3-none-any.whl", hash = "sha256:50297deaa5f18bf0b7d2aadfb3332eb3b313628aff260b63210d03578d3691aa"},
-    {file = "pytest_randomly-4.0.0.tar.gz", hash = "sha256:521c216e94e8b40cccfa5da5e403e9c45a3071db6f9f1cb2d5658e9017def2a9"},
+    {file = "pytest_randomly-4.0.1-py3-none-any.whl", hash = "sha256:e0dfad2fd4f35e07beff1e47c17fbafcf98f9bf4531fd369d9260e2f858bfcb7"},
+    {file = "pytest_randomly-4.0.1.tar.gz", hash = "sha256:174e57bb12ac2c26f3578188490bd333f0e80620c3f47340158a86eca0593cd8"},
 ]
 
 [package.dependencies]
