@@ -205,7 +205,7 @@ def test_types_to_strategies_default() -> None:  # noqa: WPS210
     ]
     assert (
         _strategy_string(result[callable_type], Callable[[int, str], bool])
-        == 'functions(like=lambda *args, **kwargs: <unknown>,'
+        == 'functions(like=lambda *args, **kwargs: None,'
         ' returns=booleans(), pure=True)'
     )
     assert (
