@@ -17,7 +17,7 @@ Make your functions return something meaningful, typed, and safe!
 
 ## Features
 
-- Brings functional programming to Python land
+- Brings functional programming to Python ecosystem
 - Provides a bunch of primitives to write declarative business logic
 - Enforces better architecture
 - Fully typed with annotations and checked with `mypy`, [PEP561 compatible](https://www.python.org/dev/peps/pep-0561/)
@@ -25,7 +25,7 @@ Make your functions return something meaningful, typed, and safe!
 - Provides type-safe interfaces to create your own data-types with enforced laws
 - Has a bunch of helpers for better composition
 - Pythonic and pleasant to write and to read 🐍
-- Support functions and coroutines, framework agnostic
+- Supports functions and coroutines, and is framework-agnostic
 - Easy to start: has lots of docs, tests, and tutorials
 
 [Quickstart](https://returns.readthedocs.io/en/latest/pages/quickstart.html) right now!
