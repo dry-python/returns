@@ -17,7 +17,7 @@ Make your functions return something meaningful, typed, and safe!
 
 ## Features
 
-- Brings functional programming to Python ecosystem
+- Brings functional programming to Python land
 - Provides a bunch of primitives to write declarative business logic
 - Enforces better architecture
 - Fully typed with annotations and checked with `mypy`, [PEP561 compatible](https://www.python.org/dev/peps/pep-0561/)
