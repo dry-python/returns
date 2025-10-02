@@ -25,7 +25,7 @@ Make your functions return something meaningful, typed, and safe!
 - Provides type-safe interfaces to create your own data-types with enforced laws
 - Has a bunch of helpers for better composition
 - Pythonic and pleasant to write and to read 🐍
-- Supports functions and coroutines, and is framework-agnostic
+- Supports functions and coroutines, framework agnostic
 - Easy to start: has lots of docs, tests, and tutorials
 
 [Quickstart](https://returns.readthedocs.io/en/latest/pages/quickstart.html) right now!
