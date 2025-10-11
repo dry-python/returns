@@ -177,8 +177,8 @@ class Maybe(  # type: ignore[type-var]
 
         """
         try:
-            value=next(expr)
-            if isinstance(value,Maybe):
+            value = next(expr)
+            if isinstance(value, Maybe):
                 return value
             return Maybe.from_value(value)
 

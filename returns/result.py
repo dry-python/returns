@@ -220,8 +220,8 @@ class Result(  # type: ignore[type-var]
 
         """
         try:
-            value=next(expr)
-            if isinstance(value,Result):
+            value = next(expr)
+            if isinstance(value, Result):
                 return value
             return Result.from_value(value)
         except UnwrapFailedError as exc:
