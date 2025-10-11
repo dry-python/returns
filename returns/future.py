@@ -1213,7 +1213,11 @@ class FutureResult(  # type: ignore[type-var]
 
         async def factory() -> Result[_NewValueType, _NewErrorType]:
             try:
-                return Success(await anext(expr))
+                value=await anext(expr)
+                if ininstance(value,FutureResult):
+                    return value
+
+                return Success(value)
             except UnwrapFailedError as exc:
                 return exc.halted_container  # type: ignore
 

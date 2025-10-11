@@ -177,7 +177,11 @@ class Maybe(  # type: ignore[type-var]
 
         """
         try:
-            return Maybe.from_value(next(expr))
+            value=next(expr)
+            if isinstance(value,Maybe):
+                return value
+            return Maybe.from_value(value)
+
         except UnwrapFailedError as exc:
             return exc.halted_container  # type: ignore
 
