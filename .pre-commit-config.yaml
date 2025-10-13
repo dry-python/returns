@@ -11,13 +11,13 @@ repos:
         args: [--fix=lf]
       - id: check-case-conflict
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.34.0
+    rev: 0.34.1
     hooks:
       - id: check-dependabot
       - id: check-readthedocs
       - id: check-github-workflows
   - repo: https://github.com/rhysd/actionlint
-    rev: v1.7.7
+    rev: v1.7.8
     hooks:
       - id: actionlint
   - repo: https://github.com/woodruffw/zizmor-pre-commit
@@ -29,11 +29,11 @@ repos:
     hooks:
       - id: shellcheck
   - repo: https://github.com/tox-dev/pyproject-fmt
-    rev: v2.7.0
+    rev: v2.10.0
     hooks:
       - id: pyproject-fmt
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.13.3
+    rev: v0.14.0
     hooks:
       - id: ruff
         args: ["--exit-non-zero-on-fix"]
