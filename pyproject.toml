@@ -68,7 +68,7 @@ ruff = ">=0.12,<0.15"
 pytest-cov = ">=6,<8"
 pytest-randomly = ">=3.12,<5.0"
 pytest-mypy-plugins = "^3.1"
-pytest-subtests = "^0.14"
+pytest-subtests = ">=0.14,<0.16"
 pytest-shard = "^0.1"
 covdefaults = "^2.3"
 
