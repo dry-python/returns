@@ -21,7 +21,7 @@ repos:
     hooks:
       - id: actionlint
   - repo: https://github.com/woodruffw/zizmor-pre-commit
-    rev: v1.15.2
+    rev: v1.16.0
     hooks:
       - id: zizmor
   - repo: https://github.com/shellcheck-py/shellcheck-py
@@ -33,7 +33,7 @@ repos:
     hooks:
       - id: pyproject-fmt
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.1
+    rev: v0.14.2
     hooks:
       - id: ruff
         args: ["--exit-non-zero-on-fix"]
