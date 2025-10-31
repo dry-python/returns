@@ -1910,14 +1910,14 @@ files = [
 
 [[package]]
 name = "trio"
-version = "0.31.0"
+version = "0.32.0"
 description = "A friendly Python library for async concurrency and I/O"
 optional = false
-python-versions = ">=3.9"
+python-versions = ">=3.10"
 groups = ["dev"]
 files = [
-    {file = "trio-0.31.0-py3-none-any.whl", hash = "sha256:b5d14cd6293d79298b49c3485ffd9c07e3ce03a6da8c7dfbe0cb3dd7dc9a4774"},
-    {file = "trio-0.31.0.tar.gz", hash = "sha256:f71d551ccaa79d0cb73017a33ef3264fde8335728eb4c6391451fe5d253a9d5b"},
+    {file = "trio-0.32.0-py3-none-any.whl", hash = "sha256:4ab65984ef8370b79a76659ec87aa3a30c5c7c83ff250b4de88c29a8ab6123c5"},
+    {file = "trio-0.32.0.tar.gz", hash = "sha256:150f29ec923bcd51231e1d4c71c7006e65247d68759dd1c19af4ea815a25806b"},
 ]
 
 [package.dependencies]
@@ -1983,4 +1983,4 @@ compatible-mypy = ["mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.10"
-content-hash = "ebfcac24d7068b11081f778a67d146a344d9f3ca101cbbb2e7fdad3b5773a529"
+content-hash = "5d1c4c0632b4b8329f208c6e9ede8686e37a634816da50915ad63714ba5e362e"

@@ -56,7 +56,7 @@ mypy = { version = ">=1.12,<1.18", optional = true }
 
 [tool.poetry.group.dev.dependencies]
 anyio = "^4.3"
-trio = ">=0.30,<0.32"
+trio = ">=0.30,<0.33"
 attrs = "^25.3"
 httpx = "^0.28"
 
