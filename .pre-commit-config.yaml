@@ -6,7 +6,7 @@ repos:
       - id: check-readthedocs
       - id: check-github-workflows
   - repo: https://github.com/rhysd/actionlint
-    rev: v1.7.8
+    rev: v1.7.9
     hooks:
       - id: actionlint
   - repo: https://github.com/woodruffw/zizmor-pre-commit
@@ -23,13 +23,13 @@ repos:
     hooks:
       - id: pyproject-fmt
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.5
+    rev: v0.14.6
     hooks:
       - id: ruff
         args: ["--exit-non-zero-on-fix"]
       - id: ruff-format
   - repo: https://github.com/sphinx-contrib/sphinx-lint
-    rev: v1.0.1
+    rev: v1.0.2
     hooks:
       - id: sphinx-lint
         args: [--enable=default-role]
