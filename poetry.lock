@@ -58,7 +58,7 @@ version = "25.4.0"
 description = "Classes Without Boilerplate"
 optional = false
 python-versions = ">=3.9"
-groups = ["main", "dev"]
+groups = ["dev"]
 files = [
     {file = "attrs-25.4.0-py3-none-any.whl", hash = "sha256:adcf7e2a1fb3b36ac48d97835bb6d8ade15b8dcce26aba8bf1d14847b57a3373"},
     {file = "attrs-25.4.0.tar.gz", hash = "sha256:16d5969b87f0859ef33a48b35d55ac1be6e42ae49d5e853b597db70c35c57e11"},
@@ -602,33 +602,32 @@ zstd = ["zstandard (>=0.18.0)"]
 
 [[package]]
 name = "hypothesis"
-version = "6.137.2"
-description = "A library for property-based testing"
+version = "6.148.5"
+description = "The property-based testing library for Python"
 optional = true
-python-versions = ">=3.9"
+python-versions = ">=3.10"
 groups = ["main"]
 markers = "extra == \"check-laws\""
 files = [
-    {file = "hypothesis-6.137.2-py3-none-any.whl", hash = "sha256:7258a288e9a4d1bac34a9403a6039056113b8b125e3974d88d7773cdb052164f"},
-    {file = "hypothesis-6.137.2.tar.gz", hash = "sha256:e98bcf06bc0f8497e91f255b2549263283be266e8f299e9b2effd7dc075978f6"},
+    {file = "hypothesis-6.148.5-py3-none-any.whl", hash = "sha256:63cde596a48cdbbabac0591ea19a1bffa812c30afbe3d948bc2a8ee8ed49a11a"},
+    {file = "hypothesis-6.148.5.tar.gz", hash = "sha256:bb0c67bff155b8d8cfe8fbc1f1218028f7e2f0ee7f24d8ccc89f4c14ee4e65c0"},
 ]
 
 [package.dependencies]
-attrs = ">=22.2.0"
 exceptiongroup = {version = ">=1.0.0", markers = "python_version < \"3.11\""}
 sortedcontainers = ">=2.1.0,<3.0.0"
 
 [package.extras]
-all = ["black (>=19.10b0)", "click (>=7.0)", "crosshair-tool (>=0.0.93)", "django (>=4.2)", "dpcontracts (>=0.4)", "hypothesis-crosshair (>=0.0.24)", "lark (>=0.10.1)", "libcst (>=0.3.16)", "numpy (>=1.19.3)", "pandas (>=1.1)", "pytest (>=4.6)", "python-dateutil (>=1.4)", "pytz (>=2014.1)", "redis (>=3.0.0)", "rich (>=9.0.0)", "tzdata (>=2025.2) ; sys_platform == \"win32\" or sys_platform == \"emscripten\"", "watchdog (>=4.0.0)"]
-cli = ["black (>=19.10b0)", "click (>=7.0)", "rich (>=9.0.0)"]
+all = ["black (>=20.8b0)", "click (>=7.0)", "crosshair-tool (>=0.0.98)", "django (>=4.2)", "dpcontracts (>=0.4)", "hypothesis-crosshair (>=0.0.26)", "lark (>=0.10.1)", "libcst (>=0.3.16)", "numpy (>=1.21.6)", "pandas (>=1.1)", "pytest (>=4.6)", "python-dateutil (>=1.4)", "pytz (>=2014.1)", "redis (>=3.0.0)", "rich (>=9.0.0)", "tzdata (>=2025.2) ; sys_platform == \"win32\" or sys_platform == \"emscripten\"", "watchdog (>=4.0.0)"]
+cli = ["black (>=20.8b0)", "click (>=7.0)", "rich (>=9.0.0)"]
 codemods = ["libcst (>=0.3.16)"]
-crosshair = ["crosshair-tool (>=0.0.93)", "hypothesis-crosshair (>=0.0.24)"]
+crosshair = ["crosshair-tool (>=0.0.98)", "hypothesis-crosshair (>=0.0.26)"]
 dateutil = ["python-dateutil (>=1.4)"]
 django = ["django (>=4.2)"]
 dpcontracts = ["dpcontracts (>=0.4)"]
-ghostwriter = ["black (>=19.10b0)"]
+ghostwriter = ["black (>=20.8b0)"]
 lark = ["lark (>=0.10.1)"]
-numpy = ["numpy (>=1.19.3)"]
+numpy = ["numpy (>=1.21.6)"]
 pandas = ["pandas (>=1.1)"]
 pytest = ["pytest (>=4.6)"]
 pytz = ["pytz (>=2014.1)"]
@@ -1947,7 +1946,7 @@ version = "2.6.0"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
 optional = false
 python-versions = ">=3.9"
-groups = ["dev", "docs"]
+groups = ["docs"]
 files = [
     {file = "urllib3-2.6.0-py3-none-any.whl", hash = "sha256:c90f7a39f716c572c4e3e58509581ebd83f9b59cced005b7db7ad2d22b0db99f"},
     {file = "urllib3-2.6.0.tar.gz", hash = "sha256:cb9bcef5a4b345d5da5d145dc3e30834f58e8018828cbc724d30b4cb7d4d49f1"},
