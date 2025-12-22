@@ -86,8 +86,10 @@ def test_custom_result_error_types_resolve(thing: CustomResult) -> None:
 
 @given(
     st.from_type(RequiresContextResultE).filter(
-        lambda container: not is_successful(
-            container(RequiresContextResultE.no_args),
+        lambda container: (
+            not is_successful(
+                container(RequiresContextResultE.no_args),
+            )
         ),
     ),
 )
