@@ -5,6 +5,13 @@ Versions before `1.0.0` are `0Ver`-based:
 incremental in minor, bugfixes only are patches.
 See [0Ver](https://0ver.org/).
 
+## Unreleased
+
+### Features
+
+- Add support for `copy.replace()` from Python 3.13+ by implementing `__replace__`
+  magic method on `BaseContainer`. This allows for creating modified copies
+  of immutable containers. (#1920)
 
 ## 0.26.0
 
