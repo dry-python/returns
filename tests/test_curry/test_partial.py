@@ -1,4 +1,5 @@
-from typing import Callable, TypeAlias, TypeVar, cast
+from collections.abc import Callable
+from typing import TypeAlias, TypeVar, cast
 
 from returns.curry import partial
 

@@ -13,13 +13,16 @@ _Decorator: TypeAlias = Callable[
 
 class _PartialDecorator(Generic[_ReturnType]):
     """Wraps ``functools.partial`` into a decorator without nesting."""
+
     __slots__ = ('_args', '_kwargs')
 
     def __init__(self, args: tuple[Any, ...], kwargs: dict[str, Any]) -> None:
         self._args = args
         self._kwargs = kwargs
 
-    def __call__(self, inner: Callable[..., _ReturnType]) -> Callable[..., _ReturnType]:
+    def __call__(
+        self, inner: Callable[..., _ReturnType]
+    ) -> Callable[..., _ReturnType]:
         return _partial(inner, *self._args, **self._kwargs)
 
 
