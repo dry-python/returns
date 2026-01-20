@@ -2,16 +2,44 @@ from collections.abc import Callable
 from functools import partial as _partial
 from functools import wraps
 from inspect import BoundArguments, Signature
-from typing import Any, TypeAlias, TypeVar
+from typing import Any, Generic, TypeAlias, TypeVar, overload
 
 _ReturnType = TypeVar('_ReturnType')
+_Decorator: TypeAlias = Callable[
+    [Callable[..., _ReturnType]],
+    Callable[..., _ReturnType],
+]
 
 
+class _PartialDecorator(Generic[_ReturnType]):
+    """Wraps ``functools.partial`` into a decorator without nesting."""
+
+    __slots__ = ('_args', '_kwargs')
+
+    def __init__(self, args: tuple[Any, ...], kwargs: dict[str, Any]) -> None:
+        self._args = args
+        self._kwargs = kwargs
+
+    def __call__(
+        self, inner: Callable[..., _ReturnType]
+    ) -> Callable[..., _ReturnType]:
+        return _partial(inner, *self._args, **self._kwargs)
+
+
+@overload
 def partial(
     func: Callable[..., _ReturnType],
+    /,
     *args: Any,
     **kwargs: Any,
-) -> Callable[..., _ReturnType]:
+) -> Callable[..., _ReturnType]: ...
+
+
+@overload
+def partial(*args: Any, **kwargs: Any) -> _Decorator: ...
+
+
+def partial(*args: Any, **kwargs: Any) -> Any:
     """
     Typed partial application.
 
@@ -35,7 +63,11 @@ def partial(
         - https://docs.python.org/3/library/functools.html#functools.partial
 
     """
-    return _partial(func, *args, **kwargs)
+    if args and callable(args[0]):
+        return _partial(args[0], *args[1:], **kwargs)
+    if args and args[0] is None:
+        args = args[1:]
+    return _PartialDecorator(args, kwargs)
 
 
 def curry(function: Callable[..., _ReturnType]) -> Callable[..., _ReturnType]:

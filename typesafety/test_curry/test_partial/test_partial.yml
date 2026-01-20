@@ -113,7 +113,7 @@
     ) -> str:
         ...
 
-    partial(multiple, 1, 2.0, 3)
+    x = partial(multiple, 1, 2.0, 3)
   out: |
     main:10: error: Too many arguments for "multiple"  [call-arg]
 
@@ -150,3 +150,97 @@
         function: Callable[[_SecondType, _FirstType], _SecondType],
     ):
         reveal_type(partial(function, default))  # N: Revealed type is "def (_FirstType`-2) -> _SecondType`-1"
+
+
+- case: partial_regression1711
+  disable_cache: false
+  main: |
+    from returns.curry import partial
+
+    def foo(x: int, y: int, z: int) -> int:
+        ...
+
+    def bar(x: int) -> int:
+        ...
+
+    baz = partial(foo, bar(1))
+    reveal_type(baz)  # N: Revealed type is "def (y: builtins.int, z: builtins.int) -> builtins.int"
+
+
+- case: partial_optional_arg
+  disable_cache: false
+  main: |
+    from returns.curry import partial
+
+    def test_partial_fn(
+        first_arg: int,
+        optional_arg: str | None,
+    ) -> tuple[int, str | None]:
+        ...
+
+    bound = partial(test_partial_fn, 1)
+    reveal_type(bound)  # N: Revealed type is "def (optional_arg: builtins.str | None) -> tuple[builtins.int, builtins.str | None]"
+
+
+- case: partial_decorator
+  disable_cache: false
+  main: |
+    from returns.curry import partial
+
+    @partial(first=1)
+    def _decorated(first: int, second: str) -> float:
+        ...
+
+    reveal_type(_decorated)  # N: Revealed type is "Any"
+  out: |
+    main:3: error: Untyped decorator makes function "_decorated" untyped  [misc]
+
+
+- case: partial_keyword_arg
+  disable_cache: false
+  main: |
+    from returns.curry import partial
+
+    def test_partial_fn(
+        first_arg: int,
+        optional_arg: str | None,
+    ) -> tuple[int, str | None]:
+        ...
+
+    bound = partial(test_partial_fn, optional_arg='a')
+    reveal_type(bound)  # N: Revealed type is "def (first_arg: builtins.int) -> tuple[builtins.int, builtins.str | None]"
+
+
+- case: partial_keyword_only
+  disable_cache: false
+  main: |
+    from returns.curry import partial
+
+    def _target(*, arg: int) -> int:
+        ...
+
+    bound = partial(_target, arg=1)
+    reveal_type(bound)  # N: Revealed type is "def () -> builtins.int"
+
+
+- case: partial_keyword_mixed
+  disable_cache: false
+  main: |
+    from returns.curry import partial
+
+    def _target(arg1: int, *, arg2: int) -> int:
+        ...
+
+    bound = partial(_target, arg2=1)
+    reveal_type(bound)  # N: Revealed type is "def (arg1: builtins.int) -> builtins.int"
+
+
+- case: partial_wrong_signature_any
+  disable_cache: false
+  main: |
+    from returns.curry import partial
+
+    reveal_type(partial(len, 1))
+  out: |
+    main:3: error: Argument 1 to "len" has incompatible type "int"; expected "Sized"  [arg-type]
+    main:3: note: Revealed type is "def (*Any, **Any) -> builtins.int"
