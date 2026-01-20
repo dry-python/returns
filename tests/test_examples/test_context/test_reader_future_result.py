@@ -38,7 +38,8 @@ def _fetch_post(
     ] = RequiresContextFutureResultE.ask()
 
     return (
-        context.bind_future_result(
+        context
+        .bind_future_result(
             lambda client: future_safe(client.get)(_URL.format(post_id)),
         )
         .bind_result(
