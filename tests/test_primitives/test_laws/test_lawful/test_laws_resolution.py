@@ -71,6 +71,8 @@ def test_interface_defined_outside_returns() -> None:
     result = test_custom_interface_with_laws._Wrapper.laws()  # noqa: SLF001
 
     assert sorted(str(interface) for interface in result) == [
-        "<class 'test_hypothesis.test_laws.test_custom_interface_with_laws"
-        "._MappableN'>"
+        (
+            "<class 'test_hypothesis.test_laws.test_custom_interface_with_laws"
+            "._MappableN'>"
+        ),
     ]
