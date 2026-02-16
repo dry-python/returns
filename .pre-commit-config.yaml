@@ -1,12 +1,12 @@
 repos:
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.36.1
+    rev: 0.36.2
     hooks:
       - id: check-dependabot
       - id: check-readthedocs
       - id: check-github-workflows
   - repo: https://github.com/rhysd/actionlint
-    rev: v1.7.10
+    rev: v1.7.11
     hooks:
       - id: actionlint
   - repo: https://github.com/woodruffw/zizmor-pre-commit
@@ -19,11 +19,11 @@ repos:
     hooks:
       - id: shellcheck
   - repo: https://github.com/tox-dev/pyproject-fmt
-    rev: v2.15.0
+    rev: v2.16.0
     hooks:
       - id: pyproject-fmt
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.0
+    rev: v0.15.1
     hooks:
       - id: ruff
         args: ["--exit-non-zero-on-fix"]
