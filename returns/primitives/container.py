@@ -1,7 +1,7 @@
 from abc import ABC
 from typing import Any, TypeVar
 
-from typing_extensions import TypedDict
+from typing_extensions import Self, TypedDict
 
 from returns.interfaces.equable import Equable
 from returns.primitives.hkt import Kind1
@@ -67,6 +67,31 @@ class BaseContainer(Immutable, ABC):
         else:
             # backward compatibility with 0.19.0 and earlier
             object.__setattr__(self, '_inner_value', state)
+
+    def __replace__(self, **kwargs: Any) -> Self:
+        """
+        Support ``copy.replace`` from Python 3.13+.
+
+        Creates a new container of the same type with the inner value
+        replaced by the ``inner_value`` keyword argument, if provided.
+
+        .. code:: pycon
+          :force:
+
+          >>> import copy
+          >>> from returns.maybe import Some
+          >>> assert copy.replace(Some(1), inner_value=2) == Some(2)
+
+        See :pep:`618` and :func:`copy.replace` for details.
+        """
+        inner_value = kwargs.pop('inner_value', self._inner_value)
+        if kwargs:
+            raise TypeError(
+                'Unsupported field names(s): {0}'.format(
+                    ', '.join(sorted(kwargs)),
+                ),
+            )
+        return type(self)(inner_value)  # type: ignore[return-value]
 
 
 def container_equality(
