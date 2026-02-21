@@ -87,7 +87,7 @@ class BaseContainer(Immutable, ABC):
         inner_value = kwargs.pop('inner_value', self._inner_value)
         if kwargs:
             raise TypeError(
-                'Unsupported field names(s): {0}'.format(
+                'Unsupported field names(s): {}'.format(
                     ', '.join(sorted(kwargs)),
                 ),
             )
