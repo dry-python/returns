@@ -1130,14 +1130,14 @@ testing = ["process-tests", "pytest-xdist", "virtualenv"]
 
 [[package]]
 name = "pytest-mypy-plugins"
-version = "3.2.0"
+version = "3.3.0"
 description = "pytest plugin for writing tests for mypy plugins"
 optional = false
-python-versions = ">=3.9"
+python-versions = ">=3.10"
 groups = ["dev"]
 files = [
-    {file = "pytest_mypy_plugins-3.2.0-py3-none-any.whl", hash = "sha256:46e24e8d9eaeabcddd0a5dc5fb089c021903d5952e0c9d8af79383db99b9ffae"},
-    {file = "pytest_mypy_plugins-3.2.0.tar.gz", hash = "sha256:68bd95400c8f128327acd9a16c737dbec18b20fced3184ad97f391b07d4662f4"},
+    {file = "pytest_mypy_plugins-3.3.0-py3-none-any.whl", hash = "sha256:7b93f338609eace9405986be69fb52344dfb3ccbb96f3fc5ac3cbd257a34c5fc"},
+    {file = "pytest_mypy_plugins-3.3.0.tar.gz", hash = "sha256:4faa42c567fc25951f065c42607f61f5c36ded0265f4d77a4d16cda76002054a"},
 ]
 
 [package.dependencies]
