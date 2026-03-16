@@ -61,7 +61,7 @@ group.docs.dependencies.myst-parser = "^4.0"
 group.docs.dependencies.tomli = "^2.0"
 plugins.hypothesis._ = "returns.contrib.hypothesis._entrypoint:_setup_hook"
 plugins.pytest11.returns = "returns.contrib.pytest.plugin"
-urls."Funding" = "https://github.com/sponsors/dry-python"
+urls.Funding = "https://github.com/sponsors/dry-python"
 
 [tool.ruff]
 # Ruff config: https://docs.astral.sh/ruff/settings
