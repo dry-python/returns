@@ -5,11 +5,13 @@ from typing import Final, final
 from mypy.nodes import ARG_STAR, ARG_STAR2
 from mypy.plugin import FunctionContext
 from mypy.types import (
+    AnyType,
     CallableType,
     FunctionLike,
     Instance,
     Overloaded,
     ProperType,
+    TypeOfAny,
     TypeType,
     get_proper_type,
 )
@@ -51,28 +53,53 @@ def analyze(ctx: FunctionContext) -> ProperType:
     default_return = get_proper_type(ctx.default_return_type)
     if not isinstance(default_return, CallableType):
         return default_return
+    return _analyze_partial(ctx, default_return)
+
+
+def _analyze_partial(
+    ctx: FunctionContext,
+    default_return: CallableType,
+) -> ProperType:
+    if not ctx.arg_types or not ctx.arg_types[0]:
+        # No function passed: treat as decorator factory and fallback to Any.
+        return AnyType(TypeOfAny.implementation_artifact)
 
     function_def = get_proper_type(ctx.arg_types[0][0])
     func_args = _AppliedArgs(ctx)
 
-    if len(list(filter(len, ctx.arg_types))) == 1:
-        return function_def  # this means, that `partial(func)` is called
-    if not isinstance(function_def, _SUPPORTED_TYPES):
-        return default_return
-    if isinstance(function_def, Instance | TypeType):
-        # We force `Instance` and similar types to coercse to callable:
-        function_def = func_args.get_callable_from_context()
-
     is_valid, applied_args = func_args.build_from_context()
-    if not isinstance(function_def, CallableType | Overloaded) or not is_valid:
+    if not is_valid:
+        return default_return
+    if not applied_args:
+        return function_def  # this means, that `partial(func)` is called
+
+    callable_def = _coerce_to_callable(function_def, func_args)
+    if callable_def is None:
         return default_return
 
     return _PartialFunctionReducer(
         default_return,
-        function_def,
+        callable_def,
         applied_args,
         ctx,
     ).new_partial()
+
+
+def _coerce_to_callable(
+    function_def: ProperType,
+    func_args: '_AppliedArgs',
+) -> CallableType | Overloaded | None:
+    if not isinstance(function_def, _SUPPORTED_TYPES):
+        return None
+    if isinstance(function_def, Instance | TypeType):
+        # We force `Instance` and similar types to coerce to callable:
+        from_context = func_args.get_callable_from_context()
+        return (
+            from_context
+            if isinstance(from_context, CallableType | Overloaded)
+            else None
+        )
+    return function_def
 
 
 @final
@@ -219,16 +246,10 @@ class _AppliedArgs:
         """
         We need the function default context.
 
-        The first arguments of ``partial`` is skipped:
+        The first argument of ``partial`` is skipped:
         it is the applied function itself.
         """
         self._function_ctx = function_ctx
-        self._parts = zip(
-            self._function_ctx.arg_names[1:],
-            self._function_ctx.arg_types[1:],
-            self._function_ctx.arg_kinds[1:],
-            strict=False,
-        )
 
     def get_callable_from_context(self) -> ProperType:
         """Returns callable type from the context."""
@@ -254,17 +275,29 @@ class _AppliedArgs:
         Here ``*args`` and ``**kwargs`` can be literally anything!
         In these cases we fallback to the default return type.
         """
-        applied_args = []
-        for names, types, kinds in self._parts:
-            for arg in self._generate_applied_args(
-                zip(names, types, kinds, strict=False)
-            ):
-                if arg.kind in {ARG_STAR, ARG_STAR2}:
-                    # We cannot really work with `*args`, `**kwargs`.
-                    return False, []
-
-                applied_args.append(arg)
+        applied_args: list[FuncArg] = []
+        for arg in self._iter_applied_args():
+            if arg.kind in {ARG_STAR, ARG_STAR2}:
+                # We cannot really work with `*args`, `**kwargs`.
+                return False, []
+            applied_args.append(arg)
         return True, applied_args
+
+    def _iter_applied_args(self) -> Iterator[FuncArg]:
+        skipped_applied_function = False
+        for names, types, kinds in zip(
+            self._function_ctx.arg_names,
+            self._function_ctx.arg_types,
+            self._function_ctx.arg_kinds,
+            strict=False,
+        ):
+            for arg in self._generate_applied_args(
+                zip(names, types, kinds, strict=False),
+            ):
+                if not skipped_applied_function:
+                    skipped_applied_function = True
+                    continue
+                yield arg
 
     def _generate_applied_args(self, arg_parts) -> Iterator[FuncArg]:
         yield from starmap(FuncArg, arg_parts)
