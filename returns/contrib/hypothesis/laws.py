@@ -1,5 +1,6 @@
 import dataclasses
 import inspect
+import sys
 from collections.abc import Callable, Iterator
 from contextlib import ExitStack, contextmanager
 from typing import Any, TypeVar, final, overload
@@ -242,7 +243,21 @@ def _create_law_test_case(
     )
 
     called_from = inspect.stack()[2]
-    module = inspect.getmodule(called_from[0])
+    # `inspect.getmodule(frame)` is surprisingly fragile under some import
+    # modes (notably `pytest` collection with assertion rewriting) and can
+    # return `None`. Use the module name from the caller's globals instead.
+    module_name = called_from.frame.f_globals.get('__name__')
+    if module_name is None:
+        module = None
+    else:
+        module = sys.modules.get(module_name)
+    if module is None:
+        module = inspect.getmodule(called_from.frame)
+    if module is None:
+        raise RuntimeError(
+            'Cannot determine a module to attach generated law tests to. '
+            'Please call `check_all_laws` from an imported module scope.',
+        )
 
     template = 'test_{container}_{interface}_{name}'
     test_function.__name__ = template.format(  # noqa: WPS125
