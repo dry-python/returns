@@ -207,7 +207,7 @@ def clean_plugin_context() -> Iterator[None]:
     """
     saved_stategies = {}
     for strategy_key, strategy in types._global_type_lookup.items():  # noqa: SLF001
-        if isinstance(
+        if isinstance(  # type: ignore[redundant-expr, unused-ignore]
             strategy_key,
             type,
         ) and strategy_key.__module__.startswith('returns.'):
