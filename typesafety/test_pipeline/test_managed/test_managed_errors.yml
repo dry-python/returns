@@ -35,7 +35,7 @@
         ...
 
     x: IOResult[int, str]
-    managed(use, release)(x)  # E: Cannot infer type argument 3 of "managed"  [misc]
+    managed(use, release)(x)  # E: Cannot infer value of type parameter "_UpdatedType" of "managed"  [misc]
 
 
 - case: managed_with_wrong_container_input
