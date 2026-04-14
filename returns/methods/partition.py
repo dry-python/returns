@@ -31,6 +31,6 @@ def partition(
     for container in containers:
         try:
             successes.append(container.unwrap())
-        except UnwrapFailedError:  # noqa: PERF203
+        except UnwrapFailedError:
             failures.append(container.failure())
     return successes, failures

@@ -1,7 +1,5 @@
 from collections.abc import Callable, Sequence
-from typing import ClassVar, TypeVar, final
-
-from typing_extensions import Never
+from typing import ClassVar, Never, TypeVar, final
 
 from returns.interfaces import applicative, bindable
 from returns.primitives.asserts import assert_equal

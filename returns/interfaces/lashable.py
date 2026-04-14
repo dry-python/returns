@@ -1,8 +1,6 @@
 from abc import abstractmethod
 from collections.abc import Callable
-from typing import Generic, TypeVar
-
-from typing_extensions import Never
+from typing import Generic, Never, TypeVar
 
 from returns.primitives.hkt import KindN
 

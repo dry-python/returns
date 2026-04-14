@@ -1,9 +1,9 @@
 from abc import ABC
 from collections.abc import Callable, Generator, Iterator
 from functools import wraps
-from typing import TYPE_CHECKING, Any, ClassVar, Optional, TypeVar, final
+from typing import TYPE_CHECKING, Any, ClassVar, Never, Optional, TypeVar, final
 
-from typing_extensions import Never, ParamSpec
+from typing_extensions import ParamSpec
 
 from returns.interfaces.specific.maybe import MaybeBased2
 from returns.primitives.container import BaseContainer, container_equality

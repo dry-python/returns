@@ -10,9 +10,7 @@ from __future__ import annotations
 
 from abc import abstractmethod
 from collections.abc import Awaitable, Callable
-from typing import TYPE_CHECKING, TypeVar
-
-from typing_extensions import Never, Self
+from typing import TYPE_CHECKING, Never, Self, TypeVar
 
 from returns.interfaces.specific import future, ioresult
 from returns.primitives.hkt import KindN

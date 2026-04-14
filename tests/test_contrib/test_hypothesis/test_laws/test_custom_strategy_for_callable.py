@@ -16,6 +16,7 @@ from typing import (
     Any,
     ClassVar,
     Generic,
+    Never,
     TypeAlias,
     TypeVar,
     final,
@@ -24,7 +25,6 @@ from typing import (
 )
 
 from hypothesis import strategies as st
-from typing_extensions import Never
 
 from returns.contrib.hypothesis.containers import strategy_from_container
 from returns.contrib.hypothesis.laws import check_all_laws

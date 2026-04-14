@@ -1,8 +1,8 @@
 from collections.abc import Callable
 from functools import wraps
-from typing import Any, TypeVar
+from typing import Any, Never, TypeVar
 
-from typing_extensions import Never, ParamSpec
+from typing_extensions import ParamSpec
 
 _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')

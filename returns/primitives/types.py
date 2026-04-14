@@ -1,6 +1,4 @@
-from typing import Any
-
-from typing_extensions import Never, Self
+from typing import Any, Never, Self
 
 from returns.primitives.exceptions import ImmutableStateError
 

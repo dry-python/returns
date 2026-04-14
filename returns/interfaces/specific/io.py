@@ -2,9 +2,7 @@ from __future__ import annotations
 
 from abc import abstractmethod
 from collections.abc import Callable
-from typing import TYPE_CHECKING, TypeVar
-
-from typing_extensions import Never
+from typing import TYPE_CHECKING, Never, TypeVar
 
 from returns.interfaces import container, equable
 from returns.primitives.hkt import KindN

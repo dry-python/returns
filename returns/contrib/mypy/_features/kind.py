@@ -1,5 +1,5 @@
 from collections.abc import Sequence
-from enum import Enum, unique
+from enum import StrEnum, unique
 
 from mypy.checkmember import analyze_member_access
 from mypy.plugin import (
@@ -155,8 +155,8 @@ def kinded_get_descriptor(ctx: MethodContext) -> MypyType:
     return ctx.type.copy_modified(args=[signature])
 
 
-@unique  # noqa: WPS600
-class _KindErrors(str, Enum):  # noqa: WPS600
+@unique
+class _KindErrors(StrEnum):
     """Represents a set of possible errors we can throw during typechecking."""
 
     dekind_not_instance = (

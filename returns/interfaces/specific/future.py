@@ -10,9 +10,7 @@ from __future__ import annotations
 
 from abc import abstractmethod
 from collections.abc import Awaitable, Callable, Generator
-from typing import TYPE_CHECKING, Any, Generic, TypeVar
-
-from typing_extensions import Never
+from typing import TYPE_CHECKING, Any, Generic, Never, TypeVar
 
 from returns.interfaces.specific import io
 from returns.primitives.hkt import KindN

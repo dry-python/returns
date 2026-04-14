@@ -1,7 +1,7 @@
 from collections.abc import Callable
-from typing import TYPE_CHECKING, Any, Generic, Protocol, TypeVar
+from typing import TYPE_CHECKING, Any, Generic, Never, Protocol, TypeVar
 
-from typing_extensions import Never, TypeVarTuple, Unpack
+from typing_extensions import TypeVarTuple
 
 _InstanceType_co = TypeVar('_InstanceType_co', covariant=True)
 _TypeArgType1_co = TypeVar('_TypeArgType1_co', covariant=True)
@@ -22,7 +22,7 @@ _UpdatedType = TypeVar('_UpdatedType')
 _TypeVars = TypeVarTuple('_TypeVars')
 
 
-class KindN(Generic[_InstanceType_co, Unpack[_TypeVars]]):
+class KindN(Generic[_InstanceType_co, *_TypeVars]):
     """
     Emulation support for Higher Kinded Types.
 
@@ -109,7 +109,7 @@ Kind3 = KindN[
 ]
 
 
-class SupportsKindN(KindN[_InstanceType_co, Unpack[_TypeVars]]):
+class SupportsKindN(KindN[_InstanceType_co, *_TypeVars]):
     """
     Base class for your containers.
 

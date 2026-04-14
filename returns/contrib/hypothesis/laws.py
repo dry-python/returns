@@ -2,14 +2,13 @@ import dataclasses
 import inspect
 from collections.abc import Callable, Iterator
 from contextlib import ExitStack, contextmanager
-from typing import Any, TypeVar, final, overload
+from typing import Any, Self, TypeVar, final, overload
 
 import pytest
 from hypothesis import given
 from hypothesis import settings as hypothesis_settings
 from hypothesis import strategies as st
 from hypothesis.strategies._internal import types  # noqa: PLC2701
-from typing_extensions import Self
 
 from returns.contrib.hypothesis.containers import strategy_from_container
 from returns.contrib.hypothesis.type_resolver import (
