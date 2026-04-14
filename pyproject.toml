@@ -62,7 +62,7 @@ check-laws = ["pytest", "hypothesis"]
 [tool.poetry.group.dev.dependencies]
 anyio = "^4.3"
 trio = ">=0.30,<0.34"
-attrs = "^25.3"
+attrs = ">=25.3,<27.0"
 httpx = "^0.28"
 wemake-python-styleguide = "^1.6"
 codespell = "^2.2"
