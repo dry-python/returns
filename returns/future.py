@@ -1170,7 +1170,7 @@ class FutureResult(  # type: ignore[type-var]
         """API for :ref:`do-notation`."""
 
         async def factory() -> AsyncGenerator[_ValueType_co, None]:
-            for inner_value in await self._inner_value:
+            for inner_value in await self._inner_value:  # pragma: no branch
                 yield inner_value  # will only yield once
 
         return factory()
