@@ -1,7 +1,5 @@
 from collections.abc import Sequence
 from enum import Enum, unique
-from importlib.metadata import version
-from typing import Any
 
 from mypy.checkmember import analyze_member_access
 from mypy.plugin import (
@@ -63,13 +61,6 @@ def attribute_access(ctx: AttributeContext) -> MypyType:
     else:
         return ctx.default_attr_type
 
-    mypy_version_tuple = tuple(
-        map(int, version('mypy').partition('+')[0].split('.'))
-    )
-
-    extra_kwargs: dict[str, Any] = {}
-    if mypy_version_tuple < (1, 16):
-        extra_kwargs['msg'] = ctx.api.msg
     return analyze_member_access(
         ctx.context.name,  # type: ignore
         accessed,
@@ -80,7 +71,6 @@ def attribute_access(ctx: AttributeContext) -> MypyType:
         original_type=instance,
         chk=ctx.api,  # type: ignore
         in_literal_context=ctx.api.expr_checker.is_literal_context(),  # type: ignore
-        **extra_kwargs,
     )
 
 
