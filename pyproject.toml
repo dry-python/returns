@@ -1,16 +1,22 @@
 [build-system]
 build-backend = "poetry.core.masonry.api"
-requires = [ "poetry-core>=2" ]
+requires = ["poetry-core>=2"]
 
 [tool.poetry]
 name = "returns"
 version = "0.26.0"
 description = "Make your functions return something meaningful, typed, and safe!"
 license = "BSD-3-Clause"
-authors = [ "sobolevn <mail@sobolevn.me>" ]
+
+authors = [
+  "sobolevn <mail@sobolevn.me>",
+]
+
 readme = "README.md"
+
 repository = "https://github.com/dry-python/returns"
 homepage = "https://returns.readthedocs.io"
+
 keywords = [
   "functional programming",
   "fp",
@@ -22,6 +28,7 @@ keywords = [
   "mypy",
   "railway-oriented-programming",
 ]
+
 classifiers = [
   "Development Status :: 4 - Beta",
   "Intended Audience :: Developers",
@@ -31,47 +38,68 @@ classifiers = [
   "Topic :: Utilities",
   "Typing :: Typed",
 ]
-dependencies.python = "^3.10"
-dependencies.typing-extensions = ">=4.0,<5.0"
-dependencies.pytest = { version = ">=8,<10", optional = true }
-dependencies.hypothesis = { version = "^6.151", optional = true }
-dependencies.mypy = { version = ">=1.19,<1.21", optional = true }
-extras.compatible-mypy = [ "mypy" ]
-extras.check-laws = [ "pytest", "hypothesis" ]
-group.dev.dependencies.anyio = "^4.3"
-group.dev.dependencies.trio = ">=0.30,<0.33"
-group.dev.dependencies.attrs = "^25.3"
-group.dev.dependencies.httpx = "^0.28"
-group.dev.dependencies.wemake-python-styleguide = "^1.3"
-group.dev.dependencies.codespell = "^2.2"
-group.dev.dependencies.slotscheck = "^0.19"
-group.dev.dependencies.ruff = ">=0.12,<0.15"
-group.dev.dependencies.pytest-cov = ">=6,<8"
-group.dev.dependencies.pytest-randomly = ">=3.12,<5.0"
-group.dev.dependencies.pytest-mypy-plugins = "^3.1"
-group.dev.dependencies.pytest-subtests = ">=0.14,<0.16"
-group.dev.dependencies.pytest-shard = "^0.1"
-group.dev.dependencies.covdefaults = "^2.3"
-group.docs.optional = true
-group.docs.dependencies.sphinx = "^8.1"
-group.docs.dependencies.sphinx-autodoc-typehints = ">=2.3,<4.0"
-group.docs.dependencies.sphinxcontrib-mermaid = ">=1,<3"
-group.docs.dependencies.furo = ">=2024.5,<2026.0"
-group.docs.dependencies.myst-parser = "^4.0"
-group.docs.dependencies.tomli = "^2.0"
-plugins.hypothesis._ = "returns.contrib.hypothesis._entrypoint:_setup_hook"
-plugins.pytest11.returns = "returns.contrib.pytest.plugin"
-urls.Funding = "https://github.com/sponsors/dry-python"
+
+[tool.poetry.urls]
+Funding = "https://github.com/sponsors/dry-python"
+
+[tool.poetry.plugins.hypothesis]
+_ = "returns.contrib.hypothesis._entrypoint:_setup_hook"
+
+[tool.poetry.plugins.pytest11]
+returns = "returns.contrib.pytest.plugin"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+typing-extensions = ">=4.0,<5.0"
+pytest = {version = ">=8,<10", optional = true}
+hypothesis = {version = "^6.151", optional = true}
+mypy = {version = ">=1.19,<1.21", optional = true}
+
+[tool.poetry.extras]
+compatible-mypy = ["mypy"]
+check-laws = ["pytest", "hypothesis"]
+
+[tool.poetry.group.dev.dependencies]
+anyio = "^4.3"
+trio = ">=0.30,<0.33"
+attrs = "^25.3"
+httpx = "^0.28"
+wemake-python-styleguide = "^1.3"
+codespell = "^2.2"
+slotscheck = "^0.19"
+ruff = ">=0.12,<0.15"
+pytest-cov = ">=6,<8"
+pytest-randomly = ">=3.12,<5.0"
+pytest-mypy-plugins = "^3.1"
+pytest-subtests = ">=0.14,<0.16"
+pytest-shard = "^0.1"
+covdefaults = "^2.3"
+
+[tool.poetry.group.docs]
+optional = true
+
+[tool.poetry.group.docs.dependencies]
+sphinx = "^8.1"
+sphinx-autodoc-typehints = ">=2.3,<4.0"
+sphinxcontrib-mermaid = ">=1,<3"
+furo = ">=2024.5,<2026.0"
+myst-parser = "^4.0"
+tomli = "^2.0"
+
 
 [tool.ruff]
 # Ruff config: https://docs.astral.sh/ruff/settings
-target-version = "py310"
-line-length = 80
 preview = true
 fix = true
-format.quote-style = "single"
-format.docstring-code-format = false
-lint.select = [
+target-version = "py310"
+line-length = 80
+
+[tool.ruff.format]
+quote-style = "single"
+docstring-code-format = false
+
+[tool.ruff.lint]
+select = [
   "A",    # flake8-builtins
   "B",    # flake8-bugbear
   "C4",   # flake8-comprehensions
@@ -112,7 +140,7 @@ lint.select = [
   "W",    # pycodestyle
   "YTT",  # flake8-2020
 ]
-lint.ignore = [
+ignore = [
   "A005",    # allow to shadow stdlib and builtin module names
   "COM812",  # trailing comma, conflicts with `ruff format`
   # Different doc rules that we don't really care about:
@@ -131,17 +159,26 @@ lint.ignore = [
   "PLR6301", # do not require classmethod / staticmethod when self not used
   "TRY003",  # long exception messages from `tryceratops`
 ]
-lint.per-file-ignores."*.pyi" = [ "D103" ]
-lint.per-file-ignores."returns/context/__init__.py" = [ "F401", "PLC0414" ]
-lint.per-file-ignores."returns/contrib/mypy/*.py" = [ "S101" ]
-lint.per-file-ignores."returns/contrib/mypy/_typeops/visitor.py" = [ "S101" ]
-lint.per-file-ignores."returns/contrib/pytest/__init__.py" = [ "F401", "PLC0414" ]
-lint.per-file-ignores."returns/interfaces/*.py" = [ "S101" ]
-lint.per-file-ignores."returns/methods/__init__.py" = [ "F401", "PLC0414" ]
-lint.per-file-ignores."returns/pipeline.py" = [ "F401", "PLC0414" ]
-lint.per-file-ignores."returns/pointfree/__init__.py" = [ "F401", "PLC0414" ]
-lint.per-file-ignores."returns/primitives/asserts.py" = [ "S101" ]
-lint.per-file-ignores."tests/*.py" = [
+external = ["WPS"]
+
+# Plugin configs:
+flake8-quotes.inline-quotes = "single"
+mccabe.max-complexity = 6
+pep8-naming.staticmethod-decorators = ["law_definition", "staticmethod"]
+pydocstyle.convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"*.pyi" = ["D103"]
+"returns/context/__init__.py" = ["F401", "PLC0414"]
+"returns/contrib/mypy/*.py" = ["S101"]
+"returns/contrib/mypy/_typeops/visitor.py" = ["S101"]
+"returns/contrib/pytest/__init__.py" = ["F401", "PLC0414"]
+"returns/interfaces/*.py" = ["S101"]
+"returns/methods/__init__.py" = ["F401", "PLC0414"]
+"returns/pipeline.py" = ["F401", "PLC0414"]
+"returns/pointfree/__init__.py" = ["F401", "PLC0414"]
+"returns/primitives/asserts.py" = ["S101"]
+"tests/*.py" = [
   "RUF029", # allow async functions to not use `await`
   "S101",   # asserts
   "S105",   # hardcoded passwords
@@ -149,21 +186,16 @@ lint.per-file-ignores."tests/*.py" = [
   "S603",   # do not require `shell=True`
   "S607",   # partial executable paths
 ]
-lint.per-file-ignores."tests/test_examples/*" = [ "D102" ]
-lint.per-file-ignores."tests/test_examples/test_maybe/test_maybe_pattern_matching.py" = [
+"tests/test_examples/*" = ["D102"]
+"tests/test_examples/test_maybe/test_maybe_pattern_matching.py" = [
   "D101",
   "D103",
   "F811",
 ]
-lint.per-file-ignores."tests/test_examples/test_result/test_result_pattern_matching.py" = [
+"tests/test_examples/test_result/test_result_pattern_matching.py" = [
   "D103",
 ]
-lint.per-file-ignores."tests/test_pattern_matching.py" = [ "S101" ]
-lint.external = [ "WPS" ]
-lint.flake8-quotes.inline-quotes = "single"
-lint.mccabe.max-complexity = 6
-lint.pep8-naming.staticmethod-decorators = [ "law_definition", "staticmethod" ]
-lint.pydocstyle.convention = "google"
+"tests/test_pattern_matching.py" = ["S101"]
 
 [tool.slotscheck]
 strict-imports = true
