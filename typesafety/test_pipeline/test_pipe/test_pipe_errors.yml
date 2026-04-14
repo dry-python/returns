@@ -9,7 +9,7 @@
     reveal_type(pipe(int, convert)('a'))
   out: |
     main:6: error: Argument 1 to "convert" has incompatible type "int"; expected "str"  [arg-type]
-    main:6: note: Revealed type is "builtins.float"
+    main:6: note: Revealed type is "float"
 
 
 - case: pipe_wrong_steps_error
@@ -44,7 +44,7 @@
     reveal_type(pipe(convert)(1))
   out: |
     main:6: error: Argument 1 to "convert" has incompatible type "int"; expected "str"  [arg-type]
-    main:6: note: Revealed type is "builtins.float"
+    main:6: note: Revealed type is "float"
     main:6: error: Argument 1 to "__call__" of "_Pipe" has incompatible type "int"; expected "str"  [arg-type]
 
 
@@ -59,7 +59,7 @@
     reveal_type(pipe(convert)(1))
   out: |
     main:6: error: Too many arguments for "convert"  [call-arg]
-    main:6: note: Revealed type is "builtins.float"
+    main:6: note: Revealed type is "float"
 
 
 - case: pipe_function_with_too_many_args_error
@@ -74,5 +74,5 @@
   out: |
     main:6: error: Missing positional argument "other" in call to "convert"  [call-arg]
     main:6: error: Argument 1 to "convert" has incompatible type "int"; expected "str"  [arg-type]
-    main:6: note: Revealed type is "builtins.float"
+    main:6: note: Revealed type is "float"
     main:6: error: Argument 1 to "__call__" of "_Pipe" has incompatible type "int"; expected "str"  [arg-type]

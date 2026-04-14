@@ -35,7 +35,7 @@ dependencies.python = "^3.10"
 dependencies.typing-extensions = ">=4.0,<5.0"
 dependencies.pytest = { version = ">=8,<10", optional = true }
 dependencies.hypothesis = { version = "^6.151", optional = true }
-dependencies.mypy = { version = ">=1.12,<1.18", optional = true }
+dependencies.mypy = { version = ">=1.12,<1.21", optional = true }
 extras.compatible-mypy = [ "mypy" ]
 extras.check-laws = [ "pytest", "hypothesis" ]
 group.dev.dependencies.anyio = "^4.3"

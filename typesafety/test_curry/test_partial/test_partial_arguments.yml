@@ -25,16 +25,16 @@
     reveal_type(partial(multiple, 1, 2, 3, 4.0, 5.0))
     reveal_type(partial(multiple, 1, 2, 3, m='m', q='q', long='long'))
   out: |
-    main:14: note: Revealed type is "def (a: builtins.int, b: builtins.int, c: builtins.int =, *args: builtins.float, d: builtins.str, e: builtins.bool =, **kwargs: builtins.str) -> builtins.str"
-    main:15: note: Revealed type is "def (b: builtins.int, c: builtins.int =, *args: builtins.float, d: builtins.str, e: builtins.bool =, **kwargs: builtins.str) -> builtins.str"
-    main:16: note: Revealed type is "def (c: builtins.int =, *args: builtins.float, d: builtins.str, e: builtins.bool =, **kwargs: builtins.str) -> builtins.str"
-    main:17: note: Revealed type is "def (*args: builtins.float, d: builtins.str, e: builtins.bool =, **kwargs: builtins.str) -> builtins.str"
-    main:18: note: Revealed type is "def (*args: builtins.float, e: builtins.bool =, **kwargs: builtins.str) -> builtins.str"
-    main:19: note: Revealed type is "def (*args: builtins.float, d: builtins.str, **kwargs: builtins.str) -> builtins.str"
-    main:20: note: Revealed type is "def (c: builtins.int =, *args: builtins.float, e: builtins.bool =, **kwargs: builtins.str) -> builtins.str"
-    main:21: note: Revealed type is "def (c: builtins.int =, *args: builtins.float, d: builtins.str, **kwargs: builtins.str) -> builtins.str"
-    main:22: note: Revealed type is "def (*args: builtins.float, d: builtins.str, e: builtins.bool =, **kwargs: builtins.str) -> builtins.str"
-    main:23: note: Revealed type is "def (*args: builtins.float, d: builtins.str, e: builtins.bool =, **kwargs: builtins.str) -> builtins.str"
+    main:14: note: Revealed type is "def (a: int, b: int, c: int =, *args: float, d: str, e: bool =, **kwargs: str) -> str"
+    main:15: note: Revealed type is "def (b: int, c: int =, *args: float, d: str, e: bool =, **kwargs: str) -> str"
+    main:16: note: Revealed type is "def (c: int =, *args: float, d: str, e: bool =, **kwargs: str) -> str"
+    main:17: note: Revealed type is "def (*args: float, d: str, e: bool =, **kwargs: str) -> str"
+    main:18: note: Revealed type is "def (*args: float, e: bool =, **kwargs: str) -> str"
+    main:19: note: Revealed type is "def (*args: float, d: str, **kwargs: str) -> str"
+    main:20: note: Revealed type is "def (c: int =, *args: float, e: bool =, **kwargs: str) -> str"
+    main:21: note: Revealed type is "def (c: int =, *args: float, d: str, **kwargs: str) -> str"
+    main:22: note: Revealed type is "def (*args: float, d: str, e: bool =, **kwargs: str) -> str"
+    main:23: note: Revealed type is "def (*args: float, d: str, e: bool =, **kwargs: str) -> str"
 
 
 - case: partial_args_kwargs
@@ -48,7 +48,7 @@
     ) -> str:
         ...
 
-    reveal_type(partial(multiple, 1, 2, 3, x='x', y='y')(4, 5, z='z'))  # N: Revealed type is "builtins.str"
+    reveal_type(partial(multiple, 1, 2, 3, x='x', y='y')(4, 5, z='z'))  # N: Revealed type is "str"
 
 
 - case: partial_pos_only_args
@@ -65,11 +65,11 @@
     ) -> str:
         ...
 
-    reveal_type(partial(multiple, 1))  # N: Revealed type is "def (builtins.int, builtins.int, d: builtins.int) -> builtins.str"
-    reveal_type(partial(multiple, 1, 2))  # N: Revealed type is "def (builtins.int, d: builtins.int) -> builtins.str"
-    reveal_type(partial(multiple, 1, 2, 3))  # N: Revealed type is "def (d: builtins.int) -> builtins.str"
-    reveal_type(partial(multiple, 1, 2, d=4))  # N: Revealed type is "def (builtins.int) -> builtins.str"
-    reveal_type(partial(multiple, 1, 2, 3, d=4))  # N: Revealed type is "def () -> builtins.str"
+    reveal_type(partial(multiple, 1))  # N: Revealed type is "def (int, int, d: int) -> str"
+    reveal_type(partial(multiple, 1, 2))  # N: Revealed type is "def (int, d: int) -> str"
+    reveal_type(partial(multiple, 1, 2, 3))  # N: Revealed type is "def (d: int) -> str"
+    reveal_type(partial(multiple, 1, 2, d=4))  # N: Revealed type is "def (int) -> str"
+    reveal_type(partial(multiple, 1, 2, 3, d=4))  # N: Revealed type is "def () -> str"
 
 
 - case: partial_object
@@ -89,10 +89,10 @@
     reveal_type(partial(Inst(1)))
     reveal_type(partial(Inst(1), 1))
   out: |
-    main:10: note: Revealed type is "def (arg: builtins.int) -> main.Inst"
+    main:10: note: Revealed type is "def (arg: int) -> main.Inst"
     main:11: note: Revealed type is "def () -> main.Inst"
     main:12: note: Revealed type is "main.Inst"
-    main:13: note: Revealed type is "def () -> builtins.int"
+    main:13: note: Revealed type is "def () -> int"
 
 
 - case: partial_classmethod
@@ -105,7 +105,7 @@
         def some(cls, arg: int, other: str) -> float:
             ...
 
-    reveal_type(partial(Test.some, 1))  # N: Revealed type is "def (other: builtins.str) -> builtins.float"
+    reveal_type(partial(Test.some, 1))  # N: Revealed type is "def (other: str) -> float"
 
 
 - case: partial_staticmethod
@@ -118,7 +118,7 @@
         def some(arg: int, other: str) -> float:
             ...
 
-    reveal_type(partial(Test.some, 1))  # N: Revealed type is "def (other: builtins.str) -> builtins.float"
+    reveal_type(partial(Test.some, 1))  # N: Revealed type is "def (other: str) -> float"
 
 
 - case: partial_union
@@ -178,8 +178,8 @@
 
     def receives_type(a: int, t: Type[I]) -> I:
         x = partial(t, a)
-        reveal_type(x)  # N: Revealed type is "def () -> I`-1"
-        reveal_type(x().arg)  # N: Revealed type is "builtins.int"
+        reveal_type(x)  # N: Revealed type is "def () -> I"
+        reveal_type(x().arg)  # N: Revealed type is "int"
         return t(1)
 
 
@@ -191,7 +191,7 @@
     def multiple(a: int, b: int) -> int:
         ...
 
-    reveal_type(partial(multiple, *(1, 2)))  # N: Revealed type is "def (*Any, **Any) -> builtins.int"
+    reveal_type(partial(multiple, *(1, 2)))  # N: Revealed type is "def (*Any, **Any) -> int"
 
 
 - case: partial_star2_arg
@@ -202,7 +202,7 @@
     def multiple(a: int, b: int) -> int:
         ...
 
-    reveal_type(partial(multiple, **{'a': 1, 'b': 2}))  # N: Revealed type is "def (*Any, **Any) -> builtins.int"
+    reveal_type(partial(multiple, **{'a': 1, 'b': 2}))  # N: Revealed type is "def (*Any, **Any) -> int"
 
 
 - case: partial_lambda
@@ -210,4 +210,4 @@
   main: |
     from returns.curry import partial
 
-    reveal_type(partial((lambda x, y: str(x + y)), 1))  # N: Revealed type is "def (y: Any) -> builtins.str"
+    reveal_type(partial((lambda x, y: str(x + y)), 1))  # N: Revealed type is "def (y: Any) -> str"

@@ -21,7 +21,7 @@
     main:15: note: Possible overload variants:
     main:15: note:     def two_args(a, a: int) -> int
     main:15: note:     def two_args(a, a: str) -> str
-    main:15: note: Revealed type is "def (*Any, **Any) -> builtins.int"
+    main:15: note: Revealed type is "def (*Any, **Any) -> int"
 
 
 - case: partial_wrong_overload2
@@ -77,11 +77,11 @@
     reveal_type(partial(two_args, 1, 'a'))
     reveal_type(partial(two_args, 'a'))
   out: |
-    main:19: note: Revealed type is "Overload(def (a: builtins.int, b: builtins.int) -> builtins.int, def (a: builtins.int, b: builtins.str) -> builtins.str, def (a: builtins.str, b: builtins.str) -> builtins.str)"
-    main:20: note: Revealed type is "Overload(def (b: builtins.int) -> builtins.int, def (b: builtins.str) -> builtins.str)"
-    main:21: note: Revealed type is "def () -> builtins.int"
-    main:22: note: Revealed type is "def () -> builtins.str"
-    main:23: note: Revealed type is "def (b: builtins.str) -> builtins.str"
+    main:19: note: Revealed type is "Overload(def (a: int, b: int) -> int, def (a: int, b: str) -> str, def (a: str, b: str) -> str)"
+    main:20: note: Revealed type is "Overload(def (b: int) -> int, def (b: str) -> str)"
+    main:21: note: Revealed type is "def () -> int"
+    main:22: note: Revealed type is "def () -> str"
+    main:23: note: Revealed type is "def (b: str) -> str"
 
 
 - case: partial_generic_overload_kind1
@@ -117,12 +117,12 @@
     reveal_type(partial(two_args, x))
     reveal_type(partial(two_args, x, y))
   out: |
-    main:24: note: Revealed type is "Overload(def [T] (a: builtins.int, b: builtins.list[T`-1]) -> T`-1, def [T] (a: builtins.int, b: builtins.set[T`-1]) -> T`-1, def [T] (a: builtins.list[T`-1], b: builtins.set[T`-1]) -> T`-1)"
-    main:25: note: Revealed type is "Overload(def [T] (b: builtins.list[T`-1]) -> T`-1, def [T] (b: builtins.set[T`-1]) -> T`-1)"
-    main:26: note: Revealed type is "def () -> builtins.float"
-    main:27: note: Revealed type is "def () -> builtins.float"
-    main:28: note: Revealed type is "def (b: builtins.set[builtins.float]) -> builtins.float"
-    main:29: note: Revealed type is "def () -> builtins.float"
+    main:24: note: Revealed type is "Overload(def [T] (a: int, b: list[T]) -> T, def [T] (a: int, b: set[T]) -> T, def [T] (a: list[T], b: set[T]) -> T)"
+    main:25: note: Revealed type is "Overload(def [T] (b: list[T]) -> T, def [T] (b: set[T]) -> T)"
+    main:26: note: Revealed type is "def () -> float"
+    main:27: note: Revealed type is "def () -> float"
+    main:28: note: Revealed type is "def (b: set[float]) -> float"
+    main:29: note: Revealed type is "def () -> float"
 
 
 - case: partial_generic_overload_kind2
@@ -161,11 +161,11 @@
     reveal_type(partial(two_args, a, b))
     reveal_type(partial(two_args, b, a))
   out: |
-    main:25: note: Revealed type is "Overload(def [A] (a: builtins.int, b: builtins.list[A`-1]) -> A`-1, def [B] (a: builtins.int, b: builtins.list[B`-1]) -> B`-1, def [A, B] (a: builtins.list[A`-1], b: builtins.list[B`-2]) -> A`-1 | B`-2)"
-    main:26: note: Revealed type is "Overload(def [A] (b: builtins.list[A`-1]) -> A`-1, def [B] (b: builtins.list[B`-1]) -> B`-1)"
-    main:27: note: Revealed type is "Overload(def () -> builtins.float, def () -> builtins.float)"
-    main:28: note: Revealed type is "Overload(def () -> builtins.str, def () -> builtins.str)"
-    main:29: note: Revealed type is "def [B] (b: builtins.list[B`-2]) -> builtins.float | B`-2"
-    main:30: note: Revealed type is "def [B] (b: builtins.list[B`-2]) -> builtins.str | B`-2"
-    main:31: note: Revealed type is "def () -> builtins.float | builtins.str"
-    main:32: note: Revealed type is "def () -> builtins.str | builtins.float"
+    main:25: note: Revealed type is "Overload(def [A] (a: int, b: list[A]) -> A, def [B] (a: int, b: list[B]) -> B, def [A, B] (a: list[A], b: list[B]) -> A | B)"
+    main:26: note: Revealed type is "Overload(def [A] (b: list[A]) -> A, def [B] (b: list[B]) -> B)"
+    main:27: note: Revealed type is "Overload(def () -> float, def () -> float)"
+    main:28: note: Revealed type is "Overload(def () -> str, def () -> str)"
+    main:29: note: Revealed type is "def [B] (b: list[B]) -> float | B"
+    main:30: note: Revealed type is "def [B] (b: list[B]) -> str | B"
+    main:31: note: Revealed type is "def () -> float | str"
+    main:32: note: Revealed type is "def () -> str | float"

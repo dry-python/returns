@@ -13,7 +13,7 @@
     ) -> str:
         ...
 
-    reveal_type(multiple)  # N: Revealed type is "Overload(def (builtins.int) -> Overload(def (builtins.int, builtins.int, d: builtins.int) -> builtins.str, def (builtins.int, builtins.int) -> def (d: builtins.int) -> builtins.str, def (builtins.int) -> Overload(def (builtins.int, d: builtins.int) -> builtins.str, def (builtins.int) -> def (d: builtins.int) -> builtins.str)), def (builtins.int, builtins.int) -> Overload(def (builtins.int, d: builtins.int) -> builtins.str, def (builtins.int) -> def (d: builtins.int) -> builtins.str), def (builtins.int, builtins.int, builtins.int) -> def (d: builtins.int) -> builtins.str, def (builtins.int, builtins.int, builtins.int, d: builtins.int) -> builtins.str)"
+    reveal_type(multiple)  # N: Revealed type is "Overload(def (int) -> Overload(def (int, int, d: int) -> str, def (int, int) -> def (d: int) -> str, def (int) -> Overload(def (int, d: int) -> str, def (int) -> def (d: int) -> str)), def (int, int) -> Overload(def (int, d: int) -> str, def (int) -> def (d: int) -> str), def (int, int, int) -> def (d: int) -> str, def (int, int, int, d: int) -> str)"
 
 
 - case: curry_nested_overload1
@@ -34,7 +34,7 @@
     def test(a: int, b: int) -> float:
         ...
 
-    reveal_type(MyClass(test))  # N: Revealed type is "main.MyClass[Overload(def (a: builtins.int) -> def (b: builtins.int) -> builtins.float, def (a: builtins.int, b: builtins.int) -> builtins.float)]"
+    reveal_type(MyClass(test))  # N: Revealed type is "main.MyClass[Overload(def (a: int) -> def (b: int) -> float, def (a: int, b: int) -> float)]"
 
 
 - case: curry_nested_overload2
@@ -55,7 +55,7 @@
     def test(a: int, b: int, c: str) -> int:
         ...
 
-    reveal_type(MyClass(test))  # N: Revealed type is "main.MyClass[Overload(def (a: builtins.int) -> Overload(def (b: builtins.int, c: builtins.str) -> builtins.int, def (b: builtins.int) -> def (c: builtins.str) -> builtins.int), def (a: builtins.int, b: builtins.int) -> def (c: builtins.str) -> builtins.int, def (a: builtins.int, b: builtins.int, c: builtins.str) -> builtins.int)]"
+    reveal_type(MyClass(test))  # N: Revealed type is "main.MyClass[Overload(def (a: int) -> Overload(def (b: int, c: str) -> int, def (b: int) -> def (c: str) -> int), def (a: int, b: int) -> def (c: str) -> int, def (a: int, b: int, c: str) -> int)]"
 
 
 - case: curry_init_magic_method
@@ -69,7 +69,7 @@
         def __init__(self, arg: int, other: str) -> None:
             ...
 
-    reveal_type(Test)  # N: Revealed type is "Overload(def () -> main.Test, def (arg: builtins.int) -> main.Test, def (arg: builtins.int, other: builtins.str) -> main.Test)"
+    reveal_type(Test)  # N: Revealed type is "Overload(def () -> main.Test, def (arg: int) -> main.Test, def (arg: int, other: str) -> main.Test)"
 
 
 - case: curry_call_magic_method
@@ -82,7 +82,7 @@
         def __call__(self, arg: int, other: float, last: str) -> str:
             ...
 
-    reveal_type(Test()(1))  # N: Revealed type is "Overload(def (other: builtins.float, last: builtins.str) -> builtins.str, def (other: builtins.float) -> def (last: builtins.str) -> builtins.str)"
+    reveal_type(Test()(1))  # N: Revealed type is "Overload(def (other: float, last: str) -> str, def (other: float) -> def (last: str) -> str)"
 
 
 - case: curry_classmethod1
@@ -96,11 +96,11 @@
         def some(cls, arg: int, other: float, last: str) -> str:
             ...
 
-    reveal_type(Test.some)  # N: Revealed type is "Overload(def () -> Overload(def (arg: builtins.int, other: builtins.float, last: builtins.str) -> builtins.str, def (arg: builtins.int, other: builtins.float) -> def (last: builtins.str) -> builtins.str, def (arg: builtins.int) -> Overload(def (other: builtins.float, last: builtins.str) -> builtins.str, def (other: builtins.float) -> def (last: builtins.str) -> builtins.str)), def (arg: builtins.int) -> Overload(def (other: builtins.float, last: builtins.str) -> builtins.str, def (other: builtins.float) -> def (last: builtins.str) -> builtins.str), def (arg: builtins.int, other: builtins.float) -> def (last: builtins.str) -> builtins.str, def (arg: builtins.int, other: builtins.float, last: builtins.str) -> builtins.str)"
+    reveal_type(Test.some)  # N: Revealed type is "Overload(def () -> Overload(def (arg: int, other: float, last: str) -> str, def (arg: int, other: float) -> def (last: str) -> str, def (arg: int) -> Overload(def (other: float, last: str) -> str, def (other: float) -> def (last: str) -> str)), def (arg: int) -> Overload(def (other: float, last: str) -> str, def (other: float) -> def (last: str) -> str), def (arg: int, other: float) -> def (last: str) -> str, def (arg: int, other: float, last: str) -> str)"
 
-    reveal_type(Test.some(1))  # N: Revealed type is "Overload(def (other: builtins.float, last: builtins.str) -> builtins.str, def (other: builtins.float) -> def (last: builtins.str) -> builtins.str)"
+    reveal_type(Test.some(1))  # N: Revealed type is "Overload(def (other: float, last: str) -> str, def (other: float) -> def (last: str) -> str)"
 
-    reveal_type(Test.some(1, 2.0, 'a'))  # N: Revealed type is "builtins.str"
+    reveal_type(Test.some(1, 2.0, 'a'))  # N: Revealed type is "str"
 
 
 - case: curry_classmethod2
@@ -118,7 +118,7 @@
     def test(c: Callable[[int, str], str]) -> str:
         return c(1, 'a')
 
-    reveal_type(test(Test.some))  # N: Revealed type is "builtins.str"
+    reveal_type(test(Test.some))  # N: Revealed type is "str"
 
 
 - case: curry_classmethod3
@@ -136,7 +136,7 @@
     def test(c: Callable[[int, str], str]) -> str:
         return c(1, 'a')
 
-    reveal_type(test(Test.some('a')))  # N: Revealed type is "builtins.str"
+    reveal_type(test(Test.some('a')))  # N: Revealed type is "str"
 
 
 - case: curry_staticmethod
@@ -150,7 +150,7 @@
         def some(arg: int, other: float, last: str) -> str:
             ...
 
-    reveal_type(Test.some)  # N: Revealed type is "Overload(def (arg: builtins.int) -> Overload(def (other: builtins.float, last: builtins.str) -> builtins.str, def (other: builtins.float) -> def (last: builtins.str) -> builtins.str), def (arg: builtins.int, other: builtins.float) -> def (last: builtins.str) -> builtins.str, def (arg: builtins.int, other: builtins.float, last: builtins.str) -> builtins.str)"
+    reveal_type(Test.some)  # N: Revealed type is "Overload(def (arg: int) -> Overload(def (other: float, last: str) -> str, def (other: float) -> def (last: str) -> str), def (arg: int, other: float) -> def (last: str) -> str, def (arg: int, other: float, last: str) -> str)"
 
 
 - case: curry_regular_method
@@ -163,13 +163,13 @@
         def some(self, arg: int, other: float, last: str) -> str:
             ...
 
-    reveal_type(Test.some)  # N: Revealed type is "Overload(def (self: main.Test) -> Overload(def (arg: builtins.int, other: builtins.float, last: builtins.str) -> builtins.str, def (arg: builtins.int, other: builtins.float) -> def (last: builtins.str) -> builtins.str, def (arg: builtins.int) -> Overload(def (other: builtins.float, last: builtins.str) -> builtins.str, def (other: builtins.float) -> def (last: builtins.str) -> builtins.str)), def (self: main.Test, arg: builtins.int) -> Overload(def (other: builtins.float, last: builtins.str) -> builtins.str, def (other: builtins.float) -> def (last: builtins.str) -> builtins.str), def (self: main.Test, arg: builtins.int, other: builtins.float) -> def (last: builtins.str) -> builtins.str, def (self: main.Test, arg: builtins.int, other: builtins.float, last: builtins.str) -> builtins.str)"
+    reveal_type(Test.some)  # N: Revealed type is "Overload(def (self: main.Test) -> Overload(def (arg: int, other: float, last: str) -> str, def (arg: int, other: float) -> def (last: str) -> str, def (arg: int) -> Overload(def (other: float, last: str) -> str, def (other: float) -> def (last: str) -> str)), def (self: main.Test, arg: int) -> Overload(def (other: float, last: str) -> str, def (other: float) -> def (last: str) -> str), def (self: main.Test, arg: int, other: float) -> def (last: str) -> str, def (self: main.Test, arg: int, other: float, last: str) -> str)"
 
-    reveal_type(Test.some(Test(), 1))  # N: Revealed type is "Overload(def (other: builtins.float, last: builtins.str) -> builtins.str, def (other: builtins.float) -> def (last: builtins.str) -> builtins.str)"
+    reveal_type(Test.some(Test(), 1))  # N: Revealed type is "Overload(def (other: float, last: str) -> str, def (other: float) -> def (last: str) -> str)"
 
-    reveal_type(Test().some)  # N: Revealed type is "Overload(def () -> Overload(def (arg: builtins.int, other: builtins.float, last: builtins.str) -> builtins.str, def (arg: builtins.int, other: builtins.float) -> def (last: builtins.str) -> builtins.str, def (arg: builtins.int) -> Overload(def (other: builtins.float, last: builtins.str) -> builtins.str, def (other: builtins.float) -> def (last: builtins.str) -> builtins.str)), def (arg: builtins.int) -> Overload(def (other: builtins.float, last: builtins.str) -> builtins.str, def (other: builtins.float) -> def (last: builtins.str) -> builtins.str), def (arg: builtins.int, other: builtins.float) -> def (last: builtins.str) -> builtins.str, def (arg: builtins.int, other: builtins.float, last: builtins.str) -> builtins.str)"
+    reveal_type(Test().some)  # N: Revealed type is "Overload(def () -> Overload(def (arg: int, other: float, last: str) -> str, def (arg: int, other: float) -> def (last: str) -> str, def (arg: int) -> Overload(def (other: float, last: str) -> str, def (other: float) -> def (last: str) -> str)), def (arg: int) -> Overload(def (other: float, last: str) -> str, def (other: float) -> def (last: str) -> str), def (arg: int, other: float) -> def (last: str) -> str, def (arg: int, other: float, last: str) -> str)"
 
-    reveal_type(Test().some(1))  # N: Revealed type is "Overload(def (other: builtins.float, last: builtins.str) -> builtins.str, def (other: builtins.float) -> def (last: builtins.str) -> builtins.str)"
+    reveal_type(Test().some(1))  # N: Revealed type is "Overload(def (other: float, last: str) -> str, def (other: float) -> def (last: str) -> str)"
 
 
 - case: curry_match_callable_protocol1
@@ -186,7 +186,7 @@
     def test(c: Callable[[int, str], str]) -> str:
         return c(1, 'a')
 
-    reveal_type(test(Test().some(1)))  # N: Revealed type is "builtins.str"
+    reveal_type(test(Test().some(1)))  # N: Revealed type is "str"
 
 
 - case: curry_match_callable_protocol2
@@ -203,7 +203,7 @@
     def test(c: Callable[[int, str], str]) -> str:
         return c(1, 'a')
 
-    reveal_type(test(Test().some))  # N: Revealed type is "builtins.str"
+    reveal_type(test(Test().some))  # N: Revealed type is "str"
 
 
 - case: curry_match_callable_protocol3
@@ -220,7 +220,7 @@
     def test(c: Callable[[int], Callable[[float], str]]) -> str:
         return c(1)(5.0)
 
-    reveal_type(test(Test().some))  # N: Revealed type is "builtins.str"
+    reveal_type(test(Test().some))  # N: Revealed type is "str"
 
 
 - case: curry_match_callable_protocol4
@@ -238,4 +238,4 @@
     def test(c: Callable[[int], Callable[[float], str]]) -> str:
         return c(1)(5.0)
 
-    reveal_type(test(Test.some))  # N: Revealed type is "builtins.str"
+    reveal_type(test(Test.some))  # N: Revealed type is "str"
