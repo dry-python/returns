@@ -1,6 +1,4 @@
-from typing import TypeVar
-
-from typing_extensions import Never
+from typing import Never, TypeVar
 
 from returns.interfaces import altable, mappable
 

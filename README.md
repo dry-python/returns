@@ -90,11 +90,11 @@ user: Optional[User]
 discount_program: Optional['DiscountProgram'] = None
 
 if user is not None:
-     balance = user.get_balance()
-     if balance is not None:
-         credit = balance.credit_amount()
-         if credit is not None and credit > 0:
-             discount_program = choose_discount(credit)
+    balance = user.get_balance()
+    if balance is not None:
+        credit = balance.credit_amount()
+        if credit is not None and credit > 0:
+            discount_program = choose_discount(credit)
 ```
 
 Or you can use
@@ -106,9 +106,10 @@ representing existing state and empty (instead of `None`) state respectively.
 from typing import Optional
 from returns.maybe import Maybe, maybe
 
+
 @maybe  # decorator to convert existing Optional[int] to Maybe[int]
-def bad_function() -> Optional[int]:
-    ...
+def bad_function() -> Optional[int]: ...
+
 
 maybe_number: Maybe[float] = bad_function().bind_optional(
     lambda number: number / 2,
@@ -129,14 +130,20 @@ And here's how your initial refactored code will look:
 user: Optional[User]
 
 # Type hint here is optional, it only helps the reader here:
-discount_program: Maybe['DiscountProgram'] = Maybe.from_optional(
-    user,
-).bind_optional(  # This won't be called if `user is None`
-    lambda real_user: real_user.get_balance(),
-).bind_optional(  # This won't be called if `real_user.get_balance()` is None
-    lambda balance: balance.credit_amount(),
-).bind_optional(  # And so on!
-    lambda credit: choose_discount(credit) if credit > 0 else None,
+discount_program: Maybe['DiscountProgram'] = (
+    Maybe
+    .from_optional(
+        user,
+    )
+    .bind_optional(  # This won't be called if `user is None`
+        lambda real_user: real_user.get_balance(),
+    )
+    .bind_optional(  # This won't be called if `real_user.get_balance()` is None
+        lambda balance: balance.credit_amount(),
+    )
+    .bind_optional(  # And so on!
+        lambda credit: choose_discount(credit) if credit > 0 else None,
+    )
 )
 ```
 
@@ -157,16 +164,20 @@ Imagine that you have a `django` based game, where you award users with points f
 from django.http import HttpRequest, HttpResponse
 from words_app.logic import calculate_points
 
+
 def view(request: HttpRequest) -> HttpResponse:
     user_word: str = request.POST['word']  # just an example
     points = calculate_points(user_word)
     ...  # later you show the result to user somehow
 
+
 # Somewhere in your `words_app/logic.py`:
+
 
 def calculate_points(word: str) -> int:
     guessed_letters_count = len([letter for letter in word if letter != '.'])
     return _award_points_for_letters(guessed_letters_count)
+
 
 def _award_points_for_letters(guessed: int) -> int:
     return 0 if guessed < 5 else guessed  # minimum 6 points possible!
@@ -202,22 +213,27 @@ from django.conf import settings
 from django.http import HttpRequest, HttpResponse
 from words_app.logic import calculate_points
 
+
 def view(request: HttpRequest) -> HttpResponse:
     user_word: str = request.POST['word']  # just an example
     points = calculate_points(user_word)(settings)  # passing the dependencies
     ...  # later you show the result to user somehow
+
 
 # Somewhere in your `words_app/logic.py`:
 
 from typing import Protocol
 from returns.context import RequiresContext
 
+
 class _Deps(Protocol):  # we rely on abstractions, not direct values or types
     WORD_THRESHOLD: int
+
 
 def calculate_points(word: str) -> RequiresContext[int, _Deps]:
     guessed_letters_count = len([letter for letter in word if letter != '.'])
     return _award_points_for_letters(guessed_letters_count)
+
 
 def _award_points_for_letters(guessed: int) -> RequiresContext[int, _Deps]:
     return RequiresContext(
@@ -245,6 +261,7 @@ Consider this code that you can find in **any** `python` project.
 ```python
 import requests
 
+
 def fetch_user_profile(user_id: int) -> 'UserProfile':
     """Fetches UserProfile dict from foreign API."""
     response = requests.get('/api/users/{0}'.format(user_id))
@@ -266,6 +283,7 @@ but with the all hidden problems explained.
 
 ```python
 import requests
+
 
 def fetch_user_profile(user_id: int) -> 'UserProfile':
     """Fetches UserProfile dict from foreign API."""
@@ -304,6 +322,7 @@ from returns.result import Result, safe
 from returns.pipeline import flow
 from returns.pointfree import bind
 
+
 def fetch_user_profile(user_id: int) -> Result['UserProfile', Exception]:
     """Fetches `UserProfile` TypedDict from foreign API."""
     return flow(
@@ -312,12 +331,14 @@ def fetch_user_profile(user_id: int) -> Result['UserProfile', Exception]:
         bind(_parse_json),
     )
 
+
 @safe
 def _make_request(user_id: int) -> requests.Response:
     # TODO: we are not yet done with this example, read more about `IO`:
     response = requests.get('/api/users/{0}'.format(user_id))
     response.raise_for_status()
     return response
+
 
 @safe
 def _parse_json(response: requests.Response) -> 'UserProfile':
@@ -377,10 +398,13 @@ import datetime as dt
 
 from returns.io import IO
 
+
 def get_random_number() -> IO[int]:  # or use `@impure` decorator
     return IO(random.randint(1, 10))  # isn't pure, because random
 
+
 now: Callable[[], IO[dt.datetime]] = impure(dt.datetime.now)
+
 
 @impure
 def return_and_show_next_number(previous: int) -> int:
@@ -427,6 +451,7 @@ from returns.result import safe
 from returns.pipeline import flow
 from returns.pointfree import bind_result
 
+
 def fetch_user_profile(user_id: int) -> IOResult['UserProfile', Exception]:
     """Fetches `UserProfile` TypedDict from foreign API."""
     return flow(
@@ -438,11 +463,13 @@ def fetch_user_profile(user_id: int) -> IOResult['UserProfile', Exception]:
         bind_result(_parse_json),
     )
 
+
 @impure_safe
 def _make_request(user_id: int) -> requests.Response:
     response = requests.get('/api/users/{0}'.format(user_id))
     response.raise_for_status()
     return response
+
 
 @safe
 def _parse_json(response: requests.Response) -> 'UserProfile':
@@ -482,6 +509,7 @@ the `first` one returns a number and the `second` one increments it:
 async def first() -> int:
     return 1
 
+
 def second():  # How can we call `first()` from here?
     return first() + 1  # Boom! Don't do this. We illustrate a problem here.
 ```
@@ -497,6 +525,7 @@ However, with `Future` we can "pretend" to call async code from sync code:
 
 ```python
 from returns.future import Future
+
 
 def second() -> Future[int]:
     return Future(first()).map(lambda num: num + 1)
@@ -543,9 +572,11 @@ import anyio
 from returns.future import future_safe
 from returns.io import IOFailure
 
+
 @future_safe
 async def raising():
     raise ValueError('Not so fast!')
+
 
 ioresult = anyio.run(raising.awaitable)  # all `Future`s return IO containers
 assert ioresult == IOFailure(ValueError('Not so fast!'))  # True
@@ -560,14 +591,14 @@ to get sync `IOResult` instance to work with it in a sync manner.
 Previously, you had to do quite a lot of `await`ing while writing `async` code:
 
 ```python
-async def fetch_user(user_id: int) -> 'User':
-    ...
+async def fetch_user(user_id: int) -> 'User': ...
 
-async def get_user_permissions(user: 'User') -> 'Permissions':
-    ...
 
-async def ensure_allowed(permissions: 'Permissions') -> bool:
-    ...
+async def get_user_permissions(user: 'User') -> 'Permissions': ...
+
+
+async def ensure_allowed(permissions: 'Permissions') -> bool: ...
+
 
 async def main(user_id: int) -> bool:
     # Also, don't forget to handle all possible errors with `try / except`!
@@ -587,22 +618,24 @@ import anyio
 from returns.future import FutureResultE, future_safe
 from returns.io import IOSuccess, IOFailure
 
-@future_safe
-async def fetch_user(user_id: int) -> 'User':
-    ...
 
 @future_safe
-async def get_user_permissions(user: 'User') -> 'Permissions':
-    ...
+async def fetch_user(user_id: int) -> 'User': ...
+
 
 @future_safe
-async def ensure_allowed(permissions: 'Permissions') -> bool:
-    ...
+async def get_user_permissions(user: 'User') -> 'Permissions': ...
+
+
+@future_safe
+async def ensure_allowed(permissions: 'Permissions') -> bool: ...
+
 
 def main(user_id: int) -> FutureResultE[bool]:
     # We can now turn `main` into a sync function, it does not `await` at all.
     # We also don't care about exceptions anymore, they are already handled.
     return fetch_user(user_id).bind(get_user_permissions).bind(ensure_allowed)
+
 
 correct_user_id: int  # has required permissions
 banned_user_id: int  # does not have required permissions
@@ -623,6 +656,7 @@ Or even something really fancy:
 ```python
 from returns.pointfree import bind
 from returns.pipeline import flow
+
 
 def main(user_id: int) -> FutureResultE[bool]:
     return flow(

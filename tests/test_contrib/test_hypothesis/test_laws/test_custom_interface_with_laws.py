@@ -1,8 +1,6 @@
 from abc import abstractmethod
 from collections.abc import Callable, Sequence
-from typing import ClassVar, Generic, TypeAlias, TypeVar, final
-
-from typing_extensions import Never
+from typing import ClassVar, Generic, Never, TypeAlias, TypeVar, final
 
 from returns.contrib.hypothesis.laws import check_all_laws
 from returns.functions import compose, identity

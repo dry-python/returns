@@ -2,9 +2,17 @@ from abc import ABC
 from collections.abc import Callable, Generator, Iterator
 from functools import wraps
 from inspect import FrameInfo
-from typing import TYPE_CHECKING, Any, TypeAlias, TypeVar, final, overload
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Never,
+    TypeAlias,
+    TypeVar,
+    final,
+    overload,
+)
 
-from typing_extensions import Never, ParamSpec
+from typing_extensions import ParamSpec
 
 from returns.interfaces.specific import result
 from returns.primitives.container import BaseContainer, container_equality
