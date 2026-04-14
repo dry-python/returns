@@ -18,10 +18,6 @@ repos:
     rev: v0.11.0.1
     hooks:
       - id: shellcheck
-  - repo: https://github.com/tox-dev/pyproject-fmt
-    rev: v2.21.1
-    hooks:
-      - id: pyproject-fmt
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.15.10
     hooks:
