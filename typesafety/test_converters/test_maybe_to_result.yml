@@ -4,7 +4,7 @@
     from returns.converters import maybe_to_result
     from returns.maybe import Maybe
 
-    reveal_type(maybe_to_result(Maybe.from_value(1)))  # N: Revealed type is "returns.result.Result[builtins.int, None]"
+    reveal_type(maybe_to_result(Maybe.from_value(1)))  # N: Revealed type is "returns.result.Result[int, None]"
 
 
 - case: maybe_to_result_default_error
@@ -13,4 +13,4 @@
     from returns.converters import maybe_to_result
     from returns.maybe import Maybe
 
-    reveal_type(maybe_to_result(Maybe.from_value(1), 'a'))  # N: Revealed type is "returns.result.Result[builtins.int, builtins.str]"
+    reveal_type(maybe_to_result(Maybe.from_value(1), 'a'))  # N: Revealed type is "returns.result.Result[int, str]"

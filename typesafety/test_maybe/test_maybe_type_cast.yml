@@ -5,7 +5,7 @@
 
     first: Maybe[ValueError]
     second: Maybe[Exception] = first
-    reveal_type(second)  # N: Revealed type is "returns.maybe.Maybe[builtins.Exception]"
+    reveal_type(second)  # N: Revealed type is "returns.maybe.Maybe[Exception]"
 
 
 - case: maybe_getattr
@@ -22,7 +22,7 @@
   main: |
     from returns.maybe import Some
 
-    reveal_type(Some(1))  # N: Revealed type is "returns.maybe.Some[builtins.int]"
+    reveal_type(Some(1))  # N: Revealed type is "returns.maybe.Some[int]"
 
 
 - case: maybe_nothing_const

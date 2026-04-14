@@ -44,4 +44,4 @@
     ) -> int | Trampoline[int]:
         return Trampoline(_accumulate, [1], 2)
 
-    reveal_type(_accumulate([1, 2]))  # N: Revealed type is "builtins.int"
+    reveal_type(_accumulate([1, 2]))  # N: Revealed type is "int"

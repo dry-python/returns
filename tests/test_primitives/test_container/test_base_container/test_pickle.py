@@ -14,7 +14,7 @@ class _CustomClass:
     def __eq__(self, other: object) -> bool:
         return (
             type(other) is type(self)  # noqa: WPS516
-            and self.inner_value == other.inner_value  # type: ignore[attr-defined]
+            and self.inner_value == other.inner_value
         )
 
     def __hash__(self) -> int:

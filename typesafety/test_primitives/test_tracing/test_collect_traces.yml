@@ -4,7 +4,7 @@
   main: |
     from returns.primitives.tracing import collect_traces
 
-    reveal_type(collect_traces)  # N: Revealed type is "Overload(def () -> contextlib.AbstractContextManager[None, builtins.bool | None], def [_FunctionType <: def (*Any, **Any) -> Any] (function: _FunctionType`-1) -> _FunctionType`-1)"
+    reveal_type(collect_traces)  # N: Revealed type is "Overload(def () -> contextlib.AbstractContextManager[None, bool | None], def [_FunctionType <: def (*Any, **Any) -> Any] (function: _FunctionType) -> _FunctionType)"
 
 
 - case: collect_traces_context_manager_return_type_two
@@ -13,7 +13,7 @@
   main: |
     from returns.primitives.tracing import collect_traces
 
-    with reveal_type(collect_traces()):  # N: Revealed type is "contextlib.AbstractContextManager[None, builtins.bool | None]"
+    with reveal_type(collect_traces()):  # N: Revealed type is "contextlib.AbstractContextManager[None, bool | None]"
         pass
 
 
@@ -26,7 +26,7 @@
     def function() -> int:
       return 0
 
-    reveal_type(function)  # N: Revealed type is "def () -> builtins.int"
+    reveal_type(function)  # N: Revealed type is "def () -> int"
 
 
 - case: collect_traces_decorated_function_with_argument_return_type
@@ -38,4 +38,4 @@
     def function(number: int) -> str:
       return str(number)
 
-    reveal_type(function)  # N: Revealed type is "def (number: builtins.int) -> builtins.str"
+    reveal_type(function)  # N: Revealed type is "def (number: int) -> str"

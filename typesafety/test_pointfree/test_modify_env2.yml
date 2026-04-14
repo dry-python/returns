@@ -37,7 +37,7 @@
         ...
 
     r: RequiresContext[int, int]
-    reveal_type(flow(r, modify_env2(modify), bind(test)))  # N: Revealed type is "returns.context.requires_context.RequiresContext[builtins.float, builtins.str]"
+    reveal_type(flow(r, modify_env2(modify), bind(test)))  # N: Revealed type is "returns.context.requires_context.RequiresContext[float, str]"
 
 
 - case: modify_env2_requires_context
@@ -50,7 +50,7 @@
     def mod(arg: A) -> bool: ...
 
     x: RequiresContext[float, bool]
-    reveal_type(modify_env2(mod)(x))  # N: Revealed type is "returns.context.requires_context.RequiresContext[builtins.float, main.A]"
+    reveal_type(modify_env2(mod)(x))  # N: Revealed type is "returns.context.requires_context.RequiresContext[float, main.A]"
 
 
 - case: modify_env2_custom_type
@@ -74,4 +74,4 @@
     def mod(arg: A) -> bool: ...
 
     x: MyClass[float, bool]
-    reveal_type(modify_env2(mod)(x))  # N: Revealed type is "main.MyClass[builtins.float, main.A]"
+    reveal_type(modify_env2(mod)(x))  # N: Revealed type is "main.MyClass[float, main.A]"

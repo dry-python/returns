@@ -1,7 +1,6 @@
 from collections.abc import Sequence
-from importlib.metadata import version
 from types import MappingProxyType
-from typing import Any, Final, Literal, overload
+from typing import Final, Literal, overload
 
 from mypy.checkmember import analyze_member_access
 from mypy.nodes import ARG_NAMED, ARG_OPT
@@ -119,15 +118,6 @@ def translate_to_function(
     """
     checker = ctx.api.expr_checker  # type: ignore
 
-    mypy_version = version('mypy')
-    mypy_version_tuple = tuple(
-        map(int, mypy_version.partition('+')[0].split('.'))
-    )
-
-    extra_kwargs: dict[str, Any] = {}
-    if mypy_version_tuple < (1, 16):
-        extra_kwargs['msg'] = checker.msg
-
     return get_proper_type(
         analyze_member_access(
             '__call__',
@@ -138,6 +128,5 @@ def translate_to_function(
             is_operator=True,
             original_type=function_def,
             chk=checker.chk,
-            **extra_kwargs,
         )
     )
