@@ -45,6 +45,7 @@ Contents
   pages/curry.rst
   pages/trampolines.rst
   pages/types.rst
+  pages/transducers.rst
 
 .. toctree::
   :maxdepth: 2
