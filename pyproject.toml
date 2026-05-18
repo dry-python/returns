@@ -53,7 +53,7 @@ python = "^3.11"
 typing-extensions = ">=4.0,<5.0"
 pytest = {version = ">=8,<10", optional = true}
 hypothesis = {version = "^6.151", optional = true}
-mypy = {version = ">=1.19,<1.21", optional = true}
+mypy = {version = ">=1.19,<2.2", optional = true}
 
 [tool.poetry.extras]
 compatible-mypy = ["mypy"]
