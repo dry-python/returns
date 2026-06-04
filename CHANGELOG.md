@@ -6,10 +6,16 @@ incremental in minor, bugfixes only are patches.
 See [0Ver](https://0ver.org/).
 
 
-## 0.27.0
+## 0.28.0
 
 ### Features
 
+- Add `mypy>=1.19,<1.22` support
+
+
+## 0.27.0
+
+### Features
 
 - Drop `python3.10` support
 - Add `python3.14` support
