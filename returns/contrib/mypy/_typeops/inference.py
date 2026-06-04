@@ -118,7 +118,7 @@ class PipelineInference:
         parameter = FuncArg(None, self._instance, ARG_POS)
         ret_type = get_proper_type(ctx.default_return_type)
 
-        for pipeline, kind in zip(pipeline_types, pipeline_kinds, strict=False):
+        for pipeline, kind in zip(pipeline_types, pipeline_kinds, strict=True):
             ret_type = self._proper_type(
                 analyze_call(
                     cast(FunctionLike, pipeline),
