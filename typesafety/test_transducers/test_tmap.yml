@@ -1,0 +1,78 @@
+- case: tmap
+  disable_cache: false
+  main: |
+    from returns.transducers import tmap
+
+    def to_str(number: int) -> str:
+        ...
+
+    reveal_type(tmap(to_str))  # N: Revealed type is 'def [_AccType] (def (_AccType`-3, builtins.str*) -> _AccType`-3) -> def (_AccType`-3, builtins.int*) -> _AccType`-3'
+
+
+- case: tmap_reducer
+  disable_cache: true
+  main: |
+    from typing import List
+    from returns.transducers import tmap
+
+    def to_str(number: int) -> str:
+        ...
+
+    def append(collection: List[str], item: str) -> List[str]:
+        ...
+
+    reveal_type(tmap(to_str)(append))  # N: Revealed type is 'def (builtins.list*[builtins.str], builtins.int) -> builtins.list*[builtins.str]'
+
+
+- case: tmap_reducer_map_
+  disable_cache: false
+  main: |
+    from typing import List
+    from returns.transducers import tmap
+
+    def to_str(number: int) -> str:
+        ...
+
+    def append(collection: List[str], item: str) -> List[str]:
+        ...
+
+    my_list: List[str]
+    reveal_type(tmap(to_str)(append)(my_list, 2))  # N: Revealed type is 'builtins.list*[builtins.str]'
+
+
+- case: tmap_composition_one
+  disable_cache: true
+  main: |
+    from typing import List
+    from returns.transducers import tmap
+
+    def to_str(number: int) -> str:
+        ...
+
+    def to_int(string: str) -> int:
+        ...
+
+    def append(collection: List[str], item: str) -> List[str]:
+        ...
+
+    composed = tmap(to_int)(tmap(to_str)(append))
+    reveal_type(composed)  # N: Revealed type is 'def (builtins.list*[builtins.str], builtins.str) -> builtins.list*[builtins.str]'
+
+
+- case: tmap_composition_two
+  disable_cache: true
+  main: |
+    from typing import List
+    from returns.transducers import tmap
+
+    def to_str(number: int) -> str:
+        ...
+
+    def to_int(string: str) -> int:
+        ...
+
+    def append(collection: List[str], item: str) -> List[str]:
+        ...
+
+    composed = tmap(to_int)(tmap(to_str)(append))
+    reveal_type(composed([], '1'))  # N: Revealed type is 'builtins.list*[builtins.str]'
