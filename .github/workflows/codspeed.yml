@@ -1,0 +1,62 @@
+name: CodSpeed
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+  # `workflow_dispatch` allows CodSpeed to trigger backtest
+  # performance analysis in order to generate initial data.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write  # for OpenID Connect authentication with CodSpeed
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  benchmarks:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - mode: instrumentation
+            runner: ubuntu-latest
+          - mode: walltime
+            runner: codspeed-macro
+          - mode: memory
+            runner: ubuntu-latest
+
+    name: Run benchmarks (${{ matrix.mode }})
+    runs-on: ${{ matrix.runner }}
+
+    steps:
+    - uses: actions/checkout@v6.0.3
+      with:
+        persist-credentials: false
+
+    - name: Set up Python
+      uses: actions/setup-python@v6
+      with:
+        python-version: '3.12'
+
+    - name: Install poetry
+      run: |
+        curl -sSL "https://install.python-poetry.org" | python
+
+        # Adding `poetry` to `$PATH`:
+        echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+    - name: Install dependencies
+      run: |
+        poetry config virtualenvs.in-project true
+        poetry install --all-extras
+
+    - name: Run benchmarks
+      uses: CodSpeedHQ/action@v4.17.6
+      with:
+        mode: ${{ matrix.mode }}
+        run: poetry run pytest benchmarks/ --codspeed -p no:cov -o addopts=""

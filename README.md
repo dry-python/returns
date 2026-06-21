@@ -4,6 +4,7 @@
 
 [![test](https://github.com/dry-python/returns/actions/workflows/test.yml/badge.svg?branch=master&event=push)](https://github.com/dry-python/returns/actions/workflows/test.yml)
 [![codecov](https://codecov.io/gh/dry-python/returns/branch/master/graph/badge.svg)](https://codecov.io/gh/dry-python/returns)
+[![CodSpeed](https://img.shields.io/endpoint?url=https://codspeed.io/badge.json)](https://app.codspeed.io/dry-python/returns?utm_source=badge)
 [![Documentation Status](https://readthedocs.org/projects/returns/badge/?version=latest)](https://returns.readthedocs.io/en/latest/?badge=latest)
 [![Python Version](https://img.shields.io/pypi/pyversions/returns.svg)](https://pypi.org/project/returns/)
 [![conda](https://img.shields.io/conda/v/conda-forge/returns?label=conda)](https://anaconda.org/conda-forge/returns)
