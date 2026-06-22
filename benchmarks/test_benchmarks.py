@@ -49,6 +49,32 @@ def test_result_bind_chain(benchmark) -> None:
     assert benchmark(run) == Success(100)
 
 
+def test_result_do_notation(benchmark) -> None:
+    """Compose ``Result`` values through ``.do`` notation."""
+
+    def run() -> Result[int, str]:
+        return Result.do(
+            first + second
+            for first in Success(1)
+            for second in Success(2)
+        )
+
+    assert benchmark(run) == Success(3)
+
+
+def test_maybe_do_notation(benchmark) -> None:
+    """Compose ``Maybe`` values through ``.do`` notation."""
+
+    def run() -> Maybe[int]:
+        return Maybe.do(
+            first + second
+            for first in Some(1)
+            for second in Some(2)
+        )
+
+    assert benchmark(run) == Some(3)
+
+
 def test_result_failure_lash(benchmark) -> None:
     """Recover from a failure using ``.lash`` and ``.value_or``."""
 

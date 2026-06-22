@@ -2379,4 +2379,4 @@ compatible-mypy = ["mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11"
-content-hash = "fe979c6275ae5882416d015099c547940a4f271eebe28ed7de6017cc6716ee7b"
+content-hash = "42a0aac18db574b3ff3e739701fa57320622c5c8ace28597f130b2ce44284b40"
