@@ -54,9 +54,7 @@ def test_result_do_notation(benchmark) -> None:
 
     def run() -> Result[int, str]:
         return Result.do(
-            first + second
-            for first in Success(1)
-            for second in Success(2)
+            first + second for first in Success(1) for second in Success(2)
         )
 
     assert benchmark(run) == Success(3)
@@ -67,9 +65,7 @@ def test_maybe_do_notation(benchmark) -> None:
 
     def run() -> Maybe[int]:
         return Maybe.do(
-            first + second
-            for first in Some(1)
-            for second in Some(2)
+            first + second for first in Some(1) for second in Some(2)
         )
 
     assert benchmark(run) == Some(3)
@@ -78,11 +74,13 @@ def test_maybe_do_notation(benchmark) -> None:
 def test_result_failure_lash(benchmark) -> None:
     """Recover from a failure using ``.lash`` and ``.value_or``."""
 
+    value = 42
+
     def run() -> int:
         container: Result[int, str] = Failure('boom')
-        return container.lash(lambda _: Success(42)).value_or(0)
+        return container.lash(lambda _: Success(value)).value_or(0)
 
-    assert benchmark(run) == 42
+    assert benchmark(run) == value
 
 
 def test_safe_decorator(benchmark) -> None:
