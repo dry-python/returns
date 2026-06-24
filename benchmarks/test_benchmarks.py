@@ -73,7 +73,6 @@ def test_maybe_do_notation(benchmark) -> None:
 
 def test_result_failure_lash(benchmark) -> None:
     """Recover from a failure using ``.lash`` and ``.value_or``."""
-
     value = 42
 
     def run() -> int:
