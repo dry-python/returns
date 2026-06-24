@@ -73,6 +73,7 @@ pytest-randomly = ">=3.12,<5.0"
 pytest-mypy-plugins = ">=3.1,<5.0"
 pytest-subtests = ">=0.14,<0.16"
 pytest-shard = "^0.1"
+pytest-codspeed = "^5.0"
 covdefaults = "^2.3"
 
 [tool.poetry.group.docs]
@@ -169,6 +170,9 @@ pydocstyle.convention = "google"
 
 [tool.ruff.lint.per-file-ignores]
 "*.pyi" = ["D103"]
+"benchmarks/*.py" = [
+  "S101",   # asserts
+]
 "returns/context/__init__.py" = ["F401", "PLC0414"]
 "returns/contrib/mypy/*.py" = ["S101"]
 "returns/contrib/mypy/_typeops/visitor.py" = ["S101"]
