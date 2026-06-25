@@ -57,7 +57,7 @@ async def test_future_safe_decorator_w_expected_error(subtests):
 
 
 @pytest.mark.anyio
-@pytest.mark.xfail(raises=AssertionError)
 async def test_future_safe_decorator_w_unexpected_error():
-    """Ensure that coroutine marked with ``@future_safe``."""
-    await _coro_three('0')
+    """Ensure that @future_safe does not swallow non-specified exceptions."""
+    with pytest.raises(AssertionError):
+        await _coro_three('0')
