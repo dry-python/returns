@@ -153,6 +153,7 @@ ignore = [
   "D401",
   "D404",
   "D405",
+  "D421",    # property docstrings can start with a verb
   "ISC001",  # implicit string concat conflicts with `ruff format`
   "ISC003",  # prefer explicit string concat over implicit concat
   "PLR09",   # we have our own complexity rules
