@@ -54,7 +54,7 @@ jobs:
         poetry install --all-extras
 
     - name: Run benchmarks
-      uses: CodSpeedHQ/action@v4.17.6
+      uses: CodSpeedHQ/action@v4.18.1
       with:
         mode: ${{ matrix.mode }}
         run: poetry run pytest benchmarks/ --codspeed -p no:cov -o addopts=""
