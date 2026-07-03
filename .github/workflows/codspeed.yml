@@ -23,7 +23,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - mode: instrumentation
+          - mode: simulation
             runner: ubuntu-latest
           - mode: memory
             runner: ubuntu-latest
