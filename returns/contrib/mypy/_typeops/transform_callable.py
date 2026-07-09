@@ -22,6 +22,10 @@ from mypy.types import Type as MypyType
 
 from returns.contrib.mypy._structures.args import FuncArg
 
+#: Kinds of arguments that consume the leftover positional or keyword
+#: arguments (``*args`` and ``**kwargs``) and therefore cannot be applied.
+_VARIADIC_KINDS: frozenset[ArgKind] = frozenset((ARG_STAR, ARG_STAR2))
+
 
 def proper_type(
     case_functions: list[CallableType],
@@ -127,15 +131,6 @@ class Functions:
     For example, one can need a diff of two callables.
     """
 
-    def __init__(
-        self,
-        original: CallableType,
-        intermediate: CallableType,
-    ) -> None:
-        """We need two callable to work with."""
-        self._original = original
-        self._intermediate = intermediate
-
     #: Kinds of arguments that can be passed positionally.
     _positional_kinds: ClassVar[frozenset[ArgKind]] = frozenset((
         ARG_POS,
@@ -147,6 +142,15 @@ class Functions:
         ARG_POS: ARG_NAMED,
         ARG_OPT: ARG_NAMED_OPT,
     }
+
+    def __init__(
+        self,
+        original: CallableType,
+        intermediate: CallableType,
+    ) -> None:
+        """We need two callable to work with."""
+        self._original = original
+        self._intermediate = intermediate
 
     def diff(self, applied_args: list[FuncArg]) -> CallableType:
         """Finds a diff between two functions' arguments."""
@@ -183,7 +187,7 @@ class Functions:
         keyword. Returns an index past the end when there is no such hole.
         """
         positional_prefix = sum(
-            applied.name is None and applied.kind not in {ARG_STAR, ARG_STAR2}
+            applied.name is None and applied.kind not in _VARIADIC_KINDS
             for applied in applied_args
         )
         seen_positional = 0
@@ -210,7 +214,7 @@ class Functions:
         intermediate_names: list[str | None],
     ) -> bool:
         """Tells whether an original argument was already applied."""
-        if arg.kind in {ARG_STAR, ARG_STAR2}:
+        if arg.kind in _VARIADIC_KINDS:
             return False
         if arg.name is not None:
             return arg.name in intermediate_names

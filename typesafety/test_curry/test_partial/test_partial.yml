@@ -56,6 +56,19 @@
     reveal_type(partial(two_args, first=1))  # N: Revealed type is "def (*, second: float) -> str"
 
 
+- case: partial_keyword_only_arg_stays_keyword_only
+  disable_cache: false
+  main: |
+    from returns.curry import partial
+
+    def two_args(first: int, *, second: float) -> str:
+        ...
+
+    # `second` is already keyword-only, so binding the positional `first`
+    # by keyword leaves it keyword-only just as before:
+    reveal_type(partial(two_args, first=1))  # N: Revealed type is "def (*, second: float) -> str"
+
+
 - case: partial_positional_arg_by_keyword_rejects_positional_call
   disable_cache: false
   main: |
@@ -86,6 +99,20 @@
     # it (`third`, `fourth`) becomes keyword-only, while `first` which
     # comes before the hole is still reachable positionally:
     reveal_type(partial(multiple, second=0.5))  # N: Revealed type is "def (first: int, *, third: str, fourth: bool) -> str"
+
+
+- case: partial_positional_only_before_keyword_bound_arg
+  disable_cache: false
+  main: |
+    from returns.curry import partial
+
+    def multiple(first: int, /, second: int, third: str) -> str:
+        ...
+
+    # `second` is bound by keyword, so `third` after the hole becomes
+    # keyword-only, while the positional-only `first` before the hole
+    # stays positional-only (rendered by mypy without a name):
+    reveal_type(partial(multiple, second=1))  # N: Revealed type is "def (int, *, third: str) -> str"
 
 
 - case: partial_multiple_args
