@@ -42,6 +42,19 @@
     reveal_type(partial(two_args, second=1.0))  # N: Revealed type is "def (first: int) -> str"
 
 
+- case: partial_last_arg_by_keyword_keeps_first_positional
+  disable_cache: false
+  main: |
+    from returns.curry import partial
+
+    def two_args(first: int, second: float) -> str:
+        ...
+
+    # `second` is the last parameter, so binding it by keyword leaves no
+    # positional parameter after the hole and `first` stays positional:
+    reveal_type(partial(two_args, second=2))  # N: Revealed type is "def (first: int) -> str"
+
+
 - case: partial_positional_arg_by_keyword_makes_rest_kwonly
   disable_cache: false
   main: |

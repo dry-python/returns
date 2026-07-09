@@ -1,4 +1,4 @@
-from typing import ClassVar, final
+from typing import ClassVar, Final, final
 
 from mypy.nodes import (
     ARG_NAMED,
@@ -24,7 +24,16 @@ from returns.contrib.mypy._structures.args import FuncArg
 
 #: Kinds of arguments that consume the leftover positional or keyword
 #: arguments (``*args`` and ``**kwargs``) and therefore cannot be applied.
-_VARIADIC_KINDS: frozenset[ArgKind] = frozenset((ARG_STAR, ARG_STAR2))
+_VARIADIC_KINDS: Final = frozenset((ARG_STAR, ARG_STAR2))
+
+#: Kinds of arguments that can be passed positionally.
+_POSITIONAL_KINDS: Final = frozenset((ARG_POS, ARG_OPT))
+
+#: Maps a positional argument kind onto its keyword-only counterpart.
+_KEYWORD_ONLY_KINDS: Final = {
+    ARG_POS: ARG_NAMED,
+    ARG_OPT: ARG_NAMED_OPT,
+}
 
 
 def proper_type(
@@ -131,18 +140,6 @@ class Functions:
     For example, one can need a diff of two callables.
     """
 
-    #: Kinds of arguments that can be passed positionally.
-    _positional_kinds: ClassVar[frozenset[ArgKind]] = frozenset((
-        ARG_POS,
-        ARG_OPT,
-    ))
-
-    #: Maps a positional argument kind onto its keyword-only counterpart.
-    _keyword_only_kinds: ClassVar[dict[ArgKind, ArgKind]] = {
-        ARG_POS: ARG_NAMED,
-        ARG_OPT: ARG_NAMED_OPT,
-    }
-
     def __init__(
         self,
         original: CallableType,
@@ -192,7 +189,7 @@ class Functions:
         )
         seen_positional = 0
         for index, arg in enumerate(original_args):
-            if arg.kind not in self._positional_kinds:
+            if arg.kind not in _POSITIONAL_KINDS:
                 continue
             applied = self._was_applied(arg, index, intermediate_names)
             if applied and seen_positional >= positional_prefix:
@@ -202,7 +199,7 @@ class Functions:
 
     def _remaining_arg(self, arg: FuncArg, *, keyword_only: bool) -> FuncArg:
         """Copies an unapplied argument, making it keyword-only if needed."""
-        keyword_kind = self._keyword_only_kinds.get(arg.kind)
+        keyword_kind = _KEYWORD_ONLY_KINDS.get(arg.kind)
         if keyword_only and keyword_kind is not None:
             return FuncArg(arg.name, arg.type, keyword_kind)
         return arg
