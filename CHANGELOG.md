@@ -12,6 +12,13 @@ See [0Ver](https://0ver.org/).
 
 - Add `mypy>=1.19,<1.22` support
 
+### Bugfixes
+
+- Fixes `partial` mypy plugin inferring the wrong signature when a positional
+  argument is applied by keyword: the remaining parameters are now correctly
+  marked as keyword-only, so passing them positionally is a type error instead
+  of a runtime `TypeError`
+
 
 ## 0.27.0
 

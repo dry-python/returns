@@ -169,7 +169,7 @@ class _PartialFunctionReducer:
         fallback: CallableType,
     ) -> CallableType:
         partial = CallableInference(
-            Functions(case_function, intermediate).diff(),
+            Functions(case_function, intermediate).diff(self._applied_args),
             self._ctx,
             fallback=fallback,
         ).from_usage(self._applied_args)
