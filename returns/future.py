@@ -37,7 +37,6 @@ _FuncParams = ParamSpec('_FuncParams')
 
 # Aliases:
 _FirstType = TypeVar('_FirstType')
-_SecondType = TypeVar('_SecondType')
 
 
 # Public composition helpers:
@@ -473,7 +472,7 @@ class Future(  # type: ignore[type-var]
 def future(
     function: Callable[
         _FuncParams,
-        Coroutine[_FirstType, _SecondType, _ValueType_co],
+        Awaitable[_ValueType_co],
     ],
 ) -> Callable[_FuncParams, Future[_ValueType_co]]:
     """
@@ -1528,7 +1527,7 @@ _ExceptionType = TypeVar('_ExceptionType', bound=Exception)
 def future_safe(
     exceptions: Callable[
         _FuncParams,
-        Coroutine[_FirstType, _SecondType, _ValueType_co],
+        Awaitable[_ValueType_co],
     ],
     /,
 ) -> Callable[_FuncParams, FutureResultE[_ValueType_co]]: ...
@@ -1541,7 +1540,7 @@ def future_safe(
     [
         Callable[
             _FuncParams,
-            Coroutine[_FirstType, _SecondType, _ValueType_co],
+            Awaitable[_ValueType_co],
         ],
     ],
     Callable[_FuncParams, FutureResult[_ValueType_co, _ExceptionType]],
@@ -1552,7 +1551,7 @@ def future_safe(  # noqa: WPS212, WPS234,
     exceptions: (
         Callable[
             _FuncParams,
-            Coroutine[_FirstType, _SecondType, _ValueType_co],
+            Awaitable[_ValueType_co],
         ]
         | tuple[type[_ExceptionType], ...]
     ),
@@ -1562,7 +1561,7 @@ def future_safe(  # noqa: WPS212, WPS234,
         [
             Callable[
                 _FuncParams,
-                Coroutine[_FirstType, _SecondType, _ValueType_co],
+                Awaitable[_ValueType_co],
             ],
         ],
         Callable[_FuncParams, FutureResult[_ValueType_co, _ExceptionType]],
@@ -1623,7 +1622,7 @@ def future_safe(  # noqa: WPS212, WPS234,
     def _future_safe_factory(  # noqa: WPS430
         function: Callable[
             _FuncParams,
-            Coroutine[_FirstType, _SecondType, _ValueType_co],
+            Awaitable[_ValueType_co],
         ],
         inner_exceptions: tuple[type[_ExceptionType], ...],
     ) -> Callable[_FuncParams, FutureResult[_ValueType_co, _ExceptionType]]:
