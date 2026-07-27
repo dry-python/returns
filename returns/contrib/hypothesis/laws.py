@@ -8,7 +8,9 @@ import pytest
 from hypothesis import given
 from hypothesis import settings as hypothesis_settings
 from hypothesis import strategies as st
-from hypothesis.strategies._internal import types  # noqa: PLC2701
+from hypothesis.strategies._internal import (
+    types,
+)
 
 from returns.contrib.hypothesis.containers import strategy_from_container
 from returns.contrib.hypothesis.type_resolver import (
@@ -205,7 +207,7 @@ def clean_plugin_context() -> Iterator[None]:
     Otherwise, some types might be messed up.
     """
     saved_stategies = {}
-    for strategy_key, strategy in types._global_type_lookup.items():  # noqa: SLF001
+    for strategy_key, strategy in types._global_type_lookup.items():  # ruff: ignore[private-member-access]
         if isinstance(  # type: ignore[redundant-expr, unused-ignore]
             strategy_key,
             type,
@@ -213,7 +215,7 @@ def clean_plugin_context() -> Iterator[None]:
             saved_stategies.update({strategy_key: strategy})
 
     for key_to_remove in saved_stategies:
-        types._global_type_lookup.pop(key_to_remove)  # noqa: SLF001
+        types._global_type_lookup.pop(key_to_remove)  # ruff: ignore[private-member-access]
     _clean_caches()
 
     try:
@@ -224,7 +226,7 @@ def clean_plugin_context() -> Iterator[None]:
 
 
 def _clean_caches() -> None:
-    st.from_type.__clear_cache()  # type: ignore[attr-defined]  # noqa: SLF001
+    st.from_type.__clear_cache()  # type: ignore[attr-defined]  # ruff: ignore[private-member-access]
 
 
 def _create_law_test_case(

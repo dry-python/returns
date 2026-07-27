@@ -591,7 +591,7 @@ class RequiresContextIOResult(  # type: ignore[type-var]
         """
         return RequiresContextIOResult(
             lambda deps: dekind(
-                function(self(deps)._inner_value),  # noqa: SLF001
+                function(self(deps)._inner_value),  # ruff: ignore[private-member-access]
             )(deps),
         )
 

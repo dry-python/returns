@@ -58,7 +58,7 @@ def test_container_defined_in_returns() -> None:
 
 def test_container_defined_outside_returns() -> None:
     """Check container defined outside `returns`."""
-    result = test_custom_type_applicative._Wrapper.laws()  # noqa: SLF001
+    result = test_custom_type_applicative._Wrapper.laws()  # ruff: ignore[private-member-access]
 
     assert sorted(str(interface) for interface in result) == [
         "<class 'returns.interfaces.applicative.ApplicativeN'>",
@@ -68,7 +68,7 @@ def test_container_defined_outside_returns() -> None:
 
 def test_interface_defined_outside_returns() -> None:
     """Check container with interface defined outside `returns`."""
-    result = test_custom_interface_with_laws._Wrapper.laws()  # noqa: SLF001
+    result = test_custom_interface_with_laws._Wrapper.laws()  # ruff: ignore[private-member-access]
 
     assert sorted(str(interface) for interface in result) == [
         (

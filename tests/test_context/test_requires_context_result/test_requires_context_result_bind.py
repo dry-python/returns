@@ -1,5 +1,7 @@
 from returns.context import RequiresContext
-from returns.context import RequiresContextResult as RCR  # noqa: N817
+from returns.context import (
+    RequiresContextResult as RCR,  # ruff: ignore[camelcase-imported-as-acronym]
+)
 from returns.result import Failure, Result, Success
 
 

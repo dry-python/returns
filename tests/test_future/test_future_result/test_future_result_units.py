@@ -27,4 +27,4 @@ async def test_inner_value(subtests):
     for container in containers:
         with subtests.test(container=container):
             result_inst = await container
-            assert result_inst._inner_value._inner_value == 1  # noqa: SLF001
+            assert result_inst._inner_value._inner_value == 1  # ruff: ignore[private-member-access]

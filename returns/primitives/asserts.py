@@ -35,10 +35,13 @@ def assert_equal(
 
 
 def _convert(container, *, deps, backend: str):
-    from returns.interfaces.specific import future, reader  # noqa: PLC0415
+    from returns.interfaces.specific import (  # ruff: ignore[import-outside-top-level]
+        future,
+        reader,
+    )
 
     if isinstance(container, future.AwaitableFutureN):
-        import anyio  # noqa: PLC0415
+        import anyio  # ruff: ignore[import-outside-top-level]
 
         return _convert(
             anyio.run(container.awaitable, backend=backend),

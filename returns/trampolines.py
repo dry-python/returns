@@ -91,5 +91,5 @@ def trampoline(
             trampoline_result = trampoline_result()
         return trampoline_result
 
-    decorator._orig_func = func  # type: ignore[attr-defined]  # noqa: SLF001
+    decorator._orig_func = func  # type: ignore[attr-defined]  # ruff: ignore[private-member-access]
     return decorator

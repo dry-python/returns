@@ -30,7 +30,7 @@ class _Wrapper(
         self,
         container: Kind1['_Wrapper', Callable[[_ValueType], _NewValueType]],
     ) -> '_Wrapper[_NewValueType]':
-        function = container._inner_value  # noqa: SLF001
+        function = container._inner_value  # ruff: ignore[private-member-access]
         return _Wrapper(function(self._inner_value))
 
     @classmethod

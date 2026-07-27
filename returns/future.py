@@ -43,7 +43,7 @@ _SecondType = TypeVar('_SecondType')
 # Public composition helpers:
 
 
-async def async_identity(instance: _FirstType) -> _FirstType:  # noqa: RUF029
+async def async_identity(instance: _FirstType) -> _FirstType:  # ruff: ignore[unused-async]
     """
     Async function that returns its argument.
 
@@ -441,7 +441,7 @@ class Future(  # type: ignore[type-var]
           >>> assert anyio.run(main) is True
 
         """
-        return Future(async_identity(inner_value._inner_value))  # noqa: SLF001
+        return Future(async_identity(inner_value._inner_value))  # ruff: ignore[private-member-access]
 
     @classmethod
     def from_future_result(
@@ -464,7 +464,7 @@ class Future(  # type: ignore[type-var]
           >>> assert anyio.run(container.awaitable) == IO(Success(1))
 
         """
-        return Future(inner_value._inner_value)  # noqa: SLF001
+        return Future(inner_value._inner_value)  # ruff: ignore[private-member-access]
 
 
 # Decorators:
@@ -539,7 +539,7 @@ def asyncify(
     """
 
     @wraps(function)
-    async def decorator(  # noqa: RUF029
+    async def decorator(  # ruff: ignore[unused-async]
         *args: _FuncParams.args,
         **kwargs: _FuncParams.kwargs,
     ) -> _ValueType_co:
@@ -1245,7 +1245,7 @@ class FutureResult(  # type: ignore[type-var]
           >>> anyio.run(main)
 
         """
-        return FutureResult(inner_value._inner_value)  # noqa: SLF001
+        return FutureResult(inner_value._inner_value)  # ruff: ignore[private-member-access]
 
     @classmethod
     def from_future(
@@ -1342,7 +1342,7 @@ class FutureResult(  # type: ignore[type-var]
           >>> anyio.run(main)
 
         """
-        return FutureResult.from_value(inner_value._inner_value)  # noqa: SLF001
+        return FutureResult.from_value(inner_value._inner_value)  # ruff: ignore[private-member-access]
 
     @classmethod
     def from_failed_io(
@@ -1366,7 +1366,7 @@ class FutureResult(  # type: ignore[type-var]
           >>> anyio.run(main)
 
         """
-        return FutureResult.from_failure(inner_value._inner_value)  # noqa: SLF001
+        return FutureResult.from_failure(inner_value._inner_value)  # ruff: ignore[private-member-access]
 
     @classmethod
     def from_ioresult(
@@ -1393,7 +1393,7 @@ class FutureResult(  # type: ignore[type-var]
           >>> anyio.run(main)
 
         """
-        return FutureResult(async_identity(inner_value._inner_value))  # noqa: SLF001
+        return FutureResult(async_identity(inner_value._inner_value))  # ruff: ignore[private-member-access]
 
     @classmethod
     def from_result(
@@ -1472,7 +1472,7 @@ class FutureResult(  # type: ignore[type-var]
         return FutureResult(async_identity(Failure(inner_value)))
 
 
-def FutureSuccess(  # noqa: N802
+def FutureSuccess(  # ruff: ignore[invalid-function-name]
     inner_value: _NewValueType,
 ) -> FutureResult[_NewValueType, Any]:
     """
@@ -1493,7 +1493,7 @@ def FutureSuccess(  # noqa: N802
     return FutureResult.from_value(inner_value)
 
 
-def FutureFailure(  # noqa: N802
+def FutureFailure(  # ruff: ignore[invalid-function-name]
     inner_value: _NewErrorType,
 ) -> FutureResult[Any, _NewErrorType]:
     """

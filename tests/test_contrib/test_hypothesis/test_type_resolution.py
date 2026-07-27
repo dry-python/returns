@@ -17,7 +17,7 @@ from returns.context import (
 )
 from returns.contrib.hypothesis.laws import (
     Settings,
-    _types_to_strategies,  # noqa: PLC2701
+    _types_to_strategies,  # ruff: ignore[import-private-name]
     default_settings,
 )
 from returns.contrib.hypothesis.type_resolver import (
@@ -179,7 +179,7 @@ _ValueType = TypeVar('_ValueType')
 
 def test_types_to_strategies_default() -> None:  # noqa: WPS210
     """Check the default strategies for types."""
-    container_type = test_custom_type_applicative._Wrapper  # noqa: SLF001
+    container_type = test_custom_type_applicative._Wrapper  # ruff: ignore[private-member-access]
     # NOTE: There is a type error because `Callable` is a
     # special form, not a type.
     callable_type: type[object] = Callable  # type: ignore[assignment]
@@ -225,7 +225,7 @@ def test_types_to_strategies_default() -> None:  # noqa: WPS210
 
 def test_types_to_strategies_overrides() -> None:  # noqa: WPS210
     """Check that we allow the user to override all strategies."""
-    container_type = test_custom_type_applicative._Wrapper  # noqa: SLF001
+    container_type = test_custom_type_applicative._Wrapper  # ruff: ignore[private-member-access]
     # NOTE: There is a type error because `Callable` is a
     # special form, not a type.
     callable_type: type[object] = Callable  # type: ignore[assignment]

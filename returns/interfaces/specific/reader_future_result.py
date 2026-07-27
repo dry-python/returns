@@ -114,8 +114,8 @@ class _LawSpec(LawSpecDef):
     ) -> None:
         """Asking for an env, always returns the env."""
         assert_equal(
-            container.ask().__call__(env),  # noqa: PLC2801
-            container.from_value(env).__call__(env),  # noqa: PLC2801
+            container.ask().__call__(env),  # ruff: ignore[unnecessary-dunder-call]
+            container.from_value(env).__call__(env),  # ruff: ignore[unnecessary-dunder-call]
         )
 
 

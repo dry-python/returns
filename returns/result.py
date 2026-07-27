@@ -363,7 +363,7 @@ class Failure(Result[Any, _ErrorType_co]):  # noqa: WPS338
     if not TYPE_CHECKING:  # noqa: WPS604  # pragma: no branch
 
         def alt(self, function):
-            """Composes failed container with a pure function to modify failure."""  # noqa: E501
+            """Composes failed container with a pure function to modify failure."""  # ruff: ignore[line-too-long]
             return Failure(function(self._inner_value))
 
         def map(self, function):

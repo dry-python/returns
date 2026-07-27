@@ -20,24 +20,32 @@ _Inst = TypeVar('_Inst', bound='Lawful')
 
 
 def _setup_hook() -> None:
-    from hypothesis import strategies as st  # noqa: PLC0415
+    from hypothesis import (
+        strategies as st,
+    )
 
-    from returns.context import (  # noqa: PLC0415
+    from returns.context import (  # ruff: ignore[import-outside-top-level]
         RequiresContext,
         RequiresContextFutureResult,
         RequiresContextIOResult,
         RequiresContextResult,
     )
-    from returns.future import Future, FutureResult  # noqa: PLC0415
-    from returns.io import IO, IOResult  # noqa: PLC0415
-    from returns.maybe import Maybe  # noqa: PLC0415
-    from returns.result import Result  # noqa: PLC0415
+    from returns.future import (  # ruff: ignore[import-outside-top-level]
+        Future,
+        FutureResult,
+    )
+    from returns.io import (  # ruff: ignore[import-outside-top-level]
+        IO,
+        IOResult,
+    )
+    from returns.maybe import Maybe  # ruff: ignore[import-outside-top-level]
+    from returns.result import Result  # ruff: ignore[import-outside-top-level]
 
     def factory(
         container_type: type[_Inst],
     ) -> Callable[[Any], st.SearchStrategy[_Inst]]:
         def decorator(thing: Any) -> st.SearchStrategy[_Inst]:
-            from returns.contrib.hypothesis.containers import (  # noqa: PLC0415
+            from returns.contrib.hypothesis.containers import (  # ruff: ignore[import-outside-top-level]
                 strategy_from_container,
             )
 

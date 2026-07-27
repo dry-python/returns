@@ -125,7 +125,7 @@ class IO(  # type: ignore[type-var]
           >>> assert IO('b').apply(IO('a').apply(IO(appliable))) == IO('ab')
 
         """
-        return self.map(dekind(container)._inner_value)  # noqa: SLF001
+        return self.map(dekind(container)._inner_value)  # ruff: ignore[private-member-access]
 
     def bind(
         self,
@@ -226,7 +226,7 @@ class IO(  # type: ignore[type-var]
 
         Is the reverse of :meth:`returns.io.IOResult.from_typecast`.
         """
-        return IO(inner_value._inner_value)  # noqa: SLF001
+        return IO(inner_value._inner_value)  # ruff: ignore[private-member-access]
 
 
 # Helper functions:
@@ -435,7 +435,7 @@ class IOResult(  # type: ignore[type-var]
         if isinstance(container, IOSuccess):
             return self.from_result(
                 self._inner_value.map(
-                    container.unwrap()._inner_value,  # noqa: SLF001
+                    container.unwrap()._inner_value,  # ruff: ignore[private-member-access]
                 ),
             )
         return container  # type: ignore
@@ -641,7 +641,7 @@ class IOResult(  # type: ignore[type-var]
     def __iter__(self) -> Iterator[_ValueType_co]:
         """API for :ref:`do-notation`."""
         # We also unwrap `IO` here.
-        yield self.unwrap()._inner_value  # noqa: SLF001
+        yield self.unwrap()._inner_value  # ruff: ignore[private-member-access]
 
     @classmethod
     def do(
@@ -697,7 +697,7 @@ class IOResult(  # type: ignore[type-var]
 
         Can be reverted via :meth:`returns.io.IO.from_ioresult` method.
         """
-        return cls.from_result(inner_value._inner_value)  # noqa: SLF001
+        return cls.from_result(inner_value._inner_value)  # ruff: ignore[private-member-access]
 
     @classmethod
     def from_failed_io(
@@ -714,7 +714,7 @@ class IOResult(  # type: ignore[type-var]
           >>> assert IOResult.from_failed_io(container) == IOFailure(1)
 
         """
-        return IOFailure(inner_value._inner_value)  # noqa: SLF001
+        return IOFailure(inner_value._inner_value)  # ruff: ignore[private-member-access]
 
     @classmethod
     def from_io(
@@ -731,7 +731,7 @@ class IOResult(  # type: ignore[type-var]
           >>> assert IOResult.from_io(container) == IOSuccess(1)
 
         """
-        return IOSuccess(inner_value._inner_value)  # noqa: SLF001
+        return IOSuccess(inner_value._inner_value)  # ruff: ignore[private-member-access]
 
     @classmethod
     def from_result(
@@ -751,8 +751,8 @@ class IOResult(  # type: ignore[type-var]
 
         """
         if isinstance(inner_value, Success):
-            return IOSuccess(inner_value._inner_value)  # noqa: SLF001
-        return IOFailure(inner_value._inner_value)  # type: ignore[arg-type]  # noqa: SLF001
+            return IOSuccess(inner_value._inner_value)  # ruff: ignore[private-member-access]
+        return IOFailure(inner_value._inner_value)  # type: ignore[arg-type]  # ruff: ignore[private-member-access]
 
     @classmethod
     def from_ioresult(
@@ -833,7 +833,7 @@ class IOFailure(IOResult[Any, _ErrorType_co]):
             """Does nothing for ``IOFailure``."""
             return self
 
-        #: Alias for `bind_ioresult` method. Part of the `IOResultBasedN` interface.  # noqa: E501
+        #: Alias for `bind_ioresult` method. Part of the `IOResultBasedN` interface.  # ruff: ignore[line-too-long]
         bind_ioresult = bind
 
         def bind_result(self, function):
@@ -845,7 +845,7 @@ class IOFailure(IOResult[Any, _ErrorType_co]):
             return self
 
         def lash(self, function):
-            """Composes this container with a function returning ``IOResult``."""  # noqa: E501
+            """Composes this container with a function returning ``IOResult``."""  # ruff: ignore[line-too-long]
             return function(self._inner_value.failure())
 
 
@@ -864,10 +864,10 @@ class IOSuccess(IOResult[_ValueType_co, Any]):
     if not TYPE_CHECKING:  # noqa: WPS604  # pragma: no branch
 
         def bind(self, function):
-            """Composes this container with a function returning ``IOResult``."""  # noqa: E501
+            """Composes this container with a function returning ``IOResult``."""  # ruff: ignore[line-too-long]
             return function(self._inner_value.unwrap())
 
-        #: Alias for `bind_ioresult` method. Part of the `IOResultBasedN` interface.  # noqa: E501
+        #: Alias for `bind_ioresult` method. Part of the `IOResultBasedN` interface.  # ruff: ignore[line-too-long]
         bind_ioresult = bind
 
         def bind_result(self, function):

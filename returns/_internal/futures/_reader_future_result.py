@@ -33,9 +33,9 @@ async def async_bind_async(
     deps: _EnvType,
 ) -> Result[_NewValueType, _ErrorType_co]:
     """Async binds a coroutine with container over a value."""
-    inner_value = await container(deps)._inner_value  # noqa: SLF001
+    inner_value = await container(deps)._inner_value  # ruff: ignore[private-member-access]
     if isinstance(inner_value, Success):
-        return await dekind(  # noqa: SLF001
+        return await dekind(  # ruff: ignore[private-member-access]
             await function(inner_value.unwrap()),
         )(deps)._inner_value
     return inner_value  # type: ignore[return-value]
@@ -57,5 +57,5 @@ async def async_compose_result(
     deps: _EnvType,
 ) -> Result[_NewValueType, _ErrorType_co]:
     """Async composes ``Result`` based function."""
-    new_container = dekind(function((await container(deps))._inner_value))  # noqa: SLF001
-    return (await new_container(deps))._inner_value  # noqa: SLF001
+    new_container = dekind(function((await container(deps))._inner_value))  # ruff: ignore[private-member-access]
+    return (await new_container(deps))._inner_value  # ruff: ignore[private-member-access]

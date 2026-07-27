@@ -28,7 +28,7 @@ def _get_project_meta():
 
 pkg_meta = _get_project_meta()
 project = str(pkg_meta['name'])
-copyright = '2019, dry-python team'  # noqa: A001
+copyright = '2019, dry-python team'  # ruff: ignore[builtin-variable-shadowing]
 author = 'dry-python team'
 
 # The short X.Y version

@@ -1,4 +1,4 @@
-import pickle  # noqa: S403
+import pickle  # ruff: ignore[suspicious-pickle-import]
 
 from returns.maybe import Nothing
 from returns.primitives.exceptions import UnwrapFailedError
@@ -13,7 +13,7 @@ def test_pickle_unwrap_failed_error_from_maybe():
     except UnwrapFailedError as error:
         serialized = pickle.dumps(error)
 
-    deserialized_error = pickle.loads(serialized)  # noqa: S301
+    deserialized_error = pickle.loads(serialized)  # ruff: ignore[suspicious-pickle-usage]
     assert deserialized_error.halted_container == Nothing
 
 
@@ -25,5 +25,5 @@ def test_pickle_unwrap_failed_error_from_result():
     except UnwrapFailedError as error:
         serialized = pickle.dumps(error)
 
-    deserialized_error = pickle.loads(serialized)  # noqa: S301
+    deserialized_error = pickle.loads(serialized)  # ruff: ignore[suspicious-pickle-usage]
     assert deserialized_error.halted_container == Failure('error')

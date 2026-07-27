@@ -32,8 +32,13 @@ def strategy_from_container(
     will produce any value for success cases
     and only exceptions for failure cases.
     """
-    from returns.interfaces.applicative import ApplicativeN  # noqa: PLC0415
-    from returns.interfaces.specific import maybe, result  # noqa: PLC0415
+    from returns.interfaces.applicative import (
+        ApplicativeN,
+    )
+    from returns.interfaces.specific import (  # ruff: ignore[import-outside-top-level]
+        maybe,
+        result,
+    )
 
     def factory(type_: type) -> st.SearchStrategy:
         value_type, error_type = _get_type_vars(type_)

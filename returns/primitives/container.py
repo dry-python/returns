@@ -81,5 +81,5 @@ def container_equality(
     if type(self) != type(other):  # noqa: WPS516, E721
         return False
     return bool(
-        self._inner_value == other._inner_value,  # type: ignore # noqa: SLF001
+        self._inner_value == other._inner_value,  # type: ignore # ruff: ignore[private-member-access]
     )

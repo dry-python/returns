@@ -48,7 +48,7 @@ def test_is_compare():
 def test_immutability_failure():
     """Ensures that Failure container is immutable."""
     with pytest.raises(ImmutableStateError):
-        Failure(0)._inner_state = 1  # noqa: SLF001
+        Failure(0)._inner_state = 1  # ruff: ignore[private-member-access]
 
     with pytest.raises(ImmutableStateError):
         Failure(1).missing = 2
@@ -57,13 +57,13 @@ def test_immutability_failure():
         del Failure(0)._inner_state  # type: ignore # noqa: SLF001, WPS420
 
     with pytest.raises(AttributeError):
-        Failure(1).missing  # type: ignore # noqa: B018
+        Failure(1).missing  # type: ignore # ruff: ignore[useless-expression]
 
 
 def test_immutability_success():
     """Ensures that Success container is immutable."""
     with pytest.raises(ImmutableStateError):
-        Success(0)._inner_state = 1  # noqa: SLF001
+        Success(0)._inner_state = 1  # ruff: ignore[private-member-access]
 
     with pytest.raises(ImmutableStateError):
         Success(1).missing = 2
@@ -72,7 +72,7 @@ def test_immutability_success():
         del Success(0)._inner_state  # type: ignore # noqa: SLF001, WPS420
 
     with pytest.raises(AttributeError):
-        Success(1).missing  # type: ignore # noqa: B018
+        Success(1).missing  # type: ignore # ruff: ignore[useless-expression]
 
 
 def test_success_immutable_copy():

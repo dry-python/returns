@@ -24,7 +24,7 @@ async def async_apply(
     inner_value: Awaitable[_ValueType_co],
 ) -> _NewValueType:
     """Async applies a container with function over a value."""
-    return (await container)._inner_value(await inner_value)  # noqa: SLF001
+    return (await container)._inner_value(await inner_value)  # ruff: ignore[private-member-access]
 
 
 async def async_bind(
@@ -32,7 +32,7 @@ async def async_bind(
     inner_value: Awaitable[_ValueType_co],
 ) -> _NewValueType:
     """Async binds a container over a value."""
-    return (await dekind(function(await inner_value)))._inner_value  # noqa: SLF001
+    return (await dekind(function(await inner_value)))._inner_value  # ruff: ignore[private-member-access]
 
 
 async def async_bind_awaitable(
@@ -51,7 +51,7 @@ async def async_bind_async(
     inner_value: Awaitable[_ValueType_co],
 ) -> _NewValueType:
     """Async binds a coroutine with container over a value."""
-    inner_io = dekind(await function(await inner_value))._inner_value  # noqa: SLF001
+    inner_io = dekind(await function(await inner_value))._inner_value  # ruff: ignore[private-member-access]
     return await inner_io
 
 
@@ -60,4 +60,4 @@ async def async_bind_io(
     inner_value: Awaitable[_ValueType_co],
 ) -> _NewValueType:
     """Async binds a container over a value."""
-    return function(await inner_value)._inner_value  # noqa: SLF001
+    return function(await inner_value)._inner_value  # ruff: ignore[private-member-access]

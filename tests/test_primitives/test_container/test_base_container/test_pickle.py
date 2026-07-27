@@ -1,4 +1,4 @@
-import pickle  # noqa: S403
+import pickle  # ruff: ignore[suspicious-pickle-import]
 from typing import Any
 
 from hypothesis import example, given
@@ -36,4 +36,4 @@ class _CustomClass:
 def test_pickle(container_value: Any):
     """Ensures custom pickle protocol works as expected."""
     container = BaseContainer(container_value)
-    assert pickle.loads(pickle.dumps(container)) == container  # noqa: S301
+    assert pickle.loads(pickle.dumps(container)) == container  # ruff: ignore[suspicious-pickle-usage]

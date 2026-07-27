@@ -84,9 +84,9 @@ class _LawSpec(LawSpecDef):
         env: _ThirdType,
     ) -> None:
         """Asking for an env, always returns the env."""
-        assert container.ask().__call__(  # noqa: PLC2801
+        assert container.ask().__call__(  # ruff: ignore[unnecessary-dunder-call]
             env,
-        ) == container.from_value(env).__call__(env)  # noqa: PLC2801
+        ) == container.from_value(env).__call__(env)  # ruff: ignore[unnecessary-dunder-call]
 
 
 class ReaderIOResultBasedN(

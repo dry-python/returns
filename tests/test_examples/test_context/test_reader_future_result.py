@@ -54,7 +54,7 @@ def _fetch_post(
 def _show_titles(
     number_of_posts: int,
 ) -> RequiresContextFutureResultE[Sequence[str], httpx.AsyncClient]:
-    def factory(post: _Post) -> str:  # noqa: FURB118
+    def factory(post: _Post) -> str:  # ruff: ignore[reimplemented-operator]
         return post['title']
 
     titles = [

@@ -5,7 +5,9 @@ from contextlib import contextmanager
 from typing import TypeAlias, TypeVar
 
 from hypothesis import strategies as st
-from hypothesis.strategies._internal import types  # noqa: PLC2701
+from hypothesis.strategies._internal import (
+    types,
+)
 
 Example_co = TypeVar('Example_co', covariant=True)
 
@@ -51,14 +53,14 @@ def look_up_strategy(
     type_: type[Example_co],
 ) -> StrategyFactory[Example_co] | None:
     """Return the strategy used by `hypothesis`."""
-    return types._global_type_lookup.get(type_)  # noqa: SLF001
+    return types._global_type_lookup.get(type_)  # ruff: ignore[private-member-access]
 
 
 def _remove_strategy(
     type_: type[object],
 ) -> None:
     """Remove the strategy registered for `type_`."""
-    types._global_type_lookup.pop(type_)  # noqa: SLF001
+    types._global_type_lookup.pop(type_)  # ruff: ignore[private-member-access]
     _clean_caches()
 
 
@@ -72,4 +74,4 @@ def apply_strategy(
 
 
 def _clean_caches() -> None:
-    st.from_type.__clear_cache()  # type: ignore[attr-defined]  # noqa: SLF001
+    st.from_type.__clear_cache()  # type: ignore[attr-defined]  # ruff: ignore[private-member-access]

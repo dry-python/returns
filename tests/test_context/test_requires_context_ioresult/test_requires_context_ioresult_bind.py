@@ -1,5 +1,7 @@
 from returns.context import RequiresContext, RequiresContextResult
-from returns.context import RequiresContextIOResult as RCR  # noqa: N814
+from returns.context import (
+    RequiresContextIOResult as RCR,  # ruff: ignore[camelcase-imported-as-constant]
+)
 from returns.io import IOFailure, IOResult, IOSuccess
 from returns.result import Failure, Result, Success
 

@@ -2,7 +2,11 @@ from copy import copy, deepcopy
 
 import pytest
 
-from returns.maybe import Nothing, Some, _Nothing  # noqa: PLC2701
+from returns.maybe import (
+    Nothing,
+    Some,
+    _Nothing,
+)
 from returns.primitives.exceptions import ImmutableStateError
 
 
@@ -33,8 +37,8 @@ def test_equality():
 def test_nonequality():
     """Ensures that containers are not compared to regular values."""
     assert Nothing is not None
-    assert Nothing != None  # noqa: E711
-    assert _Nothing(None) != None  # noqa: E711
+    assert Nothing != None  # ruff: ignore[none-comparison]
+    assert _Nothing(None) != None  # ruff: ignore[none-comparison]
     assert Some(5) != 5
     assert Some(3) is not Some(3)
 
@@ -50,7 +54,7 @@ def test_is_compare():
 def test_immutability_failure():
     """Ensures that Failure container is immutable."""
     with pytest.raises(ImmutableStateError):
-        Nothing._inner_state = 1  # noqa: SLF001
+        Nothing._inner_state = 1  # ruff: ignore[private-member-access]
 
     with pytest.raises(ImmutableStateError):
         Nothing.missing = 2
@@ -59,13 +63,13 @@ def test_immutability_failure():
         del Nothing._inner_state  # type: ignore # noqa: SLF001, WPS420
 
     with pytest.raises(AttributeError):
-        Nothing.missing  # type: ignore # noqa: B018
+        Nothing.missing  # type: ignore # ruff: ignore[useless-expression]
 
 
 def test_immutability_success():
     """Ensures that Success container is immutable."""
     with pytest.raises(ImmutableStateError):
-        Some(0)._inner_state = 1  # noqa: SLF001
+        Some(0)._inner_state = 1  # ruff: ignore[private-member-access]
 
     with pytest.raises(ImmutableStateError):
         Some(1).missing = 2
@@ -74,7 +78,7 @@ def test_immutability_success():
         del Some(0)._inner_state  # type: ignore # noqa: SLF001, WPS420
 
     with pytest.raises(AttributeError):
-        Some(1).missing  # type: ignore # noqa: B018
+        Some(1).missing  # type: ignore # ruff: ignore[useless-expression]
 
 
 def test_success_immutable_copy():

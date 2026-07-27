@@ -14,7 +14,7 @@ _DiverseFailableKind = TypeVar('_DiverseFailableKind', bound=DiverseFailableN)
 @overload
 def internal_cond(
     container_type: type[_SingleFailableKind],
-    is_success: bool,  # noqa: FBT001
+    is_success: bool,  # ruff: ignore[boolean-type-hint-positional-argument]
     success_value: _ValueType,
 ) -> KindN[_SingleFailableKind, _ValueType, _ErrorType, NoDeps]: ...
 
@@ -22,7 +22,7 @@ def internal_cond(
 @overload
 def internal_cond(
     container_type: type[_DiverseFailableKind],
-    is_success: bool,  # noqa: FBT001
+    is_success: bool,  # ruff: ignore[boolean-type-hint-positional-argument]
     success_value: _ValueType,
     error_value: _ErrorType,
 ) -> KindN[_DiverseFailableKind, _ValueType, _ErrorType, NoDeps]: ...
@@ -30,7 +30,7 @@ def internal_cond(
 
 def internal_cond(
     container_type: (type[_SingleFailableKind] | type[_DiverseFailableKind]),
-    is_success: bool,  # noqa: FBT001
+    is_success: bool,  # ruff: ignore[boolean-type-hint-positional-argument]
     success_value: _ValueType,
     error_value: _ErrorType | None = None,
 ):

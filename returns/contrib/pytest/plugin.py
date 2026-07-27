@@ -49,7 +49,9 @@ class ReturnsAsserts:
         backend: str = 'asyncio',
     ) -> None:
         """Can compare two containers even with extra calling and awaiting."""
-        from returns.primitives.asserts import assert_equal  # noqa: PLC0415
+        from returns.primitives.asserts import (
+            assert_equal,
+        )
 
         assert_equal(first, second, deps=deps, backend=backend)
 
@@ -153,14 +155,22 @@ def _spy_error_handling() -> Iterator[_ErrorsHandled]:
 
 # delayed imports are needed to prevent messing up coverage
 def _containers_to_patch() -> list:
-    from returns.context import (  # noqa: PLC0415
+    from returns.context import (  # ruff: ignore[import-outside-top-level]
         RequiresContextFutureResult,
         RequiresContextIOResult,
         RequiresContextResult,
     )
-    from returns.future import FutureResult  # noqa: PLC0415
-    from returns.io import IOFailure, IOSuccess  # noqa: PLC0415
-    from returns.result import Failure, Success  # noqa: PLC0415
+    from returns.future import (
+        FutureResult,
+    )
+    from returns.io import (  # ruff: ignore[import-outside-top-level]
+        IOFailure,
+        IOSuccess,
+    )
+    from returns.result import (  # ruff: ignore[import-outside-top-level]
+        Failure,
+        Success,
+    )
 
     return [
         Success,

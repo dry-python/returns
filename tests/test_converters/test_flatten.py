@@ -110,7 +110,7 @@ async def test_non_flatten_future(subtests):
     for cont in futures:
         with subtests.test(container=cont):
             assert isinstance(
-                (await flatten(cont)).failure()._inner_value,  # noqa: SLF001
+                (await flatten(cont)).failure()._inner_value,  # ruff: ignore[private-member-access]
                 cont.__class__,
             )
 
@@ -132,6 +132,6 @@ async def test_non_flatten_context_future_result(subtests):
         with subtests.test(container=cont):
             inner = await flatten(cont)(...)
             assert isinstance(
-                inner.failure()._inner_value,  # noqa: SLF001
+                inner.failure()._inner_value,  # ruff: ignore[private-member-access]
                 cont.__class__,
             )

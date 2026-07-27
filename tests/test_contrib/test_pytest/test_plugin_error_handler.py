@@ -47,14 +47,14 @@ def _under_test(
 )
 def test_error_handled(returns: ReturnsAsserts, container, kwargs):
     """Demo on how to use ``pytest`` helpers to work with error handling."""
-    assert not returns._errors_handled  # noqa: SLF001
+    assert not returns._errors_handled  # ruff: ignore[private-member-access]
     error_handled = _under_test(container, **kwargs)
 
     assert returns.is_error_handled(error_handled)
     assert returns.is_error_handled(error_handled.map(identity))
     assert returns.is_error_handled(error_handled.alt(identity))
 
-    assert returns._errors_handled  # noqa: SLF001
+    assert returns._errors_handled  # ruff: ignore[private-member-access]
 
 
 @pytest.mark.parametrize(
@@ -74,7 +74,7 @@ def test_error_handled(returns: ReturnsAsserts, container, kwargs):
 )
 def test_error_not_handled(returns: ReturnsAsserts, container):
     """Demo on how to use ``pytest`` helpers to work with error handling."""
-    assert not returns._errors_handled  # noqa: SLF001
+    assert not returns._errors_handled  # ruff: ignore[private-member-access]
     error_handled = _under_test(container)
 
     assert not returns.is_error_handled(container)
@@ -82,7 +82,7 @@ def test_error_not_handled(returns: ReturnsAsserts, container):
     assert not returns.is_error_handled(error_handled.map(identity))
     assert not returns.is_error_handled(error_handled.alt(identity))
 
-    assert not returns._errors_handled  # noqa: SLF001
+    assert not returns._errors_handled  # ruff: ignore[private-member-access]
 
 
 @pytest.mark.anyio

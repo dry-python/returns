@@ -39,7 +39,7 @@ async def async_apply(
     inner_value: Awaitable[Result[_ValueType_co, _ErrorType_co]],
 ) -> Result[_NewValueType, _ErrorType_co]:
     """Async maps a function over a value."""
-    return (await inner_value).apply((await container)._inner_value)  # noqa: SLF001
+    return (await inner_value).apply((await container)._inner_value)  # ruff: ignore[private-member-access]
 
 
 async def async_bind(
@@ -52,7 +52,7 @@ async def async_bind(
     """Async binds a container over a value."""
     container = await inner_value
     if isinstance(container, Success):
-        return (await dekind(function(container.unwrap())))._inner_value  # noqa: SLF001
+        return (await dekind(function(container.unwrap())))._inner_value  # ruff: ignore[private-member-access]
     return container  # type: ignore[return-value]
 
 
@@ -77,7 +77,7 @@ async def async_bind_async(
     """Async binds a coroutine with container over a value."""
     container = await inner_value
     if isinstance(container, Success):
-        return await dekind(await function(container.unwrap()))._inner_value  # noqa: SLF001
+        return await dekind(await function(container.unwrap()))._inner_value  # ruff: ignore[private-member-access]
     return container  # type: ignore[return-value]
 
 
@@ -96,7 +96,7 @@ async def async_bind_ioresult(
     """Async binds a container returning ``IOResult`` over a value."""
     container = await inner_value
     if isinstance(container, Success):
-        return function(container.unwrap())._inner_value  # noqa: SLF001
+        return function(container.unwrap())._inner_value  # ruff: ignore[private-member-access]
     return container  # type: ignore[return-value]
 
 
@@ -107,7 +107,7 @@ async def async_bind_io(
     """Async binds a container returning ``IO`` over a value."""
     container = await inner_value
     if isinstance(container, Success):
-        return Success(function(container.unwrap())._inner_value)  # noqa: SLF001
+        return Success(function(container.unwrap())._inner_value)  # ruff: ignore[private-member-access]
     return container  # type: ignore[return-value]
 
 
@@ -155,21 +155,21 @@ async def async_lash(
     container = await inner_value
     if isinstance(container, Success):
         return container
-    return (await dekind(function(container.failure())))._inner_value  # noqa: SLF001
+    return (await dekind(function(container.failure())))._inner_value  # ruff: ignore[private-member-access]
 
 
 async def async_from_success(
     container: Future[_NewValueType],
 ) -> Result[_NewValueType, Any]:
     """Async success unit factory."""
-    return Success((await container)._inner_value)  # noqa: SLF001
+    return Success((await container)._inner_value)  # ruff: ignore[private-member-access]
 
 
 async def async_from_failure(
     container: Future[_NewErrorType],
 ) -> Result[Any, _NewErrorType]:
     """Async failure unit factory."""
-    return Failure((await container)._inner_value)  # noqa: SLF001
+    return Failure((await container)._inner_value)  # ruff: ignore[private-member-access]
 
 
 async def async_compose_result(
@@ -180,4 +180,4 @@ async def async_compose_result(
     inner_value: Awaitable[Result[_ValueType_co, _ErrorType_co]],
 ) -> Result[_NewValueType, _ErrorType_co]:
     """Async composes ``Result`` based function."""
-    return (await dekind(function(await inner_value)))._inner_value  # noqa: SLF001
+    return (await dekind(function(await inner_value)))._inner_value  # ruff: ignore[private-member-access]

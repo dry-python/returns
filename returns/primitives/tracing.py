@@ -60,13 +60,13 @@ def collect_traces(
 
     @contextmanager
     def factory() -> Iterator[None]:
-        unpatched_get_trace = getattr(Failure, '_get_trace')  # noqa: B009
+        unpatched_get_trace = getattr(Failure, '_get_trace')  # ruff: ignore[get-attr-with-constant]
         substitute_get_trace = types.MethodType(_get_trace, Failure)
-        setattr(Failure, '_get_trace', substitute_get_trace)  # noqa: B010
+        setattr(Failure, '_get_trace', substitute_get_trace)  # ruff: ignore[set-attr-with-constant]
         try:  # noqa: WPS501
             yield
         finally:
-            setattr(Failure, '_get_trace', unpatched_get_trace)  # noqa: B010
+            setattr(Failure, '_get_trace', unpatched_get_trace)  # ruff: ignore[set-attr-with-constant]
 
     return factory()(function) if function else factory()
 

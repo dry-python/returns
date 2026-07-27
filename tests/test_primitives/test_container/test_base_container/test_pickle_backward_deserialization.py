@@ -1,4 +1,4 @@
-import pickle  # noqa: S403
+import pickle  # ruff: ignore[suspicious-pickle-import]
 
 from returns.primitives.container import BaseContainer
 
@@ -11,4 +11,4 @@ def test_pickle_backward_deserialization():
         + b'returns.primitives.container\x94\x8c\rBaseContainer'
         + b'\x94\x93\x94)\x81\x94K\x01b.'
     )
-    assert pickle.loads(serialized_container) == BaseContainer(1)  # noqa: S301
+    assert pickle.loads(serialized_container) == BaseContainer(1)  # ruff: ignore[suspicious-pickle-usage]

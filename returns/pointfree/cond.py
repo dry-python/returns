@@ -70,7 +70,7 @@ def cond(
 
     """
 
-    def factory(is_success: bool):  # noqa: FBT001
+    def factory(is_success: bool):  # ruff: ignore[boolean-type-hint-positional-argument]
         return internal_cond(
             container_type,
             is_success,

@@ -1,4 +1,4 @@
-from returns.maybe import _Nothing  # noqa: PLC2701
+from returns.maybe import _Nothing  # ruff: ignore[import-private-name]
 
 
 def test_nothing_singleton():

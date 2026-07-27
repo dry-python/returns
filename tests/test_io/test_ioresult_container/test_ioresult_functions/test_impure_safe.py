@@ -29,7 +29,7 @@ def test_safe_iofailure():
     """Ensures that safe decorator works correctly for IOFailure case."""
     failed = _function(0)
     assert isinstance(
-        failed.failure()._inner_value,  # noqa: SLF001
+        failed.failure()._inner_value,  # ruff: ignore[private-member-access]
         ZeroDivisionError,
     )
 
@@ -38,13 +38,13 @@ def test_safe_failure_with_expected_error():
     """Ensures that safe decorator works correctly for Failure case."""
     failed = _function_two(0)
     assert isinstance(
-        failed.failure()._inner_value,  # noqa: SLF001
+        failed.failure()._inner_value,  # ruff: ignore[private-member-access]
         ZeroDivisionError,
     )
 
     failed2 = _function_three(0)
     assert isinstance(
-        failed2.failure()._inner_value,  # noqa: SLF001
+        failed2.failure()._inner_value,  # ruff: ignore[private-member-access]
         ZeroDivisionError,
     )
 
