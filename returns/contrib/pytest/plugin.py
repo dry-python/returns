@@ -194,6 +194,7 @@ def _patched_error_handler(
 
     return wraps(original)(sync_wrapper)  # type: ignore
 
+
 def _patched_error_copier(
     original: _FunctionType,
     errs: _ErrorsHandled,
@@ -215,6 +216,7 @@ def _patched_error_copier(
         return original_result
 
     return wraps(original)(sync_wrapper)  # type: ignore
+
 
 _ERROR_HANDLING_PATCHERS: Final = MappingProxyType({
     'lash': _patched_error_handler,
