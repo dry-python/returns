@@ -180,19 +180,19 @@ def _patched_error_handler(
 ) -> _FunctionType:
     if inspect.iscoroutinefunction(original):
 
-        async def wrapper(self, *args, **kwargs):
+        async def async_wrapper(self, *args, **kwargs):
             original_result = await original(self, *args, **kwargs)
             errs[id(original_result)] = original_result
             return original_result
 
-    else:
+        return wraps(original)(async_wrapper)  # type: ignore
 
-        def wrapper(self, *args, **kwargs):
-            original_result = original(self, *args, **kwargs)
-            errs[id(original_result)] = original_result
-            return original_result
+    def sync_wrapper(self, *args, **kwargs):
+        original_result = original(self, *args, **kwargs)
+        errs[id(original_result)] = original_result
+        return original_result
 
-    return wraps(original)(wrapper)  # type: ignore
+    return wraps(original)(sync_wrapper)  # type: ignore
 
 
 def _patched_error_copier(
@@ -201,21 +201,21 @@ def _patched_error_copier(
 ) -> _FunctionType:
     if inspect.iscoroutinefunction(original):
 
-        async def wrapper(self, *args, **kwargs):
+        async def async_wrapper(self, *args, **kwargs):
             original_result = await original(self, *args, **kwargs)
             if id(self) in errs:
                 errs[id(original_result)] = original_result
             return original_result
 
-    else:
+        return wraps(original)(async_wrapper)  # type: ignore
 
-        def wrapper(self, *args, **kwargs):
-            original_result = original(self, *args, **kwargs)
-            if id(self) in errs:
-                errs[id(original_result)] = original_result
-            return original_result
+    def sync_wrapper(self, *args, **kwargs):
+        original_result = original(self, *args, **kwargs)
+        if id(self) in errs:
+            errs[id(original_result)] = original_result
+        return original_result
 
-    return wraps(original)(wrapper)  # type: ignore
+    return wraps(original)(sync_wrapper)  # type: ignore
 
 
 _ERROR_HANDLING_PATCHERS: Final = MappingProxyType({
