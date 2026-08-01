@@ -1,3 +1,4 @@
+from types import MappingProxyType
 from typing import ClassVar, Final, final
 
 from mypy.nodes import (
@@ -30,10 +31,10 @@ _VARIADIC_KINDS: Final = frozenset((ARG_STAR, ARG_STAR2))
 _POSITIONAL_KINDS: Final = frozenset((ARG_POS, ARG_OPT))
 
 #: Maps a positional argument kind onto its keyword-only counterpart.
-_KEYWORD_ONLY_KINDS: Final = {
+_KEYWORD_ONLY_KINDS: Final = MappingProxyType({
     ARG_POS: ARG_NAMED,
     ARG_OPT: ARG_NAMED_OPT,
-}
+})
 
 
 def proper_type(
