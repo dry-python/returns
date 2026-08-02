@@ -1,4 +1,4 @@
-- case: check_all_laws
+- case: test_check_all_laws
   disable_cache: false
   parametrized:
   - container: Result

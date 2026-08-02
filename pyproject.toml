@@ -221,6 +221,7 @@ skip = ["__pycache__", "_build", ".mypy_cache"]
 
 [tool.typos]
 # typos configuration: https://github.com/crate-ci/typos/
+default.extend-identifiers = ["bimap"]
 files.extend-exclude = [
   "__pycache__",
   "_build",
