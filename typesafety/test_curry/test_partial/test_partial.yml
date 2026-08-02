@@ -92,7 +92,7 @@
 
     bound = partial(two_args, first=1)
     bound(second=2.0)  # ok
-    bound(2.0)  # E: Too many positional arguments  [misc]
+    bound(2.0)  # E: Too many positional arguments  [call-arg]
 
 
 - case: partial_middle_positional_arg_by_keyword_makes_rest_kwonly
