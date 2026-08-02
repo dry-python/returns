@@ -112,11 +112,11 @@ class Result(  # type: ignore[type-var]
 
           >>> from returns.result import Failure, Success
 
-          >>> def appliable(string: str) -> str:
+          >>> def applicable(string: str) -> str:
           ...      return string + 'b'
 
-          >>> assert Success('a').apply(Success(appliable)) == Success('ab')
-          >>> assert Failure('a').apply(Success(appliable)) == Failure('a')
+          >>> assert Success('a').apply(Success(applicable)) == Success('ab')
+          >>> assert Failure('a').apply(Success(applicable)) == Failure('a')
 
           >>> assert Success('a').apply(Failure(1)) == Failure(1)
           >>> assert Failure(1).apply(Failure(2)) == Failure(1)

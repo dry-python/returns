@@ -34,7 +34,7 @@ def bind_context2(
 
     In other words, it modifies the function's
     signature from:
-    ``a -> RequresContext[b, c]``
+    ``a -> RequiresContext[b, c]``
     to:
     ``Container[a, c] -> Container[b, c]``
 
@@ -79,7 +79,7 @@ def bind_context3(
     Composes successful container with a function that returns a container.
 
     In other words, it modifies the function's
-    signature from: ``a -> RequresContext[b, c]``
+    signature from: ``a -> RequiresContext[b, c]``
     to: ``Container[a, c] -> Container[b, c]``
 
     .. code:: python

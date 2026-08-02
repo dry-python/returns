@@ -204,22 +204,22 @@ def clean_plugin_context() -> Iterator[None]:
 
     Otherwise, some types might be messed up.
     """
-    saved_stategies = {}
+    saved_strategies = {}
     for strategy_key, strategy in types._global_type_lookup.items():  # noqa: SLF001
         if isinstance(  # type: ignore[redundant-expr, unused-ignore]
             strategy_key,
             type,
         ) and strategy_key.__module__.startswith('returns.'):
-            saved_stategies.update({strategy_key: strategy})
+            saved_strategies.update({strategy_key: strategy})
 
-    for key_to_remove in saved_stategies:
+    for key_to_remove in saved_strategies:
         types._global_type_lookup.pop(key_to_remove)  # noqa: SLF001
     _clean_caches()
 
     try:
         yield
     finally:
-        for saved_state in saved_stategies.items():
+        for saved_state in saved_strategies.items():
             st.register_type_strategy(*saved_state)
 
 

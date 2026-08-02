@@ -15,7 +15,7 @@
         ...
 
 
-- case: single_failable_inheretance_correct3
+- case: single_failable_inheritance_correct3
   disable_cache: false
   main: |
     from typing import TypeVar

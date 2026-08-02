@@ -20,7 +20,7 @@
     from returns.result import Result
     from returns.io import IO, IOResult
 
-    from returns.primitivies.laws import Lawful
+    from returns.primitives.laws import Lawful
     from typing import Type
 
     x: Type[Lawful] = {{ container }}

@@ -75,12 +75,12 @@ class Maybe(  # type: ignore[type-var]
 
           >>> from returns.maybe import Some, Nothing
 
-          >>> def appliable(string: str) -> str:
+          >>> def applicable(string: str) -> str:
           ...      return string + 'b'
 
-          >>> assert Some('a').apply(Some(appliable)) == Some('ab')
+          >>> assert Some('a').apply(Some(applicable)) == Some('ab')
           >>> assert Some('a').apply(Nothing) == Nothing
-          >>> assert Nothing.apply(Some(appliable)) == Nothing
+          >>> assert Nothing.apply(Some(applicable)) == Nothing
           >>> assert Nothing.apply(Nothing) == Nothing
 
         """
