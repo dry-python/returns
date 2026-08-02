@@ -59,7 +59,7 @@ _all_containers: Sequence[type[Lawful]] = (
 @pytest.mark.parametrize('container_type', _all_containers)
 def test_all_containers_resolves(container_type: type[Lawful]) -> None:
     """Ensures all containers do resolve."""
-    assert st.from_type(container_type).example() is not None
+    assert st.from_type(container_type).example() is not None  # type: ignore[comparison-overlap]
 
 
 @given(

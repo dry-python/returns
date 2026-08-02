@@ -32,7 +32,7 @@ def test_equality():
 
 def test_nonequality():
     """Ensures that containers are not compared to regular values."""
-    assert Nothing is not None
+    assert Nothing is not None  # type: ignore[comparison-overlap]
     assert Nothing != None  # noqa: E711
     assert _Nothing(None) != None  # noqa: E711
     assert Some(5) != 5
