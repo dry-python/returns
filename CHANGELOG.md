@@ -6,6 +6,16 @@ incremental in minor, bugfixes only are patches.
 See [0Ver](https://0ver.org/).
 
 
+## 0.28.1 WIP
+
+### Bugfixes
+
+- Fixes `partial` mypy plugin inferring the wrong signature when a positional
+  argument is applied by keyword: the remaining parameters are now correctly
+  marked as keyword-only, so passing them positionally is a type error instead
+  of a runtime `TypeError`
+
+
 ## 0.28.0
 
 ### Features

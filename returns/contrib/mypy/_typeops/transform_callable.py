@@ -1,6 +1,15 @@
-from typing import ClassVar, final
+from types import MappingProxyType
+from typing import ClassVar, Final, final
 
-from mypy.nodes import ARG_OPT, ARG_POS, ARG_STAR, ARG_STAR2, ArgKind
+from mypy.nodes import (
+    ARG_NAMED,
+    ARG_NAMED_OPT,
+    ARG_OPT,
+    ARG_POS,
+    ARG_STAR,
+    ARG_STAR2,
+    ArgKind,
+)
 from mypy.typeops import get_type_vars
 from mypy.types import (
     AnyType,
@@ -13,6 +22,19 @@ from mypy.types import (
 from mypy.types import Type as MypyType
 
 from returns.contrib.mypy._structures.args import FuncArg
+
+#: Kinds of arguments that consume the leftover positional or keyword
+#: arguments (``*args`` and ``**kwargs``) and therefore cannot be applied.
+_VARIADIC_KINDS: Final = frozenset((ARG_STAR, ARG_STAR2))
+
+#: Kinds of arguments that can be passed positionally.
+_POSITIONAL_KINDS: Final = frozenset((ARG_POS, ARG_OPT))
+
+#: Maps a positional argument kind onto its keyword-only counterpart.
+_KEYWORD_ONLY_KINDS: Final = MappingProxyType({
+    ARG_POS: ARG_NAMED,
+    ARG_OPT: ARG_NAMED_OPT,
+})
 
 
 def proper_type(
@@ -128,36 +150,80 @@ class Functions:
         self._original = original
         self._intermediate = intermediate
 
-    def diff(self) -> CallableType:
+    def diff(self, applied_args: list[FuncArg]) -> CallableType:
         """Finds a diff between two functions' arguments."""
         intermediate_names = [
             arg.name for arg in FuncArg.from_callable(self._intermediate)
         ]
-        new_function_args = []
+        original_args = FuncArg.from_callable(self._original)
+        # A positional parameter applied by keyword leaves a hole that can no
+        # longer be filled positionally, so every remaining positional
+        # parameter after it must become keyword-only. Otherwise the partial
+        # would accept positional arguments that raise a ``TypeError`` at
+        # runtime. See issue #2191.
+        keyword_hole_at = self._keyword_hole_at(
+            original_args,
+            applied_args,
+            intermediate_names,
+        )
+        return Intermediate(self._original).with_signature([
+            self._remaining_arg(arg, keyword_only=index > keyword_hole_at)
+            for index, arg in enumerate(original_args)
+            if not self._was_applied(arg, index, intermediate_names)
+        ])
 
-        for index, arg in enumerate(FuncArg.from_callable(self._original)):
-            should_be_copied = (
-                arg.kind in {ARG_STAR, ARG_STAR2}
-                or arg.name not in intermediate_names
-                or
-                # We need to treat unnamed args differently, because python3.8
-                # has pos_only_args, all their names are `None`.
-                # This is also true for `lambda` functions where `.name`
-                # might be missing for some reason.
-                (
-                    not arg.name
-                    and not (
-                        index < len(intermediate_names)
-                        and
-                        # If this is also unnamed arg, then ignoring it.
-                        not intermediate_names[index]
-                    )
-                )
-            )
-            if should_be_copied:
-                new_function_args.append(arg)
-        return Intermediate(self._original).with_signature(
-            new_function_args,
+    def _keyword_hole_at(
+        self,
+        original_args: list[FuncArg],
+        applied_args: list[FuncArg],
+        intermediate_names: list[str | None],
+    ) -> int:
+        """Index of the first positional parameter applied by keyword.
+
+        Positional arguments always fill the leading positional parameters,
+        so a positional parameter applied beyond that prefix was applied by
+        keyword. Returns an index past the end when there is no such hole.
+        """
+        positional_prefix = sum(
+            applied.name is None and applied.kind not in _VARIADIC_KINDS
+            for applied in applied_args
+        )
+        seen_positional = 0
+        for index, arg in enumerate(original_args):
+            if arg.kind not in _POSITIONAL_KINDS:
+                continue
+            applied = self._was_applied(arg, index, intermediate_names)
+            if applied and seen_positional >= positional_prefix:
+                return index
+            seen_positional += 1
+        return len(original_args)
+
+    def _remaining_arg(self, arg: FuncArg, *, keyword_only: bool) -> FuncArg:
+        """Copies an unapplied argument, making it keyword-only if needed."""
+        keyword_kind = _KEYWORD_ONLY_KINDS.get(arg.kind)
+        if keyword_only and keyword_kind is not None:
+            return FuncArg(arg.name, arg.type, keyword_kind)
+        return arg
+
+    def _was_applied(
+        self,
+        arg: FuncArg,
+        index: int,
+        intermediate_names: list[str | None],
+    ) -> bool:
+        """Tells whether an original argument was already applied."""
+        if arg.kind in _VARIADIC_KINDS:
+            return False
+        if arg.name is not None:
+            return arg.name in intermediate_names
+        # We need to treat unnamed args differently, because python3.8
+        # has pos_only_args, all their names are `None`.
+        # This is also true for `lambda` functions where `.name`
+        # might be missing for some reason.
+        return (
+            index < len(intermediate_names)
+            # If this is also an unnamed arg, then it was applied.
+            and not intermediate_names[index]
         )
 
 
