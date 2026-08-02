@@ -1,4 +1,4 @@
-- case: check_all_laws
+- case: test_check_all_laws
   disable_cache: false
   parametrized:
   - container: Result
@@ -20,7 +20,7 @@
     from returns.result import Result
     from returns.io import IO, IOResult
 
-    from returns.primitivies.laws import Lawful
+    from returns.primitives.laws import Lawful
     from typing import Type
 
     x: Type[Lawful] = {{ container }}

@@ -746,17 +746,17 @@ class FutureResult(  # type: ignore[type-var]
           >>> from returns.future import FutureResult
           >>> from returns.io import IOSuccess, IOFailure
 
-          >>> def appliable(x: int) -> int:
+          >>> def applicable(x: int) -> int:
           ...    return x + 1
 
           >>> assert anyio.run(
           ...     FutureResult.from_value(1).apply(
-          ...         FutureResult.from_value(appliable),
+          ...         FutureResult.from_value(applicable),
           ...     ).awaitable,
           ... ) == IOSuccess(2)
           >>> assert anyio.run(
           ...     FutureResult.from_failure(1).apply(
-          ...         FutureResult.from_value(appliable),
+          ...         FutureResult.from_value(applicable),
           ...     ).awaitable,
           ... ) == IOFailure(1)
 

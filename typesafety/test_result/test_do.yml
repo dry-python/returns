@@ -37,7 +37,7 @@
     ))
 
 
-- case: do_types_missmatch
+- case: do_types_mismatch
   disable_cache: false
   main: |
     from returns.result import Success, Result

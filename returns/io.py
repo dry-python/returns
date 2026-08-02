@@ -119,10 +119,10 @@ class IO(  # type: ignore[type-var]
           >>> from returns.curry import curry
 
           >>> @curry
-          ... def appliable(first: str, second: str) -> str:
+          ... def applicable(first: str, second: str) -> str:
           ...      return first + second
 
-          >>> assert IO('b').apply(IO('a').apply(IO(appliable))) == IO('ab')
+          >>> assert IO('b').apply(IO('a').apply(IO(applicable))) == IO('ab')
 
         """
         return self.map(dekind(container)._inner_value)  # noqa: SLF001
@@ -416,14 +416,14 @@ class IOResult(  # type: ignore[type-var]
 
           >>> from returns.io import IOSuccess, IOFailure
 
-          >>> def appliable(first: str) -> str:
+          >>> def applicable(first: str) -> str:
           ...      return first + 'b'
 
           >>> assert IOSuccess('a').apply(
-          ...     IOSuccess(appliable),
+          ...     IOSuccess(applicable),
           ... ) == IOSuccess('ab')
           >>> assert IOFailure('a').apply(
-          ...     IOSuccess(appliable),
+          ...     IOSuccess(applicable),
           ... ) == IOFailure('a')
 
           >>> assert IOSuccess('a').apply(IOFailure(1)) == IOFailure(1)

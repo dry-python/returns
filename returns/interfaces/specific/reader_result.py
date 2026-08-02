@@ -79,7 +79,7 @@ ReaderResultLike3 = ReaderResultLikeN[_FirstType, _SecondType, _ThirdType]
 @final
 class _LawSpec(LawSpecDef):
     """
-    Concrete laws for ``ReaderResulBasedN``.
+    Concrete laws for ``ReaderResultBasedN``.
 
     See: https://github.com/haskell/mtl/pull/61/files
     """

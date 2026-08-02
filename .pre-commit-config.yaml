@@ -1,38 +1,49 @@
 repos:
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.37.4
+    rev: 1a4bb160cab6417b3045e1b37b6b72449243e658  # frozen: 0.37.4
     hooks:
       - id: check-dependabot
       - id: check-readthedocs
       - id: check-github-workflows
   - repo: https://github.com/rhysd/actionlint
-    rev: v1.7.12
+    rev: 914e7df21a07ef503a81201c76d2b11c789d3fca  # frozen: v1.7.12
     hooks:
       - id: actionlint
   - repo: https://github.com/woodruffw/zizmor-pre-commit
-    rev: v1.26.1
+    rev: 451b56af716f9f0d0c2b816503a3fd0cf8b036fa  # frozen: v1.29.0
     hooks:
       - id: zizmor
         args: ["--no-progress", "--fix"]
   - repo: https://github.com/shellcheck-py/shellcheck-py
-    rev: v0.11.0.1
+    rev: 745eface02aef23e168a8afb6b5737818efbea95  # frozen: v0.11.0.1
     hooks:
       - id: shellcheck
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.21
+    rev: 39d9ac5938dadb73df0564a45f163e25ff9fa6e2  # frozen: v0.16.1
     hooks:
       - id: ruff
         args: ["--exit-non-zero-on-fix"]
       - id: ruff-format
   - repo: https://github.com/sphinx-contrib/sphinx-lint
-    rev: v1.0.2
+    rev: c883505f64b59c3c5c9375191e4ad9f98e727ccd  # frozen: v1.0.2
     hooks:
       - id: sphinx-lint
         args: [--enable=default-role]
         files: ^docs/
 
+  - repo: https://github.com/crate-ci/typos
+    rev: 96d9af6217dc2855210655af7e1ff19d23d4e593  # frozen: v1
+    hooks:
+      - id: typos
+  - repo: https://github.com/codespell-project/codespell
+    rev: 57b21406f092110c18776e39b0bda50d37c945c8  # frozen: v2.4.3
+    hooks:
+    - id: codespell
+      additional_dependencies:
+        - tomli
+
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v6.0.0
+    rev: 3e8a8703264a2f4a69428a0aa4dcb512790b2c8c  # frozen: v6.0.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer

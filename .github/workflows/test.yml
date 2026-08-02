@@ -53,12 +53,10 @@ jobs:
         # In order to make `exclude` option work, we need to separate the checks
         # of returns and its tests into two separated commands
         poetry run mypy --enable-error-code=unused-awaitable returns
-        poetry run mypy tests
+        poetry run mypy docs tests
 
         # Different python versions are covered differently:
         poetry run pytest returns docs/pages tests
-
-        poetry run codespell returns tests docs typesafety README.md CONTRIBUTING.md CHANGELOG.md
 
         # TODO: re-enable after all problems are fixed
         # poetry run poetry check

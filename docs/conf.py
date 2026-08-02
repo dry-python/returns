@@ -12,8 +12,8 @@
 
 import pathlib
 import sys
-
-import tomli
+import tomllib
+from typing import Any
 
 sys.path.insert(0, str(pathlib.Path('..').resolve()))
 
@@ -21,9 +21,9 @@ sys.path.insert(0, str(pathlib.Path('..').resolve()))
 # -- Project information -----------------------------------------------------
 
 
-def _get_project_meta():
+def _get_project_meta() -> dict[str, Any]:
     with pathlib.Path('../pyproject.toml').open(mode='rb') as pyproject:
-        return tomli.load(pyproject)['tool']['poetry']
+        return tomllib.load(pyproject)['tool']['poetry']  # type: ignore[no-any-return]
 
 
 pkg_meta = _get_project_meta()
@@ -112,19 +112,10 @@ add_module_names = False
 # a list of builtin themes.
 html_theme = 'furo'
 
-# Theme options are theme-specific and customize the look and feel of a theme
-# further.  For a list of options available for each theme, see the
-# documentation.
-html_theme_options = {}
-
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
-
-# Custom sidebar templates, must be a dictionary that maps document names
-# to template names.
-html_sidebars = {}
 
 
 # -- Extension configuration -------------------------------------------------

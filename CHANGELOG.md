@@ -6,7 +6,11 @@ incremental in minor, bugfixes only are patches.
 See [0Ver](https://0ver.org/).
 
 
-## 0.28.1 WIP
+## 0.29.0
+
+### Features
+
+- Add `mypy>=1.19,<2.4` support
 
 ### Bugfixes
 

@@ -13,7 +13,7 @@
     main:5: note: Maybe you forgot to use "await"?
 
 
-- case: do_types_missmatch
+- case: do_types_mismatch
   disable_cache: false
   main: |
     from returns.future import Future, FutureSuccess
