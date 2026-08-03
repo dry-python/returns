@@ -1,0 +1,73 @@
+- case: tfilter
+  disable_cache: false
+  main: |
+    from returns.transducers import tfilter
+
+    def is_even(number: int) -> bool:
+        ...
+
+    reveal_type(tfilter(is_even))  # N: Revealed type is 'def [_AccType] (def (_AccType`-2, builtins.int*) -> _AccType`-2) -> def (_AccType`-2, builtins.int*) -> _AccType`-2'
+
+
+- case: tfilter_reducer
+  disable_cache: false
+  main: |
+    from typing import List
+    from returns.transducers import tfilter
+
+    def is_even(number: int) -> bool:
+        ...
+
+    def append(collection: List[int], item: int) -> List[int]:
+        ...
+
+    reveal_type(tfilter(is_even)(append))  # N: Revealed type is 'def (builtins.list*[builtins.int], builtins.int) -> builtins.list*[builtins.int]'
+
+
+- case: tfilter_reducer_filter_
+  disable_cache: false
+  main: |
+    from typing import List
+    from returns.transducers import tfilter, reduce
+
+    def is_even(number: int) -> bool:
+        ...
+
+    def append(collection: List[int], item: int) -> List[int]:
+        ...
+
+    my_list: List[int]
+    reveal_type(tfilter(is_even)(append)(my_list, 2))  # N: Revealed type is 'builtins.list*[builtins.int]'
+
+
+- case: tfilter_composition_one
+  disable_cache: false
+  main: |
+    from typing import List
+    from returns.transducers import tfilter, reduce
+
+    def is_even(number: int) -> bool:
+        ...
+
+    def append(collection: List[int], item: int) -> List[int]:
+        ...
+
+    composed = tfilter(is_even)(tfilter(is_even)(append))
+    reveal_type(composed)  # N: Revealed type is 'def (builtins.list*[builtins.int], builtins.int) -> builtins.list*[builtins.int]'
+
+
+- case: tfilter_composition_two
+  disable_cache: false
+  main: |
+    from typing import List
+    from returns.transducers import tfilter, reduce
+
+    def is_even(number: int) -> bool:
+        ...
+
+    def append(collection: List[int], item: int) -> List[int]:
+        ...
+
+    composed = tfilter(is_even)(tfilter(is_even)(append))
+    my_list: List[int]
+    reveal_type(composed(my_list, 42))  # N: Revealed type is 'builtins.list*[builtins.int]'
