@@ -6,6 +6,16 @@ incremental in minor, bugfixes only are patches.
 See [0Ver](https://0ver.org/).
 
 
+## 0.29.1 WIP
+
+### Bugfixes
+
+- Relaxes `future` and `future_safe` decorator argument types from
+  `Coroutine` to `Awaitable`, so plain `async def` functions wrapping
+  another awaitable (instead of being coroutine functions themselves)
+  type-check correctly
+
+
 ## 0.29.0
 
 ### Features
