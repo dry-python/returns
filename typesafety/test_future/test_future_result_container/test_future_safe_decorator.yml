@@ -55,3 +55,19 @@
         return 1
 
     reveal_type(test)  # N: Revealed type is "def (first: int, second: str | None =, *, kw: bool =) -> returns.future.FutureResult[int, ValueError]"
+
+
+- case: future_safe_decorator_with_awaitable_type
+  disable_cache: false
+  main: |
+    from typing import Awaitable, Callable
+    from returns.future import future_safe
+
+    async def test(first: int) -> int:
+        return first
+
+    # `future_safe` should accept plain `Awaitable`, not just `Coroutine`.
+    typed_test: Callable[[int], Awaitable[int]] = test
+
+    reveal_type(future_safe(typed_test))  # N: Revealed type is "def (int) -> returns.future.FutureResult[int, Exception]"
+    reveal_type(future_safe((ValueError,))(typed_test))  # N: Revealed type is "def (int) -> returns.future.FutureResult[int, ValueError]"
