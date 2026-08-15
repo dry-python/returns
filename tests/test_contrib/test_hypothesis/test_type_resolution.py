@@ -199,8 +199,10 @@ def test_types_to_strategies_default() -> None:  # noqa: WPS210
         [result[interface] for interface in container_type.laws()],
         container_type,
     )
-    assert all('builds' in item for item in interface_reprs)
-    assert all('from_value' in item for item in interface_reprs)
+    assert all('builds' in interface_repr for interface_repr in interface_reprs)
+    assert all(
+        'from_value' in interface_repr for interface_repr in interface_reprs
+    )
 
     functions_with_args = _strategy_string(
         result[callable_type],
@@ -254,9 +256,13 @@ def test_types_to_strategies_overrides() -> None:  # noqa: WPS210
         [result[interface] for interface in container_type.laws()],
         container_type,
     )
-    assert all('builds' in item for item in interface_reprs)
-    assert all('_Wrapper' in item for item in interface_reprs)
-    assert all('integers' in item for item in interface_reprs)
+    assert all('builds' in interface_repr for interface_repr in interface_reprs)
+    assert all(
+        '_Wrapper' in interface_repr for interface_repr in interface_reprs
+    )
+    assert all(
+        'integers' in interface_repr for interface_repr in interface_reprs
+    )
 
     functions_with_args = _strategy_string(
         result[callable_type],
