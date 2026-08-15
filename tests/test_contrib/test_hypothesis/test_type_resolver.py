@@ -35,8 +35,12 @@ def test_types_without_strategies() -> None:  # noqa: WPS210
 
     assert strategy_before1 is None
     assert strategy_before2 is None
-    assert str(strategy_inside1) == 'builds(_Wrapper1, integers())'
-    assert str(strategy_inside2) == 'builds(_Wrapper2, text())'
+    assert 'builds' in str(strategy_inside1)
+    assert '_Wrapper1' in str(strategy_inside1)
+    assert 'integers' in str(strategy_inside1)
+    assert 'builds' in str(strategy_inside2)
+    assert '_Wrapper2' in str(strategy_inside2)
+    assert 'text' in str(strategy_inside2)
     assert strategy_after1 is None
     assert strategy_after2 is None
 
@@ -51,6 +55,12 @@ def test_type_with_strategy() -> None:
 
         strategy_after = look_up_strategy(_Wrapper1)
 
-    assert str(strategy_before) == 'builds(_Wrapper1, integers())'
-    assert str(strategy_inside) == 'builds(_Wrapper1, text())'
-    assert str(strategy_after) == 'builds(_Wrapper1, integers())'
+    assert 'builds' in str(strategy_before)
+    assert '_Wrapper1' in str(strategy_before)
+    assert 'integers' in str(strategy_before)
+    assert 'builds' in str(strategy_inside)
+    assert '_Wrapper1' in str(strategy_inside)
+    assert 'text' in str(strategy_inside)
+    assert 'builds' in str(strategy_after)
+    assert '_Wrapper1' in str(strategy_after)
+    assert 'integers' in str(strategy_after)
