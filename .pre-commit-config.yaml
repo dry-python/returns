@@ -15,11 +15,11 @@ repos:
       - id: zizmor
         args: ["--no-progress", "--fix"]
   - repo: https://github.com/shellcheck-py/shellcheck-py
-    rev: 745eface02aef23e168a8afb6b5737818efbea95  # frozen: v0.11.0.1
+    rev: a6564f5d57444e123433a5c9af733e3975c77229  # frozen: v0.11.0.1-1
     hooks:
       - id: shellcheck
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: 65dbdb59d2f2d9c3bdc343c566821ad3319ddaa3  # frozen: v0.16.3
+    rev: aab412d509121cb5f7533134b7e67f9fab59c682  # frozen: v0.16.4
     hooks:
       - id: ruff
         args: ["--exit-non-zero-on-fix"]
