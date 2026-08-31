@@ -10,7 +10,7 @@ repos:
     hooks:
       - id: actionlint
   - repo: https://github.com/woodruffw/zizmor-pre-commit
-    rev: 451b56af716f9f0d0c2b816503a3fd0cf8b036fa  # frozen: v1.29.0
+    rev: cef8b8350da46d8114c7e6b7272aebdccdf193ce  # frozen: v1.30.0
     hooks:
       - id: zizmor
         args: ["--no-progress", "--fix"]
@@ -19,7 +19,7 @@ repos:
     hooks:
       - id: shellcheck
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: aab412d509121cb5f7533134b7e67f9fab59c682  # frozen: v0.16.4
+    rev: 1f1e8bf348ff38fc88619a38d3ca4d9c56abea49  # frozen: v0.16.5
     hooks:
       - id: ruff
         args: ["--exit-non-zero-on-fix"]
@@ -32,7 +32,7 @@ repos:
         files: ^docs/
 
   - repo: https://github.com/crate-ci/typos
-    rev: 12ffd4a04b4893ab75db66a59aaad2d996c3e982  # frozen: v1
+    rev: 7e42c54fbaa9738e072b11e93127845c36cef60d  # frozen: v1
     hooks:
       - id: typos
   - repo: https://github.com/codespell-project/codespell
