@@ -19,7 +19,7 @@ repos:
     hooks:
       - id: shellcheck
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: e8f7d69b957a30acb2c875078d5fd012de24b64c  # frozen: v0.16.7
+    rev: 2eeb5678de71a00c0902cbda7105d328432f72cb  # frozen: v0.16.8
     hooks:
       - id: ruff
         args: ["--exit-non-zero-on-fix"]
@@ -32,7 +32,7 @@ repos:
         files: ^docs/
 
   - repo: https://github.com/crate-ci/typos
-    rev: c132f8b9e3ac7f8f0625490b1cb5b906d1d6a63a  # frozen: v1
+    rev: 5b5e71f127904bfb8d941c57c26c544b7075e025  # frozen: v1.50.2
     hooks:
       - id: typos
   - repo: https://github.com/codespell-project/codespell
