@@ -18,7 +18,7 @@ StrategyFactory: TypeAlias = (
 @contextmanager
 def strategies_for_types(
     mapping: Mapping[type[object], StrategyFactory],
-) -> Generator[None, None, None]:
+) -> Generator[None]:
     """
     Temporarily register strategies with `hypothesis`.
 

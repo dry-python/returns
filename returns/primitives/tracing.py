@@ -59,7 +59,7 @@ def collect_traces(
     """
 
     @contextmanager
-    def factory() -> Generator[None, None, None]:
+    def factory() -> Generator[None]:
         unpatched_get_trace = getattr(Failure, '_get_trace')  # noqa: B009
         substitute_get_trace = types.MethodType(_get_trace, Failure)
         setattr(Failure, '_get_trace', substitute_get_trace)  # noqa: B010

@@ -70,7 +70,7 @@ class ReturnsAsserts:
     def assert_trace(  # noqa: WPS602
         trace_type: _ReturnsResultType,
         function_to_search: _FunctionType,
-    ) -> Generator[None, None, None]:
+    ) -> Generator[None]:
         """
         Ensures that a given function was called during execution.
 
@@ -143,7 +143,7 @@ def returns() -> Iterator[ReturnsAsserts]:
 
 
 @contextmanager
-def _spy_error_handling() -> Generator[_ErrorsHandled, None, None]:
+def _spy_error_handling() -> Generator[_ErrorsHandled]:
     """Track error handling of containers."""
     errs: _ErrorsHandled = {}
     with ExitStack() as cleanup:

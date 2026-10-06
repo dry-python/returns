@@ -198,7 +198,7 @@ def type_vars_factory(thing: type[object]) -> StrategyFactory:
 
 
 @contextmanager
-def clean_plugin_context() -> Generator[None, None, None]:
+def clean_plugin_context() -> Generator[None]:
     """
     We register a lot of types in `_entrypoint.py`, we need to clean them.
 
