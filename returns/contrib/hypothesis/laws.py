@@ -1,6 +1,6 @@
 import dataclasses
 import inspect
-from collections.abc import Callable, Iterator
+from collections.abc import Callable, Generator
 from contextlib import ExitStack, contextmanager
 from typing import Any, Self, TypeVar, final, overload
 
@@ -198,7 +198,7 @@ def type_vars_factory(thing: type[object]) -> StrategyFactory:
 
 
 @contextmanager
-def clean_plugin_context() -> Iterator[None]:
+def clean_plugin_context() -> Generator[None]:
     """
     We register a lot of types in `_entrypoint.py`, we need to clean them.
 

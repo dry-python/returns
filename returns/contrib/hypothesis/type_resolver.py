@@ -1,6 +1,6 @@
 """Make `hypothesis` resolve types to the right strategies."""
 
-from collections.abc import Callable, Iterator, Mapping
+from collections.abc import Callable, Generator, Mapping
 from contextlib import contextmanager
 from typing import TypeAlias, TypeVar
 
@@ -18,7 +18,7 @@ StrategyFactory: TypeAlias = (
 @contextmanager
 def strategies_for_types(
     mapping: Mapping[type[object], StrategyFactory],
-) -> Iterator[None]:
+) -> Generator[None]:
     """
     Temporarily register strategies with `hypothesis`.
 

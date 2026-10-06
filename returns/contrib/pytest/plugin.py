@@ -1,10 +1,18 @@
 import inspect
 import sys
-from collections.abc import Callable, Iterator
+from collections.abc import Callable, Generator, Iterator
 from contextlib import ExitStack, contextmanager
 from functools import partial, wraps
 from types import FrameType, MappingProxyType
-from typing import TYPE_CHECKING, Any, Final, TypeAlias, TypeVar, Union, final
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Final,
+    TypeAlias,
+    TypeVar,
+    Union,
+    final,
+)
 from unittest import mock
 
 import pytest
@@ -62,7 +70,7 @@ class ReturnsAsserts:
     def assert_trace(  # noqa: WPS602
         trace_type: _ReturnsResultType,
         function_to_search: _FunctionType,
-    ) -> Iterator[None]:
+    ) -> Generator[None]:
         """
         Ensures that a given function was called during execution.
 
@@ -135,7 +143,7 @@ def returns() -> Iterator[ReturnsAsserts]:
 
 
 @contextmanager
-def _spy_error_handling() -> Iterator[_ErrorsHandled]:
+def _spy_error_handling() -> Generator[_ErrorsHandled]:
     """Track error handling of containers."""
     errs: _ErrorsHandled = {}
     with ExitStack() as cleanup:
