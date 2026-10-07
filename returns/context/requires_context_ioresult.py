@@ -14,15 +14,15 @@ if TYPE_CHECKING:
     from returns.context.requires_context import RequiresContext
     from returns.context.requires_context_result import RequiresContextResult
 
-# Context:
 _EnvType_contra = TypeVar('_EnvType_contra', contravariant=True)
 _NewEnvType = TypeVar('_NewEnvType')
+"""Context."""
 
-# Result:
 _ValueType_co = TypeVar('_ValueType_co', covariant=True)
 _NewValueType = TypeVar('_NewValueType')
 _ErrorType = TypeVar('_ErrorType')
 _NewErrorType = TypeVar('_NewErrorType')
+"""Result."""
 
 
 @final
@@ -104,15 +104,15 @@ class RequiresContextIOResult(  # type: ignore[type-var]
 
     __slots__ = ()
 
-    #: Inner value of `RequiresContext`
-    #: is just a function that returns `IOResult`.
-    #: This field has an extra 'RequiresContext' just because `mypy` needs it.
     _inner_value: Callable[
         [_EnvType_contra], IOResult[_ValueType_co, _ErrorType]
     ]
+    """Inner value of `RequiresContext`. Is just a function that
+    returns `IOResult`. This field has an extra 'RequiresContext'
+    just because `mypy` needs it."""
 
-    #: A convenient placeholder to call methods created by `.from_value()`.
     no_args: ClassVar[NoDeps] = object()
+    """A convenient placeholder to call methods created by `.from_value()`."""
 
     def __init__(
         self,
@@ -296,8 +296,9 @@ class RequiresContextIOResult(  # type: ignore[type-var]
             ),
         )
 
-    #: Alias for `bind_context_ioresult` method, it is the same as `bind` here.
     bind_context_ioresult = bind
+    """Alias for `bind_context_ioresult` method,
+    it is the same as `bind` here."""
 
     def bind_result(
         self,
@@ -915,19 +916,19 @@ class RequiresContextIOResult(  # type: ignore[type-var]
 
 # Aliases:
 
-#: Alias for a popular case when ``Result`` has ``Exception`` as error type.
 RequiresContextIOResultE: TypeAlias = RequiresContextIOResult[
     _ValueType_co,
     Exception,
     _EnvType_contra,
 ]
+"""Alias for a popular case when ``Result`` has ``Exception`` as error type."""
 
-#: Alias to save you some typing. Uses original name from Haskell.
 ReaderIOResult: TypeAlias = RequiresContextIOResult
+"""Alias to save you some typing. Uses original name from Haskell."""
 
-#: Alias to save you some typing. Uses ``Exception`` as error type.
 ReaderIOResultE: TypeAlias = RequiresContextIOResult[
     _ValueType_co,
     Exception,
     _EnvType_contra,
 ]
+"""Alias to save you some typing. Uses ``Exception`` as error type."""

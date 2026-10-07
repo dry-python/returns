@@ -45,8 +45,6 @@ def _setup_hook() -> None:
 
         return decorator
 
-    #: Our types that we register in hypothesis
-    #: to be working with ``st.from_type``
     registered_types: Sequence[type[Lawful]] = (
         Result,
         Maybe,
@@ -59,6 +57,8 @@ def _setup_hook() -> None:
         RequiresContextIOResult,
         RequiresContextFutureResult,
     )
+    """Our types that we register in hypothesis to be
+    working with ``st.from_type``."""  # noqa: WPS484
 
     for type_ in registered_types:
         st.register_type_strategy(type_, factory(type_))

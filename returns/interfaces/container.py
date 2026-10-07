@@ -17,9 +17,9 @@ _FirstType = TypeVar('_FirstType')
 _SecondType = TypeVar('_SecondType')
 _ThirdType = TypeVar('_ThirdType')
 
-# Only used in laws:
 _NewType1 = TypeVar('_NewType1')
 _NewType2 = TypeVar('_NewType2')
+"""Only used in laws."""
 
 
 @final
@@ -121,11 +121,11 @@ class ContainerN(
     )
 
 
-#: Type alias for kinds with one type argument.
 Container1 = ContainerN[_FirstType, Never, Never]
+"""Type alias for kinds with one type argument."""
 
-#: Type alias for kinds with two type arguments.
 Container2 = ContainerN[_FirstType, _SecondType, Never]
+"""Type alias for kinds with two type arguments."""
 
-#: Type alias for kinds with three type arguments.
 Container3 = ContainerN[_FirstType, _SecondType, _ThirdType]
+"""Type alias for kinds with three type arguments."""

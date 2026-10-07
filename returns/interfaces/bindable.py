@@ -41,11 +41,11 @@ class BindableN(Generic[_FirstType, _SecondType, _ThirdType]):
         """
 
 
-#: Type alias for kinds with one type argument.
 Bindable1 = BindableN[_FirstType, Never, Never]
+"""Type alias for kinds with one type argument."""
 
-#: Type alias for kinds with two type arguments.
 Bindable2 = BindableN[_FirstType, _SecondType, Never]
+"""Type alias for kinds with two type arguments."""
 
-#: Type alias for kinds with three type arguments.
 Bindable3 = BindableN[_FirstType, _SecondType, _ThirdType]
+"""Type alias for kinds with three type arguments."""

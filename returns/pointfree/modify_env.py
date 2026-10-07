@@ -99,5 +99,5 @@ def modify_env3(
     return factory
 
 
-#: Useful alias for :func:`~modify_env3`.
 modify_env = modify_env3
+"""Useful alias for :func:`~modify_env3`."""

@@ -59,8 +59,8 @@ class SwappableN(
         """Swaps first and second types in ``SwappableN``."""
 
 
-#: Type alias for kinds with two type arguments.
 Swappable2 = SwappableN[_FirstType, _SecondType, Never]
+"""Type alias for kinds with two type arguments."""
 
-#: Type alias for kinds with three type arguments.
 Swappable3 = SwappableN[_FirstType, _SecondType, _ThirdType]
+"""Type alias for kinds with three type arguments."""

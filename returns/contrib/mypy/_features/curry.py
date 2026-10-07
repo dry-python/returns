@@ -21,8 +21,8 @@ from returns.contrib.mypy._typeops.transform_callable import (
     proper_type,
 )
 
-#: Raw material to build `_ArgTree`.
 _RawArgTree = list[list[list[FuncArg]]]
+"""Raw material to build `_ArgTree`."""
 
 
 def analyze(ctx: FunctionContext) -> MypyType:

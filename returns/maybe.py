@@ -14,6 +14,7 @@ from returns.primitives.hkt import Kind1, SupportsKind1
 _ValueType_co = TypeVar('_ValueType_co', covariant=True)
 _NewValueType = TypeVar('_NewValueType')
 
+
 _FuncParams = ParamSpec('_FuncParams')
 
 
@@ -40,11 +41,11 @@ class Maybe(  # type: ignore[type-var]
     _inner_value: _ValueType_co | None
     __match_args__ = ('_inner_value',)
 
-    #: Alias for `Nothing`
     empty: ClassVar['Maybe[Any]']
+    """Alias for `Nothing`."""
 
-    #: Typesafe equality comparison with other `Result` objects.
     equals = container_equality
+    """Typesafe equality comparison with other `Result` objects."""
 
     def map(
         self,
@@ -452,8 +453,8 @@ class Some(Maybe[_ValueType_co]):
         return True
 
 
-#: Public unit value of protected :class:`~_Nothing` type.
 Nothing: Maybe[Never] = _Nothing()
+"""Public unit value of protected :class:`~_Nothing` type."""
 Maybe.empty = Nothing
 
 

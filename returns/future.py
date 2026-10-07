@@ -246,8 +246,8 @@ class Future(  # type: ignore[type-var]
         """
         return Future(_future.async_bind(function, self._inner_value))
 
-    #: Alias for `bind` method. Part of the `FutureBasedN` interface.
     bind_future = bind
+    """Alias for `bind` method. Part of the `FutureBasedN` interface."""
 
     def bind_async(
         self,
@@ -279,8 +279,8 @@ class Future(  # type: ignore[type-var]
         """
         return Future(_future.async_bind_async(function, self._inner_value))
 
-    #: Alias for `bind_async` method. Part of the `FutureBasedN` interface.
     bind_async_future = bind_async
+    """Alias for `bind_async` method. Part of the `FutureBasedN` interface."""
 
     def bind_awaitable(
         self,
@@ -812,9 +812,8 @@ class FutureResult(  # type: ignore[type-var]
             )
         )
 
-    #: Alias for `bind` method.
-    #: Part of the `FutureResultBasedN` interface.
     bind_future_result = bind
+    """Alias for `bind` method. Part of the `FutureResultBasedN` interface."""
 
     def bind_async(
         self,
@@ -854,9 +853,9 @@ class FutureResult(  # type: ignore[type-var]
             )
         )
 
-    #: Alias for `bind_async` method.
-    #: Part of the `FutureResultBasedN` interface.
     bind_async_future_result = bind_async
+    """Alias for `bind_async` method.
+    Part of the `FutureResultBasedN` interface."""
 
     def bind_awaitable(
         self,
@@ -1510,9 +1509,8 @@ def FutureFailure(  # noqa: N802
     return FutureResult.from_failure(inner_value)
 
 
-#: Alias for ``FutureResult[_ValueType_co, Exception]``.
 FutureResultE: TypeAlias = FutureResult[_ValueType_co, Exception]
-
+"""Alias for ``FutureResult[_ValueType_co, Exception]``."""
 
 _ExceptionType = TypeVar('_ExceptionType', bound=Exception)
 

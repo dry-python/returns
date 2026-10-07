@@ -22,9 +22,9 @@ _UpdatedType = TypeVar('_UpdatedType')
 
 _ApplicativeType = TypeVar('_ApplicativeType', bound='ApplicativeN')
 
-# Only used in laws:
 _NewType1 = TypeVar('_NewType1')
 _NewType2 = TypeVar('_NewType2')
+"""Only used in laws"""
 
 
 @final
@@ -162,11 +162,11 @@ class ApplicativeN(
         """Unit method to create new containers from any raw value."""
 
 
-#: Type alias for kinds with one type argument.
 Applicative1 = ApplicativeN[_FirstType, Never, Never]
+"""Type alias for kinds with one type argument."""
 
-#: Type alias for kinds with two type arguments.
 Applicative2 = ApplicativeN[_FirstType, _SecondType, Never]
+"""Type alias for kinds with two type arguments."""
 
-#: Type alias for kinds with three type arguments.
 Applicative3 = ApplicativeN[_FirstType, _SecondType, _ThirdType]
+"""Type alias for kinds with three type arguments."""

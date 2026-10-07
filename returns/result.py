@@ -19,11 +19,11 @@ from returns.primitives.container import BaseContainer, container_equality
 from returns.primitives.exceptions import UnwrapFailedError
 from returns.primitives.hkt import Kind2, SupportsKind2
 
-# Definitions:
 _ValueType_co = TypeVar('_ValueType_co', covariant=True)
 _NewValueType = TypeVar('_NewValueType')
 _ErrorType_co = TypeVar('_ErrorType_co', covariant=True)
 _NewErrorType = TypeVar('_NewErrorType')
+"""Definitions."""
 
 _FirstType = TypeVar('_FirstType')
 _FuncParams = ParamSpec('_FuncParams')
@@ -53,8 +53,8 @@ class Result(  # type: ignore[type-var]
     _inner_value: _ValueType_co | _ErrorType_co
     _trace: list[FrameInfo] | None
 
-    #: Typesafe equality comparison with other `Result` objects.
     equals = container_equality
+    """Typesafe equality comparison with other `Result` objects."""
 
     @property
     def trace(self) -> list[FrameInfo] | None:
@@ -148,8 +148,8 @@ class Result(  # type: ignore[type-var]
 
         """
 
-    #: Alias for `bind_result` method, it is the same as `bind` here.
     bind_result = bind
+    """Alias for `bind_result` method, it is the same as `bind` here."""
 
     def alt(
         self,
@@ -374,8 +374,8 @@ class Failure(Result[Any, _ErrorType_co]):  # noqa: WPS338
             """Does nothing for ``Failure``."""
             return self
 
-        #: Alias for `bind` method. Part of the `ResultBasedN` interface.
         bind_result = bind
+        """Alias for `bind` method. Part of the `ResultBasedN` interface."""  # noqa: WPS484
 
         def lash(self, function):
             """Composes this container with a function returning container."""
@@ -437,8 +437,8 @@ class Success(Result[_ValueType_co, Any]):
             """Binds current container to a function that returns container."""
             return function(self._inner_value)
 
-        #: Alias for `bind` method. Part of the `ResultBasedN` interface.
         bind_result = bind
+        """Alias for `bind` method. Part of the `ResultBasedN` interface."""  # noqa: WPS484
 
         def lash(self, function):
             """Does nothing for ``Success``."""
@@ -469,9 +469,8 @@ class Success(Result[_ValueType_co, Any]):
 
 # Aliases:
 
-#: Alias for ``Result[_ValueType_co, Exception]``.
 ResultE: TypeAlias = Result[_ValueType_co, Exception]
-
+"""Alias for ``Result[_ValueType_co, Exception]``."""
 
 # Decorators:
 

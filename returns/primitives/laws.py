@@ -9,8 +9,8 @@ _TypeArgType1 = TypeVar('_TypeArgType1')
 _TypeArgType2 = TypeVar('_TypeArgType2')
 _TypeArgType3 = TypeVar('_TypeArgType3')
 
-#: Special alias to define laws as functions even inside a class
 law_definition = staticmethod
+"""Special alias to define laws as functions even inside a class."""
 
 LAWS_ATTRIBUTE: Final = '_laws'
 
@@ -25,8 +25,8 @@ class Law(Immutable):
 
     __slots__ = ('definition',)
 
-    #: Function used to define this law.
     definition: Callable
+    """Function used to define this law."""
 
     def __init__(self, function) -> None:
         """Saves function to the inner state."""
@@ -111,8 +111,8 @@ class Lawful(Generic[_Caps]):
 
     __slots__ = ()
 
-    #: Some classes and interfaces might have laws, some might not have any.
     _laws: ClassVar[Sequence[Law]]
+    """Some classes and interfaces might have laws, some might not have any."""
 
     @final  # noqa: WPS210
     @classmethod

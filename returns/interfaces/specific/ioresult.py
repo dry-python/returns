@@ -74,11 +74,11 @@ class IOResultLikeN(
         """Unit method to create new containers from failed ``IO``."""
 
 
-#: Type alias for kinds with two type arguments.
 IOResultLike2 = IOResultLikeN[_FirstType, _SecondType, Never]
+"""Type alias for kinds with two type arguments."""
 
-#: Type alias for kinds with three type arguments.
 IOResultLike3 = IOResultLikeN[_FirstType, _SecondType, _ThirdType]
+"""Type alias for kinds with three type arguments."""
 
 
 class IOResultBasedN(
@@ -102,8 +102,8 @@ class IOResultBasedN(
     __slots__ = ()
 
 
-#: Type alias for kinds with two type arguments.
 IOResultBased2 = IOResultBasedN[_FirstType, _SecondType, Never]
+"""Type alias for kinds with two type arguments."""
 
-#: Type alias for kinds with three type arguments.
 IOResultBased3 = IOResultBasedN[_FirstType, _SecondType, _ThirdType]
+"""Type alias for kinds with three type arguments."""

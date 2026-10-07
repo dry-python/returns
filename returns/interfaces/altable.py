@@ -21,9 +21,9 @@ _UpdatedType = TypeVar('_UpdatedType')
 
 _AltableType = TypeVar('_AltableType', bound='AltableN')
 
-# Used in laws:
 _NewType1 = TypeVar('_NewType1')
 _NewType2 = TypeVar('_NewType2')
+"""Used in laws"""
 
 
 @final
@@ -77,8 +77,8 @@ class AltableN(
         """Allows to run a pure function over a container."""
 
 
-#: Type alias for kinds with two type arguments.
 Altable2 = AltableN[_FirstType, _SecondType, Never]
+"""Type alias for kinds with two type arguments."""
 
-#: Type alias for kinds with three type arguments.
 Altable3 = AltableN[_FirstType, _SecondType, _ThirdType]
+"""Type alias for kinds with three type arguments."""

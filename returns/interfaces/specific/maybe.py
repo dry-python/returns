@@ -140,11 +140,11 @@ class MaybeLikeN(
         """Unit method to create containers from ``Optional`` value."""
 
 
-#: Type alias for kinds with two type arguments.
 MaybeLike2 = MaybeLikeN[_FirstType, _SecondType, Never]
+"""Type alias for kinds with two type arguments."""
 
-#: Type alias for kinds with three type arguments.
 MaybeLike3 = MaybeLikeN[_FirstType, _SecondType, _ThirdType]
+"""Type alias for kinds with three type arguments."""
 
 
 class MaybeBasedN(
@@ -168,8 +168,8 @@ class MaybeBasedN(
         """Calls a function in case there nothing to unwrap."""
 
 
-#: Type alias for kinds with two type arguments.
 MaybeBased2 = MaybeBasedN[_FirstType, _SecondType, Never]
+"""Type alias for kinds with two type arguments."""
 
-#: Type alias for kinds with three type arguments.
 MaybeBased3 = MaybeBasedN[_FirstType, _SecondType, _ThirdType]
+"""Type alias for kinds with three type arguments."""

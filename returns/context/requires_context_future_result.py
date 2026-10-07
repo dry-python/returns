@@ -20,18 +20,18 @@ if TYPE_CHECKING:
     )
     from returns.context.requires_context_result import RequiresContextResult
 
-# Context:
 _EnvType_contra = TypeVar('_EnvType_contra', contravariant=True)
 _NewEnvType = TypeVar('_NewEnvType')
+"""Context."""
 
-# Result:
 _ValueType_co = TypeVar('_ValueType_co', covariant=True)
 _NewValueType = TypeVar('_NewValueType')
 _ErrorType_co = TypeVar('_ErrorType_co', covariant=True)
 _NewErrorType = TypeVar('_NewErrorType')
+"""Result."""
 
-# Helpers:
 _FirstType = TypeVar('_FirstType')
+"""Helpers."""
 
 
 @final
@@ -103,15 +103,15 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
 
     __slots__ = ()
 
-    #: Inner value of `RequiresContext`
-    #: is just a function that returns `FutureResult`.
-    #: This field has an extra 'RequiresContext' just because `mypy` needs it.
     _inner_value: Callable[
         [_EnvType_contra], FutureResult[_ValueType_co, _ErrorType_co]
     ]
+    """Inner value of `RequiresContext` is just a function
+    that returns `FutureResult`. This field has an extra
+    'RequiresContext' just because `mypy` needs it."""
 
-    #: A convenient placeholder to call methods created by `.from_value()`.
     no_args: ClassVar[NoDeps] = object()
+    """A convenient placeholder to call methods created by `.from_value()`."""
 
     def __init__(
         self,
@@ -319,9 +319,9 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
             ),
         )
 
-    #: Alias for `bind_context_future_result` method,
-    #: it is the same as `bind` here.
     bind_context_future_result = bind
+    """Alias for `bind_context_future_result` method,
+    it is the same as `bind` here."""
 
     def bind_async(
         self,
@@ -377,9 +377,9 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
             ),
         )
 
-    #: Alias for `bind_async_context_future_result` method,
-    #: it is the same as `bind_async` here.
     bind_async_context_future_result = bind_async
+    """Alias for `bind_async_context_future_result` method,
+    it is the same as `bind_async` here."""
 
     def bind_awaitable(
         self,
@@ -1460,19 +1460,19 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
 
 # Aliases:
 
-#: Alias for a popular case when ``Result`` has ``Exception`` as error type.
 RequiresContextFutureResultE: TypeAlias = RequiresContextFutureResult[
     _ValueType_co,
     Exception,
     _EnvType_contra,
 ]
+"""Alias for a popular case when ``Result`` has ``Exception`` as error type."""
 
-#: Sometimes `RequiresContextFutureResult` is too long to type.
 ReaderFutureResult: TypeAlias = RequiresContextFutureResult
+"""Sometimes `RequiresContextFutureResult` is too long to type."""
 
-#: Alias to save you some typing. Uses ``Exception`` as error type.
 ReaderFutureResultE: TypeAlias = RequiresContextFutureResult[
     _ValueType_co,
     Exception,
     _EnvType_contra,
 ]
+"""Alias to save you some typing. Uses ``Exception`` as error type."""
