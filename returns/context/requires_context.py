@@ -31,8 +31,8 @@ _NewReturnType = TypeVar('_NewReturnType')
 _ValueType = TypeVar('_ValueType')
 _ErrorType = TypeVar('_ErrorType')
 
+# Helpers:
 _FirstType = TypeVar('_FirstType')
-"""Helpers."""
 
 # Type Aliases:
 NoDeps = Any
