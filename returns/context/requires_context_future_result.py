@@ -20,18 +20,18 @@ if TYPE_CHECKING:
     )
     from returns.context.requires_context_result import RequiresContextResult
 
+# Context:
 _EnvType_contra = TypeVar('_EnvType_contra', contravariant=True)
 _NewEnvType = TypeVar('_NewEnvType')
-"""Context."""
 
+# Result:
 _ValueType_co = TypeVar('_ValueType_co', covariant=True)
 _NewValueType = TypeVar('_NewValueType')
 _ErrorType_co = TypeVar('_ErrorType_co', covariant=True)
 _NewErrorType = TypeVar('_NewErrorType')
-"""Result."""
 
+# Helpers:
 _FirstType = TypeVar('_FirstType')
-"""Helpers."""
 
 
 @final

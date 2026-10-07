@@ -22,11 +22,11 @@ if TYPE_CHECKING:
     )
     from returns.context.requires_context_result import RequiresContextResult
 
+# Context:
 _EnvType_contra = TypeVar('_EnvType_contra', contravariant=True)
 _NewEnvType = TypeVar('_NewEnvType')
 _ReturnType_co = TypeVar('_ReturnType_co', covariant=True)
 _NewReturnType = TypeVar('_NewReturnType')
-"""Context."""
 
 _ValueType = TypeVar('_ValueType')
 _ErrorType = TypeVar('_ErrorType')
@@ -34,10 +34,10 @@ _ErrorType = TypeVar('_ErrorType')
 _FirstType = TypeVar('_FirstType')
 """Helpers."""
 
-
+# Type Aliases:
 NoDeps = Any
 """
-Type Aliases. Sometimes ``RequiresContext`` and other similar types
+Sometimes ``RequiresContext`` and other similar types
 might be used with no explicit dependencies so we need to
 have this type alias for Any.
 """

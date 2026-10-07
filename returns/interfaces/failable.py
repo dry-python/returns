@@ -23,8 +23,8 @@ _UpdatedType = TypeVar('_UpdatedType')
 _SingleFailableType = TypeVar('_SingleFailableType', bound='SingleFailableN')
 _DiverseFailableType = TypeVar('_DiverseFailableType', bound='DiverseFailableN')
 
+# Used in laws:
 _NewFirstType = TypeVar('_NewFirstType')
-"""Used in laws."""
 
 
 @final

@@ -21,9 +21,9 @@ _UpdatedType = TypeVar('_UpdatedType')
 
 _AltableType = TypeVar('_AltableType', bound='AltableN')
 
+# Used in laws:
 _NewType1 = TypeVar('_NewType1')
 _NewType2 = TypeVar('_NewType2')
-"""Used in laws."""
 
 
 @final
