@@ -22,7 +22,6 @@ if TYPE_CHECKING:
     )
     from returns.context.requires_context_result import RequiresContextResult
 
-# Context:
 _EnvType_contra = TypeVar('_EnvType_contra', contravariant=True)
 _NewEnvType = TypeVar('_NewEnvType')
 _ReturnType_co = TypeVar('_ReturnType_co', covariant=True)
