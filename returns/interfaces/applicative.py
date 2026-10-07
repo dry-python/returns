@@ -24,7 +24,7 @@ _ApplicativeType = TypeVar('_ApplicativeType', bound='ApplicativeN')
 
 _NewType1 = TypeVar('_NewType1')
 _NewType2 = TypeVar('_NewType2')
-"""Only used in laws"""
+"""Only used in laws."""
 
 
 @final

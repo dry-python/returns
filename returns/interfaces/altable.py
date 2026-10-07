@@ -23,7 +23,7 @@ _AltableType = TypeVar('_AltableType', bound='AltableN')
 
 _NewType1 = TypeVar('_NewType1')
 _NewType2 = TypeVar('_NewType2')
-"""Used in laws"""
+"""Used in laws."""
 
 
 @final
