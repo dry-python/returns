@@ -35,22 +35,29 @@ class Settings:
     """
 
     settings_kwargs: dict[str, Any]
-    """Settings directly passed on to `hypothesis`. We support all kwargs from
-    ``@settings``, see `@settings docs <https://hypothesis.readthedocs.io/en/latest/settings.html>`_."""
+    """Settings directly passed on to `hypothesis`.
+
+    We support all kwargs from ``@settings``, see `@settings docs
+    <https://hypothesis.readthedocs.io/en/latest/settings.html>`_.
+    """
 
     use_init: bool
     """Whether to create examples using ``__init__`` instead of the default ."""
 
     container_strategy: StrategyFactory | None
-    """Strategy for generating the container. By default, we generate examples
-    of a container using:
-    :func:`returns.contrib.hypothesis.containers.strategy_from_container`."""
+    """Strategy for generating the container.
+
+    By default, we generate examples of a container using:
+    :func:`returns.contrib.hypothesis.containers.strategy_from_container`.
+    """
 
     type_strategies: dict[type[object], StrategyFactory]
-    """Strategies for generating values of types other than the container and
-    its lawful interfaces. This can be useful for overriding ``TypeVar``,
-    ``Callable``, etc. in case you use certain types that ``hypothesis`` is
-    unable to find."""
+    """Strategies for generating values of non-container types.
+
+    Types other than the container and its lawful interfaces. This can
+    be useful for overriding ``TypeVar``, ``Callable``, etc. in case you
+    use certain types that ``hypothesis`` is unable to find.
+    """
 
     def __post_init__(self) -> None:
         """Check that the settings are mutually compatible."""

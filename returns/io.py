@@ -465,8 +465,10 @@ class IOResult(  # type: ignore[type-var]
         """
 
     bind_ioresult = bind
-    """Alias for `bind_ioresult` method.
-    Part of the `IOResultBasedN` interface."""
+    """Alias for ``bind_ioresult`` method.
+
+    Part of the ``IOResultBasedN`` interface.
+    """
 
     def bind_result(
         self,

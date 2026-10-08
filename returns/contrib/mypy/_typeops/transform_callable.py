@@ -24,8 +24,11 @@ from mypy.types import Type as MypyType
 from returns.contrib.mypy._structures.args import FuncArg
 
 _VARIADIC_KINDS: Final = frozenset((ARG_STAR, ARG_STAR2))
-"""Kinds of arguments that consume the leftover positional or keyword
-arguments (``*args`` and ``**kwargs``) and therefore cannot be applied."""
+"""Kinds of arguments that consume leftover arguments.
+
+These are ``*args`` and ``**kwargs``, which consume the leftover
+positional or keyword arguments and therefore cannot be applied.
+"""
 
 _POSITIONAL_KINDS: Final = frozenset((ARG_POS, ARG_OPT))
 """Kinds of arguments that can be passed positionally."""

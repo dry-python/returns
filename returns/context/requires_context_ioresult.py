@@ -107,9 +107,11 @@ class RequiresContextIOResult(  # type: ignore[type-var]
     _inner_value: Callable[
         [_EnvType_contra], IOResult[_ValueType_co, _ErrorType]
     ]
-    """Inner value of `RequiresContext`. Is just a function that
-    returns `IOResult`. This field has an extra 'RequiresContext'
-    just because `mypy` needs it."""
+    """Inner value of ``RequiresContext`` is a function.
+
+    It returns ``FutureResult``. This field has an extra
+    ``RequiresContext`` just because ``mypy`` needs it.
+    """
 
     no_args: ClassVar[NoDeps] = object()
     """A convenient placeholder to call methods created by `.from_value()`."""

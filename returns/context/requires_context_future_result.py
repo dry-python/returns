@@ -106,9 +106,11 @@ class RequiresContextFutureResult(  # type: ignore[type-var]
     _inner_value: Callable[
         [_EnvType_contra], FutureResult[_ValueType_co, _ErrorType_co]
     ]
-    """Inner value of `RequiresContext` is just a function
-    that returns `FutureResult`. This field has an extra
-    'RequiresContext' just because `mypy` needs it."""
+    """Inner value of ``RequiresContext`` is a function.
+
+    It returns ``FutureResult``. This field has an extra
+    ``RequiresContext`` just because ``mypy`` needs it.
+    """
 
     no_args: ClassVar[NoDeps] = object()
     """A convenient placeholder to call methods created by `.from_value()`."""

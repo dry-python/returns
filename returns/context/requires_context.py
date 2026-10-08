@@ -36,10 +36,9 @@ _FirstType = TypeVar('_FirstType')
 
 # Type Aliases:
 NoDeps = Any
-"""
-Sometimes ``RequiresContext`` and other similar types
-might be used with no explicit dependencies so we need to
-have this type alias for Any.
+"""``RequiresContext`` and similar types may be used with no dependencies.
+
+So we need to have this type alias for Any.
 """
 
 
@@ -82,9 +81,10 @@ class RequiresContext(  # type: ignore[type-var]
     __slots__ = ()
 
     _inner_value: Callable[[_EnvType_contra], _ReturnType_co]
+    """This field has an extra ``RequiresContext``.
+
+    Just because ``mypy`` needs it.
     """
-    This field has an extra 'RequiresContext'
-    just because `mypy` needs it."""
 
     no_args: ClassVar[NoDeps] = object()
     """A convenient placeholder to call methods created by `.from_value()`."""
