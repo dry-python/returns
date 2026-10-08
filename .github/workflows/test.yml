@@ -97,6 +97,5 @@ jobs:
 
     - name: Run typesafety tests
       run: |
-        poetry run pytest typesafety \
-          --num-shards=4 --shard-id=${{ matrix.shard }} \
-          -p no:cov -o addopts="" --mypy-ini-file=setup.cfg
+        make typesafety \
+          PYTEST_EXTRA_ARGS="--num-shards=4 --shard-id=${{ matrix.shard }}"

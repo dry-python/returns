@@ -30,8 +30,9 @@ unit: ## Run unit tests with pytest
 	$(POETRY) run pytest returns docs/pages tests
 
 .PHONY: typesafety
-typesafety: ## Run type-safety tests with pytest-mypy-plugins
-	$(POETRY) run pytest typesafety -p no:cov -o addopts=""
+typesafety: ## Run type-safety tests with pytest-mypy-plugins (PYTEST_EXTRA_ARGS for sharding, etc)
+	$(POETRY) run pytest typesafety $(PYTEST_EXTRA_ARGS) \
+	  -p no:cov -o addopts="" --mypy-ini-file=setup.cfg
 
 .PHONY: slots
 slots: ## Check __slots__ correctness with slotscheck
