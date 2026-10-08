@@ -72,8 +72,8 @@ class ReaderResultLikeN(
         """Unit method to create new containers from ``ReaderResult``."""
 
 
-#: Type alias for kinds with three type arguments.
 ReaderResultLike3 = ReaderResultLikeN[_FirstType, _SecondType, _ThirdType]
+"""Type alias for kinds with three type arguments."""
 
 
 @final
@@ -134,5 +134,5 @@ class ReaderResultBasedN(
     )
 
 
-#: Type alias for kinds with three type arguments.
 ReaderResultBased3 = ReaderResultBasedN[_FirstType, _SecondType, _ThirdType]
+"""Type alias for kinds with three type arguments."""

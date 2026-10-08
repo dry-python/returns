@@ -64,8 +64,8 @@ class ReaderIOResultLikeN(
         """Unit method to create new containers from ``ReaderIOResult``."""
 
 
-#: Type alias for kinds with three type arguments.
 ReaderIOResultLike3 = ReaderIOResultLikeN[_FirstType, _SecondType, _ThirdType]
+"""Type alias for kinds with three type arguments."""
 
 
 @final
@@ -115,5 +115,5 @@ class ReaderIOResultBasedN(
     _laws: ClassVar[Sequence[Law]] = (Law2(_LawSpec.asking_law),)
 
 
-#: Type alias for kinds with three type arguments.
 ReaderIOResultBased3 = ReaderIOResultBasedN[_FirstType, _SecondType, _ThirdType]
+"""Type alias for kinds with three type arguments."""

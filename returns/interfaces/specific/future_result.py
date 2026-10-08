@@ -81,11 +81,11 @@ class FutureResultLikeN(
         """Creates container from ``FutureResult`` instance."""
 
 
-#: Type alias for kinds with two type arguments.
 FutureResultLike2 = FutureResultLikeN[_FirstType, _SecondType, Never]
+"""Type alias for kinds with two type arguments."""
 
-#: Type alias for kinds with three type arguments.
 FutureResultLike3 = FutureResultLikeN[_FirstType, _SecondType, _ThirdType]
+"""Type alias for kinds with three type arguments."""
 
 
 class FutureResultBasedN(
@@ -102,8 +102,8 @@ class FutureResultBasedN(
     __slots__ = ()
 
 
-#: Type alias for kinds with two type arguments.
 FutureResultBased2 = FutureResultBasedN[_FirstType, _SecondType, Never]
+"""Type alias for kinds with two type arguments."""
 
-#: Type alias for kinds with three type arguments.
 FutureResultBased3 = FutureResultBasedN[_FirstType, _SecondType, _ThirdType]
+"""Type alias for kinds with three type arguments."""

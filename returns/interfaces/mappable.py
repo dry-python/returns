@@ -85,11 +85,11 @@ class MappableN(
         """Allows to run a pure function over a container."""
 
 
-#: Type alias for kinds with one type argument.
 Mappable1 = MappableN[_FirstType, Never, Never]
+"""Type alias for kinds with one type argument."""
 
-#: Type alias for kinds with two type arguments.
 Mappable2 = MappableN[_FirstType, _SecondType, Never]
+"""Type alias for kinds with two type arguments."""
 
-#: Type alias for kinds with three type arguments.
 Mappable3 = MappableN[_FirstType, _SecondType, _ThirdType]
+"""Type alias for kinds with three type arguments."""

@@ -37,18 +37,17 @@ from returns.contrib.mypy._features import (
 # Type aliases
 # ============
 
-#: Type for a function hook.
 _FunctionCallback: TypeAlias = Callable[[FunctionContext], MypyType]
+"""Type for a function hook."""
 
-#: Type for attribute hook.
 _AttributeCallback: TypeAlias = Callable[[AttributeContext], MypyType]
+"""Type for attribute hook."""
 
-#: Type for a method hook.
 _MethodCallback: TypeAlias = Callable[[MethodContext], MypyType]
+"""Type for a method hook."""
 
-#: Type for a method signature hook.
 _MethodSigCallback: TypeAlias = Callable[[MethodSigContext], CallableType]
-
+"""Type for a method signature hook."""
 
 # Interface
 # =========

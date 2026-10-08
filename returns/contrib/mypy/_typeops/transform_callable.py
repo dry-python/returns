@@ -23,18 +23,21 @@ from mypy.types import Type as MypyType
 
 from returns.contrib.mypy._structures.args import FuncArg
 
-#: Kinds of arguments that consume the leftover positional or keyword
-#: arguments (``*args`` and ``**kwargs``) and therefore cannot be applied.
 _VARIADIC_KINDS: Final = frozenset((ARG_STAR, ARG_STAR2))
+"""Kinds of arguments that consume leftover arguments.
 
-#: Kinds of arguments that can be passed positionally.
+These are ``*args`` and ``**kwargs``, which consume the leftover
+positional or keyword arguments and therefore cannot be applied.
+"""
+
 _POSITIONAL_KINDS: Final = frozenset((ARG_POS, ARG_OPT))
+"""Kinds of arguments that can be passed positionally."""
 
-#: Maps a positional argument kind onto its keyword-only counterpart.
 _KEYWORD_ONLY_KINDS: Final = MappingProxyType({
     ARG_POS: ARG_NAMED,
     ARG_OPT: ARG_NAMED_OPT,
 })
+"""Maps a positional argument kind onto its keyword-only counterpart."""
 
 
 def proper_type(
@@ -55,12 +58,12 @@ class Intermediate:
     was already provided in caller.
     """
 
-    #: Positional arguments can be of this kind.
     _positional_kinds: ClassVar[frozenset[ArgKind]] = frozenset((
         ARG_POS,
         ARG_OPT,
         ARG_STAR,
     ))
+    """Positional arguments can be of this kind."""
 
     def __init__(self, case_function: CallableType) -> None:
         """We only need a callable to work on."""

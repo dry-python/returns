@@ -46,14 +46,14 @@ class IOLikeN(container.ContainerN[_FirstType, _SecondType, _ThirdType]):
         """Unit method to create new containers from successful ``IO``."""
 
 
-#: Type alias for kinds with one type argument.
 IOLike1 = IOLikeN[_FirstType, Never, Never]
+"""Type alias for kinds with one type argument."""
 
-#: Type alias for kinds with two type arguments.
 IOLike2 = IOLikeN[_FirstType, _SecondType, Never]
+"""Type alias for kinds with two type arguments."""
 
-#: Type alias for kinds with three type arguments.
 IOLike3 = IOLikeN[_FirstType, _SecondType, _ThirdType]
+"""Type alias for kinds with three type arguments."""
 
 
 class IOBasedN(
@@ -75,11 +75,11 @@ class IOBasedN(
     __slots__ = ()
 
 
-#: Type alias for kinds with one type argument.
 IOBased1 = IOBasedN[_FirstType, Never, Never]
+"""Type alias for kinds with one type argument."""
 
-#: Type alias for kinds with two type arguments.
 IOBased2 = IOBasedN[_FirstType, _SecondType, Never]
+"""Type alias for kinds with two type arguments."""
 
-#: Type alias for kinds with three type arguments.
 IOBased3 = IOBasedN[_FirstType, _SecondType, _ThirdType]
+"""Type alias for kinds with three type arguments."""

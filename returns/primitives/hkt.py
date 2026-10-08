@@ -97,16 +97,16 @@ class KindN(Generic[_InstanceType_co, *_TypeVars]):
             """
 
 
-#: Type alias for kinds with one type argument.
 Kind1 = KindN[_InstanceType_co, _TypeArgType1_co, Any, Any]
+"""Type alias for kinds with one type argument."""
 
-#: Type alias for kinds with two type arguments.
 Kind2 = KindN[_InstanceType_co, _TypeArgType1_co, _TypeArgType2_co, Any]
+"""Type alias for kinds with two type arguments."""
 
-#: Type alias for kinds with three type arguments.
 Kind3 = KindN[
     _InstanceType_co, _TypeArgType1_co, _TypeArgType2_co, _TypeArgType3_co
 ]
+"""Type alias for kinds with three type arguments."""
 
 
 class SupportsKindN(KindN[_InstanceType_co, *_TypeVars]):
@@ -129,29 +129,29 @@ class SupportsKindN(KindN[_InstanceType_co, *_TypeVars]):
     __getattr__: None  # type: ignore
 
 
-#: Type alias used for inheritance with one type argument.
 SupportsKind1 = SupportsKindN[
     _InstanceType_co,
     _TypeArgType1_co,
     Never,
     Never,
 ]
+"""Type alias used for inheritance with one type argument."""
 
-#: Type alias used for inheritance with two type arguments.
 SupportsKind2 = SupportsKindN[
     _InstanceType_co,
     _TypeArgType1_co,
     _TypeArgType2_co,
     Never,
 ]
+"""Type alias used for inheritance with two type arguments."""
 
-#: Type alias used for inheritance with three type arguments.
 SupportsKind3 = SupportsKindN[
     _InstanceType_co,
     _TypeArgType1_co,
     _TypeArgType2_co,
     _TypeArgType3_co,
 ]
+"""Type alias used for inheritance with three type arguments."""
 
 
 def dekind(
@@ -208,8 +208,8 @@ class Kinded(Protocol[_FunctionDefType_co]):  # type: ignore
 
     __slots__ = ()
 
-    #: Used to translate `KindN` into real types.
     __call__: _FunctionDefType_co
+    """Used to translate `KindN` into real types."""
 
     def __get__(
         self,

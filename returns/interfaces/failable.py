@@ -72,11 +72,11 @@ class FailableN(
     )
 
 
-#: Type alias for kinds with two type arguments.
 Failable2 = FailableN[_FirstType, _SecondType, Never]
+"""Type alias for kinds with two type arguments."""
 
-#: Type alias for kinds with three type arguments.
 Failable3 = FailableN[_FirstType, _SecondType, _ThirdType]
+"""Type alias for kinds with three type arguments."""
 
 
 @final
@@ -153,11 +153,11 @@ class SingleFailableN(
         """This property represents the failed value."""
 
 
-#: Type alias for kinds with two types arguments.
 SingleFailable2 = SingleFailableN[_FirstType, _SecondType, Never]
+"""Type alias for kinds with two types arguments."""
 
-#: Type alias for kinds with three type arguments.
 SingleFailable3 = SingleFailableN[_FirstType, _SecondType, _ThirdType]
+"""Type alias for kinds with three type arguments."""
 
 
 @final
@@ -257,8 +257,8 @@ class DiverseFailableN(
         """Unit method to create new containers from any raw value."""
 
 
-#: Type alias for kinds with two type arguments.
 DiverseFailable2 = DiverseFailableN[_FirstType, _SecondType, Never]
+"""Type alias for kinds with two type arguments."""
 
-#: Type alias for kinds with three type arguments.
 DiverseFailable3 = DiverseFailableN[_FirstType, _SecondType, _ThirdType]
+"""Type alias for kinds with three type arguments."""

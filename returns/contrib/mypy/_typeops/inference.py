@@ -19,8 +19,8 @@ from returns.contrib.mypy._structures.args import FuncArg
 from returns.contrib.mypy._structures.types import CallableContext
 from returns.contrib.mypy._typeops.analtype import analyze_call
 
-#: Mapping of `typevar` to real type.
 _Constraints: TypeAlias = Mapping[TypeVarId, MypyType]
+"""Mapping of `typevar` to real type."""
 
 
 @final

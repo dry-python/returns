@@ -77,8 +77,8 @@ class AltableN(
         """Allows to run a pure function over a container."""
 
 
-#: Type alias for kinds with two type arguments.
 Altable2 = AltableN[_FirstType, _SecondType, Never]
+"""Type alias for kinds with two type arguments."""
 
-#: Type alias for kinds with three type arguments.
 Altable3 = AltableN[_FirstType, _SecondType, _ThirdType]
+"""Type alias for kinds with three type arguments."""

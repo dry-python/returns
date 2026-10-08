@@ -35,9 +35,11 @@ _ErrorType = TypeVar('_ErrorType')
 _FirstType = TypeVar('_FirstType')
 
 # Type Aliases:
-#: Sometimes ``RequiresContext`` and other similar types might be used with
-#: no explicit dependencies so we need to have this type alias for Any.
 NoDeps = Any
+"""``RequiresContext`` and similar types may be used with no dependencies.
+
+So we need to have this type alias for Any.
+"""
 
 
 @final
@@ -78,11 +80,14 @@ class RequiresContext(  # type: ignore[type-var]
 
     __slots__ = ()
 
-    #: This field has an extra 'RequiresContext' just because `mypy` needs it.
     _inner_value: Callable[[_EnvType_contra], _ReturnType_co]
+    """This field has an extra ``RequiresContext``.
 
-    #: A convenient placeholder to call methods created by `.from_value()`:
+    Just because ``mypy`` needs it.
+    """
+
     no_args: ClassVar[NoDeps] = object()
+    """A convenient placeholder to call methods created by `.from_value()`."""
 
     def __init__(
         self,
@@ -208,8 +213,8 @@ class RequiresContext(  # type: ignore[type-var]
         """
         return RequiresContext(lambda deps: dekind(function(self(deps)))(deps))
 
-    #: Alias for `bind_context` method, it is the same as `bind` here.
     bind_context = bind
+    """Alias for `bind_context` method, it is the same as `bind` here."""
 
     def modify_env(
         self,
@@ -445,5 +450,5 @@ class RequiresContext(  # type: ignore[type-var]
 
 # Aliases
 
-#: Sometimes `RequiresContext` is too long to type.
 Reader: TypeAlias = RequiresContext
+"""Sometimes `RequiresContext` is too long to type."""

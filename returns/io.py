@@ -62,8 +62,8 @@ class IO(  # type: ignore[type-var]
 
     _inner_value: _ValueType_co
 
-    #: Typesafe equality comparison with other `Result` objects.
     equals = container_equality
+    """Typesafe equality comparison with other `Result` objects."""
 
     def __init__(self, inner_value: _ValueType_co) -> None:
         """
@@ -147,8 +147,8 @@ class IO(  # type: ignore[type-var]
         """
         return dekind(function(self._inner_value))
 
-    #: Alias for `bind` method. Part of the `IOLikeN` interface.
     bind_io = bind
+    """Alias for `bind` method. Part of the `IOLikeN` interface."""
 
     def __iter__(self) -> Iterator[_ValueType_co]:
         """API for :ref:`do-notation`."""
@@ -334,8 +334,8 @@ class IOResult(  # type: ignore[type-var]
     _inner_value: Result[_ValueType_co, _ErrorType_co]
     __match_args__ = ('_inner_value',)
 
-    #: Typesafe equality comparison with other `IOResult` objects.
     equals = container_equality
+    """Typesafe equality comparison with other `IOResult` objects."""
 
     def __init__(
         self, inner_value: Result[_ValueType_co, _ErrorType_co]
@@ -464,8 +464,11 @@ class IOResult(  # type: ignore[type-var]
 
         """
 
-    #: Alias for `bind_ioresult` method. Part of the `IOResultBasedN` interface.
     bind_ioresult = bind
+    """Alias for ``bind_ioresult`` method.
+
+    Part of the ``IOResultBasedN`` interface.
+    """
 
     def bind_result(
         self,
@@ -833,8 +836,8 @@ class IOFailure(IOResult[Any, _ErrorType_co]):
             """Does nothing for ``IOFailure``."""
             return self
 
-        #: Alias for `bind_ioresult` method. Part of the `IOResultBasedN` interface.  # noqa: E501
         bind_ioresult = bind
+        """Alias for `bind_ioresult` method. Part of the `IOResultBasedN` interface."""  # noqa: E501 WPS484
 
         def bind_result(self, function):
             """Does nothing for ``IOFailure``."""
@@ -867,8 +870,8 @@ class IOSuccess(IOResult[_ValueType_co, Any]):
             """Composes this container with a function returning ``IOResult``."""  # noqa: E501
             return function(self._inner_value.unwrap())
 
-        #: Alias for `bind_ioresult` method. Part of the `IOResultBasedN` interface.  # noqa: E501
         bind_ioresult = bind
+        """Alias for `bind_ioresult` method. Part of the `IOResultBasedN` interface."""  # noqa: E501 WPS484
 
         def bind_result(self, function):
             """Binds ``Result`` returning function to current container."""
@@ -886,9 +889,8 @@ class IOSuccess(IOResult[_ValueType_co, Any]):
 # Aliases:
 
 
-#: Alias for ``IOResult[_ValueType_co, Exception]``.
 IOResultE: TypeAlias = IOResult[_ValueType_co, Exception]
-
+"""Alias for ``IOResult[_ValueType_co, Exception]``."""
 
 # impure_safe decorator:
 

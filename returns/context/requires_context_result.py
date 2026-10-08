@@ -98,13 +98,14 @@ class RequiresContextResult(  # type: ignore[type-var]
 
     __slots__ = ()
 
-    #: This field has an extra 'RequiresContext' just because `mypy` needs it.
     _inner_value: Callable[
         [_EnvType_contra], Result[_ValueType_co, _ErrorType_co]
     ]
+    """This field has an extra 'RequiresContext',
+    just because `mypy` needs it."""
 
-    #: A convenient placeholder to call methods created by `.from_value()`.
     no_args: ClassVar[NoDeps] = object()
+    """A convenient placeholder to call methods created by `.from_value()`."""
 
     def __init__(
         self,
@@ -282,8 +283,8 @@ class RequiresContextResult(  # type: ignore[type-var]
             ),
         )
 
-    #: Alias for `bind_context_result` method, it is the same as `bind` here.
     bind_context_result = bind
+    """Alias for `bind_context_result` method, it is the same as `bind` here."""
 
     def bind_result(
         self,
@@ -631,19 +632,19 @@ class RequiresContextResult(  # type: ignore[type-var]
 
 # Aliases:
 
-#: Alias for a popular case when ``Result`` has ``Exception`` as error type.
 RequiresContextResultE: TypeAlias = RequiresContextResult[
     _ValueType_co,
     Exception,
     _EnvType_contra,
 ]
+"""Alias for a popular case when ``Result`` has ``Exception`` as error type."""
 
-#: Alias to save you some typing. Uses original name from Haskell.
 ReaderResult: TypeAlias = RequiresContextResult
+"""Alias to save you some typing. Uses original name from Haskell."""
 
-#: Alias to save you some typing. Has ``Exception`` as error type.
 ReaderResultE: TypeAlias = RequiresContextResult[
     _ValueType_co,
     Exception,
     _EnvType_contra,
 ]
+"""Alias to save you some typing. Has ``Exception`` as error type."""

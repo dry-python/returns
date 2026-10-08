@@ -114,5 +114,5 @@ def bind_context3(
     return factory
 
 
-#: Useful alias for :func:`~bind_context3`.
 bind_context = bind_context3
+"""Useful alias for :func:`~bind_context3`."""

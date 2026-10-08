@@ -60,11 +60,11 @@ class ResultLikeN(
         """Unit method to create new containers from any raw value."""
 
 
-#: Type alias for kinds with two type arguments.
 ResultLike2 = ResultLikeN[_FirstType, _SecondType, Never]
+"""Type alias for kinds with two type arguments."""
 
-#: Type alias for kinds with three type arguments.
 ResultLike3 = ResultLikeN[_FirstType, _SecondType, _ThirdType]
+"""Type alias for kinds with three type arguments."""
 
 
 class UnwrappableResult(
@@ -101,8 +101,8 @@ class ResultBasedN(
     __slots__ = ()
 
 
-#: Type alias for kinds with two type arguments.
 ResultBased2 = ResultBasedN[_FirstType, _SecondType, Never]
+"""Type alias for kinds with two type arguments."""
 
-#: Type alias for kinds with three type arguments.
 ResultBased3 = ResultBasedN[_FirstType, _SecondType, _ThirdType]
+"""Type alias for kinds with three type arguments."""

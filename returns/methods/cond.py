@@ -79,5 +79,6 @@ def internal_cond(
     return container_type.empty
 
 
-#: Kinded version of :func:`~internal_cond`, use it to infer real return type.
 cond = kinded(internal_cond)
+"""Kinded version of :func:`~internal_cond`,
+use it to infer real return type."""

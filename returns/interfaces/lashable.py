@@ -41,8 +41,8 @@ class LashableN(Generic[_FirstType, _SecondType, _ThirdType]):
         """
 
 
-#: Type alias for kinds with two type arguments.
 Lashable2 = LashableN[_FirstType, _SecondType, Never]
+"""Type alias for kinds with two type arguments."""
 
-#: Type alias for kinds with three type arguments.
 Lashable3 = LashableN[_FirstType, _SecondType, _ThirdType]
+"""Type alias for kinds with three type arguments."""

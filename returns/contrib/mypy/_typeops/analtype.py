@@ -10,13 +10,13 @@ from mypy.types import Type as MypyType
 from returns.contrib.mypy._structures.args import FuncArg
 from returns.contrib.mypy._structures.types import CallableContext
 
-#: Mapping for better `call || function` argument compatibility.
 _KIND_MAPPING: Final = MappingProxyType({
     # We have to replace `ARG_OPT` to `ARG_NAMED`,
     # because `ARG_OPT` is only used in function defs, not calls.
     # And `ARG_NAMED` is the same thing for calls.
     ARG_OPT: ARG_NAMED,
 })
+"""Mapping for better `call || function` argument compatibility."""
 
 
 @overload
