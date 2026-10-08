@@ -40,15 +40,42 @@ poetry install --extras compatible-mypy
 To activate your `virtualenv` run `eval $(poetry env activate)`.
 
 
+## Makefile
+
+To make local development easier, all common commands are available
+via the [`Makefile`](Makefile). Run `make help` to see all available targets:
+
+```bash
+make help
+```
+
+Main targets:
+
+- `make format` — format and autofix code with `ruff`
+- `make lint` — run all linting checks (`ruff` and `flake8`)
+- `make type-check` — run `mypy` type checks
+- `make unit` — run standard tests with `pytest`
+- `make typesafety` — run type-safety tests (`pytest-mypy-plugins`)
+- `make slots` — check `__slots__` correctness with `slotscheck`
+- `make package` — check package dependencies with `pip check`
+- `make test` — run all checks: lint, type-check, unit tests, slots, and package
+
+
 ## Tests
 
 We use `pytest` and `flake8` for quality control.
-We also use `wemake_python_styleguide` to enforce code quality.
+We also use `wemake_python_styleguide` and `ruff` to enforce code quality.
 
 To run standard tests:
 
 ```bash
 poetry run pytest returns docs/pages tests
+```
+
+Or simply:
+
+```bash
+make unit
 ```
 
 **NOTE:** type-safety tests not included, see section on type tests below
@@ -57,11 +84,38 @@ To run linting:
 
 ```bash
 poetry run flake8 .
+poetry run ruff check --exit-non-zero-on-fix
+poetry run ruff format --check --diff
 ```
+
+Or simply:
+
+```bash
+make lint
+```
+
 Keep in mind: default virtual environment folder excluded by flake8 style checking is `.venv`.
 If you want to customize this parameter, you should do this in `setup.cfg`.
 
 These steps are mandatory during CI.
+
+### Pre-commit hooks
+
+We use [`pre-commit`](https://pre-commit.com/) to run some checks
+automatically before each commit. Among others, it runs `ruff check`
+and `ruff format` on the changed files.
+
+To install the hooks, run:
+
+```bash
+poetry run pre-commit install
+```
+
+To run all hooks manually:
+
+```bash
+poetry run pre-commit run --all-files
+```
 
 ### Type tests
 
@@ -72,6 +126,12 @@ The type-safety tests can be run with the following:
 
 ```bash
 poetry run pytest typesafety
+```
+
+Or simply:
+
+```bash
+make typesafety
 ```
 
 **NOTE:** This can take upwards of 20 minutes, only recommended to run if necessary.
@@ -86,7 +146,14 @@ We use `mypy` to run type checks on our code.
 To use it:
 
 ```bash
-poetry run mypy returns tests/**/*.py
+poetry run mypy returns
+poetry run mypy docs tests
+```
+
+Or simply:
+
+```bash
+make type-check
 ```
 
 This step is mandatory during CI.
@@ -116,15 +183,14 @@ In this method, the latest version of the app is always in the `master` branch.
 
 Before submitting your code please do the following steps:
 
-1. Run `pytest` to make sure everything was working before
+1. Run `make unit` (or `pytest`) to make sure everything was working before
 2. Add any changes you want
 3. Add tests for the new changes
 4. Edit documentation if you have changed something significant
 5. Update `CHANGELOG.md` with a quick summary of your changes
-6. Run `pytest` again to make sure it is still working
-7. Run `mypy` to ensure that types are correct
-8. Run `flake8` to ensure that style is correct
-9. Run `slotscheck` to ensure that slots are correct
+6. Run `make format` to format the code with `ruff`
+7. Run `make test` to run all checks: linting (`ruff`, `flake8`),
+   `mypy` types, `pytest` tests, `slotscheck`, and `pip check`
 
 
 ## Other help
