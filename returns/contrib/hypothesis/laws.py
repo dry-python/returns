@@ -35,10 +35,10 @@ class Settings:
     """
 
     settings_kwargs: dict[str, Any]
-    """Settings directly passed on to `hypothesis`.
+    """Settings directly passed on to ``hypothesis``.
 
-    We support all kwargs from ``@settings``, see `@settings docs
-    <https://hypothesis.readthedocs.io/en/latest/settings.html>`_.
+    We support all kwargs from ``@settings``, see ``@settings docs
+    <https://hypothesis.readthedocs.io/en/latest/settings.html>``_.
     """
 
     use_init: bool
