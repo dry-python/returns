@@ -48,20 +48,14 @@ jobs:
 
     - name: Run tests
       run: |
-        poetry run flake8 .
-
-        # In order to make `exclude` option work, we need to separate the checks
-        # of returns and its tests into two separated commands
-        poetry run mypy --enable-error-code=unused-awaitable returns
-        poetry run mypy docs tests
+        make lint
+        make type-check
 
         # Different python versions are covered differently:
-        poetry run pytest returns docs/pages tests
+        make unit
 
-        # TODO: re-enable after all problems are fixed
-        # poetry run poetry check
-        poetry run pip check
-        poetry run python -m slotscheck returns --verbose
+        make slots
+        make package
 
     - name: Upload coverage to Codecov
       if: matrix.python-version == 3.11

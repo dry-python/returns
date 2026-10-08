@@ -22,7 +22,7 @@ lint: ## Run linting checks (ruff, flake8)
 
 .PHONY: type-check
 type-check: ## Run type checking (mypy)
-	$(POETRY) run mypy returns
+	$(POETRY) run mypy --enable-error-code=unused-awaitable returns
 	$(POETRY) run mypy docs tests
 
 .PHONY: unit
