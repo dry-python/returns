@@ -15,6 +15,10 @@ See [0Ver](https://0ver.org/).
   another awaitable (instead of being coroutine functions themselves)
   type-check correctly
 
+### Features
+
+- Add `python3.15` support
+
 
 ## 0.29.0
 
