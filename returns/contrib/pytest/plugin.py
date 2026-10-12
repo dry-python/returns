@@ -183,6 +183,7 @@ def _error_handling_patchers() -> Mapping[str, Callable]:
         'alt': _patched_error_copier,
     })
 
+
 def _patched_error_handler(
     original: _FunctionType,
     errs: _ErrorsHandled,
