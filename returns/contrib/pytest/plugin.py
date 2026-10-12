@@ -1,18 +1,10 @@
 import inspect
 import sys
-from collections.abc import Callable, Generator, Iterator
+from collections.abc import Callable, Generator, Iterator, Mapping
 from contextlib import ExitStack, contextmanager
 from functools import partial, wraps
-from types import FrameType, MappingProxyType
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    Final,
-    TypeAlias,
-    TypeVar,
-    Union,
-    final,
-)
+from types import FrameType
+from typing import TYPE_CHECKING, Any, TypeAlias, TypeVar, Union, final
 from unittest import mock
 
 import pytest
@@ -148,7 +140,7 @@ def _spy_error_handling() -> Generator[_ErrorsHandled]:
     errs: _ErrorsHandled = {}
     with ExitStack() as cleanup:
         for container in _containers_to_patch():
-            for method, patch in _ERROR_HANDLING_PATCHERS.items():
+            for method, patch in _error_handling_patchers().items():
                 cleanup.enter_context(
                     mock.patch.object(
                         container,
@@ -180,6 +172,16 @@ def _containers_to_patch() -> list:
         RequiresContextFutureResult,
         FutureResult,
     ]
+
+
+def _error_handling_patchers() -> Mapping[str, Callable]:
+    from returns.primitives.compat import make_immutable  # noqa: PLC0415
+
+    return make_immutable({
+        'lash': _patched_error_handler,
+        'map': _patched_error_copier,
+        'alt': _patched_error_copier,
+    })
 
 
 def _patched_error_handler(
@@ -224,10 +226,3 @@ def _patched_error_copier(
         return original_result
 
     return wraps(original)(sync_wrapper)  # type: ignore
-
-
-_ERROR_HANDLING_PATCHERS: Final = MappingProxyType({
-    'lash': _patched_error_handler,
-    'map': _patched_error_copier,
-    'alt': _patched_error_copier,
-})
