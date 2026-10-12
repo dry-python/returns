@@ -24,7 +24,6 @@ def asserts_fallback_to_any(function: _CallableType) -> _CallableType:
         try:
             return function(*args, **kwargs)
         except AssertionError:
-            # TODO: log it somehow
             return AnyType(TypeOfAny.implementation_artifact)
 
     return decorator  # type: ignore
