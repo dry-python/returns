@@ -213,7 +213,7 @@
     reveal_type(partial((lambda x, y: str(x + y)), 1))  # N: Revealed type is "def (y: Any) -> str"
 
 
-- case: partial_keyword_bound_positional_removes_varargs
+- case: partial_variadic_argument_binding
   disable_cache: false
   main: |
     from returns.curry import partial
@@ -225,6 +225,14 @@
     reveal_type(bound)  # N: Revealed type is "def (*, flag: bool =) -> str"
     bound(flag=True)
     bound(True)  # E: Too many positional arguments  [call-arg]
+
+    keyword_bound = partial(multiple, flag=True)
+    reveal_type(keyword_bound)  # N: Revealed type is "def (first: int, *args: int) -> str"
+    keyword_bound(1, 2, 3)
+
+    positional_bound = partial(multiple, 1, 2)
+    reveal_type(positional_bound)  # N: Revealed type is "def (*args: int, flag: bool =) -> str"
+    positional_bound(3, 4, flag=True)
 
 
 - case: partial_keyword_hole_before_varargs_keeps_prefix
@@ -239,29 +247,3 @@
     reveal_type(bound)  # N: Revealed type is "def (first: int, *, flag: bool =) -> str"
     bound(1, flag=True)
     bound(1, True)  # E: Too many positional arguments  [call-arg]
-
-
-- case: partial_keyword_only_binding_preserves_varargs
-  disable_cache: false
-  main: |
-    from returns.curry import partial
-
-    def multiple(first: int, *args: int, flag: bool = False) -> str:
-        ...
-
-    bound = partial(multiple, flag=True)
-    reveal_type(bound)  # N: Revealed type is "def (first: int, *args: int) -> str"
-    bound(1, 2, 3)
-
-
-- case: partial_positional_binding_preserves_varargs
-  disable_cache: false
-  main: |
-    from returns.curry import partial
-
-    def multiple(first: int, *args: int, flag: bool = False) -> str:
-        ...
-
-    bound = partial(multiple, 1, 2)
-    reveal_type(bound)  # N: Revealed type is "def (*args: int, flag: bool =) -> str"
-    bound(3, 4, flag=True)
