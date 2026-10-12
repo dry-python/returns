@@ -15,6 +15,6 @@ def make_immutable(
 ) -> Mapping[_KT, _VT]:
     """Make a dictionary immutable."""
     try:
-        return frozendict(mutable_dict)
+        return frozendict(mutable_dict)  # type: ignore[no-any-return, name-defined, unused-ignore]
     except NameError:
         return types.MappingProxyType(mutable_dict)
