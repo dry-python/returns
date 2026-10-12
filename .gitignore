@@ -199,7 +199,7 @@ fabric.properties
 ### Custom ###
 ex.py
 experiments/
-.vscode/tags
+.vscode/
 .pyre
 .pytype
 build/

@@ -1,4 +1,3 @@
-from types import MappingProxyType
 from typing import ClassVar, Final, final
 
 from mypy.nodes import (
@@ -22,6 +21,7 @@ from mypy.types import (
 from mypy.types import Type as MypyType
 
 from returns.contrib.mypy._structures.args import FuncArg
+from returns.primitives.compat import make_immutable
 
 _VARIADIC_KINDS: Final = frozenset((ARG_STAR, ARG_STAR2))
 """Kinds of arguments that consume leftover arguments.
@@ -33,7 +33,7 @@ positional or keyword arguments and therefore cannot be applied.
 _POSITIONAL_KINDS: Final = frozenset((ARG_POS, ARG_OPT))
 """Kinds of arguments that can be passed positionally."""
 
-_KEYWORD_ONLY_KINDS: Final = MappingProxyType({
+_KEYWORD_ONLY_KINDS: Final = make_immutable({
     ARG_POS: ARG_NAMED,
     ARG_OPT: ARG_NAMED_OPT,
 })

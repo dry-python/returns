@@ -5,6 +5,12 @@ Versions before `1.0.0` are `0Ver`-based:
 incremental in minor, bugfixes only are patches.
 See [0Ver](https://0ver.org/).
 
+## 0.30.0 WIP
+
+### Features
+
+- Add `python3.15` support
+
 
 ## 0.29.1 WIP
 
@@ -14,10 +20,6 @@ See [0Ver](https://0ver.org/).
   `Coroutine` to `Awaitable`, so plain `async def` functions wrapping
   another awaitable (instead of being coroutine functions themselves)
   type-check correctly
-
-### Features
-
-- Add `python3.15` support
 
 
 ## 0.29.0
