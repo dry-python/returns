@@ -16,6 +16,9 @@ See [0Ver](https://0ver.org/).
 
 ### Bugfixes
 
+- Fixes `partial` retaining variadic positional arguments in its inferred
+  signature after a positional parameter is bound by keyword
+
 - Relaxes `future` and `future_safe` decorator argument types from
   `Coroutine` to `Awaitable`, so plain `async def` functions wrapping
   another awaitable (instead of being coroutine functions themselves)
