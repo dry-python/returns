@@ -99,9 +99,7 @@ class Intermediate:
     ) -> list[FuncArg]:
         callee_args = list(
             filter(
-                lambda name: (
-                    name.kind in _positional_kinds
-                ),
+                lambda name: name.kind in _positional_kinds,
                 applied_args,
             )
         )
