@@ -223,16 +223,16 @@
 
     bound = partial(multiple, first=1)
     reveal_type(bound)  # N: Revealed type is "def (*, flag: bool =) -> str"
-    bound(flag=True)
+    reveal_type(bound(flag=True))  # N: Revealed type is "str"
     bound(True)  # E: Too many positional arguments  [call-arg]
 
     keyword_bound = partial(multiple, flag=True)
     reveal_type(keyword_bound)  # N: Revealed type is "def (first: int, *args: int) -> str"
-    keyword_bound(1, 2, 3)
+    reveal_type(keyword_bound(1, 2, 3))  # N: Revealed type is "str"
 
     positional_bound = partial(multiple, 1, 2)
     reveal_type(positional_bound)  # N: Revealed type is "def (*args: int, flag: bool =) -> str"
-    positional_bound(3, 4, flag=True)
+    reveal_type(positional_bound(3, 4, flag=True))  # N: Revealed type is "str"
 
 
 - case: partial_keyword_hole_before_varargs_keeps_prefix
