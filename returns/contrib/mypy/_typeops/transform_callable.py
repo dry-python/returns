@@ -100,8 +100,8 @@ class Intermediate:
         callee_args = list(
             filter(
                 lambda name: (
-                    name.name is None
-                ),  # TODO: maybe use `kind` instead?
+                    name.kind in _positional_kinds
+                ),
                 applied_args,
             )
         )
