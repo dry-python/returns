@@ -161,7 +161,8 @@ class Functions:
         # longer be filled positionally, so every remaining positional
         # parameter after it must become keyword-only. Otherwise the partial
         # would accept positional arguments that raise a ``TypeError`` at
-        # runtime. See issue #2191.
+        # runtime. Variadic positional parameters become unreachable too.
+        # See issue #2191.
         keyword_hole_at = self._keyword_hole_at(
             original_args,
             applied_args,
@@ -171,6 +172,7 @@ class Functions:
             self._remaining_arg(arg, keyword_only=index > keyword_hole_at)
             for index, arg in enumerate(original_args)
             if not self._was_applied(arg, index, intermediate_names)
+            and (arg.kind != ARG_STAR or index < keyword_hole_at)
         ])
 
     def _keyword_hole_at(
