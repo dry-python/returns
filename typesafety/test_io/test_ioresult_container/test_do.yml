@@ -70,8 +70,8 @@
   main: |
     from returns.io import IOSuccess, IOResult
 
-    IOResult.do(  # E: Using "if" conditions inside a generator is not allowed  [misc]
-        x + y
+    IOResult.do(
+        x + y  # E: Using "if" conditions inside a generator is not allowed  [misc]
         for x in IOSuccess(1)
         for y in IOSuccess(2.5)
         if y > 5

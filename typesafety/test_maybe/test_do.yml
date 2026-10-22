@@ -44,8 +44,8 @@
   main: |
     from returns.maybe import Maybe
 
-    Maybe.do(  # E: Using "if" conditions inside a generator is not allowed  [misc]
-        x + y
+    Maybe.do(
+        x + y  # E: Using "if" conditions inside a generator is not allowed  [misc]
         for x in Maybe.from_value(1)
         for y in Maybe.from_value(2.5)
         if y > 5
