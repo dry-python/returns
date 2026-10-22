@@ -10,6 +10,7 @@ See [0Ver](https://0ver.org/).
 ### Features
 
 - Add `python3.15` support
+- Add `mypy>=1.19,<2.5` support
 
 
 ## 0.29.1 WIP

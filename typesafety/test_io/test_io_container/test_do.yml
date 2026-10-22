@@ -16,8 +16,8 @@
   main: |
     from returns.io import IO
 
-    IO.do(  # E: Using "if" conditions inside a generator is not allowed  [misc]
-        x + y
+    IO.do(
+        x + y  # E: Using "if" conditions inside a generator is not allowed  [misc]
         for x in IO(1)
         for y in IO(2.5)
         if y > 5
