@@ -540,10 +540,11 @@ However, `Future` still requires to be executed inside a proper eventloop:
 
 ```python
 import anyio  # or asyncio, or any other lib
+from returns.io import IO
 
 # We can then pass our `Future` to any library: asyncio, trio, curio.
 # And use any event loop: regular, uvloop, even a custom one, etc
-assert anyio.run(second().awaitable) == 2
+assert anyio.run(second().awaitable) == IO(2)
 ```
 
 As you can see `Future` allows you
@@ -579,8 +580,9 @@ async def raising():
     raise ValueError('Not so fast!')
 
 
-ioresult = anyio.run(raising.awaitable)  # all `Future`s return IO containers
-assert ioresult == IOFailure(ValueError('Not so fast!'))  # True
+ioresult = anyio.run(raising().awaitable)  # all `Future`s return IO containers
+assert isinstance(ioresult, IOFailure)
+assert str(ioresult) == '<IOResult: <Failure: Not so fast!>>'
 ```
 
 Using `FutureResult` will keep your code safe from exceptions.
