@@ -22,6 +22,23 @@ def _safe_decorated_function(*, return_failure: bool = False):
         raise ValueError('Function failed')
 
 
+def _same_decorator(function):
+    def decorator(*args, **kwargs):
+        return function(*args, **kwargs)
+
+    return decorator
+
+
+@_same_decorator
+def _first_decorated_function(container_type, container_value):
+    return container_type(container_value)
+
+
+@_same_decorator
+def _second_decorated_function(container_type, container_value):
+    return container_type(container_value)
+
+
 @pytest.mark.parametrize(
     'container_type',
     [  # noqa: WPS118
@@ -113,3 +130,42 @@ def test_safe_decorated_assert(container_type, returns: ReturnsAsserts):
     """Test if our plugin will catch containers from @safe-wrapped functions."""
     with returns.assert_trace(container_type, _safe_decorated_function):
         _safe_decorated_function(return_failure=container_type is Failure)
+
+
+@pytest.mark.parametrize(
+    'container_type',
+    [  # noqa: WPS118
+        Success,
+        Failure,
+        IOSuccess,
+        IOFailure,
+    ],
+)
+def test_same_decorator_assert_trace(
+    container_type,
+    returns: ReturnsAsserts,
+):
+    """Test if our plugin will catch containers from the decorated function."""
+    with returns.assert_trace(container_type, _first_decorated_function):
+        _first_decorated_function(container_type, 1)
+
+
+@pytest.mark.parametrize(
+    'container_type',
+    [  # noqa: WPS118
+        Success,
+        Failure,
+        IOSuccess,
+        IOFailure,
+    ],
+)
+def test_same_decorator_failed_assert_trace(
+    container_type,
+    returns: ReturnsAsserts,
+):
+    """Test if our plugin will ignore other functions with same decorator."""
+    with (
+        pytest.raises(pytest.fail.Exception),
+        returns.assert_trace(container_type, _first_decorated_function),
+    ):
+        _second_decorated_function(container_type, 1)

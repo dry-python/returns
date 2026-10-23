@@ -101,10 +101,25 @@ def _trace_function(
     )
     if is_desired_type_call:
         current_call_stack = inspect.stack()
-        function_to_search_code = getattr(function_to_search, '__code__', None)
         for frame_info in current_call_stack:
-            if function_to_search_code is frame_info.frame.f_code:
+            if _is_function_frame(function_to_search, frame_info.frame):
                 raise _DesiredFunctionFound
+
+
+def _is_function_frame(function: _FunctionType, frame: FrameType) -> bool:
+    function_code = getattr(function, '__code__', None)
+    if frame.f_code is not function_code:
+        return False
+
+    # Functions created by the same decorator share the same code object,
+    # so we also compare their closure variables to tell them apart:
+    frame_locals = frame.f_locals
+    closure = getattr(function, '__closure__', None) or ()
+    return all(
+        frame_locals[name] is cell.cell_contents
+        for name, cell in zip(function_code.co_freevars, closure, strict=True)
+        if name in frame_locals
+    )
 
 
 class _DesiredFunctionFound(BaseException):  # noqa: WPS418
