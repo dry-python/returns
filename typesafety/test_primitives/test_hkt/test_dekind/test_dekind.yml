@@ -70,3 +70,29 @@
   out: |
     main:8: error: dekind must be used with Instance as the first type argument  [misc]
     main:8: note: Revealed type is "Any"
+
+
+- case: dekind_wrong_non_kind_argument
+  disable_cache: false
+  main: |
+    from returns.primitives.hkt import dekind
+
+    reveal_type(dekind(1))
+  out: |
+    main:3: note: Revealed type is "Never"
+    main:3: error: Argument 1 to "dekind" has incompatible type "int"; expected "KindN[Never, Never, Never, Never]"  [arg-type]
+
+
+- case: dekind_wrong_typevar_argument
+  disable_cache: false
+  main: |
+    from typing import TypeVar
+    from returns.primitives.hkt import dekind
+
+    T = TypeVar('T')
+
+    def some(arg: T) -> None:
+        reveal_type(dekind(arg))
+  out: |
+    main:7: note: Revealed type is "Never"
+    main:7: error: Argument 1 to "dekind" has incompatible type "T"; expected "KindN[Never, Never, Never, Never]"  [arg-type]
