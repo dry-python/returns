@@ -85,7 +85,9 @@ def dekind(ctx: FunctionContext) -> MypyType:
     So, ``dekind(KindN[T, int])`` will fail.
     """
     kind = get_proper_type(ctx.arg_types[0][0])
-    assert isinstance(kind, Instance)  # mypy requires these lines
+    if not isinstance(kind, Instance) or not kind.args:
+        # Not a `KindN` instance: mypy already reports the `arg-type` error.
+        return ctx.default_return_type
 
     kind_inst = get_proper_type(kind.args[0])
 

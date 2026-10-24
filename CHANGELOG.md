@@ -17,6 +17,9 @@ See [0Ver](https://0ver.org/).
 
 ### Bugfixes
 
+- Fixes the `mypy` plugin crashing with `INTERNAL ERROR` when `dekind`
+  is called with an argument that is not a `KindN` instance;
+  now only the regular `arg-type` error is reported
 - Relaxes `future` and `future_safe` decorator argument types from
   `Coroutine` to `Awaitable`, so plain `async def` functions wrapping
   another awaitable (instead of being coroutine functions themselves)
