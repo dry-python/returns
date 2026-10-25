@@ -111,10 +111,15 @@ def _is_function_frame(function: _FunctionType, frame: FrameType) -> bool:
     if frame.f_code is not function_code:
         return False
 
+    closure = getattr(function, '__closure__', None)
+    if not closure:
+        # Fast path: without a closure the code object is enough,
+        # so we don't touch the frame's locals at all:
+        return True
+
     # Functions created by the same decorator share the same code object,
     # so we also compare their closure variables to tell them apart:
     frame_locals = frame.f_locals
-    closure = getattr(function, '__closure__', None) or ()
     return all(
         frame_locals[name] is cell.cell_contents
         for name, cell in zip(function_code.co_freevars, closure, strict=True)
