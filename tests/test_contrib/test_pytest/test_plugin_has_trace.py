@@ -22,6 +22,63 @@ def _safe_decorated_function(*, return_failure: bool = False):
         raise ValueError('Function failed')
 
 
+def _same_decorator(function):
+    def decorator(*args, **kwargs):
+        return function(*args, **kwargs)
+
+    return decorator
+
+
+@_same_decorator
+def _first_decorated_function(container_type, container_value):
+    return container_type(container_value)
+
+
+@_same_decorator
+def _second_decorated_function(container_type, container_value):
+    return container_type(container_value)
+
+
+class _NotComparable:
+    """Object that must only be compared by identity."""
+
+    def __eq__(self, other):
+        raise AssertionError('__eq__ must not be called')
+
+    def __hash__(self):
+        raise AssertionError('__hash__ must not be called')
+
+    def __bool__(self):
+        raise AssertionError('__bool__ must not be called')
+
+
+def _not_comparable_decorator(function):
+    closure_value = _NotComparable()
+
+    def decorator(*args, **kwargs):
+        return function(closure_value, *args, **kwargs)
+
+    return decorator
+
+
+@_not_comparable_decorator
+def _first_not_comparable_function(
+    closure_value,
+    container_type,
+    container_value,
+):
+    return container_type(container_value)
+
+
+@_not_comparable_decorator
+def _second_not_comparable_function(
+    closure_value,
+    container_type,
+    container_value,
+):
+    return container_type(container_value)
+
+
 @pytest.mark.parametrize(
     'container_type',
     [  # noqa: WPS118
@@ -113,3 +170,81 @@ def test_safe_decorated_assert(container_type, returns: ReturnsAsserts):
     """Test if our plugin will catch containers from @safe-wrapped functions."""
     with returns.assert_trace(container_type, _safe_decorated_function):
         _safe_decorated_function(return_failure=container_type is Failure)
+
+
+@pytest.mark.parametrize(
+    'container_type',
+    [  # noqa: WPS118
+        Success,
+        Failure,
+        IOSuccess,
+        IOFailure,
+    ],
+)
+def test_same_decorator_assert_trace(
+    container_type,
+    returns: ReturnsAsserts,
+):
+    """Test if our plugin will catch containers from the decorated function."""
+    with returns.assert_trace(container_type, _first_decorated_function):
+        _first_decorated_function(container_type, 1)
+
+
+@pytest.mark.parametrize(
+    'container_type',
+    [  # noqa: WPS118
+        Success,
+        Failure,
+        IOSuccess,
+        IOFailure,
+    ],
+)
+def test_same_decorator_failed_assert_trace(
+    container_type,
+    returns: ReturnsAsserts,
+):
+    """Test if our plugin will ignore other functions with same decorator."""
+    with (
+        pytest.raises(pytest.fail.Exception),
+        returns.assert_trace(container_type, _first_decorated_function),
+    ):
+        _second_decorated_function(container_type, 1)
+
+
+@pytest.mark.parametrize(
+    'container_type',
+    [  # noqa: WPS118
+        Success,
+        Failure,
+        IOSuccess,
+        IOFailure,
+    ],
+)
+def test_identity_closure_assert_trace(
+    container_type,
+    returns: ReturnsAsserts,
+):
+    """Test that closure variables are compared by identity only."""
+    with returns.assert_trace(container_type, _first_not_comparable_function):
+        _first_not_comparable_function(container_type, 1)
+
+
+@pytest.mark.parametrize(
+    'container_type',
+    [  # noqa: WPS118
+        Success,
+        Failure,
+        IOSuccess,
+        IOFailure,
+    ],
+)
+def test_identity_closure_failed_assert_trace(
+    container_type,
+    returns: ReturnsAsserts,
+):
+    """Test that other closure variables are not compared by ``__eq__``."""
+    with (
+        pytest.raises(pytest.fail.Exception),
+        returns.assert_trace(container_type, _first_not_comparable_function),
+    ):
+        _second_not_comparable_function(container_type, 1)

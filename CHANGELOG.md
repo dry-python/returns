@@ -24,6 +24,9 @@ See [0Ver](https://0ver.org/).
   `Coroutine` to `Awaitable`, so plain `async def` functions wrapping
   another awaitable (instead of being coroutine functions themselves)
   type-check correctly
+- Fixes `assert_trace` from our `pytest` plugin passing when the container
+  was created by a different function that uses the same decorator,
+  see #876
 
 
 ## 0.29.0
