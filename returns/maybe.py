@@ -346,7 +346,7 @@ class _Nothing(Maybe[Any]):
         """
         return '<Nothing>'
 
-    if not TYPE_CHECKING:
+    if not TYPE_CHECKING:  # noqa: WPS604  # pragma: no branch
 
         def map(self, function):
             """Does nothing for ``Nothing``."""
