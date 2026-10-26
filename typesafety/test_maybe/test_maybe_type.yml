@@ -157,3 +157,19 @@
     from returns.maybe import Some
 
     reveal_type(Some(1).unwrap())  # N: Revealed type is "int"
+
+
+- case: some_methods
+  disable_cache: false
+  main: |
+    from returns.maybe import Some
+
+    def fallback() -> str:
+        ...
+
+    reveal_type(Some(1).map(str))  # N: Revealed type is "returns.maybe.Maybe[str]"
+    reveal_type(Some(1).apply(Some(float)))  # N: Revealed type is "returns.maybe.Maybe[float]"
+    reveal_type(Some(1).lash(lambda _: Some(2)))  # N: Revealed type is "returns.maybe.Maybe[int]"
+    reveal_type(Some(1).value_or(None))  # N: Revealed type is "int | None"
+    reveal_type(Some(1).or_else_call(fallback))  # N: Revealed type is "int | str"
+    reveal_type(Some(1).failure())  # N: Revealed type is "Never"

@@ -11,6 +11,7 @@ See [0Ver](https://0ver.org/).
 
 - Add `python3.15` support
 - Add `mypy>=1.19,<2.5` support
+- Fix overridden method of `Some` returning `Any`
 
 
 ## 0.29.1 WIP
