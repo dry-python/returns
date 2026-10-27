@@ -65,6 +65,13 @@ See [0Ver](https://0ver.org/).
 - Added `__bool__` to `Maybe`, only `Nothing` ever returns `False`
 
 
+## 0.26.0
+
+### Features
+
+- Add `returns.methods.gather` utility method
+
+
 ## 0.25.0
 
 ### Features
