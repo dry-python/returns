@@ -28,7 +28,7 @@ class Law(Immutable):
     definition: Callable
     """Function used to define this law."""
 
-    def __init__(self, function) -> None:
+    def __init__(self, function: Callable) -> None:
         """Saves function to the inner state."""
         object.__setattr__(self, 'definition', function)
 

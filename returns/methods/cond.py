@@ -1,4 +1,4 @@
-from typing import TypeVar, overload
+from typing import Final, TypeVar, overload
 
 from returns.context import NoDeps
 from returns.interfaces.failable import DiverseFailableN, SingleFailableN
@@ -79,6 +79,6 @@ def internal_cond(
     return container_type.empty
 
 
-cond = kinded(internal_cond)
+cond: Final = kinded(internal_cond)
 """Kinded version of :func:`~internal_cond`,
 use it to infer real return type."""

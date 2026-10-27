@@ -45,3 +45,14 @@
         return Trampoline(_accumulate, [1], 2)
 
     reveal_type(_accumulate([1, 2]))  # N: Revealed type is "int"
+
+
+- case: trampoline_attributes
+  disable_cache: false
+  main: |
+    from returns.trampolines import Trampoline
+
+    def test(t: Trampoline[int]) -> None:
+        reveal_type(t.func)  # N: Revealed type is "def (*Any, **Any) -> int"
+        reveal_type(t.args)  # N: Revealed type is "tuple[Any, ...]"
+        reveal_type(t.kwargs)  # N: Revealed type is "dict[str, Any]"

@@ -29,7 +29,7 @@ class BaseContainer(Immutable, ABC):
     __slots__ = ('_inner_value',)
     _inner_value: Any
 
-    def __init__(self, inner_value) -> None:
+    def __init__(self, inner_value: object) -> None:
         """
         Wraps the given value in the Container.
 

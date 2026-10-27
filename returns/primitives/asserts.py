@@ -1,8 +1,8 @@
 def assert_equal(
-    first,
-    second,
+    first: object,
+    second: object,
     *,
-    deps=None,
+    deps: object | None = None,
     backend: str = 'asyncio',
 ) -> None:
     """

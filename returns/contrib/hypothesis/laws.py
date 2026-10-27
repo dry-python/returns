@@ -177,7 +177,7 @@ def check_all_laws(
             )
 
 
-def pure_functions_factory(thing) -> st.SearchStrategy:
+def pure_functions_factory(thing: Any) -> st.SearchStrategy:
     """Factory to create pure functions."""
     like = (
         (lambda: None)

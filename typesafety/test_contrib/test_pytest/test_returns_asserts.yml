@@ -1,0 +1,7 @@
+- case: is_error_handled_non_container
+  disable_cache: false
+  main: |
+    from returns.contrib.pytest import ReturnsAsserts
+
+    def test(returns: ReturnsAsserts) -> None:
+        returns.is_error_handled(1)  # E: Argument 1 to "is_error_handled" of "ReturnsAsserts" has incompatible type "int"; expected "ResultLikeN[Any, Any, Any]"  [arg-type]

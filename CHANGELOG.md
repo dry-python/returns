@@ -7,6 +7,10 @@ See [0Ver](https://0ver.org/).
 
 ## 0.31.0 WIP
 
+### Features
+
+- Adds missing type annotations
+
 ### Bugfixes
 
 - Fix `{Success, Failure}.swap` returning `Any`
