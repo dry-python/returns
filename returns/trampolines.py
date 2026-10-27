@@ -1,6 +1,6 @@
 from collections.abc import Callable
 from functools import wraps
-from typing import Generic, TypeVar, final
+from typing import Any, Generic, TypeVar, final
 
 from typing_extensions import ParamSpec
 
@@ -17,6 +17,10 @@ class Trampoline(Generic[_ReturnType]):
     """
 
     __slots__ = ('args', 'func', 'kwargs')
+
+    func: Callable[..., _ReturnType]
+    args: tuple[Any, ...]
+    kwargs: dict[str, Any]
 
     def __init__(  # noqa: WPS451
         self,

@@ -42,10 +42,10 @@ class ReturnsAsserts:
 
     @staticmethod  # noqa: WPS602
     def assert_equal(  # noqa: WPS602
-        first,
-        second,
+        first: object,
+        second: object,
         *,
-        deps=None,
+        deps: object | None = None,
         backend: str = 'asyncio',
     ) -> None:
         """Can compare two containers even with extra calling and awaiting."""
@@ -53,7 +53,7 @@ class ReturnsAsserts:
 
         assert_equal(first, second, deps=deps, backend=backend)
 
-    def is_error_handled(self, container) -> bool:
+    def is_error_handled(self, container: 'ResultLikeN[Any, Any, Any]') -> bool:
         """Ensures that container has its error handled in the end."""
         return id(container) in self._errors_handled
 
@@ -131,7 +131,7 @@ class _DesiredFunctionFound(BaseException):  # noqa: WPS418
     """Exception to raise when expected function is found."""
 
 
-def pytest_configure(config) -> None:
+def pytest_configure(config: pytest.Config) -> None:
     """
     Hook to be executed on import.
 

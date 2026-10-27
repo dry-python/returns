@@ -83,3 +83,11 @@
   out: |
     main:16: note: Revealed type is "main.MyOwn[str, float]"
     main:16: error: Only concrete class can be given where "type[MyOwn[Any, Any]]" is expected  [type-abstract]
+
+
+- case: cond_final
+  disable_cache: false
+  main: |
+    from returns.methods import cond
+
+    cond = cond  # E: Cannot assign to final name "cond"  [misc]
