@@ -65,6 +65,13 @@ See [0Ver](https://0ver.org/).
 - Added `__bool__` to `Maybe`, only `Nothing` ever returns `False`
 
 
+## 0.25.1
+
+### Bugfixes
+
+- Adds lock to `ReAwaitable` to safely handle multiple concurrent awaits on the same instance
+
+
 ## 0.25.0
 
 ### Features
