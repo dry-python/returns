@@ -25,6 +25,10 @@ type-check: ## Run type checking (mypy)
 	$(POETRY) run mypy --enable-error-code=unused-awaitable returns
 	$(POETRY) run mypy docs tests
 
+.PHONY: type-coverage
+type-coverage: ## Check public API type coverage (pyrefly)
+	$(POETRY) run pyrefly coverage check --public-only returns
+
 .PHONY: unit
 unit: ## Run unit tests with pytest
 	$(POETRY) run pytest returns docs/pages tests
@@ -43,4 +47,4 @@ package: ## Check package dependencies with pip
 	$(POETRY) run pip check
 
 .PHONY: test
-test: lint type-check unit slots package ## Run all checks (lint, type-check, unit, slots, package)
+test: lint type-check type-coverage unit slots package ## Run all checks (lint, type-check, type-coverage, unit, slots, package)

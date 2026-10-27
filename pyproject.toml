@@ -74,6 +74,7 @@ pytest-subtests = "^0.15"
 pytest-shard = "^0.1"
 pytest-codspeed = "^5.0"
 covdefaults = "^2.3"
+pyrefly = "^1.4"
 
 [tool.poetry.group.docs]
 optional = true

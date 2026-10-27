@@ -50,6 +50,7 @@ jobs:
       run: |
         make lint
         make type-check
+        make type-coverage
 
         # Different python versions are covered differently:
         make unit

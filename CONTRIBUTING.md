@@ -54,11 +54,12 @@ Main targets:
 - `make format` — format and autofix code with `ruff`
 - `make lint` — run all linting checks (`ruff` and `flake8`)
 - `make type-check` — run `mypy` type checks
+- `make type-coverage` — check public API type coverage with `pyrefly`
 - `make unit` — run standard tests with `pytest`
 - `make typesafety` — run type-safety tests (`pytest-mypy-plugins`)
 - `make slots` — check `__slots__` correctness with `slotscheck`
 - `make package` — check package dependencies with `pip check`
-- `make test` — run all checks: lint, type-check, unit tests, slots, and package
+- `make test` — run all checks: lint, type-check, type-coverage, unit tests, slots, and package
 
 
 ## Tests
@@ -157,6 +158,13 @@ make type-check
 ```
 
 This step is mandatory during CI.
+
+We also require the public API to be fully annotated.
+We use `pyrefly` to check that its type coverage stays at 100%:
+
+```bash
+make type-coverage
+```
 
 
 ## Submitting your code
