@@ -1,13 +1,13 @@
 from abc import abstractmethod
 from typing import Generic, TypeVar
 
-_FirstType = TypeVar('_FirstType')
-_SecondType = TypeVar('_SecondType')
+_FirstType_co = TypeVar('_FirstType_co', covariant=True)
+_SecondType_co = TypeVar('_SecondType_co', covariant=True)
 
 _UnwrappableType = TypeVar('_UnwrappableType', bound='Unwrappable')
 
 
-class Unwrappable(Generic[_FirstType, _SecondType]):
+class Unwrappable(Generic[_FirstType_co, _SecondType_co]):
     """
     Represents containers that can unwrap and return its wrapped value.
 
@@ -21,7 +21,7 @@ class Unwrappable(Generic[_FirstType, _SecondType]):
     __slots__ = ()
 
     @abstractmethod
-    def unwrap(self: _UnwrappableType) -> _FirstType:
+    def unwrap(self: _UnwrappableType) -> _FirstType_co:
         """
         Custom magic method to unwrap inner value from container.
 
@@ -37,7 +37,7 @@ class Unwrappable(Generic[_FirstType, _SecondType]):
         """
 
     @abstractmethod
-    def failure(self: _UnwrappableType) -> _SecondType:
+    def failure(self: _UnwrappableType) -> _SecondType_co:
         """
         Custom magic method to unwrap inner value from the failed container.
 

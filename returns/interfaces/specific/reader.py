@@ -49,13 +49,15 @@ _ThirdType = TypeVar('_ThirdType')
 _UpdatedType = TypeVar('_UpdatedType')
 
 _ValueType = TypeVar('_ValueType')
+_ValueType_co = TypeVar('_ValueType_co', covariant=True)
 _EnvType = TypeVar('_EnvType')
+_EnvType_contra = TypeVar('_EnvType_contra', contravariant=True)
 
 _ReaderLike2Type = TypeVar('_ReaderLike2Type', bound='ReaderLike2')
 _ReaderLike3Type = TypeVar('_ReaderLike3Type', bound='ReaderLike3')
 
 
-class Contextable(Generic[_ValueType, _EnvType]):
+class Contextable(Generic[_ValueType_co, _EnvType_contra]):
     """
     Special type we use as a base one for all callble ``Reader`` instances.
 
@@ -75,7 +77,7 @@ class Contextable(Generic[_ValueType, _EnvType]):
     __slots__ = ()
 
     @abstractmethod
-    def __call__(self, deps: _EnvType) -> _ValueType:
+    def __call__(self, deps: _EnvType_contra) -> _ValueType_co:
         """Receives one parameter, returns a value. As simple as that."""
 
 
@@ -128,7 +130,7 @@ class ReaderLike2(Container2[_FirstType, _SecondType]):
 
 class CallableReader2(
     ReaderLike2[_FirstType, _SecondType],
-    Contextable[_ValueType, _EnvType],
+    Contextable[_ValueType_co, _EnvType_contra],
 ):
     """
     Intermediate interface for ``ReaderLike2`` + ``__call__`` method.
@@ -193,7 +195,7 @@ class ReaderLike3(Container3[_FirstType, _SecondType, _ThirdType]):
 
 class CallableReader3(
     ReaderLike3[_FirstType, _SecondType, _ThirdType],
-    Contextable[_ValueType, _EnvType],
+    Contextable[_ValueType_co, _EnvType_contra],
 ):
     """
     Intermediate interface for ``ReaderLike3`` + ``__call__`` method.

@@ -1,0 +1,58 @@
+- case: law1_correct_cast
+  disable_cache: false
+  main: |
+    from returns.primitives.laws import Law1
+
+    first: Law1[int, bool]
+    second: Law1[bool, int] = first
+
+
+- case: law1_wrong_cast
+  disable_cache: false
+  main: |
+    from returns.primitives.laws import Law1
+
+    first: Law1[bool, int]
+    second: Law1[int, bool] = first
+  out: |
+    main:4: error: Incompatible types in assignment (expression has type "Law1[bool, int]", variable has type "Law1[int, bool]")  [assignment]
+
+
+- case: law2_correct_cast
+  disable_cache: false
+  main: |
+    from returns.primitives.laws import Law2
+
+    first: Law2[int, int, bool]
+    second: Law2[bool, bool, int] = first
+
+
+- case: law2_wrong_cast
+  disable_cache: false
+  main: |
+    from returns.primitives.laws import Law2
+
+    first: Law2[bool, bool, int]
+    second: Law2[int, int, bool] = first
+  out: |
+    main:4: error: Incompatible types in assignment (expression has type "Law2[bool, bool, int]", variable has type "Law2[int, int, bool]")  [assignment]
+
+
+- case: law3_correct_cast
+  disable_cache: false
+  main: |
+    from returns.primitives.laws import Law3
+
+    first: Law3[int, int, int, bool]
+    second: Law3[bool, bool, bool, int] = first
+
+
+- case: law3_wrong_cast
+  disable_cache: false
+  main: |
+    from returns.primitives.laws import Law3
+
+    first: Law3[bool, bool, bool, int]
+    second: Law3[int, int, int, bool] = first
+  out: |
+    main:4: error: Incompatible types in assignment (expression has type "Law3[bool, bool, bool, int]", variable has type "Law3[int, int, int, bool]")  [assignment]

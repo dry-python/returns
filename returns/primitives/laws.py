@@ -4,10 +4,10 @@ from typing import Any, ClassVar, Final, Generic, TypeVar, final
 from returns.primitives.types import Immutable
 
 _Caps = TypeVar('_Caps')
-_ReturnType = TypeVar('_ReturnType')
-_TypeArgType1 = TypeVar('_TypeArgType1')
-_TypeArgType2 = TypeVar('_TypeArgType2')
-_TypeArgType3 = TypeVar('_TypeArgType3')
+_ReturnType_co = TypeVar('_ReturnType_co', covariant=True)
+_TypeArgType1_contra = TypeVar('_TypeArgType1_contra', contravariant=True)
+_TypeArgType2_contra = TypeVar('_TypeArgType2_contra', contravariant=True)
+_TypeArgType3_contra = TypeVar('_TypeArgType3_contra', contravariant=True)
 
 law_definition = staticmethod
 """Special alias to define laws as functions even inside a class."""
@@ -42,17 +42,17 @@ class Law(Immutable):
 @final
 class Law1(
     Law,
-    Generic[_TypeArgType1, _ReturnType],
+    Generic[_TypeArgType1_contra, _ReturnType_co],
 ):
     """Law definition for functions with a single argument."""
 
     __slots__ = ()
 
-    definition: Callable[['Law1', _TypeArgType1], _ReturnType]
+    definition: Callable[['Law1', _TypeArgType1_contra], _ReturnType_co]
 
     def __init__(
         self,
-        function: Callable[[_TypeArgType1], _ReturnType],
+        function: Callable[[_TypeArgType1_contra], _ReturnType_co],
     ) -> None:
         """Saves function of one argument to the inner state."""
         super().__init__(function)
@@ -61,17 +61,23 @@ class Law1(
 @final
 class Law2(
     Law,
-    Generic[_TypeArgType1, _TypeArgType2, _ReturnType],
+    Generic[_TypeArgType1_contra, _TypeArgType2_contra, _ReturnType_co],
 ):
     """Law definition for functions with two arguments."""
 
     __slots__ = ()
 
-    definition: Callable[['Law2', _TypeArgType1, _TypeArgType2], _ReturnType]
+    definition: Callable[
+        ['Law2', _TypeArgType1_contra, _TypeArgType2_contra],
+        _ReturnType_co,
+    ]
 
     def __init__(
         self,
-        function: Callable[[_TypeArgType1, _TypeArgType2], _ReturnType],
+        function: Callable[
+            [_TypeArgType1_contra, _TypeArgType2_contra],
+            _ReturnType_co,
+        ],
     ) -> None:
         """Saves function of two arguments to the inner state."""
         super().__init__(function)
@@ -80,22 +86,32 @@ class Law2(
 @final
 class Law3(
     Law,
-    Generic[_TypeArgType1, _TypeArgType2, _TypeArgType3, _ReturnType],
+    Generic[
+        _TypeArgType1_contra,
+        _TypeArgType2_contra,
+        _TypeArgType3_contra,
+        _ReturnType_co,
+    ],
 ):
     """Law definition for functions with three argument."""
 
     __slots__ = ()
 
     definition: Callable[
-        ['Law3', _TypeArgType1, _TypeArgType2, _TypeArgType3],
-        _ReturnType,
+        [
+            'Law3',
+            _TypeArgType1_contra,
+            _TypeArgType2_contra,
+            _TypeArgType3_contra,
+        ],
+        _ReturnType_co,
     ]
 
     def __init__(
         self,
         function: Callable[
-            [_TypeArgType1, _TypeArgType2, _TypeArgType3],
-            _ReturnType,
+            [_TypeArgType1_contra, _TypeArgType2_contra, _TypeArgType3_contra],
+            _ReturnType_co,
         ],
     ) -> None:
         """Saves function of three arguments to the inner state."""

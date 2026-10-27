@@ -5,11 +5,12 @@ from typing import Any, Generic, TypeVar, final
 from typing_extensions import ParamSpec
 
 _ReturnType = TypeVar('_ReturnType')
+_ReturnType_co = TypeVar('_ReturnType_co', covariant=True)
 _FuncParams = ParamSpec('_FuncParams')
 
 
 @final
-class Trampoline(Generic[_ReturnType]):
+class Trampoline(Generic[_ReturnType_co]):
     """
     Represents a wrapped function call.
 
@@ -18,13 +19,13 @@ class Trampoline(Generic[_ReturnType]):
 
     __slots__ = ('args', 'func', 'kwargs')
 
-    func: Callable[..., _ReturnType]
+    func: Callable[..., _ReturnType_co]
     args: tuple[Any, ...]
     kwargs: dict[str, Any]
 
     def __init__(  # noqa: WPS451
         self,
-        func: Callable[_FuncParams, _ReturnType],
+        func: Callable[_FuncParams, _ReturnType_co],
         /,  # We use pos-only here to be able to store `kwargs` correctly.
         *args: _FuncParams.args,
         **kwargs: _FuncParams.kwargs,
@@ -34,7 +35,7 @@ class Trampoline(Generic[_ReturnType]):
         self.args = args
         self.kwargs = kwargs
 
-    def __call__(self) -> _ReturnType:
+    def __call__(self) -> _ReturnType_co:
         """Call wrapped function with given arguments."""
         return self.func(*self.args, **self.kwargs)
 

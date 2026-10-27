@@ -1,0 +1,7 @@
+- case: contextable_correct_cast
+  disable_cache: false
+  main: |
+    from returns.interfaces.specific.reader import Contextable
+
+    first: Contextable[bool, object]
+    second: Contextable[int, str] = first
