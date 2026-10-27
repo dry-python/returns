@@ -65,3 +65,11 @@
     from returns.result import Success
 
     reveal_type(Success(1).unwrap())  # N: Revealed type is "int"
+
+
+- case: success_swap
+  disable_cache: false
+  main: |
+    from returns.result import Success
+
+    reveal_type(Success(1).swap())  # N: Revealed type is "returns.result.Result[Any, int]"
