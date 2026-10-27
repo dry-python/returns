@@ -346,41 +346,43 @@ class _Nothing(Maybe[Any]):
         """
         return '<Nothing>'
 
-    def map(self, function):
-        """Does nothing for ``Nothing``."""
-        return self
+    if not TYPE_CHECKING:  # noqa: WPS604  # pragma: no branch
 
-    def apply(self, container):
-        """Does nothing for ``Nothing``."""
-        return self
+        def map(self, function):
+            """Does nothing for ``Nothing``."""
+            return self
 
-    def bind(self, function):
-        """Does nothing for ``Nothing``."""
-        return self
+        def apply(self, container):
+            """Does nothing for ``Nothing``."""
+            return self
 
-    def bind_optional(self, function):
-        """Does nothing."""
-        return self
+        def bind(self, function):
+            """Does nothing for ``Nothing``."""
+            return self
 
-    def lash(self, function):
-        """Composes this container with a function returning container."""
-        return function(None)
+        def bind_optional(self, function):
+            """Does nothing."""
+            return self
 
-    def value_or(self, default_value):
-        """Returns default value."""
-        return default_value
+        def lash(self, function):
+            """Composes this container with a function returning container."""
+            return function(None)
 
-    def or_else_call(self, function):
-        """Returns the result of a passed function."""
-        return function()
+        def value_or(self, default_value):
+            """Returns default value."""
+            return default_value
 
-    def unwrap(self):
-        """Raises an exception, since it does not have a value inside."""
-        raise UnwrapFailedError(self)
+        def or_else_call(self, function):
+            """Returns the result of a passed function."""
+            return function()
 
-    def failure(self) -> None:
-        """Returns failed value."""
-        return self._inner_value
+        def unwrap(self):
+            """Raises an exception, since it does not have a value inside."""
+            raise UnwrapFailedError(self)
+
+        def failure(self) -> None:
+            """Returns failed value."""
+            return self._inner_value
 
     def __bool__(self):
         """Returns ``False``."""
@@ -417,29 +419,29 @@ class Some(Maybe[_ValueType_co]):
             """Returns inner value for successful container."""
             return self._inner_value
 
-    def map(self, function):
-        """Composes current container with a pure function."""
-        return Some(function(self._inner_value))
+        def map(self, function):
+            """Composes current container with a pure function."""
+            return Some(function(self._inner_value))
 
-    def apply(self, container):
-        """Calls a wrapped function in a container on this container."""
-        if isinstance(container, Some):
-            return self.map(container.unwrap())  # type: ignore
-        return container
+        def apply(self, container):
+            """Calls a wrapped function in a container on this container."""
+            if isinstance(container, Some):
+                return self.map(container.unwrap())  # type: ignore
+            return container
 
-    def lash(self, function):
-        """Does nothing for ``Some``."""
-        return self
+        def lash(self, function):
+            """Does nothing for ``Some``."""
+            return self
 
-    def value_or(self, default_value):
-        """Returns inner value for successful container."""
-        return self._inner_value
+        def value_or(self, default_value):
+            """Returns inner value for successful container."""
+            return self._inner_value
 
-    def or_else_call(self, function):
-        """Returns inner value for successful container."""
-        return self._inner_value
+        def or_else_call(self, function):
+            """Returns inner value for successful container."""
+            return self._inner_value
 
-    def failure(self):
+    def failure(self) -> Never:
         """Raises exception for successful container."""
         raise UnwrapFailedError(self)
 
