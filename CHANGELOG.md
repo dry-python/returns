@@ -5,16 +5,12 @@ Versions before `1.0.0` are `0Ver`-based:
 incremental in minor, bugfixes only are patches.
 See [0Ver](https://0ver.org/).
 
-## 0.30.0 WIP
+## 0.30.0
 
 ### Features
 
-- Add `python3.15` support
-- Add `mypy>=1.19,<2.5` support
-- Fix overridden method of `Some` returning `Any`
-
-
-## 0.29.1 WIP
+- Adds `python3.15` support
+- Adds `mypy>=1.19,<2.5` support
 
 ### Bugfixes
 
@@ -28,6 +24,7 @@ See [0Ver](https://0ver.org/).
 - Fixes `assert_trace` from our `pytest` plugin passing when the container
   was created by a different function that uses the same decorator,
   see #876
+- Fixes overridden method of `Some` returning `Any`
 
 
 ## 0.29.0

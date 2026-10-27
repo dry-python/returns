@@ -4,7 +4,7 @@ requires = ["poetry-core>=2"]
 
 [tool.poetry]
 name = "returns"
-version = "0.29.0"
+version = "0.30.0"
 description = "Make your functions return something meaningful, typed, and safe!"
 license = "BSD-3-Clause"
 
@@ -61,14 +61,14 @@ check-laws = ["pytest", "hypothesis"]
 
 [tool.poetry.group.dev.dependencies]
 anyio = "^4.3"
-trio = ">=0.33,<0.35"
+trio = "^0.34"
 attrs = "^26.1"
 httpx = "^0.28"
 wemake-python-styleguide = "^1.7"
-slotscheck = ">=0.20,<0.22"
-ruff = ">=0.16,<0.18"
+slotscheck = "^0.21"
+ruff = "^0.17"
 pytest-cov = "^7.1"
-pytest-randomly = ">=4.1,<6.0"
+pytest-randomly = "^5.0"
 pytest-mypy-plugins = "^4.0"
 pytest-subtests = "^0.15"
 pytest-shard = "^0.1"
