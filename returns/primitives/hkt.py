@@ -214,7 +214,7 @@ class Kinded(Protocol[_FunctionDefType_co]):  # type: ignore
     def __get__(
         self,
         instance: _UpdatedType,
-        type_: type | None,
+        type_: type[Any] | None,
     ) -> Callable[..., _UpdatedType]:
         """Used to decorate and properly analyze method calls."""
 

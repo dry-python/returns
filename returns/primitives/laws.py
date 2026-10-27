@@ -1,5 +1,5 @@
 from collections.abc import Callable, Sequence
-from typing import ClassVar, Final, Generic, TypeVar, final
+from typing import Any, ClassVar, Final, Generic, TypeVar, final
 
 from returns.primitives.types import Immutable
 
@@ -25,10 +25,10 @@ class Law(Immutable):
 
     __slots__ = ('definition',)
 
-    definition: Callable
+    definition: Callable[..., Any]
     """Function used to define this law."""
 
-    def __init__(self, function: Callable) -> None:
+    def __init__(self, function: Callable[..., Any]) -> None:
         """Saves function to the inner state."""
         object.__setattr__(self, 'definition', function)
 
