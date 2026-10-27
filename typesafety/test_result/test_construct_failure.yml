@@ -24,3 +24,11 @@
     from returns.result import Failure
 
     reveal_type(Failure(1).failure())  # N: Revealed type is "int"
+
+
+- case: failure_swap
+  disable_cache: false
+  main: |
+    from returns.result import Failure
+
+    reveal_type(Failure(1).swap())  # N: Revealed type is "returns.result.Result[int, Any]"

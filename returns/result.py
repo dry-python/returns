@@ -389,9 +389,9 @@ class Failure(Result[Any, _ErrorType_co]):  # noqa: WPS338
             """Returns default value for failed container."""
             return default_value
 
-    def swap(self):
-        """Failures swap to :class:`Success`."""
-        return Success(self._inner_value)
+        def swap(self):
+            """Failures swap to :class:`Success`."""
+            return Success(self._inner_value)
 
     def unwrap(self) -> Never:
         """Raises an exception, since it does not have a value inside."""
@@ -454,9 +454,9 @@ class Success(Result[_ValueType_co, Any]):
             """Returns the value for successful container."""
             return self._inner_value
 
-    def swap(self):
-        """Successes swap to :class:`Failure`."""
-        return Failure(self._inner_value)
+        def swap(self):
+            """Successes swap to :class:`Failure`."""
+            return Failure(self._inner_value)
 
     def unwrap(self) -> _ValueType_co:
         """Returns the unwrapped value from successful container."""
