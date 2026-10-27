@@ -1,0 +1,7 @@
+- case: unwrappable_correct_cast
+  disable_cache: false
+  main: |
+    from returns.interfaces.unwrappable import Unwrappable
+
+    first: Unwrappable[bool, ValueError]
+    second: Unwrappable[int, Exception] = first

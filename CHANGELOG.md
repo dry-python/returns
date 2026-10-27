@@ -14,6 +14,8 @@ See [0Ver](https://0ver.org/).
 ### Bugfixes
 
 - Fix `{Success, Failure}.swap` returning `Any`
+- Fix type parameter variance of `Law{1,2,3}`, `Unwrappable`, `Contextable`,
+  and `Trampoline`
 
 ## 0.30.0
 

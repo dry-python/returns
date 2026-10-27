@@ -56,3 +56,12 @@
         reveal_type(t.func)  # N: Revealed type is "def (*Any, **Any) -> int"
         reveal_type(t.args)  # N: Revealed type is "tuple[Any, ...]"
         reveal_type(t.kwargs)  # N: Revealed type is "dict[str, Any]"
+
+
+- case: trampoline_correct_cast
+  disable_cache: false
+  main: |
+    from returns.trampolines import Trampoline
+
+    first: Trampoline[bool]
+    second: Trampoline[int] = first

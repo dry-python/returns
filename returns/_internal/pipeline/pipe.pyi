@@ -1,7 +1,9 @@
 from typing import Generic, TypeVar
 
 _InstanceType = TypeVar('_InstanceType')
+_InstanceType_contra = TypeVar('_InstanceType_contra', contravariant=True)
 _ReturnType = TypeVar('_ReturnType')
+_ReturnType_co = TypeVar('_ReturnType_co', covariant=True)
 
 _PipelineStepType1 = TypeVar('_PipelineStepType1')
 _PipelineStepType2 = TypeVar('_PipelineStepType2')
@@ -26,8 +28,8 @@ _PipelineStepType20 = TypeVar('_PipelineStepType20')
 
 class _Pipe(
     Generic[
-        _InstanceType,
-        _ReturnType,
+        _InstanceType_contra,
+        _ReturnType_co,
         _PipelineStepType1,
         _PipelineStepType2,
         _PipelineStepType3,
@@ -76,7 +78,7 @@ class _Pipe(
         ],
         /,
     ) -> None: ...
-    def __call__(self, instance: _InstanceType) -> _ReturnType: ...
+    def __call__(self, instance: _InstanceType_contra) -> _ReturnType_co: ...
 
 def pipe(  # noqa: WPS451
     function1: _PipelineStepType1,
