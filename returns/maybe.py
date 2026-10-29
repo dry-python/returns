@@ -346,6 +346,26 @@ class _Nothing(Maybe[Any]):
         """
         return '<Nothing>'
 
+    def __replace__(self, **changes: Any) -> '_Nothing':
+        """
+        Implements Python 3.13 ``copy.replace`` protocol for Nothing.
+
+        ``Nothing`` has no inner value, so replacing its value with
+        anything other than ``None`` raises a TypeError.
+        """
+        if '_inner_value' in changes and changes['_inner_value'] is not None:
+            raise TypeError('Cannot replace _inner_value on Nothing with a non-None value')
+        if 'inner_value' in changes and changes['inner_value'] is not None:
+            raise TypeError('Cannot replace inner_value on Nothing with a non-None value')
+        changes.pop('_inner_value', None)
+        changes.pop('inner_value', None)
+        if changes:
+            unexpected = next(iter(changes))
+            raise TypeError(
+                f'_Nothing.__replace__() got an unexpected keyword argument {unexpected!r}',
+            )
+        return self
+
     if not TYPE_CHECKING:  # noqa: WPS604  # pragma: no branch
 
         def map(self, function):

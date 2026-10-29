@@ -8,6 +8,7 @@ from returns.primitives.hkt import Kind1
 from returns.primitives.types import Immutable
 
 _EqualType = TypeVar('_EqualType', bound=Equable)
+_ContainerType = TypeVar('_ContainerType', bound='BaseContainer')
 
 
 class _PickleState(TypedDict):
@@ -67,6 +68,27 @@ class BaseContainer(Immutable, ABC):
         else:
             # backward compatibility with 0.19.0 and earlier
             object.__setattr__(self, '_inner_value', state)
+
+    def __replace__(self: _ContainerType, **changes: Any) -> _ContainerType:
+        """
+        Implements Python 3.13 ``copy.replace`` protocol.
+
+        Allows creating a new container of the same type with replaced fields.
+        """
+        if '_inner_value' in changes and 'inner_value' in changes:
+            raise TypeError(
+                f'{self.__class__.__name__}.__replace__() got multiple values for inner value',
+            )
+        inner_value = changes.pop(
+            '_inner_value',
+            changes.pop('inner_value', self._inner_value),
+        )
+        if changes:
+            unexpected = next(iter(changes))
+            raise TypeError(
+                f'{self.__class__.__name__}.__replace__() got an unexpected keyword argument {unexpected!r}',
+            )
+        return self.__class__(inner_value)
 
 
 def container_equality(
