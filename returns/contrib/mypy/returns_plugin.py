@@ -26,6 +26,7 @@ from mypy.types import Type as MypyType
 
 from returns.contrib.mypy import _consts
 from returns.contrib.mypy._features import (
+    alias_e,
     curry,
     do_notation,
     flow,
@@ -75,6 +76,7 @@ class _ReturnsPlugin(Plugin):
         _consts.TYPED_KIND_KINDED_CALL: kind.kinded_call,
         _consts.TYPED_KIND_KINDED_GET: kind.kinded_get_descriptor,
         **dict.fromkeys(_consts.DO_NOTATION_METHODS, do_notation.analyze),
+        **dict.fromkeys(_consts.E_ALIAS_METHODS, alias_e.analyze),
     }
 
     def get_function_hook(

@@ -133,3 +133,12 @@
 
     result: IOResultE[int] = function(1)
     reveal_type(result)  # N: Revealed type is "returns.io.IOResult[int, Exception]"
+
+
+- case: ioresulte_unit_methods
+  disable_cache: false
+  main: |
+    from returns.io import IOResultE
+
+    reveal_type(IOResultE.from_value(1))  # N: Revealed type is "returns.io.IOResult[int, Exception]"
+    reveal_type(IOResultE.from_failure(ValueError('boom')))  # N: Revealed type is "returns.io.IOResult[Any, ValueError]"
