@@ -354,15 +354,20 @@ class _Nothing(Maybe[Any]):
         anything other than ``None`` raises a TypeError.
         """
         if '_inner_value' in changes and changes['_inner_value'] is not None:
-            raise TypeError('Cannot replace _inner_value on Nothing with a non-None value')
+            raise TypeError(
+                'Cannot replace _inner_value on Nothing with a non-None value',
+            )
         if 'inner_value' in changes and changes['inner_value'] is not None:
-            raise TypeError('Cannot replace inner_value on Nothing with a non-None value')
+            raise TypeError(
+                'Cannot replace inner_value on Nothing with a non-None value',
+            )
         changes.pop('_inner_value', None)
         changes.pop('inner_value', None)
         if changes:
             unexpected = next(iter(changes))
             raise TypeError(
-                f'_Nothing.__replace__() got an unexpected keyword argument {unexpected!r}',
+                f'_Nothing.__replace__() got an unexpected keyword '
+                f'argument {unexpected!r}',
             )
         return self
 
