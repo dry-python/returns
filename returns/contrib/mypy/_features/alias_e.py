@@ -52,7 +52,9 @@ def analyze(ctx: MethodContext) -> MypyType:
 
     new_args = list(default_ret.args)
     changed = False
-    for index, (bound_arg, ret_arg) in enumerate(zip(bound_type.args, new_args)):
+    for index, (bound_arg, ret_arg) in enumerate(
+        zip(bound_type.args, new_args)
+    ):
         proper_bound_arg = get_proper_type(bound_arg)
         proper_ret_arg = get_proper_type(ret_arg)
         if (
