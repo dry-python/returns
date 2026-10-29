@@ -16,6 +16,8 @@ We only solve problems of the current typing implementation.
 Related issue: https://github.com/dry-python/returns/issues/407
 """
 
+from collections.abc import Sequence
+
 from mypy.plugin import MethodContext
 from mypy.types import (
     AnyType,
@@ -50,10 +52,21 @@ def analyze(ctx: MethodContext) -> MypyType:
         # Different containers, nothing to fix.
         return ctx.default_return_type
 
-    new_args = list(default_ret.args)
+    new_args, changed = _rewrite_args(bound_type.args, list(default_ret.args))
+    if not changed:
+        return ctx.default_return_type
+    return Instance(default_ret.type, new_args, default_ret.line)
+
+
+def _rewrite_args(
+    bound_args: Sequence[MypyType],
+    default_args: list[MypyType],
+) -> tuple[list[MypyType], bool]:
+    """Replaces uninferable Any types with Exception when fixed by alias."""
+    new_args = list(default_args)
     changed = False
     for index, (bound_arg, ret_arg) in enumerate(
-        zip(bound_type.args, new_args)
+        zip(bound_args, new_args, strict=True),
     ):
         proper_bound_arg = get_proper_type(bound_arg)
         proper_ret_arg = get_proper_type(ret_arg)
@@ -62,11 +75,6 @@ def analyze(ctx: MethodContext) -> MypyType:
             and proper_bound_arg.type.fullname == _EXCEPTION_FULLNAME
             and isinstance(proper_ret_arg, AnyType)
         ):
-            # The alias fixes this position to `Exception`,
-            # but the constructor could not infer it and used `Any`.
             new_args[index] = proper_bound_arg
             changed = True
-
-    if not changed:
-        return ctx.default_return_type
-    return Instance(default_ret.type, new_args, default_ret.line)
+    return new_args, changed
