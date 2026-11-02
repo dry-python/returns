@@ -8,7 +8,7 @@ We only solve problems of the current typing implementation.
 https://mypy.readthedocs.io/en/latest/extending_mypy.html
 
 We use ``pytest-mypy-plugins`` to test that it works correctly, see:
-https://github.com/mkurnikov/pytest-mypy-plugins
+https://github.com/TypedDjango/pytest-mypy-plugins
 """
 
 from collections.abc import Callable, Mapping
