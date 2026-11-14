@@ -32,7 +32,7 @@ repos:
         files: ^docs/
 
   - repo: https://github.com/crate-ci/typos
-    rev: 2cd238ce4ad020f6751c1a9ed42de2b7f9fdbcb1  # frozen: typos-dict-v0.14.5
+    rev: 6b8d5532f97e7efe2bf6907daac17b3c9f8926ba  # frozen: v1.52.2
     hooks:
       - id: typos
   - repo: https://github.com/codespell-project/codespell
