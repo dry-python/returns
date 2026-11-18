@@ -1309,18 +1309,18 @@ files = [
 
 [[package]]
 name = "mdit-py-plugins"
-version = "0.6.1"
+version = "0.7.0"
 description = "Collection of plugins for markdown-it-py"
 optional = false
 python-versions = ">=3.10"
 groups = ["docs"]
 files = [
-    {file = "mdit_py_plugins-0.6.1-py3-none-any.whl", hash = "sha256:214c82fb2ac524472ab6a5bcab1de80f73b50443e187f401bfd77efbc7c6481d"},
-    {file = "mdit_py_plugins-0.6.1.tar.gz", hash = "sha256:a2bca0f039f39dbd35fb74ae1b5f998608c437463371f0ff7f49a19a17a114d0"},
+    {file = "mdit_py_plugins-0.7.0-py3-none-any.whl", hash = "sha256:7f8e30403f3dd8bfe3afcdcbc6e61066d3f2e714167507b9c26eb385ec399353"},
+    {file = "mdit_py_plugins-0.7.0.tar.gz", hash = "sha256:26d2179227aaf4d1dc7acffe7a738cbd15cade6b5a61cff0a2cbf9fed93efede"},
 ]
 
 [package.dependencies]
-markdown-it-py = ">=2.0.0,<5.0.0"
+markdown-it-py = ">=3.0.0,<5.0.0"
 
 [package.extras]
 code-style = ["pre-commit"]
@@ -1434,29 +1434,29 @@ markers = {main = "extra == \"compatible-mypy\""}
 
 [[package]]
 name = "myst-parser"
-version = "5.1.0"
+version = "5.2.0"
 description = "An extended [CommonMark](https://spec.commonmark.org/) compliant parser,"
 optional = false
 python-versions = ">=3.11"
 groups = ["docs"]
 files = [
-    {file = "myst_parser-5.1.0-py3-none-any.whl", hash = "sha256:9c91c52b3cdb4d94a6506e4fab4e2f296c7623a0da0dcbe6de1565c3dad67a8a"},
-    {file = "myst_parser-5.1.0.tar.gz", hash = "sha256:ab69322dc6719dcc7f296479dbb70181b66df6ed315064f92dbc85c0e1bf2f02"},
+    {file = "myst_parser-5.2.0-py3-none-any.whl", hash = "sha256:517c91da81e6898c6aaa223c236f384e6f5cc5d14ab7df38b11164862c1b6e1a"},
+    {file = "myst_parser-5.2.0.tar.gz", hash = "sha256:749cc02793f2be6b984b0b59b1fe33b6ed61d77644499b85db436d0d20117fa4"},
 ]
 
 [package.dependencies]
-docutils = ">=0.20,<0.23"
+docutils = ">=0.20,<0.24"
 jinja2 = "*"
 markdown-it-py = ">=4.2,<5.0"
-mdit-py-plugins = ">=0.6.1,<1.0"
+mdit-py-plugins = ">=0.7,<1.0"
 pyyaml = "*"
 sphinx = ">=8,<10"
 
 [package.extras]
 code-style = ["pre-commit (>=4.0,<5.0)"]
 linkify = ["linkify-it-py (>=2.0,<3.0)"]
-rtd = ["ipython", "sphinx (>=8)", "sphinx-autodoc2 (>=0.5.0,<0.6.0)", "sphinx-book-theme (>=1.1,<2.0)", "sphinx-copybutton", "sphinx-design", "sphinx-pyscript", "sphinx-tippy (>=0.4.3)", "sphinx-togglebutton", "sphinxext-opengraph (>=0.13.0,<0.14.0)", "sphinxext-rediraffe (>=0.3.0,<0.4.0)"]
-testing = ["beautifulsoup4", "coverage[toml]", "defusedxml", "pygments (<2.21)", "pytest (>=9,<10)", "pytest-cov", "pytest-param-files (>=0.6.0,<0.7.0)", "pytest-regressions", "sphinx-pytest (>=0.3.0,<0.4.0)"]
+rtd = ["ipython", "sphinx (>=8)", "sphinx-autodoc2 (>=0.5.0,<0.6.0)", "sphinx-book-theme (>=1.1,<2.0)", "sphinx-copybutton", "sphinx-design", "sphinx-pyscript", "sphinx-syntax-example (>=0.2.0,<0.3.0)", "sphinx-tippy (>=0.4.3)", "sphinx-togglebutton", "sphinxext-opengraph (>=0.13.0,<0.14.0)", "sphinxext-rediraffe (>=0.3.0,<0.4.0)"]
+testing = ["beautifulsoup4", "coverage[toml]", "defusedxml", "pygments (<2.22)", "pytest (>=9,<10)", "pytest-cov", "pytest-param-files (>=0.6.0,<0.7.0)", "pytest-regressions", "sphinx-pytest (>=0.3.0,<0.4.0)"]
 testing-docutils = ["pygments", "pytest (>=9,<10)", "pytest-param-files (>=0.6.0,<0.7.0)"]
 
 [[package]]
