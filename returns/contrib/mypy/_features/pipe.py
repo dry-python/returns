@@ -76,6 +76,16 @@ def analyze(ctx: FunctionContext) -> MypyType:
     if not isinstance(last_step, FunctionLike):
         return default_return
 
+    # Check known step boundaries before a Callable annotation erases them.
+    # Generic input types still need the concrete-argument pass in `infer`.
+    PipelineInference(
+        AnyType(TypeOfAny.implementation_artifact),
+    ).from_callable_sequence(
+        get_proper_types(arg_types),
+        list((ARG_POS,) * len(arg_types)),
+        ctx,
+    )
+
     return default_return.copy_modified(
         args=[
             # First type argument represents first function arguments type:

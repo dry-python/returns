@@ -56,3 +56,122 @@
 
     predefined = pipe(first, second)
     reveal_type(callback(predefined))  # N: Revealed type is "str"
+
+
+- case: pipe_invalid_intermediate_callable_assignment
+  disable_cache: true
+  main: |
+    from collections.abc import Callable
+    from returns.pipeline import pipe
+
+    def load(value: str) -> str:
+        return value
+
+    def compute(value: int) -> int:
+        return value - 1
+
+    def display(value: int) -> str:
+        return str(value)
+
+    pipeline: Callable[[str], str] = pipe(load, compute, display)
+  out: |
+    main:13: error: Argument 1 to "compute" has incompatible type "str"; expected "int"  [arg-type]
+
+
+- case: pipe_invalid_intermediate_callable_argument
+  disable_cache: true
+  main: |
+    from collections.abc import Callable
+    from returns.pipeline import pipe
+
+    def load(value: str) -> str:
+        return value
+
+    def compute(value: int) -> int:
+        return value - 1
+
+    def display(value: int) -> str:
+        return str(value)
+
+    def apply(function: Callable[[str], str]) -> str:
+        return function('value')
+
+    apply(pipe(load, compute, display))
+  out: |
+    main:16: error: Argument 1 to "compute" has incompatible type "str"; expected "int"  [arg-type]
+
+
+- case: pipe_generic_intermediate_callable_assignment
+  disable_cache: true
+  main: |
+    from collections.abc import Callable
+    from typing import TypeVar
+    from returns.pipeline import pipe
+
+    T = TypeVar('T')
+
+    def load(value: int) -> int:
+        return value
+
+    def wrap(value: T) -> list[T]:
+        return [value]
+
+    def first(value: list[T]) -> T:
+        return value[0]
+
+    pipeline: Callable[[int], str] = pipe(load, wrap, first, str)
+    reveal_type(pipeline(1))  # N: Revealed type is "str"
+
+
+- case: pipe_overloaded_first_step
+  disable_cache: true
+  main: |
+    from typing import overload
+    from returns.pipeline import pipe
+
+    @overload
+    def convert(value: str) -> int: ...
+    @overload
+    def convert(value: int) -> str: ...
+    def convert(value: str | int) -> int | str:
+        return len(value) if isinstance(value, str) else str(value)
+
+    def text(value: str) -> str:
+        return value
+
+    reveal_type(pipe(convert, text)(1))  # N: Revealed type is "str"
+
+
+- case: pipe_generic_callable_first_step
+  disable_cache: true
+  main: |
+    from typing import TypeVar
+    from returns.pipeline import pipe
+
+    T = TypeVar('T')
+
+    class Identity:
+        def __call__(self, value: T) -> T:
+            return value
+
+    def text(value: str) -> str:
+        return value
+
+    reveal_type(pipe(Identity(), text)('value'))  # N: Revealed type is "str"
+
+
+- case: pipe_union_intermediate_callable_assignment
+  disable_cache: true
+  main: |
+    from collections.abc import Callable
+    from returns.pipeline import pipe
+
+    def union_out(value: str) -> str | int:
+        return value
+
+    def text(value: str) -> str:
+        return value
+
+    pipeline: Callable[[str], str] = pipe(union_out, text)
+  out: |
+    main:10: error: Argument 1 to "text" has incompatible type "str | int"; expected "str"  [arg-type]
