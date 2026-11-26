@@ -14,7 +14,6 @@ See [0Ver](https://0ver.org/).
 ### Bugfixes
 
 - Check intermediate `pipe` steps before assigning or passing it as a `Callable`
-
 - Fix `{Success, Failure}.swap` returning `Any`
 - Fix type parameter variance of `Law{1,2,3}`, `Unwrappable`, `Contextable`,
   and `Trampoline`
