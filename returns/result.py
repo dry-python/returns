@@ -422,6 +422,7 @@ class Success(Result[_ValueType_co, Any]):
     def __init__(self, inner_value: _ValueType_co) -> None:
         """Success constructor."""
         super().__init__(inner_value)
+        object.__setattr__(self, '_trace', None)
 
     if not TYPE_CHECKING:  # noqa: WPS604  # pragma: no branch
 
