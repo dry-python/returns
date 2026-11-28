@@ -10,6 +10,10 @@ See [0Ver](https://0ver.org/).
 ### Features
 
 - Adds missing type annotations
+- Narrows `Result`, `Maybe` and `IOResult` with `is_successful`
+  (`TypeIs` overloads), so the successful branch is typed
+  as `Success`, `Some` or `IOSuccess`
+- Requires `typing-extensions>=4.10` for `TypeIs`
 
 ### Bugfixes
 
