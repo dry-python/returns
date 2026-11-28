@@ -263,6 +263,26 @@ and :func:`Some <returns.maybe.Some>`
   >>> assert is_successful(Success(1)) is True
   >>> assert is_successful(Failure('text')) is False
 
+For ``Result``, ``Maybe`` and ``IOResult`` the check also narrows the type,
+because it is annotated with :class:`typing_extensions.TypeIs`.
+The successful branch has the type of the successful container,
+so its value can be used without a cast:
+
+.. code:: python
+
+  >>> from returns.result import Result, Success, Failure
+
+  >>> def double(container: Result[int, str]) -> int:
+  ...     if is_successful(container):
+  ...         return container.unwrap() * 2
+  ...     return 0
+
+  >>> assert double(Success(2)) == 4
+  >>> assert double(Failure('text')) == 0
+
+Other :class:`~returns.interfaces.unwrappable.Unwrappable` containers
+keep returning a plain ``bool``.
+
 
 Further reading
 ---------------
